@@ -1,0 +1,142 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/tables/handsontable/handsontable.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/handsontable_search.js"></script>
+<!-- /theme JS files -->
+
+{% endblock %}
+{%block pagename%}Handsontable - Search{%endblock%}
+{%block content%}
+	
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Basic functionality -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Basic functionality</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">Search plugin provides an easy interface to perform data search across Handsontable. First thing you should do, is enabling the plugin by setting the <code>search</code> option to <code>true</code>. When enabled, <strong>searchPlugin</strong> exposes a new method <strong>query(queryStr)</strong>, where <code>queryStr</code> is a string to find within the table. By default, the search is case insensitive.</p>
+
+						<div class="form-group form-group-feedback form-group-feedback-left">
+							<input type="text" id="hot_search_basic_input" class="form-control" placeholder="Search">
+							<div class="form-control-feedback">
+								<i class="icon-search4 font-size-base"></i>
+							</div>
+						</div>
+
+						<div class="hot-container">
+							<div id="hot_search_basic"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /basic functionality -->
+
+
+				<!-- Custom search result class -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Custom search result class</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">By default <code>searchPlugin</code> adds <code>htSearchResult</code> class to every cell which <code>isSearchResult</code> property is <code>true</code>. You can change this class using <code>searchResultClass</code> option. If you wish to change the result class globally (for all Handsontable instances on the page), you can use <code>Handsontable.Search.global.setDefaultSearchResultClass(className)</code> method.</p>
+
+						<div class="form-group form-group-feedback form-group-feedback-left">
+							<input type="text" id="hot_search_class_input" class="form-control" placeholder="Search">
+							<div class="form-control-feedback">
+								<i class="icon-search4 font-size-base"></i>
+							</div>
+						</div>
+
+						<div class="hot-container">
+							<div id="hot_search_class"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /custom search result class -->
+
+
+				<!-- Custom query method -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Custom query method</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">The <code>queryMethod</code> is responsible for determining whether a <code>queryStr</code> matches the value stored in a cell. It takes 2 arguments: <code>queryStr</code> and <code>cellData</code>. The first is a string passed to <code>query()</code> method. The second is a value returned by <code>getDataAtCell()</code>. The <code>queryMethod</code> function should return true if there is a match.</p>
+
+						<div class="form-group form-group-feedback form-group-feedback-left">
+							<input type="text" id="hot_search_query_input" class="form-control" placeholder="Search">
+							<div class="form-control-feedback">
+								<i class="icon-search4 font-size-base"></i>
+							</div>
+						</div>
+
+						<div class="hot-container">
+							<div id="hot_search_query"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /custom query method -->
+
+
+				<!-- Custom callback -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Custom callback</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">After calling <code>queryMethod</code>, <code>searchPlugin</code> <code>calls callback(instance, rowIndex, colIndex, cellData, testResult)</code> for every cell. The default callback is responsible for setting the <code>isSearchResult</code> property, so if you want to preserve this functionality, be sure to invoke <code>Handsontable.Search.DEFAULT_CALLBACK</code> inside your custom callback.</p>
+
+						<div class="form-group form-group-feedback form-group-feedback-left">
+							<input type="text" id="hot_search_callback_input" class="form-control" placeholder="Search">
+							<div class="form-control-feedback">
+								<i class="icon-search4 font-size-base"></i>
+							</div>
+						</div>
+
+						<p class="mb-3"><span class="font-weight-semibold" id="result-count">0</span> results found</p>
+
+						<div class="hot-container">
+							<div id="hot_search_callback"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /custom callback -->
+
+			</div>
+			<!-- /content area -->
+{%endblock%}

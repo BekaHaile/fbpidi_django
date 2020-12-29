@@ -1,0 +1,160 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/tables/handsontable/handsontable.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/handsontable_cols.js"></script>
+	<!-- /theme JS files -->
+ 
+{% endblock %}
+{%block pagename%}Handsontable - Cols{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Fixed columns and rows -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Fixed columns and rows</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">The following example demonstrates how to make certain columns and rows fixed when scrolling is enabled. To enable this functionality, specify amount of fixed rows with <code>fixedRowsTop</code> and amount of fixed columns with <code>fixedColumnsLeft</code> options. <strong>Note:</strong> You'll need horizontal scrollbars, so just set a container <code>width</code> and <code>overflow: auto</code> in CSS or simply add pre-defined <code>hot-scrollable</code> class to the parent container.</p>
+
+						<div class="hot-container hot-scrollable">
+							<div id="hot_fixed"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /fixed columns and rows -->
+
+
+				<!-- Scrolling enabled -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Scrolling enabled</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">The following example demonstrates vertical and horizontal scrolling of the table. If you want scrollbars, just set container <code>width</code>, <code>height</code> and <code>overflow: auto</code> in CSS. Or simply add <code>hot-scrollable</code> class to the parent container. This demo shows table of 250 rows and columns. Only visible part is rendered. Native div scrollbar is used to scroll through the table.</p>
+
+						<div class="hot-container hot-scrollable">
+							<div id="hot_scroll"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /scrolling enabled -->
+
+
+				<!-- Columns frezing -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Columns freezing</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">In order to manually freeze a column (in another words - make it fixed), you need to set the <code>manualColumnFreeze</code> config item to <code>true</code> in Handsontable initialization. When the <strong>Manual Column Freeze</strong> plugin is enabled, you can freeze <strong>any</strong> non-fixed column and unfreeze any fixed column in your Handsontable instance using the Context Menu. <strong>Note:</strong> to properly use this plugin, you need to have the Context Menu plugin enabled.</p>
+
+						<div class="hot-container hot-scrollable">
+							<div id="hot_freezing"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /columns frezing -->
+
+
+				<!-- Columns moving -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Columns moving</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">The following example demonstrates an ability to move rows and columns, some kind of drag sorting. To enable these features, use settings <code>manualColumnMove: true</code> and <code>manualRowMove: true</code>. The draggable move handle appears: in the right part of the column header; in the top part of the row header. Handler styling can be customized in less files.</p>
+
+						<div class="hot-container">
+							<div id="hot_moving"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /columns moving -->
+
+
+				<!-- Column stretching -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Column stretching</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">The following example demonstrates how columns can be stretched using <code>stretchH</code> option. Possible mode values are: <code>none</code> - default value, disables stretching, column width depends on the content width; <code>last</code> - stretch only the last column; <code>all</code> - stretch all the columns evenly. Example below uses <code>stretchH: 'last'</code> to stretch only last column.</p>
+
+						<div class="hot-container">
+							<div id="hot_stretch"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /column stretching -->
+
+
+				<!-- Resizable -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Resizable rows and columns</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">The following example demonstrates manual row and column resizing feature using <code>manualRowResize</code> and <code>manualColumnResize</code> options. Can be either set to a boolean or define initial column and row resized widths. In addition, columns width and row heights have custom values defined in an arrays of numbers added to <code>colWidths</code> and <code>rowHeights</code> options.</p>
+
+						<div class="hot-container">
+							<div id="hot_resize"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /resizable -->
+
+			</div>
+			<!-- /content area -->
+{%endblock%}

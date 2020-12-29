@@ -1,0 +1,152 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{%load crispy_forms_tags%}
+{%block mainblock%}{%endblock%}
+{%block loginblock%}
+<div class="page-content">
+
+  <!-- Main content -->
+  <div class="content-wrapper">
+
+    <!-- Content area -->
+    <div class="content d-flex justify-content-center align-items-center">
+
+      <!-- Login card -->
+      <form class="login-form" action="{{ app_path }}" method="post" id="login-form">
+        {% csrf_token %}
+        <div class="card mb-0">
+          <div class="card-body">
+            <div class="text-center mb-3">
+              <i class="icon-reading icon-2x text-slate-300 border-slate-300 border-3 rounded-round p-3 mb-3 mt-1"></i>
+              <h5 class="mb-0">Login to your account</h5>
+              <span class="d-block text-muted">Your credentials</span>
+            </div>
+
+            {{form|crispy}}
+            <!-- <div class="form-group form-group-feedback form-group-feedback-left">
+              <input type="text" class="form-control" placeholder="Username">
+              <div class="form-control-feedback">
+                <i class="icon-user text-muted"></i>
+              </div>
+            </div>
+
+            <div class="form-group form-group-feedback form-group-feedback-left">
+              <input type="password" class="form-control" placeholder="Password">
+              <div class="form-control-feedback">
+                <i class="icon-lock2 text-muted"></i>
+              </div>
+            </div> -->
+
+            <div class="form-group d-flex align-items-center">
+              <div class="form-check mb-0">
+                <label class="form-check-label">
+                  <input type="checkbox" name="remember" class="form-input-styled" checked data-fouc>
+                  Remember
+                </label>
+              </div>
+
+              <a href="{%url 'forgot_pass'%}" class="ml-auto">Forgot password?</a>
+            </div>
+
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-block">Sign in <i class="icon-circle-right2 ml-2"></i></button>
+            </div>
+
+            <!-- <div class="form-group text-center text-muted content-divider">
+              <span class="px-2">or sign in with</span>
+            </div>
+
+            <div class="form-group text-center">
+              <button type="button" class="btn btn-outline bg-indigo border-indigo text-indigo btn-icon rounded-round border-2"><i class="icon-facebook"></i></button>
+              <button type="button" class="btn btn-outline bg-pink-300 border-pink-300 text-pink-300 btn-icon rounded-round border-2 ml-2"><i class="icon-dribbble3"></i></button>
+              <button type="button" class="btn btn-outline bg-slate-600 border-slate-600 text-slate-600 btn-icon rounded-round border-2 ml-2"><i class="icon-github"></i></button>
+              <button type="button" class="btn btn-outline bg-info border-info text-info btn-icon rounded-round border-2 ml-2"><i class="icon-twitter"></i></button>
+            </div> -->
+
+            <div class="form-group text-center text-muted content-divider">
+              <span class="px-2">Don't have an account?</span>
+            </div>
+
+            <div class="form-group">
+              <a href="{%url 'signup'%}" class="btn btn-light btn-block">Sign up</a>
+            </div>
+
+            <span class="form-text text-center text-muted">By continuing, you're confirming that you've read our <a href="#">Terms &amp; Conditions</a> and <a href="#">Cookie Policy</a></span>
+          </div>
+        </div>
+      </form>
+      <!-- /login card -->
+
+    </div>
+    <!-- /content area -->
+
+  </div>
+  <!-- /main content -->
+
+</div>
+{%endblock%}
+<!-- {% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}">
+{{ form.media }}
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+
+{% block usertools %}{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+{% if form.errors and not form.non_field_errors %}
+<p class="errornote">
+{% if form.errors.items|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
+</p>
+{% endif %}
+
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+<p class="errornote">
+    {{ error }}
+</p>
+{% endfor %}
+{% endif %}
+
+<div id="content-main">
+
+{% if user.is_authenticated %}
+<p class="errornote">
+{% blocktranslate trimmed %}
+    You are authenticated as {{ username }}, but are not authorized to
+    access this page. Would you like to login to a different account?
+{% endblocktranslate %}
+</p>
+{% endif %}
+
+<form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+  <div class="form-row">
+    {{ form.username.errors }}
+    {{ form.username.label_tag }} {{ form.username }}
+  </div>
+  <div class="form-row">
+    {{ form.password.errors }}
+    {{ form.password.label_tag }} {{ form.password }}
+    <input type="hidden" name="next" value="{{ next }}">
+  </div>
+  {% url 'admin_password_reset' as password_reset_url %}
+  {% if password_reset_url %}
+  <div class="password-reset-link">
+    <a href="{{ password_reset_url }}">{% translate 'Forgotten your password or username?' %}</a>
+  </div>
+  {% endif %}
+  <div class="submit-row">
+    <input type="submit" value="{% translate 'Log in' %}">
+  </div>
+</form>
+
+</div>
+{% endblock %} -->

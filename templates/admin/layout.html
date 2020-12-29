@@ -1,0 +1,356 @@
+{% load i18n static %}
+{%load core_template_tags%}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl" {% endif %}>
+
+<!-- /layout_fixed_sidebar_custom.html , Fri, 28 Dec 2018 10:49:58 GMT -->
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	{% block blockbots %}
+	<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+	<title>{% block title %}{% endblock %}</title>
+
+	<!-- Global stylesheets -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
+		type="text/css">
+	<link href="/static/admin/global_assets/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
+	<link href="/static/admin/global_assets/css/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">
+	<link href="/static/admin/global_assets/css/icons/material/icons.css" rel="stylesheet" type="text/css">
+	<link href="/static/admin/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="/static/admin/assets/css/bootstrap_limitless.min.css" rel="stylesheet" type="text/css">
+	<link href="/static/admin/assets/css/layout.min.css" rel="stylesheet" type="text/css">
+	<link href="/static/admin/assets/css/components.min.css" rel="stylesheet" type="text/css">
+	<link href="/static/admin/assets/css/colors.min.css" rel="stylesheet" type="text/css">
+	<!-- /global stylesheets -->
+
+	<!-- Core JS files -->
+	<script src="/static/admin/global_assets/js/main/jquery.min.js"></script>
+	<script src="/static/admin/global_assets/js/main/bootstrap.bundle.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/loaders/blockui.min.js"></script>
+	<!-- /core JS files -->
+
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/visualization/d3/d3.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/visualization/d3/d3_tooltip.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/styling/switchery.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/perfect_scrollbar.min.js"></script>
+
+	<script src="/static/admin/assets/js/app.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/dashboard.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/layout_fixed_sidebar_custom.js"></script>
+	<!-- <script src="/static/admin/global_assets/js/demo_pages/login.js"></script> -->
+	<script src="/static/admin/global_assets/js/plugins/notifications/pnotify.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/extra_pnotify.js"></script>
+
+	<!-- summernote -->
+	<link rel="stylesheet" href="/static/summernote/summernote-bs4.css">
+	<script src="/static/summernote/summernote-bs4.js"></script>
+	<!-- /theme JS files -->
+	{% block extrastyle %}{% endblock %}
+	{% block extrahead %}{% endblock %}
+</head>
+
+<body class="navbar-top">
+
+	{%block mainblock%}
+	{% if not is_popup %}
+
+	<!-- Main navbar -->
+	<div class="navbar navbar-expand-md navbar-dark fixed-top">
+		<div class="navbar-brand">
+			{%block branding%}{%endblock%}
+		</div>
+
+		<div class="d-md-none">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
+				<i class="icon-tree5"></i>
+			</button>
+			<button class="navbar-toggler sidebar-mobile-main-toggle" type="button">
+				<i class="icon-paragraph-justify3"></i>
+			</button>
+		</div>
+		{%include 'admin/partials/header.html'%}
+
+	</div>
+	{% endif %}
+	<!-- /main navbar -->
+
+
+	<!-- Page content -->
+	<div class="page-content">
+
+		<!-- Main sidebar -->
+		<div class="sidebar sidebar-dark sidebar-main sidebar-fixed sidebar-expand-md">
+
+			<!-- Sidebar mobile toggler -->
+			<div class="sidebar-mobile-toggler text-center">
+				<a href="#" class="sidebar-mobile-main-toggle">
+					<i class="icon-arrow-left8"></i>
+				</a>
+				Navigation
+				<a href="#" class="sidebar-mobile-expand">
+					<i class="icon-screen-full"></i>
+					<i class="icon-screen-normal"></i>
+				</a>
+			</div>
+			<!-- /sidebar mobile toggler -->
+
+
+			<!-- Sidebar content -->
+			<div class="sidebar-content">
+
+				<!-- User menu -->
+				<div class="sidebar-user">
+					<div class="card-body">
+						<div class="media">
+							<div class="mr-3">
+								<a href="#"><img src="/static/admin/global_assets/images/demo/users/face11.jpg"
+										width="38" height="38" class="rounded-circle" alt=""></a>
+							</div>
+
+							<div class="media-body">
+								<div class="media-title font-weight-semibold">
+									{% firstof user.get_short_name user.get_username %}</div>
+								<div class="font-size-xs opacity-50">
+									<i class="icon-pin font-size-sm"></i> &nbsp;Santa Ana, CA
+								</div>
+							</div>
+
+							<div class="ml-3 align-self-center">
+								<a href="{% url 'admin:password_change' %}" class="text-white"><i
+										class="icon-cog3"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /user menu -->
+
+
+				<!-- Main navigation -->
+				<div class="card card-sidebar-mobile">
+					<ul class="nav nav-sidebar" data-nav-type="accordion">
+
+						<!-- Main -->
+						<li class="nav-item-header">
+							<div class="text-uppercase font-size-xs line-height-xs">Main</div> <i class="icon-menu"
+								title="Main"></i>
+						</li>
+						<li class="nav-item">
+							<a href="{%url 'admin:index'%}" class="nav-link">
+								<i class="icon-home4"></i>
+								<span>
+									Dashboard
+									<span class="d-block font-weight-normal opacity-50">Main Page</span>
+
+								</span>
+							</a>
+						</li>
+						<!-- Forms -->
+						<li class="nav-item-header">
+							<div class="text-uppercase font-size-xs line-height-xs">Components</div> <i
+								class="icon-menu" title="Forms"></i>
+						</li>
+
+						
+						<li class="nav-item nav-item-submenu">
+							<a href="#" class="nav-link"><i class="icon-cabinet"></i> <span>Categories</span></a>
+							<ul class="nav nav-group-sub" data-submenu-title="Form components">
+								<li class="nav-item">
+									<a href="{%url 'p_categories' option='category'%}" class="nav-link"><i class="icon-drawer"></i>
+										<span>Category</span></a>
+								</li>
+
+								<li class="nav-item">
+									<a href="{%url 'p_categories' option='sub_category'%}" class="nav-link"><i class="icon-folder6"></i>
+										<span>Sub-Category</span></a>
+								</li> 
+							</ul>
+						</li>
+						<li class="nav-item">
+							{%if user.is_admin%}
+							<a href="{%url 'admin_products' user_type='admin'%}" class="nav-link"><i
+									class="icon-stack"></i> <span>Products</span></a>
+							{%else%}
+							<a href="{%url 'admin_products' user_type='provider'%}" class="nav-link"><i
+									class="icon-stack"></i> <span>Products</span></a>
+							{%endif%}
+						</li>
+						{%if user.is_admin%}
+						<li class="nav-item">
+							<a href="{%url 'companies' option='supplier' %}" class="nav-link">
+								<i class="icon-truck"></i>
+								<span>Suppliers</span>
+								<span class="badge bg-blue-400 align-self-center ml-auto">
+									{{'supplier'|company_count}}
+								</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="{%url 'companies' option='manufacturer' %}" class="nav-link">
+								<i class="icon-cogs"></i>
+								<span>Manufacturing Companies</span>
+								<span class="badge bg-blue-400 align-self-center ml-auto">
+									{{'manufacturer'|company_count}}
+								</span>
+							</a>
+						</li>
+						<li class="nav-item-header">
+							<div class="text-uppercase font-size-xs line-height-xs">Log</div> <i class="icon-menu" title="Forms"></i>
+						</li>
+						<li class="nav-item">
+							<a href="{%url 'useraudit' %}" class="nav-link"><i class="icon-archive"></i>
+								<span>User Logs</span></a>
+						</li>
+
+
+						<li class="nav-item-header">
+							<div class="text-uppercase font-size-xs line-height-xs">Account</div> <i class="icon-menu"
+								title="Forms"></i>
+						</li>
+						
+						<li class="nav-item nav-item-submenu">
+							<a href="#" class="nav-link"><i class="icon-users"></i> <span>Users</span></a>
+							<ul class="nav nav-group-sub" data-submenu-title="Form components">
+								<li class="nav-item">
+									<a href="{%url 'users_list' %}" class="nav-link"><i class="icon-users"></i>
+										<span>User</span></a>
+								</li>
+								<li class="nav-item">
+									<a href="{% url 'group_view'%}" class="nav-link"><i class="icon-users"></i>
+										<span>Group</span></a>
+								</li>
+								<!-- <li class="nav-item">
+									<a href="{% url 'roles_list'%}" class="nav-link"><i class="icon-users"></i>
+										<span>Roles</span></a>
+								</li> -->
+							</ul>
+						</li>
+						{%else%}
+						<li class="nav-item">
+							<a href="{%url 'users_list' %}" class="nav-link"><i class="icon-users"></i>
+								<span>Users</span></a>
+						</li>
+						<li class="nav-item">
+							<a href="{{user|my_company_link}}" class="nav-link"><i class="icon-coins"></i><span>My Company</span></a>
+						</li>
+              			  
+ 						{%endif%}
+						<li class="nav-item mb-5">
+							<a href="{% url 'admin:logout' %}" class="nav-link"><i class="icon-switch2"></i> <span>Log Out</span></a>
+						</li>
+
+						<!-- /main -->
+						<!-- applist -->
+
+						{%comment%}
+						{% block sidenav %}
+						{% endblock %}
+
+						{% include 'admin/partials/sidenavs.html'%}
+						{%endcomment%}
+					</ul>
+				</div>
+				<!-- /main navigation -->
+
+			</div>
+			<!-- /sidebar content -->
+
+		</div>
+		<!-- /main sidebar -->
+
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header page-header-light">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4><i class="icon-arrow-left52 mr-2"></i>
+							<span class="font-weight-semibold">{%block pagename%}Home - Dashboard{%endblock%} </span>
+							<!-- {%if user.is_suplier%} Supplier  {%elif user.is_manufacturer%} Manufacturer  {%endif%} -->
+						</h4>
+						<a href="{%url 'admin:index'%}" class="header-elements-toggle text-default d-md-none"><i
+								class="icon-more"></i></a>
+					</div>
+					{% if messages %}
+					{% for message in messages %}
+					<div class="alert alert-{{message.tags}} border-0 alert-dismissible">
+						<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+						<span class="font-weight-semibold">{{message}}</span>
+					</div>
+
+					{% endfor %}
+					{% endif %}
+					<!-- {% block messages %}
+					
+					{% endblock messages %} -->
+					<!-- <div class="header-elements d-none">
+						<div class="d-flex justify-content-center">
+							<a href="#" class="btn btn-link btn-float text-default"><i class="icon-bars-alt text-primary"></i><span>Statistics</span></a>
+							<a href="#" class="btn btn-link btn-float text-default"><i class="icon-calculator text-primary"></i> <span>Invoices</span></a>
+							<a href="#" class="btn btn-link btn-float text-default"><i class="icon-calendar5 text-primary"></i> <span>Schedule</span></a>
+						</div>
+					</div> -->
+				</div>
+
+			</div>
+			<!-- /page header -->
+
+
+			<!-- Content area -->
+			<div class="content">
+				{%block content%}
+				{% block object-tools %}{% endblock %}
+				{{ content }}
+				{%endblock%}
+			</div>
+			<!-- /content area -->
+
+
+			<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse"
+						data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i>
+						Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text">
+						&copy; 2015 - 2018. <a href="#">Admin Templet</a> by <a href="" target="_blank">Admin</a>
+					</span>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="" class="navbar-nav-link" target="_blank"><i
+									class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="" class="navbar-nav-link" target="_blank"><i
+									class="icon-file-text2 mr-2"></i> Docs</a></li>
+						<li class="nav-item"><a href="" class="navbar-nav-link font-weight-semibold"><span
+									class="text-pink-400"><i class="icon-cart2 mr-2"></i> Purchase</span></a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+		</div>
+		<!-- /main content -->
+
+	</div>
+	<!-- /page content -->
+	{%endblock%}
+	{%block loginblock%}{%endblock%}
+</body>
+
+<!-- /layout_fixed_sidebar_custom.html , Fri, 28 Dec 2018 10:49:58 GMT -->
+
+</html>

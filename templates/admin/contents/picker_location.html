@@ -1,0 +1,233 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+<!-- Theme JS files -->
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyAPQXi7ZBZ73SPXi7JfHycSCi30thvQGCg&amp;libraries=places"></script>
+
+<script src="/static/admin/global_assets/js/plugins/extensions/jquery_ui/widgets.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/inputs/typeahead/typeahead.bundle.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/pickers/location/typeahead_addresspicker.js"></script>
+<script src="/static/admin/global_assets/js/plugins/pickers/location/autocomplete_addresspicker.js"></script>
+<script src="/static/admin/global_assets/js/plugins/pickers/location/location.js"></script>
+<script src="/static/admin/global_assets/js/plugins/ui/prism.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/picker_location.js"></script>
+{% endblock %}
+{%block pagename%}Location picker{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Basic location picker -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Location picker</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">This plug-in allows to easily find and select a location on the Google map. Along with a single point selection, it allows to choose an area by providing its center and the radius. All the data can be saved to any HTML input element automatically as well as be processed by Javascript (callback support).</p>
+						<div class="map-container locationpicker-default"></div>
+					</div>
+				</div>
+				<!-- /basic location picker -->
+
+
+				<!-- Manipulating from callback -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Manipulating from callback</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">If you need direct access to the actual Google Maps widget you can use map method as follows. This example illustrates how to set zoom pragmatically each time when location has been changed.</p>
+						<div class="map-container locationpicker-manipulate"></div>
+					</div>
+				</div>
+				<!-- /manipulating from callback -->
+
+
+				<!-- Location picker -->
+				<div class="row">
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-header header-elements-inline">
+								<h5 class="card-title">Binding UI with the widget</h5>
+								<div class="header-elements">
+									<div class="list-icons">
+				                		<a class="list-icons-item" data-action="collapse"></a>
+				                		<a class="list-icons-item" data-action="reload"></a>
+				                		<a class="list-icons-item" data-action="remove"></a>
+				                	</div>
+			                	</div>
+							</div>
+
+							<div class="card-body">
+								<div class="form-group">
+									<label>Location:</label>
+									<input type="text" class="form-control" id="us2-address">
+								</div>
+
+								<div class="form-group">
+									<label>Radius:</label>
+									<input type="text" class="form-control" id="us2-radius">
+								</div>
+
+								<div class="form-group">
+									<div id="us2" class="map-container"></div>
+								</div>
+
+								<div class="form-group">
+									<label>Latitude:</label>
+									<input type="text" class="form-control" id="us2-lat">
+								</div>
+
+								<div class="form-group">
+									<label>Longitude:</label>
+									<input type="text" class="form-control" id="us2-lon">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-header header-elements-inline">
+								<h5 class="card-title">Subscribing for events</h5>
+								<div class="header-elements">
+									<div class="list-icons">
+				                		<a class="list-icons-item" data-action="collapse"></a>
+				                		<a class="list-icons-item" data-action="reload"></a>
+				                		<a class="list-icons-item" data-action="remove"></a>
+				                	</div>
+			                	</div>
+							</div>
+
+							<div class="card-body">
+								<div class="form-group">
+									<label>Location:</label>
+									<input type="text" class="form-control" id="us3-address">
+								</div>
+
+								<div class="form-group">
+									<label>Radius:</label>
+									<input type="text" class="form-control" id="us3-radius">
+								</div>
+
+								<div class="form-group">
+									<div id="us3" class="map-container"></div>
+								</div>
+
+								<div class="form-group">		
+									<label>Latitude:</label>
+									<input type="text" class="form-control" id="us3-lat">
+								</div>
+
+								<div class="form-group">
+									<label>Longitude:</label>
+									<input type="text" class="form-control" id="us3-lon">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /location picker -->
+
+
+				<!-- Address pickers -->
+				<div class="row">
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-header header-elements-inline">
+								<h5 class="card-title">Typeahead address picker</h5>
+								<div class="header-elements">
+									<div class="list-icons">
+				                		<a class="list-icons-item" data-action="collapse"></a>
+				                		<a class="list-icons-item" data-action="reload"></a>
+				                		<a class="list-icons-item" data-action="remove"></a>
+				                	</div>
+			                	</div>
+							</div>
+
+							<div class="card-body">
+								<div class="form-group">
+									<label>Address input</label>
+									<input id="address" class="form-control typeahead" type="text" placeholder="Enter an address">
+								</div>
+
+								<div class="form-group">
+									<div id="map" class="map-container mb-2"></div>
+									<span class="form-text text-muted">You can drag and drop the marker to the correct location</span>
+								</div>
+
+								<div class="form-group">
+									<label>Response</label>
+									<pre class="language-javascript" id="response"><code>Address Output</code></pre>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-header header-elements-inline">
+								<h5 class="card-title">Autocomplete address picker</h5>
+								<div class="header-elements">
+									<div class="list-icons">
+				                		<a class="list-icons-item" data-action="collapse"></a>
+				                		<a class="list-icons-item" data-action="reload"></a>
+				                		<a class="list-icons-item" data-action="remove"></a>
+				                	</div>
+			                	</div>
+							</div>
+
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Address:</label>
+											<input id="addresspicker_map" class="form-control" placeholder="Enter an address">
+										</div>
+									</div>
+
+									<div class="col-md-6">
+										<div class="form-group">
+											<label id="geo_label" for="reverseGeocode">Reverse Geocode after Marker Drag?</label>
+											<select id="reverseGeocode" class="form-control">
+												<option value="false" selected>No</option>
+												<option value="true">Yes</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div id="map2" class="map-container mb-2"></div>
+									<span class="form-text text-muted">You can drag and drop the marker to the correct location</span>
+								</div>
+
+								<div class="form-group">
+									<label>Response:</label>
+									<pre class="language-javascript" id="response2"><code>Address Output</code></pre>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /address pickers -->
+
+			</div>
+			<!-- /content area -->
+{%endblock%}

@@ -1,0 +1,56 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/inputs/inputmask.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/validation/validate.min.js"></script>
+
+{% endblock %}
+{%block pagename%}Manage Group{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+				<!-- <div class="card">
+						
+					<div class="card-body">
+						{%for obj in objs%}
+						<h1>
+							{{obj.name}}
+						</h1>
+						<h2>
+							{{obj.permissions}}
+						</h2>
+						{%endfor%}
+					</div>
+						 
+				</div> -->
+				<div class="card">
+						
+					<div class="card-body">
+						
+						<form action="{%url 'group_view'%}" method="POST">{%csrf_token%}
+							<fieldset class="mb-3 ml-3 mr-3">
+								<legend class="text-uppercase font-size-sm font-weight-bold">Create Group</legend>
+								{{form|crispy}}
+								
+							</fieldset>
+
+							<div class="text-right">
+								<button style="padding-left: 10%; padding-right: 10%;" type="submit" class="btn btn-primary rounded-round">Submit </button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+			</div>
+			<!-- /content area -->
+			<script>
+				$(document).ready(function() {
+					$('#summernote').summernote();
+					$('.summernote').summernote();
+				});
+			  </script>
+{%endblock%}
+

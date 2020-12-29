@@ -1,0 +1,37 @@
+{%load crispy_forms_tags%}
+<fieldset >
+   
+
+
+    {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
+    {% if fieldset.description %}
+        <div class="alert alert-info description">{{ fieldset.description|safe }}</div>
+    {% endif %}
+    
+    {% for line in fieldset %}
+            
+            
+            {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+        
+            {% for field in line %}
+                <div class="form-group row">
+                    {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                    {% if field.is_checkbox %}
+                    <label class="col-lg-3 col-form-label float-left">{{ field.label_tag }}</label>
+                    <div class="col-lg-9">{{ field.field }}</div>
+                    {% else %}
+                        <label class="col-lg-3 col-form-label pull-left"> {{ field.label_tag }}</label>
+                        
+                         {% if field.is_readonly %}
+                            <div class="col-lg-9 ">{{ field.contents }}</div>
+                        {% else %}
+                        <div class="col-lg-9">{{ field.field }}</div>
+                        {% endif %}
+                    {% endif %}
+                    {% if field.field.help_text %}
+                        <div style="width: 100%;" class="alert alert-info pull-right">{{ field.field.help_text|safe }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+    {% endfor %}
+</fieldset>

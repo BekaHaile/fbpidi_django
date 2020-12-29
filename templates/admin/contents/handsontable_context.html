@@ -1,0 +1,114 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/tables/handsontable/handsontable.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/handsontable/sheetclip.js"></script> 
+	<script src="/static/admin/global_assets/js/demo_pages/handsontable_context.js"></script>
+	<!-- /theme JS files -->
+ 
+{% endblock %}
+{%block pagename%}Handsontable - Context{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Default context menu options -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Default context menu options</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">The following example demonstrates a basic setup of content menu. To run the basic configuration, just set the <code>contextMenu</code> option to <code>true</code>. When the context menu for the row header is opened, the column options are disabled. Likewise, when the context menu for the column header is opened, the row options are disabled.</p>
+
+						<div class="hot-container">
+							<div id="hot_context_basic"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /default context menu options -->
+
+
+				<!-- Specific options -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Specific options</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">You can limit options available in the context menu using <code>contextMenu</code> option as an array of strings: <code>row_above</code> - insert row above; <code>row_below</code> - insert row below; <code>col_left</code> - insert column on the left; <code>col_right</code> - insert column on the right; <code>remove_row</code> - remove row; <code>remove_col</code> - remove column; <code>undo</code> - undo action; <code>redo</code> - redo action; <code>make_read_only</code> - read only; <code>alignment</code> - submenu with alignment options. For separator use <code>'---------'</code> string. </p>
+
+						<div class="hot-container">
+							<div id="hot_context_specific"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /specific options -->
+
+
+				<!-- Custom configuration -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Custom configuration</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">The following example demonstrates custom context menu configuration. For greatest configurability, you use <code>contextMenu</code> option as a configuration object as described in <a href="http://medialize.github.com/jQuery-contextMenu/docs.html" target="_blank">jQuery contextMenu documentation</a>. This example shows how to set <strong>custom text</strong>, how to disable <strong>"Remove row"</strong> and <strong>"Insert row above"</strong> for the first row and how to add your <strong>own option</strong>.</p>
+
+						<div class="hot-container">
+							<div id="hot_context_custom"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /custom configuration -->
+
+
+				<!-- Copy-paste configuration -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Copy-paste configuration</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">Copy and Paste feature are available in Handsontable by default, but only as key shortcuts (<kbd>Ctrl (Cmd) + C</kbd> and <kbd>Ctrl (Cmd) + V</kbd> respectively). This plugin makes them available also as a clickable options in the context menu. Unfortunately, due to the browser's security restrictions, Handsontable is forced to use a third-party <strong>SheetClip</strong> library - a tiny library that transforms JavaScript 2-dimensional arrays to clipboard strings compatible with spreadsheets such as Microsoft Excel, Google Docs, LibreOffice and OpenOffice.</p>
+
+						<div class="hot-container">
+							<div id="hot_context_copy"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /copy-paste configuration -->
+
+			</div>
+			<!-- /content area -->
+
+{%endblock%}

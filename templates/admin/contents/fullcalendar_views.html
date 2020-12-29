@@ -1,0 +1,84 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/ui/fullcalendar/fullcalendar.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/fullcalendar_basic.js"></script>
+<!-- /theme JS files -->
+
+{% endblock %}
+{%block pagename%}FullCalendar - Simple Views{%endblock%}
+{%block content%}
+
+	
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Basic view -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Basic view</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+					
+					<div class="card-body">
+						<p class="mb-3">FullCalendar is a jQuery plugin that provides a full-sized, drag &amp; drop event calendar like the one below. It uses AJAX to fetch events on-the-fly and is easily configured to use your own feed format. It is visually customizable with a rich API. Example below demonstrates a default view of the calendar with a basic setup: draggable and editable events, and starting date.</p>
+
+						<div class="fullcalendar-basic"></div>
+					</div>
+				</div>
+				<!-- /basic view -->
+
+
+				<!-- Agenda view -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Agenda view</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+					
+					<div class="card-body">
+						<p class="mb-3">FullCalendar has a number of different "views", or ways of displaying days and events. The following 5 views are all built in to FullCalendar: <code>month</code>, <code>basicWeek</code>, <code>basicDay</code>, <code>agendaWeek</code>, <code>agendaDay</code>. You can define header buttons to allow the user to switch between them. Also you can set the initial view of the calendar with the defaultView option. The following example demonstrates <code>agenda</code> views.</p>
+
+						<div class="fullcalendar-agenda"></div>
+					</div>
+				</div>
+				<!-- /agenda view -->
+
+
+				<!-- List view -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">List view</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+					
+					<div class="card-body">
+						<p class="mb-3">A list view is a type of available views that displays events in a flat list. Only days with events are displayed. A list view displays events during a specific interval of time. There are 4 preset list views: <code>listDay</code>, <code>listWeek</code>, <code>listMonth</code>, and <code>listYear</code>. The following example demonstrates <code>listWeek</code>, <code>listDay</code> and <code>listMonth</code> views.</p>
+
+						<div class="fullcalendar-list"></div>
+					</div>
+				</div>
+				<!-- /list view -->
+
+			</div>
+			<!-- /content area -->
+{%endblock%}

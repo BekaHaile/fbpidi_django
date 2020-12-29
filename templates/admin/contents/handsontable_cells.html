@@ -1,0 +1,166 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/tables/handsontable/handsontable.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/prism.min.js"></script> 
+	<script src="/static/admin/global_assets/js/demo_pages/handsontable_cells.js"></script>
+	<!-- /theme JS files -->
+ 
+{% endblock %}
+{%block pagename%}Handsontable - Cells{%endblock%}
+{%block content%}
+
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Data validation -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Data validation</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">The following example demonstrates cell validation. Use the <code>validator</code> method to easily validate synchronous or asynchronous changes to a cell. If you need more control, <code>beforeValidate</code> and <code>afterValidate</code> plugin hooks are available. In the below example, <code>email_validator_fn</code> is an async validator that resolves after <code>1000 ms</code>.</p>
+
+						<div class="hot-container mb-3">
+							<div id="hot_validation"></div>
+						</div>
+
+						<p>Edit the above grid to see callback:</p>
+						<pre class="language-javascript"><code id="hot_validation_console">// Validation callback</code></pre>
+					</div>
+				</div>
+				<!-- /data validation -->
+
+
+				<!-- Drag down -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Drag down</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">Drag down example. Notice the little square (<strong>fill</strong> handle) in the corner of the selected cell. You can drag it (drag-down) to repeat the values from the cell. Double click the fill handle in cell <strong>B8</strong> (value "47382") to fill the selection down to the last value in neighbouring column, just like it would in LibreOffice or Google Docs.</p>
+
+						<div class="hot-container">
+							<div id="hot_drag"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /drag down -->
+
+
+				<!-- Merge cells -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Merge cells</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">The following example demonstrates an ability to merge table cells. To enable the merge cells feature, set the <code>mergeCells</code> option to be <code>true</code> or an <code>array</code>. To initialize Handsontable with predefined merged cells, provide merged cells details in form of an array: <code>mergeCells: [{row: 1, col: 1, rowspan: 2, colspan: 2}]</code>. Context menu provides an option to merge/unmerge the cells.</p>
+
+						<div class="hot-container">
+							<div id="hot_merge"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /merge cells -->
+
+
+				<!-- Alignment -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Alignment</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">To initialize Handsontable with predefined horizontal and vertical alignment, provide className cells details in form of a grid, columns or cell setting. Available classNames: <strong>Horizontal</strong> - <code>htLeft</code>, <code>htCenter</code>, <code>htRight</code>, <code>htJustify</code>; <strong>Vertical</strong> - <code>htTop</code>, <code>htMiddle</code>, <code>htBottom</code>. Context menu also includes alignment option for both horizontal and vertical orientations.</p>
+
+						<div class="hot-container">
+							<div id="hot_alignment"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /alignment -->
+
+
+				<!-- Read only -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Read only</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">The following example demonstrates how to configure columns or cells to be read only. Here cells that contain the word <strong>"Nissan"</strong> are read only. It forces all cells to be rendered by <code>myReadonlyRenderer</code>, which will decide whether a cell is really read only by checking its <code>readOnly</code> property. To make a full column read only, declare it in the <code>columns</code> setting. You can also define a special renderer function that will dim the read-only values.</p>
+
+						<div class="hot-container">
+							<div id="hot_readonly"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /read only -->
+
+
+				<!-- Disable cell editing -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Disable cell editing</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<p class="mb-3">The following example demonstrates how to configure columns or cells to be not editable. Here the table with non-editable cells containing the word <strong>“Nissan”</strong>. This property of the cell is optional and can be easily set in the configuration of Handsontable. To make a full column non-editable, declare it in the <code>columns</code> setting. You can also define a special renderer function that will dim the editor value.</p>
+
+						<div class="hot-container">
+							<div id="hot_non_editable"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /disable cell editing -->
+
+			</div>
+			<!-- /content area -->
+
+{%endblock%}

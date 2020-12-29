@@ -1,0 +1,1051 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/job_list.js"></script>
+	<!-- /theme JS files -->
+ 
+{% endblock %}
+{%block pagename%}Job - List{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Inner container -->
+				<div class="d-md-flex align-items-md-start">
+
+					<!-- Left sidebar component -->
+					<div class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-left border-0 shadow-0 sidebar-expand-md">
+
+						<!-- Sidebar content -->
+						<div class="sidebar-content">
+
+							<!-- Filter -->
+							<div class="card">
+								<div class="card-header bg-transparent header-elements-inline">
+									<span class="text-uppercase font-size-sm font-weight-semibold">Filter</span>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+				                		</div>
+			                		</div>
+								</div>
+
+								<div class="card-body">
+									<form action="#">
+										<div class="form-group form-group-feedback form-group-feedback-left">
+											<input type="search" class="form-control" placeholder="Job title or keywords">
+											<div class="form-control-feedback">
+												<i class="icon-reading text-muted"></i>
+											</div>
+										</div>
+
+										<div class="form-group form-group-feedback form-group-feedback-left">
+											<input type="search" class="form-control" placeholder="Location">
+											<div class="form-control-feedback">
+												<i class="icon-pin-alt text-muted"></i>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Full time
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Part time
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Remote
+												</label>
+											</div>
+										</div>
+
+										<button type="submit" class="btn bg-blue btn-block">
+											<i class="icon-search4 font-size-base mr-2"></i>
+											Find jobs
+										</button>
+									</form>
+								</div>
+							</div>
+							<!-- /filter -->
+
+
+							<!-- Location -->
+							<div class="card">
+								<div class="card-header bg-transparent header-elements-inline">
+									<span class="text-uppercase font-size-sm font-weight-semibold">Location</span>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+				                		</div>
+			                		</div>
+								</div>
+
+								<form action="#">
+									<div class="card-body">
+										<div class="form-group">
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Amsterdam
+													<span class="d-block text-muted">North Holland, Netherlands</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Koog aan de Zaan
+													<span class="d-block text-muted">North Holland, Netherlands</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Amsterdam Binnenstad en Oostelijk Havengebied
+													<span class="d-block text-muted">North Holland, Netherlands</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Hoofddorp
+													<span class="d-block text-muted">North Holland, Netherlands</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Alkmaar
+													<span class="d-block text-muted">North Holland, Netherlands</span>
+												</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="card-footer text-center p-0">
+										<a href="#" class="d-block p-2">All locations</a>
+									</div>
+								</form>
+							</div>
+							<!-- /location -->
+
+
+							<!-- Job title -->
+							<div class="card">
+								<div class="card-header bg-transparent header-elements-inline">
+									<span class="text-uppercase font-size-sm font-weight-semibold">Job title</span>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+				                		</div>
+			                		</div>
+								</div>
+
+								<form action="#">
+									<div class="card-body">
+										<div class="form-group">
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Developer
+													<span class="text-muted font-size-sm ml-1">(38)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Front end designer
+													<span class="text-muted font-size-sm ml-1">(43)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													UX designer
+													<span class="text-muted font-size-sm ml-1">(74)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Software engineer
+													<span class="text-muted font-size-sm ml-1">(25)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Full stack designer
+													<span class="text-muted font-size-sm ml-1">(12)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Motion designer
+													<span class="text-muted font-size-sm ml-1">(53)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													PHP developer
+													<span class="text-muted font-size-sm ml-1">(19)</span>
+												</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="card-footer text-center p-0">
+										<a href="#" class="d-block p-2">All job titles</a>
+									</div>
+								</form>
+							</div>
+							<!-- /job title -->
+
+
+							<!-- Industry -->
+							<div class="card">
+								<div class="card-header bg-transparent header-elements-inline">
+									<span class="text-uppercase font-size-sm font-weight-semibold">Industry</span>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+				                		</div>
+			                		</div>
+								</div>
+
+								<form action="#">
+									<div class="card-body">
+										<div class="form-group">
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Arts and design
+													<span class="text-muted font-size-sm ml-1">(32)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Engineering
+													<span class="text-muted font-size-sm ml-1">(65)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Computer Software
+													<span class="text-muted font-size-sm ml-1">(235)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Financial Services
+													<span class="text-muted font-size-sm ml-1">(26)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Service Industry
+													<span class="text-muted font-size-sm ml-1">(94)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Healthcare
+													<span class="text-muted font-size-sm ml-1">(35)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Law Enforcement
+													<span class="text-muted font-size-sm ml-1">(40)</span>
+												</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="card-footer text-center p-0">
+										<a href="#" class="d-block p-2">All industries</a>
+									</div>
+								</form>
+							</div>
+							<!-- /industry -->
+
+
+							<!-- Company -->
+							<div class="card">
+								<div class="card-header bg-transparent header-elements-inline">
+									<span class="text-uppercase font-size-sm font-weight-semibold">Company</span>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+				                		</div>
+			                		</div>
+								</div>
+
+								<form action="#">
+									<div class="card-body">
+										<div class="form-group">
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled">
+													Amazon
+													<span class="text-muted font-size-sm ml-1">(43)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled">
+													The North Face
+													<span class="text-muted font-size-sm ml-1">(124)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled">
+													Transfer Wise
+													<span class="text-muted font-size-sm ml-1">(67)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled">
+													ING Bank
+													<span class="text-muted font-size-sm ml-1">(37)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled">
+													Facebook
+													<span class="text-muted font-size-sm ml-1">(28)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled">
+													Dell
+													<span class="text-muted font-size-sm ml-1">(67)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled">
+													Microsoft
+													<span class="text-muted font-size-sm ml-1">(57)</span>
+												</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="card-footer text-center p-0">
+										<a href="#" class="d-block p-2">All companies</a>
+									</div>
+								</form>
+							</div>
+							<!-- /company -->
+
+
+							<!-- Specific skills -->
+							<div class="card">
+								<div class="card-header bg-transparent header-elements-inline">
+									<span class="text-uppercase font-size-sm font-weight-semibold">Specific skills</span>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+				                		</div>
+			                		</div>
+								</div>
+
+								<form action="#">
+									<div class="card-body">
+										<div class="form-group">
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													JavaScript
+													<span class="text-muted font-size-sm ml-1">(53)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													HTML5, SCSS/SASS
+													<span class="text-muted font-size-sm ml-1">(36)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Wireframing
+													<span class="text-muted font-size-sm ml-1">(21)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Scrum
+													<span class="text-muted font-size-sm ml-1">(8)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Grunt/gulp/bower
+													<span class="text-muted font-size-sm ml-1">(68)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													Node.js
+													<span class="text-muted font-size-sm ml-1">(32)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="checkbox" class="form-input-styled" data-fouc>
+													AngularJS
+													<span class="text-muted font-size-sm ml-1">(94)</span>
+												</label>
+											</div>
+										</div>
+									</div>
+
+									<div class="card-footer text-center p-0">
+										<a href="#" class="d-block p-2">All skills</a>
+									</div>
+								</form>
+							</div>
+							<!-- /specific skills -->
+
+
+							<!-- Date posted -->
+							<div class="card">
+								<div class="card-header bg-transparent header-elements-inline">
+									<span class="text-uppercase font-size-sm font-weight-semibold">Date posted</span>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+				                		</div>
+			                		</div>
+								</div>
+
+								<div class="card-body">
+									<form action="#">
+										<div class="form-group">
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="radio" name="when_posted" class="form-input-styled" data-fouc>
+													Today
+													<span class="text-muted font-size-sm ml-1">(632)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="radio" name="when_posted" class="form-input-styled" data-fouc>
+													Yesterday
+													<span class="text-muted font-size-sm ml-1">(431)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="radio" name="when_posted" class="form-input-styled" data-fouc>
+													Last week
+													<span class="text-muted font-size-sm ml-1">(31)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="radio" name="when_posted" class="form-input-styled" data-fouc>
+													Last month
+													<span class="text-muted font-size-sm ml-1">(124)</span>
+												</label>
+											</div>
+
+											<div class="form-check">
+												<label class="form-check-label">
+													<input type="radio" name="when_posted" class="form-input-styled" data-fouc>
+													Any time
+												</label>
+											</div>
+										</div>								
+									</form>
+								</div>
+							</div>
+							<!-- /date posted -->
+
+
+							<!-- Latest searches -->
+							<div class="card">
+								<div class="card-header bg-transparent header-elements-inline">
+									<span class="text-uppercase font-size-sm font-weight-semibold">Latest searches</span>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+				                		</div>
+			                		</div>
+								</div>
+
+								<div class="card-body p-0">
+									<div class="list-group list-group-flush">
+										<a href="#" class="list-group-item list-group-item-action">
+											<div>
+												Senior UI/UX designer
+												<div class="font-size-sm text-muted">Amsterdam</div>
+											</div>
+										</a>
+										<a href="#" class="list-group-item list-group-item-action">
+											<div>
+												Full stack web developer
+												<div class="font-size-sm text-muted">Zurich</div>
+											</div>
+										</a>
+										<a href="#" class="list-group-item list-group-item-action">
+											<div>
+												Business controller
+												<div class="font-size-sm text-muted">Budapest</div>
+											</div>
+										</a>
+										<a href="#" class="list-group-item list-group-item-action">
+											<div>
+												Python/Django developer
+												<div class="font-size-sm text-muted">Hamburg</div>
+											</div>
+										</a>
+										<a href="#" class="list-group-item list-group-item-action">
+											<div>
+												Senior PHP software engineer
+												<div class="font-size-sm text-muted">London</div>
+											</div>
+										</a>
+									</div>
+								</div>
+							</div>
+							<!-- /latest searches -->
+
+						</div>
+						<!-- /sidebar content -->
+
+					</div>
+					<!-- /left sidebar component -->
+
+
+					<!-- Right content -->
+					<div class="flex-fill overflow-auto">
+
+						<!-- List layout -->
+			            <div class="card">
+							<div class="card-header bg-white header-elements-inline">
+								<h6 class="card-title">Open positions</h6>
+								<div class="header-elements">
+									<div class="list-icons">
+				                		<a class="list-icons-item" data-action="collapse"></a>
+				                		<a class="list-icons-item" data-action="reload"></a>
+				                		<a class="list-icons-item" data-action="remove"></a>
+				                	</div>
+			                	</div>
+							</div>
+
+							<ul class="media-list">
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/dell.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">Interaction UX/UI Industrial Designer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">Dell</a></li>
+											<li class="list-inline-item">Amsterdam, Netherlands</li>
+										</ul>
+
+										Extended kindness trifling remember he confined outlived if. Assistance sentiments yet unpleasing say. Open they an busy they my such high. An active dinner wishes at unable hardly no talked on. Immediate him her resolving his favourite. Wished denote abroad at branch at. Mind what no by kept.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="badge bg-blue">New</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/northface.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">Front-End Designer / Developer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">The North Face</a></li>
+											<li class="list-inline-item">The Hague, Netherlands</li>
+										</ul>
+
+										Quick six blind smart out burst. Perfectly on furniture dejection determine my depending an to. Add short water court fat. Her bachelor honoured perceive securing but desirous ham required. Questions deficient acuteness to engrossed as. Entirely led ten humoured greatest and yourself besides country.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="badge bg-blue">New</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/ibm.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">UX Lead Designer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">IBM</a></li>
+											<li class="list-inline-item">Lelystad, Netherlands</li>
+										</ul>
+
+										Contented get distrusts certainty nay are frankness concealed ham. On unaffected resolution on considered of. No thought me husband or colonel forming effects. End sitting shewing who saw besides son musical adapted. Contrasted interested eat alteration pianoforte sympathize was.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">3 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/cnn.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">Designer, CRM</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">CNN</a></li>
+											<li class="list-inline-item">Rotterdam, Netherlands</li>
+										</ul>
+
+										At as in understood an remarkably solicitude. Mean them very seen she she. Use totally written the observe pressed justice. Instantly cordially far intention recommend estimable yet her his. Ladies stairs enough esteem add fat all enable. Needed its design number winter see. Oh be me sure wise.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">4 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/transferwise.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">Senior UX Designer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">Transfer Wise</a></li>
+											<li class="list-inline-item">Nijmegen, Netherlands</li>
+										</ul>
+
+										By an outlived insisted procured improved am. Paid hill fine ten now love even leaf. Supplied feelings mr of dissuade recurred no it offering honoured. Am of of in collecting devonshire favourable excellence. Her sixteen end ashamed cottage yet reached get hearing invited. Resources ourselves.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">5 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/uber.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">UI Designer E-commerce</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">Uber</a></li>
+											<li class="list-inline-item">Utrecht, Netherlands</li>
+										</ul>
+
+										Insipidity the sufficient discretion imprudence resolution sir him decisively. Proceed how any engaged visitor. Explained propriety off out perpetual his you. Feel sold off felt nay rose met you. We so entreaties cultivated astonished is. Was sister for few longer mrs sudden talent become.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">6 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/ing.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">FPGA Designer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">ING Bank</a></li>
+											<li class="list-inline-item">Eindhoven, Netherlands</li>
+										</ul>
+
+										By so delight of showing neither believe he present. Deal sigh up in shew away when. Pursuit express no or prepare replied. Wholly formed old latter future but way she. Day her likewise smallest expenses judgment building man carriage gay. Considered introduced themselves mr to discretion at.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">7 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/amazon.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">Medior JAVA Designer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">Amazon</a></li>
+											<li class="list-inline-item">Baarn, Netherlands</li>
+										</ul>
+
+										Woody equal ask saw sir weeks aware decay. Entrance prospect removing we packages strictly is no smallest he. For hopes may chief get hours day rooms. Oh no turned behind polite piqued enough at. Forbade few through inquiry blushes you. Cousin no itself eldest it in dinner latter missed no.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">8 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/facebook.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">Full-stack UX Designer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">Facebook</a></li>
+											<li class="list-inline-item">Nijmegen, Netherlands</li>
+										</ul>
+
+										Situation admitting promotion at or to perceived be. Mr acuteness we as estimable enjoyment up. An held late as felt know. Learn do allow solid to grave. Middleton suspicion age her attention. Chiefly several bed its wishing. Is so moments on chamber pressed to. Doubtful yet way properly answered.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">9 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/microsoft.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">Front End Web Developer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">Microsoft</a></li>
+											<li class="list-inline-item">Coevorden, Netherlands</li>
+										</ul>
+
+										Out believe has request not how comfort evident. Up delight cousins we feeling minutes. Genius has looked end piqued spring. Down has rose feel find man. Learning day desirous informed expenses material returned six the. She enabled invited exposed him another. Reasonably conviction solicitude me.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">10 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/dell.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">Interaction UX/UI Industrial Designer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">Dell</a></li>
+											<li class="list-inline-item">Amsterdam, Netherlands</li>
+										</ul>
+
+										Extended kindness trifling remember he confined outlived if. Assistance sentiments yet unpleasing say. Open they an busy they my such high. An active dinner wishes at unable hardly no talked on. Immediate him her resolving his favourite. Wished denote abroad at branch at. Mind what no by kept.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">12 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/northface.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">Front-End Designer / Developer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">The North Face</a></li>
+											<li class="list-inline-item">The Hague, Netherlands</li>
+										</ul>
+
+										Quick six blind smart out burst. Perfectly on furniture dejection determine my depending an to. Add short water court fat. Her bachelor honoured perceive securing but desirous ham required. Questions deficient acuteness to engrossed as. Entirely led ten humoured greatest and yourself besides country.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">13 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/ibm.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">UX Lead Designer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">IBM</a></li>
+											<li class="list-inline-item">Lelystad, Netherlands</li>
+										</ul>
+
+										Contented get distrusts certainty nay are frankness concealed ham. On unaffected resolution on considered of. No thought me husband or colonel forming effects. End sitting shewing who saw besides son musical adapted. Contrasted interested eat alteration pianoforte sympathize was.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">14 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/cnn.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">Designer, CRM</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">CNN</a></li>
+											<li class="list-inline-item">Rotterdam, Netherlands</li>
+										</ul>
+
+										At as in understood an remarkably solicitude. Mean them very seen she she. Use totally written the observe pressed justice. Instantly cordially far intention recommend estimable yet her his. Ladies stairs enough esteem add fat all enable. Needed its design number winter see. Oh be me sure wise.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">15 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/transferwise.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">Senior UX Designer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">Transfer Wise</a></li>
+											<li class="list-inline-item">Nijmegen, Netherlands</li>
+										</ul>
+
+										By an outlived insisted procured improved am. Paid hill fine ten now love even leaf. Supplied feelings mr of dissuade recurred no it offering honoured. Am of of in collecting devonshire favourable excellence. Her sixteen end ashamed cottage yet reached get hearing invited. Resources ourselves.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">16 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/uber.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">UI Designer E-commerce</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">Uber</a></li>
+											<li class="list-inline-item">Utrecht, Netherlands</li>
+										</ul>
+
+										Insipidity the sufficient discretion imprudence resolution sir him decisively. Proceed how any engaged visitor. Explained propriety off out perpetual his you. Feel sold off felt nay rose met you. We so entreaties cultivated astonished is. Was sister for few longer mrs sudden talent become.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">17 days ago</span>
+									</div>
+								</li>
+
+								<li class="media card-body flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="/static/admin/global_assets/images/demo/brands/ing.png" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">FPGA Designer</a>
+										</h6>
+
+										<ul class="list-inline list-inline-dotted text-muted mb-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">ING Bank</a></li>
+											<li class="list-inline-item">Eindhoven, Netherlands</li>
+										</ul>
+
+										By so delight of showing neither believe he present. Deal sigh up in shew away when. Pursuit express no or prepare replied. Wholly formed old latter future but way she. Day her likewise smallest expenses judgment building man carriage gay. Considered introduced themselves mr to discretion at.
+									</div>
+
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="text-muted">18 days ago</span>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<!-- /list layout -->
+
+
+						<!-- Pagination -->
+						<div class="d-flex justify-content-center pt-3 mb-3">
+							<ul class="pagination">
+								<li class="page-item"><a href="#" class="page-link"><i class="icon-arrow-small-right"></i></a></li>
+								<li class="page-item active"><a href="#" class="page-link">1</a></li>
+								<li class="page-item"><a href="#" class="page-link">2</a></li>
+								<li class="page-item"><a href="#" class="page-link">3</a></li>
+								<li class="page-item"><a href="#" class="page-link">4</a></li>
+								<li class="page-item"><a href="#" class="page-link">5</a></li>
+								<li class="page-item"><a href="#" class="page-link"><i class="icon-arrow-small-left"></i></a></li>
+							</ul>
+						</div>
+						<!-- /pagination -->
+
+					</div>
+					<!-- /right content -->
+
+				</div>
+				<!-- /inner container -->
+
+			</div>
+			<!-- /content area -->
+
+{%endblock%}

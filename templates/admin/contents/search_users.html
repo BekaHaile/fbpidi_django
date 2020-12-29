@@ -1,0 +1,1120 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+{% endblock %}
+{%block pagename%}Search - Users{%endblock%}
+{%block content%}
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Search field -->
+				<div class="card">
+					<div class="card-body">
+						<h5 class="mb-3">Website search results</h5>
+
+						<form action="#">
+							<div class="input-group mb-3">
+								<div class="form-group-feedback form-group-feedback-left">
+									<input type="text" class="form-control form-control-lg alpha-grey" value="Limitless interface kit" placeholder="Search">
+									<div class="form-control-feedback form-control-feedback-lg">
+										<i class="icon-search4 text-muted"></i>
+									</div>
+								</div>
+
+								<div class="input-group-append">
+									<button type="submit" class="btn btn-primary btn-lg">Search</button>
+								</div>
+							</div>
+
+							<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+								<ul class="list-inline list-inline-condensed mb-0">
+									<li class="list-inline-item dropdown">
+										<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+											<i class="icon-stack2 mr-2"></i>
+											All categories
+										</a>
+
+										<div class="dropdown-menu">
+											<a href="#" class="dropdown-item"><i class="icon-question7"></i> Getting started</a>
+											<a href="#" class="dropdown-item"><i class="icon-accessibility"></i> Registration</a>
+											<a href="#" class="dropdown-item"><i class="icon-reading"></i> General info</a>
+											<a href="#" class="dropdown-item"><i class="icon-gear"></i> Your settings</a>
+											<a href="#" class="dropdown-item"><i class="icon-graduation"></i> Copyrights</a>
+											<div class="dropdown-divider"></div>
+											<a href="#" class="dropdown-item"><i class="icon-mail-read"></i> Contacting authors</a>
+										</div>
+									</li>
+									<li class="list-inline-item"><a href="#" class="btn btn-link text-default"><i class="icon-reload-alt mr-2"></i> Refine your search</a></li>
+								</ul>
+
+								<ul class="list-inline mb-0 ml-md-auto">
+									<li class="list-inline-item"><a href="#" class="btn btn-link text-default"><i class="icon-make-group mr-2"></i> Browse articles</a></li>
+									<li class="list-inline-item"><a href="#" class="btn btn-link text-default"><i class="icon-menu7 mr-2"></i> Advanced search</a></li>
+								</ul>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- /search field -->
+
+
+				<!-- Tabs -->
+				<div class="nav-tabs-responsive mb-3">
+					<ul class="nav nav-tabs nav-tabs-bottom flex-nowrap mb-0">
+						<li class="nav-item"><a href="search_basic.html" class="nav-link"><i class="icon-display4 mr-2"></i> Website</a></li>
+						<li class="nav-item"><a href="search_users.html" class="nav-link active"><i class="icon-people mr-2"></i> Users</a></li>
+						<li class="nav-item"><a href="search_images.html" class="nav-link"><i class="icon-image2 mr-2"></i> Images</a></li>
+						<li class="nav-item"><a href="search_videos.html" class="nav-link"><i class="icon-file-play mr-2"></i> Videos</a></li>
+						<li class="nav-item dropdown ml-md-auto">
+							<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" data-boundary="window">
+								<i class="icon-cog3 mr-2"></i>
+								Options
+							</a>
+
+							<div class="dropdown-menu dropdown-menu-right">
+								<a href="#" class="dropdown-item">Action</a>
+								<a href="#" class="dropdown-item">Another action</a>
+								<a href="#" class="dropdown-item">Something else</a>
+								<div class="dropdown-divider"></div>
+								<a href="#" class="dropdown-item">One more line</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<!-- /tabs -->
+
+
+				<!-- Vertical cards view -->
+				<div class="pt-2 mb-3">
+					<h6 class="mb-0 font-weight-semibold">
+						Vertical cards view
+					</h6>
+					<span class="text-muted d-block">User cards with vertical stack of components</span>
+				</div>
+
+				<div class="row">
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="/static/admin/global_assets/images/demo/users/face1.jpg" width="170" height="170" alt="">
+									<div class="card-img-actions-overlay card-img rounded-circle">
+										<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+											<i class="icon-plus3"></i>
+										</a>
+										<a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+											<i class="icon-link"></i>
+										</a>
+									</div>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">James Alexander</h6>
+					    		<span class="d-block text-muted">Lead developer</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="/static/admin/global_assets/images/demo/users/face2.jpg" width="170" height="170" alt="">
+									<div class="card-img-actions-overlay card-img rounded-circle">
+										<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+											<i class="icon-plus3"></i>
+										</a>
+										<a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+											<i class="icon-link"></i>
+										</a>
+									</div>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">Nathan Jacobson</h6>
+					    		<span class="d-block text-muted">Lead UX designer</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="/static/admin/global_assets/images/demo/users/face3.jpg" width="170" height="170" alt="">
+									<div class="card-img-actions-overlay card-img rounded-circle">
+										<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+											<i class="icon-plus3"></i>
+										</a>
+										<a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+											<i class="icon-link"></i>
+										</a>
+									</div>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">Margo Baker</h6>
+					    		<span class="d-block text-muted">Sales manager</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="/static/admin/global_assets/images/demo/users/face4.jpg" width="170" height="170" alt="">
+									<div class="card-img-actions-overlay card-img rounded-circle">
+										<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+											<i class="icon-plus3"></i>
+										</a>
+										<a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+											<i class="icon-link"></i>
+										</a>
+									</div>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">Barbara Walden</h6>
+					    		<span class="d-block text-muted">SEO specialist</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="/static/admin/global_assets/images/demo/users/face11.jpg" width="170" height="170" alt="">
+									<div class="card-img-actions-overlay card-img rounded-circle">
+										<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+											<i class="icon-plus3"></i>
+										</a>
+										<a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+											<i class="icon-link"></i>
+										</a>
+									</div>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">Hanna Dorman</h6>
+					    		<span class="d-block text-muted">UX/UI designer</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="/static/admin/global_assets/images/demo/users/face14.jpg" width="170" height="170" alt="">
+									<div class="card-img-actions-overlay card-img rounded-circle">
+										<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+											<i class="icon-plus3"></i>
+										</a>
+										<a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+											<i class="icon-link"></i>
+										</a>
+									</div>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">Benjamin Loretti</h6>
+					    		<span class="d-block text-muted">Network engineer</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="/static/admin/global_assets/images/demo/users/face13.jpg" width="170" height="170" alt="">
+									<div class="card-img-actions-overlay card-img rounded-circle">
+										<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+											<i class="icon-plus3"></i>
+										</a>
+										<a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+											<i class="icon-link"></i>
+										</a>
+									</div>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">Vanessa Aurelius</h6>
+					    		<span class="d-block text-muted">Front end guru</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="/static/admin/global_assets/images/demo/users/face8.jpg" width="170" height="170" alt="">
+									<div class="card-img-actions-overlay card-img rounded-circle">
+										<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+											<i class="icon-plus3"></i>
+										</a>
+										<a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+											<i class="icon-link"></i>
+										</a>
+									</div>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">William Brenson</h6>
+					    		<span class="d-block text-muted">Chief officer</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="/static/admin/global_assets/images/demo/users/face6.jpg" width="170" height="170" alt="">
+									<div class="card-img-actions-overlay card-img rounded-circle">
+										<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+											<i class="icon-plus3"></i>
+										</a>
+										<a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+											<i class="icon-link"></i>
+										</a>
+									</div>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">Lucy North</h6>
+					    		<span class="d-block text-muted">PHP developer</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="/static/admin/global_assets/images/demo/users/face16.jpg" width="170" height="170" alt="">
+									<div class="card-img-actions-overlay card-img rounded-circle">
+										<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+											<i class="icon-plus3"></i>
+										</a>
+										<a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+											<i class="icon-link"></i>
+										</a>
+									</div>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">Vicky Barna</h6>
+					    		<span class="d-block text-muted">UI designer</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="/static/admin/global_assets/images/demo/users/face25.jpg" width="170" height="170" alt="">
+									<div class="card-img-actions-overlay card-img rounded-circle">
+										<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+											<i class="icon-plus3"></i>
+										</a>
+										<a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+											<i class="icon-link"></i>
+										</a>
+									</div>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">Hugo Bills</h6>
+					    		<span class="d-block text-muted">Sales manager</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="/static/admin/global_assets/images/demo/users/face22.jpg" width="170" height="170" alt="">
+									<div class="card-img-actions-overlay card-img rounded-circle">
+										<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+											<i class="icon-plus3"></i>
+										</a>
+										<a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+											<i class="icon-link"></i>
+										</a>
+									</div>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">Tony Gurrano</h6>
+					    		<span class="d-block text-muted">CEO and founder</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+				</div>
+				<!-- /vertical cards view -->
+
+
+				<!-- Horizontal cards view -->
+				<div class="pt-2 mb-3">
+					<h6 class="mb-0 font-weight-semibold">
+						Horizontal cards view
+					</h6>
+					<span class="text-muted d-block">User cards with horizontal components</span>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4">
+						<div class="card card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face11.jpg" class="rounded-circle" width="42" height="42" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<h6 class="mb-0">Hanna Dorman</h6>
+									<span class="text-muted">UX/UI designer</span>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<div class="list-icons">
+				                    	<div class="list-icons-item dropdown">
+					                    	<a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+					                    	<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Start chat</a>
+												<a href="#" class="dropdown-item"><i class="icon-phone2"></i> Make a call</a>
+												<a href="#" class="dropdown-item"><i class="icon-mail5"></i> Send mail</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Statistics</a>
+											</div>
+				                    	</div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face14.jpg" class="rounded-circle" width="42" height="42" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<h6 class="mb-0">Benjamin Loretti</h6>
+									<span class="text-muted">Network engineer</span>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<div class="list-icons">
+				                    	<div class="list-icons-item dropdown">
+					                    	<a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+					                    	<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Start chat</a>
+												<a href="#" class="dropdown-item"><i class="icon-phone2"></i> Make a call</a>
+												<a href="#" class="dropdown-item"><i class="icon-mail5"></i> Send mail</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Statistics</a>
+											</div>
+				                    	</div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face13.jpg" class="rounded-circle" width="42" height="42" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<h6 class="mb-0">Vanessa Aurelius</h6>
+									<span class="text-muted">Front end guru</span>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<div class="list-icons">
+				                    	<div class="list-icons-item dropdown">
+					                    	<a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+					                    	<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Start chat</a>
+												<a href="#" class="dropdown-item"><i class="icon-phone2"></i> Make a call</a>
+												<a href="#" class="dropdown-item"><i class="icon-mail5"></i> Send mail</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Statistics</a>
+											</div>
+				                    	</div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4">
+						<div class="card card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face1.jpg" class="rounded-circle" width="42" height="42" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<h6 class="mb-0">James Alexander</h6>
+									<span class="text-muted">Lead developer</span>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<div class="list-icons">
+				                    	<div class="list-icons-item dropdown">
+					                    	<a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+					                    	<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Start chat</a>
+												<a href="#" class="dropdown-item"><i class="icon-phone2"></i> Make a call</a>
+												<a href="#" class="dropdown-item"><i class="icon-mail5"></i> Send mail</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Statistics</a>
+											</div>
+				                    	</div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face2.jpg" class="rounded-circle" width="42" height="42" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<h6 class="mb-0">Nathan Jacobson</h6>
+									<span class="text-muted">Lead UX designer</span>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<div class="list-icons">
+				                    	<div class="list-icons-item dropdown">
+					                    	<a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+					                    	<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Start chat</a>
+												<a href="#" class="dropdown-item"><i class="icon-phone2"></i> Make a call</a>
+												<a href="#" class="dropdown-item"><i class="icon-mail5"></i> Send mail</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Statistics</a>
+											</div>
+				                    	</div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face3.jpg" class="rounded-circle" width="42" height="42" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<h6 class="mb-0">Margo Baker</h6>
+									<span class="text-muted">Sales manager</span>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<div class="list-icons">
+				                    	<div class="list-icons-item dropdown">
+					                    	<a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+					                    	<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Start chat</a>
+												<a href="#" class="dropdown-item"><i class="icon-phone2"></i> Make a call</a>
+												<a href="#" class="dropdown-item"><i class="icon-mail5"></i> Send mail</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Statistics</a>
+											</div>
+				                    	</div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4">
+						<div class="card card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face4.jpg" class="rounded-circle" width="42" height="42" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<h6 class="mb-0">Barbara Walden</h6>
+									<span class="text-muted">SEO specialist</span>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<div class="list-icons">
+				                    	<div class="list-icons-item dropdown">
+					                    	<a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+					                    	<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Start chat</a>
+												<a href="#" class="dropdown-item"><i class="icon-phone2"></i> Make a call</a>
+												<a href="#" class="dropdown-item"><i class="icon-mail5"></i> Send mail</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Statistics</a>
+											</div>
+				                    	</div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face8.jpg" class="rounded-circle" width="42" height="42" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<h6 class="mb-0">William Brenson</h6>
+									<span class="text-muted">Chief officer</span>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<div class="list-icons">
+				                    	<div class="list-icons-item dropdown">
+					                    	<a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+					                    	<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Start chat</a>
+												<a href="#" class="dropdown-item"><i class="icon-phone2"></i> Make a call</a>
+												<a href="#" class="dropdown-item"><i class="icon-mail5"></i> Send mail</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Statistics</a>
+											</div>
+				                    	</div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face6.jpg" class="rounded-circle" width="42" height="42" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<h6 class="mb-0">Lucy North</h6>
+									<span class="text-muted">PHP developer</span>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<div class="list-icons">
+				                    	<div class="list-icons-item dropdown">
+					                    	<a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+					                    	<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Start chat</a>
+												<a href="#" class="dropdown-item"><i class="icon-phone2"></i> Make a call</a>
+												<a href="#" class="dropdown-item"><i class="icon-mail5"></i> Send mail</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Statistics</a>
+											</div>
+				                    	</div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4">
+						<div class="card card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face16.jpg" class="rounded-circle" width="42" height="42" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<h6 class="mb-0">Vicky Barna</h6>
+									<span class="text-muted">UI designer</span>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<div class="list-icons">
+				                    	<div class="list-icons-item dropdown">
+					                    	<a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+					                    	<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Start chat</a>
+												<a href="#" class="dropdown-item"><i class="icon-phone2"></i> Make a call</a>
+												<a href="#" class="dropdown-item"><i class="icon-mail5"></i> Send mail</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Statistics</a>
+											</div>
+				                    	</div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face25.jpg" class="rounded-circle" width="42" height="42" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<h6 class="mb-0">Hugo Bills</h6>
+									<span class="text-muted">Sales manager</span>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<div class="list-icons">
+				                    	<div class="list-icons-item dropdown">
+					                    	<a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+					                    	<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Start chat</a>
+												<a href="#" class="dropdown-item"><i class="icon-phone2"></i> Make a call</a>
+												<a href="#" class="dropdown-item"><i class="icon-mail5"></i> Send mail</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Statistics</a>
+											</div>
+				                    	</div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="card card-body">
+							<div class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face22.jpg" class="rounded-circle" width="42" height="42" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<h6 class="mb-0">Tony Gurrano</h6>
+									<span class="text-muted">CEO and founder</span>
+								</div>
+
+								<div class="ml-3 align-self-center">
+									<div class="list-icons">
+				                    	<div class="list-icons-item dropdown">
+					                    	<a href="#" class="list-icons-item dropdown-toggle caret-0" data-toggle="dropdown"><i class="icon-menu7"></i></a>
+					                    	<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Start chat</a>
+												<a href="#" class="dropdown-item"><i class="icon-phone2"></i> Make a call</a>
+												<a href="#" class="dropdown-item"><i class="icon-mail5"></i> Send mail</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-statistics"></i> Statistics</a>
+											</div>
+				                    	</div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /horizontal cards view -->
+
+
+				<!-- List view -->
+				<div class="pt-2 mb-3">
+					<h6 class="mb-0 font-weight-semibold">
+						List view
+					</h6>
+					<span class="text-muted d-block">Single card with rows</span>
+				</div>
+
+				<div class="card">
+					<div class="card-body">
+						<ul class="media-list">
+							<li class="media font-weight-semibold py-1">Team leaders</li>
+
+							<li class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face1.jpg" class="rounded-circle" width="40" height="40" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">James Alexander</div>
+									<span class="text-muted">Development</span>
+								</div>
+
+								<div class="align-self-center ml-3">
+									<div class="list-icons list-icons-extended">
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Call" data-toggle="modal" data-trigger="hover" data-target="#call"><i class="icon-phone2"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Chat" data-toggle="modal" data-trigger="hover" data-target="#chat"><i class="icon-comment"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Video" data-toggle="modal" data-trigger="hover" data-target="#video"><i class="icon-video-camera"></i></a>
+			                    	</div>
+								</div>
+							</li>
+
+							<li class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face2.jpg" class="rounded-circle" width="40" height="40" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">Jeremy Victorino</div>
+									<span class="text-muted">Finances</span>
+								</div>
+
+								<div class="align-self-center ml-3">
+									<div class="list-icons list-icons-extended">
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Call" data-toggle="modal" data-trigger="hover" data-target="#call"><i class="icon-phone2"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Chat" data-toggle="modal" data-trigger="hover" data-target="#chat"><i class="icon-comment"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Video" data-toggle="modal" data-trigger="hover" data-target="#video"><i class="icon-video-camera"></i></a>
+			                    	</div>
+								</div>
+							</li>
+
+							<li class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face3.jpg" class="rounded-circle" width="40" height="40" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">Margo Baker</div>
+									<span class="text-muted">Marketing</span>
+								</div>
+
+								<div class="align-self-center ml-3">
+									<div class="list-icons list-icons-extended">
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Call" data-toggle="modal" data-trigger="hover" data-target="#call"><i class="icon-phone2"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Chat" data-toggle="modal" data-trigger="hover" data-target="#chat"><i class="icon-comment"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Video" data-toggle="modal" data-trigger="hover" data-target="#video"><i class="icon-video-camera"></i></a>
+			                    	</div>
+								</div>
+							</li>
+
+							<li class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face4.jpg" class="rounded-circle" width="40" height="40" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">Monica Smith</div>
+									<span class="text-muted">Design</span>
+								</div>
+
+								<div class="align-self-center ml-3">
+									<div class="list-icons list-icons-extended">
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Call" data-toggle="modal" data-trigger="hover" data-target="#call"><i class="icon-phone2"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Chat" data-toggle="modal" data-trigger="hover" data-target="#chat"><i class="icon-comment"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Video" data-toggle="modal" data-trigger="hover" data-target="#video"><i class="icon-video-camera"></i></a>
+			                    	</div>
+								</div>
+							</li>
+
+							<li class="media font-weight-semibold py-1">Office staff</li>
+
+							<li class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face5.jpg" class="rounded-circle" width="40" height="40" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">Bastian Miller</div>
+									<span class="text-muted">Web dev</span>
+								</div>
+
+								<div class="align-self-center ml-3">
+									<div class="list-icons list-icons-extended">
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Call" data-toggle="modal" data-trigger="hover" data-target="#call"><i class="icon-phone2"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Chat" data-toggle="modal" data-trigger="hover" data-target="#chat"><i class="icon-comment"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Video" data-toggle="modal" data-trigger="hover" data-target="#video"><i class="icon-video-camera"></i></a>
+			                    	</div>
+								</div>
+							</li>
+
+							<li class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face6.jpg" class="rounded-circle" width="40" height="40" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">Jordana Mills</div>
+									<span class="text-muted">Sales consultant</span>
+								</div>
+
+								<div class="align-self-center ml-3">
+									<div class="list-icons list-icons-extended">
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Call" data-toggle="modal" data-trigger="hover" data-target="#call"><i class="icon-phone2"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Chat" data-toggle="modal" data-trigger="hover" data-target="#chat"><i class="icon-comment"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Video" data-toggle="modal" data-trigger="hover" data-target="#video"><i class="icon-video-camera"></i></a>
+			                    	</div>
+								</div>
+							</li>
+
+							<li class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face7.jpg" class="rounded-circle" width="40" height="40" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">Buzz Brenson</div>
+									<span class="text-muted">UX expert</span>
+								</div>
+
+								<div class="align-self-center ml-3">
+									<div class="list-icons list-icons-extended">
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Call" data-toggle="modal" data-trigger="hover" data-target="#call"><i class="icon-phone2"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Chat" data-toggle="modal" data-trigger="hover" data-target="#chat"><i class="icon-comment"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Video" data-toggle="modal" data-trigger="hover" data-target="#video"><i class="icon-video-camera"></i></a>
+			                    	</div>
+								</div>
+							</li>
+
+							<li class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face8.jpg" class="rounded-circle" width="40" height="40" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">Zachary Willson</div>
+									<span class="text-muted">Illustrator</span>
+								</div>
+
+								<div class="align-self-center ml-3">
+									<div class="list-icons list-icons-extended">
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Call" data-toggle="modal" data-trigger="hover" data-target="#call"><i class="icon-phone2"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Chat" data-toggle="modal" data-trigger="hover" data-target="#chat"><i class="icon-comment"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Video" data-toggle="modal" data-trigger="hover" data-target="#video"><i class="icon-video-camera"></i></a>
+			                    	</div>
+								</div>
+							</li>
+
+							<li class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face9.jpg" class="rounded-circle" width="40" height="40" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">William Miles</div>
+									<span class="text-muted">SEO expert</span>
+								</div>
+
+								<div class="align-self-center ml-3">
+									<div class="list-icons list-icons-extended">
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Call" data-toggle="modal" data-trigger="hover" data-target="#call"><i class="icon-phone2"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Chat" data-toggle="modal" data-trigger="hover" data-target="#chat"><i class="icon-comment"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Video" data-toggle="modal" data-trigger="hover" data-target="#video"><i class="icon-video-camera"></i></a>
+			                    	</div>
+								</div>
+							</li>
+
+							<li class="media font-weight-semibold py-1">Partners</li>
+
+							<li class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face10.jpg" class="rounded-circle" width="40" height="40" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">Freddy Walden</div>
+									<span class="text-muted">Microsoft</span>
+								</div>
+
+								<div class="align-self-center ml-3">
+									<div class="list-icons list-icons-extended">
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Call" data-toggle="modal" data-trigger="hover" data-target="#call"><i class="icon-phone2"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Chat" data-toggle="modal" data-trigger="hover" data-target="#chat"><i class="icon-comment"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Video" data-toggle="modal" data-trigger="hover" data-target="#video"><i class="icon-video-camera"></i></a>
+			                    	</div>
+								</div>
+							</li>
+
+							<li class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face11.jpg" class="rounded-circle" width="40" height="40" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">Dori Laperriere</div>
+									<span class="text-muted">Google</span>
+								</div>
+
+								<div class="align-self-center ml-3">
+									<div class="list-icons list-icons-extended">
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Call" data-toggle="modal" data-trigger="hover" data-target="#call"><i class="icon-phone2"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Chat" data-toggle="modal" data-trigger="hover" data-target="#chat"><i class="icon-comment"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Video" data-toggle="modal" data-trigger="hover" data-target="#video"><i class="icon-video-camera"></i></a>
+			                    	</div>
+								</div>
+							</li>
+
+							<li class="media">
+								<div class="mr-3">
+									<a href="#">
+										<img src="/static/admin/global_assets/images/demo/users/face12.jpg" class="rounded-circle" width="40" height="40" alt="">
+									</a>
+								</div>
+
+								<div class="media-body">
+									<div class="media-title font-weight-semibold">Vanessa Aurelius</div>
+									<span class="text-muted">Facebook</span>
+								</div>
+
+								<div class="align-self-center ml-3">
+									<div class="list-icons list-icons-extended">
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Call" data-toggle="modal" data-trigger="hover" data-target="#call"><i class="icon-phone2"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Chat" data-toggle="modal" data-trigger="hover" data-target="#chat"><i class="icon-comment"></i></a>
+				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Video" data-toggle="modal" data-trigger="hover" data-target="#video"><i class="icon-video-camera"></i></a>
+			                    	</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- /list view -->
+
+
+				<!-- Pagination -->
+				<div class="d-flex justify-content-center pt-3 mb-3">
+					<ul class="pagination">
+						<li class="page-item"><a href="#" class="page-link"><i class="icon-arrow-small-right"></i></a></li>
+						<li class="page-item active"><a href="#" class="page-link">1</a></li>
+						<li class="page-item"><a href="#" class="page-link">2</a></li>
+						<li class="page-item"><a href="#" class="page-link">3</a></li>
+						<li class="page-item"><a href="#" class="page-link">4</a></li>
+						<li class="page-item"><a href="#" class="page-link">5</a></li>
+						<li class="page-item"><a href="#" class="page-link"><i class="icon-arrow-small-left"></i></a></li>
+					</ul>
+				</div>
+				<!-- /pagination -->
+
+			</div>
+			<!-- /content area -->
+
+{%endblock%}

@@ -1,0 +1,171 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+		<!-- Theme JS files -->
+		<script src="/static/admin/global_assets/js/plugins/visualization/echarts/echarts.min.js"></script>
+		<script src="/static/admin/global_assets/js/demo_pages/charts/echarts/columns_waterfalls.js"></script>
+		<!-- /theme JS files -->
+	 
+{% endblock %}
+{%block pagename%}Echarts - Columns & Waterfalls{%endblock%}
+{%block content%}
+
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Basic columns -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Basic columns</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="columns_basic"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /basic columns -->
+
+
+				<!-- Stacked columns -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Stacked columns</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="columns_stacked"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /stacked columns -->
+
+
+				<!-- Thermometer chart -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Thermometer chart</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="columns_thermometer"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /thermometer chart -->
+
+
+				<!-- Stacked clustered columns -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Stacked clustered columns</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="columns_clustered"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /stacked clustered columns -->
+
+
+				<!-- Compositive waterfall -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Compositive waterfall</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="columns_compositive_waterfall"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /compositive waterfall -->
+
+
+				<!-- Change waterfall -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Change waterfall</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="columns_change_waterfall"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /change waterfall -->
+
+
+				<!-- Columns timeline -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Columns timeline</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="columns_timeline"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /columns timeline -->
+
+			</div>
+			<!-- /content area -->
+{%endblock%}

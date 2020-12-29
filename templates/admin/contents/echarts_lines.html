@@ -1,0 +1,150 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/visualization/echarts/echarts.min.js"></script> 
+	<script src="/static/admin/global_assets/js/demo_pages/charts/echarts/lines.js"></script>
+	<!-- /theme JS files -->
+ 
+{% endblock %}
+{%block pagename%}Echarts - Lines{%endblock%}
+{%block content%}
+
+	
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Basic line -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Basic line</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="line_basic"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /basic line -->
+
+
+				<!-- Stacked lines -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Stacked lines</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="line_stacked"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /stacked lines -->
+
+
+				<!-- Inverted axes -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Inverted axes</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="line_inverted_axes"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /inverted axes -->
+
+
+				<!-- Line multiples -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Line multiples</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="line_multiple" style="height: 440px;"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /line multiples -->
+
+
+				<!-- Show values -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Show values</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="line_values"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /show values -->
+
+
+				<!-- Zoom option -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Zoom option</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart has-fixed-height" id="line_zoom"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /zoom option -->
+
+			</div>
+			<!-- /content area -->
+
+{%endblock%}

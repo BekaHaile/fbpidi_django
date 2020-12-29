@@ -1,0 +1,129 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+    <!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/visualization/d3/d3.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/visualization/c3/c3.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/charts/c3/c3_axis.js"></script>
+	<!-- /theme JS files -->
+ 
+ 
+{% endblock %}
+{%block pagename%}C3 - Axis{%endblock%}
+{%block content%}
+	
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Categorized axes -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Categorized axis</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart" id="c3-axis-categorized"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /xategorized axes -->
+
+
+				<!-- Additional axes -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Additional axis</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart" id="c3-axis-additional"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /additional axes -->
+
+
+				<!-- Axis tick culling -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Axis tick culling</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart" id="c3-axis-tick-culling"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /axis tick culling -->
+
+
+				<!-- Axis tick rotation -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Axis tick rotation</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart" id="c3-axis-tick-rotation"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /axis tick rotation -->
+
+
+				<!-- Axis labels -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Additional axis labels</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+
+					<div class="card-body">
+						<div class="chart-container">
+							<div class="chart" id="c3-axis-labels"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /axis labels -->
+
+			</div>
+			<!-- /content area -->
+{%endblock%}

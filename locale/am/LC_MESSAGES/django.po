@@ -1,0 +1,675 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-02 10:38+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\fbpims\settings.py:138 .\templates\frontpages\layout.html:124
+msgid "Amharic"
+msgstr "አማርኛ"
+
+#: .\templates\admin\404.html:4 .\templates\admin\404.html:8
+msgid "Page not found"
+msgstr ""
+
+#: .\templates\admin\404.html:10
+msgid "We’re sorry, but the requested page could not be found."
+msgstr ""
+
+#: .\templates\admin\500.html:6 .\templates\admin\app_index.html:9
+#: .\templates\admin\base.html:65 .\templates\admin\change_form.html:19
+#: .\templates\admin\delete_confirmation.html:14
+#: .\templates\admin\delete_selected_confirmation.html:14
+#: .\templates\admin\invalid_setup.html:6
+#: .\templates\admin\object_history.html:6
+#: .\templates\frontpages\layout.html:156
+#: .\templates\registration\logged_out.html:4
+#: .\templates\registration\password_change_done.html:6
+#: .\templates\registration\password_change_form.html:8
+#: .\templates\registration\password_reset_complete.html:6
+#: .\templates\registration\password_reset_confirm.html:7
+#: .\templates\registration\password_reset_done.html:6
+#: .\templates\registration\password_reset_form.html:7
+msgid "Home"
+msgstr "ዋና ገጽ"
+
+#: .\templates\admin\500.html:7
+msgid "Server error"
+msgstr ""
+
+#: .\templates\admin\500.html:11
+msgid "Server error (500)"
+msgstr ""
+
+#: .\templates\admin\500.html:14
+msgid "Server Error <em>(500)</em>"
+msgstr ""
+
+#: .\templates\admin\500.html:15
+msgid ""
+"There’s been an error. It’s been reported to the site administrators via "
+"email and should be fixed shortly. Thanks for your patience."
+msgstr ""
+
+#: .\templates\admin\actions.html:16
+msgid "Run the selected action"
+msgstr ""
+
+#: .\templates\admin\actions.html:16
+msgid "Go"
+msgstr ""
+
+#: .\templates\admin\actions.html:27
+msgid "Click here to select the objects across all pages"
+msgstr ""
+
+#: .\templates\admin\actions.html:27
+#, python-format
+msgid "Select all %(total_count)s %(module_name)s"
+msgstr ""
+
+#: .\templates\admin\actions.html:29
+msgid "Clear selection"
+msgstr ""
+
+#: .\templates\admin\app_list.html:12 .\templates\admin\app_list.html:27
+#: .\templates\admin\app_list.html:44
+#, python-format
+msgid "Models in the %(name)s application"
+msgstr ""
+
+#: .\templates\admin\app_list.html:55
+#: .\templates\admin\widgets\related_widget_wrapper.html:18
+msgid "Add"
+msgstr ""
+
+#: .\templates\admin\app_list.html:62
+#: .\templates\admin\edit_inline\stacked.html:12
+#: .\templates\admin\edit_inline\tabular.html:34
+msgid "View"
+msgstr ""
+
+#: .\templates\admin\app_list.html:64
+#: .\templates\admin\edit_inline\stacked.html:12
+#: .\templates\admin\edit_inline\tabular.html:34
+#: .\templates\admin\widgets\related_widget_wrapper.html:11
+msgid "Change"
+msgstr ""
+
+#: .\templates\admin\app_list.html:75
+msgid "You don’t have permission to view or edit anything."
+msgstr ""
+
+#: .\templates\admin\auth\user\add_form.html:6
+msgid ""
+"First, enter a username and password. Then, you’ll be able to edit more user "
+"options."
+msgstr ""
+
+#: .\templates\admin\auth\user\add_form.html:8
+msgid "Enter a username and password."
+msgstr ""
+
+#: .\templates\admin\auth\user\change_password.html:17
+#: .\templates\admin\change_form.html:58 .\templates\admin\change_list.html:39
+#: .\templates\admin\login.html:107
+msgid "Please correct the error below."
+msgstr ""
+
+#: .\templates\admin\auth\user\change_password.html:17
+#: .\templates\admin\change_form.html:58 .\templates\admin\change_list.html:39
+#: .\templates\admin\login.html:107
+msgid "Please correct the errors below."
+msgstr ""
+
+#: .\templates\admin\auth\user\change_password.html:21
+#, python-format
+msgid "Enter a new password for the user <strong>%(username)s</strong>."
+msgstr ""
+
+#: .\templates\admin\auth\user\change_password.html:45
+#: .\templates\admin\base.html:53
+#: .\templates\registration\password_change_done.html:3
+#: .\templates\registration\password_change_form.html:5
+msgid "Change password"
+msgstr ""
+
+#: .\templates\admin\base.html:39
+msgid "Welcome,"
+msgstr ""
+
+#: .\templates\admin\base.html:44
+msgid "View site"
+msgstr ""
+
+#: .\templates\admin\base.html:49
+#: .\templates\registration\password_change_done.html:3
+#: .\templates\registration\password_change_form.html:5
+msgid "Documentation"
+msgstr ""
+
+#: .\templates\admin\base.html:55
+#: .\templates\registration\password_change_done.html:3
+#: .\templates\registration\password_change_form.html:5
+msgid "Log out"
+msgstr ""
+
+#: .\templates\admin\base_site.html:3
+msgid "Admin"
+msgstr ""
+
+#: .\templates\admin\change_form.html:22
+#: .\templates\admin\change_list_object_tools.html:8
+#, python-format
+msgid "Add %(name)s"
+msgstr ""
+
+#: .\templates\admin\change_form_object_tools.html:6
+#: .\templates\admin\object_history.html:10
+msgid "History"
+msgstr ""
+
+#: .\templates\admin\change_form_object_tools.html:8
+#: .\templates\admin\edit_inline\stacked.html:14
+#: .\templates\admin\edit_inline\tabular.html:36
+msgid "View on site"
+msgstr ""
+
+#: .\templates\admin\change_list.html:114
+msgid "Filter"
+msgstr ""
+
+#: .\templates\admin\change_list.html:126
+msgid "Clear all filters"
+msgstr ""
+
+#: .\templates\admin\change_list_results.html:17
+msgid "Remove from sorting"
+msgstr ""
+
+#: .\templates\admin\change_list_results.html:19
+#, python-format
+msgid "Sorting priority: %(priority_number)s"
+msgstr ""
+
+#: .\templates\admin\change_list_results.html:22
+msgid "Toggle sorting"
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:18
+#: .\templates\admin\submit_line.html:7
+#: .\templates\admin\widgets\related_widget_wrapper.html:25
+msgid "Delete"
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:31
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
+"related objects, but your account doesn't have permission to delete the "
+"following types of objects:"
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:38
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
+"following protected related objects:"
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:45
+#, python-format
+msgid ""
+"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
+"All of the following related items will be deleted:"
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:47
+#: .\templates\admin\delete_selected_confirmation.html:39
+msgid "Objects"
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:54
+#: .\templates\admin\delete_selected_confirmation.html:50
+msgid "Yes, I’m sure"
+msgstr ""
+
+#: .\templates\admin\delete_confirmation.html:55
+#: .\templates\admin\delete_selected_confirmation.html:51
+msgid "No, take me back"
+msgstr ""
+
+#: .\templates\admin\delete_selected_confirmation.html:17
+msgid "Delete multiple objects"
+msgstr ""
+
+#: .\templates\admin\delete_selected_confirmation.html:23
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would result in deleting related "
+"objects, but your account doesn't have permission to delete the following "
+"types of objects:"
+msgstr ""
+
+#: .\templates\admin\delete_selected_confirmation.html:30
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would require deleting the following "
+"protected related objects:"
+msgstr ""
+
+#: .\templates\admin\delete_selected_confirmation.html:37
+#, python-format
+msgid ""
+"Are you sure you want to delete the selected %(objects_name)s? All of the "
+"following objects and their related items will be deleted:"
+msgstr ""
+
+#: .\templates\admin\edit_inline\tabular.html:20
+msgid "Delete?"
+msgstr ""
+
+#: .\templates\admin\filter.html:6
+#, python-format
+msgid " By %(filter_title)s "
+msgstr ""
+
+#: .\templates\admin\includes\object_delete_summary.html:2
+msgid "Summary"
+msgstr ""
+
+#: .\templates\admin\invalid_setup.html:12
+msgid ""
+"Something’s wrong with your database installation. Make sure the appropriate "
+"database tables have been created, and make sure the database is readable by "
+"the appropriate user."
+msgstr ""
+
+#: .\templates\admin\login.html:123
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+
+#: .\templates\admin\login.html:143
+msgid "Forgotten your password or username?"
+msgstr ""
+
+#: .\templates\admin\login.html:147
+#: .\templates\registration\password_reset_complete.html:18
+msgid "Log in"
+msgstr ""
+
+#: .\templates\admin\nav_sidebar.html:2
+msgid "Toggle navigation"
+msgstr ""
+
+#: .\templates\admin\object_history.html:27
+msgid "Date/time"
+msgstr ""
+
+#: .\templates\admin\object_history.html:28
+msgid "User"
+msgstr ""
+
+#: .\templates\admin\object_history.html:29
+msgid "Action"
+msgstr ""
+
+#: .\templates\admin\object_history.html:43
+msgid ""
+"This object doesn’t have a change history. It probably wasn’t added via this "
+"admin site."
+msgstr ""
+
+#: .\templates\admin\pages\product_detail.html:26
+msgid "Ecommerce - Product Detail"
+msgstr ""
+
+#: .\templates\admin\pagination.html:11 .\templates\admin\search_form.html:18
+msgid "Show all"
+msgstr ""
+
+#: .\templates\admin\pagination.html:12 .\templates\admin\submit_line.html:12
+msgid "Save"
+msgstr ""
+
+#: .\templates\admin\popup_response.html:3
+msgid "Popup closing…"
+msgstr ""
+
+#: .\templates\admin\search_form.html:15
+msgid "Search"
+msgstr ""
+
+#: .\templates\admin\search_form.html:18
+#, python-format
+msgid "%(counter)s result"
+msgid_plural "%(counter)s results"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\templates\admin\search_form.html:18
+#, python-format
+msgid "%(full_result_count)s total"
+msgstr ""
+
+#: .\templates\admin\submit_line.html:15
+msgid "Save as new"
+msgstr ""
+
+#: .\templates\admin\submit_line.html:16
+msgid "Save and add another"
+msgstr ""
+
+#: .\templates\admin\submit_line.html:17
+msgid "Save and continue editing"
+msgstr ""
+
+#: .\templates\admin\submit_line.html:17
+msgid "Save and view"
+msgstr ""
+
+#: .\templates\admin\submit_line.html:18
+msgid "Close"
+msgstr ""
+
+#: .\templates\admin\widgets\related_widget_wrapper.html:10
+#, python-format
+msgid "Change selected %(model)s"
+msgstr ""
+
+#: .\templates\admin\widgets\related_widget_wrapper.html:17
+#, python-format
+msgid "Add another %(model)s"
+msgstr ""
+
+#: .\templates\admin\widgets\related_widget_wrapper.html:24
+#, python-format
+msgid "Delete selected %(model)s"
+msgstr ""
+
+#: .\templates\frontpages\index.html:13
+msgid "Welcome To The Biggest Business Directory"
+msgstr "ወደ ትልቁ የንግድ ማውጫ እንኳን በደህና መጡ"
+
+#: .\templates\frontpages\index.html:14
+msgid ""
+"It is a long established fact that a reader will be distracted by the "
+"readable."
+msgstr "አንባቢ በሚነበብ ነገር ሊዘናጋ መሆኑ ረጅም የተረጋገጠ ሀቅ ነው ፡፡"
+
+#: .\templates\frontpages\index.html:22
+msgid "Phrase or Keywords"
+msgstr "የመፈለግያ ቃላት ጻፍ"
+
+#: .\templates\frontpages\index.html:27
+msgid "Type"
+msgstr "አይነት"
+
+#: .\templates\frontpages\index.html:28
+msgid "Select Type"
+msgstr "አይነት ምረጥ"
+
+#: .\templates\frontpages\index.html:29 .\templates\frontpages\layout.html:158
+msgid "Manufacturers"
+msgstr "አምራቾች"
+
+#: .\templates\frontpages\index.html:30 .\templates\frontpages\layout.html:165
+msgid "Suppliers"
+msgstr "አቅራቢዎች"
+
+#: .\templates\frontpages\index.html:31 .\templates\frontpages\layout.html:171
+msgid "Products"
+msgstr "ምርት"
+
+#: .\templates\frontpages\index.html:38
+msgid "Categories"
+msgstr "ምድቦች"
+
+#: .\templates\frontpages\index.html:39
+msgid "Select Category"
+msgstr "ምድብ ምረጥ"
+
+#: .\templates\frontpages\index.html:40
+#, fuzzy
+#| msgid "Categories"
+msgid "All Categories"
+msgstr "ምድቦች"
+
+#: .\templates\frontpages\index.html:60
+msgid "Search Here"
+msgstr "ፈልግ"
+
+#: .\templates\frontpages\index.html:761
+msgid "Latest Products"
+msgstr "ምርት"
+
+#: .\templates\frontpages\index.html:762 .\templates\frontpages\index.html:916
+#: .\templates\frontpages\index.html:975
+msgid "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula"
+msgstr "ሞርቢ አሥራ አንድ ፣ ሊጉላ በሴሴቲተር ተሸከርካሪ ላይ ሞርቢ አሥራ አንድ ፣ ሊጉላ በሴሴቲተር ተሸከርካሪ ላይ"
+
+#: .\templates\frontpages\index.html:915
+msgid "Latest Manufacturers"
+msgstr "አምራቾች"
+
+#: .\templates\frontpages\index.html:974
+msgid "Latest Suppliers"
+msgstr "አቅራቢዎች"
+
+#: .\templates\frontpages\index.html:1096
+msgid "Total Products"
+msgstr "ምርት"
+
+#: .\templates\frontpages\index.html:1105
+msgid "Total Suppliers"
+msgstr "አቅራቢዎች"
+
+#: .\templates\frontpages\index.html:1114
+msgid "Total Manufacturers"
+msgstr "አምራቾች"
+
+#: .\templates\frontpages\index.html:1123
+msgid "Happy Customers"
+msgstr "ደንበኞች"
+
+#: .\templates\frontpages\layout.html:97
+msgid "Register"
+msgstr "ተመዝገብ"
+
+#: .\templates\frontpages\layout.html:101
+msgid "Login"
+msgstr "ግባ"
+
+#: .\templates\frontpages\layout.html:106
+msgid "My Dashboard"
+msgstr "የራስ መቆጣጠሪያ"
+
+#: .\templates\frontpages\layout.html:112
+msgid "Language"
+msgstr "ቋንቋ"
+
+#: .\templates\frontpages\layout.html:118
+msgid "English"
+msgstr "እንግሊዝኛ"
+
+#: .\templates\frontpages\layout.html:157
+msgid "About Us"
+msgstr "ስለ እኛ"
+
+#: .\templates\frontpages\layout.html:160
+#: .\templates\frontpages\layout.html:167
+#: .\templates\frontpages\layout.html:173
+msgid "Foods"
+msgstr "ምግብ"
+
+#: .\templates\frontpages\layout.html:161
+#: .\templates\frontpages\layout.html:168
+#: .\templates\frontpages\layout.html:174
+msgid "Beverages"
+msgstr "መጠጥ"
+
+#: .\templates\frontpages\layout.html:162
+#: .\templates\frontpages\layout.html:169
+#: .\templates\frontpages\layout.html:175
+msgid "Pharmaceuticals"
+msgstr "መድሃኒት"
+
+#: .\templates\frontpages\layout.html:177
+msgid "Blog"
+msgstr "ብሎግ"
+
+#: .\templates\frontpages\layout.html:178
+msgid "Contact Us"
+msgstr "ተገናኙን"
+
+#: .\templates\registration\logged_out.html:10
+msgid "Thanks for spending some quality time with the Web site today."
+msgstr "ለነበረን ጊዘ እናመሰናለን"
+
+#: .\templates\registration\logged_out.html:12
+msgid "Log in again"
+msgstr "እንደገና ግባ"
+
+#: .\templates\registration\password_change_done.html:7
+#: .\templates\registration\password_change_form.html:9
+msgid "Password change"
+msgstr "የይለፍ ቃል ቀይር"
+
+#: .\templates\registration\password_change_done.html:21
+msgid "Your password was changed."
+msgstr ""
+
+#: .\templates\registration\password_change_form.html:38
+#: .\templates\registration\password_reset_confirm.html:32
+msgid "Change my password"
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html:7
+#: .\templates\registration\password_reset_done.html:7
+#: .\templates\registration\password_reset_form.html:8
+msgid "Password reset"
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html:16
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html:8
+msgid "Password reset confirmation"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html:18
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html:24
+msgid "New password:"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html:29
+msgid "Confirm password:"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.html:38
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+
+#: .\templates\registration\password_reset_done.html:15
+msgid ""
+"We’ve emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+
+#: .\templates\registration\password_reset_done.html:17
+msgid ""
+"If you don’t receive an email, please make sure you’ve entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html:8
+msgid "Your username, in case you’ve forgotten:"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: .\templates\registration\password_reset_form.html:16
+msgid ""
+"Forgotten your password? Enter your email address below, and we’ll email "
+"instructions for setting a new one."
+msgstr ""
+
+#: .\templates\registration\password_reset_form.html:22
+msgid "Email address:"
+msgstr ""
+
+#: .\templates\registration\password_reset_form.html:25
+msgid "Reset my password"
+msgstr ""
+
+#~ msgid "Currency"
+#~ msgstr "ገንዘብ"
+
+#~ msgid "My Profile"
+#~ msgstr "የራስ አካውንት"
+
+#~ msgid "Inbox"
+#~ msgstr "በሳጥን"
+
+#~ msgid "Notifications"
+#~ msgstr "መልክት"
+
+#~ msgid "Account Settings"
+#~ msgstr "የአካዉንት ማስተካከያ"
+
+#~ msgid "My favorities"
+#~ msgstr "የራስ ምርጫዎች"
+
+#~ msgid "Widgets"
+#~ msgstr "ዊድጀቶች"
+
+#~ msgid "Welcome to our page"
+#~ msgstr "እንካን ደህና መጡ"
+
+#~ msgid "Hello world! This is an HTML5 Boilerplate."
+#~ msgstr "እንደምነህ አለም ይሕ....።"
+
+#~ msgid "Some Random Text"
+#~ msgstr "ዝምብሎ ጽሁፍ"

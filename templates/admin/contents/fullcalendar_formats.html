@@ -1,0 +1,65 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/fullcalendar/fullcalendar.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/fullcalendar/lang/locale-all.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/fullcalendar_formats.js"></script>
+	<!-- /theme JS files -->
+ 
+{% endblock %}
+{%block pagename%}FullCalendar - Formats{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Internationalization -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Internationalization</h5>
+						<div class="header-elements">
+							<form action="#">
+								<div class="form-group mb-0">
+									<select id="lang-selector" class="form-control form-control-select2" data-container-css-class="bg-slate-700" data-dropdown-css-class="bg-slate-700" data-placeholder="Select language" data-fouc></select>
+								</div>
+							</form>
+	                	</div>
+					</div>
+					
+					<div class="card-body">
+						<p class="mb-3">Customize the language and localization options for the calendar using <code>lang</code> option. If you are simply loading one language, you do not need to specify the <code>lang</code> option. FullCalendar will look at the most recent language file loaded and use it. However, if more than one language file is loaded, or the combined <code>all.js</code> file is loaded, you must explicitly specify which language to use via the lang option.</p>
+
+						<div class="fullcalendar-languages"></div>
+					</div>
+				</div>
+				<!-- /internationalization -->
+
+
+				<!-- Formats -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Date formats</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+		                		<a class="list-icons-item" data-action="collapse"></a>
+		                		<a class="list-icons-item" data-action="reload"></a>
+		                		<a class="list-icons-item" data-action="remove"></a>
+		                	</div>
+	                	</div>
+					</div>
+					
+					<div class="card-body">
+						<p class="mb-3">FullCalendar uses <code>moment.js</code> library to parse and display date and time. Moment.js library allows you to control different display formats: time, title, column and popover. This means you can adapt Fullcalendar to any locale and customize almost everything to your needs. The following example demonstrates different setups for <code>time</code>, <code>column</code> and <code>title</code> date/time formats in different view modes.</p>
+
+						<div class="fullcalendar-formats"></div>
+					</div>
+				</div>
+				<!-- /formats -->
+
+			</div>
+			<!-- /content area -->
+
+{%endblock%}
