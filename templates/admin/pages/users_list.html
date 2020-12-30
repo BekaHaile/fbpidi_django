@@ -22,7 +22,7 @@
 						{%if user.is_admin%}
 						<div class="header-elements">
 							<div class="list-icons">
-								<a href="{% url 'create_user' admin_type='super_admin'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New User</a>
+								<a href="{% url 'admin:create_user' admin_type='super_admin'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New User</a>
 		                	</div>
 						</div>
 						{%endif%}
@@ -48,7 +48,7 @@
 										 {%if pimg.user == usr%}
 										 
 										 <div class="mr-3">
-											<a href="{%url 'user_detail' option='profile_dtl' id=usr.id%}">
+											<a href="{%url 'admin:user_detail' option='profile_dtl' id=usr.id%}">
 												<img src="{{pimg.profile_image.url}}" class="rounded-circle" alt="" width="40" height="40">
 											</a>
 										</div>
@@ -58,7 +58,7 @@
 								<td>{{usr.first_name|title}} {{usr.last_name|title}}</td>
 								<td>{{usr.email}}</td>
 								<td>{{usr.phone_number}}</td>
-								<td><a href="{%url 'user_detail' option='profile_dtl' id=usr.id%}">@{{usr.username}}</a></td>
+								<td><a href="{%url 'admin:user_detail' option='profile_dtl' id=usr.id%}">@{{usr.username}}</a></td>
 								<td>
 									{%if usr.is_suplier%}Supplier{%elif usr.is_manufacturer%}Manufacturer
 									{%elif usr.is_admin%}Super Admin{%else%}Customer{%endif%}
@@ -67,7 +67,7 @@
 								<td class="text-center">
 									<div class="list-icons">
 										<div class="dropdown">
-											<a href="{%url 'delete' model_name='user_account' id=usr.id%}" class="btn btn-xs btn-danger"><i class="icon-trash"></i></a>
+											<a href="{%url 'admin:delete' model_name='user_account' id=usr.id%}" class="btn btn-xs btn-danger"><i class="icon-trash"></i></a>
 										</div>
 									</div>
 								</td>
@@ -83,7 +83,7 @@
 						<h5 class="card-title">Your Company Users</h5>
 						<div class="header-elements">
 							<div class="list-icons">
-								<a href="{% url 'create_user' admin_type='comp_admin'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New User</a>
+								<a href="{% url 'admin:create_user' admin_type='comp_admin'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New User</a>
 		                	</div>
 						</div>
 					</div>
@@ -111,7 +111,7 @@
 										 {%if pimg.user == usr%}
 										 
 										 <div class="mr-3">
-											<a href="{%url 'user_detail' option='profile_dtl' id=usr.id%}">
+											<a href="{%url 'admin:user_detail' option='profile_dtl' id=usr.id%}">
 												<img src="{{pimg.profile_image.url}}" class="rounded-circle" alt="" width="40" height="40">
 											</a>
 										</div>
@@ -121,14 +121,14 @@
 								<td>{{usr.first_name|title}} {{usr.last_name|title}}</td>
 								<td>{{usr.email}}</td>
 								<td>{{usr.phone_number}}</td>
-								<td><a href="{%url 'user_detail' option='profile_dtl' id=usr.id%}">@{{usr.username}}</a></td>
+								<td><a href="{%url 'admin:user_detail' option='profile_dtl' id=usr.id%}">@{{usr.username}}</a></td>
 								<td>
 									{{usr.group_name.name}}
 								</td>
 								<td class="text-center">
 									<div class="list-icons">
 										<div class="dropdown">
-											<a href="{%url 'delete' model_name='user_account' id=usr.id%}" class="btn btn-xs btn-danger"><i class="icon-trash"></i></a>
+											<a href="{%url 'admin:delete' model_name='user_account' id=usr.id%}" class="btn btn-xs btn-danger"><i class="icon-trash"></i></a>
 										</div>
 									</div>
 								</td>

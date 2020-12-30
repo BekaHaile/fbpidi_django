@@ -21,7 +21,7 @@
 						{%if user.is_admin%}
 						<div class="header-elements">
 							<div class="list-icons">
-								<a href="{%url 'create_category' option='category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
+								<a href="{%url 'admin:create_category' option='category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
 		                	</div>
 						</div>
 						{%endif%}
@@ -55,8 +55,8 @@
 
 											<div class="dropdown-menu dropdown-menu-right">
 												{%if user.is_admin%}
-												<a href="{%url 'delete' model_name='category' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Category</a>
-												<a href="{%url 'edit_category' option='category' cat_id=cat.id%}" class="dropdown-item">
+												<a href="{%url 'admin:delete' model_name='category' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Category</a>
+												<a href="{%url 'admin:edit_category' option='category' cat_id=cat.id%}" class="dropdown-item">
 													<i class="icon-pencil"></i>Edit Category</a>
 													{%endif%}
 												<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
@@ -80,7 +80,7 @@
 							{%if user.is_admin%}
 							<div class="header-elements">
 								<div class="list-icons">
-									<a href="{%url 'create_category' option='sub_category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
+									<a href="{%url 'admin:create_category' option='sub_category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
 								</div>
 							</div>
 							{%endif%}
@@ -114,8 +114,8 @@
 
 											<div class="dropdown-menu dropdown-menu-right">
 												{%if user.is_admin%}
-												<a href="{%url 'delete' model_name='sub_category' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Sub-Category</a>
-												<a href="{%url 'edit_category' option='sub_category' cat_id=cat.id%}" class="dropdown-item">
+												<a href="{%url 'admin:delete' model_name='sub_category' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Sub-Category</a>
+												<a href="{%url 'admin:edit_category' option='sub_category' cat_id=cat.id%}" class="dropdown-item">
 													<i class="icon-pencil"></i>Edit Sub-Category</a>
 													{%endif%}
 												<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>

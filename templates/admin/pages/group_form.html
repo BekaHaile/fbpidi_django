@@ -30,7 +30,7 @@
 						
 					<div class="card-body">
 						
-						<form action="{%url 'group_view'%}" method="POST">{%csrf_token%}
+						<form action="{%url 'admin:group_view'%}" method="POST">{%csrf_token%}
 							<fieldset class="mb-3 ml-3 mr-3">
 								<legend class="text-uppercase font-size-sm font-weight-bold">Create Group</legend>
 								{{form|crispy}}

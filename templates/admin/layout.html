@@ -163,28 +163,28 @@
 							<a href="#" class="nav-link"><i class="icon-cabinet"></i> <span>Categories</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
 								<li class="nav-item">
-									<a href="{%url 'p_categories' option='category'%}" class="nav-link"><i class="icon-drawer"></i>
+									<a href="{%url 'admin:p_categories' option='category'%}" class="nav-link"><i class="icon-drawer"></i>
 										<span>Category</span></a>
 								</li>
 
 								<li class="nav-item">
-									<a href="{%url 'p_categories' option='sub_category'%}" class="nav-link"><i class="icon-folder6"></i>
+									<a href="{%url 'admin:p_categories' option='sub_category'%}" class="nav-link"><i class="icon-folder6"></i>
 										<span>Sub-Category</span></a>
 								</li> 
 							</ul>
 						</li>
 						<li class="nav-item">
 							{%if user.is_admin%}
-							<a href="{%url 'admin_products' user_type='admin'%}" class="nav-link"><i
+							<a href="{%url 'admin:admin_products' user_type='admin'%}" class="nav-link"><i
 									class="icon-stack"></i> <span>Products</span></a>
 							{%else%}
-							<a href="{%url 'admin_products' user_type='provider'%}" class="nav-link"><i
+							<a href="{%url 'admin:admin_products' user_type='provider'%}" class="nav-link"><i
 									class="icon-stack"></i> <span>Products</span></a>
 							{%endif%}
 						</li>
 						{%if user.is_admin%}
 						<li class="nav-item">
-							<a href="{%url 'companies' option='supplier' %}" class="nav-link">
+							<a href="{%url 'admin:companies' option='supplier' %}" class="nav-link">
 								<i class="icon-truck"></i>
 								<span>Suppliers</span>
 								<span class="badge bg-blue-400 align-self-center ml-auto">
@@ -193,7 +193,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="{%url 'companies' option='manufacturer' %}" class="nav-link">
+							<a href="{%url 'admin:companies' option='manufacturer' %}" class="nav-link">
 								<i class="icon-cogs"></i>
 								<span>Manufacturing Companies</span>
 								<span class="badge bg-blue-400 align-self-center ml-auto">
@@ -205,7 +205,7 @@
 							<div class="text-uppercase font-size-xs line-height-xs">Log</div> <i class="icon-menu" title="Forms"></i>
 						</li>
 						<li class="nav-item">
-							<a href="{%url 'useraudit' %}" class="nav-link"><i class="icon-archive"></i>
+							<a href="{%url 'admin:useraudit' %}" class="nav-link"><i class="icon-archive"></i>
 								<span>User Logs</span></a>
 						</li>
 
@@ -219,22 +219,22 @@
 							<a href="#" class="nav-link"><i class="icon-users"></i> <span>Users</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
 								<li class="nav-item">
-									<a href="{%url 'users_list' %}" class="nav-link"><i class="icon-users"></i>
+									<a href="{%url 'admin:users_list' %}" class="nav-link"><i class="icon-users"></i>
 										<span>User</span></a>
 								</li>
 								<li class="nav-item">
-									<a href="{% url 'group_view'%}" class="nav-link"><i class="icon-users"></i>
+									<a href="{% url 'admin:group_view'%}" class="nav-link"><i class="icon-users"></i>
 										<span>Group</span></a>
 								</li>
 								<!-- <li class="nav-item">
-									<a href="{% url 'roles_list'%}" class="nav-link"><i class="icon-users"></i>
+									<a href="{% url 'admin:roles_list'%}" class="nav-link"><i class="icon-users"></i>
 										<span>Roles</span></a>
 								</li> -->
 							</ul>
 						</li>
 						{%else%}
 						<li class="nav-item">
-							<a href="{%url 'users_list' %}" class="nav-link"><i class="icon-users"></i>
+							<a href="{%url 'admin:users_list' %}" class="nav-link"><i class="icon-users"></i>
 								<span>Users</span></a>
 						</li>
 						<li class="nav-item">

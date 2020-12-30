@@ -26,7 +26,7 @@
 			<h5 class="card-title">Products {%if company%} Of {{company.company_name|title}}{%endif%}</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					<a href="{% url 'create_product'%}" class="btn bg-teal btn-sm rounded-round"><i
+					<a href="{% url 'admin:create_product'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Product</a>
 				</div>
 			</div>
@@ -48,14 +48,14 @@
 				<tr>
 					<td>
 						<div class="mr-3">
-							<a href="{%url 'product_detail' option='view' id=cat.id%}">
+							<a href="{%url 'admin:product_detail' option='view' id=cat.id%}">
 								<img src="{{cat.image.url}}" class="" alt="" width="40" height="40">
 							</a>
 						</div>
 					</td>
 					<td>{{cat.name}}</td>
 					<td>{{cat.category}}</td>
-					<td>{{cat.description|safe|truncatewords:10}}<a href="{%url 'product_detail' option='view' id=cat.id%}">More...</a></td>
+					<td>{{cat.description|safe|truncatewords:10}}<a href="{%url 'admin:product_detail' option='view' id=cat.id%}">More...</a></td>
 					<td>
 						{%if company%}
 						{{company.company_name}}
@@ -80,8 +80,8 @@
 
 										<div class="dropdown-menu dropdown-menu-right">
 											{%if user.is_admin%}
-											<a href="{%url 'delete' model_name='product' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Product</a>
-											<a href="{%url 'product_detail' option='edit' id=cat.id%}" class="dropdown-item">
+											<a href="{%url 'admin:delete' model_name='product' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Product</a>
+											<a href="{%url 'admin:product_detail' option='edit' id=cat.id%}" class="dropdown-item">
 												<i class="icon-pencil"></i>Edit Product</a>
 												{%endif%}
 											<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
@@ -103,7 +103,7 @@
 			<h5 class="card-title">Products</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					<a href="{% url 'create_product'%}" class="btn bg-teal btn-sm rounded-round"><i
+					<a href="{% url 'admin:create_product'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Product</a>
 				</div>
 			</div>
@@ -125,7 +125,7 @@
 				<tr>
 					<td>
 						<div class="mr-3">
-							<a href="{%url 'product_detail' option='view' id=cat.id%}">
+							<a href="{%url 'admin:product_detail' option='view' id=cat.id%}">
 								<img src="{{cat.image.url}}" class="" alt="" width="40" height="40">
 							</a>
 						</div>
@@ -144,8 +144,8 @@
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-right">
-									<a href="{%url 'delete' model_name='product' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Product</a>
-									<a href="{%url 'product_detail' option='edit' id=cat.id%}" class="dropdown-item">
+									<a href="{%url 'admin:delete' model_name='product' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Product</a>
+									<a href="{%url 'admin:product_detail' option='edit' id=cat.id%}" class="dropdown-item">
 										<i class="icon-pencil"></i>Edit Product</a>
 									<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
 									<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
