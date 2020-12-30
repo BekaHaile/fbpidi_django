@@ -1,5 +1,4 @@
 ### Food, Beverage and Pharmaceutical Industry Development Institute INDUSTRY INFORMATION MANAGEMENT SYSTEM
-**
 ### Specific Objective of the project
 1. The system must be Web Based and user-friendly.
 2. Provide facility to record, store, retrieve and search records in electronic mode which can be accessed using web technology
@@ -17,4 +16,3 @@
 14. The system must provide data validation features and on-line alert messages for invalid data entry. 
 15. The system must allow export/Import capability and full integration with MS-Office products or other software’s for report, production, analysis etc.
 
-**
