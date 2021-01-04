@@ -18,13 +18,13 @@
 				<div class="card">
 					<div class="card-header header-elements-inline">
 						<h5 class="card-title">Categories</h5>
-						{%if user.is_admin%}
 						<div class="header-elements">
+							{%if perms.admin_site.add_category%}
 							<div class="list-icons">
 								<a href="{%url 'admin:create_category' option='category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
-		                	</div>
+							</div>
+							{%endif%}
 						</div>
-						{%endif%}
 					</div>
 
 					<table class="table datatable-show-all">
@@ -54,7 +54,7 @@
 											</a>
 
 											<div class="dropdown-menu dropdown-menu-right">
-												{%if user.is_admin%}
+												{%if user.is_superuser%}
 												<a href="{%url 'admin:delete' model_name='category' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Category</a>
 												<a href="{%url 'admin:edit_category' option='category' cat_id=cat.id%}" class="dropdown-item">
 													<i class="icon-pencil"></i>Edit Category</a>
@@ -77,7 +77,7 @@
 					<div class="card">
 						<div class="card-header header-elements-inline">
 							<h5 class="card-title">Sub Categories</h5>
-							{%if user.is_admin%}
+							{%if perms.admin_site.add_sub_category%}
 							<div class="header-elements">
 								<div class="list-icons">
 									<a href="{%url 'admin:create_category' option='sub_category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
@@ -113,7 +113,7 @@
 											</a>
 
 											<div class="dropdown-menu dropdown-menu-right">
-												{%if user.is_admin%}
+												{%if user.is_superuser%}
 												<a href="{%url 'admin:delete' model_name='sub_category' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Sub-Category</a>
 												<a href="{%url 'admin:edit_category' option='sub_category' cat_id=cat.id%}" class="dropdown-item">
 													<i class="icon-pencil"></i>Edit Sub-Category</a>

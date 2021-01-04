@@ -1,5 +1,5 @@
 {%extends 'frontpages/layout.html'%}
-
+{%load crispy_forms_tags%}
 {%block content%}
 		<!--Sliders Section-->
 		<section>
@@ -38,17 +38,11 @@
 									</div>
 								</div>
 								<hr class="divider">
-								<form id="login" class="card-body" tabindex="500">
-									<div class="mail">
-										<input type="email" name="mail">
-										<label>Mail or Username</label>
-									</div>
-									<div class="passwd">
-										<input type="password" name="password">
-										<label>Password</label>
-									</div>
+								<form id="login" class="card-body" action="{%url 'login' %}" method="POST" tabindex="500">
+									{%csrf_token%}
+									{{form|crispy}}
 									<div class="submit">
-										<a class="btn btn-secondary btn-block" href="{%url 'index'%}">Login</a>
+										<button class="btn btn-secondary btn-block" type="submit">Login</button>
 									</div>
 									<p class="mb-2"><a href="{%url 'forgot' %}" >Forgot Password</a></p>
 									<p class="text-dark mb-0">Don't have account?<a href="{%url 'register'%}" class="text-secondary ml-1">Sign UP</a></p>

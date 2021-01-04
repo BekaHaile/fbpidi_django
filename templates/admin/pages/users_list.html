@@ -1,4 +1,6 @@
 {%extends 'admin/base_site.html'%}
+{%load admin_template_tags%}
+
 {% block extrastyle %}
 
 	<!-- Theme JS files -->
@@ -15,14 +17,14 @@
 			<div class="content">
 
 				<!-- Page length options main category -->
-				{%if user.is_admin%}
+				{%if user.is_superuser%}
 				<div class="card">
 					<div class="card-header header-elements-inline">
 						<h5 class="card-title">Users</h5>
-						{%if user.is_admin%}
+						{%if perms.accounts.add_user%}
 						<div class="header-elements">
 							<div class="list-icons">
-								<a href="{% url 'admin:create_user' admin_type='super_admin'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New User</a>
+								<a href="{% url 'admin:create_user'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New User</a>
 		                	</div>
 						</div>
 						{%endif%}
@@ -44,24 +46,21 @@
 							{%for usr in users%}
 							<tr>
 								<td>
-									{%for pimg in pimages%}
-										 {%if pimg.user == usr%}
-										 
-										 <div class="mr-3">
-											<a href="{%url 'admin:user_detail' option='profile_dtl' id=usr.id%}">
-												<img src="{{pimg.profile_image.url}}" class="rounded-circle" alt="" width="40" height="40">
-											</a>
-										</div>
-									 {%endif%}
-									 {%endfor%}
+									<div class="mr-3">
+									<a href="{%url 'admin:user_detail' option='profile_dtl' id=usr.id%}">
+										{%if usr.profile_image != ""%}
+										<img src="{{usr.profile_image.url}}" class="rounded-circle" alt="" width="40" height="40">
+										{%endif%}
+									</a>
+								</div>
 								</td>
 								<td>{{usr.first_name|title}} {{usr.last_name|title}}</td>
 								<td>{{usr.email}}</td>
 								<td>{{usr.phone_number}}</td>
 								<td><a href="{%url 'admin:user_detail' option='profile_dtl' id=usr.id%}">@{{usr.username}}</a></td>
 								<td>
-									{%if usr.is_suplier%}Supplier{%elif usr.is_manufacturer%}Manufacturer
-									{%elif usr.is_admin%}Super Admin{%else%}Customer{%endif%}
+									{%if usr.is_company_admin%}Company Admin{%elif usr.is_company_staff%}Company Staff
+									{%elif usr.is_superuser%}Super Admin{%else%}Customer{%endif%}
 
 								</td>
 								<td class="text-center">
@@ -83,7 +82,10 @@
 						<h5 class="card-title">Your Company Users</h5>
 						<div class="header-elements">
 							<div class="list-icons">
-								<a href="{% url 'admin:create_user' admin_type='comp_admin'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New User</a>
+								<a href="{{user|my_company_link}}" class="link"><span></span></a>
+								{%if perms.accounts.add_user%}
+								<a href="{% url 'admin:create_user'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New User</a>
+								{%endif%}
 		                	</div>
 						</div>
 					</div>
@@ -107,28 +109,28 @@
 							{%for usr in users%}
 							<tr>
 								<td>
-									{%for pimg in pimages%}
-										 {%if pimg.user == usr%}
-										 
-										 <div class="mr-3">
-											<a href="{%url 'admin:user_detail' option='profile_dtl' id=usr.id%}">
-												<img src="{{pimg.profile_image.url}}" class="rounded-circle" alt="" width="40" height="40">
-											</a>
-										</div>
-									 {%endif%}
-									 {%endfor%}
+									
+									<div class="mr-3">
+										<a href="{%url 'admin:user_detail' option='profile_dtl' id=usr.user.id%}">
+											{%if usr.user.profile_image != ""%}
+											<img src="{{usr.user.profile_image.url}}" class="rounded-circle" alt="" width="40" height="40">
+											{%endif%}
+										</a>
+									</div>
 								</td>
-								<td>{{usr.first_name|title}} {{usr.last_name|title}}</td>
-								<td>{{usr.email}}</td>
-								<td>{{usr.phone_number}}</td>
-								<td><a href="{%url 'admin:user_detail' option='profile_dtl' id=usr.id%}">@{{usr.username}}</a></td>
+								<td>{{usr.user.first_name|title}} {{usr.user.last_name|title}}</td>
+								<td>{{usr.user.email}}</td>
+								<td>{{usr.user.phone_number}}</td>
+								<td><a href="{%url 'admin:user_detail' option='profile_dtl' id=usr.user.id%}">@{{usr.user.username}}</a></td>
 								<td>
-									{{usr.group_name.name}}
+									{%for grp in usr.user.groups.all%}
+									{{grp.name}}
+									{%endfor%}
 								</td>
 								<td class="text-center">
 									<div class="list-icons">
 										<div class="dropdown">
-											<a href="{%url 'admin:delete' model_name='user_account' id=usr.id%}" class="btn btn-xs btn-danger"><i class="icon-trash"></i></a>
+											<a href="{%url 'admin:delete' model_name='user_account' id=usr.user.id%}" class="btn btn-xs btn-danger"><i class="icon-trash"></i></a>
 										</div>
 									</div>
 								</td>

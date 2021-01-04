@@ -12,12 +12,12 @@
 
 			<!-- Content area -->
 			<div class="content">
-				{%if comp_admin%}
+				{%if user.is_company_admin%}
 				<div class="card">
 						
 					<div class="card-body">
 						
-						<form action="{%url 'admin:create_user' admin_type='comp_admin' %}" method="POST">{%csrf_token%}
+						<form action="{%url 'admin:create_user'%}" method="POST">{%csrf_token%}
 							<fieldset class="mb-3 ml-3 mr-3">
 								<legend class="text-uppercase font-size-sm font-weight-bold">Create User</legend>
 								<!-- {{form|crispy}} -->
@@ -96,10 +96,10 @@
 									</div>
 								</div>
 								<div class="form-group row">
-									<label class="col-form-label col-lg-2">{{form.group_name.label|title}}</label>
+									<label class="col-form-label col-lg-2">{{form.user_group.label|title}}</label>
 									<div class="col-lg-10">
-										{{form.group_name}}
-										<span style="color: red;">{{form.group_name.errors}}</span>
+										{{form.user_group}}
+										<span style="color: red;">{{form.user_group.errors}}</span>
 									</div>
 								</div>
 								 
@@ -113,12 +113,12 @@
 						</form>
 					</div>
 				</div>
-				{%elif super_admin%}
+				{%elif user.is_superuser%}
 				<div class="card">
 						
 					<div class="card-body">
 						
-						<form action="{%url 'admin:create_user' admin_type='super_admin' %}" method="POST">{%csrf_token%}
+						<form action="{%url 'admin:create_user' %}" method="POST">{%csrf_token%}
 							<fieldset class="mb-3 ml-3 mr-3">
 								<legend class="text-uppercase font-size-sm font-weight-bold">Create User</legend>
 								<!-- {{form|crispy}} -->
@@ -197,10 +197,10 @@
 									</div>
 								</div>
 								<div class="form-group row">
-									<label class="col-form-label col-lg-2">{{form.user_roles.label|title}}</label>
+									<label class="col-form-label col-lg-2">{{form.user_type.label|title}}</label>
 									<div class="col-lg-10">
-										{{form.user_roles}}
-										<span style="color: red;">{{form.user_roles.errors}}</span>
+										{{form.user_type}}
+										<span style="color: red;">{{form.user_type.errors}}</span>
 									</div>
 								</div>
 								 

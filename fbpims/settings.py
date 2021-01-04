@@ -162,8 +162,8 @@ STATICFILES_DIRS = (
 )
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'admin:index'
-LOGOUT_REDIRECT_URL = 'admin:login'
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'login'
 
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -174,3 +174,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media/uploads/')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 SUMMERNOTE_THEME = 'bs4'
+
+
+"""Email Related Settings"""
+# For development use smtp EmailBackend
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+# EMAIL_FILE_PATH = os.path.join(BASE_DIR, "email_archive")
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = "melkamu.aait@gmail.com"
+EMAIL_HOST_PASSWORD = "0920854091"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+EMAIL_USE_LOCALTIME = True

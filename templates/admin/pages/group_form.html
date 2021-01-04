@@ -5,51 +5,79 @@
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/inputs/inputmask.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/validation/validate.min.js"></script>
-
+<script src="/static/admin/global_assets/js/plugins/forms/inputs/duallistbox/duallistbox.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_dual_listboxes.js"></script>
 {% endblock %}
 {%block pagename%}Manage Group{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
 			<div class="content">
-				<!-- <div class="card">
-						
+				<div class="card">
 					<div class="card-body">
-						{%for obj in objs%}
-						<h1>
-							{{obj.name}}
-						</h1>
-						<h2>
-							{{obj.permissions}}
-						</h2>
+						{%for obj in objs %}
+						<h4>{{obj.name}}</h4>
+						{%for perm in obj.permissions.all%}
+						<li>{{perm.name}}</li>
+						{%endfor%}
 						{%endfor%}
 					</div>
-						 
-				</div> -->
+				</div>
+				
 				<div class="card">
-						
 					<div class="card-body">
 						
-						<form action="{%url 'admin:group_view'%}" method="POST">{%csrf_token%}
-							<fieldset class="mb-3 ml-3 mr-3">
-								<legend class="text-uppercase font-size-sm font-weight-bold">Create Group</legend>
-								{{form|crispy}}
-								
-							</fieldset>
+						<form action="{%url 'admin:group_view'%}" method="POST">
+							{%csrf_token%}
+								<input type="text" name="group_name" id="group_name" placeholder="Group Name Here"  class="form-control">
+								<hr>
+								<select name="permissions" class="form-control listbox" multiple="multiple" id="">
+									{%for perm in permisions%}
+									<option value="{{perm.id}}">{{perm.name|title}}</option>
+									{%endfor%}
+								</select>
 
 							<div class="text-right">
-								<button style="padding-left: 10%; padding-right: 10%;" type="submit" class="btn btn-primary rounded-round">Submit </button>
+								<button style="padding-left: 10%; padding-right: 10%;" type="button" class="btn33 btn btn-primary rounded-round">Submit </button>
 							</div>
 						</form>
 					</div>
 				</div>
+				 
 
 			</div>
 			<!-- /content area -->
 			<script>
+				var my_token = "{{csrf_token}}";
 				$(document).ready(function() {
 					$('#summernote').summernote();
 					$('.summernote').summernote();
+
+					var selected_permissions_list = [];
+					var group_name = "";
+					$(".btn33").click(function(){
+						if($("#group_name").val() == "") {alert("Group Name is Required");}else{
+							group_name = $("#group_name").val();
+						$("#bootstrap-duallistbox-selected-list_permissions option").each(function() {
+							selected_permissions_list.push($(this).val());
+
+						});
+
+						$.ajax({
+							url:"{%url 'admin:group_view'%}",
+							type : "POST",
+							headers: { "X-CSRFToken": my_token },
+							data : {
+								'group_name':group_name,
+								'sel_perm_list':selected_permissions_list
+							},
+							success:function(result){
+								alert(result['message']);
+							},
+						});
+						}
+						
+					});
 				});
 			  </script>
 {%endblock%}

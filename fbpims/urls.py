@@ -19,16 +19,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include,re_path
 
-from accounts.views import (CustomerAdminSignUpView,UserListView,RolesView,UserLogView,
-                        UserDetailView,profileImage,CreateUserView,GroupView)
 from admin_site.admin import admin_site
-
+from accounts.views import activate
 
 urlpatterns = [
     # admin page urls
     path("admin/",admin_site.urls),
     # frontpage urls 
     path("",include("core.urls")),
+    path('activate/<uidb64>/<token>/',activate, name='activate'),
     # third party app urls
     path('summernote/', include('django_summernote.urls')),
     re_path(r'^i18n/', include('django.conf.urls.i18n')),

@@ -1,113 +1,233 @@
+# django imports
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.contrib import messages
 from django.views import View
+from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin import AdminSite
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission,Group
-
-
-
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+from admin_site.perm_mixins import GroupRequiredMixin
+# third party app imports
 from useraudit.models import FailedLoginLog,LoginAttempt,LoginLog,UserDeactivation
 
-from accounts.forms import (UserCreationForm, ProfileForm, AdminCreateUserForm,
-                            CompanyUserCreationForm,GroupCreationForm)
-from accounts.models import User, ProfileImage,AssignedRoles,Company
+from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,CompanyUserCreationForm,
+                            AdminCreateUserForm,GroupCreationForm,CompanyForm)
+from accounts.models import User,AssignedRoles,Company,CompanyAdmin,CompanyStaff,Customer
+from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
 
-class CustomerAdminSignUpView(View):
+class CompanyAdminSignUpView(CreateView):
+    model = User
+    form_class = CompanyAdminCreationForm
+    template_name = 'registration/admin_signup.html'
 
-    def get(self, *args, **kwargs):
-        form = UserCreationForm()
-        return render(self.request, "registration/signup.html", {'form': form})
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
 
-    def post(self, *args, **kwargs):
-        form = UserCreationForm(self.request.POST)
+    def form_valid(self, form):
+        user = form.save()
+        return redirect('admin:complete_company_profile',id=user.id)
+
+
+def create_company_after_signup_view(request,id):
+    if request.method == "POST":
+        form = CompanyForm(request.POST,request.FILES)
+        user = User.objects.get(id=id)
+        comp_admin = CompanyAdmin.objects.get(user=user)
+        company_type = ""
+        if comp_admin.is_suplier:
+            company_type = "supplier"
+            company_type_am = "አቅራቢ"
+        elif comp_admin.is_manufacturer:
+            company_type = "manufacturer"
+            company_type_am = "አምራች"
+
         if form.is_valid():
-            print(form.cleaned_data.get("phone_number"))
-            if form.cleaned_data.get("usertype") == "supplier":
-                user = User(
-                    first_name=form.cleaned_data.get("first_name"),
-                    last_name=form.cleaned_data.get("last_name"),
-                    username=form.cleaned_data.get("username"),
-                    email=form.cleaned_data.get("email"),
-                    phone_number=form.cleaned_data.get("phone_number")
-                )
-                user.staff = True
-                user.is_active = True
-                user.is_suplier = True
-                user.set_password(form.cleaned_data.get("password1"))
-                user.save()
-                return redirect("ccp_al",id=user.id)
-            elif form.cleaned_data.get("usertype") == "manufacture":
-                user = User(
-                    first_name=form.cleaned_data.get("first_name"),
-                    last_name=form.cleaned_data.get("last_name"),
-                    username=form.cleaned_data.get("username"),
-                    email=form.cleaned_data.get("email"),
-                    phone_number=form.cleaned_data.get("phone_number")
-                )
-                user.staff = True
-                user.is_active = True
-                user.is_manufacturer = True
-                user.set_password(form.cleaned_data.get("password1"))
-                user.save()
-                return redirect("ccp_al",id=user.id)
-            elif form.cleaned_data.get("usertype") == "superuser":
-                user = User(
-                    first_name=form.cleaned_data.get("first_name"),
-                    last_name=form.cleaned_data.get("last_name"),
-                    username=form.cleaned_data.get("username"),
-                    email=form.cleaned_data.get("email"),
-                    phone_number=form.cleaned_data.get("phone_number")
-                )
-                user.staff = True
-                user.is_active = True
-                user.admin = True
-                user.set_password(form.cleaned_data.get("password1"))
-                user.save()
-            # user = User(
-            #     username=form.cleaned_data.get("username"),
-            #     email=form.cleaned_data.get("email"),
-            #     is_superuser=True,
-            #     is_staff=True
-            #     )
-            # user.set_password(form.cleaned_data.get("password1"))
-            # user.save()
+            company_info = Company.objects.create(
+                user=user,
+                company_name=form.cleaned_data.get("company_name"),
+                company_name_am=form.cleaned_data.get("company_name_am"),
+                email=form.cleaned_data.get("email"),
+                phone_number=form.cleaned_data.get("phone_number"),
+                company_type=company_type,
+                company_type_am = company_type_am,
+                location=form.cleaned_data.get('location'),
+                company_logo=form.cleaned_data.get("company_logo"),
+                company_intro=form.cleaned_data.get("company_intro"),
+                detail=form.cleaned_data.get("detail"),
+                detail_am=form.cleaned_data.get("detail_am")
+            )
+            company_info.save()
             return redirect("admin:login")
         else:
-            print(form.errors)
-        return render(self.request, "registration/signup.html", {'form': form})
+            return render(request,"admin/pages/company_form.html",{'form':form,'comp_user':user})
+    else:
+        form = CompanyForm()
+        comp_user = User.objects.get(id=id)
+        context = {'form':form,'comp_user':comp_user}
+        return render(request,"admin/pages/company_form.html",context)
+          
+        
+
+# company related view
+class CreateCompanyProfileView(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        form = CompanyForm()
+        context = {}
+        if self.kwargs['option'] == 'view':
+            if self.request.user.is_company_admin:
+                company_detail = Company.objects.get(user=self.request.user)
+                context={'company':company_detail}
+            elif self.request.user.is_company_staff:
+                comp_staff = CompanyStaff.objects.get(user=self.request.user)
+                company_detail = Company.objects.get(id=comp_staff.company.id)
+                context={'company':company_detail}
+            return render(self.request,"admin/pages/company_detail.html",context)
+        elif self.kwargs['option'] == 'edit':
+            company_detail = Company.objects.get(id=self.kwargs['id'])
+            context={'company':company_detail,'edit':'edit'}
+            return render(self.request,"admin/pages/company_profile.html",context)
+        elif self.kwargs['option'] == 'create':
+            context = {'form':form}
+            return render(self.request,"admin/pages/company_profile.html",context)
+        elif self.kwargs['option'] == "create_now":
+            comp_user = User.objects.get(id=self.kwargs['id'])
+            context = {'form':form,'comp_user':comp_user}
+            return render(self.request,"admin/pages/company_form.html",context)
+            
+        
+    
+    def post(self,*args,**kwargs):
+        comp_admin = CompanyAdmin.objects.get(user=self.request.user)
+        company_type = ""
+        if comp_admin.is_suplier:
+            company_type = "supplier"
+            company_type_am = "አቅራቢ"
+        elif comp_admin.is_manufacturer:
+            company_type = "manufacturer"
+            company_type_am = "አምራች"
+
+        if self.kwargs['option'] == 'create':
+            form = CompanyForm(self.request.POST,self.request.FILES)
+            if form.is_valid():
+                company_info = Company(
+                    user=self.request.user,
+                    company_name=form.cleaned_data.get("company_name"),
+                    company_name_am=form.cleaned_data.get("company_name_am"),
+                    email=form.cleaned_data.get("email"),
+                    phone_number=form.cleaned_data.get("phone_number"),
+                    company_type=company_type,
+                    location=form.cleaned_data.get('location'),
+                    company_logo=form.cleaned_data.get("company_logo"),
+                    company_intro=form.cleaned_data.get("company_intro"),
+                    detail=form.cleaned_data.get("detail"),
+                    detail_am = form.cleaned_data.get("detail_am"),
+                    )
+                company_info.save()
+                messages.success(self.request,"Company Profile Created")
+                return redirect("admin:comp_profile",option="view",id=company_info.id)
+        elif self.kwargs['option'] == 'edit':
+            print(self.request.POST.get("company_name"))
+            company_info = Company.objects.get(id=self.request.POST['comp_id'])
+            company_info.company_name=self.request.POST['company_name']
+            company_info.company_name_am=self.request.POST['company_name_am']
+            company_info.email=self.request.POST['email']
+            company_info.phone_number=self.request.POST['phone_number']
+            company_info.location=self.request.POST['location']
+            if self.request.FILES.get('company_logo') == None:
+                pass
+            elif self.request.FILES.get('company_logo') != None:
+                company_info.company_logo=self.request.FILES.get('company_logo')
+            if self.request.FILES.get("company_intro") == None:
+                pass
+            elif self.request.FILES.get("company_intro") != None:
+                company_info.company_intro=self.request.FILES.get("company_intro")
+            company_info.detail=self.request.POST["detail"]
+            company_info.detail_am=self.request.POST["detail_am"]
+            company_info.save()
+            messages.success(self.request,"Company Profile Created")
+            return redirect("admin:comp_profile",option="view",id=company_info.id)
 
 
-def profileImage(request):
+class CustomerSignUpView(CreateView):
+    model = User
+    form_class = CustomerCreationForm
+    template_name = 'registration/customer_signup.html'
 
-    if request.method == "POST":
-        form = ProfileForm(request.POST, request.FILES)
-        if form.is_valid():
-            print(form.cleaned_data.get("profile_image"))
-            profile_img,created = ProfileImage.objects.get_or_create(user=request.user)
-            profile_img.profile_image=form.cleaned_data.get("profile_image")
-            profile_img.save()
-            return redirect("user_detail",option="my_profile",id=request.user.id)
-        else:
-            print(form.errors)
-            return redirect("user_detail",option="my_profile",id=request.user.id)
-    return redirect("user_detail",option="my_profile",id=request.user.id)
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
 
+    def form_valid(self, form):
+        user = form.save()
+        user.save()
+        sendEmailVerification(self.request,user)
+        return render(self.request,'email/confirm_registration_message.html',
+            {'message':"Please Verify your email address to complete the registration\n"
+            +"If you can\'t find the mail please check it in your spam folder!"})
+
+def activate(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User._default_manager.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        sendWelcomeEmail(request,user)
+        return render(request,'email/confirm_registration_message.html',
+        {'message':"Thank you for your email confirmation. Now you can login to your account.",'url':'login'})
+    else:
+        return render(request,'email/confirm_registration_message.html',
+        {'message':"Activation link is invalid!"})
+
+
+class UpdateAdminProfile(LoginRequiredMixin,View):
+
+    def post(self,*args,**kwargs):
+        user = User.objects.get(id=self.request.user.id)
+        if self.request.POST['username'] != None:
+            user.username = self.request.POST['username']
+        if self.request.POST['first_name'] != None:
+            user.first_name = self.request.POST['first_name']
+        if self.request.POST['last_name'] != None:
+            user.last_name = self.request.POST['last_name']
+        if self.request.POST['phone_number'] != None:
+            user.phone_number = self.request.POST['phone_number']
+        if self.request.FILES.get('profile_image') != None:
+            user.profile_image = self.request.FILES.get('profile_image')
+        
+        user.save()
+        messages.success(self.request,"You Have Successfully Updated Your Profile")
+        return redirect("admin:user_detail",option="my_profile",id=self.request.user.id)
+        
 
 class UserListView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        if self.request.user.is_admin:
+        context = {}
+        if self.request.user.is_superuser:
             users = User.objects.all().exclude(id=self.request.user.id)
-            pimages = ProfileImage.objects.all().exclude(user=self.request.user)
-            context = {'users': users, 'pimages': pimages}
-        else:
-            company = Company.objects.get(user=self.request.user)
-            users = User.objects.filter(created_by_admin_id=self.request.user.id) 
-            # pimages = ProfileImage.objects.all().exclude(user=self.request.user)
-            context = {'users': users, 'pimages': 'pimages'}
+            context = {'users': users}
+        elif self.request.user.is_company_admin:
+            try:
+                company = Company.objects.get(user=self.request.user)
+                company_users = CompanyStaff.objects.filter(company=company)
+                context = {'users': company_users}
+            except ObjectDoesNotExist:
+                messages.warning(self.request,"Please Complete Your Company Profile First and Create Your Company Staff\n")
+                return redirect('admin:comp_profile',option="create",id=self.request.user.id)
+        elif self.request.user.is_company_staff:
+            try:
+                staff_obj = CompanyStaff.objects.get(user=self.request.user)
+                company_users=CompanyStaff.objects.filter(company=staff_obj.company).exclude(user=self.request.user)
+                context = {'users':company_users}
+            except ObjectDoesNotExist:
+                messages.warning(self.request,"You Are Not Authrized To View The Users")
+                return redirect('admin:index')
         return render(self.request, "admin/pages/users_list.html", context)
 
 
@@ -115,115 +235,98 @@ class UserDetailView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         context = {}
         if self.kwargs['option'] == 'my_profile':
-            form = ProfileForm()
-            users = User.objects.get(id=self.kwargs['id'])
-            roles = AssignedRoles.objects.filter(user=users)
-            pimage = None
             user_company = None
+            user_profile = None
+            user_type = ""
+            if self.request.user.is_superuser:
+                user_profile = self.request.user
+                user_type = "super_admin"
+            elif self.request.user.is_company_admin:
+                user_profile = CompanyAdmin.objects.get(user=self.request.user)
+            elif self.request.user.is_company_staff:
+                user_profile = CompanyStaff.objects.get(user=self.request.user)
+            
             try:
-                pimage = ProfileImage.objects.get(user=self.request.user)
-                user_company = Company.objects.filter(user=users)
+                user_company = Company.objects.get(user=self.request.user)
             except ObjectDoesNotExist:
-                # messages.warning(self.request, "User Does Not Exist")
-                # return redirect("admin:index")
                 pass
+
             context = {
-                'form': form, 'users': users, 'pimage': pimage,'user_company':user_company,'roles':roles
+                'user_company':user_company,'users':user_profile,'user_type':user_type
             }
         elif self.kwargs['option'] == 'profile_dtl':
-            users = User.objects.get(id=self.kwargs['id'])
-            roles = AssignedRoles.objects.filter(user=users)
-            pimage = None
-            try:
-                pimage = ProfileImage.objects.get(user=users)
-            except ObjectDoesNotExist:
-                # messages.warning(self.request, "User Does Not Exist")
-                # return redirect("users_list")
-                pass
-            context = {
-                'users': users, 'pimage': pimage,'roles':roles
-            }
+            user = User.objects.get(id=self.kwargs['id'])
+            user_profile = None
+            if user.is_superuser:
+                user_profile = user
+            elif user.is_company_admin:
+                user_profile = CompanyAdmin.objects.get(user=user)
+            elif user.is_company_staff:
+                user_profile = CompanyStaff.objects.get(user=user)
+            elif user.is_customer:
+                user_profile = Customer.objects.get(user=user)
+            context = {'users': user_profile,}
         return render(self.request, "admin/pages/user_profile.html", context)
 
 
-class CreateUserView(LoginRequiredMixin, View):
+class CreateUserView(LoginRequiredMixin,GroupRequiredMixin, View):
     def get(self, *args, **kwargs):
+        group_name = []
+        for gname in self.request.user.groups.all():
+            group_name.append(gname.name)
+        group_required = [u''+group_name]
         form = ""
         context = {}
-        if self.kwargs['admin_type'] == 'super_admin':
-            form = AdminCreateUserForm()
-            context = {'form':form,'super_admin':'super_admin'}
-        elif self.kwargs['admin_type'] == 'comp_admin':
-            form = CompanyUserCreationForm()
-            context = {'form':form,'comp_admin':'comp_admin'}
 
+        if self.request.user.is_superuser:
+            form = AdminCreateUserForm()
+            context = {'form':form}
+        elif self.request.user.is_company_admin:
+            form = CompanyUserCreationForm()
+            context = {'form':form}
         return render(self.request, "admin/pages/user_form.html", context)
 
     def post(self, *args, **kwargs):
-        admin_type = self.kwargs['admin_type']
         form = ""
-        if admin_type == 'comp_admin':
-            form = CompanyUserCreationForm(self.request.POST)
-        elif admin_type == 'super_admin':
+        if self.request.user.is_superuser:
             form = AdminCreateUserForm(self.request.POST)
-        
-        if form.is_valid():
-            
-            user = User(
-                first_name=form.cleaned_data.get("first_name"),
-                last_name=form.cleaned_data.get("last_name"),
-                username=form.cleaned_data.get("username"),
-                email=form.cleaned_data.get("email"),
-                phone_number=form.cleaned_data.get("phone_number")
-            )
-            if admin_type == 'supper_admin':
-                user_type = form.cleaned_data.get("user_roles")
-                if user_type == "admin":
-                    user.staff=True
-                    user.admin = True
-                elif user_type == "suplier":
-                    user.staff = True
-                    user.is_suplier=True
-                elif user_type == "manufacturer":
-                    user.staff = True
-                    user.is_manufacturer=True
-                elif user_type == "customer":
-                    pass
-            elif admin_type == 'comp_admin':
-                group_name = Group.objects.get(id=form.cleaned_data.get('group_name').id)
-                user.created_by_admin_id = self.request.user.id
-                if self.request.user.is_suplier:
-                    user.is_suplier = True
-                elif self.request.user.is_manufacturer:
-                    user.is_manufacturer=True
-                user.group_name = group_name
-                user.staff = True
+            if form.is_valid():
+                user = form.save()
+                messages.success(self.request,"You Created a User Successfully!")
+                return redirect("admin:users_list")
             else:
-                pass
-            user.is_active=True
-            user.set_password(form.cleaned_data.get("password1"))
-            user.save()
-            messages.success(self.request,"You Created a User Successfully!")
-            return redirect("users_list")
-        else:
-            return render(self.request, "admin/pages/user_form.html", {"form": form})
+                return render(self.request, "admin/pages/user_form.html", {"form": form})
+        elif self.request.user.is_company_admin:
+            form = CompanyUserCreationForm(self.request.POST)
+            if form.is_valid():
+                user = form.save()
+                company = Company.objects.get(user=self.request.user)
+                comp_staff = CompanyStaff.objects.create(user=user,company=company)
+                comp_staff.save()
+                messages.success(self.request,"You Created a User Successfully!")
+                return redirect("admin:users_list")
+            else:
+                return render(self.request, "admin/pages/user_form.html", {"form": form})
+            
+        
 
 class GroupView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        form = GroupCreationForm()
         obj = Group.objects.all()
-        return render(self.request,"admin/pages/group_form.html",{'form':form,'objs':obj})
+        permissions = Permission.objects.all()
+        return render(self.request,"admin/pages/group_form.html",{'permisions':permissions,'objs':obj})
 
     def post(self,*args,**kwargs):
-        form = GroupCreationForm(self.request.POST)
-        if form.is_valid():
-            group,created = Group.objects.get_or_create(name = form.cleaned_data.get("name"))
-            group.permissions.set(form.cleaned_data.get('permissions'))
-            group.save()
-            messages.success(self.request,"Group Created Success Fully")
-            return redirect("group_view")
-        else:
-            return render(self.request,"admin/pages/group_form.html",{'form':form})
+        permission_list = []
+        for permision_id in self.request.POST.getlist('sel_perm_list[]'):
+            permission_list.append(Permission.objects.get(id=permision_id))
+        group,created = Group.objects.get_or_create(name = self.request.POST.get('group_name'))
+        group.permissions.set(permission_list)
+        group.save()
+        return HttpResponse({"message":"Role Group Created SuccessFully","group":group})
+
+
+
 
 
 class RolesView(LoginRequiredMixin,View):

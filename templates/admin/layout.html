@@ -1,4 +1,5 @@
 {% load i18n static %}
+{%load admin_template_tags%}
 {%load core_template_tags%}
 <!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
@@ -174,7 +175,7 @@
 							</ul>
 						</li>
 						<li class="nav-item">
-							{%if user.is_admin%}
+							{%if user.is_superuser%}
 							<a href="{%url 'admin:admin_products' user_type='admin'%}" class="nav-link"><i
 									class="icon-stack"></i> <span>Products</span></a>
 							{%else%}
@@ -182,7 +183,7 @@
 									class="icon-stack"></i> <span>Products</span></a>
 							{%endif%}
 						</li>
-						{%if user.is_admin%}
+						{%if user.is_superuser%}
 						<li class="nav-item">
 							<a href="{%url 'admin:companies' option='supplier' %}" class="nav-link">
 								<i class="icon-truck"></i>

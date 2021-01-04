@@ -1,10 +1,11 @@
 from django import forms
-from django.contrib.auth.models import Group
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django_summernote.widgets import SummernoteWidget
 
-from accounts.models import ProfileImage, Company
+from accounts.models import Company, CompanyAdmin, Customer, CompanyStaff
 
 
 class AbstractUserCreationForm(forms.ModelForm):
@@ -36,28 +37,157 @@ class AbstractUserCreationForm(forms.ModelForm):
         return password2
 
 
-class UserCreationForm(AbstractUserCreationForm, forms.Form):
+ADMIN_PERMISSION_LIST = [
+    'add_logentry',
+    'view_logentry',
+    'view_permission',
+    'view_group',
+    'view_contenttype',
+    'view_session',
+    'view_category',
+    'add_product',
+    'change_product',
+    'delete_product',
+    'view_product',
+    'view_subcategory',
+    'add_productprice',
+    'change_productprice',
+    'delete_productprice',
+    'view_productprice',
+    'add_user',
+    'change_user',
+    'delete_user',
+    'view_user',
+    'add_companyadmin',
+    'change_companyadmin',
+    'delete_companyadmin',
+    'view_companyadmin',
+    'change_company',
+    'delete_company',
+    'view_company',
+    'add_companystaff',
+    'change_companystaff',
+    'delete_companystaff',
+    'view_companystaff',
+    'view_failedloginlog',
+    'view_loginlog',
+    'view_loginattempt',
+    'view_userdeactivation'
+]
+
+
+class CompanyAdminCreationForm(AbstractUserCreationForm):
     """ A form is prepared for admin users to regster. Includes all the required
         fields, plus a repeated password.
     """
     usertype = forms.ChoiceField(required=True,
                                  widget=forms.RadioSelect(
                                      attrs={'type': 'radio'}),
-                                 choices=(('supplier', 'Supplier'),
+                                 choices=(('suplier', 'Supplier'),
                                           ('manufacture', 'Manufacturer'))
                                  )
 
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_company_admin = True
+        user.is_staff = True
+        user.is_superuser = False
+        user.set_password(self.cleaned_data.get("password1"))
+        user.save()
+        perm_list = []
+        for code_name in ADMIN_PERMISSION_LIST:
+            perm_list.append(Permission.objects.get(codename=code_name))
+        user.user_permissions.set(perm_list)
+        
+        comp_admin = CompanyAdmin.objects.create(user=user)
+        if self.cleaned_data.get("usertype") == "suplier":
+            comp_admin.is_suplier = True
+        elif self.cleaned_data.get("usertype") == "manufacture":
+            comp_admin.is_manufacturer = True
+        comp_admin.save()
+        return user
 
-class AdminCreateUserForm(AbstractUserCreationForm, forms.Form):
+
+class CustomerCreationForm(AbstractUserCreationForm):
+    """ A form is prepared for normal/customer users to regster. Includes all the required
+        fields, plus a repeated password.
+    """
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(
+        attrs={},
+    ))
+    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput(
+        attrs={},
+    ))
+
+    class Meta(AbstractUserCreationForm.Meta):
+        widgets = {
+            'first_name': forms.TextInput(attrs={},),
+            'last_name': forms.TextInput(attrs={},),
+            'username': forms.TextInput(attrs={},),
+            'email': forms.TextInput(attrs={},),
+            'phone_number': forms.TextInput(attrs={},),
+        }
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_staff = False
+        user.is_superuser = False
+        user.is_customer = True
+        user.is_active = False
+        user.set_password(self.cleaned_data.get("password1"))
+        user.save()
+        customer = Customer.objects.create(user=user)
+        customer.save()
+        return user
+
+
+class AdminCreateUserForm(AbstractUserCreationForm):
     """
     this form is created for creating users by super admin
     """
-    user_roles = forms.ChoiceField(required=True,
-                                   widget=forms.Select(
-                                       attrs={'type': 'select', "class": "form-control form-control-uniform"}),
-                                   choices=(('admin', 'Super Admin'), ('suplier', 'Supplier'), (
-                                       'manufacturer', 'Manufacturer'), ('customer', 'Customer'),)
-                                   )
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(
+        attrs={'placeholder': "Create Password"},
+    ))
+    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput(
+        attrs={'placeholder': 'Re-Type Password'},
+    ))
+    user_type = forms.ChoiceField(required=True,
+                                  widget=forms.Select(
+                                      attrs={'type': 'select', "class": "form-control form-control-uniform"}),
+                                  choices=(('admin', 'Super Admin'), ('suplier', 'Supplier Admin'), (
+                                      'manufacturer', 'Manufacturer Admin'), ('customer', 'Customer'),)
+                                  )
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data.get("password1"))
+        if self.cleaned_data.get("user_type") == "admin":
+            user.is_staff = True
+            user.is_superuser = True
+            user.save()
+        if self.cleaned_data.get("user_type") == "suplier":
+            user.is_company_admin = True
+            user.is_staff = True
+            user.save()
+            comp_admin = CompanyAdmin.objects.create(user=user)
+            comp_admin.is_suplier = True
+            comp_admin.save()
+        elif self.cleaned_data.get("user_type") == "manufacturer":
+            user.is_company_admin = True
+            user.is_staff = True
+            user.save()
+            comp_admin = CompanyAdmin.objects.create(user=user)
+            comp_admin.is_manufacturer = True
+            comp_admin.save()
+        elif self.cleaned_data.get("user_type") == "customer":
+            user.is_customer = True
+            user.save()
+            comp_admin = Customer.objects.create(user=user)
+            comp_admin.save()
+        return user
 
 
 class CompanyUserCreationForm(AbstractUserCreationForm):
@@ -76,9 +206,15 @@ class CompanyUserCreationForm(AbstractUserCreationForm):
     #                                    ('product_manager', 'Product Manager'),
     #                                    )
     #                                )
+    user_group = forms.ModelChoiceField(
+        queryset=Group.objects.all(),
+        widget=forms.Select(attrs={}),
+        required=True
+    )
+
     class Meta(AbstractUserCreationForm.Meta):
         fields = ('first_name', 'last_name',
-                  'username', 'email', 'phone_number','group_name',)
+                  'username', 'email', 'phone_number',)
         widgets = {
             'first_name': forms.TextInput(attrs={"placeholder": "First Name", },),
             'last_name': forms.TextInput(attrs={"placeholder": "Last Name"},),
@@ -86,18 +222,33 @@ class CompanyUserCreationForm(AbstractUserCreationForm):
             'email': forms.TextInput(attrs={"placeholder": "User Email"},),
             'phone_number': forms.TextInput(attrs={"placeholder": "Phone Number", "data-mask": "+251-99999-9999"},),
         }
-        
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_staff = True
+        user.is_company_staff = True
+        user.set_password(self.cleaned_data.get("password1"))
+        user.save()
+        user.groups.add(Group.objects.get_by_natural_key(
+            self.cleaned_data.get("user_group")))
+        return user
+
 
 class GroupCreationForm(forms.ModelForm):
     class Meta:
-        model=Group
+        model = Group
         fields = ('__all__')
-    
+        widgets = {
+            'permissions': forms.Select(attrs={'class': 'form-control listbox', 'multiple': "multiple"})
+        }
+
     def save(self, commit=True):
         group = super().save(commit=False)
         if commit:
             group.save()
         return group
+
 
 class UserChangeForm(forms.ModelForm):
     """A form for updating users. Includes all the fields on
@@ -120,16 +271,6 @@ class UserChangeForm(forms.ModelForm):
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
         return self.initial["password"]
-
-
-class ProfileForm(forms.ModelForm):
-
-    class Meta:
-        model = ProfileImage
-        fields = ("profile_image",)
-        widgets = {
-            "profile_image": forms.FileInput(attrs={'class': "form-input-styled"})
-        }
 
 
 class CompanyForm(forms.ModelForm):

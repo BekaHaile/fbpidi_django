@@ -1,0 +1,36 @@
+{%extends 'frontpages/layout.html'%}
+{%load crispy_forms_tags%}
+{%block content%}
+		<section>
+			<div class="p-4">
+
+			</div>
+		</section>
+		<!--Login-Section-->
+		<section class="sptb">
+			<div class="container customerpage">
+				<div class="row">
+					<div class="single-page" >
+						<div class="col-lg-5 col-xl-4 col-md-6 d-block mx-auto">
+							<div class="wrapper wrapper2">
+								<div class="card-body">
+									<h3>{{message}}</h3>
+									 {%if url%}
+									 <a href="{%url 'login' %}" class="link">Click Here to Login</a>
+									 {%endif%}
+								</div>
+								 
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Login-Section-->
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			
+		</section>
+		<!--/Newsletter-->
+{%endblock%}

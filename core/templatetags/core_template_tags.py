@@ -15,13 +15,6 @@ def company_count(type):
     except ObjectDoesNotExist:
         return 0
 
-@register.filter
-def my_company_link(user):
-    try:
-        co = Company.objects.get(user=user)
-        return "/admin/comp_profile/view/1/" 
-    except ObjectDoesNotExist:
-        return "/admin/comp_profile/create/1/"
 
 @register.filter
 def company_product_count(company):

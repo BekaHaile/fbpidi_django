@@ -1,13 +1,15 @@
 from django.urls import path,include
 from django.views.generic import TemplateView
 
-from core.views import IndexView
+from core.views import IndexView,ProfileView
+from accounts.views import CustomerSignUpView
 
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
-    path("register/",TemplateView.as_view(template_name="frontpages/register.html"),name="register"),
-    path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
-    path("mydash/",TemplateView.as_view(template_name="frontpages/mydash.html"),name="mydash"),
+    path("register/",CustomerSignUpView.as_view(),name="register"),
+    path("accounts/",include("django.contrib.auth.urls")),
+    # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
+    path("mydash/",ProfileView.as_view(),name="mydash"),
     path("setting/",TemplateView.as_view(template_name="frontpages/settings.html"),name="setting"),
     path("myfavorite/",TemplateView.as_view(template_name="frontpages/myfavorite.html"),name="favorite"),
     path("forgot/",TemplateView.as_view(template_name="frontpages/forgot.html"),name="forgot"),

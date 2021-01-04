@@ -83,15 +83,19 @@
 												</div>
 												
 											</div>
-											{%if user.is_admin%}
+											{%if user.is_superuser%}
 											{%else%}
 											<div class="card-footer">
+												{%if perms.accounts.delete_company%}
 												<div class="" style="float: left;">
-													<a href="{%url 'delete' model_name='company' id=company.id%}" class="btn btn-danger">Delete Company Profile</a>
+													<a href="{%url 'admin:delete' model_name='company' id=company.id%}" class="btn btn-danger">Delete Company Profile</a>
 												</div>
+												{%endif%}
+												{%if perms.accounts.change_company%}
 												<div class="" style="float: right;">
-													<a href="{%url 'comp_profile' option='edit' id=company.id%}" class="btn btn-warning">Edit Company Profile</a>
+													<a href="{%url 'admin:comp_profile' option='edit' id=company.id%}" class="btn btn-warning">Edit Company Profile</a>
 												</div>
+												{%endif%}
 											</div>
 											{%endif%}
 										</div>

@@ -4,15 +4,16 @@ from django.template.response import TemplateResponse
 from django.urls import path
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
-from accounts.forms import UserCreationForm
+# from accounts.forms import UserCreationForm
 # views from accounts app
-from accounts.views import (CustomerAdminSignUpView,UserListView,RolesView,UserLogView,
-                        UserDetailView,profileImage,CreateUserView,GroupView)
+from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLogView,
+                        UserDetailView,UpdateAdminProfile,CreateUserView,GroupView,
+                        create_company_after_signup_view,CreateCompanyProfileView)
 # views from admin_site app
 from admin_site.views import (AdminIndex,CategoryView,CreateCategories,CategoryDetail,
-                        CreateCompanyProfileView,CompaniesView,CompaniesDetailView,DeleteView,
+                        CompaniesView,CompaniesDetailView,DeleteView,
                         AdminProductListView,CreateProductView,ProductDetailView,
-                        AddProductImage,CreatePrice,create_company_after_signup_view)
+                        AddProductImage,CreatePrice)
 
 
 class CustomAdminSite(admin.AdminSite):
@@ -27,12 +28,12 @@ class CustomAdminSite(admin.AdminSite):
 
         my_urls = [
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
-            path("signup/",CustomerAdminSignUpView.as_view(),name="signup"),
-            path("create_user/<admin_type>/",wrap(CreateUserView.as_view()),name="create_user"),
+            path("signup/",CompanyAdminSignUpView.as_view(),name="signup"),
+            path("create_user/",wrap(CreateUserView.as_view()),name="create_user"),
             path("users_list/",wrap(UserListView.as_view()),name="users_list"),
             path("roles_list/",wrap(RolesView.as_view()),name="roles_list"),
             path("user_detail/<option>/<id>/",wrap(UserDetailView.as_view()),name="user_detail"),
-            path("add_profile_image/",wrap(profileImage),name="add_profile"),
+            path("update_profile/",wrap(UpdateAdminProfile.as_view()),name="add_profile"),
             path("user_audit/",wrap(UserLogView.as_view()),name="useraudit"),
             path("manage_group/",wrap(GroupView.as_view()),name="group_view"),
 
@@ -48,7 +49,7 @@ class CustomAdminSite(admin.AdminSite):
             path("product_detail/<option>/<id>/",wrap(ProductDetailView.as_view()),name="product_detail"),
             path("add_more_images/",wrap(AddProductImage.as_view()),name="add_product_image"),
             path("create_price/",wrap(CreatePrice.as_view()),name="create_price"),
-            path("create_company_profile_al/<id>/",wrap(create_company_after_signup_view),name='ccp_al'),
+            path("create_company_profile_al/<id>/",wrap(create_company_after_signup_view),name='complete_company_profile'),
         ]
         return my_urls + urls
 

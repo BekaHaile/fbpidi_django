@@ -48,7 +48,7 @@
 						</div>
 						<!-- List -->
 						<div class="card card-body">
-							<form action="{% url 'add_product_image'%}" method="post" enctype="multipart/form-data">{%csrf_token%}
+							<form action="{% url 'admin:add_product_image'%}" method="post" enctype="multipart/form-data">{%csrf_token%}
 								<div class="media align-items-center align-items-lg-start text-center text-lg-left flex-column flex-lg-row">
 									<div class="mr-lg-3 mb-3 mb-lg-0">
 										<a href="{{product.image.url}}" data-popup="lightbox">
@@ -92,7 +92,7 @@
 	
 										<div class="text-muted">85 reviews</div>
 	
-										<button type="button" class="btn bg-teal-400 mt-3"><i class="icon-cart-add mr-2"></i> Add to cart</button>
+										<!-- <button type="button" class="btn bg-teal-400 mt-3"><i class="icon-cart-add mr-2"></i> Add to cart</button> -->
 									</div>
 								</div>
 
@@ -113,7 +113,7 @@
 														<i class="icon-plus3"></i>
 													</a>
 				
-													<a href="{%url 'delete' model_name='product_image' id=pd_img.id%}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+													<a href="{%url 'admin:delete' model_name='product_image' id=pd_img.id%}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
 														<i class="icon-trash"></i>
 													</a>
 												</div>
@@ -141,7 +141,7 @@
 						</div>
 						<div class="card card-footer">
 							<div>
-								<a href="{%url 'delete' model_name='product' id=product.id%}" class="btn btn-danger rounded-round ">Delete This Product</a>
+								<a href="{%url 'admin:delete' model_name='product' id=product.id%}" class="btn btn-danger rounded-round ">Delete This Product</a>
 							</div>
 						</div>
 						 
@@ -163,7 +163,7 @@
 					   </div>
 					   <div class="modal-body">
 						   <h4>Add Price For {{product.name}}</h4>
-						   <form action="{%url 'create_price'%}" method="POST" >{%csrf_token%}
+						   <form action="{%url 'admin:create_price'%}" method="POST" >{%csrf_token%}
 							   <input type="hidden" value="{{product.id}}" name="product">
 							   <input type="hidden" name="option" value="new" id="">
 							  <div class="form-group row">
@@ -215,7 +215,7 @@
 				   <div class="modal-body">
 					   <h4>Chage the Price For a Product</h4>
 					   {%for pprice in product_price%}
-					   <form action="{%url 'create_price'%}" method="POST" >{%csrf_token%}
+					   <form action="{%url 'admin:create_price'%}" method="POST" >{%csrf_token%}
 						<input type="hidden" value="{{product.id}}" name="product">
 						<input type="hidden" value="{{pprice.id}}" name="priceid">
 						<input type="hidden" name="option" value="change" id="">
