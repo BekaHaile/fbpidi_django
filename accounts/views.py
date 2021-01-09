@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission,Group
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
-from admin_site.perm_mixins import GroupRequiredMixin
+#from admin_site.perm_mixins import GroupRequiredMixin
 # third party app imports
 from useraudit.models import FailedLoginLog,LoginAttempt,LoginLog,UserDeactivation
 
@@ -269,7 +269,7 @@ class UserDetailView(LoginRequiredMixin, View):
         return render(self.request, "admin/pages/user_profile.html", context)
 
 
-class CreateUserView(LoginRequiredMixin,GroupRequiredMixin, View):
+class CreateUserView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         group_name = []
         for gname in self.request.user.groups.all():
