@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_summernote',
     'useraudit',
+    'collaborations',
 ]
 
 MIDDLEWARE = [
@@ -101,6 +102,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
 
 
 # Password validation
