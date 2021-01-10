@@ -10,6 +10,9 @@ from admin_site import models
 from admin_site.forms import SubCategoryForm,ProductCreationForm
 from accounts.models import User,Company
 
+from collaborations.forms import PollsForm
+from collaborations.models import PollsQuestion, PollsResult
+
 # INDEX VIEW
 class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -308,4 +311,25 @@ class DeleteView(LoginRequiredMixin,View):
             message ="Image Deleted"
             messages.success(self.request,message)
             return redirect("admin:product_detail",id=pdimage.product.id,option='view')
-        
+
+class CreatePoll(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        form = PollsForm()
+        context = {'form':form}
+        return render(self.request,'admin/pages/poll_form.html',context)
+    
+    def post(self,*args,**kwargs):
+        form = PollsForm(self.request.POST)
+        print ("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", type(form))
+        if form.is_valid():
+            poll = PollsQuestion(
+                user=self.request.user,
+                title=form.cleaned_data.get('title'),
+                title_am=form.cleaned_data.get('title_am'),
+                description=form.cleaned_data.get("description"),
+                description_am=form.cleaned_data.get('description_am'),
+                
+            )
+            poll.save()
+            messages.success(self.request,"Poll Created Successfully!")
+            return redirect("admin:index")

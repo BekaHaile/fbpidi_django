@@ -11,7 +11,7 @@ class PollsQuestion(models.Model):
     description = models.TextField( verbose_name="Poll Description(English)" )
     description_am = models.TextField( verbose_name="Poll Description(Amharic)" )
     timestamp = models.DateTimeField(auto_now_add=True)
-    choices = models.ManyToManyField('Choices',related_name='choices',default="")
+    choices = models.ManyToManyField('Choices',related_name='choices',default="",)
 
     def __str__(self):
         return self.title

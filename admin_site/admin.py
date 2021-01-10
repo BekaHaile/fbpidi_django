@@ -13,7 +13,8 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLo
 from admin_site.views import (AdminIndex,CategoryView,CreateCategories,CategoryDetail,
                         CompaniesView,CompaniesDetailView,DeleteView,
                         AdminProductListView,CreateProductView,ProductDetailView,
-                        AddProductImage,CreatePrice)
+                        AddProductImage,CreatePrice,
+                        CreatePoll)
 
 
 class CustomAdminSite(admin.AdminSite):
@@ -50,6 +51,10 @@ class CustomAdminSite(admin.AdminSite):
             path("add_more_images/",wrap(AddProductImage.as_view()),name="add_product_image"),
             path("create_price/",wrap(CreatePrice.as_view()),name="create_price"),
             path("create_company_profile_al/<id>/",wrap(create_company_after_signup_view),name='complete_company_profile'),
+        
+            # paths for polls app, 
+            path("create_poll/", wrap(CreatePoll.as_view()), name = "create_poll"),
+        
         ]
         return my_urls + urls
 

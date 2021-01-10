@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from core.views import IndexView,ProfileView
 from accounts.views import CustomerSignUpView
 
+
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
     path("register/",CustomerSignUpView.as_view(),name="register"),
@@ -62,4 +63,6 @@ urlpatterns = [
     path("login2-/",TemplateView.as_view(template_name="frontpages/login-2.html"),name="login_2"),
     path("typography/",TemplateView.as_view(template_name="frontpages/typography.html"),name="typography"),
     path("underconstruction/",TemplateView.as_view(template_name="frontpages/underconstruction.html"),name="underconstruction"),
+
+    path("collaborations/", include('collaborations.urls')),
 ]
