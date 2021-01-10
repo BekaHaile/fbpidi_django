@@ -1,1 +1,5 @@
 media
+venv
+.vscode
+__pycache__
+
