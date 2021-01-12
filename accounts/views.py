@@ -30,7 +30,7 @@ class CompanyAdminSignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        return redirect('admin:complete_company_profile',id=user.id)
+        return redirect('admin:complete_company_profile')
 
 
 def create_company_after_signup_view(request,id):

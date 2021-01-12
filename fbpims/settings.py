@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_summernote',
     'useraudit',
     'collaborations',
+    'company',
 ]
 
 MIDDLEWARE = [
