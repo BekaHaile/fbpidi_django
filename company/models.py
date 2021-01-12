@@ -15,7 +15,7 @@ class Company(models.Model):
     detail = models.TextField(verbose_name="Company Detail(English)")
     detail_am = models.TextField(verbose_name="Company Detail(Amharic)")
     company_logo = models.ImageField(verbose_name="Company Logo",help_text="png,jpg,gif files, Max size 10MB")
-    company_intro = models.FileField(verbose_name="Company Logo",help_text="mp4,mkv,avi files, Max size 10MB")
+    company_intro = models.FileField(verbose_name="Company Intro",help_text="mp4,mkv,avi files, Max size 10MB")
     company_type = models.CharField(max_length=255)
     company_type_am = models.CharField(max_length=255)
     number_of_employees = models.IntegerField(default=0,verbose_name="Number Of Employees")
