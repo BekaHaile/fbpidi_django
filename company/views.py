@@ -6,11 +6,11 @@ from django.views import View
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from company.models import Company,CompanySolution
+from company.models import Company,CompanySolution,CompanyEvent
 from accounts.models import CompanyAdmin,CompanyStaff
 
 
-from company.forms import CompanyForm,CompanySolutionForm
+from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm
 
 class CreateCompanyProfile(LoginRequiredMixin,View):
     def get(self, *args,**kwargs):
@@ -25,6 +25,7 @@ class CreateCompanyProfile(LoginRequiredMixin,View):
         form = CompanyForm(self.request.POST,self.request.FILES)
         
         if form.is_valid():
+            print(form.cleaned_data.get("color"))
             company = form.save(commit=False)
             comp_admin = CompanyAdmin.objects.get(user=self.request.user)
             if comp_admin.is_suplier:
@@ -69,15 +70,22 @@ class CreateCompanyProfileAfterSignUp(LoginRequiredMixin,View):
 class ViewCompanyProfile(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         company = None
-        if self.request.user.is_company_admin:
-            company = Company.objects.get(user=self.request.user)
-        if self.request.user.is_company_staff:
-            comp_staff = CompanyStaff.objects.get(user = self.request.user)
-            company = Company.objects.get(id=comp_staff.company.id)
-        sol_form = CompanySolutionForm()
-        staff_users = CompanyStaff.objects.filter(company=company)
-        context = {'company':company,'staff_users':staff_users,'solution_form':sol_form}
-        return render(self.request,'admin/company/company_profile_detail.html',context)
+        try:
+            if self.request.user.is_company_admin:
+                company = Company.objects.get(user=self.request.user)
+            if self.request.user.is_company_staff:
+                comp_staff = CompanyStaff.objects.get(user = self.request.user)
+                company = Company.objects.get(id=comp_staff.company.id)
+            sol_form = CompanySolutionForm()
+            staff_users = CompanyStaff.objects.filter(company=company)
+            solutions = CompanySolution.objects.filter(company=company)
+            events = CompanyEvent.objects.filter(company=company)
+            event_form = CompanyEventForm
+            context = {'company':company,'staff_users':staff_users,'solution_form':sol_form,
+                        'solutions':solutions,'event_form':event_form,'events':events}
+            return render(self.request,'admin/company/company_profile_detail.html',context)
+        except ObjectDoesNotExist:
+            return redirect("admin:create_company_profile")
         
     def post(self,*args,**kwargs):
         try:
@@ -95,6 +103,7 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
                 company.postal_code = self.request.POST['postal_code']
                 company.detail = self.request.POST['detail']
                 company.detail_am = self.request.POST['detail_am']
+                company.color = self.request.POST['color']
                 if self.request.FILES.get('company_logo') != None:
                     company.company_logo = self.request.FILES.get('company_logo')
                 if self.request.FILES.get('company_intro') != None:

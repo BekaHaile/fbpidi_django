@@ -10,6 +10,9 @@
 	<script src="/static/admin/global_assets/js/demo_pages/user_pages_profile_tabbed.js"></script>
 	<script src="/static/admin/global_assets/js/demo_pages/job_list.js"></script>
 	<!-- /theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/pickers/color/spectrum.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/forms/styling/switchery.min.js"></script>
+    <script src="/static/admin/global_assets/js/demo_pages/picker_color.js"></script>
 {% endblock %}
 {%block pagename%}Company Profile{%endblock%}
 {%block content%}
@@ -143,90 +146,6 @@
 								</div>
 							</div>
 							<!-- /staff users -->
-
-
-							<!-- Latest updates -->
-							<div class="card">
-								<div class="card-header bg-transparent header-elements-inline">
-									<span class="card-title font-weight-semibold">Latest updates</span>
-									<div class="header-elements">
-										<div class="list-icons">
-					                		<a class="list-icons-item" data-action="collapse"></a>
-				                		</div>
-			                		</div>
-								</div>
-
-								<div class="card-body">
-									<ul class="media-list">
-										<li class="media">
-											<div class="mr-3">
-												<a href="#" class="btn bg-transparent border-primary text-primary rounded-round border-2 btn-icon">
-													<i class="icon-git-pull-request"></i>
-												</a>
-											</div>
-
-											<div class="media-body">
-												Drop the IE <a href="#">specific hacks</a> for temporal inputs
-												<div class="text-muted font-size-sm">4 minutes ago</div>
-											</div>
-										</li>
-
-										<li class="media">
-											<div class="mr-3">
-												<a href="#" class="btn bg-transparent border-warning text-warning rounded-round border-2 btn-icon">
-													<i class="icon-git-commit"></i>
-												</a>
-											</div>
-											
-											<div class="media-body">
-												Add full font overrides for popovers and tooltips
-												<div class="text-muted font-size-sm">36 minutes ago</div>
-											</div>
-										</li>
-
-										<li class="media">
-											<div class="mr-3">
-												<a href="#" class="btn bg-transparent border-info text-info rounded-round border-2 btn-icon">
-													<i class="icon-git-branch"></i>
-												</a>
-											</div>
-											
-											<div class="media-body">
-												<a href="#">Chris Arney</a> created a new <span class="font-weight-semibold">Design</span> branch
-												<div class="text-muted font-size-sm">2 hours ago</div>
-											</div>
-										</li>
-
-										<li class="media">
-											<div class="mr-3">
-												<a href="#" class="btn bg-transparent border-success text-success rounded-round border-2 btn-icon">
-													<i class="icon-git-merge"></i>
-												</a>
-											</div>
-											
-											<div class="media-body">
-												<a href="#">Admin</a> merged <span class="font-weight-semibold">Master</span> and <span class="font-weight-semibold">Dev</span> branches
-												<div class="text-muted font-size-sm">Dec 18, 18:36</div>
-											</div>
-										</li>
-
-										<li class="media">
-											<div class="mr-3">
-												<a href="#" class="btn bg-transparent border-primary text-primary rounded-round border-2 btn-icon">
-													<i class="icon-git-pull-request"></i>
-												</a>
-											</div>
-											
-											<div class="media-body">
-												Have Carousel ignore keyboard events
-												<div class="text-muted font-size-sm">Dec 12, 05:46</div>
-											</div>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<!-- /latest updates -->
-
  
 						</div>
 						<!-- /sidebar content -->
@@ -422,9 +341,7 @@
 														</div>
 													</div>
 												</div>
-												<div class="form-group row">
-													{{company.color}}
-												</div>
+												 
 												<div class="form-group">
 													<div class="row">
 														<div class="col-md-4">
@@ -458,13 +375,17 @@
 												</div>
 												<div class="form-group">
 													<div class="row">
-														<div class="col-md-6">
+														<div class="col-md-4">
 															<label>Established Year</label>
 															<input type="text" id="estyr" onkeyup="isNumber('estyr')" name="established_year" class="form-control" value="{{company.established_year}}">
 														</div>
-														<div class="col-md-6">
+														<div class="col-md-4">
 															<label>Number Of Employees</label>
 															<input type="text" id="noemp" onkeyup="isNumber('noemp')" name="number_of_employees" class="form-control" value="{{company.number_of_employees}}">
+														</div>
+														<div class="col-md-4">
+															<label for="">Company Theme Color</label>
+															<input type="text" name="color" class="form-control colorpicker-show-input" data-preferred-format="hex" value="{{company.color}}" data-fouc>
 														</div>
 													</div>
 												</div>
@@ -678,25 +599,36 @@
 
 					    </div>
 						<div class="tab-pane fade" id="services">
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h6 class="card-title">Company Services</h6>
+									<div class="header-elements">
+										<div class="list-icons">
+											<a href="#">Create New</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							{%for soln in solutions%}
+							
 							<div class="card card-body">
 								<div class="media flex-column flex-sm-row">
 									<div class="mr-sm-3 mb-2 mb-sm-0">
 										<a href="#">
-											<img src="/static/admin/global_assets/images/demo/brands/dell.png" class="rounded" width="44" height="44" alt="">
+											<img src="{{soln.image.url}}" class="rounded" width="44" height="44" alt="">
 										</a>
 									</div>
 	
 									<div class="media-body">
 										<h6 class="media-title font-weight-semibold">
-											<a href="#">Interaction UX/UI Industrial Designer</a>
+											<a href="#">{{soln.title}}</a>
 										</h6>
 	
 										<ul class="list-inline list-inline-dotted text-muted mb-2">
-											<li class="list-inline-item"><a href="#" class="text-muted">Dell</a></li>
-											<li class="list-inline-item">Amsterdam, Netherlands</li>
+											<li class="list-inline-item"><a href="#" class="text-muted">{{soln.link}}</a></li>
 										</ul>
 	
-										Extended kindness trifling remember he confined outlived if. Assistance sentiments yet unpleasing say. Open they an busy they my such high. An active dinner wishes at unable hardly no talked on. Immediate him her resolving his favourite. Wished denote abroad at branch at. Mind what no by kept.
+										{{soln.description}}
 									</div>
 	
 									<div class="ml-sm-3 mt-2 mt-sm-0">
@@ -704,27 +636,33 @@
 									</div>
 								</div>
 							</div>
+							{%endfor%}
 						</div>
 						<div class="tab-pane fade" id="events">
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h6 class="card-title">Company Events</h6>
+									<div class="header-elements">
+										<div class="list-icons">
+											 <a href="#">Create New</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							{%for event in events%}
 							<div class="card card-body">
 								<div class="media flex-column flex-sm-row">
 									<div class="mr-sm-3 mb-2 mb-sm-0">
 										<a href="#">
-											<img src="/static/admin/global_assets/images/demo/brands/dell.png" class="rounded" width="44" height="44" alt="">
+											<img src="{{event.image.url}}" class="rounded" width="44" height="44" alt="">
 										</a>
 									</div>
 	
 									<div class="media-body">
 										<h6 class="media-title font-weight-semibold">
-											<a href="#">Interaction UX/UI Industrial Designer</a>
+											<a href="#">{{event.event_name}}</a>
 										</h6>
-	
-										<ul class="list-inline list-inline-dotted text-muted mb-2">
-											<li class="list-inline-item"><a href="#" class="text-muted">Dell</a></li>
-											<li class="list-inline-item">Amsterdam, Netherlands</li>
-										</ul>
-	
-										Extended kindness trifling remember he confined outlived if. Assistance sentiments yet unpleasing say. Open they an busy they my such high. An active dinner wishes at unable hardly no talked on. Immediate him her resolving his favourite. Wished denote abroad at branch at. Mind what no by kept.
+										{{event.description}}
 									</div>
 	
 									<div class="ml-sm-3 mt-2 mt-sm-0">
@@ -732,6 +670,7 @@
 									</div>
 								</div>
 							</div>
+							{%endfor%}
 						</div>
 					    <div class="tab-pane fade" id="schedule">
 

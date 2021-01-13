@@ -3,14 +3,15 @@ from colorfield.widgets import ColorWidget
 from company.models import Company,CompanySolution,CompanyEvent
 
 class CompanyForm(forms.ModelForm):
-    color = forms.CharField(label='Company Theme Color', max_length=7,
-        widget=forms.TextInput(attrs={'type': 'color','class':'form-control'}))
+    # color = forms.CharField(label='Company Theme Color',
+    #     widget=forms.TextInput(attrs={'class':"form-control colorpicker-show-input",
+    #                 'data-preferred-format':"hex",'data-fouc':'data-fouc', 'type': 'text'}))
     class Meta:
         model = Company
         fields = (
             # Company Profile
                 'company_name', 'company_name_am', 'email', 'phone_number','city','postal_code',
-                  'detail', 'detail_am', 'company_logo', 'location', 'company_intro',
+                  'detail', 'detail_am', 'company_logo', 'location', 'company_intro','color',
                   'number_of_employees','established_year','certification','products','capital',
             # trade capacity
             'incoterms','incoterms_am','terms_of_payment','average_lead_time','average_lead_time_am',
@@ -38,7 +39,8 @@ class CompanyForm(forms.ModelForm):
             'capital':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_capital")','placeholder':'Capital'}),
             'detail': forms.Textarea(attrs={'class': 'summernote'}),
             'detail_am': forms.Textarea(attrs={'class': 'summernote'}),
-            # 'color':forms.TextInput(attrs={'type':'color'}),
+            'color':forms.TextInput(attrs={'class':"form-control colorpicker-show-input",
+                    'data-preferred-format':"hex",'data-fouc':'data-fouc', 'type': 'text'}),
             # Trade Capacity
             'incoterms': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Incoterms(English)'}),
             'incoterms_am': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Incoterms(Amharic)'}),
@@ -78,6 +80,15 @@ class CompanySolutionForm(forms.ModelForm):
             'link':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Required Link'}),
         }
 
-# class CompanyEventForm(forms.ModelForm):
+class CompanyEventForm(forms.ModelForm):
 
-#     class Meta:
+    class Meta:
+        model=CompanyEvent
+        fields = ('event_name','event_name_am','description','description_am','image',)
+        widgets = {
+            'event_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (English)'}),
+            'event_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (Amharic)'}),
+            'description': forms.Textarea(attrs={'class': 'summernote'}),
+            'description_am': forms.Textarea(attrs={'class': 'summernote'}),
+            'image': forms.FileInput(attrs={'class': 'form-input-styled'}),
+        }
