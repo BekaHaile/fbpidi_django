@@ -1,8 +1,10 @@
 from django import forms
-from company.models import Company,CompanySolution
+from colorfield.widgets import ColorWidget
+from company.models import Company,CompanySolution,CompanyEvent
 
 class CompanyForm(forms.ModelForm):
-    
+    color = forms.CharField(label='Company Theme Color', max_length=7,
+        widget=forms.TextInput(attrs={'type': 'color','class':'form-control'}))
     class Meta:
         model = Company
         fields = (
@@ -36,6 +38,7 @@ class CompanyForm(forms.ModelForm):
             'capital':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_capital")','placeholder':'Capital'}),
             'detail': forms.Textarea(attrs={'class': 'summernote'}),
             'detail_am': forms.Textarea(attrs={'class': 'summernote'}),
+            # 'color':forms.TextInput(attrs={'type':'color'}),
             # Trade Capacity
             'incoterms': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Incoterms(English)'}),
             'incoterms_am': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Incoterms(Amharic)'}),
@@ -71,5 +74,10 @@ class CompanySolutionForm(forms.ModelForm):
             'title_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title (Amharic)'}),
             'description': forms.Textarea(attrs={'class': 'summernote'}),
             'description_am': forms.Textarea(attrs={'class': 'summernote'}),
+            'image': forms.FileInput(attrs={'class': 'form-input-styled'}),
             'link':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Required Link'}),
         }
+
+# class CompanyEventForm(forms.ModelForm):
+
+#     class Meta:

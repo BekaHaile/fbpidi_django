@@ -25,7 +25,7 @@ class Company(models.Model):
     postal_code = models.CharField(max_length=100,null=True,default="")
     products = models.CharField(max_length=200,default="",verbose_name="Main Products")
     capital = models.FloatField(default=0)
-    color = ColorField(verbose_name="Your Company Theme")
+    color = models.CharField(max_length=10,verbose_name="Your Company Theme")
        # Trade Capacity
     incoterms = models.CharField(max_length=100,null=True,blank=True,verbose_name="International Commercial Terms(English)",help_text="Incoterms")
     incoterms_am  = models.CharField(max_length=100,null=True,blank=True,verbose_name="International Commercial Terms(Amharic)",help_text="Incoterms")
@@ -55,6 +55,7 @@ class Company(models.Model):
 
 
 class CompanySolution(models.Model):
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
     title = models.CharField(max_length=200,verbose_name="Title(English)")
     title_am = models.CharField(max_length=200,verbose_name="Title(Amharic)")
     description = models.TextField(verbose_name="Description(English)")
@@ -64,3 +65,10 @@ class CompanySolution(models.Model):
     time_stamp = models.DateTimeField(auto_now_add=True)
 
 class CompanyEvent(models.Model):
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
+    event_name = models.CharField(max_length=200,verbose_name="Event Name(English)")
+    event_name_am = models.CharField(max_length=200,verbose_name="Event Name(Amharic)")
+    description = models.TextField(verbose_name="Description(English)")
+    description_am = models.TextField(verbose_name="Description(Amharic)")
+    image = models.ImageField()
+    time_stamp = models.DateTimeField(auto_now_add=True)
