@@ -202,6 +202,7 @@
 								</span>
 							</a>
 						</li>
+
 						<li class="nav-item-header">
 							<div class="text-uppercase font-size-xs line-height-xs">Log</div> <i class="icon-menu" title="Forms"></i>
 						</li>
@@ -233,6 +234,24 @@
 								</li> -->
 							</ul>
 						</li>
+
+						<!-- ################################# collaborations nav ################################## -->
+						<li class="nav-item-header">
+							<div class="text-uppercase font-size-xs line-height-xs">Collaborations</div> <i class="icon-menu"
+								title="Forms"></i>
+						</li>
+						
+						<li class="nav-item ">
+							<a href="#" class="nav-link"><i class="icon-group"></i> <span>Blogs</span></a>
+							<a href="/admin/polls/" class="nav-link"><i class="icon-group"></i> <span>Polls</span></a>
+							<a href="#" class="nav-link"><i class="icon-group"></i> <span>Forums</span></a>
+							
+							
+							
+						</li>
+
+						<!-- ################################# collaborations nav ################################## --> 
+
 						{%else%}
 						<li class="nav-item">
 							<a href="{%url 'admin:users_list' %}" class="nav-link"><i class="icon-users"></i>
@@ -274,10 +293,12 @@
 			<div class="page-header page-header-light">
 				<div class="page-header-content header-elements-md-inline">
 					<div class="page-title d-flex">
-						<h4><i class="icon-arrow-left52 mr-2"></i>
+						
+						<h4><i class="icon-arrow-left8 mr-2"></i>
 							<span class="font-weight-semibold">{%block pagename%}Home - Dashboard{%endblock%} </span>
 							<!-- {%if user.is_suplier%} Supplier  {%elif user.is_manufacturer%} Manufacturer  {%endif%} -->
 						</h4>
+						
 						<a href="{%url 'admin:index'%}" class="header-elements-toggle text-default d-md-none"><i
 								class="icon-more"></i></a>
 					</div>

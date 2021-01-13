@@ -177,9 +177,17 @@
                                 <li><a href="{% url 'bs_list3' %}">{% trans "Foods" %}</a></li>
                                 <li><a href="{% url 'bs_list3' %}">{% trans "Beverages" %}</a></li>
                                 <li><a href="{% url 'bs_list3' %}">{% trans "Pharmaceuticals" %}</a></li>
-                            </ul>
-                            <li><a href="{% url 'blog_grid_right' %}">{% trans "Blog" %}</a></li>
-							<li><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
+							</ul>
+
+							<li><a href="{%url 'polls'%}">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
+								<ul class="sub-menu">
+									<li><a href="#">{% trans "Blog" %}</a></li>
+									<li><a href="#">{% trans "Forums" %}</a></li>
+									<li><a href="{% url 'polls' %}">{% trans "Polls" %}</a></li>
+								</ul>
+							
+
+                            <li><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
 
 						</ul>
 

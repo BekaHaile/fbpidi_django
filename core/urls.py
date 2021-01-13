@@ -64,5 +64,5 @@ urlpatterns = [
     path("typography/",TemplateView.as_view(template_name="frontpages/typography.html"),name="typography"),
     path("underconstruction/",TemplateView.as_view(template_name="frontpages/underconstruction.html"),name="underconstruction"),
 
-    path("collaborations/", include('collaborations.urls')),
+    
 ]

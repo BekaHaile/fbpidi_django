@@ -1,6 +1,5 @@
 {%extends 'frontpages/layout.html'%}
 
-
 {%block content%}
 		<!--Sliders Section-->
 		<section>
@@ -10,7 +9,8 @@
 						<div class="text-center text-white ">
 							<h1 class="">Latest Polls</h1>
 							<ol class="breadcrumb text-center">
-								<li class="breadcrumb-item"><a href=" ">Home</a></li>
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item"><a href="#">Pages</a></li>
 								<li class="breadcrumb-item active text-white" aria-current="page">Polls</li>
 							</ol>
 						</div>
@@ -23,34 +23,52 @@
 		<!--polls section-->
 		<section class="sptb">
 			<div class="container">
-				<div class="panel-group1" id="accordion2">      
+				<div class="panel-group1" id="accordion2">
+                   
+                        
+							<!-- polls_with_number_of_vote is list of tuple, where each tuple contains poll and number of vote -->
 							<ol>
+							{% if polls %}
 								{% for poll in polls %}
 									<div class="panel panel-default mb-4 border p-0">
 										<div class="panel-heading1">
-											<h4 class="panel-title1" style="padding-left: 15px;"></h4>	
-												<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#abc{{poll.id}} " aria-expanded="false">
+											<h4 class="panel-title1">
+												<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseone" aria-expanded="false">
 													<li> <h2>{{poll.title}}</h2>
-														{% if poll.count > 1 %}
-															<h6>{{poll.count_votes}} Votes</h6>
-														{% else %}
-															<h6>{{poll.count_votes}} Votes</h6>
-														{%endif%}	
+													<h6>{{poll.count_votes}} Votes</h6>
+													
 												</li></a>
 											</h4>
 										</div>
 										
-										<div id="abc{{poll.id}}" class="panel-collapse collapse active" role="tabpanel" aria-expanded="false">
+										<div id="collapseone" class="panel-collapse collapse active" role="tabpanel" aria-expanded="false">
 											<div class="panel-body bg-white">
 												
-												<h6>{{poll.description|safe}}</h6>
-												<a href="/collaborations/poll_detail/{{poll.id}}/"> <button style="width: auto; margin: auto;" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5"><p> Detail</p></button></a>
+
+												<h6>{{poll.description}}</h6>
+
+												{%  if  poll.user == user %}
+													<p>You can not vote for this poll, since you are the creator of the poll.</p>
+												
+												<!-- if the poll has no choices, inform the user -->
+												{% elif poll.count_choices == 0 %}
+													<p>No Choices to  choose from</p>	
+
+												{% else %}
+													<button style="width: auto; margin: auto;"><a href="/collaborations/poll_detail/{{poll.id}}/"><p> Vote</p></a></button>
+												{%endif%}	
+
 											</div>
 										</div>
+									
 									</div>
 								
-								{%endfor%}							
+								{%endfor%}
+							{% endif %}
                         </ol>
+                    
+                        
+					
 				</div>
 			</div>
 		</section>
@@ -61,7 +79,7 @@
 			<div class="container">
 				<div class="section-title center-block text-center">
 					<h2>Subscribe To Our Newsletter</h2>
-					
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
 				</div>
 				<div class="row">
 					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
