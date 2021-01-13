@@ -11,5 +11,7 @@ urlpatterns = [
     path("company_list/<option>/",CompaniesView.as_view(),name="companies"),
     path("company_detail/<id>/",CompaniesDetailView.as_view(),name="company_detail"),
     path("create_company_profile_al/",CreateCompanyProfileAfterSignUp.as_view() ,name='complete_company_profile'),
+    path("view_company_profile/",ViewCompanyProfile.as_view() ,name='view_company_profile'),
+    path("edit_company_profile/<id>/",ViewCompanyProfile.as_view(),name="edit_company_profile"),
 
 ]

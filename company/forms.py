@@ -13,7 +13,7 @@ class CompanyForm(forms.ModelForm):
             # trade capacity
             'incoterms','incoterms_am','terms_of_payment','average_lead_time','average_lead_time_am',
             'no_trading_staff','export_yr','export_percentage','main_market','main_market_am',
-            'nearest_port','nearest_port_am','import_export',
+            'nearest_port','nearest_port_am',
             # production capacity
             'r_and_d_capacity','r_and_d_capacity_am','no_of_rnd_staff','no_production_lines',
             'anual_op_value','anual_op_main_products','anual_op_main_products_am',
@@ -49,7 +49,7 @@ class CompanyForm(forms.ModelForm):
             'main_market_am': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Main Market(Amharic)'}),
             'nearest_port': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Nearest Port(English)'}),
             'nearest_port_am': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Nearest Port(Amharic)'}),
-            'import_export':forms.CheckboxInput(attrs={'class':"form-check-input-styled"}),
+            # 'import_export':forms.CheckboxInput(attrs={'class':"form-check-input-styled"}),
             # production capacity
             'r_and_d_capacity': forms.TextInput(attrs={'class': 'form-control','placeholder': 'R&D Capacity(English)'}),
             'r_and_d_capacity_am': forms.TextInput(attrs={'class': 'form-control','placeholder': 'R&D Capacity(Amharic)'}),

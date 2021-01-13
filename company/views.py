@@ -23,6 +23,7 @@ class CreateCompanyProfile(LoginRequiredMixin,View):
 
     def post(self, *args,**kwargs):
         form = CompanyForm(self.request.POST,self.request.FILES)
+        
         if form.is_valid():
             company = form.save(commit=False)
             comp_admin = CompanyAdmin.objects.get(user=self.request.user)
@@ -34,8 +35,9 @@ class CreateCompanyProfile(LoginRequiredMixin,View):
                 company.company_type_am = "አምራች"
             company.user = self.request.user
             company.save()
-            messages.success(self.request,"Company Profile Created");
+            messages.success(self.request,"Company Profile Created")
             return redirect("admin:index")
+        print(form.errors)
         return render(self.request,"admin/company/company_form_create.html",{'form':form})
 
 class CreateCompanyProfileAfterSignUp(LoginRequiredMixin,View):
