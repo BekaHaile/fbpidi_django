@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-
+from colorfield.fields import ColorField
 
 class Company(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -25,6 +25,7 @@ class Company(models.Model):
     postal_code = models.CharField(max_length=100,null=True,default="")
     products = models.CharField(max_length=200,default="",verbose_name="Main Products")
     capital = models.FloatField(default=0)
+    color = ColorField(verbose_name="Your Company Theme")
        # Trade Capacity
     incoterms = models.CharField(max_length=100,null=True,blank=True,verbose_name="International Commercial Terms(English)",help_text="Incoterms")
     incoterms_am  = models.CharField(max_length=100,null=True,blank=True,verbose_name="International Commercial Terms(Amharic)",help_text="Incoterms")
@@ -62,3 +63,4 @@ class CompanySolution(models.Model):
     image = models.ImageField()
     time_stamp = models.DateTimeField(auto_now_add=True)
 
+class CompanyEvent(models.Model):
