@@ -3,3 +3,6 @@ venv
 **/migrations/
 
 venv/Scripts/python.exe
+.vscode
+__pycache__
+

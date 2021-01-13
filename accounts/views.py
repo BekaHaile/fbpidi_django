@@ -11,13 +11,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission,Group
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
-#from admin_site.perm_mixins import GroupRequiredMixin
+
 # third party app imports
 from useraudit.models import FailedLoginLog,LoginAttempt,LoginLog,UserDeactivation
 
 from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,CompanyUserCreationForm,
                             AdminCreateUserForm,GroupCreationForm,CompanyForm)
-from accounts.models import User,AssignedRoles,Company,CompanyAdmin,CompanyStaff,Customer
+from accounts.models import User,Company,CompanyAdmin,CompanyStaff,Customer
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
 
 class CompanyAdminSignUpView(CreateView):
@@ -152,6 +152,10 @@ class CreateCompanyProfileView(LoginRequiredMixin,View):
             messages.success(self.request,"Company Profile Created")
             return redirect("admin:comp_profile",option="view",id=company_info.id)
 
+class CreateCompanyProfile(LoginRequiredMixin,View):
+    def get(self, *args,**kwargs):
+        form = CompanyForm()
+        return render(self.request,"admin/pages/form_wizard.html",{"form":form})
 
 class CustomerSignUpView(CreateView):
     model = User
@@ -271,10 +275,6 @@ class UserDetailView(LoginRequiredMixin, View):
 
 class CreateUserView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        group_name = []
-        for gname in self.request.user.groups.all():
-            group_name.append(gname.name)
-        group_required = [u''+group_name]
         form = ""
         context = {}
 
