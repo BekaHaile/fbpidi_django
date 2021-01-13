@@ -2,8 +2,8 @@ from django.urls import path
 
 
 from company.views import (
-    CompaniesDetailView,CompaniesView,CreateCompanyProfile,
-    CreateCompanyProfileAfterSignUp,ViewCompanyProfile
+    CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,
+    CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
 )
 
 urlpatterns = [
@@ -13,5 +13,6 @@ urlpatterns = [
     path("create_company_profile_al/",CreateCompanyProfileAfterSignUp.as_view() ,name='complete_company_profile'),
     path("view_company_profile/",ViewCompanyProfile.as_view() ,name='view_company_profile'),
     path("edit_company_profile/<id>/",ViewCompanyProfile.as_view(),name="edit_company_profile"),
-
+    path("create_company_solution/<company_id>",CreateCompanySolution.as_view(),name="create_company_solution"),
+    path("create_company_event/<company_id>",CreateCompanyEvent.as_view(),name="create_company_event"),
 ]

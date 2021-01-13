@@ -70,7 +70,7 @@ class CompanySolutionForm(forms.ModelForm):
 
     class Meta:
         model = CompanySolution
-        fields = ('title','title_am','description','description_am','link',)
+        fields = ('title','title_am','description','description_am','link','image',)
         widgets = {
             'title':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title (English)'}),
             'title_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title (Amharic)'}),

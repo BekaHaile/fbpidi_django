@@ -28,7 +28,7 @@
 				<div class="d-md-flex align-items-md-start">
 
 					<!-- Left sidebar component -->
-					<div class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-left wmin-300 border-0 shadow-0 sidebar-expand-md">
+					<div style="min-height: calc(130vh + 110px); max-height: calc(120vh + 160px);overflow-y: scroll;" class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-left wmin-300 border-0 shadow-0 sidebar-expand-md">
 
 						<!-- Sidebar content -->
 						<div class="sidebar-content">
@@ -159,7 +159,7 @@
 
 
 					<!-- Right content -->
-					<div class="tab-content w-100 overflow-auto">
+					<div style="min-height: calc(130vh + 110px); max-height: calc(120vh + 160px);overflow-y: scroll;" class="tab-content w-100 overflow-auto">
 						<div class="tab-pane fade active show" id="profile">
 
 							<!-- Sales stats -->
@@ -608,7 +608,7 @@
 									<h6 class="card-title">Company Services</h6>
 									<div class="header-elements">
 										<div class="list-icons">
-											<a href="#">Create New</a>
+											<a data-toggle="modal" data-target="#solution_form_id" class="btn btn-outline-success btn-sm"><i class="icon-add mr-2"></i> Create New</a>
 										</div>
 									</div>
 								</div>
@@ -632,7 +632,7 @@
 											<li class="list-inline-item"><a href="#" class="text-muted">{{soln.link}}</a></li>
 										</ul>
 	
-										{{soln.description}}
+										{{soln.description|safe}}
 									</div>
 	
 									<div class="ml-sm-3 mt-2 mt-sm-0">
@@ -641,6 +641,68 @@
 								</div>
 							</div>
 							{%endfor%}
+							<div id="solution_form_id" class="modal fade" tabindex="-1">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Company Service Form</h5>
+											
+										</div>
+			
+										<form action="{%url 'admin:create_company_solution' company_id=company.id%}" method="POST" enctype="multipart/form-data">
+											{%csrf_token%}
+											<div class="modal-body">
+												<div class="form-group">
+													<div class="row">
+														<div class="col-sm-6">
+															<label>{{solution_form.title.label|title}}</label>
+															{{solution_form.title}}
+														</div>
+			
+														<div class="col-sm-6">
+															<label>{{solution_form.title_am.label|title}}</label>
+															{{solution_form.title_am}}
+														</div>
+													</div>
+												</div>
+			
+												<div class="form-group">
+													<div class="row">
+														<div class="col-sm-12">
+															<label>{{solution_form.description.label}}</label>
+															{{solution_form.description}}
+														</div>
+			
+														<div class="col-sm-12">
+															<label>{{solution_form.description_am.label}}</label>
+															{{solution_form.description_am}}
+														</div>
+													</div>
+												</div>
+			
+												<div class="form-group">
+													<div class="row">
+														<div class="col-sm-12">
+															<label>{{solution_form.link.label}}</label>
+															{{solution_form.link}}
+														</div>
+														<div class="col-sm-12">
+															<label>{{solution_form.image.label}}</label>
+															{{solution_form.image}}
+														</div>
+		
+													</div>
+												</div>
+											</div>
+			
+											<div class="modal-footer">
+												<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+												<button type="submit" class="btn bg-primary">Submit form</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="tab-pane fade" id="events">
 							<div class="card">
@@ -648,7 +710,7 @@
 									<h6 class="card-title">Company Events</h6>
 									<div class="header-elements">
 										<div class="list-icons">
-											 <a class="btn btn-primary" data-toggle="modal" data-target="#events_form_id">Create New</a>
+											 <a data-toggle="modal" data-target="#events_form_id" class="btn btn-outline-success btn-sm"><i class="icon-add mr-2"></i> Create New</a>
 										</div>
 									</div>
 								</div>
@@ -666,7 +728,7 @@
 										<h6 class="media-title font-weight-semibold">
 											<a href="#">{{event.event_name}}</a>
 										</h6>
-										{{event.description}}
+										{{event.description|safe}}
 									</div>
 	
 									<div class="ml-sm-3 mt-2 mt-sm-0">
@@ -679,72 +741,48 @@
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h5 class="modal-title">Vertical form</h5>
+											<h5 class="modal-title">Company Event Form</h5>
 											<button type="button" class="close" data-dismiss="modal">&times;</button>
 										</div>
 			
-										<form action="#">
+										<form action="{%url 'admin:create_company_event' company_id=company.id%}" method="POST" enctype="multipart/form-data">
+											{%csrf_token%}
 											<div class="modal-body">
 												<div class="form-group">
 													<div class="row">
 														<div class="col-sm-6">
-															<label>First name</label>
-															<input type="text" placeholder="Eugene" class="form-control">
+															<label>{{event_form.event_name.label|title}}</label>
+															{{event_form.event_name}}
 														</div>
 			
 														<div class="col-sm-6">
-															<label>Last name</label>
-															<input type="text" placeholder="Kopyov" class="form-control">
+															<label>{{event_form.event_name_am.label|title}}</label>
+															{{event_form.event_name_am}}
 														</div>
 													</div>
 												</div>
 			
 												<div class="form-group">
 													<div class="row">
-														<div class="col-sm-6">
-															<label>Address line 1</label>
-															<input type="text" placeholder="Ring street 12" class="form-control">
+														<div class="col-sm-12">
+															<label>{{event_form.description.label}}</label>
+															{{event_form.description}}
 														</div>
 			
-														<div class="col-sm-6">
-															<label>Address line 2</label>
-															<input type="text" placeholder="building D, flat #67" class="form-control">
+														<div class="col-sm-12">
+															<label>{{event_form.description_am.label}}</label>
+															{{event_form.description_am}}
 														</div>
 													</div>
 												</div>
 			
 												<div class="form-group">
 													<div class="row">
-														<div class="col-sm-4">
-															<label>City</label>
-															<input type="text" placeholder="Munich" class="form-control">
+														<div class="col-sm-12">
+															<label>{{event_form.image.label}}</label>
+															{{event_form.image}}
 														</div>
-			
-														<div class="col-sm-4">
-															<label>State/Province</label>
-															<input type="text" placeholder="Bayern" class="form-control">
-														</div>
-			
-														<div class="col-sm-4">
-															<label>ZIP code</label>
-															<input type="text" placeholder="1031" class="form-control">
-														</div>
-													</div>
-												</div>
-			
-												<div class="form-group">
-													<div class="row">
-														<div class="col-sm-6">
-															<label>Email</label>
-															<input type="text" placeholder="eugene@kopyov.com" class="form-control">
-															<span class="form-text text-muted">name@domain.com</span>
-														</div>
-			
-														<div class="col-sm-6">
-															<label>Phone #</label>
-															<input type="text" placeholder="+99-99-9999-9999" data-mask="+99-99-9999-9999" class="form-control">
-															<span class="form-text text-muted">+99-99-9999-9999</span>
-														</div>
+		
 													</div>
 												</div>
 											</div>
