@@ -12,11 +12,11 @@ def my_company_link(user):
     if user.is_company_admin:
         try:
             co = Company.objects.get(user=user)
-            return "/admin/comp_profile/view/1/" 
+            return "/admin/view_company_profile/" 
         except ObjectDoesNotExist:
-            return "/admin/comp_profile/create/1/"
+            return "/admin/create_company_profile/"
     elif user.is_company_staff:
         staff = CompanyStaff.objects.get(user=user)
         company = Company.objects.get(id=staff.company.id)
-        return "/admin/comp_profile/view/1/"
+        return "/admin/view_company_profile/"
         
