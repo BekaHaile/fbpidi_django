@@ -2,3 +2,4 @@ media
 venv
 **/migrations/
 
+venv/Scripts/python.exe
