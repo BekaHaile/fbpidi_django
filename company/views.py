@@ -174,6 +174,24 @@ class CompaniesDetailView(LoginRequiredMixin,View):
             return redirect("admin:companies")
         return render(self.request,"admin/company/company_profile_detail.html",context)
 
-# class CreateCompanySolution(LoginRequiredMixin,View):
-#     def post(self,*args,**kwargs):
-#         return render(self.request)
+class CreateCompanySolution(LoginRequiredMixin,View):
+    def post(self,*args,**kwargs):
+        form = CompanySolutionForm(self.request.POST,self.request.FILES)
+        if form.is_valid():
+            solution = form.save(commit=False)
+            solution.company = Company.objects.get(id=self.kwargs['company_id'])
+            solution.save()
+            messages.success(self.request,"Services Created Successfully")
+        messages.warning(self.request,form.errors)
+        return redirect("admin:view_company_profile")
+
+class CreateCompanyEvent(LoginRequiredMixin,View):
+    def post(self,*args,**kwargs):
+        form = CompanyEventForm(self.request.POST,self.request.FILES)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.company = Company.objects.get(id=self.kwargs['company_id'])
+            event.save()
+            messages.success(self.request,"Event Created Successfully")
+        messages.warning(self.request,form.errors)
+        return redirect("admin:view_company_profile")
