@@ -130,36 +130,6 @@ class CreateCategories(LoginRequiredMixin,View):
                 return redirect("admin:p_categories", option='sub_category')
 
 
-class CompaniesView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        context = {}
-        if self.kwargs['option'] == "supplier":
-            suppliers = Company.objects.filter(company_type="supplier")
-            context = {
-                'companies':suppliers
-            }
-        elif self.kwargs['option'] == "manufacturer":
-            manufacturers = Company.objects.filter(company_type="manufacturer")
-            context = {
-                'companies':manufacturers
-            }
-        print(context)
-        return render(self.request,"admin/pages/companies.html",context)
-
-class CompaniesDetailView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        company = ""
-        context = {}
-        try:
-            company = Company.objects.get(id=self.kwargs['id'])
-            context = {
-                'company':company
-            }
-        except ObjectDoesNotExist:
-            messages.warning(self.request,"Company does not Exist")
-            return redirect("admin:companies")
-        return render(self.request,"admin/pages/company_detail.html",context)
-
 
 class AdminProductListView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):

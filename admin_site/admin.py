@@ -1,20 +1,21 @@
 from django.contrib import admin
 from functools import update_wrapper
 from django.template.response import TemplateResponse
-from django.urls import path
+from django.urls import path,include
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
 # from accounts.forms import UserCreationForm
 # views from accounts app
 from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLogView,
-                        UserDetailView,UpdateAdminProfile,CreateUserView,GroupView,
-                        create_company_after_signup_view,CreateCompanyProfileView)
+                        UserDetailView,UpdateAdminProfile,CreateUserView,GroupView)
 # views from admin_site app
 from admin_site.views import (AdminIndex,CategoryView,CreateCategories,CategoryDetail,
                         CompaniesView,CompaniesDetailView,DeleteView,
                         AdminProductListView,CreateProductView,ProductDetailView,
                         AddProductImage,CreatePrice,
-                        Polls, CreatePoll, AddChoice, EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
+                        Polls, CreatePoll, AddChoice, EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice,
+                        DeleteView,AdminProductListView,CreateProductView,ProductDetailView,
+                        AddProductImage,CreatePrice)
 
 
 class CustomAdminSite(admin.AdminSite):
@@ -41,9 +42,6 @@ class CustomAdminSite(admin.AdminSite):
             path("categories/<option>/",wrap(CategoryView.as_view()),name="p_categories"),
             path("create_category/<option>",wrap(CreateCategories.as_view()),name="create_category"),
             path("category_edit/<option>/<cat_id>/",wrap(CategoryDetail.as_view()),name="edit_category"),
-            path("comp_profile/<option>/<id>/",wrap(CreateCompanyProfileView.as_view()),name="comp_profile"),
-            path("company_list/<option>/",wrap(CompaniesView.as_view()),name="companies"),
-            path("company_detail/<id>/",wrap(CompaniesDetailView.as_view()),name="company_detail"),
             path("delete/<model_name>/<id>/",wrap(DeleteView.as_view()),name="delete"),
             path("products_list/<user_type>/",wrap(AdminProductListView.as_view()),name="admin_products"),
             path("create_product/",wrap(CreateProductView.as_view()),name="create_product"),
@@ -63,6 +61,7 @@ class CustomAdminSite(admin.AdminSite):
             path("detail_poll/<id>/", wrap(DetailPoll.as_view()), name = "detail_poll"),
 
         
+            path("",include("company.urls")),
         ]
         return my_urls + urls
 

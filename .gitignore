@@ -4,5 +4,7 @@ venv
 
 venv/Scripts/python.exe
 .vscode
-__pycache__
+*.pyc
+!*.pyc
+static
 
