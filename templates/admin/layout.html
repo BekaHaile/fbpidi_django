@@ -207,7 +207,29 @@
 								</li>
 							</ul>
 						</li>
-						
+						<li class="nav-item nav-item-submenu">
+							<a href="#" class="nav-link"><i class="icon-users"></i> <span>Collaborations</span></a>
+							<ul class="nav nav-group-sub" data-submenu-title="Form components">
+								<li class="nav-item">
+									<a href="#" class="nav-link">
+										<i class="icon-truck"></i>
+										<span>Blogs</span>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="{%url 'admin:admin_polls'%}" class="nav-link">
+										<i class="icon-cogs"></i>
+										<span>Polls</span>										 
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="#" class="nav-link">
+										<i class="icon-cogs"></i>
+										<span>Forums</span>										 
+									</a>
+								</li>
+							</ul>
+						</li>
 						<li class="nav-item-header">
 							<div class="text-uppercase font-size-xs line-height-xs">Log</div> <i class="icon-menu" title="Forms"></i>
 						</li>
@@ -240,23 +262,10 @@
 							</ul>
 						</li>
 
-						<!-- ################################# collaborations nav ################################## -->
-						<li class="nav-item-header">
-							<div class="text-uppercase font-size-xs line-height-xs">Collaborations</div> <i class="icon-menu"
-								title="Forms"></i>
-						</li>
+						 
 						
-						<li class="nav-item ">
-							<a href="#" class="nav-link"><i class="icon-group"></i> <span>Blogs</span></a>
-							<a href="/admin/polls/" class="nav-link"><i class="icon-group"></i> <span>Polls</span></a>
-							<a href="#" class="nav-link"><i class="icon-group"></i> <span>Forums</span></a>
-							
-							
-							
-						</li>
-
-						<!-- ################################# collaborations nav ################################## --> 
-
+						
+						 
 						{%else%}
 						<li class="nav-item">
 							<a href="{%url 'admin:users_list' %}" class="nav-link"><i class="icon-users"></i>

@@ -376,7 +376,7 @@ class EditPoll(LoginRequiredMixin,View):
         
         pollform = CreatePollForm()
         choiceform = CreateChoiceForm()
-        message.success(self.request, "ya message works")
+        messages.success(self.request, "ya message works")
        
         try:
             poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
