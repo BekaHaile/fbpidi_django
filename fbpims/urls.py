@@ -33,6 +33,7 @@ urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
     path("blog-list-right/",BlogList.as_view(),name="blog_grid_right"),
     re_path(r'^i18n/', include('django.conf.urls.i18n')),
-]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    path("collaborations/", include('collaborations.urls')),
+]  
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

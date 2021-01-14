@@ -12,12 +12,13 @@ from django.contrib.auth.models import Permission,Group
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 #from admin_site.perm_mixins import
+
 # third party app imports
 from useraudit.models import FailedLoginLog,LoginAttempt,LoginLog,UserDeactivation
 
 from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,CompanyUserCreationForm,
                             AdminCreateUserForm,GroupCreationForm,CompanyForm)
-from accounts.models import User,AssignedRoles,Company,CompanyAdmin,CompanyStaff,Customer
+from accounts.models import User,Company,CompanyAdmin,CompanyStaff,Customer
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
 
 class CompanyAdminSignUpView(CreateView):
@@ -30,127 +31,7 @@ class CompanyAdminSignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        return redirect('admin:complete_company_profile',id=user.id)
-
-
-def create_company_after_signup_view(request,id):
-    if request.method == "POST":
-        form = CompanyForm(request.POST,request.FILES)
-        user = User.objects.get(id=id)
-        comp_admin = CompanyAdmin.objects.get(user=user)
-        company_type = ""
-        if comp_admin.is_suplier:
-            company_type = "supplier"
-            company_type_am = "አቅራቢ"
-        elif comp_admin.is_manufacturer:
-            company_type = "manufacturer"
-            company_type_am = "አምራች"
-
-        if form.is_valid():
-            company_info = Company.objects.create(
-                user=user,
-                company_name=form.cleaned_data.get("company_name"),
-                company_name_am=form.cleaned_data.get("company_name_am"),
-                email=form.cleaned_data.get("email"),
-                phone_number=form.cleaned_data.get("phone_number"),
-                company_type=company_type,
-                company_type_am = company_type_am,
-                location=form.cleaned_data.get('location'),
-                company_logo=form.cleaned_data.get("company_logo"),
-                company_intro=form.cleaned_data.get("company_intro"),
-                detail=form.cleaned_data.get("detail"),
-                detail_am=form.cleaned_data.get("detail_am")
-            )
-            company_info.save()
-            return redirect("admin:login")
-        else:
-            return render(request,"admin/pages/company_form.html",{'form':form,'comp_user':user})
-    else:
-        form = CompanyForm()
-        comp_user = User.objects.get(id=id)
-        context = {'form':form,'comp_user':comp_user}
-        return render(request,"admin/pages/company_form.html",context)
-          
-        
-
-# company related view
-class CreateCompanyProfileView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        form = CompanyForm()
-        context = {}
-        if self.kwargs['option'] == 'view':
-            if self.request.user.is_company_admin:
-                company_detail = Company.objects.get(user=self.request.user)
-                context={'company':company_detail}
-            elif self.request.user.is_company_staff:
-                comp_staff = CompanyStaff.objects.get(user=self.request.user)
-                company_detail = Company.objects.get(id=comp_staff.company.id)
-                context={'company':company_detail}
-            return render(self.request,"admin/pages/company_detail.html",context)
-        elif self.kwargs['option'] == 'edit':
-            company_detail = Company.objects.get(id=self.kwargs['id'])
-            context={'company':company_detail,'edit':'edit'}
-            return render(self.request,"admin/pages/company_profile.html",context)
-        elif self.kwargs['option'] == 'create':
-            context = {'form':form}
-            return render(self.request,"admin/pages/company_profile.html",context)
-        elif self.kwargs['option'] == "create_now":
-            comp_user = User.objects.get(id=self.kwargs['id'])
-            context = {'form':form,'comp_user':comp_user}
-            return render(self.request,"admin/pages/company_form.html",context)
-            
-        
-    
-    def post(self,*args,**kwargs):
-        comp_admin = CompanyAdmin.objects.get(user=self.request.user)
-        company_type = ""
-        if comp_admin.is_suplier:
-            company_type = "supplier"
-            company_type_am = "አቅራቢ"
-        elif comp_admin.is_manufacturer:
-            company_type = "manufacturer"
-            company_type_am = "አምራች"
-
-        if self.kwargs['option'] == 'create':
-            form = CompanyForm(self.request.POST,self.request.FILES)
-            if form.is_valid():
-                company_info = Company(
-                    user=self.request.user,
-                    company_name=form.cleaned_data.get("company_name"),
-                    company_name_am=form.cleaned_data.get("company_name_am"),
-                    email=form.cleaned_data.get("email"),
-                    phone_number=form.cleaned_data.get("phone_number"),
-                    company_type=company_type,
-                    location=form.cleaned_data.get('location'),
-                    company_logo=form.cleaned_data.get("company_logo"),
-                    company_intro=form.cleaned_data.get("company_intro"),
-                    detail=form.cleaned_data.get("detail"),
-                    detail_am = form.cleaned_data.get("detail_am"),
-                    )
-                company_info.save()
-                messages.success(self.request,"Company Profile Created")
-                return redirect("admin:comp_profile",option="view",id=company_info.id)
-        elif self.kwargs['option'] == 'edit':
-            print(self.request.POST.get("company_name"))
-            company_info = Company.objects.get(id=self.request.POST['comp_id'])
-            company_info.company_name=self.request.POST['company_name']
-            company_info.company_name_am=self.request.POST['company_name_am']
-            company_info.email=self.request.POST['email']
-            company_info.phone_number=self.request.POST['phone_number']
-            company_info.location=self.request.POST['location']
-            if self.request.FILES.get('company_logo') == None:
-                pass
-            elif self.request.FILES.get('company_logo') != None:
-                company_info.company_logo=self.request.FILES.get('company_logo')
-            if self.request.FILES.get("company_intro") == None:
-                pass
-            elif self.request.FILES.get("company_intro") != None:
-                company_info.company_intro=self.request.FILES.get("company_intro")
-            company_info.detail=self.request.POST["detail"]
-            company_info.detail_am=self.request.POST["detail_am"]
-            company_info.save()
-            messages.success(self.request,"Company Profile Created")
-            return redirect("admin:comp_profile",option="view",id=company_info.id)
+        return redirect('admin:complete_company_profile')
 
 
 class CustomerSignUpView(CreateView):
@@ -219,7 +100,7 @@ class UserListView(LoginRequiredMixin, View):
                 context = {'users': company_users}
             except ObjectDoesNotExist:
                 messages.warning(self.request,"Please Complete Your Company Profile First and Create Your Company Staff\n")
-                return redirect('admin:comp_profile',option="create",id=self.request.user.id)
+                return redirect('admin:create_company_profile')
         elif self.request.user.is_company_staff:
             try:
                 staff_obj = CompanyStaff.objects.get(user=self.request.user)
@@ -271,10 +152,6 @@ class UserDetailView(LoginRequiredMixin, View):
 
 class CreateUserView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        group_name = []
-        for gname in self.request.user.groups.all():
-            group_name.append(gname.name)
-        group_required = [u''+group_name]
         form = ""
         context = {}
 

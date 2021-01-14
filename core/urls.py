@@ -5,6 +5,7 @@ from core.views import IndexView,ProfileView
 from collaborations.views import BlogList,BlogDetail,FaqList
 from accounts.views import CustomerSignUpView
 
+
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
     path("blog-grid-right/",BlogList.as_view(),name="blog_grid_right"),
@@ -69,4 +70,5 @@ urlpatterns = [
     path("login2-/",TemplateView.as_view(template_name="frontpages/login-2.html"),name="login_2"),
     path("typography/",TemplateView.as_view(template_name="frontpages/typography.html"),name="typography"),
     path("underconstruction/",TemplateView.as_view(template_name="frontpages/underconstruction.html"),name="underconstruction"),
+    path("check_comp/",TemplateView.as_view(template_name="frontpages/company/index.html"),name="chcmp"),
 ]

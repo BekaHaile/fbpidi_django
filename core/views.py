@@ -18,7 +18,7 @@ class IndexView(View):
         category = models.Category.objects.all()
         sub_category = models.SubCategory.objects.all()
         company = Company.objects.all()
-        context = {'products':products,'category':category,'sub_category':sub_category,'companies':company}
+        context = {'products':products,'category':category,'sub_c1ategory':sub_category,'companies':company}
         return render(self.request,"frontpages/index.html",context)
 
 class ProfileView(LoginRequiredMixin, View):

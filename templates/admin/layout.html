@@ -193,24 +193,30 @@
 									class="icon-stack"></i> <span>Faqs</span></a>
 						</li>
 						{%if user.is_superuser%}
-						<li class="nav-item">
-							<a href="{%url 'admin:companies' option='supplier' %}" class="nav-link">
-								<i class="icon-truck"></i>
-								<span>Suppliers</span>
-								<span class="badge bg-blue-400 align-self-center ml-auto">
-									{{'supplier'|company_count}}
-								</span>
-							</a>
+						<li class="nav-item nav-item-submenu">
+							<a href="#" class="nav-link"><i class="icon-cabinet"></i> <span>Companies</span></a>
+							<ul class="nav nav-group-sub" data-submenu-title="Form components">
+								<li class="nav-item">
+									<a href="{%url 'admin:companies' option='supplier' %}" class="nav-link">
+										<i class="icon-truck"></i>
+										<span>Suppliers</span>
+										<span class="badge bg-blue-400 align-self-center ml-auto">
+											{{'supplier'|company_count}}
+										</span>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="{%url 'admin:companies' option='manufacturer' %}" class="nav-link">
+										<i class="icon-cogs"></i>
+										<span>Manufacturing Companies</span>
+										<span class="badge bg-blue-400 align-self-center ml-auto">
+											{{'manufacturer'|company_count}}
+										</span>
+									</a>
+								</li>
+							</ul>
 						</li>
-						<li class="nav-item">
-							<a href="{%url 'admin:companies' option='manufacturer' %}" class="nav-link">
-								<i class="icon-cogs"></i>
-								<span>Manufacturing Companies</span>
-								<span class="badge bg-blue-400 align-self-center ml-auto">
-									{{'manufacturer'|company_count}}
-								</span>
-							</a>
-						</li>
+						
 						<li class="nav-item-header">
 							<div class="text-uppercase font-size-xs line-height-xs">Log</div> <i class="icon-menu" title="Forms"></i>
 						</li>
@@ -242,6 +248,24 @@
 								</li> -->
 							</ul>
 						</li>
+
+						<!-- ################################# collaborations nav ################################## -->
+						<li class="nav-item-header">
+							<div class="text-uppercase font-size-xs line-height-xs">Collaborations</div> <i class="icon-menu"
+								title="Forms"></i>
+						</li>
+						
+						<li class="nav-item ">
+							<a href="#" class="nav-link"><i class="icon-group"></i> <span>Blogs</span></a>
+							<a href="/admin/polls/" class="nav-link"><i class="icon-group"></i> <span>Polls</span></a>
+							<a href="#" class="nav-link"><i class="icon-group"></i> <span>Forums</span></a>
+							
+							
+							
+						</li>
+
+						<!-- ################################# collaborations nav ################################## --> 
+
 						{%else%}
 						<li class="nav-item">
 							<a href="{%url 'admin:users_list' %}" class="nav-link"><i class="icon-users"></i>
@@ -283,10 +307,12 @@
 			<div class="page-header page-header-light">
 				<div class="page-header-content header-elements-md-inline">
 					<div class="page-title d-flex">
-						<h4><i class="icon-arrow-left52 mr-2"></i>
+						
+						<h4><i class="icon-arrow-left8 mr-2"></i>
 							<span class="font-weight-semibold">{%block pagename%}Home - Dashboard{%endblock%} </span>
 							<!-- {%if user.is_suplier%} Supplier  {%elif user.is_manufacturer%} Manufacturer  {%endif%} -->
 						</h4>
+						
 						<a href="{%url 'admin:index'%}" class="header-elements-toggle text-default d-md-none"><i
 								class="icon-more"></i></a>
 					</div>
