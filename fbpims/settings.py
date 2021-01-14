@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'collaborations',
     'company',
     'colorfield',
+    'social_django',
+
 ]
 
 MIDDLEWARE = [
