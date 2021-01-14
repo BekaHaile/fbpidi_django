@@ -1,7 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import Permission, Group
+
 from django.conf import settings
-
-
 
 
 class PollsQuestion(models.Model):
@@ -52,3 +52,47 @@ class PollsResult(models.Model):
     class Meta:
         unique_together = (('user', 'poll'))
 
+
+
+## Colab 
+class Blog(models.Model):
+    title = models.CharField(max_length=100,null=False)
+    title_am = models.CharField(max_length=100,null=False)
+    tag = models.CharField(max_length=50,null=False)
+    tag_am = models.CharField(max_length=50,null=False)
+    blogImage = models.ImageField(null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField(null=False)
+    content_am = models.TextField(null=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    publish = models.BooleanField(null=False,default=False)
+
+            
+    def countComment(self):
+        return self.blogcomment_set.all().count()
+
+    def comments(self):
+        return self.blogcomment_set.all()
+    
+class BlogComment(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE,null=False)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=False)
+    content = models.TextField(null=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return self.title
+
+
+##Faqs
+class Faqs(models.Model):
+    questions = models.CharField(max_length=100,null=False)
+    questions_am = models.TextField(max_length=100,null=False)  
+    answers = models.TextField(null=False)  
+    answers_am = models.TextField(null=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
+
+    
+    

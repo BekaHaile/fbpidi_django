@@ -1,4 +1,8 @@
 media
 venv
+<<<<<<< HEAD
+**/migrations/
+=======
 __pycache__
 .vscode
+>>>>>>> 6f2f53e1365678ad785fd30d06dc3d91cdffd4a9

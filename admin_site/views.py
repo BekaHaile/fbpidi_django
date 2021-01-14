@@ -9,6 +9,62 @@ from django.core.exceptions import ObjectDoesNotExist
 from admin_site import models
 from admin_site.forms import SubCategoryForm,ProductCreationForm
 from accounts.models import User,Company
+from collaborations.forms import CreateBlogs, CreateBlogComment, CreateFaqs
+from collaborations.models import Blog, BlogComment,Faqs
+
+## Faqs
+class FaqsFormView(View):
+    def get(self,*args,**kwargs):
+        form = CreateFaqs()
+        context = {'form':form}
+        return render(self.request,"admin/pages/faqs_forms.html",context)
+
+
+    def post(self,*args,**kwargs):
+        form = CreateFaqs(self.request.POST)
+        context = {"form":form}
+        if form.is_valid():
+            faqs=Faqs(questions=self.request.POST['questions'],
+                questions_am=self.request.POST['questions_am'],
+                answers=self.request.POST['answers'],
+                answers_am=self.request.POST['answers_am'])
+            faqs.save()
+            form = CreateFaqs()
+            context = {'form':form}
+            messages.success(self.request, "New Faqs Added Successfully")
+            return redirect("admin:admin_Faqs")
+        return render(self.request, "admin/pages/faqs_forms.html",context)
+
+
+class FaqsView(View):
+    template_name="admin/pages/blog_list.html"
+    def get(self,*args,**kwargs):
+        faqs=Faqs.objects.get(id=self.kwargs['id'])
+        template_name="admin/pages/faqs_detail.html"
+        context={'faq':faqs}
+        return render(self.request, template_name,context)
+    def post(self,*args,**kwargs):
+        form = CreateFaqs(self.request.POST)
+        context={'form':form}
+        faqs = Faqs.objects.get(id=self.kwargs['id'])
+         
+        faqs.questions = self.request.POST['questions']
+        faqs.questions_am = self.request.POST['questions_am']
+        faqs.answers = self.request.POST['answers']
+        faqs.answers_am = self.request.POST['answers_am']
+        messages.success(self.request, "Edited Faqs Successfully")
+        faqs.save()
+        return redirect("admin:admin_Faqs",option=option) 
+
+class FaqsList(View):
+    template_name = "admin/pages/faqs_forms.html"
+    def get(self,*args,**kwargs):
+        faqs=Faqs.objects.all()
+        context = {'faqs':faqs}
+        template_name = "admin/pages/faqs_list.html"
+        return render(self.request, template_name,context)
+
+    
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 from collaborations.models import PollsQuestion, PollsResult, Choices
@@ -18,6 +74,120 @@ class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = dict()
         return render(self.request,"admin/index.html",context)
+
+## blogform
+class BlogForm(View):
+    template_name="admin/pages/blog_form.html"
+    def get(self,*args,**kwargs):
+        form = CreateBlogs()
+        template_name="admin/pages/blog_form.html"
+        context={'form':form}
+        return render(self.request, template_name,context)
+    def post(self,*args,**kwargs):
+        form = CreateBlogs(self.request.POST,self.request.FILES)
+        context={'form':form}
+        if form.is_valid():
+            blog = Blog()
+            blog.user = self.request.user
+            blog.title = self.request.POST['title']
+            blog.tag = self.request.POST['tag']
+            blog.content = self.request.POST['content']
+            blog.title_am = self.request.POST['title_am']
+            blog.tag_am = self.request.POST['tag_am']
+            blog.content_am = self.request.POST['content_am']
+            publish =self.request.POST['publish']
+            if publish =="on":
+                blog.publish=True 
+            else:
+                blog.publish=True
+
+            print("-----------"+ str(blog.publish))
+            blog.blogImage = form.cleaned_data.get("blogImage")
+            blog.save()
+            messages.success(self.request, "Added New Blog Successfully")
+            form = CreateBlogs()
+            context={'form':form}
+            return render(self.request, "admin/pages/blog_form.html",context)
+        return render(self.request, "admin/pages/blog_form.html",context)
+
+
+
+class BlogList(View):
+    template_name="admin/pages/blog_list.html"
+    def get(self,*args,**kwargs):
+        blogs = Blog.objects.all()
+        template_name="admin/pages/blog_list.html"
+        context={'blogs':blogs}
+        return render(self.request, template_name,context)
+# def post(self,*args,**kwargs):
+#         product = models.Product.objects.get(id=self.kwargs['id'])
+#         if self.kwargs['option'] == 'edit_all':
+#             category = models.SubCategory.objects.get(id=self.request.POST['category'])
+#             product.name=self.request.POST['name']
+#             product.name_am = self.request.POST['name_am']
+#             product.category=category
+#             product.description = self.request.POST['description']
+#             product.description_am = self.request.POST['description_am']
+#             if self.request.FILES.get('image') == None:
+#                 pass
+#             elif self.request.FILES.get('image') != None:
+#                 product.image = self.request.FILES.get('image')
+#             product.save()
+class BlogView(View):
+    template_name="admin/pages/blog_list.html"
+    def get(self,*args,**kwargs):
+        blogs = Blog.objects.get(id=self.kwargs['id'])
+        template_name="admin/pages/blog_detail.html"
+        context={'form':blogs}
+        return render(self.request, template_name,context)
+    def post(self,*args,**kwargs):
+        form = CreateBlogs(self.request.POST,self.request.FILES)
+        context={'form':form}
+        blog = Blog.objects.get(id=self.kwargs['id'])
+         
+        blog.title = self.request.POST['title']
+        blog.tag = self.request.POST['tag']
+        blog.content = self.request.POST['content']
+        blog.title_am = self.request.POST['title_am']
+        blog.tag_am = self.request.POST['tag_am']
+        blog.content_am = self.request.POST['content_am']
+        is_private = 'is_private' in self.request.POST
+        if is_private == 'on':
+            blog.publish = True
+        else:
+            blog.publish = False
+        if self.request.FILES.get('blogImage') == None:
+                 pass
+        elif self.request.FILES.get('blogImage') != None:
+                 blog.blogImage = self.request.FILES.get('blogImage')
+        
+        blog.save()
+        messages.success(self.request, "Edited Blogs Successfully")
+        return render(self.request, "admin/pages/blog_list.html",context)
+
+class BlogCommentForm(View):
+    template_name="admin/pages/blog_form.html"
+    def post(self,*args,**kwargs):
+        form = CreateBlogComment(self.request.POST)
+        context={'form':form}
+        if form.is_valid():
+            comment = Blog()
+            blog.title = self.request.POST['content']
+            blog.user = self.request.user
+            #blog.blog = 
+            blog.save()
+            form = CreateBlogs()
+            context={'form':form}
+            messages.success(self.request, "You commented on a blog")
+            return render(self.request, "admin/pages/blog_form.html",context)
+        return render(self.request, "admin/pages/blog_form.html",context)
+
+# class BlogComment(models.Model):
+#     blog = models.ForeignKey(Blog, on_delete=models.CASCADE,null=False)
+#     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=False)
+#     content = models.TextField(null=False)
+#     timestamp = models.DateTimeField(auto_now_add=True)
+
 # category related views
 
 # This is class/view is crated for displaying all categories and sub categories
@@ -251,6 +421,18 @@ class DeleteView(LoginRequiredMixin,View):
             message = "Category Deleted"
             messages.success(self.request,message)
             return redirect("admin:p_categories",option='category')
+        elif self.kwargs['model_name'] == 'Blog':
+            Blog1 = Blog.objects.get(id=self.kwargs['id'])
+            Blog1.delete()
+            message ="Blog Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:admin_Blogs")
+        elif self.kwargs['model_name'] == 'Faqs':
+            faqs = Faqs.objects.get(id=self.kwargs['id'])
+            faqs.delete()
+            message ="Faqs Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:index")
         elif self.kwargs['model_name'] == 'sub_category':
             sub_category = models.SubCategory.objects.get(id=self.kwargs['id'])
             sub_category.delete()

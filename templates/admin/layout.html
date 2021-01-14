@@ -174,6 +174,7 @@
 								</li> 
 							</ul>
 						</li>
+						
 						<li class="nav-item">
 							{%if user.is_superuser%}
 							<a href="{%url 'admin:admin_products' user_type='admin'%}" class="nav-link"><i
@@ -182,6 +183,14 @@
 							<a href="{%url 'admin:admin_products' user_type='provider'%}" class="nav-link"><i
 									class="icon-stack"></i> <span>Products</span></a>
 							{%endif%}
+						</li>
+						<li class="nav-item">
+							<a href="{%url 'admin:admin_Blogs'%}" class="nav-link"><i
+									class="icon-stack"></i> <span>Blog</span></a>
+						</li>
+						<li class="nav-item">
+							<a href="{%url 'admin:admin_Faqs'%}" class="nav-link"><i
+									class="icon-stack"></i> <span>Faqs</span></a>
 						</li>
 						{%if user.is_superuser%}
 						<li class="nav-item nav-item-submenu">
