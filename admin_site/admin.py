@@ -10,6 +10,10 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLo
                         UserDetailView,UpdateAdminProfile,CreateUserView,GroupView)
 # views from admin_site app
 from admin_site.views import (AdminIndex,CategoryView,CreateCategories,CategoryDetail,
+                        CompaniesView,CompaniesDetailView,DeleteView,
+                        AdminProductListView,CreateProductView,ProductDetailView,
+                        AddProductImage,CreatePrice,
+                        Polls, CreatePoll, AddChoice, EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice,
                         DeleteView,AdminProductListView,CreateProductView,ProductDetailView,
                         AddProductImage,CreatePrice)
 
@@ -44,6 +48,19 @@ class CustomAdminSite(admin.AdminSite):
             path("product_detail/<option>/<id>/",wrap(ProductDetailView.as_view()),name="product_detail"),
             path("add_more_images/",wrap(AddProductImage.as_view()),name="add_product_image"),
             path("create_price/",wrap(CreatePrice.as_view()),name="create_price"),
+            path("create_company_profile_al/<id>/",wrap(create_company_after_signup_view),name='complete_company_profile'),
+        
+            # paths for polls app, 
+            path("polls/", wrap(Polls.as_view()), name = "admin_polls"),
+            path("create_poll/", wrap(CreatePoll.as_view()), name = "create_poll"),
+            path("edit_poll/<id>/", wrap(EditPoll.as_view()), name = "edit_poll"),
+            path("add_choice/<id>/", wrap(AddChoice.as_view()), name = "add_choice"),
+            path("edit_choice/", wrap(EditChoice.as_view()), name = "edit_choice"), #choice id is found from adit_poll.html option tag
+            path("delete_poll/<id>/", wrap(DeletePoll.as_view()), name = "delete_poll"),
+            path("delete_choice/<id>/", wrap(DeleteChoice.as_view()), name = "delete_choice"),
+            path("detail_poll/<id>/", wrap(DetailPoll.as_view()), name = "detail_poll"),
+
+        
             path("",include("company.urls")),
         ]
         return my_urls + urls

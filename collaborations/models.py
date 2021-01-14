@@ -11,11 +11,18 @@ class PollsQuestion(models.Model):
     description = models.TextField( verbose_name="Poll Description(English)" )
     description_am = models.TextField( verbose_name="Poll Description(Amharic)" )
     timestamp = models.DateTimeField(auto_now_add=True)
-    choices = models.ManyToManyField('Choices',related_name='choices',default="")
-
+    choices = models.ManyToManyField('Choices',related_name='choices',default="",)
+    
     def __str__(self):
         return self.title
-
+    
+    def count_votes(self):
+        return self.pollsresult_set.count()
+        
+    def count_choices(self):
+        return self.choices.count()
+ 
+    
 class Choices (models.Model):
     choice_name = models.CharField( max_length=200, verbose_name="Choice name (English)" )
     choice_name_am = models.CharField( max_length=200, verbose_name="Choice name(Amharic)" )
@@ -26,14 +33,22 @@ class Choices (models.Model):
     def __str__(self):
         return self.choice_name
 
+    def count_votes(self):
+        return self.pollsresult_set.count()
 
+    
+    
+    
 class PollsResult(models.Model):    
     poll = models.ForeignKey(PollsQuestion, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     choice = models.ForeignKey(Choices, on_delete=models.CASCADE)
-    remark = models.CharField( max_length=200,verbose_name= "Any remarks the user may have" )
+    remark = models.CharField( max_length=200,verbose_name= "Any remarks the user may have", default="" )
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.poll.title}'s Result "
+    
+    class Meta:
+        unique_together = (('user', 'poll'))
 

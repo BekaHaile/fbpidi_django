@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from core.views import IndexView,ProfileView
 from accounts.views import CustomerSignUpView
 
+
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
     path("register/",CustomerSignUpView.as_view(),name="register"),
