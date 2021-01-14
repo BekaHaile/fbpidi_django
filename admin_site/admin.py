@@ -10,9 +10,14 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLo
                         UserDetailView,UpdateAdminProfile,CreateUserView,GroupView)
 # views from admin_site app
 from admin_site.views import (AdminIndex,CategoryView,CreateCategories,CategoryDetail,
-                         DeleteView, AdminProductListView,CreateProductView,ProductDetailView,
+                        DeleteView, AdminProductListView,CreateProductView,ProductDetailView,
                         AddProductImage,CreatePrice,
+
+                        BlogForm,BlogList,BlogView,
+                        FaqsFormView,FaqsView,FaqsList,
+                        
                         Polls, CreatePoll, AddChoice, EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice,
+                        
                         DeleteView,AdminProductListView,CreateProductView,ProductDetailView,
                         AddProductImage,CreatePrice)
 
@@ -29,6 +34,13 @@ class CustomAdminSite(admin.AdminSite):
 
         my_urls = [
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
+            
+            path("faqs-detail/<model_name>/<id>",FaqsView.as_view(),name="faqs_detail"),
+            path("faq-form/",FaqsFormView.as_view(),name="admin_Faqsform"),
+            path("faq-list/",FaqsList.as_view(),name="admin_Faqs"),
+            path("blog-list/",BlogList.as_view(),name="admin_Blogs"),
+            path("blog-detail/<model_name>/<id>/",BlogView.as_view(),name="blog_detail"),
+            path("blog-create/",BlogForm.as_view(),name="create_blog"),
             path("signup/",CompanyAdminSignUpView.as_view(),name="signup"),
             path("create_user/",wrap(CreateUserView.as_view()),name="create_user"),
             path("users_list/",wrap(UserListView.as_view()),name="users_list"),
