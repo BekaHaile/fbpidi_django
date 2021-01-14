@@ -12,8 +12,6 @@ from accounts.models import User,Company,Customer
 from accounts.forms import CompanyForm
 
 
-
-
 class IndexView(View):
     def get(self,*args,**kwargs):
         products = models.Product.objects.all()

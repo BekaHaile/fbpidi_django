@@ -2,15 +2,22 @@ from django.urls import path,include
 from django.views.generic import TemplateView
 
 from core.views import IndexView,ProfileView
+from collaborations.views import BlogList,BlogDetail,FaqList
 from accounts.views import CustomerSignUpView
 
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
+    path("blog-grid-right/",BlogList.as_view(),name="blog_grid_right"),
+    path("blog-detail-right/<id>",BlogDetail.as_view(),name="blog_details"),
     path("register/",CustomerSignUpView.as_view(),name="register"),
+    path("faq/",FaqList.as_view(),name="faq"),
     path("accounts/",include("django.contrib.auth.urls")),
+    path("setting/",TemplateView.as_view(template_name="frontpages/settings.html"),name="setting"),
     # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
     path("mydash/",ProfileView.as_view(),name="mydash"),
-    path("setting/",TemplateView.as_view(template_name="frontpages/settings.html"),name="setting"),
+    path("Job-detail/",TemplateView.as_view(template_name="admin/pages/job_detail.html"),name="Job_detail"),
+    path("Job-form/",TemplateView.as_view(template_name="admin/pages/job_form.html"),name="Job_form"),
+    path("job-list/",TemplateView.as_view(template_name="admin/pages/job_list.html"),name="Job_list"),
     path("myfavorite/",TemplateView.as_view(template_name="frontpages/myfavorite.html"),name="favorite"),
     path("forgot/",TemplateView.as_view(template_name="frontpages/forgot.html"),name="forgot"),
     path("add-list/",TemplateView.as_view(template_name="frontpages/ad-list.html"),name="ad_list"),
@@ -30,11 +37,11 @@ urlpatterns = [
     path("blog-detail-center/",TemplateView.as_view(template_name="frontpages/blog-details-center.html"),name="blog_details_center"),
     path("blog-list/",TemplateView.as_view(template_name="frontpages/blog-list.html"),name="blog_list"),
     path("blog-detail/",TemplateView.as_view(template_name="frontpages/blog-details.html"),name="blog_details"),
-    path("blog-list-right/",TemplateView.as_view(template_name="frontpages/blog-list-right.html"),name="blog_list_right"),
-    path("blog-detail-right/",TemplateView.as_view(template_name="frontpages/blog-details-right.html"),name="blog_details_right"),
+    #path("blog-list-right/",TemplateView.as_view(template_name="frontpages/blog-list-right.html"),name="blog_list_right"),
+    #path("blog-detail-right/",TemplateView.as_view(template_name="frontpages/blog-details-right.html"),name="blog_details_right"),
     path("blog-grid/",TemplateView.as_view(template_name="frontpages/blog-grid.html"),name="blog_grid_f"),
     path("blog-grid-center/",TemplateView.as_view(template_name="frontpages/blog-grid-center.html"),name="blog_grid_center"),
-    path("blog-grid-right/",TemplateView.as_view(template_name="frontpages/blog-grid-right.html"),name="blog_grid_right"),
+    #path("blog-grid-right/",TemplateView.as_view(template_name="frontpages/blog-grid-right.html"),name="blog_grid_right"),
 
     path("userprofile/",TemplateView.as_view(template_name="frontpages/userprofile.html"),name="userprofile"),
     path("mylistings/",TemplateView.as_view(template_name="frontpages/mylistings.html"),name="mylistings"),
@@ -56,7 +63,7 @@ urlpatterns = [
     path("personal-blog/",TemplateView.as_view(template_name="frontpages/personal-blog.html"),name="personal_blog"),
     
     path("not_found/",TemplateView.as_view(template_name="frontpages/404.html"),name="not_found"),
-    path("faq/",TemplateView.as_view(template_name="frontpages/faq.html"),name="faq"),
+    
     path("invoice/",TemplateView.as_view(template_name="frontpages/inovice.html"),name="invoice"),
     path("lockscreen/",TemplateView.as_view(template_name="frontpages/lockscreen.html"),name="lockscreen"),
     path("login2-/",TemplateView.as_view(template_name="frontpages/login-2.html"),name="login_2"),

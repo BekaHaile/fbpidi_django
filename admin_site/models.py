@@ -65,6 +65,7 @@ class ProductPrice(models.Model):
     startdate = models.DateField(auto_now_add=True)
     end_date = models.DateField(auto_now_add=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    
 
     def __str__(self):
         return self.price

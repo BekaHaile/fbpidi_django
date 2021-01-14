@@ -1,0 +1,108 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+{% endblock %}
+{%block pagename%}Create Blog{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	
+	<div class="card">
+ 
+		<div class="card-body">
+
+			<form action="" method="POST" enctype="multipart/form-data">
+				<fieldset class="mb-3 ml-3 mr-3">
+					<legend class="text-uppercase font-size-sm font-weight-bold">Create Blog</legend>
+					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
+					{%if form.errors%}
+					<div class="alert alert-danger" role="alert">
+					  {{form.errors}}
+					</div>
+					{% endif %}
+					{%csrf_token%}
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.title.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.title}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.title_am.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.title_am}}
+						</div>
+					</div> 
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.tag.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.tag}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.tag_am.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.tag_am}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.content.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.content}}
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.content_am.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.content_am}}
+						</div>
+					</div>
+
+					<div class="form-group row">
+				    <label class="col-form-label col-lg-3" >{{form.publish.label|title}} </label>
+						<div class="col-lg-9" name="publish" value="True">
+							{{form.publish}}
+							<!--
+				    <select class="form-control">
+				      <option>True</option>
+				      <option>false</option>
+				    </select> -->
+				  		</div>
+				  	</div>
+				  		
+					
+					 
+					<div class="form-group row">
+						<label class="col-form-label col-lg-2">Blog Image</label>
+						<div class="col-lg-10">
+							<div class="uniform-uploader"><input type="file" name="blogImage" value="{{form.blogImage.url}}" class="form-input-styled" data-fouc=""><span
+								class="filename" style="user-select: none;">No file selected</span><span
+								class="action btn bg-warning" style="user-select: none;">Choose File</span></div>
+						</div>
+					</div>
+
+							
+						
+				</fieldset>
+
+				<div class="text-right">
+					<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+						class="btn btn-primary rounded-round">Submit </button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+	});
+</script>
+{%endblock%}

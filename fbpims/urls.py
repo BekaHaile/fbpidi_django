@@ -21,16 +21,18 @@ from django.urls import path,include,re_path
 
 from admin_site.admin import admin_site
 from accounts.views import activate
-
+from collaborations.views import BlogList
 urlpatterns = [
     # admin page urls
     path("admin/",admin_site.urls),
+    #  page urls
     # frontpage urls 
     path("",include("core.urls")),
     path('activate/<uidb64>/<token>/',activate, name='activate'),
     # third party app urls
     path('summernote/', include('django_summernote.urls')),
+    path("blog-list-right/",BlogList.as_view(),name="blog_grid_right"),
     re_path(r'^i18n/', include('django.conf.urls.i18n')),
-]  
+]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
