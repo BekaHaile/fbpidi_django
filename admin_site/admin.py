@@ -10,8 +10,7 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLo
                         UserDetailView,UpdateAdminProfile,CreateUserView,GroupView)
 # views from admin_site app
 from admin_site.views import (AdminIndex,CategoryView,CreateCategories,CategoryDetail,
-                        CompaniesView,CompaniesDetailView,DeleteView,
-                        AdminProductListView,CreateProductView,ProductDetailView,
+                         DeleteView, AdminProductListView,CreateProductView,ProductDetailView,
                         AddProductImage,CreatePrice,
                         Polls, CreatePoll, AddChoice, EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice,
                         DeleteView,AdminProductListView,CreateProductView,ProductDetailView,
@@ -48,7 +47,6 @@ class CustomAdminSite(admin.AdminSite):
             path("product_detail/<option>/<id>/",wrap(ProductDetailView.as_view()),name="product_detail"),
             path("add_more_images/",wrap(AddProductImage.as_view()),name="add_product_image"),
             path("create_price/",wrap(CreatePrice.as_view()),name="create_price"),
-            path("create_company_profile_al/<id>/",wrap(create_company_after_signup_view),name='complete_company_profile'),
         
             # paths for polls app, 
             path("polls/", wrap(Polls.as_view()), name = "admin_polls"),
