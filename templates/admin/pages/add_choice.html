@@ -1,0 +1,170 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+{% endblock %}
+
+{%block pagename%}Choice Form.{%endblock%}
+<section>
+	<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+		<div class="header-text mb-0">
+			<div class="container">
+				<div class="text-center " style="color: lightskyblue;">
+					<h1 class="">Polls-List</h1>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/admin/">Home</a></li>
+						<li class="breadcrumb-item active " aria-current="page""><a href="/admin/polls/">Polls</a></li>
+						
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+	{%if edit %}
+		
+		<div class="card">
+
+			<div class="card-body">
+				<h3>{{choice.choice_name}}</h3>
+								<div class="item7-card-desc d-flex mb-2 mt-3">                                    
+									<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{choice.timestamp}}</a>
+                                   
+                                    <a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>Total votes {{choice.count_votes}}</a>
+                                    
+                                </div>
+	
+				<form action="{%url 'admin:edit_choice'   %}" method="POST" enctype="multipart/form-data">
+					<fieldset class="mb-3 ml-3 mr-3">
+						<legend class="text-uppercase font-size-sm font-weight-bold">Edit Chioce </legend>
+						
+
+						{%csrf_token%}
+						<div class="form-group row">
+							<label class="col-form-label col-lg-3">Choice name<Title></Title>(English) </label>
+							<div class="col-lg-9">
+								<input required type="text" name="choice_name" class="form-control" value="{{choice.choice_name}}" id="">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-form-label col-lg-3">Choice name(Amharic) </label>
+							<div class="col-lg-9">
+								<input required type="text" name="choice_name_am" class="form-control" value="{{choice.choice_name_am}}" id="">
+							</div>
+						</div>
+	
+						<div class="form-group row">
+							<label class="col-form-label col-lg-3">Choice Description(English) </label>
+							<div class="col-lg-9">
+								<textarea required name="description" id="summernote" cols="30"
+									rows="10">{{choice.description|safe}}</textarea>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-form-label col-lg-3">Choice Description(Amharic) </label>
+							<div class="col-lg-9">
+								<textarea required name="description_am" class="summernote" cols="30"
+									rows="10">{{choice.description_am|safe}}</textarea>
+							</div>
+						</div>
+
+						<input name="choice" hidden value = "{{choice.id}}"/>
+
+						
+					</fieldset>
+					
+					<div class="text-right">
+						<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+							class="btn btn-primary rounded-round" onclick="return confirm ('Are you sure you want to Edit this choice?')">Edit Choice </button>
+					</div>
+				</form>
+				<br>
+				<form action="{% url 'admin:delete_choice' id=choice.id %}" method="GET" enctype="multipart/form-data" >
+					{%csrf_token%}
+					<div class="text-right">
+						<button style="padding-left: 10%; padding-right: 10%; background-color: maroon;" type="submit"
+							class="btn btn-primary rounded-round" onclick="return confirm ('Are you sure you want to delete this choice?')">Delete Choice </button>
+					</div>
+				</form>
+				<br>
+				<form action="{% url 'admin:admin_polls' %}" method="GET" enctype="multipart/form-data" >
+					{%csrf_token%}
+					<div class="text-right">
+						<button style="padding-left: 10%; padding-right: 10%; background-color: grey;" type="submit"
+							class="btn btn-primary rounded-round">Cancel </button>
+					</div>
+				</form>
+				
+			</div>
+		</div>
+
+	{% else %}
+	<div class="card">
+
+		<div class="card-body">
+                                <!-- path('add_choice/<id>', add_choice.as_view(), name = "add_choice") -->
+
+			<form action="{%url 'admin:add_choice' id=poll.id%}" method="POST" enctype="multipart/form-data">
+				<fieldset class="mb-3 ml-3 mr-3">
+					<legend class="text-uppercase font-size-sm font-weight-bold">Create new choice for {{poll.title}}</legend>
+					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
+                    {{form.errors}}
+                 
+                    {%csrf_token%}
+				  
+					
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.choice_name.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.choice_name}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.choice_name_am.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.choice_name_am}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.description.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.description}}
+						</div>
+					</div>
+					 
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.description_am.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.description_am}}
+						</div>
+					</div>
+
+					
+					
+				</fieldset>
+
+				<div class="text-right">
+					<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+						class="btn btn-primary rounded-round">Add Choice </button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	{% endif %}
+</div>
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+	});
+</script>
+{%endblock%}
