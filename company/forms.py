@@ -1,5 +1,4 @@
 from django import forms
-from colorfield.widgets import ColorWidget
 from company.models import Company,CompanySolution,CompanyEvent
 
 class CompanyForm(forms.ModelForm):

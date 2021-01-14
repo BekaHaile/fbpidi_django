@@ -1,10 +1,7 @@
 media
 venv
 **/migrations/
-
 venv/Scripts/python.exe
 .vscode
 *.pyc
 !*.pyc
-static
-
