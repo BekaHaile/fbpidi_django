@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 
 from core.views import IndexView,ProfileView
 from collaborations.views import BlogList,BlogDetail,FaqList
-from accounts.views import CustomerSignUpView
+from accounts.views import CustomerSignUpView,SocialLoginView
 
 
 urlpatterns = [
@@ -11,6 +11,7 @@ urlpatterns = [
     path("blog-grid-right/",BlogList.as_view(),name="blog_grid_right"),
     path("blog-detail-right/<id>",BlogDetail.as_view(),name="blog_details"),
     path("register/",CustomerSignUpView.as_view(),name="register"),
+    path("complete-auth/",SocialLoginView.as_view(),name="complete_social_login"),
     path("faq/",FaqList.as_view(),name="faq"),
     path("accounts/",include("django.contrib.auth.urls")),
     path("setting/",TemplateView.as_view(template_name="frontpages/settings.html"),name="setting"),

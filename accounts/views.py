@@ -50,6 +50,17 @@ class CustomerSignUpView(CreateView):
             {'message':"Please Verify your email address to complete the registration\n"
             +"If you can\'t find the mail please check it in your spam folder!"})
 
+class SocialLoginView(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        user = User.objects.get(id=self.request.user.id)
+        user.is_customer = True
+        user.save()
+        customer = Customer(
+            user=user
+        )
+        customer.save()
+        return redirect("index")
+
 def activate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
