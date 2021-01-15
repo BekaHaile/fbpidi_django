@@ -14,6 +14,8 @@ urlpatterns = [
     path("faq/",FaqList.as_view(),name="faq"),
     path("accounts/",include("django.contrib.auth.urls")),
     path("setting/",TemplateView.as_view(template_name="frontpages/settings.html"),name="setting"),
+    
+    path('social-auth', include('social_django.urls', namespace='social')),
     # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
     path("mydash/",ProfileView.as_view(),name="mydash"),
     path("Job-detail/",TemplateView.as_view(template_name="admin/pages/job_detail.html"),name="Job_detail"),

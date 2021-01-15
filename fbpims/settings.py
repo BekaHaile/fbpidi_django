@@ -52,10 +52,48 @@ INSTALLED_APPS = [
     'useraudit',
     'collaborations',
     'company',
-    'colorfield',
     'social_django',
+    'colorfield',
+    
+    
 
 ]
+
+##### social-auth for postgres
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+
+##### used by social-auth
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_FACEBOOK_KEY = '2860739290914734'  #APP ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '5afc8b24a3cdb7d93dcccf3fa06f49b6' #APP SECRET
+
+##### Google
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '753998838053-1gd5boe4mjbvulm8cv71em8q0tf21k1v.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'd7UttVSC6u_KamtFI0_kY4RS'
+SOCIAL_AUTH_GOOGLE_OAUTH2_IGNORE_DEFAULT_SCOPE = True
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile'
+]
+#######
+
+
+######  Github
+SOCIAL_AUTH_GITHUB_KEY = '1e66719b28647a384cb2'  #CLIENT ID
+SOCIAL_AUTH_GITHUB_SECRET = '271b0d0d47b41342933f5f8287f43f0f2d3eb070' #CLIENT SECRET
+######
+
+
+###### Linkedin
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,6 +119,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
