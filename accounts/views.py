@@ -52,13 +52,19 @@ class CustomerSignUpView(CreateView):
 
 class SocialLoginView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
+        print("$$$$$$$$$$$$$$$$ social login called")
         user = User.objects.get(id=self.request.user.id)
-        user.is_customer = True
-        user.save()
-        customer = Customer(
-            user=user
-        )
-        customer.save()
+        if user.is_customer == False:
+            print("$$$$$$$$$$$$$$$$ client user is being created")
+            user.is_customer = True
+            user.save()
+            customer = Customer(
+                user=user
+            )
+            customer.save()
+            redirect()
+            return redirect("login", messages  = "Account Created Successfully! Please Login Again! \n Then you can modify your Email my clicking on My Profile.")
+        print("$$$$$$$$$$$$ this is just loggin in")
         return redirect("index")
 
 def activate(request, uidb64, token):
