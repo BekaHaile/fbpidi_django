@@ -21,8 +21,9 @@
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="/admin/">Home</a></li>
 						<li class="breadcrumb-item"><a href="/admin/polls/">Polls</a></li>
-						<li class="breadcrumb-item active " aria-current="page""><a href="/admin/edit_poll/{{poll.id}}/">Editing Poll</a></li>
-						
+						{% if edit %}
+						<li class="breadcrumb-item active " aria-current="page"><a href="/admin/edit_poll/{{poll.id}}/">Editing Poll</a></li>
+						{% endif %}
 					</ol>
 				</div>
 			</div>

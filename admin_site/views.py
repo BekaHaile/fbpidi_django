@@ -12,6 +12,10 @@ from accounts.models import User,Company
 from collaborations.forms import CreateBlogs, CreateBlogComment, CreateFaqs
 from collaborations.models import Blog, BlogComment,Faqs
 
+
+from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
+from collaborations.models import PollsQuestion, PollsResult, Choices
+
 ## Faqs
 class FaqsFormView(View):
     def get(self,*args,**kwargs):
@@ -65,9 +69,6 @@ class FaqsList(View):
         return render(self.request, template_name,context)
 
     
-
-from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
-from collaborations.models import PollsQuestion, PollsResult, Choices
 
 # INDEX VIEW
 class AdminIndex(LoginRequiredMixin,View):
@@ -500,10 +501,7 @@ class CreatePoll(LoginRequiredMixin,View):
             return redirect("admin:admin_polls")
 
 class DetailPoll(LoginRequiredMixin,View):
-    def get(self, *args, **kwargs):
-        message = "" 
-        messages.success(self.request, "ya message works")
-          
+    def get(self, *args, **kwargs):  
           
         if self.kwargs['id'] :
             try:
@@ -512,7 +510,6 @@ class DetailPoll(LoginRequiredMixin,View):
                 return render(self.request, "admin/pages/admin_poll_detail.html", {'poll':poll,})
 
             except Exception as e:
-                print ("444444444444444444444444 error at admin.views.DetailPoll " ,str(e))
                 messages.error(self.request, "Poll not found")
                 return redirect("admin:admin_polls") 
 
@@ -558,8 +555,7 @@ class EditPoll(LoginRequiredMixin,View):
         
         pollform = CreatePollForm()
         choiceform = CreateChoiceForm()
-        messages.success(self.request, "ya message works")
-       
+        
         try:
             poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
             # little verification (this verification is done at the front end, this is just for safety, like if user uses url)            

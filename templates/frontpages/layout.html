@@ -193,15 +193,16 @@
 							<li><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
 							</ul>
 
-							<li><a href="{%url 'polls'%}">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
+							<li><span><a href="{%url 'polls'%}">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
 								<ul class="sub-menu">
 									<li><a href="#">{% trans "Blog" %}</a></li>
 									<li><a href="#">{% trans "Forums" %}</a></li>
 									<li><a href="{% url 'polls' %}">{% trans "Polls" %}</a></li>
 								</ul>
+							</li>
 							
 
-                            <li><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
+                            <li><span></span><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
 
 						</ul>
 

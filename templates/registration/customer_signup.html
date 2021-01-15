@@ -46,9 +46,11 @@
 									<h3>Sign Up With</h3>
 									<div class="text-center">
 										<div class="btn-list d-flex">
-											<a href="https://www.google.com/gmail/" class="btn btn-google btn-block"><i class="fa fa-google fa-1x mr-2"></i> Google</a>
+											<a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-google btn-block"><i class="fa fa-google fa-1x mr-2"></i> Google</a>
 											<a href="https://twitter.com/" class="btn btn-twitter"><i class="fa fa-twitter fa-1x"></i></a>
-											<a href="https://www.facebook.com/" class="btn btn-facebook"><i class="fa fa-facebook fa-1x"></i></a>
+											<a href="{% url 'social:begin' 'facebook' %}" class="btn btn-facebook"><i class="fa fa-facebook fa-1x"></i></a>
+											<a href="{% url 'social:begin' 'github' %}" class="btn btn-github"><i class="fa fa-github fa-1x"></i></a>
+											
 										</div>
 									</div>
 								</div>
