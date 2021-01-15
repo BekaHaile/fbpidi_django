@@ -52,7 +52,7 @@ class CustomerSignUpView(CreateView):
 
 class SocialLoginView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        user = User.objects.get(id=self.request.user)
+        user = User.objects.get(id=self.request.user.id)
         user.is_customer = True
         user.save()
         customer = Customer(
