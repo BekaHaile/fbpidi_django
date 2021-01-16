@@ -24,7 +24,11 @@ class Company(models.Model):
     postal_code = models.CharField(max_length=100,null=True,default="")
     products = models.CharField(max_length=200,default="",verbose_name="Main Products")
     capital = models.FloatField(default=0)
-    color = models.CharField(max_length=10,verbose_name="Your Company Theme")
+    color = models.CharField(default="#000000",max_length=10,verbose_name="Your Company Theme")
+    facebook_link = models.CharField(max_length=100,default="")
+    twiter_link = models.CharField(max_length=100,default="")
+    google_link = models.CharField(max_length=100,default="")
+    pintrest_link = models.CharField(max_length=100,default="")
        # Trade Capacity
     incoterms = models.CharField(max_length=100,null=True,blank=True,verbose_name="International Commercial Terms(English)",help_text="Incoterms")
     incoterms_am  = models.CharField(max_length=100,null=True,blank=True,verbose_name="International Commercial Terms(Amharic)",help_text="Incoterms")
@@ -51,6 +55,14 @@ class Company(models.Model):
     
     def __str__(self):
         return self.company_name
+
+class CompanyStaff(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
+    time_stamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 class CompanySolution(models.Model):

@@ -16,7 +16,6 @@ from django.conf import global_settings
 import django.conf.locale
 from django.db.models import JSONField
 
-
 gettext_noop = lambda s: s
 
 
@@ -111,7 +110,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'admindb',
         'USER': 'postgres',
-        'PASSWORD': 'Melfan@22',
+        'PASSWORD': 'cbe@ps4woga',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -179,6 +178,10 @@ STATICFILES_DIRS = (
 )
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+# if request.user.is_staff:
+#     LOGIN_REDIRECT_URL = 'index'
+#     LOGOUT_REDIRECT_URL = 'login':
+# elif request.user.is_customer:
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
 

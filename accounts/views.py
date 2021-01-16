@@ -18,9 +18,10 @@ from useraudit.models import FailedLoginLog,LoginAttempt,LoginLog,UserDeactivati
 
 from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,CompanyUserCreationForm,
                             AdminCreateUserForm,GroupCreationForm,CompanyForm)
-from accounts.models import User,Company,CompanyAdmin,CompanyStaff,Customer
+from accounts.models import User,Company,CompanyAdmin,Customer
+from company.models import CompanyStaff
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
-
+ 
 class CompanyAdminSignUpView(CreateView):
     model = User
     form_class = CompanyAdminCreationForm
@@ -195,7 +196,11 @@ class CreateUserView(LoginRequiredMixin, View):
                 return redirect("admin:users_list")
             else:
                 return render(self.request, "admin/pages/user_form.html", {"form": form})
-            
+
+class GroupList(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        groups = Group.objects.all()
+        return render(self.request,"admin/pages/group_list.html",{'groups':groups})      
         
 
 class GroupView(LoginRequiredMixin,View):
