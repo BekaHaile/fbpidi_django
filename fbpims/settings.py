@@ -179,9 +179,8 @@ STATICFILES_DIRS = (
 )
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'complete_social_login'
 
-LOGIN_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'complete_social_login'
 LOGOUT_REDIRECT_URL = 'login'
  
 AUTH_USER_MODEL = 'accounts.User'

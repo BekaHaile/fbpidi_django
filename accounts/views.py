@@ -63,7 +63,6 @@ class SocialLoginView(LoginRequiredMixin,View):
             customer.save()
             
             return redirect("/accounts/login/", messages  = "Account Created Successfully! Please Login Again! \n Then you can modify your Email my clicking on My Profile.")
-        
         return redirect("index")
 
 def activate(request, uidb64, token):
