@@ -74,21 +74,29 @@
 
 		<!--Topbar-->
 		<div class="header-main">
-			<div class="top-bar p-3">
+			<div class="top-bar">
 				<div class="container">
 					<div class="row">
 						<div class="col-xl-7 col-lg-7 col-sm-4 col-7">
 							<div class="top-bar-left d-flex">
 								<div class="clearfix">
-
-									<div class="header-search-logo d-none d-lg-block ">
-                                        <a href="{%url 'index' %}">
-										    <img src="/static/frontpages/images/brand/logo2.png" alt="image">
-                                        </a>
-									</div>
+									<ul class="socials">
+										<li>
+											<a class="social-icon text-dark" href="#"><i class="fa fa-facebook"></i></a>
+										</li>
+										<li>
+											<a class="social-icon text-dark" href="#"><i class="fa fa-twitter"></i></a>
+										</li>
+										<li>
+											<a class="social-icon text-dark" href="#"><i class="fa fa-linkedin"></i></a>
+										</li>
+										<li>
+											<a class="social-icon text-dark" href="#"><i class="fa fa-google-plus"></i></a>
+										</li>
+									</ul>
 								</div>
-
 							</div>
+
 						</div>
 						<div class="col-xl-5 col-lg-5 col-sm-8 col-5">
 							<div class="top-bar-right">
@@ -159,8 +167,17 @@
 			</div>
 			<!-- /Mobile Header -->
 
-			<div class="horizontal-main bg-dark-transparent clearfix">
-				<div class=" header-style horizontal-mainwrapper container clearfix">
+			<div class="horizontal-main  bg-dark-transparent clearfix">
+				<div class="horizontal-mainwrapper container clearfix">
+					<div class="desktoplogo">
+						<a href="{%url 'index' %}"><img src="/static/frontpages/images/brand/logo1.png" alt="image"></a>
+					</a>
+					</div>
+					<div class="desktoplogo-1">
+						<a href="{%url 'index' %}" class="d-flex logo-height logo-svg">
+							<img src="/static/frontpages/images/brand/logo2.png" alt="image"></a>
+						</a>
+					</div>
 					<!--Nav-->
 					<nav class="horizontalMenu clearfix d-md-flex">
 
@@ -179,29 +196,23 @@
                                     <li><a href="{% url 'bs_list_right' %}">{% trans "Foods" %}</a></li>
                                     <li><a href="{% url 'bs_list_right' %}">{% trans "Beverages" %}</a></li>
                                     <li><a href="{% url 'bs_list_right' %}">{% trans "Pharmaceuticals" %}</a></li>
-                                </ul>
-                            <li><a href="{%url 'bs_list3'%}">{% trans "Products" %} <span class="fa fa-caret-down m-0"></span></a>
-                            <ul class="sub-menu">
-                                <li><a href="{% url 'bs_list3' %}">{% trans "Foods" %}</a></li>
-                                <li><a href="{% url 'bs_list3' %}">{% trans "Beverages" %}</a></li>
-                                <li><a href="{% url 'bs_list3' %}">{% trans "Pharmaceuticals" %}</a></li>
-                            </ul>
-                            <li><a href="{% url 'faq' %}">{% trans "Faqs" %}</a></li>
-
-                            <li><a href="{% url 'blog_grid_right' %}">{% trans "Blog" %}</a></li>
-
-							<li><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
-							</ul>
-
-							<li><span><a href="{%url 'polls'%}">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
-								<ul class="sub-menu">
-									<li><a href="#">{% trans "Blog" %}</a></li>
-									<li><a href="#">{% trans "Forums" %}</a></li>
-									<li><a href="{% url 'polls' %}">{% trans "Polls" %}</a></li>
 								</ul>
 							</li>
-							
-
+                            <li><a href="{%url 'bs_list3'%}">{% trans "Products" %} <span class="fa fa-caret-down m-0"></span></a>
+								<ul class="sub-menu">
+									<li><a href="{% url 'bs_list3' %}">{% trans "Foods" %}</a></li>
+									<li><a href="{% url 'bs_list3' %}">{% trans "Beverages" %}</a></li>
+									<li><a href="{% url 'bs_list3' %}">{% trans "Pharmaceuticals" %}</a></li>
+								</ul>
+							</li>			
+							<li><a href="{%url 'blog_grid_right'%}">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
+								<ul class="sub-menu">
+									<li><a href="{% url 'blog_grid_right' %}">{% trans "Blog" %}</a></li>
+									<li><a href="#">{% trans "Forums" %}</a></li>
+									<li><a href="{% url 'polls' %}">{% trans "Polls" %}</a></li>
+									<li><a href="{% url 'faq' %}">{% trans "Faqs" %}</a></li>
+								</ul>
+							</li>
                             <li><span></span><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
 
 						</ul>
