@@ -33,7 +33,6 @@ class CompanyAdminSignUpView(CreateView):
         user = form.save()
         return redirect('admin:complete_company_profile')
 
-
 class CustomerSignUpView(CreateView):
     model = User
     form_class = CustomerCreationForm
