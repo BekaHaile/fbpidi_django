@@ -5,8 +5,8 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from django_summernote.widgets import SummernoteWidget
 
-from accounts.models import Company, CompanyAdmin, Customer, CompanyStaff
-
+from accounts.models import Company, CompanyAdmin, Customer
+from company.models import CompanyStaff
 
 class AbstractUserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput(

@@ -50,6 +50,10 @@
 	<script src="/static/admin/global_assets/js/plugins/notifications/pnotify.min.js"></script>
 	<script src="/static/admin/global_assets/js/demo_pages/extra_pnotify.js"></script>
 
+	<link rel="icon" href="/static/frontpages/images/brand/favicon.png" type="image/x-icon"/>
+	<link rel="shortcut icon" type="image/x-icon" href="/static/frontpages/images/brand/favicon.png" />
+
+
 	<!-- summernote -->
 	<link rel="stylesheet" href="/static/summernote/summernote-bs4.css">
 	<script src="/static/summernote/summernote-bs4.js"></script>
@@ -184,17 +188,10 @@
 									class="icon-stack"></i> <span>Products</span></a>
 							{%endif%}
 						</li>
-						<li class="nav-item">
-							<a href="{%url 'admin:admin_Blogs'%}" class="nav-link"><i
-									class="icon-stack"></i> <span>Blog</span></a>
-						</li>
-						<li class="nav-item">
-							<a href="{%url 'admin:admin_Faqs'%}" class="nav-link"><i
-									class="icon-stack"></i> <span>Faqs</span></a>
-						</li>
+						 
 						{%if user.is_superuser%}
 						<li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link"><i class="icon-cabinet"></i> <span>Companies</span></a>
+							<a href="#" class="nav-link"><i class="icon-office"></i> <span>Companies</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
 								<li class="nav-item">
 									<a href="{%url 'admin:companies' option='supplier' %}" class="nav-link">
@@ -208,7 +205,7 @@
 								<li class="nav-item">
 									<a href="{%url 'admin:companies' option='manufacturer' %}" class="nav-link">
 										<i class="icon-cogs"></i>
-										<span>Manufacturing Companies</span>
+										<span>Manufacturers</span>
 										<span class="badge bg-blue-400 align-self-center ml-auto">
 											{{'manufacturer'|company_count}}
 										</span>
@@ -217,24 +214,24 @@
 							</ul>
 						</li>
 						<li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link"><i class="icon-users"></i> <span>Collaborations</span></a>
+							<a href="#" class="nav-link"><i class="icon-collaboration"></i> <span>Collaborations</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
 								<li class="nav-item">
-									<a href="#" class="nav-link">
-										<i class="icon-truck"></i>
+									<a href="{%url 'admin:admin_Blogs'%}" class="nav-link">
+										<i class="icon-blog"></i>
 										<span>Blogs</span>
 									</a>
 								</li>
 								<li class="nav-item">
 									<a href="{%url 'admin:admin_polls'%}" class="nav-link">
-										<i class="icon-cogs"></i>
+										<i class="icon-clipboard3"></i>
 										<span>Polls</span>										 
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="#" class="nav-link">
-										<i class="icon-cogs"></i>
-										<span>Forums</span>										 
+									<a href="{%url 'admin:admin_Faqs'%}" class="nav-link">
+										<i class="icon-help"></i>
+										<span>Faqs</span>										 
 									</a>
 								</li>
 							</ul>
@@ -286,7 +283,7 @@
               			  
  						{%endif%}
 						<li class="nav-item mb-5">
-							<a href="{% url 'admin:logout' %}" class="nav-link"><i class="icon-switch2"></i> <span>Log Out</span></a>
+							<a href="{% url 'admin:logout' %}?next={%url 'admin:login'%}" class="nav-link"><i class="icon-switch2"></i> <span>Log Out</span></a>
 						</li>
 
 						<!-- /main -->

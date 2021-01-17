@@ -16,7 +16,6 @@ from django.conf import global_settings
 import django.conf.locale
 from django.db.models import JSONField
 
-
 gettext_noop = lambda s: s
 
 
@@ -49,13 +48,14 @@ INSTALLED_APPS = [
     'core',
     'admin_site',
     'accounts',
+    'collaborations',
+    'company',
+    'product',
+    'social_django',
+    'colorfield',
     'crispy_forms',
     'django_summernote',
     'useraudit',
-    'collaborations',
-    'company',
-    'social_django',
-    'colorfield',
     
     
 

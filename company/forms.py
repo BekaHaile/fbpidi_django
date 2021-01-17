@@ -12,6 +12,7 @@ class CompanyForm(forms.ModelForm):
                 'company_name', 'company_name_am', 'email', 'phone_number','city','postal_code',
                   'detail', 'detail_am', 'company_logo', 'location', 'company_intro','color',
                   'number_of_employees','established_year','certification','products','capital',
+                #   'facebook_link','twitter_link','google_link','pintrest_link'
             # trade capacity
             'incoterms','incoterms_am','terms_of_payment','average_lead_time','average_lead_time_am',
             'no_trading_staff','export_yr','export_percentage','main_market','main_market_am',
@@ -91,3 +92,6 @@ class CompanyEventForm(forms.ModelForm):
             'description_am': forms.Textarea(attrs={'class': 'summernote'}),
             'image': forms.FileInput(attrs={'class': 'form-input-styled'}),
         }
+
+
+# class FbpidiCompanyForm()
