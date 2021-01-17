@@ -197,7 +197,12 @@
 										<div class="col-xl-4 col-lg-12 col-md-12">
 											<div class="item7-card-img">
 												<a href="/collaborations/poll_detail/{{poll.id}}/"></a>
+												{% if poll.get_image %}
+												<img src="{{poll.get_image}}"  alt="img" class="cover-image">
+												{% else %}
+												
 												<img src="/static/frontpages/images/products/products/v1.jpg" alt="img" class="cover-image">
+												{% endif %}
 											</div>
 										</div>
 

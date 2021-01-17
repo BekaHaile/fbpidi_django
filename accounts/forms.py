@@ -72,7 +72,17 @@ ADMIN_PERMISSION_LIST = [
     'view_failedloginlog',
     'view_loginlog',
     'view_loginattempt',
-    'view_userdeactivation'
+    'view_userdeactivation', 
+
+    'add_pollsquestion',
+    'view_pollsquestion',
+    'change_pollsquestion',
+    'delete_pollsquestion',
+    'add_choices',
+    'view_choices',
+    'change_choices',
+    'delete_choices',
+
 ]
 
 

@@ -51,6 +51,12 @@ class Company(models.Model):
     
     def __str__(self):
         return self.company_name
+    
+    def get_image(self):
+        if self.company_logo.url:
+            return self.company_logo.url
+        else:
+            return None
 
 
 class CompanySolution(models.Model):

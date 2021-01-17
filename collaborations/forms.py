@@ -6,8 +6,6 @@ from .models import PollsQuestion, Choices, PollsResult
 
 
 class CreateFaqs(forms.ModelForm):
-    
-    
     questions_am = forms.CharField(label='questions_am',widget=forms.TextInput(
     	attrs={'placeholder': 'question in amharic'}))
 
@@ -54,7 +52,7 @@ class CreatePollForm(forms.ModelForm):
     class Meta:
         model = PollsQuestion
         fields = ('title', 'title_am',
-                  'description', 'description_am')
+                  'description', 'description_am',)
         # choices = forms.ModelMultipleChoiceField(
         #     queryset=Choices.objects.all(),
         #     widget = forms.CheckboxSelectMultiple
@@ -64,7 +62,8 @@ class CreatePollForm(forms.ModelForm):
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),
             'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
-            'description_am':forms.Textarea(attrs={'class':'summernote'}),          
+            'description_am':forms.Textarea(attrs={'class':'summernote'}),
+           
         }
 
 class CreateChoiceForm(forms.ModelForm):
