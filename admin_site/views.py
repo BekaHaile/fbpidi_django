@@ -264,22 +264,29 @@ class CreatePoll(LoginRequiredMixin,View):
     
     def post(self,*args,**kwargs):
         
-        form = CreatePollForm(self.request.POST)        
-        if form.is_valid():
-            poll = PollsQuestion(
-                user=self.request.user,
-                title=form.cleaned_data.get('title'),
-                title_am=form.cleaned_data.get('title_am'),
-                description=form.cleaned_data.get("description"),
-                description_am=form.cleaned_data.get('description_am'),
+        form = CreatePollForm(self.request.POST)  
+        try:      
+            if form.is_valid():
+                poll = PollsQuestion(
+                    user=self.request.user,
+                    title=form.cleaned_data.get('title'),
+                    title_am=form.cleaned_data.get('title_am'),
+                    description=form.cleaned_data.get("description"),
+                    description_am=form.cleaned_data.get('description_am'),
+                    image = form.cleaned_data.get("image"),                 
+                    
+                )
+                poll.save()
+                messages.success(self.request,"Poll was Successfully Created!")
+                return redirect("admin:admin_polls")
+            else:
+                messages.error(self.request, "Error! Poll was not Created!" )
+                return redirect("admin:admin_polls")
                 
-            )
-            poll.save()
-            messages.success(self.request,"Poll was Successfully Created!")
+        except Exception as e:
+            print("44444444444444444444" , str (e))
             return redirect("admin:admin_polls")
-        else:
-            messages.error(self.request, "Error! Poll was not Created!" )
-            return redirect("admin:admin_polls")
+
 
 class DetailPoll(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):  
@@ -291,10 +298,12 @@ class DetailPoll(LoginRequiredMixin,View):
                 return render(self.request, "admin/pages/admin_poll_detail.html", {'poll':poll,})
 
             except Exception as e:
+                print("eeeeeeeeeeeeeeeee", str(e))
                 messages.error(self.request, "Poll not found")
                 return redirect("admin:admin_polls") 
 
         else:
+
             messages.error(self.request, "Nothing selected!")
             return redirect("admin:admin_polls")
 

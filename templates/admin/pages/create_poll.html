@@ -35,171 +35,179 @@
 <!-- Content area -->
 <div class="content">
 
-	{%if edit %}
+	{% if edit and perms.collaborations.change_pollsquestion %}
+	    {% if  user.is_superuser or poll.user == user %}
 	
-	
-		<div class="card">
+			<div class="card">
 
-			<div class="card-body">
-	
-				<form action="{%url 'admin:edit_poll'  id=poll.id %}" method="POST" enctype="multipart/form-data">
-					<fieldset class="mb-3 ml-3 mr-3">
-						<legend class="text-uppercase font-size-sm font-weight-bold">Edit "{{poll.title}}"  poll{{poll.name}}</legend>
-	
-						{%csrf_token%}
-						<div class="form-group row">
-							<label class="col-form-label col-lg-3">Poll <Title></Title>(English) </label>
-							<div class="col-lg-9">
-								<input required type="text" name="title" class="form-control" value="{{poll.title}}" id="">
+				<div class="card-body">
+		
+					<form action="{%url 'admin:edit_poll'  id=poll.id %}" method="POST" enctype="multipart/form-data">
+						<fieldset class="mb-3 ml-3 mr-3">
+							<legend class="text-uppercase font-size-sm font-weight-bold">Edit "{{poll.title}}"  poll{{poll.name}}</legend>
+		
+							{%csrf_token%}
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">Poll <Title></Title>(English) </label>
+								<div class="col-lg-9">
+									<input required type="text" name="title" class="form-control" value="{{poll.title}}" id="">
+								</div>
 							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-form-label col-lg-3">Poll Title(Amharic) </label>
-							<div class="col-lg-9">
-								<input required type="text" name="title_am" class="form-control" value="{{poll.title_am}}" id="">
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">Poll Title(Amharic) </label>
+								<div class="col-lg-9">
+									<input required type="text" name="title_am" class="form-control" value="{{poll.title_am}}" id="">
+								</div>
 							</div>
-						</div>
-	
-						<div class="form-group row">
-							<label class="col-form-label col-lg-3">Poll Description(English) </label>
-							<div class="col-lg-9">
-								<textarea required name="description" id="summernote" cols="30"
-									rows="10">{{poll.description|safe}}</textarea>
+		
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">Poll Description(English) </label>
+								<div class="col-lg-9">
+									<textarea required name="description" id="summernote" cols="30"
+										rows="10">{{poll.description|safe}}</textarea>
+								</div>
 							</div>
-						</div>
 
-						<div class="form-group row">
-							<label class="col-form-label col-lg-3">poll Description(Amharic) </label>
-							<div class="col-lg-9">
-								<textarea required name="description_am" class="summernote" cols="30"
-									rows="10">{{poll.description_am|safe}}</textarea>
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">poll Description(Amharic) </label>
+								<div class="col-lg-9">
+									<textarea required name="description_am" class="summernote" cols="30"
+										rows="10">{{poll.description_am|safe}}</textarea>
+								</div>
 							</div>
-						</div>
 
-						
-					</fieldset>
-	
-					<div class="text-right">
-						<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-							class="btn btn-primary rounded-round" onclick="return confirm ('Are you sure you want to Edit this Poll?')">Edit Poll </button>
-					</div>
-				</form>
-				<br>
-				<form action="{% url 'admin:admin_polls' %}" method="GET" enctype="multipart/form-data" >
-					{%csrf_token%}
-					<div class="text-right">
-						<button style="padding-left: 10%; padding-right: 10%; background-color: grey;" type="submit"
-							class="btn btn-primary rounded-round">Cancel </button>
-					</div>
-				</form>
-				<br>
-				<br><br><br>
-				{% if poll.count_choices > 0 %}
-					<h3 class = "text-center"> Select the chioce you want to Edit or Delete</h3>
-
-					<form action="{%url 'admin:edit_choice' %}" method="GET" enctype="multipart/form-data">
-						
-						<fieldset>
 							
-							<div class="form-group row" >
-								<label class="col-form-label col-lg-3">Edit Poll Choices </label>
-											<div style="width: 100%;">
-											<div class="col-lg-9" style="width: 95%; display: inline-block;">
-
-												<select required name="choice" class="form-control form-control-uniform" data-fouc>
-													
-													
-													{%for choice in poll.choices.all%}
-														<option  value="{{choice.id}}">{{choice.choice_name}}</option>
-														<div class="list-icons" style="width: 3%; display: inline-block;" >
-															<div class="dropdown">
-																<a href="#" class="list-icons-item" data-toggle="dropdown">
-																	<i class="icon-menu9"></i>
-																</a>
-									
-																
-															</div>
-														</div>
-													{%endfor%}
-					
-												</select>
-											</div>
-										
-											
-											</div>
-										
-							</div>
 						</fieldset>
-
+		
 						<div class="text-right">
 							<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-								class="btn btn-primary rounded-round">Edit/Delete this choice </button>
+								class="btn btn-primary rounded-round" onclick="return confirm ('Are you sure you want to Edit this Poll?')">Edit Poll </button>
 						</div>
-
-						
 					</form>
-				{%else%}
-					<h3 class = "text-center"> No Choice to Edit or Delete</h3>
-				{%endif%}
-					
+					<br>
+					<form action="{% url 'admin:admin_polls' %}" method="GET" enctype="multipart/form-data" >
+						{%csrf_token%}
+						<div class="text-right">
+							<button style="padding-left: 10%; padding-right: 10%; background-color: grey;" type="submit"
+								class="btn btn-primary rounded-round">Cancel </button>
+						</div>
+					</form>
+					<br>
+					<br><br><br>
+					{% if poll.count_choices > 0 %}
+						<h3 class = "text-center"> Select the chioce you want to Edit or Delete</h3>
+
+						<form action="{%url 'admin:edit_choice' %}" method="GET" enctype="multipart/form-data">
+							
+							<fieldset>
+								
+								<div class="form-group row" >
+									<label class="col-form-label col-lg-3">Edit Poll Choices </label>
+												<div style="width: 100%;">
+												<div class="col-lg-9" style="width: 95%; display: inline-block;">
+
+													<select required name="choice" class="form-control form-control-uniform" data-fouc>
+														
+														
+														{%for choice in poll.choices.all%}
+															<option  value="{{choice.id}}">{{choice.choice_name}}</option>
+															<div class="list-icons" style="width: 3%; display: inline-block;" >
+																<div class="dropdown">
+																	<a href="#" class="list-icons-item" data-toggle="dropdown">
+																		<i class="icon-menu9"></i>
+																	</a>
+										
+																	
+																</div>
+															</div>
+														{%endfor%}
+						
+													</select>
+												</div>
+											
+												
+												</div>
+											
+								</div>
+							</fieldset>
+
+							<div class="text-right">
+								<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+									class="btn btn-primary rounded-round">Edit/Delete this choice </button>
+							</div>
+
+							
+						</form>
+					{%else%}
+						<h3 class = "text-center"> No Choice to Edit or Delete</h3>
+					{%endif%}
+						
+				</div>
 			</div>
-		</div>
+		
+
+
+		{% endif %}
 
 
 
 
 		
 	{%else%}
-	<div class="card">
+		
+			<div class="card">
 
-		<div class="card-body">
+				<div class="card-body">
 
-			<form action="{%url 'admin:create_poll'%}" method="POST" enctype="multipart/form-data">
-				<fieldset class="mb-3 ml-3 mr-3">
-					<legend class="text-uppercase font-size-sm font-weight-bold">Create new Poll</legend>
-					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
-                    {{form.errors}}
-                 
-                    {%csrf_token%}
-				  
-					
-					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.title.label|title}} *</label>
-						<div class="col-lg-9">
-							{{form.title}}
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.title_am.label|title}} *</label>
-						<div class="col-lg-9">
-							{{form.title_am}}
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.description.label|title}} *</label>
-						<div class="col-lg-9">
-							{{form.description|safe}}
-						</div>
-					</div>
-					 
-					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.description_am.label|title}} *</label>
-						<div class="col-lg-9">
-							{{form.description_am|safe}}
-						</div>
-					</div>
+					<form action="{%url 'admin:create_poll'%}" method="POST" enctype="multipart/form-data">
+						<fieldset class="mb-3 ml-3 mr-3">
+							<legend class="text-uppercase font-size-sm font-weight-bold">Create new Poll</legend>
+							<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
+							{{form.errors}}
+						
+							{%csrf_token%}
+						
+							
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">{{form.title.label|title}} *</label>
+								<div class="col-lg-9">
+									{{form.title}}
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">{{form.title_am.label|title}} *</label>
+								<div class="col-lg-9">
+									{{form.title_am}}
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">{{form.description.label|title}} *</label>
+								<div class="col-lg-9">
+									{{form.description|safe}}
+								</div>
+							</div>
+							
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">{{form.description_am.label|title}} *</label>
+								<div class="col-lg-9">
+									{{form.description_am|safe}}
+								</div>
+							</div>
+							
+							
+							
+						</fieldset>
 
-					
-					
-				</fieldset>
-
-				<div class="text-right">
-					<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-						class="btn btn-primary rounded-round">Create Poll </button>
+						<div class="text-right">
+							<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+								class="btn btn-primary rounded-round">Create Poll </button>
+						</div>
+					</form>
 				</div>
-			</form>
-		</div>
-	</div>
+			</div>
+		
+		
+		
 	{%endif%}
 </div>
 <!-- /content area -->

@@ -13,6 +13,7 @@ class PollsQuestion(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     choices = models.ManyToManyField('Choices',related_name='choices',default="",)
     
+    
     def __str__(self):
         return self.title
     
@@ -21,6 +22,14 @@ class PollsQuestion(models.Model):
         
     def count_choices(self):
         return self.choices.count()
+    
+    def get_image(self):
+        #gets the company by using the user, and in the company model there is a method called get_image() which returns image url
+        if self.user.company_set.first():
+            return self.user.company_set.first().get_image()
+        else:
+            return None
+   
  
     
 class Choices (models.Model):
@@ -29,7 +38,7 @@ class Choices (models.Model):
     description = models.TextField( verbose_name="Choice Description(English)" )
     description_am = models.TextField( verbose_name="Choice Description(Amharic)" )
     timestamp = models.DateTimeField(auto_now_add=True)
-
+   
     def __str__(self):
         return self.choice_name
 

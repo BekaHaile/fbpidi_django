@@ -57,6 +57,12 @@ class Company(models.Model):
     
     def __str__(self):
         return self.company_name
+    
+    def get_image(self):
+        if self.company_logo.url:
+            return self.company_logo.url
+        else:
+            return None
 
 class CompanyStaff(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)

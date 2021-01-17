@@ -33,13 +33,13 @@
 				<!-- Page length options main category -->
 				<div class="card">
 					<div class="card-header header-elements-inline">
-						
+						<h5 class="card-title">Polls</h5>
 						<div class="header-elements">
-							
+							{%if perms.collaborations.add_pollsquestion%}
 							<div class="list-icons">
-								<a href="{%url 'admin:create_poll'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New Poll</a>
+								<a href="{%url 'admin:create_poll' %}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
 							</div>
-							
+							{%endif%}
 						</div>
 					</div>
 					{%if polls %}
@@ -73,18 +73,28 @@
 											</a>
 
 											<div class="dropdown-menu dropdown-menu-right">
-												{%if user.is_superuser%}
-												<a href="{%url 'admin:detail_poll' id=poll.id%}" class="dropdown-item"><i class="icon-pencil"></i>View Poll Detail</a>
-												{% if poll.count_votes != 0 %}
-												<a style="pointer-events: none;color: currentColor; cursor: not-allowed; opacity: 0.5; text-decoration: none;" href="{%url 'admin:edit_poll' id=poll.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Poll</a>
-												{% else %}
-												<a href="{%url 'admin:edit_poll' id=poll.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Poll</a>
 												
-												{% endif %}
-												<a href="{%url 'admin:add_choice' id=poll.id%}" class="dropdown-item"><i class="icon-plus3"></i>Add New Choice</a>
-                                                <a href="{%url 'admin:delete_poll'  id=poll.id %}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this Poll?')"><i class="icon-trash"></i>Delete Poll</a>
-                                                 
-                                                {%endif%}
+													
+													<a href="{%url 'admin:detail_poll' id=poll.id%}" class="dropdown-item"><i class="icon-pencil"></i>View Poll Detail</a>
+													{% if poll.user == user %}
+														{% if poll.count_votes != 0 %}
+															<a style="pointer-events: none;color: currentColor; cursor: not-allowed; opacity: 0.5; text-decoration: none;" href="{%url 'admin:edit_poll' id=poll.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Poll</a>
+														{% else %}
+															<a href="{%url 'admin:edit_poll' id=poll.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Poll</a>
+														{% endif %}
+													
+														{% if perms.collaborations.add_choices and poll.user == user%}
+														<a href="{%url 'admin:add_choice' id=poll.id%}" class="dropdown-item"><i class="icon-plus3"></i>Add New Choice</a>
+														{% endif %}
+	
+	
+														{% if perms.collaborations.delete_pollsquestion and poll.user == user%}
+														<a href="{%url 'admin:delete_poll'  id=poll.id %}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this Poll?')"><i class="icon-trash"></i>Delete Poll</a>
+														{%endif%}
+
+													{% endif %}
+
+													
 												
 											</div>
 										</div>

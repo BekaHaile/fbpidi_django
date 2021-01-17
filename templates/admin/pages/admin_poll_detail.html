@@ -18,7 +18,8 @@
 {%block content%}
 
  <!--  Only super users can watch this -->
- {% if user.is_superuser == True %}
+
+ {% if perms.collaborations.view_pollsquestion %}
 <!--Breadcrumb-->
         <!-- Note -->
         
@@ -43,10 +44,13 @@
         <div class="card-header header-elements-inline">
 						
             <div class="header-elements">
-                
-                <div class="list-icons">
-                    <a href="{%url 'admin:edit_poll' id=poll.id %}"   style = "margin-left: 40px; " class = "btn bg-teal btn-sm rounded-round"><i class="icon-pencil mr-2"></i>Edit this Poll</a>
-                </div>
+                {% if poll.count_votes == 0  %}
+                    {% if perms.collaborations.edit_polls or poll.user == user %}
+                    <div class="list-icons">
+                        <a href="{%url 'admin:edit_poll' id=poll.id %}"   style = "margin-left: 40px; " class = "btn bg-teal btn-sm rounded-round"><i class="icon-pencil mr-2"></i>Edit this Poll</a>
+                    </div>
+                    {%endif%}
+                {% endif %}
                 
             </div>
         </div>
@@ -110,7 +114,7 @@
                                                     
                                                     <!-- if the user is the creator or has voted hide the vote button -->
 
-                                                    {% if user.is_superuser == False and not user == poll.user and not has_voted == True %}
+                                                    {% if user.is_superuser == False and not user == poll.user and has_voted == False %}
                                                         <div class = "choice-btn-group" class="badge badge-secondary">
                                                             <span class="badge badge-secondary">
                                                                 <label for = "{{choice.pk}}"><span style="font-size: medium;">Vote</span></label>
@@ -274,7 +278,7 @@
 
 
 
-{%else%}
+{% else %}
 <h1>You are not allowed to view this page!!</h1>
 <!-- endif of if user.is_superuser = True -->
 {% endif %}
