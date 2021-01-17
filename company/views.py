@@ -6,8 +6,8 @@ from django.views import View
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from company.models import Company,CompanySolution,CompanyEvent
-from accounts.models import CompanyAdmin,CompanyStaff
+from company.models import Company,CompanySolution,CompanyEvent,CompanyStaff
+from accounts.models import CompanyAdmin
 
 
 from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm

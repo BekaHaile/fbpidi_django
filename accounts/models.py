@@ -42,13 +42,13 @@ class CompanyAdmin(models.Model):
     def __str__(self):
         return self.user.username
 
-class CompanyStaff(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    company = models.ForeignKey(Company,on_delete=models.CASCADE)
-    time_stamp = models.DateTimeField(auto_now_add=True)
+# class CompanyStaff(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+#     company = models.ForeignKey(Company,on_delete=models.CASCADE)
+#     time_stamp = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.user.username
+#     def __str__(self):
+#         return self.user.username
 
 class AssignedRoles(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
