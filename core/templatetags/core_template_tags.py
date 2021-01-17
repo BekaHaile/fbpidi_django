@@ -1,7 +1,7 @@
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
-from accounts.models import Company
-from admin_site.models import Product
+from company.models import Company
+from product.models import Product
 
 
 register = template.Library()

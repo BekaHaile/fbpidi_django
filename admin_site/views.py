@@ -6,9 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
 # 
-from admin_site import models
-from admin_site.forms import SubCategoryForm,ProductCreationForm
-from accounts.models import User,Company
+from product import models
+from product.forms import SubCategoryForm,ProductCreationForm
+from accounts.models import User
+from company.models import Company
 from collaborations.forms import CreateBlogs, CreateBlogComment, CreateFaqs
 from collaborations.models import Blog, BlogComment,Faqs
 

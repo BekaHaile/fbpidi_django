@@ -6,8 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 
 # 
-from admin_site import models
-from admin_site.forms import SubCategoryForm,ProductCreationForm
+from product import models
+from product.forms import SubCategoryForm,ProductCreationForm
 from accounts.models import User,Company,Customer
 from accounts.forms import CompanyForm
 

@@ -48,13 +48,14 @@ INSTALLED_APPS = [
     'core',
     'admin_site',
     'accounts',
+    'collaborations',
+    'company',
+    'product',
+    'social_django',
+    'colorfield',
     'crispy_forms',
     'django_summernote',
     'useraudit',
-    'collaborations',
-    'company',
-    'social_django',
-    'colorfield',
     
     
 
