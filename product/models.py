@@ -2,7 +2,11 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
+
+
+from company.models import Company
 CAT_LIST = (
+    ('','Select Main Category'),
     ("Food",'Food'),
     ("Beverages",'Beverages'),
     ("Pharmaceuticals",'Pharmaceuticals'),
@@ -15,6 +19,7 @@ class Category(models.Model):
     category_name_am = models.CharField(max_length=200,verbose_name="Category Name(Amharic)")
     description = models.TextField(verbose_name="Description(English)")
     description_am = models.TextField(verbose_name="Description(Amharic)")
+    image = models.ImageField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -28,6 +33,7 @@ class SubCategory(models.Model):
     sub_category_name_am = models.CharField(max_length=200,verbose_name="Sub-Category Name(Amharic)")
     description = models.TextField(verbose_name="Description (English)")
     description_am = models.TextField(verbose_name="Description (Amharic)")
+    image = models.ImageField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -35,6 +41,7 @@ class SubCategory(models.Model):
 
 class Product(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=False)
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
     name = models.CharField(max_length=255,verbose_name="Product Name(English)")
     name_am = models.CharField(max_length=255,verbose_name="Product Name(Amharic)")
     category = models.ForeignKey(SubCategory,on_delete=models.CASCADE, blank=True,null=True, verbose_name="Product Category")
@@ -68,3 +75,22 @@ class ProductPrice(models.Model):
 
     def __str__(self):
         return self.price
+
+
+class Review(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField(max_length=200)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    review = models.TextField()
+    time_stamp = models.DateTimeField(auto_now_add=True)
+
+
+class AbuseReport(models.Model):
+    url_link = models.CharField(max_length=100)
+    category = models.CharField(max_length=100)
+    email = models.EmailField(max_length=200)
+    message  = models.TextField()
+    time_stamp = models.DateTimeField(auto_now_add=True)
+    
+

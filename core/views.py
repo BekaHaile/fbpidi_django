@@ -2,15 +2,13 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.views.generic import View
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from django.core.exceptions import ObjectDoesNotExist
+
+from social_django.context_processors import REDIRECT_FIELD_NAME, login_redirect
 
 # 
 from product import models
-from product.forms import SubCategoryForm,ProductCreationForm
-from accounts.models import User,Company,Customer
-from accounts.forms import CompanyForm
-from social_django.context_processors import REDIRECT_FIELD_NAME, login_redirect
+from company.models import Company
 
 
 class IndexView(View):
@@ -22,6 +20,16 @@ class IndexView(View):
         company = Company.objects.all()
         context = {'products':products,'category':category,'sub_c1ategory':sub_category,'companies':company}
         return render(self.request,"frontpages/index.html",context)
+
+class ProductDetailView(View):
+    def get(self,*args,**kwargs):
+        try:
+            product = models.Product.objects.get(id=self.kwargs['id'])
+            images = models.ProductImage.objects.filter(product=product)
+            context = {'product':product,'images':images}
+            return render(self.request,'frontpages/product/product_detail.html',context)
+        except ObjectDoesNotExist:
+            return redirect("index")
 
 class ProfileView(LoginRequiredMixin, View):
     def get(self,*args,**kwargs):
