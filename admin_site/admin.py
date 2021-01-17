@@ -65,7 +65,7 @@ class CustomAdminSite(admin.AdminSite):
             path("create_poll/", wrap(CreatePoll.as_view()), name = "create_poll"),
             path("edit_poll/<id>/", wrap(EditPoll.as_view()), name = "edit_poll"),
             path("add_choice/<id>/", wrap(AddChoice.as_view()), name = "add_choice"),
-            path("edit_choice/", wrap(EditChoice.as_view()), name = "edit_choice"), #choice id is found from adit_poll.html option tag
+            path("edit_choice/", wrap(EditChoice.as_view()), name = "edit_choice"), #choice id is found from edit_poll.html option tag
             path("delete_poll/<id>/", wrap(DeletePoll.as_view()), name = "delete_poll"),
             path("delete_choice/<id>/", wrap(DeleteChoice.as_view()), name = "delete_choice"),
             path("detail_poll/<id>/", wrap(DetailPoll.as_view()), name = "detail_poll"),
