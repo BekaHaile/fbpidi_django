@@ -179,14 +179,10 @@ STATICFILES_DIRS = (
 )
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# if request.user.is_staff:
-#     LOGIN_REDIRECT_URL = 'index'
-#     LOGOUT_REDIRECT_URL = 'login':
-# elif request.user.is_customer:
-LOGIN_REDIRECT_URL = 'index'
+
+LOGIN_REDIRECT_URL = 'complete_social_login'
 LOGOUT_REDIRECT_URL = 'login'
-
-
+ 
 AUTH_USER_MODEL = 'accounts.User'
 
 
@@ -232,6 +228,10 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '5afc8b24a3cdb7d93dcccf3fa06f49b6' #APP SECRET
 ##### Google
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '753998838053-1gd5boe4mjbvulm8cv71em8q0tf21k1v.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'd7UttVSC6u_KamtFI0_kY4RS'
+
+# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '753998838053-26174krlcn3j7iaknth6fe1s7u2eg5rd.apps.googleusercontent.com'
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'kj8AUq_g-RfZY6f-hERyAlK_'
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.email',

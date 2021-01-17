@@ -1,0 +1,25 @@
+This is my doc
+{% if polls %}
+
+
+ <ol>
+{% for poll in polls %}
+
+    <li>
+         <h1>{{poll.title}}</h1>
+         
+         {% if poll.choices %}
+            <h3>Choices</h3>
+            <ol>
+                {% for i in  poll.choices.all  %}
+
+                    <li>{{i.choice_name}}</li>
+                {% endfor %}
+            </ol>
+            <p>{{choices}}</p>
+         {% endif %}
+     </li>
+    {% endfor %}     
+ </ol>
+ 
+{% endif %}
