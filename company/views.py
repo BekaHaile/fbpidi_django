@@ -10,7 +10,7 @@ from company.models import Company,CompanySolution,CompanyEvent,CompanyStaff
 from accounts.models import CompanyAdmin
 
 
-from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm
+from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm,FbpidiCompanyForm
 
 class CreateCompanyProfile(LoginRequiredMixin,View):
     def get(self, *args,**kwargs):
@@ -100,10 +100,17 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
                 company.number_of_employees = self.request.POST['number_of_employees']
                 company.certification = self.request.POST['certification']
                 company.capital = self.request.POST['capital']
+                company.established_year = self.request.POST['established_year']
                 company.postal_code = self.request.POST['postal_code']
                 company.detail = self.request.POST['detail']
                 company.detail_am = self.request.POST['detail_am']
                 company.color = self.request.POST['color']
+                company.facebook_link = self.request.POST['facebook_link']
+                company.twiter_link = self.request.POST['twiter_link']
+                company.linkedin_link = self.request.POST['linkedin_link']
+                company.google_link = self.request.POST['google_link']
+                company.instagram_link = self.request.POST['instagram_link']
+                company.pintrest_link = self.request.POST['pintrest_link']
                 if self.request.FILES.get('company_logo') != None:
                     company.company_logo = self.request.FILES.get('company_logo')
                 if self.request.FILES.get('company_intro') != None:
@@ -195,3 +202,63 @@ class CreateCompanyEvent(LoginRequiredMixin,View):
             messages.success(self.request,"Event Created Successfully")
         messages.warning(self.request,form.errors)
         return redirect("admin:view_company_profile")
+
+
+class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        form = FbpidiCompanyForm()
+        return render(self.request,"admin/company/company_form_fbpidi.html",{'form':form})
+
+    def post(self,*args,**kwargs):
+        form = FbpidiCompanyForm(self.request.POST,self.request.FILES)
+        if form.is_valid():
+            fbpidi = form.save(commit=False)
+            fbpidi.company_type = "fbpidi"
+            fbpidi.company_type_am = "fbpidi"
+            fbpidi.user=self.request.user
+            fbpidi.save()
+            return redirect('admin:index')
+        else:
+            return render(self.request,"admin/company/company_form_fbpidi.html",{'form':form})
+
+
+class ViewFbpidiCompany(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        fbpidi = Company.objects.get(company_type="fbpidi")
+        events = CompanyEvent.objects.filter(company=fbpidi)
+        event_form = CompanyEventForm
+        return render(self.request,"admin/company/company_profile_fbpidi.html",
+        {'company':fbpidi,'events':events,'event_form':event_form})
+    
+    def post(self,*args,**kwargs):
+        company = Company.objects.get(id=self.kwargs['id'])
+        try:
+            if self.request.POST['flag'] == "profile":
+                company.company_name = self.request.POST['company_name']
+                company.company_name_am = self.request.POST['company_name_am']
+                company.location = self.request.POST['location']
+                company.city = self.request.POST['city']
+                company.phone_number = self.request.POST['phone_number']
+                company.postal_code = self.request.POST['postal_code']
+                company.established_year = self.request.POST['established_year']
+                company.detail = self.request.POST['detail']
+                company.detail_am = self.request.POST['detail_am']
+            elif self.request.POST['flag'] == "aditional":
+                company.facebook_link = self.request.POST['facebook_link']
+                company.twiter_link = self.request.POST['twiter_link']
+                company.linkedin_link = self.request.POST['linkedin_link']
+                company.google_link = self.request.POST['google_link']
+                company.instagram_link = self.request.POST['instagram_link']
+                company.pintrest_link = self.request.POST['pintrest_link']
+                if self.request.FILES.get('company_logo') != None:
+                    company.company_logo = self.request.FILES.get('company_logo')
+                if self.request.FILES.get('company_intro') != None:
+                    company.company_intro = self.request.FILES.get('company_intro')
+            company.save()
+            messages.success(self.request,"Company Updated")
+            return redirect("admin:view_fbpidi_company")
+        except ObjectDoesNotExist:
+            messages.warning(self.request,"Company Does Not Exist")
+            return redirect("admin:view_fbpidi_company")
+
+

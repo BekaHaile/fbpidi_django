@@ -9,7 +9,13 @@ register = template.Library()
 
 @register.filter
 def my_company_link(user):
-    if user.is_company_admin:
+    if user.is_superuser:
+        try:
+            co = Company.objects.get(company_type="fbpidi")
+            return "/admin/view_fbpidi_company/"
+        except ObjectDoesNotExist:
+            return "/admin/create_fbpidi_company/"
+    elif user.is_company_admin:
         try:
             co = Company.objects.get(user=user)
             return "/admin/view_company_profile/" 

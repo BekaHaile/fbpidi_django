@@ -9,17 +9,19 @@ from django.contrib import messages
 from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLogView,
                         UserDetailView,UpdateAdminProfile,CreateUserView,GroupView)
 # views from admin_site app
-from admin_site.views import (AdminIndex,CategoryView,CreateCategories,CategoryDetail,
-                        DeleteView, AdminProductListView,CreateProductView,ProductDetailView,
-                        AddProductImage,CreatePrice,
-
-                        BlogForm,BlogList,BlogView,
-                        FaqsFormView,FaqsView,FaqsList,
-                        
-                        Polls, CreatePoll, AddChoice, EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice,
-                        
-                        DeleteView,AdminProductListView,CreateProductView,ProductDetailView,
-                        AddProductImage,CreatePrice)
+from admin_site.views import (AdminIndex,DeleteView, BlogForm,BlogList,BlogView,
+                        FaqsFormView,FaqsView,FaqsList, Polls, CreatePoll, AddChoice,
+                        EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice,
+                        )
+from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
+                            ProductDetailView,AddProductImage,CreatePrice,CategoryView
+                            )
+                            
+from company.views import (
+    CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,
+    CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
+    CreateFbpidiCompanyProfile,ViewFbpidiCompany
+)
 
 
 class CustomAdminSite(admin.AdminSite):
@@ -71,7 +73,18 @@ class CustomAdminSite(admin.AdminSite):
             path("detail_poll/<id>/", wrap(DetailPoll.as_view()), name = "detail_poll"),
 
         
-            path("",include("company.urls")),
+            # path("",wrap(include("company.urls"))),
+            path("create_company_profile/",wrap(CreateCompanyProfile.as_view()),name="create_company_profile"),
+            path("company_list/<option>/",wrap(CompaniesView.as_view()),name="companies"),
+            path("company_detail/<id>/",wrap(CompaniesDetailView.as_view()),name="company_detail"),
+            path("create_company_profile_al/",wrap(CreateCompanyProfileAfterSignUp.as_view()) ,name='complete_company_profile'),
+            path("view_company_profile/",wrap(ViewCompanyProfile.as_view()) ,name='view_company_profile'),
+            path("edit_company_profile/<id>/",wrap(ViewCompanyProfile.as_view()),name="edit_company_profile"),
+            path("create_company_solution/<company_id>",wrap(CreateCompanySolution.as_view()),name="create_company_solution"),
+            path("create_company_event/<company_id>",wrap(CreateCompanyEvent.as_view()),name="create_company_event"),
+            path("create_fbpidi_company/",wrap(CreateFbpidiCompanyProfile.as_view()),name="create_fbpidi_company"),
+            path("view_fbpidi_company/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
+            path("edit_fbpidi_profile/<id>/",wrap(ViewFbpidiCompany.as_view()),name="edit_fbpidi_profile"),
         ]
         return my_urls + urls
 

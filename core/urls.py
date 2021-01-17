@@ -1,27 +1,25 @@
 from django.urls import path,include
 from django.views.generic import TemplateView
 
-from core.views import IndexView,ProfileView
+from core.views import IndexView,ProfileView,ProductDetailView
 from collaborations.views import BlogList,BlogDetail,FaqList
-from accounts.views import CustomerSignUpView,SocialLoginView
+
 
 
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
     path("blog-grid-right/",BlogList.as_view(),name="blog_grid_right"),
     path("blog-detail-right/<id>",BlogDetail.as_view(),name="blog_details"),
-    path("register/",CustomerSignUpView.as_view(),name="register"),
-    path("complete-auth/",SocialLoginView.as_view(),name="complete_social_login"),
     path("faq/",FaqList.as_view(),name="faq"),
-    path("accounts/",include("django.contrib.auth.urls")),
-    path("setting/",TemplateView.as_view(template_name="frontpages/settings.html"),name="setting"),
-    
-    path('social-auth', include('social_django.urls', namespace='social')),
-    # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
+    path("product-detail/<id>",ProductDetailView.as_view(),name="product_detail"),
     path("mydash/",ProfileView.as_view(),name="mydash"),
-    path("Job-detail/",TemplateView.as_view(template_name="admin/pages/job_detail.html"),name="Job_detail"),
-    path("Job-form/",TemplateView.as_view(template_name="admin/pages/job_form.html"),name="Job_form"),
-    path("job-list/",TemplateView.as_view(template_name="admin/pages/job_list.html"),name="Job_list"),
+    path("",include("accounts.urls")),
+
+
+
+    # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
+    # unused urls those will be removed in the future
+    path("setting/",TemplateView.as_view(template_name="frontpages/settings.html"),name="setting"),
     path("myfavorite/",TemplateView.as_view(template_name="frontpages/myfavorite.html"),name="favorite"),
     path("forgot/",TemplateView.as_view(template_name="frontpages/forgot.html"),name="forgot"),
     path("add-list/",TemplateView.as_view(template_name="frontpages/ad-list.html"),name="ad_list"),

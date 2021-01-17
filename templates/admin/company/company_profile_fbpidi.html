@@ -62,12 +62,7 @@
 												 Company Profile
 											</a>
 										</li>
-										<li class="nav-item">
-											<a href="#services" class="nav-link" data-toggle="tab">
-												<i class="icon-wrench3"></i>
-												Services
-											</a>
-										</li>
+										
 										<li class="nav-item">
 											<a href="#events" class="nav-link" data-toggle="tab">
 												<i class="icon-calendar3"></i>
@@ -324,13 +319,12 @@
 								<div class="card-body">
 									<ul class="nav nav-tabs nav-tabs-bottom nav-justified">
 										<li class="nav-item"><a href="#bottom-justified-tab1" class="nav-link active" data-toggle="tab">Profile</a></li>
-										<li class="nav-item"><a href="#bottom-justified-tab2" class="nav-link" data-toggle="tab">Trade Capacity</a></li>
-										<li class="nav-item"><a href="#bottom-justified-tab3" class="nav-link" data-toggle="tab">Production Capacity</a></li>
+										<li class="nav-item"><a href="#bottom-justified-tab2" class="nav-link" data-toggle="tab">More Info</a></li>
 									</ul>
 	
 									<div class="tab-content">
 										<div class="tab-pane fade show active" id="bottom-justified-tab1">
-											<form  action="{%url 'admin:edit_company_profile' id=company.id %}" method="POST" enctype="multipart/form-data">
+											<form  action="{%url 'admin:edit_fbpidi_profile' id=company.id %}" method="POST" enctype="multipart/form-data">
 												{%csrf_token%}
 												<input type="hidden" name="flag" value="profile">
 												<div class="form-group">
@@ -379,6 +373,59 @@
 												</div>
 												<div class="form-group">
 													<div class="row">
+														<div class="col-md-12">
+															<label>Established Year</label>
+															<input type="text" id="estyr" onkeyup="isNumber('estyr')" name="established_year" class="form-control" value="{{company.established_year}}">
+														</div>
+														 
+													</div>
+												</div>
+												 
+												
+												<div class="form-group">
+													<div class="row">
+														<div class="col-md-12">
+															<label>Detail English</label>
+															<textarea name="detail" class="summernote" >{{company.detail|safe}}</textarea>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="row">
+														<div class="col-md-12">
+															<label>Detail Amharic</label>
+															<textarea name="detail_am" class="summernote" >{{company.detail_am|safe}}</textarea>
+														</div>
+													</div>
+												</div>
+												{%if perms.company.change_company%}
+												<div class="text-right">
+													<button type="submit" class="btn btn-primary">Save changes</button>
+												</div>
+												{%endif%}
+											</form>
+										</div>
+	
+										<div class="tab-pane fade" id="bottom-justified-tab2">
+											<form action="{%url 'admin:edit_fbpidi_profile' id=company.id %}" method="POST" enctype="multipart/form-data">
+												{%csrf_token%}
+												<input type="hidden" name="flag" value="aditional">
+												<div class="form-group">
+													<div class="row">
+														<div class="col-md-6">
+															<label>Upload Logo</label>
+															<input type="file" name="company_logo" class="form-input-styled" data-fouc>
+															<span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size 10Mb</span>
+														</div>
+														<div class="col-md-6">
+															<label>Upload Intro</label>
+															<input type="file" name="company_intro" class="form-input-styled" data-fouc>
+															<span class="form-text text-muted">Accepted formats: MP4, mkv, 3gp. Max file size 10Mb</span>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="row">
 														<div class="col-md-6">
 															<label>Facebook Link</label>
 															<input type="text" placeholder="Facebook" name="facebook_link" value="{{company.facebook_link}}" class="form-control">
@@ -415,65 +462,6 @@
 														</div>
 													</div>
 												</div>
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-4">
-															<label>Established Year</label>
-															<input type="text" id="estyr" onkeyup="isNumber('estyr')" name="established_year" class="form-control" value="{{company.established_year}}">
-														</div>
-														<div class="col-md-4">
-															<label>Number Of Employees</label>
-															<input type="text" id="noemp" onkeyup="isNumber('noemp')" name="number_of_employees" class="form-control" value="{{company.number_of_employees}}">
-														</div>
-														<div class="col-md-4">
-															<label for="">Company Theme Color</label>
-															<input type="text" name="color" class="form-control colorpicker-show-input" data-preferred-format="hex" value="{{company.color}}" data-fouc>
-														</div>
-													</div>
-												</div>
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-6">
-															<label>Capital</label>
-															<input type="text" id="capital" onkeyup="isNumber('capital')" name="capital" class="form-control" value="{{company.capital}}">
-														</div>
-								
-														<div class="col-md-6">
-															<label>Certification</label>
-															<input type="text" name="certification" class="form-control" value="{{company.certification}}">
-														</div>
-													</div>
-												</div>
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-6">
-															<label>Upload Logo</label>
-															<input type="file" name="company_logo" class="form-input-styled" data-fouc>
-															<span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size 10Mb</span>
-														</div>
-														<div class="col-md-6">
-															<label>Upload Intro</label>
-															<input type="file" name="company_intro" class="form-input-styled" data-fouc>
-															<span class="form-text text-muted">Accepted formats: MP4, mkv, 3gp. Max file size 10Mb</span>
-														</div>
-													</div>
-												</div>
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-12">
-															<label>Detail English</label>
-															<textarea name="detail" class="summernote" >{{company.detail|safe}}</textarea>
-														</div>
-													</div>
-												</div>
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-12">
-															<label>Detail Amharic</label>
-															<textarea name="detail_am" class="summernote" >{{company.detail_am|safe}}</textarea>
-														</div>
-													</div>
-												</div>
 												{%if perms.company.change_company%}
 												<div class="text-right">
 													<button type="submit" class="btn btn-primary">Save changes</button>
@@ -482,157 +470,7 @@
 											</form>
 										</div>
 	
-										<div class="tab-pane fade" id="bottom-justified-tab2">
-											<form action="{%url 'admin:edit_company_profile' id=company.id %}" method="POST" enctype="multipart/form-data">
-												{%csrf_token%}
-												<input type="hidden" name="flag" value="trade">
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-6">
-															<label>Incoterms(English)</label>
-															<input type="text" name="incoterms" value="{{company.incoterms}}" class="form-control">
-														</div>
-														<div class="col-md-6">
-															<label>Incoterms(Amharic)</label>
-															<input type="text" name="incoterms_am" value="{{company.incoterms_am}}" class="form-control">
-														</div>
-													</div>
-												</div>
-								
-												
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-6">
-															<label>Average Lead Time (English)</label>
-															<input type="text" name="average_lead_time" value="{{company.average_lead_time}}" class="form-control">
-														</div>
-														<div class="col-md-6">
-															<label>Average Lead Time (Amharic) </label>
-															<input type="text" name="average_lead_time_am" value="{{company.average_lead_time_am}}" class="form-control">
-														</div>
-														
-													</div>
-												</div>
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-6">
-															<label>Number Of Trading Staff</label>
-															<input type="text" id="notrstaff" onkeyup="isNumber('notrstaff')" name="no_trading_staff" class="form-control" value="{{company.no_trading_staff}}">
-														</div>
-														<div class="col-md-6">
-															<label>Payment Method</label>
-															<input type="text" name="terms_of_payment" class="form-control" value="{{company.terms_of_payment}}">
-														</div>
-													</div>
-												</div>
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-6">
-															<label>Export Year</label>
-															<input type="text" id="expyr" onkeyup="isNumber('expyr')" name="export_yr" class="form-control" value="{{company.export_yr}}">
-														</div>
-								
-														<div class="col-md-6">
-															<label>Export Percentage</label>
-															<input type="text" id="expper" onkeyup="isNumber('expper')" name="export_percentage" class="form-control" value="{{company.export_percentage}}">
-														</div>
-													</div>
-												</div>
-												
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-6">
-															<label>Main Market (English)</label>
-															<input type="text" name="main_market" class="form-control" value="{{company.main_market}}">
-														</div>
-								
-														<div class="col-md-6">
-															<label>Main Market (Amharic)</label>
-															<input type="text" name="main_market_am" class="form-control" value="{{company.main_market_am}}">
-														</div>
-													</div>
-												</div>
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-6">
-															<label>Nearest Port(English)</label>
-															<input type="text" name="nearest_port" value="{{company.nearest_port}}" class="form-control">
-														</div>
-														<div class="col-md-6">
-															<label>Nearest Port (Amharic)</label>
-															<input type="text" name="nearest_port_am" value="{{company.nearest_port_am}}" class="form-control">
-														</div>
-													</div>
-												</div>
-												{%if perms.company.change_company%}
-												<div class="text-right">
-													<button type="submit" class="btn btn-primary">Save changes</button>
-												</div>
-												{%endif%}
-											</form>
-										</div>
-	
-										<div class="tab-pane fade" id="bottom-justified-tab3">
-											<form   action="{%url 'admin:edit_company_profile' id=company.id %}" method="POST" enctype="multipart/form-data">
-												{%csrf_token%}
-												<input type="hidden" name="flag" value="production">
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-6">
-															<label>R&D Capacity(English)</label>
-															<input type="text" name="r_and_d_capacity" value="{{company.r_and_d_capacity}}" class="form-control">
-														</div>
-														<div class="col-md-6">
-															<label>R&D Capacity(Amharic)</label>
-															<input type="text" name="r_and_d_capacity_am" value="{{company.r_and_d_capacity_am}}" class="form-control">
-														</div>
-													</div>
-												</div>
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-6">
-															<label>Number Of R&D Staff</label>
-															<input type="text" name="no_of_rnd_staff" id="nordstaff" onkeyup="isNumber('nordstaff')" value="{{company.no_of_rnd_staff}}" class="form-control">
-														</div>
-														<div class="col-md-6">
-															<label>Number Of Production Lines</label>
-															<input type="text" name="no_production_lines" id="prodline" onkeyup="isNumber('prodline')" value="{{company.no_production_lines}}" class="form-control">
-														</div>
-														
-													</div>
-												</div>
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-12">
-															<label>Anual Output Value</label>
-															<input type="text" name="anual_op_value" id="opval" onkeyup="isNumber('opval')" class="form-control" value="{{company.anual_op_value}}">
-														</div>
-													</div>
-												</div>
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-12">
-															<label>Anual Output value for Main Products(English)</label>
-															<textarea name="anual_op_main_products" class="summernote">{{company.anual_op_main_products}}</textarea>
-														</div>
-													</div>
-												</div>
-												
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-12">
-															<label>Anual Output value for Main Products(Amharic)</label>
-															<textarea name="anual_op_main_products_am" class="summernote">{{company.anual_op_main_products_am}}</textarea>
-														</div>
-													</div>
-												</div>
-												{%if perms.company.change_company%}
-												<div class="text-right">
-													<button type="submit" class="btn btn-primary">Save changes</button>
-												</div>
-												{%endif%}
-											</form>
-										</div>
+										 
 									</div>
 								</div>
 							</div>
@@ -640,108 +478,7 @@
 
 
 					    </div>
-						<div class="tab-pane fade" id="services">
-							<div class="card">
-								<div class="card-header header-elements-inline">
-									<h6 class="card-title">Company Services</h6>
-									<div class="header-elements">
-										<div class="list-icons">
-											<a data-toggle="modal" data-target="#solution_form_id" class="btn btn-outline-success btn-sm"><i class="icon-add mr-2"></i> Create New</a>
-										</div>
-									</div>
-								</div>
-							</div>
-							{%for soln in solutions%}
-							
-							<div class="card card-body">
-								<div class="media flex-column flex-sm-row">
-									<div class="mr-sm-3 mb-2 mb-sm-0">
-										<a href="#">
-											<img src="{{soln.image.url}}" class="rounded" width="44" height="44" alt="">
-										</a>
-									</div>
-	
-									<div class="media-body">
-										<h6 class="media-title font-weight-semibold">
-											<a href="#">{{soln.title}}</a>
-										</h6>
-	
-										<ul class="list-inline list-inline-dotted text-muted mb-2">
-											<li class="list-inline-item"><a href="#" class="text-muted">{{soln.link}}</a></li>
-										</ul>
-	
-										{{soln.description|safe}}
-									</div>
-	
-									<div class="ml-sm-3 mt-2 mt-sm-0">
-										<span class="badge bg-blue">New</span>
-									</div>
-								</div>
-							</div>
-							{%endfor%}
-							<div id="solution_form_id" class="modal fade" tabindex="-1">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title">Company Service Form</h5>
-											
-										</div>
-			
-										<form action="{%url 'admin:create_company_solution' company_id=company.id%}" method="POST" enctype="multipart/form-data">
-											{%csrf_token%}
-											<div class="modal-body">
-												<div class="form-group">
-													<div class="row">
-														<div class="col-sm-6">
-															<label>{{solution_form.title.label|title}}</label>
-															{{solution_form.title}}
-														</div>
-			
-														<div class="col-sm-6">
-															<label>{{solution_form.title_am.label|title}}</label>
-															{{solution_form.title_am}}
-														</div>
-													</div>
-												</div>
-			
-												<div class="form-group">
-													<div class="row">
-														<div class="col-sm-12">
-															<label>{{solution_form.description.label}}</label>
-															{{solution_form.description}}
-														</div>
-			
-														<div class="col-sm-12">
-															<label>{{solution_form.description_am.label}}</label>
-															{{solution_form.description_am}}
-														</div>
-													</div>
-												</div>
-			
-												<div class="form-group">
-													<div class="row">
-														<div class="col-sm-12">
-															<label>{{solution_form.link.label}}</label>
-															{{solution_form.link}}
-														</div>
-														<div class="col-sm-12">
-															<label>{{solution_form.image.label}}</label>
-															{{solution_form.image}}
-														</div>
-		
-													</div>
-												</div>
-											</div>
-			
-											<div class="modal-footer">
-												<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-												<button type="submit" class="btn bg-primary">Submit form</button>
-											</div>
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>
+						 
 						<div class="tab-pane fade" id="events">
 							<div class="card">
 								<div class="card-header header-elements-inline">

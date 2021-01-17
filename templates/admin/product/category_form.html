@@ -17,7 +17,7 @@
 						
 						<div class="card-body">
 							
-							<form action="{%url 'edit_category' option='category' cat_id=category.id %}" method="POST">{%csrf_token%}
+							<form action="{%url 'admin:edit_category' option='category' cat_id=category.id %}" enctype="multipart/form-data" method="POST">{%csrf_token%}
 								<fieldset class="mb-3 ml-3 mr-3">
 									<legend class="text-uppercase font-size-sm font-weight-bold">Edit Categories</legend>
 
@@ -67,7 +67,17 @@
 											<textarea class="summernote" name="description_am" >{{category.description_am|safe}}</textarea>
 										</div>
 									</div>
-									
+									<div class="form-group row">
+										<label class="col-form-label col-lg-2">Category Image</label>
+										<div class="col-lg-10">
+											<div class="uniform-uploader">
+												<input type="file" name="image" class="form-input-styled" data-fouc="">
+												<span class="filename" style="user-select: none;">No file selected</span>
+												<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+											</div>
+											<span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size 2Mb</span>
+										</div>
+									</div>
 								</fieldset>
 
 								<div class="text-right">
@@ -81,61 +91,55 @@
 						
 						<div class="card-body">
 							
-							<form action="{%url 'admin:create_category' option='category' %}" method="POST">{%csrf_token%}
+							<form action="{%url 'admin:create_category' option='category' %}" method="POST" enctype="multipart/form-data">{%csrf_token%}
+								 
 								<fieldset class="mb-3 ml-3 mr-3">
 									<legend class="text-uppercase font-size-sm font-weight-bold">Create Categories</legend>
 									<p class="mb-4"> All Fields ending with * are required. You are required to fill English and Amharic fields</p>
+									{{form.errors}} 
+									{%csrf_token%}
+									 
 									<div class="form-group row">
-										<label class="col-form-label col-lg-3">Category Name(English) *</label>
+										<label class="col-form-label col-lg-3">{{form.category_type.label|title}} *</label>
 										<div class="col-lg-9">
-											<input type="text" name="category_name" class="form-control" placeholder="Enter Category name(English)">
+											{{form.category_type}}
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-form-label col-lg-3">{{form.category_name.label|title}} *</label>
+										<div class="col-lg-9">
+											{{form.category_name}}
+										</div>
+									</div>
+	
+									<div class="form-group row">
+										<label class="col-form-label col-lg-3">{{form.category_name.label|title}} *</label>
+										<div class="col-lg-9">
+											{{form.category_name_am}}
+										</div>
+									</div>
+									 
+									<div class="form-group row">
+										<label class="col-form-label col-lg-3">{{form.description.label|title}} *</label>
+										<div class="col-lg-9">
+											{{form.description|safe}}
 										</div>
 									</div>
 
 									<div class="form-group row">
-										<label class="col-form-label col-lg-3">Category Name(Amharic) *</label>
+										<label class="col-form-label col-lg-3">{{form.description_am.label|title}} *</label>
 										<div class="col-lg-9">
-											<input type="text" name="category_name_am" class="form-control" placeholder="Enter Category name(Amharic)">
-										</div>
-									</div>
-
-									<div class="form-group row">
-										<label class="col-form-label col-lg-3">Category Type *</label>
-										<div class="col-lg-9">
-											<select required name="category_type" class="form-control form-control-uniform" data-fouc>
-												<option value="">Select Category Type</option>
-												<option value="Food">Food</option>
-												<option value="Beverage">Beverages</option>
-												<option value="pharmaceuticals">Pharmaceuticals</option>
-												
-											</select>
-										</div>
-									</div>
-									<!-- <div class="form-group row">
-										<label class="col-form-label col-lg-3">Category Type(Amharic) *</label>
-										<div class="col-lg-9">
-											<select required name="category_type_am" class="form-control form-control-uniform" data-fouc>
-												<option value="">Select Category Type(Amharic)</option>
-												<option value="Food">መግብ</option>
-												<option value="Beverage">መጠጥ</option>
-												<option value="pharmaceuticals">መድሃኒት</option>
-												
-											</select>
-										</div>
-									</div> -->
-									<div class="form-group row">
-										<label class="col-form-label col-lg-3">Description(English) *</label>
-										<div class="col-lg-9">
-											<textarea  id="summernote"  name="description" rows="3" cols="3" class="form-control" ></textarea>
+											{{form.description_am|safe}}
 										</div>
 									</div>
 									<div class="form-group row">
-										<label class="col-form-label col-lg-3">Description(Amharic) *</label>
-										<div class="col-lg-9">
-											<textarea   name="description_am" rows="3" cols="3" class="form-control summernote" ></textarea>
+										<label class="col-form-label col-lg-2">{{form.image.label|title}}</label>
+										<div class="col-lg-10">
+											<div class="uniform-uploader">{{form.image|safe}}<span
+												class="filename" style="user-select: none;">No file selected</span><span
+												class="action btn bg-warning" style="user-select: none;">Choose File</span></div>
 										</div>
 									</div>
-									
 								</fieldset>
 
 								<div class="text-right">
@@ -152,10 +156,11 @@
 						
 							<div class="card-body">
 								
-								<form action="{%url 'edit_category' option='sub_category' cat_id=sub_category.id %}" method="POST">
+								<form action="{%url 'admin:edit_category' option='sub_category' cat_id=sub_category.id %}" enctype="multipart/form-data" method="POST">
 									<fieldset class="mb-3 ml-3 mr-3">
 										<legend class="text-uppercase font-size-sm font-weight-bold">Sub-Category detail</legend>
 										{%csrf_token%}
+										
 										<div class="form-group row">
 											<label class="col-form-label col-lg-3">Sub-Category Name(English)</label>
 											<div class="col-lg-9">
@@ -196,7 +201,17 @@
 												<textarea name="description_am" class="summernote">{{sub_category.description_am|safe}}</textarea>												
 											</div>
 										</div>
-										
+										<div class="form-group row">
+											<label class="col-form-label col-lg-2">Sub-Category Image</label>
+											<div class="col-lg-10">
+												<div class="uniform-uploader">
+													<input type="file" name="image" class="form-input-styled" data-fouc="">
+													<span class="filename" style="user-select: none;">No file selected</span>
+													<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+												</div>
+												<span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size 2Mb</span>
+											</div>
+										</div>
 									</fieldset>
 		
 										<div class="text-right">
@@ -210,11 +225,11 @@
 						
 							<div class="card-body">
 								
-								<form action="{%url 'admin:create_category' option='sub_category' %}" method="POST">
+								<form action="{%url 'admin:create_category' option='sub_category' %}" method="POST" enctype="multipart/form-data">
 									<fieldset class="mb-3 ml-3 mr-3">
 										<legend class="text-uppercase font-size-sm font-weight-bold">Create Sub-Category</legend>
 										<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
-										{{form.errors}}{{form_am.errors}}
+										{{form.errors}} 
 										{%csrf_token%}
 										<div class="form-group row">
 											<label class="col-form-label col-lg-3">{{form.sub_category_name.label|title}} *</label>
@@ -249,7 +264,15 @@
 												{{form.description_am|safe}}
 											</div>
 										</div>
-										
+										<div class="form-group row">
+											<label class="col-form-label col-lg-2">{{form.image.label|title}}</label>
+											<div class="col-lg-10">
+												<div class="uniform-uploader">{{form.image|safe}}<span
+													class="filename" style="user-select: none;">No file selected</span><span
+													class="action btn bg-warning" style="user-select: none;">Choose File</span></div>
+												
+											</div>
+										</div>
 									</fieldset>
 		
 									<div class="text-right">
