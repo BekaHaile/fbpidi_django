@@ -57,11 +57,7 @@ urlpatterns = [
     path("mylistings/",TemplateView.as_view(template_name="frontpages/mylistings.html"),name="mylistings"),
     path("manged/",TemplateView.as_view(template_name="frontpages/manged.html"),name="manged"),
     path("orders/",TemplateView.as_view(template_name="frontpages/orders.html"),name="orders"),
-<<<<<<< HEAD
     path("tips/",TemplateView.as_view(template_name="frontpages/tips.html"),name="tips"),
-=======
-    path("tips/",TemplateView.as_view(template_name="frontpages/vacancy_list.html"),name="tips"),
->>>>>>> local/master
     path("payments/",TemplateView.as_view(template_name="frontpages/payments.html"),name="payments"),
     path("pricing/",TemplateView.as_view(template_name="frontpages/pricing.html"),name="pricing"),
     path("business-list/",TemplateView.as_view(template_name="frontpages/business-list.html"),name="bs_list"),

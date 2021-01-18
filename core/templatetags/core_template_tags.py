@@ -1,12 +1,7 @@
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
-<<<<<<< HEAD
 from company.models import Company
 from product.models import Product
-=======
-from accounts.models import Company
-from admin_site.models import Product
->>>>>>> local/master
 
 
 register = template.Library()

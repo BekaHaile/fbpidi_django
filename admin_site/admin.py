@@ -9,10 +9,11 @@ from django.contrib import messages
 from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLogView,
                         UserDetailView,UpdateAdminProfile,CreateUserView,GroupView)
 # views from admin_site app
-<<<<<<< HEAD
 from admin_site.views import (AdminIndex,DeleteView, BlogForm,BlogList,BlogView,
                         FaqsFormView,FaqsView,FaqsList, Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice,
+                        VacancyFormView,VacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
+                        JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView
@@ -23,23 +24,6 @@ from company.views import (
     CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
     CreateFbpidiCompanyProfile,ViewFbpidiCompany
 )
-=======
-from admin_site.views import (AdminIndex,CategoryView,CreateCategories,CategoryDetail,
-                        DeleteView, AdminProductListView,CreateProductView,ProductDetailView,
-                        AddProductImage,CreatePrice,
-
-                        BlogForm,BlogList,BlogView,
-                        FaqsFormView,FaqsView,FaqsList,
-                        
-                        Polls, CreatePoll, AddChoice, EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice,
-                        
-                        DeleteView,AdminProductListView,CreateProductView,ProductDetailView,
-                        AddProductImage,CreatePrice,
-
-                        VacancyFormView,VacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
-                        JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download)
->>>>>>> local/master
-
 
 class CustomAdminSite(admin.AdminSite):
     def get_urls(self):
@@ -53,9 +37,6 @@ class CustomAdminSite(admin.AdminSite):
 
         my_urls = [
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
-<<<<<<< HEAD
-            
-=======
             path('download/<name>/<id>',Download.as_view(),name="Download"),
             path('close/<id>',CloseVacancy.as_view(),name="close"),
             path('applicant-info/<id>',Applicantinfo.as_view(),name="Applicant_info"),
@@ -66,7 +47,6 @@ class CustomAdminSite(admin.AdminSite):
             path("Job-form/",VacancyFormView.as_view(),name="Job_form"),
             path("Job-list/",VacancyList.as_view(),name="Job_list"),
             path("job-detail/<model_name>/<id>",VacancyDetail.as_view(),name="job_detail"),
->>>>>>> local/master
             path("faqs-detail/<model_name>/<id>",FaqsView.as_view(),name="faqs_detail"),
             path("faq-form/",FaqsFormView.as_view(),name="admin_Faqsform"),
             path("faq-list/",FaqsList.as_view(),name="admin_Faqs"),
@@ -97,17 +77,12 @@ class CustomAdminSite(admin.AdminSite):
             path("create_poll/", wrap(CreatePoll.as_view()), name = "create_poll"),
             path("edit_poll/<id>/", wrap(EditPoll.as_view()), name = "edit_poll"),
             path("add_choice/<id>/", wrap(AddChoice.as_view()), name = "add_choice"),
-<<<<<<< HEAD
             path("edit_choice/", wrap(EditChoice.as_view()), name = "edit_choice"), #choice id is found from edit_poll.html option tag
-=======
-            path("edit_choice/", wrap(EditChoice.as_view()), name = "edit_choice"), #choice id is found from adit_poll.html option tag
->>>>>>> local/master
             path("delete_poll/<id>/", wrap(DeletePoll.as_view()), name = "delete_poll"),
             path("delete_choice/<id>/", wrap(DeleteChoice.as_view()), name = "delete_choice"),
             path("detail_poll/<id>/", wrap(DetailPoll.as_view()), name = "detail_poll"),
 
         
-<<<<<<< HEAD
             # path("",wrap(include("company.urls"))),
             path("create_company_profile/",wrap(CreateCompanyProfile.as_view()),name="create_company_profile"),
             path("company_list/<option>/",wrap(CompaniesView.as_view()),name="companies"),
@@ -120,9 +95,6 @@ class CustomAdminSite(admin.AdminSite):
             path("create_fbpidi_company/",wrap(CreateFbpidiCompanyProfile.as_view()),name="create_fbpidi_company"),
             path("view_fbpidi_company/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
             path("edit_fbpidi_profile/<id>/",wrap(ViewFbpidiCompany.as_view()),name="edit_fbpidi_profile"),
-=======
-            path("",include("company.urls")),
->>>>>>> local/master
         ]
         return my_urls + urls
 

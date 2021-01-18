@@ -103,8 +103,6 @@ class Faqs(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     
 
-<<<<<<< HEAD
-=======
 ## Vacancy
 
 class JobCategoty(models.Model):
@@ -155,6 +153,5 @@ class JobApplication(models.Model):
 
 
 
->>>>>>> local/master
     
     
