@@ -1,7 +1,7 @@
 from django.urls import path,include
 from django.views.generic import TemplateView
 
-from core.views import IndexView,ProfileView,ProductDetailView
+from core.views import IndexView,ProfileView,ProductDetailView,ProductByCategoryView
 from collaborations.views import BlogList,BlogDetail,FaqList
 
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path("blog-detail-right/<id>",BlogDetail.as_view(),name="blog_details"),
     path("faq/",FaqList.as_view(),name="faq"),
     path("product-detail/<id>",ProductDetailView.as_view(),name="product_detail"),
+    path("product-by-category/<cat_id>/",ProductByCategoryView.as_view(),name="product_category"),
     path("mydash/",ProfileView.as_view(),name="mydash"),
     path("",include("accounts.urls")),
 

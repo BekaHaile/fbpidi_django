@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from admin_site.models import SubCategory
 
 class Company(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -22,7 +23,7 @@ class Company(models.Model):
     certification = models.CharField(max_length=100,verbose_name="Certification")
     city = models.CharField(max_length=100,default="",verbose_name="City")
     postal_code = models.CharField(max_length=100,null=True,default="")
-    products = models.CharField(max_length=200,default="",verbose_name="Main Products")
+    product_category = models.ForeignKey(SubCategory,null=True,blank=True,on_delete=models.CASCADE,verbose_name="Main Products")
     capital = models.FloatField(default=0)
     color = models.CharField(default="#000000",max_length=10,verbose_name="Your Company Theme")
     facebook_link = models.CharField(max_length=100,default="",null=True,blank=True)

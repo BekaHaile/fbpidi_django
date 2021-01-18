@@ -1,5 +1,6 @@
 from django import forms
 from product import models
+from admin_site.models import Category,SubCategory
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 
@@ -7,7 +8,7 @@ from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 class CategoryForm(forms.ModelForm):
 
     class Meta:
-        model = models.Category
+        model = Category
         fields = ('category_type','category_name','category_name_am','description','description_am','image')
         widgets = {
             'image':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
@@ -21,13 +22,13 @@ class CategoryForm(forms.ModelForm):
 class SubCategoryForm(forms.ModelForm):
     category_name = forms.ModelChoiceField(
         empty_label="Select Category Type",
-        queryset=models.Category.objects.all(),
+        queryset=Category.objects.all(),
         widget=forms.Select(attrs={'class':'form-control form-control-uniform'}),
         required=True
     )
 
     class Meta:
-        model = models.SubCategory
+        model = SubCategory
         fields = ('category_name','sub_category_name','sub_category_name_am','description','description_am','image')
         widgets = {
             'image':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
@@ -42,7 +43,7 @@ class SubCategoryForm(forms.ModelForm):
 class ProductCreationForm(forms.ModelForm):
     category = forms.ModelChoiceField(
         empty_label="Select Category",
-        queryset=models.SubCategory.objects.all(),
+        queryset=SubCategory.objects.all(),
         widget=forms.Select(attrs={'class':'form-control form-control-uniform'}),
         required=True
     )
