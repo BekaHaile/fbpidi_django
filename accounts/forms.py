@@ -5,8 +5,13 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from django_summernote.widgets import SummernoteWidget
 
+<<<<<<< HEAD
 from accounts.models import Company, CompanyAdmin, Customer
 from company.models import CompanyStaff
+=======
+from accounts.models import Company, CompanyAdmin, Customer, CompanyStaff
+
+>>>>>>> local/master
 
 class AbstractUserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput(
@@ -72,6 +77,7 @@ ADMIN_PERMISSION_LIST = [
     'view_failedloginlog',
     'view_loginlog',
     'view_loginattempt',
+<<<<<<< HEAD
     'view_userdeactivation', 
 
     'add_pollsquestion',
@@ -83,6 +89,9 @@ ADMIN_PERMISSION_LIST = [
     'change_choices',
     'delete_choices',
 
+=======
+    'view_userdeactivation'
+>>>>>>> local/master
 ]
 
 

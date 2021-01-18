@@ -192,6 +192,22 @@
 						{%if user.is_superuser%}
 						<li class="nav-item nav-item-submenu">
 							<a href="#" class="nav-link"><i class="icon-office"></i> <span>Companies</span></a>
+						<li class="nav-item">
+							<a href="{%url 'admin:admin_Blogs'%}" class="nav-link"><i
+									class="icon-stack"></i> <span>Blog</span></a>
+						</li>
+						<li class="nav-item">
+							<a href="{%url 'admin:admin_Faqs'%}" class="nav-link"><i
+									class="icon-stack"></i> <span>Faqs</span></a>
+						</li>
+						<li class="nav-item">
+							<a href="{%url 'admin:Job_list'%}" class="nav-link"><i
+									class="icon-stack"></i> <span>Vacancy</span></a>
+						</li>
+						
+						{%if user.is_superuser%}
+						<li class="nav-item nav-item-submenu">
+							<a href="#" class="nav-link"><i class="icon-cabinet"></i> <span>Companies</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
 								<li class="nav-item">
 									<a href="{%url 'admin:companies' option='supplier' %}" class="nav-link">
@@ -231,7 +247,11 @@
 								<li class="nav-item">
 									<a href="{%url 'admin:admin_Faqs'%}" class="nav-link">
 										<i class="icon-help"></i>
-										<span>Faqs</span>										 
+										<span>Faqs</span>	
+										</a>									 
+									<a href="#" class="nav-link">
+										<i class="icon-cogs"></i>
+										<span>Forums</span>										 
 									</a>
 								</li>
 							</ul>

@@ -9,11 +9,15 @@ from social_django.context_processors import REDIRECT_FIELD_NAME, login_redirect
 # 
 from product import models
 from company.models import Company
+# 
+from admin_site import models
+from admin_site.forms import SubCategoryForm,ProductCreationForm
+from accounts.models import User,Company,Customer
+from accounts.forms import CompanyForm
 
 
 class IndexView(View):
     def get(self,*args,**kwargs):
-    
         products = models.Product.objects.all()
         category = models.Category.objects.all()
         sub_category = models.SubCategory.objects.all()

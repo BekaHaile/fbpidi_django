@@ -1,7 +1,11 @@
 # django imports
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
+<<<<<<< HEAD
 from django.http import HttpResponse,JsonResponse
+=======
+from django.http import HttpResponse
+>>>>>>> local/master
 from django.contrib import messages
 from django.views import View
 from django.views.generic import CreateView
@@ -18,10 +22,16 @@ from useraudit.models import FailedLoginLog,LoginAttempt,LoginLog,UserDeactivati
 
 from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,CompanyUserCreationForm,
                             AdminCreateUserForm,GroupCreationForm,CompanyForm)
+<<<<<<< HEAD
 from accounts.models import User,Company,CompanyAdmin,Customer
 from company.models import CompanyStaff
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
  
+=======
+from accounts.models import User,Company,CompanyAdmin,CompanyStaff,Customer
+from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
+
+>>>>>>> local/master
 class CompanyAdminSignUpView(CreateView):
     model = User
     form_class = CompanyAdminCreationForm
@@ -34,6 +44,10 @@ class CompanyAdminSignUpView(CreateView):
         user = form.save()
         return redirect('admin:complete_company_profile')
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> local/master
 class CustomerSignUpView(CreateView):
     model = User
     form_class = CustomerCreationForm
@@ -50,6 +64,7 @@ class CustomerSignUpView(CreateView):
             {'message':"Please Verify your email address to complete the registration\n"
             +"If you can\'t find the mail please check it in your spam folder!"})
 
+<<<<<<< HEAD
 class CompleteLoginView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         
@@ -67,6 +82,8 @@ class CompleteLoginView(LoginRequiredMixin,View):
             return redirect("index")
 
 
+=======
+>>>>>>> local/master
 def activate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -201,11 +218,15 @@ class CreateUserView(LoginRequiredMixin, View):
                 return redirect("admin:users_list")
             else:
                 return render(self.request, "admin/pages/user_form.html", {"form": form})
+<<<<<<< HEAD
 
 class GroupList(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         groups = Group.objects.all()
         return render(self.request,"admin/pages/group_list.html",{'groups':groups})      
+=======
+            
+>>>>>>> local/master
         
 
 class GroupView(LoginRequiredMixin,View):
@@ -221,7 +242,11 @@ class GroupView(LoginRequiredMixin,View):
         group,created = Group.objects.get_or_create(name = self.request.POST.get('group_name'))
         group.permissions.set(permission_list)
         group.save()
+<<<<<<< HEAD
         return JsonResponse({"message":"Role Group Created SuccessFully"})
+=======
+        return HttpResponse({"message":"Role Group Created SuccessFully","group":group})
+>>>>>>> local/master
 
 
 

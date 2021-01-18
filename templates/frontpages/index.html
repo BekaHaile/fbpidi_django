@@ -5,17 +5,26 @@
 {% get_current_language as LANGUAGE_CODE %}
 <!--Sliders Section-->
 <section>
+<<<<<<< HEAD
 
 	<div class="banner-1 card cover-image sptb-2 bg-background2"
 		data-image-src="../../assets/images/banners/banner1.jpg">
 		<div class="header-text mb-0">
 			<div class="container">
 				<div class="text-center text-white ">
+=======
+	<div class="banner-1 cover-image sptb-2 sptb-tab bg-background2"
+		data-image-src="/static/frontpages/images/banners/banner1.jpg">
+		<div class="header-text mb-0">
+			<div class="container">
+				<div class="text-center text-white mb-7">
+>>>>>>> local/master
 					<h1 class="mb-1">{% trans "Welcome To The Biggest Business Directory" %}</h1>
 					<p>{% trans "It is a long established fact that a reader will be distracted by the readable." %}</p>
 				</div>
 				<div class="row">
 					<div class="col-xl-10 col-lg-12 col-md-12 d-block mx-auto">
+<<<<<<< HEAD
 						<div class="item-search-tabs">
 							<div class="item-search-menu">
 								<ul class="nav pl-0">
@@ -130,6 +139,51 @@
 											</div>
 										</div>
 									</div>
+=======
+						<div class="search-background py-3 px-4 bg-white-transparent">
+							<div class="form row row-sm">
+								<div class="form-group col-xl-4 col-lg-3 col-md-12 mb-0">
+									<input type="text" class="form-control input-lg keywords-input" id="text4"
+										placeholder="{% trans "Phrase or Keywords"%}">
+								</div>
+								<div class="form-group col-xl-3 col-lg-3 col-md-12 select2-lg mb-0">
+									<select class="form-control select2-show-search  border-bottom-0"
+										data-placeholder="Select Category">
+										<optgroup label="{% trans "Type" %}">
+											<option>{% trans "Select Type" %}</option>
+											<option value="0">{% trans "Manufacturers" %}</option>
+											<option value="1">{% trans "Suppliers" %}</option>
+											<option value="2">{% trans "Products" %}</option>
+										</optgroup>
+									</select>
+								</div>
+								<div class="form-group col-xl-3 col-lg-3 col-md-12 select2-lg mb-0">
+									<select class="form-control select2-show-search  border-bottom-0"
+										data-placeholder="Select Category">
+										<optgroup label="{% trans "Categories" %}">
+											<option>{% trans "Select Category" %}</option>
+											<option value="0">{% trans "All Categories" %}</option>
+											{%for sub_cat in category%}
+											{%if LANGUAGE_CODE == "en"%}
+											<option value="{{sub_cat.id}}">{{sub_cat.category_name}}</option>
+											{%elif LANGUAGE_CODE == "am"%}
+											<option value="{{sub_cat.id}}">{{sub_cat.category_name_am}}</option>
+											{%endif%}
+											{%endfor%}
+											<!-- <option value="3">Events</option>
+											<option value="4">Cinema</option>
+											<option value="5">Gym</option>
+											<option value="6">Shop & Store</option>
+											<option value="7">Tours & Travels</option>
+											<option value="8">Cafe</option>
+											<option value="9">Mobile Store</option>
+											<option value="10">College</option> -->
+										</optgroup>
+									</select>
+								</div>
+								<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
+									<a href="#" class="btn btn-lg btn-block btn-secondary">{% trans "Search Here" %}</a>
+>>>>>>> local/master
 								</div>
 							</div>
 						</div>
@@ -137,10 +191,16 @@
 				</div>
 			</div>
 		</div><!-- /header-text -->
+<<<<<<< HEAD
 
 	</div>
 </section>
 <!--/Sliders Section-->
+=======
+	</div>
+</section>
+<!--Sliders Section-->
+>>>>>>> local/master
 
 <!--Categories-->
 <section class="categories">
@@ -827,7 +887,11 @@
 </section>
 <!--/Categories-->
 
+<<<<<<< HEAD
 <!--Products Listings-->
+=======
+<!--Latest Listings-->
+>>>>>>> local/master
 <section class="sptb bg-white">
 	<div class="container">
 		<div class="section-title center-block text-center">
@@ -842,10 +906,17 @@
 					<div class="power-ribbon power-ribbon-top-left text-warning"><span class="bg-warning"><i
 								class="fa fa-bolt"></i></span></div>
 					<div class="item-card2-img">
+<<<<<<< HEAD
 						<a href="{%url 'product_detail' id=product.id %}" class="absolute-link"></a>
 						<img src="{{product.image.url}}" style="height: 300px;" alt="img" class="cover-image">
 						<div class="item-card2-icons">
 							<a href="{%url 'product_detail' id=product.id %}" class="item-card2-icons-l"><i class="fa fa-cutlery"></i></a>
+=======
+						<a href="{% url 'bs' %}" class="absolute-link"></a>
+						<img src="{{product.image.url}}" style="height: 300px;" alt="img" class="cover-image">
+						<div class="item-card2-icons">
+							<a href="{% url 'bs' %}" class="item-card2-icons-l"><i class="fa fa-cutlery"></i></a>
+>>>>>>> local/master
 							<a href="#" class="item-card2-icons-r"><i class="fa fa fa-heart-o"></i></a>
 						</div>
 						<div class="blog--category">{{product.category.category_name.category_name}}</div>
@@ -854,7 +925,11 @@
 						<div class="item-card2">
 							<div class="item-card2-desc">
 								<div class="item-card2-text">
+<<<<<<< HEAD
 									<a href="{%url 'product_detail' id=product.id %}" class="text-dark">
+=======
+									<a href="{% url 'bs' %}" class="text-dark">
+>>>>>>> local/master
 										<h4 class="mb-0">{{product.name|title}}</h4>
 									</a>
 								</div>
@@ -910,10 +985,17 @@
 					<div class="power-ribbon power-ribbon-top-left text-warning"><span class="bg-warning"><i
 								class="fa fa-bolt"></i></span></div>
 					<div class="item-card2-img">
+<<<<<<< HEAD
 						<a href="{%url 'product_detail' id=product.id %}" class="absolute-link"></a>
 						<img src="{{product.image.url}}" style="height: 300px;" alt="img" class="cover-image">
 						<div class="item-card2-icons">
 							<a href="{%url 'product_detail' id=product.id %}" class="item-card2-icons-l"><i class="fa fa-cutlery"></i></a>
+=======
+						<a href="{% url 'bs' %}" class="absolute-link"></a>
+						<img src="{{product.image.url}}" style="height: 300px;" alt="img" class="cover-image">
+						<div class="item-card2-icons">
+							<a href="{% url 'bs' %}" class="item-card2-icons-l"><i class="fa fa-cutlery"></i></a>
+>>>>>>> local/master
 							<a href="#" class="item-card2-icons-r"><i class="fa fa fa-heart-o"></i></a>
 						</div>
 						<div class="blog--category">{{product.category.category_name.category_name_am}}</div>
@@ -922,9 +1004,14 @@
 						<div class="item-card2">
 							<div class="item-card2-desc">
 								<div class="item-card2-text">
+<<<<<<< HEAD
 									<a href="{%url 'product_detail' id=product.id %}" class="text-dark">
 										<h4 class="mb-0">{{product.name_am|title}}</h4>
 										 
+=======
+									<a href="{% url 'bs' %}" class="text-dark">
+										<h4 class="mb-0">{{product.name_am|title}}</h4>
+>>>>>>> local/master
 									</a>
 								</div>
 								<div class="pt-3">
@@ -980,6 +1067,7 @@
 		</div>
 	</div>
 </section>
+<<<<<<< HEAD
 <!--/Products Listings-->
 
 <!--Statistics-->
@@ -1034,11 +1122,18 @@
 
 <!--Manufacturers Section-->
 <section class="sptb bg-patterns bg-white">
+=======
+<!--Latest Listings-->
+
+<!--Section-->
+<section class="sptb">
+>>>>>>> local/master
 	<div class="container">
 		<div class="section-title center-block text-center">
 			<h2>{% trans "Latest Manufacturers" %}</h2>
 			<p>{% trans "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula" %}</p>
 		</div>
+<<<<<<< HEAD
 		<div id="myCarousel2" class="owl-carousel owl-carousel-icons2">
 			<!-- Wrapper for carousel items -->
 			{%for company in companies%}
@@ -1275,13 +1370,67 @@
 						</div>
 					</div>
 				</div>
+=======
+		<div class="row">
+			<div class="col-md-12">
+				<div id="myCarousel" class="owl-carousel testimonial-owl-carousel">
+					 
+					{%for company in companies%}
+					{%if company.company_type == "manufacturer"%}
+					{%if LANGUAGE_CODE == 'en'%}
+					<div class="item card mb-0">
+						<div class="row no-gutters">
+							<div class="col-lg-6 col-md-4">
+								<div class="h-100">
+									<img src="{{company.company_logo.url}}" alt="img" class="w-100 h-100">
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-8">
+								<div class="card-body p-7">
+									<h2>{{company.company_name}}</h2>
+									<p class="fs-16 mt-4">{{company.detail|safe}}</p>
+									<a class="btn btn-lg btn-secondary px-6" href="#">View Listings</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					{%elif LANGUAGE_CODE == 'am' %}
+					<div class="item card mb-0">
+						<div class="row no-gutters">
+							<div class="col-lg-6 col-md-4">
+								<div class="h-100">
+									<img src="{{company.company_logo.url}}" alt="img"
+										class="w-100 h-100">
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-8">
+								<div class="card-body p-7">
+									<h2>{{company.company_name_am}}</h2>
+									<p class="fs-16 mt-4">{{company.detail_am|safe}}</p>
+									<a class="btn btn-lg btn-secondary px-6" href="#">View Listings</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					{%endif%}
+					{%endif%}
+					{%endfor%}
+				</div>
+
+>>>>>>> local/master
 			</div>
 		</div>
 	</div>
 </section>
+<<<<<<< HEAD
 <!--/How It Works-->
 
 <!--Suppliers Listings-->
+=======
+<!--/Section-->
+
+<!--/Featured Listings-->
+>>>>>>> local/master
 <section class="sptb bg-patterns bg-white">
 	<div class="container">
 		<div class="section-title center-block text-center">
@@ -1395,6 +1544,7 @@
 		</div>
 	</div>
 </section>
+<<<<<<< HEAD
 <!--/Suppliers Listings-->
 
 <!--Subscribe section-->
@@ -1422,6 +1572,49 @@
 									</div>
 								</div>
 							</div>
+=======
+<!--Statistics-->
+<section>
+	<div class="about-1 cover-image sptb bg-background-color"
+		data-image-src="/static/frontpages/images/banners/banner5.jpg">
+		<div class="content-text mb-0 text-white info">
+			<div class="container">
+				<div class="row text-center">
+					<div class="col-lg-3 col-md-6">
+						<div class="counter-status status md-lg-0">
+							<div class="counter-icon text-secondary">
+								<i class="icon icon-docs"></i>
+							</div>
+							<h5>{% trans "Total Products" %}</h5>
+							<h2 class="counter mb-0">{{""|product_count}}</h2>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-6">
+						<div class="counter-status status-1 md-lg-0">
+							<div class="counter-icon text-warning">
+								<i class="icon icon-rocket"></i>
+							</div>
+							<h5>{% trans "Total Suppliers" %}</h5>
+							<h2 class="counter mb-0">{{'supplier'|company_count}}</h2>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-6">
+						<div class="counter-status mb-md-0">
+							<div class="counter-icon">
+								<i class="icon icon-people"></i>
+							</div>
+							<h5>{% trans "Total Manufacturers" %}</h5>
+							<h2 class="counter mb-0">{{'manufacturer'|company_count}}</h2>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-6">
+						<div class="counter-status status mb-0">
+							<div class="counter-icon text-success">
+								<i class="icon icon-emotsmile"></i>
+							</div>
+							<h5>{% trans "Happy Customers" %}</h5>
+							<h2 class="counter mb-0">7,253</h2>
+>>>>>>> local/master
 						</div>
 					</div>
 				</div>
@@ -1429,9 +1622,15 @@
 		</div>
 	</div>
 </section>
+<<<<<<< HEAD
 <!--/Subscribe section-->
 
 <!--Getting Started Section-->
+=======
+<!--/Statistics-->
+
+<!--Section-->
+>>>>>>> local/master
 <section class="sptb bg-white">
 	<div class="container">
 		<div class="section-title center-block text-center">
@@ -1500,7 +1699,11 @@
 		</div>
 	</div>
 </section>
+<<<<<<< HEAD
 <!--/Getting Started Section-->
+=======
+<!--/Section-->
+>>>>>>> local/master
 
 <!--Latest News-->
 <section class="sptb">
@@ -2108,6 +2311,7 @@
 		</div>
 	</div>
 </section>
+<<<<<<< HEAD
 <!--/Latest News-->
 
 <!--Sub Categories-->
@@ -2283,15 +2487,178 @@
 								<a href="#" class="text-secondary"> View more..</a>
 							</li>
 						</ul>
+=======
+<!--Latest News-->
+
+<!--Blogs-->
+<section class="sptb bg-white">
+	<div class="container">
+		<div class="section-title center-block text-center">
+			<h2>Best Rated Products</h2>
+			<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 col-lg-3 col-md-6">
+				<div class="item-card overflow-hidden">
+					<div class="item-card-desc">
+						<a href="{% url 'bs_list' %}"></a>
+						<div class="card text-center overflow-hidden mb-lg-0">
+							<div class="card-img">
+								<img src="/static/frontpages/images/locations/germany1.jpg" alt="img"
+									class="cover-image">
+							</div>
+							<div class="item-card-text text-left">
+								<div class="rating-stars">
+									<div class="rating-stars-container text-left">
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+									</div>
+								</div>
+								<h4 class="mb-2">Germany</h4>
+								<small class="text-white"><i class="fa fa-moon-o"></i> 8 Cities <i
+										class="ml-3 fa fa-map-o"></i> 140+ Listings </small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-12 col-lg-3 col-md-6">
+				<div class="item-card overflow-hidden">
+					<div class="item-card-desc">
+						<a href="{% url 'bs_list' %}"></a>
+						<div class="card text-center overflow-hidden mb-lg-0">
+							<div class="card-img">
+								<img src="/static/frontpages/images/locations/london1.jpg" alt="img"
+									class="cover-image">
+							</div>
+							<div class="item-card-text text-left">
+								<div class="rating-stars">
+									<div class="rating-stars-container text-left">
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+									</div>
+								</div>
+								<h4 class="mb-2">London</h4>
+								<small class="text-white"><i class="fa fa-moon-o"></i> 17 Cities <i
+										class="ml-3 fa fa-map-o"></i> 24+ Listings </small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-12 col-lg-3 col-md-6">
+				<div class="item-card overflow-hidden">
+					<div class="item-card-desc">
+						<a href="{% url 'bs_list' %}"></a>
+						<div class="card text-center overflow-hidden mb-md-0">
+							<div class="card-img">
+								<img src="/static/frontpages/images/locations/austrelia1.jpg" alt="img"
+									class="cover-image">
+							</div>
+							<div class="item-card-text text-left">
+								<div class="rating-stars">
+									<div class="rating-stars-container text-left">
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+									</div>
+								</div>
+								<h4 class="mb-2">Australia</h4>
+								<small class="text-white"><i class="fa fa-moon-o"></i> 12 Cities <i
+										class="ml-3 fa fa-map-o"></i> 18+ Listings </small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-12 col-lg-3 col-md-6">
+				<div class="item-card overflow-hidden">
+					<div class="item-card-desc">
+						<a href="{% url 'bs_list' %}"></a>
+						<div class="card text-center overflow-hidden mb-0">
+							<div class="card-img">
+								<img src="/static/frontpages/images/locations/canada1.jpg" alt="img"
+									class="cover-image">
+							</div>
+							<div class="item-card-text text-left">
+								<div class="rating-stars">
+									<div class="rating-stars-container text-left">
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="rating-star sm is--active fs-12">
+											<i class="fa fa-star"></i>
+										</div>
+									</div>
+								</div>
+								<h4 class="mb-2">Canada</h4>
+								<small class="text-white"><i class="fa fa-moon-o"></i> 12 Cities <i
+										class="ml-3 fa fa-map-o"></i> 40+ Listings </small>
+							</div>
+						</div>
+>>>>>>> local/master
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
+<<<<<<< HEAD
 <!--/Sub Categories-->
 
 <!--Download App-->
+=======
+<!--Blogs-->
+
+<!--Section-->
+>>>>>>> local/master
 <section class="sptb cover-image patter-image" data-image-src="/static/frontpages/images/pngs/7.png">
 	<div class="container">
 		<div class="section-title center-block text-center">
@@ -2313,6 +2680,11 @@
 		</div>
 	</div>
 </section>
+<<<<<<< HEAD
 <!--/Download App-->
+=======
+<!--/Section-->
+
+>>>>>>> local/master
 
 {%endblock%}

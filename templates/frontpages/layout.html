@@ -16,8 +16,13 @@
 		html template,html5 responsive template,html5 template,local business directory,local business listing,online business directory,
 		online directory,premium,premium bootstrap templates,small business directory,classified,Premium business directory Templates,
 		Directory & Listing HTML Template,business listing websites">
+<<<<<<< HEAD
 		<link rel="icon" href="/static/frontpages/images/brand/favicon.png" type="image/x-icon"/>
 		<link rel="shortcut icon" type="image/x-icon" href="/static/frontpages/images/brand/favicon.png" />
+=======
+		<link rel="icon" href="favicon.ico" type="image/x-icon"/>
+		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+>>>>>>> local/master
 
 		<!-- Title -->
 		<title>FBPIDI - Business Directory</title>
@@ -74,12 +79,17 @@
 
 		<!--Topbar-->
 		<div class="header-main">
+<<<<<<< HEAD
 			<div class="top-bar">
+=======
+			<div class="top-bar p-3">
+>>>>>>> local/master
 				<div class="container">
 					<div class="row">
 						<div class="col-xl-7 col-lg-7 col-sm-4 col-7">
 							<div class="top-bar-left d-flex">
 								<div class="clearfix">
+<<<<<<< HEAD
 									<ul class="socials">
 										<li>
 											<a class="social-icon text-dark" href="#"><i class="fa fa-facebook"></i></a>
@@ -97,10 +107,22 @@
 								</div>
 							</div>
 
+=======
+
+									<div class="header-search-logo d-none d-lg-block ">
+                                        <a href="{%url 'index' %}">
+										    <img src="/static/frontpages/images/brand/logo2.png" alt="image">
+                                        </a>
+									</div>
+								</div>
+
+							</div>
+>>>>>>> local/master
 						</div>
 						<div class="col-xl-5 col-lg-5 col-sm-8 col-5">
 							<div class="top-bar-right">
 								<ul class="custom ">
+<<<<<<< HEAD
 									
 									{%if user.is_authenticated%}
 									
@@ -122,6 +144,24 @@
 										<li>
 											<a href="{%url 'logout' %}?next={%url 'login'%}" class="text-dark"><i class="fa fa-sign-out mr-1"></i> <span>{% trans "Logout" %}</span></a>
 										</li>
+=======
+									{%if user.is_authenticated%}
+									{%if user.is_customer%}
+									<li class="dropdown">
+										<a href="{% url 'mydash' %}" class="text-dark">
+                                            <i class="fa fa-home mr-1"></i><span>{% trans "My Profile" %}</span>
+                                        </a>
+
+									</li>
+									{%elif user.is_staff%}
+									<li class="dropdown">
+										<a href="{%url 'admin:user_detail' option='my_profile' id=user.id%}" class="text-dark">
+                                            <i class="fa fa-home mr-1"></i><span>{% trans "My Profile" %}</span>
+                                        </a>
+
+									</li>
+									{%endif%}
+>>>>>>> local/master
 									{%else%}
 									<li>
 										<a href="{% url 'register'%}" class="text-dark"><i class="fa fa-user mr-1"></i> <span >{% trans "Register" %}</span></a>
@@ -172,6 +212,7 @@
 			</div>
 			<!-- /Mobile Header -->
 
+<<<<<<< HEAD
 			<div class="horizontal-main  bg-dark-transparent clearfix">
 				<div class="horizontal-mainwrapper container clearfix">
 					<div class="desktoplogo">
@@ -183,6 +224,10 @@
 							<img src="/static/frontpages/images/brand/logo2.png" alt="image"></a>
 						</a>
 					</div>
+=======
+			<div class="horizontal-main bg-dark-transparent clearfix">
+				<div class=" header-style horizontal-mainwrapper container clearfix">
+>>>>>>> local/master
 					<!--Nav-->
 					<nav class="horizontalMenu clearfix d-md-flex">
 
@@ -201,6 +246,7 @@
                                     <li><a href="{% url 'bs_list_right' %}">{% trans "Foods" %}</a></li>
                                     <li><a href="{% url 'bs_list_right' %}">{% trans "Beverages" %}</a></li>
                                     <li><a href="{% url 'bs_list_right' %}">{% trans "Pharmaceuticals" %}</a></li>
+<<<<<<< HEAD
 								</ul>
 							</li>
                             <li><a href="{%url 'bs_list3'%}">{% trans "Products" %} <span class="fa fa-caret-down m-0"></span></a>
@@ -219,6 +265,31 @@
 								</ul>
 							</li>
                             <li><span></span><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
+=======
+                                </ul>
+                            <li><a href="{%url 'bs_list3'%}">{% trans "Products" %} <span class="fa fa-caret-down m-0"></span></a>
+                            <ul class="sub-menu">
+                                <li><a href="{% url 'bs_list3' %}">{% trans "Foods" %}</a></li>
+                                <li><a href="{% url 'bs_list3' %}">{% trans "Beverages" %}</a></li>
+                                <li><a href="{% url 'bs_list3' %}">{% trans "Pharmaceuticals" %}</a></li>
+                            </ul>
+                            <li><a href="{% url 'faq' %}">{% trans "Faqs" %}</a></li>
+
+                            <li><a href="{% url 'blog_grid_right' %}">{% trans "Blog" %}</a></li>
+
+							<li><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
+							</ul>
+
+							<li><a href="{%url 'polls'%}">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
+								<ul class="sub-menu">
+									<li><a href="#">{% trans "Blog" %}</a></li>
+									<li><a href="#">{% trans "Forums" %}</a></li>
+									<li><a href="{% url 'polls' %}">{% trans "Polls" %}</a></li>
+								</ul>
+							
+
+                            <li><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
+>>>>>>> local/master
 
 						</ul>
 

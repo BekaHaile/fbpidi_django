@@ -4,7 +4,7 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
-{%block pagename%}Create Blog{%endblock%}
+{%block pagename%}Create Vacancy{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -17,74 +17,98 @@
 
 			<form action="" method="POST" enctype="multipart/form-data">
 				<fieldset class="mb-3 ml-3 mr-3">
-					<legend class="text-uppercase font-size-sm font-weight-bold">Create Blog</legend>
+					<legend class="text-uppercase font-size-sm font-weight-bold">Create Vacancy</legend>
 					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
-					{%if form.errors%}
-					<div class="alert alert-danger" role="alert">
-					  {{form.errors}}
+					{%if vacancy.errors%}
+					<div class="alert alert-danger" role="alert"> 
+					  {{vacancy.errors}}
 					</div>
 					{% endif %}
 					{%csrf_token%}
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.title.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Title *</label>
 						<div class="col-lg-9">
-							{{form.title}}
+							{{vacancy.job_title}}
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.title_am.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Title in amharic *</label>
 						<div class="col-lg-9">
-							{{form.title_am}}
+							{{vacancy.job_title_am}}
 						</div>
 					</div> 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.tag.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Discription *</label>
 						<div class="col-lg-9">
-							{{form.tag}}
+							{{vacancy.description}}
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.tag_am.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Discription in amharic *</label>
 						<div class="col-lg-9">
-							{{form.tag_am}}
+							{{vacancy.description_am}}
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.content.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Requirements *</label>
 						<div class="col-lg-9">
-							{{form.content}}
-						</div>
-					</div>
-
-					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.content_am.label|title}} *</label>
-						<div class="col-lg-9">
-							{{form.content_am}}
+							{{vacancy.requirement}}
 						</div>
 					</div>
 
 					<div class="form-group row">
-				    <label class="col-form-label col-lg-3" >{{form.publish.label|title}} </label>
-						<div class="col-lg-9" name="publish" value="True">
-							{{form.publish}}
-							<!--
-				    <select class="form-control">
-				      <option>True</option>
-				      <option>false</option>
-				    </select> -->
+						<label class="col-form-label col-lg-3">Requirements in amharic *</label>
+						<div class="col-lg-9">
+							{{vacancy.requirement_am}}
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Location *</label>
+						<div class="col-lg-9">
+							{{vacancy.location}}
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Salary (in birr) *</label>
+						<div class="col-lg-9">
+							{{vacancy.salary}}
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Category *</label>
+						<div class="col-lg-9">
+							{{vacancy.category}}
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Employement Type *</label>
+						<div class="col-lg-9">
+							{{vacancy.employement_type}}
+						</div>
+					</div>
+
+					<div class="form-group row">
+				    <label class="col-form-label col-lg-3" >Starting Date </label>
+						<div class="col-lg-9" name="starting_date" value="True">
+							{{vacancy.starting_date}}
+							
+				  		</div>
+				  	</div>
+
+				  	<div class="form-group row">
+				    <label class="col-form-label col-lg-3" >Ending Date </label>
+						<div class="col-lg-9" name="ending_date" value="True">
+							{{vacancy.ending_date}}
+							
 				  		</div>
 				  	</div>
 				  		
 					
 					 
-					<div class="form-group row">
-						<label class="col-form-label col-lg-2">Blog Image</label>
-						<div class="col-lg-10">
-							<div class="uniform-uploader"><input type="file" name="blogImage" value="{{form.blogImage.url}}" class="form-input-styled" data-fouc=""><span
-								class="filename" style="user-select: none;">No file selected</span><span
-								class="action btn bg-warning" style="user-select: none;">Choose File</span></div>
-						</div>
-					</div>
 
 							
 						
@@ -103,6 +127,9 @@
 	$(document).ready(function () {
 		$('#summernote').summernote();
 		$('.summernote').summernote();
+
 	});
+
+
 </script>
 {%endblock%}

@@ -15,6 +15,10 @@ class User(AbstractUser):
     is_company_staff = models.BooleanField(default=False) # if user is company staff
     profile_image = models.ImageField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+<<<<<<< HEAD
+=======
+    
+>>>>>>> local/master
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -33,9 +37,12 @@ class Customer(models.Model):
     def __str__(self):
         return self.user.username
 
+<<<<<<< HEAD
     def get_year(self):
         return self.time_stamp.year
 
+=======
+>>>>>>> local/master
 class CompanyAdmin(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     is_suplier = models.BooleanField(default=False) # if the user is from a suplier company.
@@ -45,6 +52,7 @@ class CompanyAdmin(models.Model):
     def __str__(self):
         return self.user.username
 
+<<<<<<< HEAD
 # class CompanyStaff(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 #     company = models.ForeignKey(Company,on_delete=models.CASCADE)
@@ -52,6 +60,18 @@ class CompanyAdmin(models.Model):
 
 #     def __str__(self):
 #         return self.user.username
+=======
+    def companyname(self):
+        return self.company_set.all()
+
+class CompanyStaff(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
+    time_stamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+>>>>>>> local/master
 
 class AssignedRoles(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,

@@ -3,23 +3,31 @@ from django.views.generic import TemplateView
 
 from core.views import IndexView,ProfileView,ProductDetailView
 from collaborations.views import BlogList,BlogDetail,FaqList
+from accounts.views import CustomerSignUpView
 
-
-
+# busines-meditation/,tips/,orders
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
     path("blog-grid-right/",BlogList.as_view(),name="blog_grid_right"),
     path("blog-detail-right/<id>",BlogDetail.as_view(),name="blog_details"),
-    path("faq/",FaqList.as_view(),name="faq"),
     path("product-detail/<id>",ProductDetailView.as_view(),name="product_detail"),
-    path("mydash/",ProfileView.as_view(),name="mydash"),
     path("",include("accounts.urls")),
 
 
 
     # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
-    # unused urls those will be removed in the future
+    # unused urls those will be removed in the futurepath("register/",CustomerSignUpView.as_view(),name="register"),
+    path("faq/",FaqList.as_view(),name="faq"),
+    path("vacancy-list/",TemplateView.as_view(template_name="frontpages/vacancy_list.html"),name="tips"),
+    
+    path("accounts/",include("django.contrib.auth.urls")), 
+    path("test/",TemplateView.as_view(template_name="frontpages/date_piker.html"),name="Test"),
     path("setting/",TemplateView.as_view(template_name="frontpages/settings.html"),name="setting"),
+    # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
+    path("mydash/",ProfileView.as_view(),name="mydash"),
+    path("Job-detail/",TemplateView.as_view(template_name="admin/pages/job_detail.html"),name="Job_detail"),
+    #path("Job-form/",TemplateView.as_view(template_name="admin/pages/job_form.html"),name="Job_form"),
+    path("job-list/",TemplateView.as_view(template_name="admin/pages/job_list.html"),name="Job_list"),
     path("myfavorite/",TemplateView.as_view(template_name="frontpages/myfavorite.html"),name="favorite"),
     path("forgot/",TemplateView.as_view(template_name="frontpages/forgot.html"),name="forgot"),
     path("add-list/",TemplateView.as_view(template_name="frontpages/ad-list.html"),name="ad_list"),
@@ -49,7 +57,11 @@ urlpatterns = [
     path("mylistings/",TemplateView.as_view(template_name="frontpages/mylistings.html"),name="mylistings"),
     path("manged/",TemplateView.as_view(template_name="frontpages/manged.html"),name="manged"),
     path("orders/",TemplateView.as_view(template_name="frontpages/orders.html"),name="orders"),
+<<<<<<< HEAD
     path("tips/",TemplateView.as_view(template_name="frontpages/tips.html"),name="tips"),
+=======
+    path("tips/",TemplateView.as_view(template_name="frontpages/vacancy_list.html"),name="tips"),
+>>>>>>> local/master
     path("payments/",TemplateView.as_view(template_name="frontpages/payments.html"),name="payments"),
     path("pricing/",TemplateView.as_view(template_name="frontpages/pricing.html"),name="pricing"),
     path("business-list/",TemplateView.as_view(template_name="frontpages/business-list.html"),name="bs_list"),

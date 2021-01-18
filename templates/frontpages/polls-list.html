@@ -7,10 +7,17 @@
 			<div class="bannerimg cover-image bg-background3" data-image-src="../../assets/images/banners/banner2.jpg">
 				<div class="header-text mb-0">
 					<div class="container">
+<<<<<<< HEAD
 						<div class="text-center text-white">
 							<h1 class="">Polls Lists</h1>
 							<ol class="breadcrumb text-center">
 								<li class="breadcrumb-item"><a href="#">Home</a></li>
+=======
+						<div class="text-center text-white ">
+							<h1 class="">Latest Polls</h1>
+							<ol class="breadcrumb text-center">
+								<li class="breadcrumb-item"><a href=" ">Home</a></li>
+>>>>>>> local/master
 								<li class="breadcrumb-item active text-white" aria-current="page">Polls</li>
 							</ol>
 						</div>
@@ -23,6 +30,7 @@
 		<!--polls section-->
 		<section class="sptb">
 			<div class="container">
+<<<<<<< HEAD
 				<div class="row">
 					<!--Left Side Content-->
 					<div class="col-xl-4 col-lg-4 col-md-12">
@@ -262,6 +270,37 @@
 
 				</div>
 
+=======
+				<div class="panel-group1" id="accordion2">      
+							<ol>
+								{% for poll in polls %}
+									<div class="panel panel-default mb-4 border p-0">
+										<div class="panel-heading1">
+											<h4 class="panel-title1" style="padding-left: 15px;"></h4>	
+												<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#abc{{poll.id}} " aria-expanded="false">
+													<li> <h2>{{poll.title}}</h2>
+														{% if poll.count > 1 %}
+															<h6>{{poll.count_votes}} Votes</h6>
+														{% else %}
+															<h6>{{poll.count_votes}} Votes</h6>
+														{%endif%}	
+												</li></a>
+											</h4>
+										</div>
+										
+										<div id="abc{{poll.id}}" class="panel-collapse collapse active" role="tabpanel" aria-expanded="false">
+											<div class="panel-body bg-white">
+												
+												<h6>{{poll.description|safe}}</h6>
+												<a href="/collaborations/poll_detail/{{poll.id}}/"> <button style="width: auto; margin: auto;" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5"><p> Detail</p></button></a>
+											</div>
+										</div>
+									</div>
+								
+								{%endfor%}							
+                        </ol>
+				</div>
+>>>>>>> local/master
 			</div>
 		</section>
 		<!--/Poll section-->

@@ -1,16 +1,58 @@
 from collaborations.models import Blog, BlogComment
 from collaborations.forms import CreateBlogComment
 from collaborations.forms import CreateFaqs
-from collaborations.models import Faqs
 from django.shortcuts import render, redirect
+from django.views import View
+
+from collaborations.models import Faqs, Vacancy
 from django.http import HttpResponse
 from django.views import View
-from .models import PollsQuestion, Choices, PollsResult
-from .forms import PollsForm
+from .models import PollsQuestion, Choices, PollsResult, JobApplication, JobCategoty
+from .forms import PollsForm, CreateJobApplicationForm
 from django.contrib import messages
 
-
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+#apply to a job
+class CreateApplication(View):
+
+    def get(self,*args,**kwargs):
+        vacancy=Vacancy.objects.get(id=self.kwargs['id'] ,closed=False)
+        job = CreateJobApplicationForm()
+        jobcategory = JobCategoty.objects.all()
+        template_name="frontpages/job_apply.html"
+        context={'job':job,'vacancy':vacancy,'category':jobcategory}
+        return render(self.request, template_name,context) 
+
+    def post(self,*args,**kwargs):
+        form = CreateJobApplicationForm(self.request.POST,self.request.FILES)
+
+        if form.is_valid():
+            job=JobApplication(vacancy=Vacancy.objects.get(id=self.kwargs['id']),
+                user=self.request.user,
+                status=self.request.POST['status'],
+                bio = self.request.POST['bio'],
+                documents=form.cleaned_data.get("documents"),
+                cv=form.cleaned_data.get("cv"))
+            job.save()
+            return redirect("vacancy")
+
+class CategoryBasedSearch(View):
+    def get(self,*args,**kwargs):
+        vacancy = Vacancy.objects.filter(category=self.kwargs['id'],closed=False) 
+        cateory = JobCategoty.objects.get(id=self.kwargs['id'])
+        jobcategory = JobCategoty.objects.all()
+        template_name="frontpages/vacancy_list.html"
+        context = {'vacancys':vacancy,'category':jobcategory,'message':'Vacancies on '+str(cateory)}
+        return render(self.request, template_name,context)
+
+class VacancyList(View):
+    def get(self,*args,**kwargs):
+        vacancy = Vacancy.objects.filter(closed=False)
+        jobcategory = JobCategoty.objects.all()
+        template_name="frontpages/vacancy_list.html"
+        context = {'vacancys':vacancy,'category':jobcategory,'message':'All Vacancys '}
+        return render(self.request, template_name,context)
 
 
 #blog-grid-right 
@@ -21,6 +63,8 @@ class BlogList(View):
         template_name="frontpages/blog-grid-right.html"
         context={'blogs':blog}
         return render(self.request, template_name,context)
+
+
 
 
 class BlogDetail(View):
