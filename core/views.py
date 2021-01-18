@@ -7,25 +7,32 @@ from django.core.exceptions import ObjectDoesNotExist
 from social_django.context_processors import REDIRECT_FIELD_NAME, login_redirect
 
 # 
-from product import models
+from product.models import Product, ProductImage
+from admin_site.models import Category,SubCategory
 from company.models import Company
 
 
 class IndexView(View):
     def get(self,*args,**kwargs):
     
-        products = models.Product.objects.all()
-        category = models.Category.objects.all()
-        sub_category = models.SubCategory.objects.all()
+        products = Product.objects.all()
+        category = Category.objects.all()
+        sub_category = SubCategory.objects.all()
         company = Company.objects.all()
-        context = {'products':products,'category':category,'sub_c1ategory':sub_category,'companies':company}
+        context = {'products':products,'categories':category,'sub_categories':sub_category,'companies':company}
         return render(self.request,"frontpages/index.html",context)
+
+class ProductByCategoryView(View):
+    def get(self,*args,**kwargs):
+        products = Product.objects.filter(category=self.kwargs['cat_id'])
+        context = {'products':products,'count':products.count()}
+        return render(self.request,"frontpages/product/product_category.html",context)
 
 class ProductDetailView(View):
     def get(self,*args,**kwargs):
         try:
-            product = models.Product.objects.get(id=self.kwargs['id'])
-            images = models.ProductImage.objects.filter(product=product)
+            product = Product.objects.get(id=self.kwargs['id'])
+            images = ProductImage.objects.filter(product=product)
             context = {'product':product,'images':images}
             return render(self.request,'frontpages/product/product_detail.html',context)
         except ObjectDoesNotExist:

@@ -1,17 +1,24 @@
 from django import forms
 from company.models import Company,CompanySolution,CompanyEvent
+from admin_site.models import SubCategory
 
 class CompanyForm(forms.ModelForm):
     # color = forms.CharField(label='Company Theme Color',
     #     widget=forms.TextInput(attrs={'class':"form-control colorpicker-show-input",
     #                 'data-preferred-format':"hex",'data-fouc':'data-fouc', 'type': 'text'}))
+    product_category = forms.ModelChoiceField(
+        empty_label="Select Main Product Type",
+        queryset=SubCategory.objects.all(),
+        widget=forms.Select(attrs={'class':'form-control form-control-uniform'}),
+        required=True
+    )
     class Meta:
         model = Company
         fields = (
             # Company Profile
                 'company_name', 'company_name_am', 'email', 'phone_number','city','postal_code',
                   'detail', 'detail_am', 'company_logo', 'location', 'company_intro','color',
-                  'number_of_employees','established_year','certification','products','capital',
+                  'number_of_employees','established_year','certification','capital',
                 #   'facebook_link','twitter_link','google_link','pintrest_link'
             # trade capacity
             'incoterms','incoterms_am','terms_of_payment','average_lead_time','average_lead_time_am',
@@ -35,7 +42,7 @@ class CompanyForm(forms.ModelForm):
             'certification':forms.TextInput(attrs={'class':'form-control','placeholder':'Management System Certification'}),
             'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
             'postal_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Postal Code'}),
-            'products':forms.TextInput(attrs={'class':'form-control','placeholder':'Main Products'}),
+            # 'product_category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'capital':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_capital")','placeholder':'Capital'}),
             'detail': forms.Textarea(attrs={'class': 'summernote'}),
             'detail_am': forms.Textarea(attrs={'class': 'summernote'}),

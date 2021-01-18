@@ -34,6 +34,7 @@ class CreateCompanyProfile(LoginRequiredMixin,View):
             elif comp_admin.is_manufacturer:
                 company.company_type = "manufacturer"
                 company.company_type_am = "አምራች"
+            company.product_category = form.cleaned_data.get("product_category")
             company.user = self.request.user
             company.save()
             messages.success(self.request,"Company Profile Created")
@@ -61,9 +62,10 @@ class CreateCompanyProfileAfterSignUp(LoginRequiredMixin,View):
             elif comp_admin.is_manufacturer:
                 company.company_type = "manufacturer"
                 company.company_type_am = "አምራች"
+            company.product_category = form.cleaned_data.get("product_category")
             company.user = self.request.user
             company.save()
-            messages.success(self.request,"Company Profile Created");
+            messages.success(self.request,"Company Profile Created")
             return redirect("admin:index")
         return render(self.request,"admin/company/company_form_signup.html",{'form':form})
 
@@ -105,6 +107,7 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
                 company.detail = self.request.POST['detail']
                 company.detail_am = self.request.POST['detail_am']
                 company.color = self.request.POST['color']
+                company.product_category = self.request.POST['product_category']
                 company.facebook_link = self.request.POST['facebook_link']
                 company.twiter_link = self.request.POST['twiter_link']
                 company.linkedin_link = self.request.POST['linkedin_link']
@@ -195,13 +198,22 @@ class CreateCompanySolution(LoginRequiredMixin,View):
 class CreateCompanyEvent(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
         form = CompanyEventForm(self.request.POST,self.request.FILES)
+        company = Company.objects.get(id=self.kwargs['company_id'])
         if form.is_valid():
             event = form.save(commit=False)
-            event.company = Company.objects.get(id=self.kwargs['company_id'])
+            event.company = company
             event.save()
             messages.success(self.request,"Event Created Successfully")
-        messages.warning(self.request,form.errors)
-        return redirect("admin:view_company_profile")
+            if company.company_type == "fbpidi":
+                return redirect("admin:view_fbpidi_company")
+            else:
+                return redirect("admin:view_company_profile")
+        else:
+            messages.warning(self.request,form.errors)
+            if company.company_type == "fbpidi":
+                return redirect("admin:view_fbpidi_company")
+            else:
+                return redirect("admin:view_company_profile")
 
 
 class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):

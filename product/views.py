@@ -6,8 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
 
-
-from product import models
+from admin_site.models import Category, SubCategory
+from product.models import Product
 from product.forms import SubCategoryForm,ProductCreationForm,CategoryForm
 from accounts.models import User
 from company.models import Company
@@ -18,10 +18,10 @@ class CategoryView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = {}
         if self.kwargs['option'] == 'category':
-            categories = models.Category.objects.all()
+            categories = Category.objects.all()
             context = {'categories':categories,'option':'category'}
         elif self.kwargs['option'] == 'sub_category':
-            sub_categories = models.SubCategory.objects.all()
+            sub_categories = SubCategory.objects.all()
             context = {
                 "sub_categories":sub_categories,'option':'sub_category'
             }
@@ -32,14 +32,14 @@ class CategoryDetail(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = {}
         if self.kwargs['option'] == "category":
-            category = models.Category.objects.get(id=self.kwargs['cat_id'])
+            category = Category.objects.get(id=self.kwargs['cat_id'])
             context = {
                 'category':category,
                 'edit':'edit'
             }
         elif self.kwargs['option'] == "sub_category":
-            sub_category = models.SubCategory.objects.get(id=self.kwargs['cat_id'])
-            cat_types = models.Category.objects.all().distinct('category_name')
+            sub_category = SubCategory.objects.get(id=self.kwargs['cat_id'])
+            cat_types = Category.objects.all().distinct('category_name')
             context = {
                 'sub_category':sub_category,
                 'categories_name':cat_types,
@@ -53,7 +53,7 @@ class CategoryDetail(LoginRequiredMixin,View):
         option = ""
         if self.kwargs['option'] == "category":
             
-            category = models.Category.objects.get(id=self.kwargs['cat_id'])
+            category = Category.objects.get(id=self.kwargs['cat_id'])
             category.category_name = self.request.POST['category_name']
             category.category_type = self.request.POST['category_type']
             category.description = self.request.POST['description']
@@ -66,8 +66,8 @@ class CategoryDetail(LoginRequiredMixin,View):
             message = "Category Updated Successfully"
             option = "category"
         elif self.kwargs['option'] == "sub_category":
-            sub_category = models.SubCategory.objects.get(id=self.kwargs['cat_id'])
-            sub_category.category_name = models.Category.objects.get(id=self.request.POST['category_name'])
+            sub_category = SubCategory.objects.get(id=self.kwargs['cat_id'])
+            sub_category.category_name = Category.objects.get(id=self.request.POST['category_name'])
             sub_category.sub_category_name = self.request.POST['sub_category_name']
             sub_category.description = self.request.POST['description']
             sub_category.sub_category_name_am = self.request.POST['sub_category_name_am']
@@ -82,7 +82,7 @@ class CategoryDetail(LoginRequiredMixin,View):
 
 # This class/view is created for creating new categories
 class CreateCategories(LoginRequiredMixin,View):
-    cat_list_am = { "Food":'ምግብ',"Beverage":'መጠጥ',"pharmaceuticals":'መድሃኒት' }
+    cat_list_am = { "Food":'ምግብ',"Beverage":'መጠጥ',"Pharmaceuticals":'መድሃኒት' }
      
     def get(self,*args,**kwargs):
         context = {}
@@ -138,39 +138,39 @@ class AdminProductListView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         products = ""
         if self.kwargs['user_type'] == 'admin':
-            products = models.Product.objects.all()
+            products = Product.objects.all()
             company = Company.objects.all()
             context = {'products':products,'companies':company}
         elif self.kwargs['user_type'] == 'provider':
-            products = models.Product.objects.filter(user=self.request.user)
+            products = Product.objects.filter(user=self.request.user)
             company = Company.objects.filter(user=self.request.user)
             context = {'products':products,'companies':company}
         else:
             company = Company.objects.get(id=self.kwargs['user_type'])
-            products = models.Product.objects.filter(user=company.user)
+            products = Product.objects.filter(user=company.user)
             context = {'products':products,'company':company}
         return render(self.request,"admin/product/product_list.html",context)
 
 class ProductDetailView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        product = get_object_or_404(models.Product,id=self.kwargs['id'])
+        product = get_object_or_404(Product,id=self.kwargs['id'])
         company = ""
         try:
             company = Company.objects.get(user=product.user)
         except ObjectDoesNotExist:
             company = None
-        product_image = models.ProductImage.objects.filter(product=product)
-        product_price = models.ProductPrice.objects.filter(product=product)
+        product_image = ProductImage.objects.filter(product=product)
+        product_price = ProductPrice.objects.filter(product=product)
         if self.kwargs['option'] == 'edit':
-            pcats = models.SubCategory.objects.all().exclude(id=product.category.id)
+            pcats = SubCategory.objects.all().exclude(id=product.category.id)
             return render(self.request,"admin/product/product_form.html",{'product':product,'pcats':pcats,'company':company,'edit':'edit'})    
         elif self.kwargs['option'] == 'view':
             return render(self.request,"admin/product/product_detail.html",{'product':product,'company':company,'product_imgs':product_image,'product_price':product_price})
 
     def post(self,*args,**kwargs):
-        product = models.Product.objects.get(id=self.kwargs['id'])
+        product = Product.objects.get(id=self.kwargs['id'])
         if self.kwargs['option'] == 'edit_all':
-            category = models.SubCategory.objects.get(id=self.request.POST['category'])
+            category = SubCategory.objects.get(id=self.request.POST['category'])
             product.name=self.request.POST['name']
             product.name_am = self.request.POST['name_am']
             product.category=category
@@ -193,8 +193,8 @@ class AddProductImage(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
         item = self.request.POST['product']
         image = self.request.FILES['image']
-        product = models.Product.objects.get(id=item)
-        product_image = models.ProductImage(
+        product = Product.objects.get(id=item)
+        product_image = ProductImage(
             product=product,image=image
         )
         product_image.save()
@@ -224,13 +224,13 @@ class CreatePrice(LoginRequiredMixin,View):
         price = self.request.POST['price']
         start_date = self.request.POST['start_date']
         end_date = self.request.POST['end_date']
-        product = models.Product.objects.get(id=pid)
+        product = Product.objects.get(id=pid)
         if self.request.POST['option'] == 'change':
-            old_price = models.ProductPrice.objects.get(id=self.request.POST['priceid'])
+            old_price = ProductPrice.objects.get(id=self.request.POST['priceid'])
             old_price.price = float(price)
             old_price.save()
         elif self.request.POST['option'] == 'new':
-            price_obj = models.ProductPrice(
+            price_obj = ProductPrice(
                 user=self.request.user,
                 product=product,
                 price=float(price)
