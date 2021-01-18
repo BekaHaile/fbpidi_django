@@ -1,0 +1,52 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+<!-- /theme JS files -->
+
+{% endblock %}
+{%block pagename%}Applicants{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	<!-- Page length options main category -->
+	
+	<!-- /page length options -->
+
+	<!-- Page length options sub-category-->
+	
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">Applicants</h5> 
+
+			<a href="{%url 'admin:close' id=vacancy%}" class="btn btn-secondary">Close the Vacancy</a>
+		</div>
+				{%for job in jobapplicant %}
+				<div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary"><b>Name</b>:{{job.user}}</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3"><b>Status</b>:{{job.status}}</div>
+                                    <div class="mb-3"><b>Bio</b>:{{job.bio}}</div>
+                                    <div class="mb-3"><b>Date</b>:{{job.timestamp}}</div> 
+                                   <a href="{%url 'admin:Download' name='cv' id=job.id%}"> 
+                                   		<div class="mb-3"><b>Cv</b>:{{job.cv}}</div>
+                                   	</a>
+                                   	<a href="{%url 'admin:Download' name='documents' id=job.id%}"> 
+                                   		<div class="mb-3"><b>Documents</b>:{{job.documents}}</div>
+                                   	</a>
+                                    
+                                </div>
+                            </div>
+						
+				{%endfor%}
+			
+	</div>
+<!-- /content area -->
+{%endblock%}

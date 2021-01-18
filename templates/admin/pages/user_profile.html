@@ -1,0 +1,334 @@
+{%extends 'admin/base_site.html'%}
+
+{% load i18n %}
+{% block extrastyle %}
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/extensions/rowlink.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/visualization/echarts/echarts.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/fullcalendar/fullcalendar.min.js"></script> 
+	<script src="/static/admin/global_assets/js/demo_pages/user_pages_profile_tabbed.js"></script>
+	<!-- /theme JS files -->
+ 
+{% endblock %}
+ 
+
+{%block pagename%}User Profile{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Inner container -->
+				<div class="d-md-flex align-items-md-start">
+
+					<!-- Left sidebar component -->
+					<div class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-left wmin-300 border-0 shadow-0 sidebar-expand-md">
+
+						<!-- Sidebar content -->
+						<div class="sidebar-content">
+
+							<!-- Navigation -->
+							<div class="card">
+								<div class="card-body bg-indigo-400 text-center card-img-top" style="background-image: url(../../../../../../../assets/images/bg.html); background-size: contain;">
+									{%if user_type == 'super_admin'%}
+									<div class="card-img-actions d-inline-block mb-3">
+										{%if users.profile_image != ""%}
+										<img class="img-fluid rounded-circle" src="{{users.profile_image.url}}" width="170" height="170" alt="">
+										{%endif%}
+									</div>
+									
+									<h6 class="font-weight-semibold mb-0">{{users.first_name|title}} {{users.last_name|title}}</h6>
+									{%elif users.is_superuser%}
+									<div class="card-img-actions d-inline-block mb-3">
+										{%if users.profile_image != ""%}
+										<img class="img-fluid rounded-circle" src="{{users.profile_image.url}}" width="170" height="170" alt="">
+										{%endif%}
+									</div>
+									
+									<h6 class="font-weight-semibold mb-0">{{users.first_name|title}} {{users.last_name|title}}</h6>
+									{%else%}
+									<div class="card-img-actions d-inline-block mb-3">
+										{%if users.user.profile_image != ""%}
+										<img class="img-fluid rounded-circle" src="{{users.user.profile_image.url}}" width="170" height="170" alt="">
+										{%endif%}
+									</div>
+									<h6 class="font-weight-semibold mb-0">{{users.user.first_name|title}} {{users.user.last_name|title}}</h6>
+									{%endif%}
+						    		<span class="d-block opacity-75">
+										Designation
+									</span>
+
+					    			<div class="list-icons list-icons-extended mt-3">
+				                    	<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Google Drive"><i class="icon-google-drive"></i></a>
+				                    	<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Twitter"><i class="icon-twitter"></i></a>
+				                    	<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Github"><i class="icon-github"></i></a>
+			                    	</div>
+						    	</div>
+
+								<div class="card-body p-0">
+									<ul class="nav nav-sidebar mb-2">
+										<li class="nav-item-header">Navigation</li>
+										  
+										<li class="nav-item">
+											<a href="#inbox" class="nav-link" data-toggle="tab">
+												<i class="icon-envelop2"></i>
+												Inbox
+												<span class="badge bg-danger badge-pill ml-auto">29</span>
+											</a>
+										</li>
+										 
+										<li class="nav-item">
+											<a href="{% url 'admin:logout' %}" class="nav-link" data-toggle="tab">
+												<i class="icon-switch2"></i>
+												Logout
+											</a>
+										</li>
+										
+									</ul>
+								</div>
+							</div>
+							<!-- /navigation -->
+
+						</div>
+						<!-- /sidebar content -->
+
+					</div>
+					<!-- /left sidebar component -->
+
+
+					<!-- Right content -->
+					<div class="tab-content w-100 overflow-auto">
+						<div class="tab-pane fade active show" id="profile">
+
+							<!-- Profile info -->
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h5 class="card-title">Profile information</h5>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+					                		<a class="list-icons-item" data-action="reload"></a>
+					                		<a class="list-icons-item" data-action="remove"></a>
+					                	</div>
+				                	</div>
+								</div>
+
+								<div class="card-body">
+									{%if user_type == 'super_admin'%}
+									<form action="{% url 'admin:add_profile' %}" method="POST"  enctype="multipart/form-data">
+										{%csrf_token%}
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-12">
+													<label>Username</label>
+													<input type="text" name="username" value="{{users.username}}" class="form-control">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-6">
+													<label>First Name</label>
+													<input type="text" name="first_name" value="{{users.first_name}}" class="form-control">
+												</div>
+												<div class="col-md-6">
+													<label>Last name</label>
+													<input type="text" name="last_name" value="{{users.last_name|title}}" class="form-control">
+												</div>
+											</div>
+										</div>
+										  
+
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-12">
+													<label>Email</label>
+													<input type="text" name="email" readonly="readonly" value="{{users.email}}" class="form-control">
+												</div>
+											</div>
+										</div>
+
+				                        <div class="form-group">
+				                        	<div class="row">
+				                        		<div class="col-md-6">
+													<label>Phone #</label>
+													<input type="text" name="phone_number" value="{{users.phone_number}}" class="form-control">
+													<span class="form-text text-muted">+99-99-9999-9999</span>
+				                        		</div>
+
+												<div class="col-md-6">
+													<label>Upload profile image</label>
+				                                    <input type="file" name="profile_image" class="form-input-styled" data-fouc>
+				                                    <span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size 2Mb</span>
+												</div>
+												
+				                        	</div>
+				                        </div>
+
+				                        <div class="text-right">
+				                        	<button type="submit" class="btn btn-primary">Save changes</button>
+				                        </div>
+									</form>
+									{%elif users.is_superuser%}
+									<form action="{% url 'admin:add_profile' %}" method="POST"  enctype="multipart/form-data">
+										{%csrf_token%}
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-12">
+													<label>Username</label>
+													<input type="text" name="username" value="{{users.username}}" class="form-control">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-6">
+													<label>First Name</label>
+													<input type="text" name="first_name" value="{{users.first_name}}" class="form-control">
+												</div>
+												<div class="col-md-6">
+													<label>Last name</label>
+													<input type="text" name="last_name" value="{{users.last_name|title}}" class="form-control">
+												</div>
+											</div>
+										</div>
+										  
+
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-12">
+													<label>Email</label>
+													<input type="text" name="email" readonly="readonly" value="{{users.email}}" class="form-control">
+												</div>
+											</div>
+										</div>
+
+				                        <div class="form-group">
+				                        	<div class="row">
+				                        		<div class="col-md-6">
+													<label>Phone #</label>
+													<input type="text" name="phone_number" value="{{users.phone_number}}" class="form-control">
+													<span class="form-text text-muted">+99-99-9999-9999</span>
+				                        		</div>
+
+												<div class="col-md-6">
+													<label>Upload profile image</label>
+				                                    <input type="file" name="profile_image" class="form-input-styled" data-fouc>
+				                                    <span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size 2Mb</span>
+												</div>
+												
+				                        	</div>
+				                        </div>
+
+				                        <div class="text-right">
+				                        	{%if user == users%}
+											<button type="submit" class="btn btn-primary">Save changes</button>
+											{%else%}
+											<button type="submit" class="btn btn-primary disabled" disabled>Save changes</button>
+											{%endif%}
+				                        </div>
+									</form>
+									{%else%}
+									<form action="{% url 'admin:add_profile' %}" method="POST"  enctype="multipart/form-data">
+										{%csrf_token%}
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-12">
+													<label>Username</label>
+													<input type="text" name="username" value="{{users.user.username}}" class="form-control">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-6">
+													<label>First Name</label>
+													<input type="text" name="first_name" value="{{users.user.first_name}}" class="form-control">
+												</div>
+												<div class="col-md-6">
+													<label>Last name</label>
+													<input type="text" name="last_name" value="{{users.user.last_name|title}}" class="form-control">
+												</div>
+											</div>
+										</div>
+										  
+
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-12">
+													<label>Email</label>
+													<input type="text" name="email" readonly="readonly" value="{{users.user.email}}" class="form-control">
+												</div>
+											</div>
+										</div>
+
+				                        <div class="form-group">
+				                        	<div class="row">
+				                        		<div class="col-md-6">
+													<label>Phone #</label>
+													<input type="text" name="phone_number" value="{{users.user.phone_number}}" class="form-control">
+													<span class="form-text text-muted">+99-99-9999-9999</span>
+				                        		</div>
+
+												<div class="col-md-6">
+													<label>Upload profile image</label>
+				                                    <input type="file" name="profile_image" class="form-input-styled" data-fouc>
+				                                    <span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size 2Mb</span>
+												</div>
+												
+				                        	</div>
+				                        </div>
+
+				                        <div class="text-right">
+											{%if user == users.user%}
+											<button type="submit" class="btn btn-primary">Save changes</button>
+											{%else%}
+											<button type="submit" class="btn btn-primary disabled" disabled>Save changes</button>
+											{%endif%}
+				                        </div>
+									</form>
+									{%endif%}
+								</div>
+							</div>
+							<!-- /profile info -->
+
+							<!-- <div class="card">
+								<div class="card-header header-elements-inline">
+									<h5 class="card-title">User Roles</h5>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+					                		<a class="list-icons-item" data-action="reload"></a>
+					                		<a class="list-icons-item" data-action="remove"></a>
+					                	</div>
+				                	</div>
+								</div>
+
+								<div class="card-body">
+									<ul class="list-group bg-slate-600">
+										{%for role in roles%}
+										<li class="list-group-item font-weight-semibold">{{role.roles}}</li>
+										<li class="list-group-item list-group-divider"></li>
+										{%endfor%}
+									</ul>
+								</div>
+							</div> -->
+					    </div>
+
+					     
+
+					     
+
+				    	 
+					</div>
+					<!-- /right content -->
+
+				</div>
+				<!-- /inner container -->
+
+			</div>
+			<!-- /content area -->
+{%endblock%}

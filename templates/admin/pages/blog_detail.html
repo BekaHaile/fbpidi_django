@@ -1,0 +1,115 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+{% endblock %}
+{%block pagename%}Create Blog{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	 
+	<div class="card">
+
+		<div class="card-body">
+
+			<form action="" method="POST" enctype="multipart/form-data">
+				<fieldset class="mb-3 ml-3 mr-3">
+					<legend class="text-uppercase font-size-sm font-weight-bold">Edit Blog</legend>
+					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
+					{{form.errors}}
+					{%csrf_token%}
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Title *</label>
+						<div class="col-lg-9">
+							<input type="text" name="title" class="form-control" value="{{form.title}} " id="">
+						 
+							
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Title Amharic *</label>
+							<div class="col-lg-9">
+							<input type="text" name="title_am" class="form-control" value="{{form.title_am}}" id="">
+						</div>
+							
+					</div> 
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Tag *</label>
+						
+							<div class="col-lg-9">
+							<input type="text" name="tag" class="form-control" value="{{form.tag}} " id="">
+						
+							
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Tag Amharic *</label>
+						
+							<div class="col-lg-9">
+							<input type="text" name="tag_am" class="form-control" value="{{form.tag_am}} " id="">
+						
+							
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Content *</label>
+						<div class="col-lg-9">
+								<textarea class="summernote" name="content" >{{form.content}}</textarea>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Content Amharic *</label>
+						<div class="col-lg-9">
+								<textarea class="summernote" name="content_am" >{{form.content_am}}</textarea>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+				    <label class="col-form-label col-lg-3">Publish </label>
+						
+
+							<div class="col-lg-9">
+							<input type="checkbox" name="pubish" value="{{form.pubish}}" class="form-check-input" id="exampleCheck1">
+							
+						</div>
+							
+				  	</div>
+				  		
+					
+					 
+					<div class="form-group row">
+						<label class="col-form-label col-lg-2">Blog Image</label>
+						<div class="col-lg-10">
+							<div class="uniform-uploader"><input type="file" name="blogImage" value="{{form.blogImage.url}}" class="form-input-styled" data-fouc=""><span
+								class="filename" style="user-select: none;">No file selected</span><span
+								class="action btn bg-warning" style="user-select: none;">Choose File</span></div>
+						</div>
+					</div>
+
+							
+						
+				</fieldset>
+
+				<div class="text-right">
+					<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+						class="btn btn-primary rounded-round" onclick="return confirm('are you sure you Done with editing')">Submit </button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+	});
+</script>
+{%endblock%}

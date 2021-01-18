@@ -1,0 +1,594 @@
+{%extends 'frontpages/layout.html'%}
+
+{%block content%}
+		<!--Sliders Section-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white">
+							<h1>Ad List</h1>
+							<ol class="breadcrumb text-center">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item"><a href="#">Pages</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">Ad List</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Sliders Section-->
+
+		<!--Add posts-section-->
+		<section class="sptb">
+			<div class="container">
+				<div class="row">
+					<div class="col-xl-8">
+						<div class="card mb-xl-0">
+							<div class="card-header">
+								<h3 class="card-title">Add Listing</h3>
+							</div>
+							<div class="card-body">
+								<form id="commentForm" method="get" class="form-horizontal mb-0">
+									<div id="rootwizard" class="border pt-0">
+										<ul class="nav nav-tabs nav-justified">
+											<li class="nav-item"><a href="#first" data-toggle="tab" class="nav-link font-bold">Select category</a></li>
+											<li class="nav-item"><a href="#second" data-toggle="tab" class="nav-link font-bold">Details</a></li>
+											<li class="nav-item"><a href="#third" data-toggle="tab" class="nav-link font-bold">Personal Details</a></li>
+											<li class="nav-item"><a href="#fourth" data-toggle="tab" class="nav-link font-bold ">Payment</a></li>
+										</ul>
+										<div class="tab-content mb-0 b-0">
+											<div class="tab-pane fade card-body" id="first">
+												<div class="control-group form-group">
+													<div class="form-group">
+														<label class="form-label text-dark">Listing Title</label>
+														<input type="text" class="form-control required" placeholder="Add List Name">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="form-group">
+														<label class="form-label text-dark">Category</label>
+														<select class="form-control custom-select required category select2">
+															<option value="0">Select Category</option>
+															<option value="1">RealEstate</option>
+															<option value="2">Restaurant</option>
+															<option value="3">Health & Fitness</option>
+															<option value="4">Travel</option>
+															<option value="5">Computer</option>
+															<option value="6">Electronics</option>
+															<option value="7">Jobs</option>
+															<option value="8">Beauty & Spa</option>
+															<option value="9">Clothing</option>
+															<option value="10">Home & Furinture</option>
+															<option value="11">Vechicles</option>
+															<option value="12">Education</option>
+															<option value="13">Services</option>
+															<option value="14">Events</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="tab-pane fade card-body border-top-0" id="second">
+												<div class="form-group">
+													<label class="form-label text-dark">Add Your Address</label>
+													<input type="text" class="form-control" placeholder="Add List Address">
+												</div>
+												<div class="form-group">
+													<label class="form-label text-dark">Add Phone Number</label>
+													<input type="text" class="form-control" placeholder="Add List Phone Number">
+												</div>
+												<div class="form-group">
+													<label class="form-label text-dark">Opening Days</label>
+													<select class="form-control select2" data-placeholder="Choose Day" multiple>
+														<option value="AllDays" Selected>All Days</option>
+														<option value="Sunday">Sunday</option>
+														<option value="Monday">Monday</option>
+														<option value="Tuesday">Tuesday</option>
+														<option value="Wednesday">Wednesday</option>
+														<option value="Thursday">Thursday</option>
+														<option value="Friday">Friday</option>
+														<option value="Saturday">Saturday</option>
+													</select>
+												</div>
+												<div class="row">
+													<div class="col-sm-6">
+														<div class="form-group">
+															<label class="form-label text-dark">Opening Time</label>
+															<select class="form-control select2-show-search" data-placeholder="Choose Time">
+																<option value="12">12am</option>
+																<option value="1">1am</option>
+																<option value="2">2am</option>
+																<option value="3">4am</option>
+																<option value="4">4am</option>
+																<option value="5">5am</option>
+																<option value="6">6am</option>
+																<option value="7">7am</option>
+																<option value="8">8am</option>
+																<option value="9">9am</option>
+																<option value="10">10am</option>
+																<option value="11">11am</option>
+																<option value="13">12pm</option>
+																<option value="14">1pm</option>
+																<option value="15">2pm</option>
+																<option value="16">3pm</option>
+																<option value="17">4pm</option>
+																<option value="18">5pm</option>
+																<option value="19">6pm</option>
+																<option value="20">7pm</option>
+																<option value="21">8pm</option>
+																<option value="22">9pm</option>
+																<option value="23">10pm</option>
+																<option value="24">11pm</option>
+															</select>
+														</div>
+													</div>
+													<div class="col-sm-6">
+														<div class="form-group">
+															<label class="form-label text-dark">Closing Time</label>
+															<select class="form-control select2-show-search" data-placeholder="Choose Time">
+																<option value="12">12am</option>
+																<option value="1">1am</option>
+																<option value="2">2am</option>
+																<option value="3">4am</option>
+																<option value="4">4am</option>
+																<option value="5">5am</option>
+																<option value="6">6am</option>
+																<option value="7">7am</option>
+																<option value="8">8am</option>
+																<option value="9">9am</option>
+																<option value="10">10am</option>
+																<option value="11">11am</option>
+																<option value="13">12pm</option>
+																<option value="14">1pm</option>
+																<option value="15">2pm</option>
+																<option value="16">3pm</option>
+																<option value="17">4pm</option>
+																<option value="18">5pm</option>
+																<option value="19">6pm</option>
+																<option value="20">7pm</option>
+																<option value="21">8pm</option>
+																<option value="22">9pm</option>
+																<option value="23">10pm</option>
+																<option value="24">11pm</option>
+															</select>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="form-label text-dark">Description</label>
+													<textarea class="form-control" name="example-textarea-input" rows="6" placeholder="text here.."></textarea>
+												</div>
+												<div class="form-group">
+													<label class="form-label text-dark">Image Upload</label>
+													<input id="demo" type="file" name="files" accept=".jpg, .png, image/jpeg, image/png" multiple>
+												</div>
+												<h4 class="mt-6 mb-4">Social Media Information</h4>
+												<div class="input-group mb-4">
+													<div class="input-group-prepend">
+														<div class="input-group-text w-7">
+															<i class="fa fa-facebook tx-16 lh-0 op-6 text-center mx-auto"></i>
+														</div>
+													</div><!-- input-group-prepend -->
+													<input class="form-control" placeholder="Facebook URL" type="text">
+												</div>
+												<div class="input-group mb-4">
+													<div class="input-group-prepend">
+														<div class="input-group-text w-7">
+															<i class="fa fa-twitter tx-16 lh-0 op-6 text-center mx-auto"></i>
+														</div>
+													</div><!-- input-group-prepend -->
+													<input class="form-control" placeholder="Twitter URL" type="text">
+												</div>
+												<div class="input-group mb-4">
+													<div class="input-group-prepend">
+														<div class="input-group-text w-7">
+															<i class="fa fa-google-plus tx-16 lh-0 op-6 text-center mx-auto"></i>
+														</div>
+													</div>
+													<input class="form-control" placeholder="GooglePlus URL" type="text">
+												</div>
+												<div class="input-group mb-4">
+													<div class="input-group-prepend">
+														<div class="input-group-text w-7">
+															<i class="fa fa-map-marker tx-16 lh-0 op-6 text-center mx-auto"></i>
+														</div>
+													</div>
+													<input class="form-control" placeholder="GoogleMap Location URL" type="text">
+												</div>
+												<h4 class="mt-6 mb-4">Business Info</h4>
+												<div class="form-group">
+													<label class="form-label">Company Established year</label>
+													<select name="user[year]" class="form-control select2">
+														<option value="">Year</option>
+														<option value="2020">2020</option>
+														<option value="2019">2019</option>
+														<option value="2018">2018</option>
+														<option value="2017">2017</option>
+														<option value="2016">2016</option>
+														<option value="2015">2015</option>
+														<option value="2014">2014</option>
+														<option value="2013">2013</option>
+														<option value="2012">2012</option>
+														<option value="2011">2011</option>
+														<option value="2010">2010</option>
+														<option value="2009">2009</option>
+														<option value="2008">2008</option>
+														<option value="2007">2007</option>
+														<option value="2006">2006</option>
+														<option value="2005">2005</option>
+														<option value="2004">2004</option>
+														<option value="2003">2003</option>
+														<option value="2002">2002</option>
+														<option value="2001">2001</option>
+														<option value="2000">2000</option>
+														<option value="1999">1999</option>
+														<option value="1998">1998</option>
+														<option value="1997">1997</option>
+														<option value="1996">1996</option>
+														<option value="1995">1995</option>
+														<option value="1994">1994</option>
+														<option value="1993">1993</option>
+														<option value="1992">1992</option>
+														<option value="1991">1991</option>
+														<option value="1990">1990</option>
+														<option selected="selected" value="1989">1989</option>
+														<option value="1988">1988</option>
+														<option value="1987">1987</option>
+														<option value="1986">1986</option>
+														<option value="1985">1985</option>
+														<option value="1984">1984</option>
+														<option value="1983">1983</option>
+														<option value="1982">1982</option>
+														<option value="1981">1981</option>
+														<option value="1980">1980</option>
+														<option value="1979">1979</option>
+														<option value="1978">1978</option>
+														<option value="1977">1977</option>
+														<option value="1976">1976</option>
+														<option value="1975">1975</option>
+														<option value="1974">1974</option>
+														<option value="1973">1973</option>
+														<option value="1972">1972</option>
+														<option value="1971">1971</option>
+														<option value="1970">1970</option>
+														<option value="1969">1969</option>
+														<option value="1968">1968</option>
+														<option value="1967">1967</option>
+														<option value="1966">1966</option>
+														<option value="1965">1965</option>
+														<option value="1964">1964</option>
+														<option value="1963">1963</option>
+														<option value="1962">1962</option>
+														<option value="1961">1961</option>
+														<option value="1960">1960</option>
+														<option value="1959">1959</option>
+														<option value="1958">1958</option>
+														<option value="1957">1957</option>
+														<option value="1956">1956</option>
+														<option value="1955">1955</option>
+														<option value="1954">1954</option>
+														<option value="1953">1953</option>
+														<option value="1952">1952</option>
+														<option value="1951">1951</option>
+														<option value="1950">1950</option>
+														<option value="1949">1949</option>
+														<option value="1948">1948</option>
+														<option value="1947">1947</option>
+														<option value="1946">1946</option>
+														<option value="1945">1945</option>
+														<option value="1944">1944</option>
+														<option value="1943">1943</option>
+														<option value="1942">1942</option>
+														<option value="1941">1941</option>
+														<option value="1940">1940</option>
+														<option value="1939">1939</option>
+														<option value="1938">1938</option>
+														<option value="1937">1937</option>
+														<option value="1936">1936</option>
+														<option value="1935">1935</option>
+														<option value="1934">1934</option>
+														<option value="1933">1933</option>
+														<option value="1932">1932</option>
+														<option value="1931">1931</option>
+														<option value="1930">1930</option>
+														<option value="1929">1929</option>
+														<option value="1928">1928</option>
+														<option value="1927">1927</option>
+														<option value="1926">1926</option>
+														<option value="1925">1925</option>
+														<option value="1924">1924</option>
+														<option value="1923">1923</option>
+														<option value="1922">1922</option>
+														<option value="1921">1921</option>
+														<option value="1920">1920</option>
+														<option value="1919">1919</option>
+														<option value="1918">1918</option>
+														<option value="1917">1917</option>
+														<option value="1916">1916</option>
+														<option value="1915">1915</option>
+														<option value="1914">1914</option>
+														<option value="1913">1913</option>
+														<option value="1912">1912</option>
+														<option value="1911">1911</option>
+														<option value="1910">1910</option>
+														<option value="1909">1909</option>
+														<option value="1908">1908</option>
+														<option value="1907">1907</option>
+														<option value="1906">1906</option>
+														<option value="1905">1905</option>
+														<option value="1904">1904</option>
+														<option value="1903">1903</option>
+														<option value="1902">1902</option>
+														<option value="1901">1901</option>
+														<option value="1900">1900</option>
+														<option value="1899">1899</option>
+														<option value="1898">1898</option>
+														<option value="1897">1897</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label class="form-label text-dark">Services</label>
+													<select class="form-control select2" data-placeholder="Choose Services" multiple>
+														<option>Select Category</option>
+														<option value="0">All Categories</option>
+														<option value="1">Hotels</option>
+														<option value="2">Restaurant</option>
+														<option value="3">Events</option>
+														<option value="4">Cinema</option>
+														<option value="5">Gym</option>
+														<option value="6">Shop & Store</option>
+														<option value="7">Tours & Travels</option>
+														<option value="8">Cafe</option>
+														<option value="9">Mobile Store</option>
+														<option value="10">College</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label class="form-label text-dark">Payment Methods</label>
+													<select class="form-control select2" data-placeholder="Choose Payment" multiple>
+														<option value="Cash" Selected>Cash</option>
+														<option value="Net Banking">Net Banking</option>
+														<option value="Visa">Visa</option>
+														<option value="Master Card">Master Card</option>
+														<option value="Discover">Discover</option>
+														<option value="Americal Express">Americal Express</option>
+														<option value="Online Transaction">Online Transaction</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label class="form-label">Fax</label>
+													<input type="number" class="form-control" placeholder="Fax Number">
+												</div>
+												<div class="form-group">
+													<label class="form-label">Toll Free</label>
+													<input type="number" class="form-control" placeholder="Toll Free Number">
+												</div>
+												<div class="form-group">
+													<label class="form-label text-dark">Certification</label>
+													<select class="form-control select2" data-placeholder="Choose Certification" multiple>
+														<option value="Iso Certified" Selected>Iso Certified</option>
+														<option value="Government">Government</option>
+													</select>
+												</div>
+												<h4 class="mt-6 mb-3">Package</h4>
+												<div class="control-group form-group">
+													<label class="form-label text-dark">Ad Post Package</label>
+													<div class="d-md-flex ad-post-details">
+														<label class="custom-control custom-radio mb-2 mr-4">
+															<input type="radio" class="custom-control-input" name="radios1" value="option1" checked="">
+															<span class="custom-control-label"><a class="text-muted">30 Days Free</a></span>
+														</label>
+														<label class="custom-control custom-radio  mb-2 mr-4">
+															<input type="radio" class="custom-control-input" name="radios1" value="option2" >
+															<span class="custom-control-label"><a class="text-muted">60 days / 20$</a></span>
+														</label>
+														<label class="custom-control custom-radio  mb-2 mr-4">
+															<input type="radio" class="custom-control-input" name="radios1" value="option3" >
+															<span class="custom-control-label"><a class="text-muted">6months / 50$</a></span>
+														</label>
+														<label class="custom-control custom-radio  mb-2">
+															<input type="radio" class="custom-control-input" name="radios1" value="option4" >
+															<span class="custom-control-label"><a class="text-muted">1 year / 80$</a></span>
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="tab-pane fade card-body border-top-0" id="third">
+												<div class="control-group form-group">
+													<label class="form-label">Name</label>
+													<input type="text" class="form-control required" placeholder="Name">
+												</div>
+												<div class="control-group form-group">
+													<label class="form-label">Email</label>
+													<input type="email" class="form-control required" placeholder="Email Address">
+												</div>
+												<div class="control-group form-group">
+													<label class="form-label">Phone Number</label>
+													<input type="number" class="form-control required" placeholder="Number">
+												</div>
+												<div class="control-group form-group mb-0">
+													<label class="form-label">Address</label>
+													<input type="text" class="form-control required" placeholder="Address">
+												</div>
+											</div>
+											<div class="tab-pane fade card-body border-top-0" id="fourth">
+												<div class="panel panel-secondary">
+													<div class=" tab-menu-heading border-0 pl-0 pr-0 pt-0">
+														<div class="tabs-menu1 ">
+															<!-- Tabs -->
+															<ul class="nav panel-tabs">
+																<li><a href="#tab5" class="active" data-toggle="tab">Credit/ Debit Card</a></li>
+																<li><a href="#tab6" data-toggle="tab">Pay-pal</a></li>
+																<li><a href="#tab7" data-toggle="tab">Net Banking</a></li>
+																<li><a href="#tab8" data-toggle="tab">Gift Voucher</a></li>
+															</ul>
+														</div>
+													</div>
+													<div class="panel-body tabs-menu-body pl-0 pr-0 border-0">
+														<div class="tab-content">
+															<div class="tab-pane active " id="tab5">
+																<div class="form-group">
+																	<label class="form-label" >CardHolder Name</label>
+																	<input type="text" class="form-control" id="name1" placeholder="First Name">
+																</div>
+																<div class="form-group">
+																	<label class="form-label">Card number</label>
+																	<div class="input-group">
+																		<input type="text" class="form-control" placeholder="Search for...">
+																		<span class="input-group-append">
+																			<button class="btn btn-info" type="button"><i class="fa fa-cc-visa"></i> &nbsp; <i class="fa fa-cc-amex"></i> &nbsp;
+																			<i class="fa fa-cc-mastercard"></i></button>
+																		</span>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-sm-8">
+																		<div class="form-group mb-sm-0">
+																			<label class="form-label">Expiration</label>
+																			<div class="input-group">
+																				<input type="number" class="form-control" placeholder="MM" name="expiremonth">
+																				<input type="number" class="form-control" placeholder="YY" name="expireyear">
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-sm-4 ">
+																		<div class="form-group mb-0">
+																			<label class="form-label">CVV <i class="fa fa-question-circle"></i></label>
+																			<input type="number" class="form-control" required="">
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="tab-pane " id="tab6">
+																<h6 class="font-weight-semibold">Paypal is easiest way to pay online</h6>
+																<p><a href="#" class="btn btn-secondary"><i class="fa fa-paypal"></i> Log in my Paypal</a></p>
+																<p class="mb-0"><strong>Note:</strong> Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. </p>
+															</div>
+															<div class="tab-pane " id="tab7">
+																<div class="control-group form-group">
+																	<div class="form-group">
+																		<label class="form-label text-dark">All Banks</label>
+																		<select class="form-control custom-select required category select2-no-search">
+																			<option value="0">Select Bank</option>
+																			<option value="1">Credit Agricole Group</option>
+																			<option value="2">Bank of America</option>
+																			<option value="3">Mitsubishi UFJ Financial Group</option>
+																			<option value="4">BNP Paribas</option>
+																			<option value="5">JPMorgan Chase & Co.</option>
+																			<option value="6">HSBC Holdings</option>
+																			<option value="7">Bank of China</option>
+																			<option value="8">Agricultural Bank of China</option>
+																			<option value="9">China Construction Bank Corp.</option>
+																			<option value="10">Industrial & Commercial Bank of China, or ICBC</option>
+																		</select>
+																	</div>
+																</div>
+																<p><a href="#" class="btn btn-secondary">Log in Bank</a></p>
+															</div>
+															<div class="tab-pane " id="tab8">
+																<div class="form-group">
+																	<label class="form-label">Gift Voucher</label>
+																	<div class="input-group">
+																		<input type="text" class="form-control" placeholder="Enter Your Gv Number">
+																		<span class="input-group-append">
+																			<button class="btn btn-info" type="button">
+																			Apply</button>
+																		</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="form-group row clearfix">
+													<div class="col-lg-12">
+														<div class="checkbox checkbox-info">
+															<label class="custom-control mt-4 custom-checkbox">
+																<input type="checkbox" class="custom-control-input" />
+																<span class="custom-control-label text-dark pl-2">I agree with the Terms and Conditions.</span>
+															</label>
+														</div>
+													</div>
+												</div>
+											</div>
+											<ul class="list-inline wizard mb-0 mt-4 px-5 py-4 bg-light border-top">
+												<li class="previous list-inline-item"><a href="#" class="btn btn-primary mb-0">Previous</a>
+												</li>
+												<li class="next list-inline-item float-right"><a href="#" class="btn btn-secondary  mb-0">Continue</a></li>
+											</ul>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-4">
+						<div class="card">
+							<div class="card-header">
+								<h3 class="card-title">Terms And Conditions</h3>
+							</div>
+							<div class="card-body p-0">
+								<ul class="list-unstyled widget-spec mb-0">
+									<li>
+										<i class="fa fa-check text-success" aria-hidden="true"></i>Money Not Refundable
+									</li>
+									<li>
+										<i class="fa fa-check text-success" aria-hidden="true"></i>You can renew your Premium ad after experted.
+									</li>
+									<li>
+										<i class="fa fa-check text-success" aria-hidden="true"></i>Premium listings are active for depend on package.
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="card mb-0 overflow-hidden">
+							<div class="card-header">
+								<h3 class="card-title">Benefits Of Premium Ad</h3>
+							</div>
+							<div class="card-body p-0">
+								<ul class="list-unstyled widget-spec mb-0">
+									<li>
+										<i class="fa fa-check text-success" aria-hidden="true"></i>Premium listings Active
+									</li>
+									<li>
+										<i class="fa fa-check text-success" aria-hidden="true"></i>Premium listings are displayed on top
+									</li>
+									<li>
+										<i class="fa fa-check text-success" aria-hidden="true"></i>Premium listings will be Show in Google results
+									</li>
+									<li class="ml-5 mb-0">
+										<a href="tips.html"> View more..</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div> <!-- end row -->
+			</div>
+		</section>
+		<!--/Add posts-section-->
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Subscribe To Our Newsletter</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+						<div class="input-group sub-input mt-0">
+							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Newsletter-->
+{%endblock%}

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+{%load crispy_forms_tags%}
+<!-- /login_registration_advanced.html , Fri, 28 Dec 2018 11:02:25 GMT -->
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title></title>
+
+	<!-- Global stylesheets -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+	<link href="/static/admin/global_assets/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
+	<link href="/static/admin/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="/static/admin/assets/css/bootstrap_limitless.min.css" rel="stylesheet" type="text/css">
+	<link href="/static/admin/assets/css/layout.min.css" rel="stylesheet" type="text/css">
+	<link href="/static/admin/assets/css/components.min.css" rel="stylesheet" type="text/css">
+	<link href="/static/admin/assets/css/colors.min.css" rel="stylesheet" type="text/css">
+	<!-- /global stylesheets -->
+
+	<!-- Core JS files -->
+	<script src="/static/admin/global_assets/js/main/jquery.min.js"></script>
+	<script src="/static/admin/global_assets/js/main/bootstrap.bundle.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/loaders/blockui.min.js"></script>
+	<!-- /core JS files -->
+
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+
+	<script src="/static/admin/assets/js/app.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/login.js"></script>
+
+	<!-- /theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/forms/wizards/steps.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/inputs/inputmask.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/validation/validate.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/extensions/cookie.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/form_wizard.js"></script>
+</head>
+
+<body>
+
+	<!-- Main navbar -->
+	<div class="navbar navbar-expand-md navbar-dark">
+		<div class="navbar-brand">
+			<a href="{%url 'admin:index'%}" class="d-inline-block">
+				<img src="/static/admin/global_assets/images/logo_light.png" alt="">
+			</a>
+		</div>
+
+		<div class="d-md-none">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
+				<i class="icon-tree5"></i>
+			</button>
+		</div>
+
+		<div class="collapse navbar-collapse" id="navbar-mobile">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item dropdown">
+					<a href="#" class="navbar-nav-link">
+						<i class="icon-display4"></i>
+						<span class="d-md-none ml-2">Go to website</span>
+					</a>					
+				</li>
+
+				<li class="nav-item dropdown">
+					<a href="#" class="navbar-nav-link">
+						<i class="icon-user-tie"></i>
+						<span class="d-md-none ml-2">Contact admin</span>
+					</a>					
+				</li>
+
+				<li class="nav-item dropdown">
+					<a href="#" class="navbar-nav-link">
+						<i class="icon-cog3"></i>
+						<span class="d-md-none ml-2">Options</span>
+					</a>					
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /main navbar -->
+
+
+	<!-- Page content -->
+	<div class="page-content">
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Content area -->
+			<div class="content d-flex justify-content-center align-items-center">
+
+				<!-- Registration form -->
+				<form action="{%url 'admin:signup'%}" method="POST" class="flex-fill">{%csrf_token%}
+					<div class="row">
+						<div class="col-lg-6 offset-lg-3">
+							<div class="card mb-0">
+								<div class="card-body">
+									<div class="text-center mb-3">
+										<!-- <i class="icon-plus3 icon-2x text-success border-success border-3 rounded-round p-3 mb-3 mt-1"></i> -->
+										<h5 class="mb-0">Create account</h5>
+										<span class="d-block text-muted">All fields are required</span>
+									</div>
+									<!-- {{form|crispy}} -->
+									<div class="form-group form-group-feedback form-group-feedback-right">
+										{{form.first_name}}
+										<div class="form-control-feedback">
+											<i class="icon-user-plus text-muted"></i>
+										</div>
+										{{form.first_name.errors}}
+									</div>
+									<div class="form-group form-group-feedback form-group-feedback-right">
+										{{form.last_name}}
+										<div class="form-control-feedback">
+											<i class="icon-user-plus text-muted"></i>
+										</div>
+										{{form.last_name.errors}}
+									</div>
+									<div class="form-group form-group-feedback form-group-feedback-right">
+										{{form.username}}
+										<div class="form-control-feedback">
+											<i class="icon-user-plus text-muted"></i>
+										</div>
+										{{form.username.errors}}
+									</div>
+									
+									<div class="form-group form-group-feedback form-group-feedback-right">
+											{{form.email}}
+											<div class="form-control-feedback">
+												<i class="icon-mention text-muted"></i>
+											</div>
+											{{form.email.errors}}
+										</div>
+										<div class="form-group form-group-feedback form-group-feedback-right">
+											{{form.phone_number}}
+											<div class="form-control-feedback">
+												<i class="icon-phone text-muted"></i>
+											</div>
+											{{form.phone_number.errors}}
+										</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group form-group-feedback form-group-feedback-right">
+												{{form.password1}}
+												<div class="form-control-feedback">
+													<i class="icon-user-lock text-muted"></i>
+												</div>
+												{{form.password1.errors}}
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<div class="form-group form-group-feedback form-group-feedback-right">
+												{{form.password2}}
+												<div class="form-control-feedback">
+													<i class="icon-user-lock text-muted"></i>
+												</div>
+												{{form.password2.errors}}
+											</div>
+										</div>
+										 
+									</div>
+									
+
+									<div class="form-group">
+										<div class="form-group mb-3 mb-md-2">
+											<label class="d-block font-weight-semibold">Select a User Type</label>
+											{%for field in form.usertype%}
+											<div class="custom-control custom-control-right custom-radio custom-control-inline">
+												<!-- <input type="radio" required class="custom-control-input" name="staff_user_type" value="supplier" id="custom_radio_inline_right_checked" checked>
+												<label class="custom-control-label position-static" for="custom_radio_inline_right_checked">Supplier</label> -->
+												{{field}}
+											</div>
+											{%endfor%}
+										</div>
+									</div>
+									<a href="{% url 'admin:login'%}" class="btn btn-warning-400 btn-labeled btn-labeled-right">Sign In</a>
+									<button type="submit" class="btn bg-teal-400 btn-labeled btn-labeled-right"><b><i class="icon-plus3"></i></b> Create account</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+				<!-- /registration form -->
+
+			</div>
+			<!-- /content area -->
+
+
+			<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse" data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i>
+						Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text">
+						&copy; 2015 - 2018. <a href="#">Admin Templet</a> by <a href="" target="_blank">Admin</a>
+					</span>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="" class="navbar-nav-link" target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="" class="navbar-nav-link" target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+						<li class="nav-item"><a href="" class="navbar-nav-link font-weight-semibold"><span class="text-pink-400"><i class="icon-cart2 mr-2"></i> Purchase</span></a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+		</div>
+		<!-- /main content -->
+
+	</div>
+	<!-- /page content -->
+
+</body>
+
+<!-- /login_registration_advanced.html , Fri, 28 Dec 2018 11:02:25 GMT -->
+</html>

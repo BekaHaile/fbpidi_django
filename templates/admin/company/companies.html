@@ -1,0 +1,40 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+
+{%block pagename%}Companies{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Form inputs -->
+				<div class="row">
+					{%for company in companies%}
+					<div class="col-xl-3 col-sm-6">
+						<div class="card">
+							<div class="card-body text-center">
+								<div class="card-img-actions d-inline-block mb-3">
+									<img class="img-fluid rounded-circle" src="{{company.company_logo.url}}" style="width: 200px;height: 200px;" alt="">
+									<a href="{%url 'admin:company_detail' id=company.id%}"><div class="card-img-actions-overlay card-img rounded-circle">
+										
+									</div></a>
+								</div>
+
+					    		<h6 class="font-weight-semibold mb-0">{{company.company_name}}</h6>
+					    		<span class="d-block text-muted">{{company.email|title}}</span>
+
+				    			<div class="list-icons list-icons-extended mt-3">
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
+			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+		                    	</div>
+					    	</div>
+				    	</div>
+					</div>
+					{%endfor%}
+				</div>
+				<!-- /form inputs -->
+
+			</div>
+			<!-- /content area -->
+{%endblock%}

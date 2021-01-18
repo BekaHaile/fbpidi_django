@@ -1,0 +1,330 @@
+{%extends 'frontpages/layout.html'%}
+
+{%block content%}
+		<!--Sliders Section-->
+		<section>
+			<div class="banner-1 cover-image sptb-21 sptb-tab bg-background2" data-image-src="../../assets/images/banners/banner7.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white mb-7">
+							<h1 class="mb-1">Welcome To The Biggest Business Directory</h1>
+							<p>It is a long established fact that a reader will be distracted by the readable.</p>
+						</div>
+						<div class="row">
+							<div class="col-xl-10 col-lg-12 col-md-12 d-block mx-auto">
+								<div class="search-background py-3 px-4">
+									<div class="form row row-sm">
+										<div class="form-group col-xl-4 col-lg-3 col-md-12 mb-0">
+											<input type="text" class="form-control input-lg keywords-input" id="text4" placeholder="Phrase or Keywords">
+										</div>
+										<div class="form-group col-xl-3 col-lg-3 col-md-12 mb-0">
+											<input type="text" class="form-control input-lg location-input" id="text5" placeholder="Enter Location">
+											<span><img src="../../assets/images/svgs/gps.svg" class="location-gps" alt="img"></span>
+										</div>
+										<div class="form-group col-xl-3 col-lg-3 col-md-12 select2-lg mb-0">
+											<select class="form-control select2-show-search  border-bottom-0" data-placeholder="Select Category">
+												<optgroup label="Categories">
+													<option>Select Category</option>
+													<option value="0">All Categories</option>
+													<option value="1">Hotels</option>
+													<option value="2">Restaurant</option>
+													<option value="3">Events</option>
+													<option value="4">Cinema</option>
+													<option value="5">Gym</option>
+													<option value="6">Shop & Store</option>
+													<option value="7">Tours & Travels</option>
+													<option value="8">Cafe</option>
+													<option value="9">Mobile Store</option>
+													<option value="10">College</option>
+												</optgroup>
+											</select>
+										</div>
+										<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
+											<a href="#" class="btn btn-lg btn-block btn-secondary">Search Here</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- /header-text -->
+			</div>
+		</section>
+		<!--Sliders Section-->
+
+		<!--Categories-->
+		<section class="categories">
+			<div class="container">
+				<div class="card mb-0 box-shadow-0">
+					<div class="card-body">
+					<div class="row">
+						<div class="col-lg-3 col-md-6 col-sm-6 d-catmb mb-4 mb-lg-0">
+							<div class="d-flex">
+								<div>
+									<span class="bg-secondary-transparent icon-service1 text-secondary">
+										<i class="ti ti-layers-alt"></i>
+									</span>
+								</div>
+								<div class="ml-4 mt-4">
+									<h3 class=" mb-0 font-weight-bold">69,856</h3>
+									<p class="mb-0 text-muted">Total Listings</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-6 col-sm-6 d-catmb mb-4 mb-lg-0">
+							<div class="d-flex">
+								<div>
+									<span class="bg-primary-transparent icon-service1 text-primary">
+										<i class="ti ti-star"></i>
+									</span>
+								</div>
+								<div class="ml-4 mt-4">
+									<h3 class=" mb-0 font-weight-bold">6854</h3>
+									<p class="mb-0 text-muted">Featured Listings</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-6 col-sm-6 d-catmb mb-4 mb-sm-0">
+							<div class="d-flex">
+								<div>
+									<span class="bg-warning-transparent icon-service1 text-warning">
+										<i class="ti ti-heart"></i>
+									</span>
+								</div>
+								<div class="ml-4 mt-4">
+									<h3 class=" mb-0 font-weight-bold">6354</h3>
+									<p class="mb-0 text-muted">Top Listings</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-6 col-sm-6 ">
+							<div class="d-flex">
+								<div>
+									<span class="bg-info-transparent icon-service1 text-info">
+										<i class="ti ti-map-alt"></i>
+									</span>
+								</div>
+								<div class="ml-4 mt-4">
+									<h3 class=" mb-0 font-weight-bold ">8754</h3>
+									<p class="mb-0 text-muted">Locations</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Categories-->
+
+		<!--Categories-->
+		<section class="sptb bg-white">
+			<div class="container">
+				<div class="row no-gutters category-images">
+					<div class="col-xl-6 col-lg-12 col-md-12">
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/1.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Home &amp; Furniture<span>6251 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/2.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Clothing<span>132 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/4.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Restaurant<span>547 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/3.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Beauty<span>478 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/5.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Education<span>635 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/animals.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Animals<span>854 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/jobs.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Jobs<span>9658 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/furniture.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Furnitures<span>4123 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/electronics.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Electronics<span>654 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/6.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Health<span>326 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/8.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Travels<span>7456 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/7.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Medical<span>1456 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/9.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Computers<span>1345 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12 col-md-12">
+						<div class="card mb-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="{% url 'bs_list' %}"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/10.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Movies<span>1248 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Categories-->
+{%endblock%}

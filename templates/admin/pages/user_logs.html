@@ -1,0 +1,165 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+	<!-- /theme JS files -->
+ 
+{% endblock %}
+{%block pagename%}UserAudit{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h6 class="card-title"></h6>
+						<div class="header-elements">
+							<div class="list-icons">
+								<a href="#" class="list-icons-item"><i class="icon-file-pdf"></i></a>
+								<a href="#" class="list-icons-item"><i class="icon-file-excel"></i></a>
+								<a href="#" class="list-icons-item"><i class="icon-file-word"></i></a> 
+							</div>
+						</div>
+					</div>
+
+					<div class="card-body">
+						<ul class="nav nav-tabs">
+							<li class="nav-item"><a href="#basic-tab1" class="nav-link active" data-toggle="tab">Failed Login</a></li>
+							<li class="nav-item"><a href="#basic-tab2" class="nav-link" data-toggle="tab">Logins</a></li>
+							<li class="nav-item"><a href="#basic-tab3" class="nav-link" data-toggle="tab">Lgoin Attempt</a></li>
+							<li class="nav-item"><a href="#basic-tab4" class="nav-link" data-toggle="tab">Users</a></li>
+						</ul>
+
+						<div class="tab-content">
+							<div class="tab-pane fade show active" id="basic-tab1">
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>User Email</th>
+											<th>IP Address</th>
+											<th>Forwarded By</th>
+											<th>User Agent</th>
+											<th>Time Stamp</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for fl_lg in failed_logins%}
+										<tr>
+											<td>{{fl_lg.username}}</td>
+											<td>{{fl_lg.ip_address}}</td>
+											<td>{{fl_lg.forwarded_by}}</td>
+											<td>{{fl_lg.user_agent}}</td>
+											<td><span class="badge badge-success">{{fl_lg.timestamp}}</span></td>
+											<td class="text-center">
+												 
+											</td>
+										</tr>
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+
+							<div class="tab-pane fade" id="basic-tab2">
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>User Email</th>
+											<th>IP Address</th>
+											<th>Forwarded By</th>
+											<th>User Agent</th>
+											<th>Time Stamp</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for fl_lg in login_logs%}
+										<tr>
+											<td>{{fl_lg.username}}</td>
+											<td>{{fl_lg.ip_address}}</td>
+											<td>{{fl_lg.forwarded_by}}</td>
+											<td>{{fl_lg.user_agent}}</td>
+											<td><span class="badge badge-success">{{fl_lg.timestamp}}</span></td>
+											<td class="text-center">
+												 
+											</td>
+										</tr>
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+
+							<div class="tab-pane fade" id="basic-tab3">
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>User ID</th>
+											<th>User Email</th>
+											<th>Count </th>
+											<th>Time Stamp</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for fl_lg in login_attempt%}
+										<tr>
+											<td>{{forloop.counter}}</td>
+											<td>{{fl_lg.id}}</td>
+											<td>{{fl_lg.username}}</td>
+											<td>{{fl_lg.count}}</td>
+											<td><span class="badge badge-success">{{fl_lg.timestamp}}</span></td>
+											<td class="text-center">
+												 
+											</td>
+										</tr>
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+
+							<div class="tab-pane fade" id="basic-tab4">
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>User ID</th>
+											<th>User Email</th>
+											<th>Reason </th>
+											<th>Time Stamp</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for fl_lg in user_deactivated%}
+										<tr>
+											<td>{{forloop.counter}}</td>
+											<td>{{fl_lg.id}}</td>
+											<td>{{fl_lg.username}}</td>
+											<td>{{fl_lg.reason}}</td>
+											<td><span class="badge badge-success">{{fl_lg.timestamp}}</span></td>
+											<td class="text-center">
+												 
+											</td>
+										</tr>
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Page length options main category -->
+				
+			 
+			</div>
+			<!-- /content area -->
+			<!-- <script>
+				$(document).ready(function() {
+					$('.summernote').summernote('code', 'html_tags_string_from_db');
+				});
+			  </script> -->
+{%endblock%}

@@ -1,0 +1,134 @@
+{%extends 'frontpages/layout.html'%}
+ 
+{%block content%}
+		<!--Breadcrumb-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white">
+							<h1 class="">Vacancy List</h1>
+							<ol class="breadcrumb text-center">
+								{%if message %}
+									{{message}}
+								{%endif%}
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Breadcrumb-->
+
+		<!--user dashboard-->
+		<section class="sptb">
+			<div class="container">
+				<div class="row">
+					<div class="col-xl-3 col-lg-12 col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h3 class="card-title">Categories</h3>
+							</div>
+							{%for cat in category%}
+							<div class="card-body p-0">
+								<div class="list-catergory">
+									<div class="item-list">
+										<ul class="list-group mb-0">
+											<li class="list-group-item">
+												<a href="{%url 'vacancy_search' id=cat.id%}" class="text-dark">
+													<i class="fa fa-building bg-secondary text-secondary"></i> {{cat}}
+													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">({{cat.countjobs}})</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							{%endfor%}
+							
+						</div> </div>
+								
+
+							
+					<div class="col-xl-9 col-lg-12 col-md-12">
+						{%for vacancy in vacancys%}
+						
+
+						<div class="col-lg-12">
+
+                            <div class="card position-relative">
+                                <div class="card-header py-3">
+                                    <h3 class="card-title">{{vacancy.job_title|safe}}</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                       <b>cateory</b>: <code>{{vacancy.category|safe}}</code>
+                                    </div>
+                                    <div class="mb-3">
+                                    <b>Employee Type</b>:{{vacancy.employement_type}}</div>
+                                    <div class="mb-4">
+                                    	<b>Campany</b>:{{vacancy.company}} 
+                                    </div>
+                                    <div class='mb-4'>
+                                    	<b>Location</b>:{{vacancy.location}}
+                                    </div>
+                                    <div class='mb-4'>
+                                    	<b>Salary</b>:{{vacancy.salary}}
+                                    </div>
+
+                                    <div class='mb-4'>
+                                    	
+                                    	<b>requirement</b>:{{vacancy.requirement|safe}}
+                                    </div>
+                                    <div class='mb-4'>
+                                    	
+                                    	<b>starting_date</b>:{{vacancy.starting_date}}
+                                    </div>
+                                    <div class='mb-4'>
+                                    	
+                                    	<b>ending_date</b>:{{vacancy.ending_date}}
+                                    </div>
+                                    <div class='mb-4'>
+                                    	
+                                    	<b>description</b>:{{vacancy.description|safe}}
+                                    </div>
+                                    
+                                </div>
+                                <div class="card-footer">
+								<a href="{%url 'applications'  model_name='Vacancy' id=vacancy.id%}" class="btn btn-secondary">Apply</a>
+							</div>
+                            </div>
+
+                        </div>
+						{%endfor%}
+						 
+
+
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Subscribe To Our Newsletter</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+						<div class="input-group sub-input mt-0">
+							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Newsletter-->
+{%endblock%}

@@ -1,0 +1,81 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+<!-- /theme JS files -->
+
+{% endblock %}
+{%block pagename%}Faqs List{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	<!-- Page length options main category -->
+	
+	<!-- /page length options -->
+
+	<!-- Page length options sub-category-->
+	
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">Faqs</h5>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a href="{% url 'admin:admin_Faqsform'%}" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add Faq</a>
+				</div>
+			</div>
+		</div>
+
+		<table class="table datatable-show-all">
+			<thead>
+				<tr>
+					<th>questions_am</th>
+					<th>questions</th>
+					<th>answers_am </th>
+					<th>answers</th>
+
+					<th class="text-center">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for faq in faqs%}
+				<tr>
+					
+					<td>{{faq.questions_am|safe}}</td>
+					<td>{{faq.questions|safe}}</td>
+					<td>{{faq.answers_am|safe}}</td>
+					<td>{{faq.answers|safe}}</td>
+					
+					<td class="text-center">
+						<div class="list-icons">
+							<div class="dropdown">
+								<a href="#" class="list-icons-item" data-toggle="dropdown">
+									<i class="icon-menu9"></i>
+								</a>
+									
+								<div class="dropdown-menu dropdown-menu-right">
+									<a href="{%url 'admin:delete' model_name='Faqs' id=faq.id%}" class="dropdown-item" onclick="return confirm('are you sure you want to delete this')"><i class="icon-trash"></i>Delete Faqs</a>
+									<a href="{%url 'admin:faqs_detail'  model_name='Faqs' id=faq.id%}" class="dropdown-item">
+										<i class="icon-pencil"></i>Edit Faqs</a>
+									
+									
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+	<!-- /page length options -->
+
+
+</div>
+<!-- /content area -->
+{%endblock%}

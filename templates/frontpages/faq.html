@@ -1,0 +1,72 @@
+{%extends 'frontpages/layout.html'%}
+
+{%block content%}
+		<!--Sliders Section-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="../../assets/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white ">
+							<h1 class="">FAQ</h1>
+							<ol class="breadcrumb text-center">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item"><a href="#">Pages</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">FAQS</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Sliders Section-->
+
+		<!--Faq section-->
+		<section class="sptb">
+			<div class="container">
+				{%for faq in faqs%}
+				<div class="panel-group1" id="accordion2">
+					<div class="panel panel-default mb-4 border p-0">
+						<div class="panel-heading1">
+							<h4 class="panel-title1">
+								<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#faq{{faq.id}}" aria-expanded="false">{{faq.questions}}</a>
+							</h4>
+						</div>
+						<div id="faq{{faq.id}}" class="panel-collapse collapse active" role="tabpanel" aria-expanded="false">
+							<div class="panel-body bg-white">
+								{{faq.answers|safe}}
+								
+
+							</div>
+						</div>
+					</div>
+					
+
+				</div>
+				{%endfor%}
+			</div>
+		</section>
+		<!--/Faq section-->
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Subscribe To Our Newsletter</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+						<div class="input-group sub-input mt-0">
+							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Newsletter-->
+{%endblock%}

@@ -1,0 +1,228 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/inputs/inputmask.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/validation/validate.min.js"></script>
+
+{% endblock %}
+{%block pagename%}Create Users{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+				{%if user.is_company_admin%}
+				<div class="card">
+						
+					<div class="card-body">
+						
+						<form action="{%url 'admin:create_user'%}" method="POST">{%csrf_token%}
+							<fieldset class="mb-3 ml-3 mr-3">
+								<legend class="text-uppercase font-size-sm font-weight-bold">Create User</legend>
+								<!-- {{form|crispy}} -->
+								<span style="color: red;">{{form.errors}}</span>
+								<div class="row">
+									
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.first_name.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.first_name}}
+												<span style="color: red;">{{form.first_name.errors}}</span>
+											</div>
+										</div>
+									</div>
+	
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.last_name.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.last_name}}
+												<span style="color: red;">{{form.last_name.errors}}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.email.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.email}}
+												<span style="color: red;">{{form.email.errors}}</span>
+											</div>
+										</div>
+									</div>
+	
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.username.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.username}}
+												<span style="color: red;">{{form.username.errors}}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">{{form.phone_number.label|title}}</label>
+									<div class="col-lg-10">
+										{{form.phone_number}}
+										<span style="color: red;">{{form.phone_number.errors}}</span>
+									</div>
+								</div>
+								<div class="row">
+									
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.password1.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.password1}}
+												<span style="color: red;">{{form.password1.errors}}</span>
+											</div>
+										</div>
+									</div>
+	
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.password2.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.password2}}
+												<span style="color: red;">{{form.password2.errors}}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">{{form.user_group.label|title}}</label>
+									<div class="col-lg-10">
+										{{form.user_group}}
+										<span style="color: red;">{{form.user_group.errors}}</span>
+									</div>
+								</div>
+								 
+								 
+								
+							</fieldset>
+
+							<div class="text-right">
+								<button style="padding-left: 10%; padding-right: 10%;" type="submit" class="btn btn-primary rounded-round">Submit </button>
+							</div>
+						</form>
+					</div>
+				</div>
+				{%elif user.is_superuser%}
+				<div class="card">
+						
+					<div class="card-body">
+						
+						<form action="{%url 'admin:create_user' %}" method="POST">{%csrf_token%}
+							<fieldset class="mb-3 ml-3 mr-3">
+								<legend class="text-uppercase font-size-sm font-weight-bold">Create User</legend>
+								<!-- {{form|crispy}} -->
+								<span style="color: red;">{{form.errors}}</span>
+								<div class="row">
+									
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.first_name.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.first_name}}
+												<span style="color: red;">{{form.first_name.errors}}</span>
+											</div>
+										</div>
+									</div>
+	
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.last_name.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.last_name}}
+												<span style="color: red;">{{form.last_name.errors}}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.email.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.email}}
+												<span style="color: red;">{{form.email.errors}}</span>
+											</div>
+										</div>
+									</div>
+	
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.username.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.username}}
+												<span style="color: red;">{{form.username.errors}}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">{{form.phone_number.label|title}}</label>
+									<div class="col-lg-10">
+										{{form.phone_number}}
+										<span style="color: red;">{{form.phone_number.errors}}</span>
+									</div>
+								</div>
+								<div class="row">
+									
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.password1.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.password1}}
+												<span style="color: red;">{{form.password1.errors}}</span>
+											</div>
+										</div>
+									</div>
+	
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.password2.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.password2}}
+												<span style="color: red;">{{form.password2.errors}}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">{{form.user_type.label|title}}</label>
+									<div class="col-lg-10">
+										{{form.user_type}}
+										<span style="color: red;">{{form.user_type.errors}}</span>
+									</div>
+								</div>
+								 
+								 
+								
+							</fieldset>
+
+							<div class="text-right">
+								<button style="padding-left: 10%; padding-right: 10%;" type="submit" class="btn btn-primary rounded-round">Submit </button>
+							</div>
+						</form>
+					</div>
+				</div>
+				{%endif%}
+
+			</div>
+			<!-- /content area -->
+			<script>
+				$(document).ready(function() {
+					$('#summernote').summernote();
+					$('.summernote').summernote();
+				});
+			  </script>
+{%endblock%}
+

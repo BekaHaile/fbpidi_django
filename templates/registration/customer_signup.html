@@ -1,0 +1,90 @@
+{%extends 'frontpages/layout.html'%}
+{%load crispy_forms_tags%}
+{%block content%}
+		<!--Breadcrumb-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white">
+							<h1 class="">Register</h1>
+							<ol class="breadcrumb text-center">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item"><a href="#">Pages</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">Register</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Breadcrumb-->
+
+		<!--Register-section-->
+		<section class="sptb">
+			<div class="container customerpage">
+				<div class="row">
+				    <div class="single-page" >
+						<div class="col-lg-6 col-xl-6 col-md-6 d-block mx-auto">
+							<div class="wrapper wrapper2">
+								<div class="card-body">
+									<h3>Register</h3>
+									
+								</div>
+								<hr>
+								<form id="Register" class="card-body" action="{%url 'register'%}" method="POST" tabindex="500">
+									{% csrf_token %}
+									{{form|crispy}}
+									{{form.errors}}
+									<div class="submit">
+										<button type="submit" class="btn btn-secondary btn-block">Register</button>
+									</div>
+									<p class="text-dark mb-0">Already have an account?<a href="{%url 'login'%}" class="text-secondary ml-1">Sign In</a></p>
+								</form>
+								<hr class="divider">
+								<div class="card-body">
+									<h3>Sign Up With</h3>
+									<div class="text-center">
+										<div class="btn-list d-flex">
+											<a href="https://www.google.com/gmail/" class="btn btn-google btn-block"><i class="fa fa-google fa-1x mr-2"></i> Google</a>
+											<a href="https://twitter.com/" class="btn btn-twitter"><i class="fa fa-twitter fa-1x"></i></a>
+											<a href="https://www.facebook.com/" class="btn btn-facebook"><i class="fa fa-facebook fa-1x"></i></a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--Register-section-->
+
+		<!--Newsletter-->
+		<section class="sptb bg-white border-top">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-7 col-xl-6 col-md-12">
+						<div class="sub-newsletter d-sm-flex">
+							<i class="fa fa-envelope fs-22 mr-2"></i>
+							<div>
+								<h3 class="mb-1">Subscribe To Our Newsletter</h3>
+								<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-5 col-xl-6 col-md-12 mt-4 mt-lg-0">
+						<div class="input-group sub-input mt-1">
+							<input type="text" class="form-control input-lg" placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Newsletter-->
+{%endblock%}

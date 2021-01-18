@@ -1,0 +1,73 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+<!-- /theme JS files -->
+
+{% endblock %}
+{%block pagename%}Applicants{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	<!-- Page length options main category -->
+	
+	<!-- /page length options -->
+
+	<!-- Page length options sub-category-->
+	
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">Jobs created</h5>
+			
+		</div>
+
+			<div class="col-xl-8 col-lg-8 col-md-12">
+				{%for vac in vacancy%}
+								<div class="row">
+							
+							<div class="col-xl-6 col-lg-12 col-md-12">
+								<div class="card">
+									<div class="item7-card-img">
+										<a href="#"></a>
+										<img src="{{vac.image.url}}" alt="img" class="cover-image">
+										<div class="item7-card-text">
+											<h3 >{{vac.job_title}}</h3>
+										</div>
+									</div>
+
+									<div class="item7-card-img">
+										<a href="#"></a>
+										<img src="{{blog.blogImage.url}}" alt="img" class="cover-image">
+										<div class="item7-card-text">
+											<span class="badge badge-info">{{blog.title}}</span>
+										</div>
+									</div>
+
+
+									<div class="card-body">
+										<div class="item7-card-desc d-flex mb-2">
+											
+											<div class="ml-auto">
+												<a class="mr-0" href="#">{{vac.countApplicant}}</a><i> Applicants</i>
+											</div>
+										</div>
+										<a href="{% url 'admin:Applicant_info' id=vac.id %}" class="btn btn-secondary btn-sm">
+
+										View all applicants</a>
+										
+										
+									</div>
+								</div>
+							</div>
+							
+						</div>
+				{%endfor%}
+			
+	</div>
+<!-- /content area -->
+{%endblock%}

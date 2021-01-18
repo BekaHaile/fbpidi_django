@@ -1,0 +1,168 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/anytime.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.date.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.time.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/legacy.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/notifications/jgrowl.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/picker_date.js"></script>
+
+{% endblock %}
+{%block pagename%}Edit Vacancy{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	 
+	<div class="card">
+
+		<div class="card-body">
+
+			<form action="" method="POST" enctype="multipart/form-data">
+				<fieldset class="mb-3 ml-3 mr-3">
+					<legend class="text-uppercase font-size-sm font-weight-bold">Edit Vacancy</legend>
+					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
+					{{form.errors}}
+					{%csrf_token%}
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Job Title *</label>
+						<div class="col-lg-9">
+							<input type="text" name="job_title" class="form-control" value="{{form.job_title}} " required="True">
+						 
+							
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Job Title Amharic *</label>
+							<div class="col-lg-9">
+							<input type="text" name="job_title_am" class="form-control" value="{{form.job_title_am}}" id=""  required="True">
+						</div>
+							
+					</div> 
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Description *</label>
+						
+							<div class="col-lg-9">
+							<textarea type="text" name="description" class="summernote"  id="">{{form.description|safe}}</textarea> 
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Description Amharic *</label>
+						
+							<div class="col-lg-9">
+							<textarea type="text" name="description_am" class="summernote"  id="">{{form.description_am|safe}}</textarea>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Requirement *</label>
+						<div class="col-lg-9">
+								<textarea class="summernote" name="requirement" value="">{{form.requirement|safe}}</textarea>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Requirement Amharic *</label>
+						<div class="col-lg-9">
+								<textarea  value="" class="summernote" name="requirement_am" >{{form.requirement_am|safe}}</textarea>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Location  *</label>
+						<div class="col-lg-9">
+								<textarea value="" class="form-control" name="location" > {{form.location|safe}}</textarea>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Salary *</label>
+						<div class="col-lg-9">
+								<input value="{{form.salary}}" class="form-control" name="salary" type="number"></input>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Category *</label>
+						<div class="col-lg-9">
+								<select name="category" id="category" >{
+								<option value="{{form.category}}">{{form.Category}}</option>
+									{%for form1 in form2%}
+								  <option value="{{form1}}">{{form1}}</option>
+								  		{%endfor%}
+								</select>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Category Amharic *</label>
+						<div class="col-lg-9">
+								<input name="category_am" value="{{form.category_am|safe}}" class="form-control" name="category_am" ></input>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Employement Type *</label>
+						<div class="col-lg-9">
+								<input value="{{form.employement_type}}" class="form-control" name="employement_type" ></input>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Starting Date  *</label>
+						<div class="col-lg-9">
+							<span class="input-group-prepend">
+											<span class="input-group-text"><i class="icon-calendar22"></i></span>
+										</span>
+								<input type="text" name="starting_date" class="form-control daterange-single" value="{{form.starting_date}}">
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Ending Date  *</label>
+						<div class="col-lg-9">
+							<span class="input-group-prepend">
+											<span class="input-group-text"><i class="icon-calendar22"></i></span>
+										</span>
+								<input type="text" name ="ending_date" class="form-control daterange-single" value="{{form.ending_date}}">
+						</div>
+							
+					</div>
+					
+
+				</fieldset>
+
+				<div class="text-right">
+					<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+						class="btn btn-primary rounded-round" onclick="return confirm('are you sure you Done with editing')">Submit </button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+		$('#datetimepicker1').datetimepicker();
+	});
+
+</script>
+{%endblock%}
