@@ -10,7 +10,6 @@ from social_django.context_processors import REDIRECT_FIELD_NAME, login_redirect
 from product import models
 from company.models import Company
 # 
-from admin_site import models
 from accounts.models import User,Company,Customer
 from accounts.forms import CompanyForm
 
