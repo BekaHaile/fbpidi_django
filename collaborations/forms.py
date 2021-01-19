@@ -10,7 +10,7 @@ JOB_CHOICES=[('Temporary','Temporary'),
             ('Permanent','Permanent'),
             ('Contract','Contract')]
 
-class CreateFaqs(forms.ModelForm):
+class FaqsForm(forms.ModelForm):
     
 
     class Meta:
@@ -22,8 +22,7 @@ class CreateFaqs(forms.ModelForm):
                     'questions':forms.TextInput(attrs={'class':'form-control'}),
                     'questions_am':forms.TextInput(attrs={'class':'form-control'})}
 
-
-class CreateBlogs(forms.ModelForm):
+class BlogsForm(forms.ModelForm):
     
     class Meta:
         model = Blog
@@ -39,7 +38,7 @@ class CreateBlogs(forms.ModelForm):
                             }
 
 
-class CreateBlogComment(forms.ModelForm):
+class BlogCommentForm(forms.ModelForm):
 	
 	class Meta:
 		model = BlogComment
@@ -107,7 +106,7 @@ class DateForm(forms.Form):
     ) 
 '''
 
-class CreateVacancyForm(forms.ModelForm):
+class VacancyForm(forms.ModelForm):
 
     employement_type = forms.CharField(label='job type', widget=forms.Select(choices=JOB_CHOICES))
     starting_date = forms.DateField(widget=SelectDateWidget())
@@ -145,7 +144,7 @@ class CreateJobApplicationForm(forms.ModelForm):
             'bio':forms.Textarea(attrs={'class':'summernote'}),         
         }
 
-class CreateJobCategoty(forms.ModelForm):
+class JobCategoryForm(forms.ModelForm):
     class Meta:
         model = JobCategoty
         fields = ('categoryName','categoryName_am')
