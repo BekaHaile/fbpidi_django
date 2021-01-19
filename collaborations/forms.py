@@ -17,7 +17,8 @@ class CreateFaqs(forms.ModelForm):
         model = Faqs
         fields = ('questions', 'questions_am',
                   'answers', 'answers_am')
-        widgets = {'answers': SummernoteWidget,'answers_am': SummernoteWidget,
+        widgets = {'answers': forms.Textarea(attrs={'class':'summernote'}),
+                    'answers_am': forms.Textarea(attrs={'class':'summernote'}),
                     'questions':forms.TextInput(attrs={'class':'form-control'}),
                     'questions_am':forms.TextInput(attrs={'class':'form-control'})}
 
@@ -27,8 +28,8 @@ class CreateBlogs(forms.ModelForm):
     class Meta:
         model = Blog
         fields = ('title', 'tag', 'content','publish','blogImage','title_am','tag_am','content_am')
-        widgets = {'content': SummernoteWidget,
-                    'content_am': SummernoteWidget,
+        widgets = {'content': forms.Textarea(attrs={'class':'summernote'}),
+                    'content_am': forms.Textarea(attrs={'class':'summernote'}),
                     'title':forms.TextInput(attrs={'class':'form-control'}),
                     'tag':forms.TextInput(attrs={'class':'form-control'}),
                     'title_am':forms.TextInput(attrs={'class':'form-control'}),
@@ -148,6 +149,10 @@ class CreateJobCategoty(forms.ModelForm):
     class Meta:
         model = JobCategoty
         fields = ('categoryName','categoryName_am')
+        widgets ={
+            'categoryName':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
+             'categoryName_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
+        }
 
 
 

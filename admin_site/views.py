@@ -4,12 +4,12 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+import os
 
 # 
 from product import models
 from accounts.models import User
 from company.models import Company
-from collaborations.models import Blog, BlogComment,Faqs
 
 
 
@@ -30,7 +30,7 @@ class Download(View):
             filename = obj.cv.path
         if self.kwargs['name']=='documents':
             filename = obj.documents.path
-        if os.path.exists(file_path):
+        if os.path.exists(filename):
             response = FileResponse(open(filename, 'rb'))
         else:
             message.error(self.request, "File does not exists")
@@ -279,10 +279,11 @@ class BlogForm(View):
             blog.tag_am = self.request.POST['tag_am']
             blog.content_am = self.request.POST['content_am']
             publish =self.request.POST['publish']
+            print("+++++++++++++"+str(publish))
             if publish =="on":
                 blog.publish=True 
             else:
-                blog.publish=True
+                blog.publish=False
 
             print("-----------"+ str(blog.publish))
             blog.blogImage = form.cleaned_data.get("blogImage")
@@ -321,32 +322,32 @@ class BlogView(View):
     def get(self,*args,**kwargs):
         blogs = Blog.objects.get(id=self.kwargs['id'])
         template_name="admin/pages/blog_detail.html"
-        context={'form':blogs}
-        return render(self.request, template_name,context)
+        context = {'form':blogs}
+        return render(self.request, "admin/pages/blog_detail.html",context)
     def post(self,*args,**kwargs):
         form = CreateBlogs(self.request.POST,self.request.FILES)
         context={'form':form}
-        blog = Blog.objects.get(id=self.kwargs['id'])
-         
-        blog.title = self.request.POST['title']
-        blog.tag = self.request.POST['tag']
-        blog.content = self.request.POST['content']
-        blog.title_am = self.request.POST['title_am']
-        blog.tag_am = self.request.POST['tag_am']
-        blog.content_am = self.request.POST['content_am']
-        is_private = 'is_private' in self.request.POST
-        if is_private == 'on':
-            blog.publish = True
-        else:
-            blog.publish = False
-        if self.request.FILES.get('blogImage') == None:
-                 pass
-        elif self.request.FILES.get('blogImage') != None:
-                 blog.blogImage = self.request.FILES.get('blogImage')
-        
-        blog.save()
-        messages.success(self.request, "Edited Blogs Successfully")
-        return redirect("admin:admin_Blogs")
+        if form.is_valid():
+            blog = Blog.objects.get(id=self.kwargs['id'])
+            
+            blog.title = self.request.POST['title']
+            blog.tag = self.request.POST['tag']
+            blog.content = self.request.POST['content']
+            blog.title_am = self.request.POST['title_am']
+            blog.tag_am = self.request.POST['tag_am']
+            blog.content_am = self.request.POST['content_am']
+            publ = 'publish' in self.request.POST
+            print("+++++++++++++"+str(publ))
+            blog.publish = publ
+            if self.request.FILES.get('blogImage') == None:
+                    pass
+            elif self.request.FILES.get('blogImage') != None:
+                    blog.blogImage = self.request.FILES.get('blogImage')
+            
+            blog.save()
+            messages.success(self.request, "Edited Blogs Successfully")
+            return redirect("admin:admin_Blogs")
+        return render(self.request, "admin/pages/blog_detail.html",context)
 
 class BlogCommentForm(View):
     template_name="admin/pages/blog_form.html"

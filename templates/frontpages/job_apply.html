@@ -7,7 +7,7 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h4><u>You are appling to </u>{{vacancy.company}} <u>for </u> {{vacancy.job_title|safe}} <u>at </u>{{vacancy.location}} </h4>
+							<h4><u>Campany</u>{{vacancy.company}} <u>For </u> {{vacancy.job_title|safe}} <u>at </u>{{vacancy.location}} </h4>
 							
 						</div>
 					</div>
@@ -23,7 +23,7 @@
 					<div class="col-xl-3 col-lg-12 col-md-12">
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">Vacancy Type</h3>
+								<h3 class="card-title">Categories</h3>
 							</div>
 							{%for cat in category%}
 							<div class="card-body p-0">
@@ -32,8 +32,8 @@
 										<ul class="list-group mb-0">
 											<li class="list-group-item">
 												<a href="#" class="text-dark">
-													<i class="fa fa-building bg-secondary text-secondary"></i> {{cat}}
-													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">({{cat.countjobs}})</span>
+													 {{cat}}
+													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">{{cat.countjobs}}</span>
 												</a>
 											</li>
 										</ul>
