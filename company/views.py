@@ -142,7 +142,6 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
             messages.warning(self.request,"Company Does Not Exist")
             return redirect("admin:view_company_profile")
 
-
 class CompaniesView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = {}

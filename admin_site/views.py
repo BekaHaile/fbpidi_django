@@ -493,7 +493,6 @@ class CreatePoll(LoginRequiredMixin,View):
                     title_am=form.cleaned_data.get('title_am'),
                     description=form.cleaned_data.get("description"),
                     description_am=form.cleaned_data.get('description_am'),
-                    image = form.cleaned_data.get("image"),                 
                     
                 )
                 poll.save()

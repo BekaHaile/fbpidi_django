@@ -31,7 +31,6 @@ class CreateBlogComment(forms.ModelForm):
 		fields = ('content',)
 
 
-
 class PollsForm(forms.ModelForm):
     
     class Meta:
@@ -46,18 +45,13 @@ class PollsForm(forms.ModelForm):
             'description_am':forms.Textarea(attrs={'class':'summernote'}),
             
         }
- 
+
 
 class CreatePollForm(forms.ModelForm):
     class Meta:
         model = PollsQuestion
         fields = ('title', 'title_am',
                   'description', 'description_am',)
-        # choices = forms.ModelMultipleChoiceField(
-        #     queryset=Choices.objects.all(),
-        #     widget = forms.CheckboxSelectMultiple
-
-        # )
         widgets = {
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),
@@ -65,6 +59,7 @@ class CreatePollForm(forms.ModelForm):
             'description_am':forms.Textarea(attrs={'class':'summernote'}),
            
         }
+
 
 class CreateChoiceForm(forms.ModelForm):
     class Meta:

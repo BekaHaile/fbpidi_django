@@ -60,7 +60,7 @@ class CustomAdminSite(admin.AdminSite):
             path("add_more_images/",wrap(AddProductImage.as_view()),name="add_product_image"),
             path("create_price/",wrap(CreatePrice.as_view()),name="create_price"),
         
-            # paths for polls app, 
+            # paths for polls, 
             path("polls/", wrap(Polls.as_view()), name = "admin_polls"),
             path("create_poll/", wrap(CreatePoll.as_view()), name = "create_poll"),
             path("edit_poll/<id>/", wrap(EditPoll.as_view()), name = "edit_poll"),
@@ -70,8 +70,10 @@ class CustomAdminSite(admin.AdminSite):
             path("delete_choice/<id>/", wrap(DeleteChoice.as_view()), name = "delete_choice"),
             path("detail_poll/<id>/", wrap(DetailPoll.as_view()), name = "detail_poll"),
 
-        
+            # paths for tenders
+            
             path("",include("company.urls")),
+
         ]
         return my_urls + urls
 
