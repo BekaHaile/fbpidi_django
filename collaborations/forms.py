@@ -2,8 +2,8 @@ from django import forms
 from collaborations.models import Blog,BlogComment
 from django_summernote.widgets import SummernoteWidget
 from collaborations.models import Faqs
-from .models import PollsQuestion, Choices, PollsResult
-
+from .models import PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications
+from django.forms.widgets import SelectDateWidget
 
 class CreateFaqs(forms.ModelForm):
     questions_am = forms.CharField(label='questions_am',widget=forms.TextInput(
@@ -73,3 +73,47 @@ class CreateChoiceForm(forms.ModelForm):
             'choice_name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
             'description_am':forms.Textarea(attrs={'class':'summernote'}),          
         }
+
+class TenderForm(forms.ModelForm):
+    # user, bank_account, document
+    tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
+    status = forms.ChoiceField(choices = [ ('Pending', 'Pending'),('Open', 'Open' ),                                                                                         ('Closed', 'Closed'), ('Suspended', 'Suspended')
+                                          ], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
+                                
+    
+    
+    start_date = forms.DateTimeField( input_formats=['%d/%m/%Y %H:%M'],  widget=forms.DateTimeInput(attrs={
+                                                                                'class': 'form-control datetimepicker-input', 'placeholder': 'dd/mm/YYYY HH:mm'}))
+
+    end_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'],  widget=forms.DateTimeInput(attrs={
+                                                                                'class': 'form-control datetimepicker-input', 'placeholder': 'dd/mm/YYYY HH:mm'}))
+    class Meta:
+        model = Tender
+        fields = ('title', 'title_am','description', 'description_am','tender_type', 'status', 
+                'start_date', 'end_date')
+        widgets = {
+                'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
+                'description':forms.Textarea(attrs={'class':'summernote'}),
+                'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
+                'description_am':forms.Textarea(attrs={'class':'summernote'}),
+            
+            }
+
+class TenderEditForm(forms.ModelForm):
+    # user, bank_account, document
+    tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
+    status = forms.ChoiceField(choices = [ ('Pending', 'Pending'),('Open', 'Open' ),                                                                                         ('Closed', 'Closed'), ('Suspended', 'Suspended')
+                                          ], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
+                                
+    
+    
+    class Meta:
+        model = Tender
+        fields = ('title', 'title_am','description', 'description_am','tender_type', 'status')
+        widgets = {
+                'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
+                'description':forms.Textarea(attrs={'class':'summernote'}),
+                'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
+                'description_am':forms.Textarea(attrs={'class':'summernote'}),
+            
+            }

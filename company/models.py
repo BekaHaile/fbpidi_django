@@ -65,7 +65,7 @@ class Company(models.Model):
         
 
     def get_bank_accounts(self):
-        return self.companybankaccounts_set.all() if self.companybankaccounts_set.all().count() > 0 else None
+        return self.companybankaccount_set.all() if self.companybankaccount_set.all().count() > 0 else None
 
 
 class CompanyStaff(models.Model):
@@ -112,3 +112,6 @@ class CompanyBankAccount(models.Model):
 
     def __str__(self):
         return f"{self.company.company_name}'s  {bank.bank_name} account"
+
+    class Meta:
+        unique_together = (('company', 'bank','account_number'))

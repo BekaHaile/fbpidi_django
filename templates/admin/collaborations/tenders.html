@@ -1,193 +1,108 @@
 {%extends 'admin/base_site.html'%}
-{%load crispy_forms_tags %}
 {% block extrastyle %}
-<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
-<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+	<!-- /theme JS files -->
+ 
 {% endblock %}
-{%block pagename%}Polls Form{%endblock%}
+{%block pagename%}Latest Tenders list{%endblock%}
 {%block content%}
-<div class="content">
-
-	{% if edit and perms.collaborations.change_pollsquestion %}
-	    {% if  user.is_superuser or poll.user == user %}
-	
-			<div class="card">
-
-				<div class="card-body">
-		
-					<form action="{%url 'admin:edit_poll'  id=poll.id %}" method="POST" enctype="multipart/form-data">
-						<fieldset class="mb-3 ml-3 mr-3">
-							<legend class="text-uppercase font-size-sm font-weight-bold">Edit "{{poll.title}}"  poll{{poll.name}}</legend>
-		
-							{%csrf_token%}
-							<div class="form-group row">
-								<label class="col-form-label col-lg-3">Poll <Title></Title>(English) </label>
-								<div class="col-lg-9">
-									<input required type="text" name="title" class="form-control" value="{{poll.title}}" id="">
-								</div>
+			
+			<!-- Content area -->
+			<div class="content">
+				
+				<!-- Page length options main category -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Tenders</h5>
+						<div class="header-elements">
+							{%if perms.collaborations.add_tender%}
+							<div class="list-icons">
+								<a href="{%url 'admin:create_tender' %}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
 							</div>
-							<div class="form-group row">
-								<label class="col-form-label col-lg-3">Poll Title(Amharic) </label>
-								<div class="col-lg-9">
-									<input required type="text" name="title_am" class="form-control" value="{{poll.title_am}}" id="">
-								</div>
-							</div>
-		
-							<div class="form-group row">
-								<label class="col-form-label col-lg-3">Poll Description(English) </label>
-								<div class="col-lg-9">
-									<textarea required name="description" id="summernote" cols="30"
-										rows="10">{{poll.description|safe}}</textarea>
-								</div>
-							</div>
-
-							<div class="form-group row">
-								<label class="col-form-label col-lg-3">poll Description(Amharic) </label>
-								<div class="col-lg-9">
-									<textarea required name="description_am" class="summernote" cols="30"
-										rows="10">{{poll.description_am|safe}}</textarea>
-								</div>
-							</div>
-
+							{%endif%}
 							
-						</fieldset>
-		
-						<div class="text-right">
-							<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-								class="btn btn-primary rounded-round" onclick="return confirm ('Are you sure you want to Edit this Poll?')">Edit Poll </button>
 						</div>
-					</form>
-					<br>
-					<form action="{% url 'admin:admin_polls' %}" method="GET" enctype="multipart/form-data" >
-						{%csrf_token%}
-						<div class="text-right">
-							<button style="padding-left: 10%; padding-right: 10%; background-color: grey;" type="submit"
-								class="btn btn-primary rounded-round">Cancel </button>
-						</div>
-					</form>
-					<br>
-					<br><br><br>
-					{% if poll.count_choices > 0 %}
-						<h3 class = "text-center"> Select the chioce you want to Edit or Delete</h3>
+					</div>
+					{%if tenders %}
 
-						<form action="{%url 'admin:edit_choice' %}" method="GET" enctype="multipart/form-data">
-							
-							<fieldset>
-								
-								<div class="form-group row" >
-									<label class="col-form-label col-lg-3">Edit Poll Choices </label>
-												<div style="width: 100%;">
-												<div class="col-lg-9" style="width: 95%; display: inline-block;">
+					<table class="table datatable-show-all">
+						<thead>
+							<tr>
+								<th>Tender Title</th>
+								<th>Created By</th>
+								<th>Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+								<th>Status</th>
+								<th class="text-center">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for tender in tenders%}
+							<tr>
+								<td>{{tender.title}}</td>
+								<td>Company Name</td>
+								<td>{{tender.tender_type}}</td>	
+								<td>{{tender.start_date}}</td>
+								<td>{{tender.end_date}}</td>
+								<td>{{tender.status}}</td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
 
-													<select required name="choice" class="form-control form-control-uniform" data-fouc>
-														
-														
-														{%for choice in poll.choices.all%}
-															<option  value="{{choice.id}}">{{choice.choice_name}}</option>
-															<div class="list-icons" style="width: 3%; display: inline-block;" >
-																<div class="dropdown">
-																	<a href="#" class="list-icons-item" data-toggle="dropdown">
-																		<i class="icon-menu9"></i>
-																	</a>
-										
-																	
-																</div>
-															</div>
-														{%endfor%}
-						
-													</select>
-												</div>
-											
+											<div class="dropdown-menu dropdown-menu-right">
 												
-												</div>
-											
-								</div>
-							</fieldset>
+													{% if perms.collaborations.view_tender %}
+													<a href="{%url 'admin:tender_detail' id=tender.id%}" class="dropdown-item"><i class="icon-pencil"></i>View tender Detail</a>
+													{% endif %}
 
-							<div class="text-right">
-								<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-									class="btn btn-primary rounded-round">Edit/Delete this choice </button>
-							</div>
+													{% if perms.collaborations.change_tender %}
+														{% if user.is_company_admin or tender.user == user %}
+															<a href="{%url 'admin:edit_tender' id=tender.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Tender</a>	
+														{% else %}
+															<a style="pointer-events: none;color: currentColor; cursor: not-allowed; opacity: 0.5; text-decoration: none;" href="{%#" class="dropdown-item"><i class="icon-pencil"></i>Edit Tender</a>
+														{% endif %}
+													
+														<!-- only super admins and company admins can set bank accounts -->
+														{% if perms.collaborations.add_companybankaccount and user.is_company_admin%}
+															<a href="{%url 'admin:add_tenderbankaccount' id=tender.id%}" class="dropdown-item"><i class="icon-plus3"></i>Add new bank account</a>
+														{% endif %}
+	
+	
+														{% if perms.collaborations.delete_tender %}
+														<a href="{%url 'admin:delete_tender'  id=tender.id %}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this tender?')"><i class="icon-trash"></i>Delete Tender</a>
+														{%endif%}
 
-							
-						</form>
-					{%else%}
-						<h3 class = "text-center"> No Choice to Edit or Delete</h3>
-					{%endif%}
-						
+													{% endif %}
+
+													
+												
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+							{%endfor%}
+						</tbody>
+					</table>
 				</div>
+				<!-- /page length options -->
+				
+				{%endif%}
+ 
 			</div>
-		
-
-
-		{% endif %}
-
-
-
-
-		
-	{%else%}
-		
-			<div class="card">
-
-				<div class="card-body">
-
-					<form action="{%url 'admin:create_poll'%}" method="POST" enctype="multipart/form-data">
-						<fieldset class="mb-3 ml-3 mr-3">
-							<legend class="text-uppercase font-size-sm font-weight-bold">Create new Poll</legend>
-							<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
-							{{form.errors}}
-						
-							{%csrf_token%}
-						
-							
-							<div class="form-group row">
-								<label class="col-form-label col-lg-3">{{form.title.label|title}} *</label>
-								<div class="col-lg-9">
-									{{form.title}}
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-form-label col-lg-3">{{form.title_am.label|title}} *</label>
-								<div class="col-lg-9">
-									{{form.title_am}}
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-form-label col-lg-3">{{form.description.label|title}} *</label>
-								<div class="col-lg-9">
-									{{form.description|safe}}
-								</div>
-							</div>
-							
-							<div class="form-group row">
-								<label class="col-form-label col-lg-3">{{form.description_am.label|title}} *</label>
-								<div class="col-lg-9">
-									{{form.description_am|safe}}
-								</div>
-							</div>
-							
-							
-							
-						</fieldset>
-
-						<div class="text-right">
-							<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-								class="btn btn-primary rounded-round">Create Poll </button>
-						</div>
-					</form>
-				</div>
-			</div>
-		
-		
-		
-	{%endif%}
-</div>
-<!-- /content area -->
-<script>
-	$(document).ready(function () {
-		$('#summernote').summernote();
-		$('.summernote').summernote();
-	});
-</script>
+			<!-- /content area -->
+			<!-- <script>
+				$(document).ready(function() {
+					$('.summernote').summernote('code', 'html_tags_string_from_db');
+				});
+			  </script> -->
 {%endblock%}
+

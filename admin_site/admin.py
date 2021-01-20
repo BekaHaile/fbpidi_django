@@ -4,6 +4,7 @@ from django.template.response import TemplateResponse
 from django.urls import path,include
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
+
 # from accounts.forms import UserCreationForm
 # views from accounts app
 from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLogView,
@@ -21,6 +22,8 @@ from admin_site.views import (AdminIndex,CategoryView,CreateCategories,CategoryD
                         DeleteView,AdminProductListView,CreateProductView,ProductDetailView,
                         AddProductImage,CreatePrice)
 
+
+from collaborations.views import TenderList, CreateTender, TenderDetail, EditTender, AddTenderBankAccount, DeleteTender
 
 class CustomAdminSite(admin.AdminSite):
     def get_urls(self):
@@ -71,8 +74,16 @@ class CustomAdminSite(admin.AdminSite):
             path("detail_poll/<id>/", wrap(DetailPoll.as_view()), name = "detail_poll"),
 
             # paths for tenders
+            path("tenders/", TenderList.as_view(), name = "tenders"),
+            path("create_tender/", CreateTender.as_view(), name = "create_tender"),
+            path("tender_detail/<id>/", wrap(DetailPoll.as_view()), name = "tender_detail"),
+            path("edit_tender/<id>/", EditTender.as_view(), name = "edit_tender"),
+            path("delete_tender/<id>/", DeleteTender.as_view(), name = "delete_tender"),
+            path("add_tenderbankaccount/<id>/",wrap(DeletePoll.as_view()), name = "add_tenderbankaccount"),
             
+
             path("",include("company.urls")),
+            
 
         ]
         return my_urls + urls

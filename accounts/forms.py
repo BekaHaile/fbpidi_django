@@ -82,7 +82,19 @@ ADMIN_PERMISSION_LIST = [
     'view_choices',
     'change_choices',
     'delete_choices',
-
+    
+    'view_bank',
+    'add_tender',
+    'view_tender',
+    'change_tender',
+    'delete_tender',
+    'add_companybankaccount',
+    'change_companybankaccount',
+    'delete_companybankaccount',
+    'view_companybankaccount',
+    'view_tenderapplicant',
+    'view_tenderapplications',
+    
 ]
 
 
@@ -107,6 +119,7 @@ class CompanyAdminCreationForm(AbstractUserCreationForm):
         user.save()
         perm_list = []
         for code_name in ADMIN_PERMISSION_LIST:
+            print("9999999999999999999",code_name)
             perm_list.append(Permission.objects.get(codename=code_name))
         user.user_permissions.set(perm_list)
         

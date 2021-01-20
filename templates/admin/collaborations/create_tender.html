@@ -1,0 +1,396 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+{% endblock %}
+{%block pagename%}Tenders Form{%endblock%}
+{%block content%}
+
+
+<!-- Content area -->
+<div class="content">
+
+	{% if edit and perms.collaborations.change_tender %}
+	    
+			<div class="card">
+
+				<div class="card-body">
+
+					<form action="{%url 'admin:edit_tender'  id=tender.id %}" method="POST" enctype="multipart/form-data">
+						<fieldset class="mb-3 ml-3 mr-3">
+							<legend class="text-uppercase font-size-sm font-weight-bold">Edit "{{tender.title}}" </legend>
+
+							{%csrf_token%}
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">Tender <Title></Title>(English) </label>
+								<div class="col-lg-9">
+									<input required type="text" name="title" class="form-control" value="{{tender.title}}" id="">
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">Tender Title(Amharic) </label>
+								<div class="col-lg-9">
+									<input required type="text" name="title_am" class="form-control" value="{{tender.title_am}}" id="">
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">Tender Description(English) </label>
+								<div class="col-lg-9">
+									<textarea required name="description" id="summernote" cols="30"
+										rows="10">{{tender.description|safe}}</textarea>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">Tender Description(Amharic) </label>
+								<div class="col-lg-9">
+									<textarea required name="description_am" class="summernote" cols="30"
+										rows="10">{{tender.description_am|safe}}</textarea>
+								</div>
+							</div>
+
+
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group ">
+										<label class="col-form-label ">{{form.tender_type.label|title}}</label>
+											
+											<span class="form-text text-muted">If you set the type to be free, the document will be downloaded freely</span>
+											
+											{% if tender.tender_type == "Free"%}
+											<input type="radio" id="Free" name="tender_type" value="Free" checked="true">
+											<label for="Free">Free</label><br>
+											<input type="radio" id="Paid" name="tender_type" value="Paid">
+											<label for="Paid">Paid</label><br>  
+											{% else %}
+
+											<input type="radio" id="Free" name="tender_type" value="Free" >
+											<label for="Free">Free</label><br>
+											<input type="radio" id="Paid" name="tender_type" value="Paid" checked = "true">
+											<label for="Paid">Paid</label><br>  
+											{%endif%}
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group ">
+										
+											
+										
+										<label class="col-form-label col-lg-8">Change tender document</label>
+										<input type = "file" name = "document"/>
+											
+											<span class="form-text text-muted">Accepted formats:pdf, Docx, png, gif</span>
+											<a href="{{tender.document.url}}" target="blank"class="btn btn-primary rounded-round">Show current document</a>
+											
+										
+									</div>
+								</div>
+							</div>
+
+							<br><br><br>
+							<div class = "row">
+								
+								
+								<div class="col-md-4">
+									<div class="form-group ">
+										<label class="col-form-label ">Current start date {{tender.start_date}}</label>
+										<input input type="datetime" name = "start_date" placeholder="dd/mm/yyyy hh:mm" value=""/> 
+										<span class="form-text text-muted">New start date</span>
+											
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group ">
+										<label class="col-form-label ">Current end date {{tender.end_date}}</label>
+										<input input type="datetime" name = "end_date" placeholder="dd/mm/yyyy hh:mm" value=""/> 
+										<span class="form-text text-muted">New end date</span>
+											
+									</div>
+								</div>
+
+
+
+								
+
+
+								<div class="col-md-4">
+									<div class="form-group ">
+										<div style="width: 100%;">
+											<div class="col-lg-9" style="width: 95%; display: inline-block;">
+												<label>Current status : {{tender.status}}</label>
+												<select required name="status"  class="form-control form-control-uniform" data-fouc>
+
+													{% for status in tender.TENDER_STATUS %}
+
+														<option  value="{{status}}">{{status}}</option>
+														<div class="list-icons" style="width: 3%; display: inline-block;" >
+															<div class="dropdown">
+																<a href="#" class="list-icons-item" data-toggle="dropdown">
+																	<i class="icon-menu9"></i>
+																</a>
+									
+																
+															</div>
+														</div>
+
+													{%endfor%}
+					
+												</select>
+											</div>
+									
+										
+										</div>
+		
+		
+											
+									</div>
+								</div>
+
+							</div>
+
+
+							
+							
+						</fieldset>
+
+						<div class="text-right">
+							<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+								class="btn btn-primary rounded-round col-lg-2" onclick="return confirm ('Are you sure you want to Edit this tender?')">Edit Tender </button>
+						</div>
+
+
+					</form>
+
+					<br>
+					<form action="{% url 'admin:tenders' %}" method="GET" enctype="multipart/form-data" >
+						{%csrf_token%}
+						<div class="text-right">
+							<button style="padding-left: 10%; padding-right: 10%; background-color: grey;" type="submit"
+								class="btn btn-primary rounded-round col-lg-2">Cancel </button>
+						</div>
+					</form>
+					
+					<br>
+					<br><br><br>
+
+					{% if tender.bankaccount.set.all.count > 0 %}
+						<h3 class = "text-center"> Select the bank account you want to Relate from the bank accounts of this tender.</h3>
+
+						<form action="{%url 'admin:add_tenderbankaccount'  id=tender.id%}" method="GET" enctype="multipart/form-data">
+							
+							<!-- <fieldset>
+								
+								<div class="form-group row" >
+									<label class="col-form-label col-lg-3">Edit tender bank accounts </label>
+												<div style="width: 100%;">
+												<div class="col-lg-9" style="width: 95%; display: inline-block;">
+
+													<select required name="choice" class="form-control form-control-uniform" data-fouc>
+														
+														
+														{%for choice in tender.choices.all%}
+															<option  value="{{choice.id}}">{{choice.choice_name}}</option>
+															<div class="list-icons" style="width: 3%; display: inline-block;" >
+																<div class="dropdown">
+																	<a href="#" class="list-icons-item" data-toggle="dropdown">
+																		<i class="icon-menu9"></i>
+																	</a>
+										
+																	
+																</div>
+															</div>
+														{%endfor%}
+						
+													</select>
+												</div>
+											
+												
+												</div>
+											
+								</div>
+							</fieldset> -->
+
+							<div class="text-right">
+								<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+									class="btn btn-primary rounded-round">Unrelate this account </button>
+							</div>
+
+							
+						</form>
+					{%else%}
+					<div class="text-right">
+						<h3 class = "text-center"> No bank account Remove</h3>
+						<div class="list-icons">
+							<a href="{%url 'admin:add_tenderbankaccount' id=tender.id %}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Relate new bank account</a>
+						</div>							
+					</div>
+					{%endif%}
+
+
+						
+				</div>
+			</div>
+
+
+		
+
+
+
+
+		
+	{%else%}
+		
+			<div class="card">
+
+				<div class="card-body">
+
+					<form action="{%url 'admin:create_tender'%}" method="POST" class="wizard-form steps-enable-all" enctype="multipart/form-data">
+						<fieldset class="mb-3 ml-3 mr-3">
+							<legend class="text-uppercase font-size-sm font-weight-bold">Create new Tender</legend>
+							<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
+							{{form.errors}}
+						
+							{%csrf_token%}
+						
+							
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">{{form.title.label|title}} *</label>
+								<div class="col-lg-9">
+									{{form.title}}
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">{{form.title_am.label|title}} *</label>
+								<div class="col-lg-9">
+									{{form.title_am}}
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">{{form.description.label|title}} *</label>
+								<div class="col-lg-9">
+									{{form.description|safe}}
+								</div>
+							</div>
+							
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">{{form.description_am.label|title}} *</label>
+								<div class="col-lg-9">
+									{{form.description_am|safe}}
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group ">
+										<label class="col-form-label ">{{form.tender_type.label|title}}</label>
+											{{form.tender_type}}
+											<span class="form-text text-muted">If you set the type to be free, the document will be downloaded freely</span>
+											
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group ">
+										<label class="col-form-label col-lg-8">Upload your tender document</label>
+										<input required type = "file" name = "document"  >
+											<span class="form-text text-muted">Accepted formats:pdf, Docx, png, gif</span>
+											<!-- <span class="form-text text-warning">{{form.company_logo.errors}}</span> -->
+									</div>
+								</div>
+							</div>
+							
+							<div class = "row">
+								
+								
+								<div class="col-md-4">
+									<div class="form-group ">
+										<label class="col-form-label ">{{form.start_date.label|title}}</label>
+											{{form.start_date}}
+											
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group ">
+										<label class="col-form-label ">{{form.end_date.label|title}}</label>
+											{{form.end_date}}
+											
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="form-group ">
+										<label class="col-form-label ">{{form.status.label|title}}</label>
+											{{form.status}}
+											
+									</div>
+								</div>
+
+							</div>
+							
+							{% if company_bank_accounts.count > 0 %}
+
+								<div class="form-group row" >
+									<div style="width: 100%;">
+										<div class="col-lg-9" style="width: 95%; display: inline-block;">
+
+											<select required name="company_bank_account" class="form-control form-control-uniform" data-fouc>
+												
+												<label class="col-form-label ">Choose your main bank account for this tender.</label>
+													
+													{%for bank_account in company_bank_accounts %}
+														<option  value="{{bank_account.id}}">{{bank_account.bank.bank_name}} {{bank_account.account_number}} </option>
+														<div class="list-icons" style="width: 3%; display: inline-block;" >
+															<div class="dropdown">
+																<a href="#" class="list-icons-item" data-toggle="dropdown">
+																	<i class="icon-menu9"></i>
+																</a>
+									
+																
+															</div>
+														</div>
+													
+													{%endfor%}
+												
+											</select>
+										</div>
+									
+										
+									</div>
+
+								</div>
+							{% else %}
+											
+								<label class="col-form-label ">You don't have any bank accounts.</label>
+							
+							
+							<div class="text-left">
+									<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+										class="btn btn-primary rounded-round">Register new bank account </button>
+							</div>	
+							
+
+							{% endif %}
+							
+						</fieldset>
+
+						<div class="text-right">
+							<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+								class="btn btn-primary rounded-round">Create Tender </button>
+						</div>
+					</form>
+				</div>
+			</div>
+		
+		
+		
+	{%endif%}
+</div>
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+	});
+</script>
+{%endblock%}

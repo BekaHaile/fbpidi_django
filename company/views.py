@@ -185,6 +185,7 @@ class CreateCompanySolution(LoginRequiredMixin,View):
         return redirect("admin:view_company_profile")
 
 class CreateCompanyEvent(LoginRequiredMixin,View):
+
     def post(self,*args,**kwargs):
         form = CompanyEventForm(self.request.POST,self.request.FILES)
         if form.is_valid():
@@ -194,3 +195,6 @@ class CreateCompanyEvent(LoginRequiredMixin,View):
             messages.success(self.request,"Event Created Successfully")
         messages.warning(self.request,form.errors)
         return redirect("admin:view_company_profile")
+
+class CreateCompanyBankAccount(LoginRequiredMixin, View):
+    pass
