@@ -96,8 +96,8 @@ class BlogComment(models.Model):
 
 ##Faqs
 class Faqs(models.Model):
-    questions = models.CharField(max_length=100,null=False)
-    questions_am = models.TextField(max_length=100,null=False)  
+    questions = models.CharField(max_length=10000,null=False)
+    questions_am = models.TextField(max_length=10000,null=False)  
     answers = models.TextField(null=False)  
     answers_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -110,7 +110,7 @@ class JobCategoty(models.Model):
     categoryName_am = models.CharField(max_length=50,null=False)
 
     def countjobs(self):
-        return self.vacancy_set.all().count()
+        return self.vacancy_set.filter(closed=False).count()
 
     def __str__(self):
         return self.categoryName

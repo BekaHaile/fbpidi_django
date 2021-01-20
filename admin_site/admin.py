@@ -14,7 +14,8 @@ from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoic
 
 from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,FaqsView,FaqsList,
                         CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
-                        JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download
+                        JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
+                        SuperAdminVacancyList
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView
@@ -38,10 +39,10 @@ class CustomAdminSite(admin.AdminSite):
             wrapper.admin_site = self
             return update_wrapper(wrapper, view)
 
-        my_urls = [
+        my_urls = [ 
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
             path('download/<name>/<id>',Download.as_view(),name="Download"),
-            path('close/<id>',CloseVacancy.as_view(),name="close"),
+            path('close/<id>/<closed>',CloseVacancy.as_view(),name="close"),
             path('applicant-info/<id>',Applicantinfo.as_view(),name="Applicant_info"),
             path('applicant-list',ApplicantList.as_view(),name="Applicant_list"),
             
@@ -51,6 +52,7 @@ class CustomAdminSite(admin.AdminSite):
            
             path("Vacancy-form/",CreateVacancy.as_view(),name="Job_form"),
             path("Vacancy-list/",AdminVacancyList.as_view(),name="Job_list"),
+            path("Vacancy-list-super/",SuperAdminVacancyList.as_view(),name="super_Job_list"),
             path("Vacancy-detail/<model_name>/<id>",VacancyDetail.as_view(),name="job_detail"),
            
             path("faqs-detail/<model_name>/<id>",FaqsView.as_view(),name="faqs_detail"),

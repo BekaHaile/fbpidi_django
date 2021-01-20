@@ -210,7 +210,7 @@
 										</div>
 
 
-										<h4 class="font-weight-semibold">{{blog.content|safe}}</h4>
+										<h4 class="font-weight-semibold">{{blog.content|safe|truncatewords:30}}</h4>
 										<a href="{% url 'blog_details' id=blog.id %}" class="btn btn-secondary btn-sm">Read More</a>
 									</div>
 								</div>

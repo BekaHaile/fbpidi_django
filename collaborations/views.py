@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.views import View
 from .forms import PollsForm, CreateJobApplicationForm
 from django.contrib import messages
+import os
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models import User
@@ -92,21 +93,16 @@ class BlogView(LoginRequiredMixin,View):
         return render(self.request, "admin/pages/blog_detail.html",context)
 
 class CreateBlogComment(LoginRequiredMixin,View):
-    template_name="admin/pages/blog_form.html"
     def post(self,*args,**kwargs):
         form = BlogCommentForm(self.request.POST)
-        context={'form':form}
+        blog = Blog.objects.get(id=self.kwargs['id'])
+        template_name="frontpages/blog-details-right.html"
         if form.is_valid():
-            comment = Blog()
-            blog.title = self.request.POST['content']
-            blog.user = self.request.user
-            #blog.blog = 
-            blog.save()
-            form = BlogsForm()
-            context={'form':form}
-            messages.success(self.request, "You commented on a blog")
-            return render(self.request, "admin/pages/blog_form.html",context)
-        return render(self.request, "admin/pages/blog_form.html",context)
+            blogComment=BlogComment(blog=blog,sender=self.request.user,content=self.request.POST['content'])
+            blogComment.save()
+            comment = BlogCommentForm()
+            context = {'blog':blog,'comment':comment}
+            return redirect("blog_grid_right")
 
 ## --- Faqs views
 
@@ -177,10 +173,24 @@ class CloseVacancy(LoginRequiredMixin,View):
     
     def get(self,*args,**kwargs):
         vacancy=Vacancy.objects.get(id=self.kwargs['id'])
-        vacancy.closed = True
-        vacancy.save()
-        messages.success(self.request, "Vacancy Closed Successfully")
-        return redirect("admin:admin_jobcategoty")
+        status = self.kwargs['closed']
+        print("============="+str(status))
+        if status== "True":
+            vacancy.closed = False
+            print("iii")
+            messages.success(self.request, "Vacancy Opened Successfully")
+            vacancy.save()
+            if self.request.user.is_superuser:
+                return redirect("admin:super_Job_list")
+        else:
+            vacancy.closed = True
+            print("lll")
+            messages.success(self.request, "Vacancy Closed Successfully")    
+            vacancy.save()
+            if self.request.user.is_superuser:
+                return redirect("admin:super_Job_list")
+        
+        return redirect("admin:Job_list")
 
 class ApplicantList(LoginRequiredMixin,View):
     
@@ -193,8 +203,9 @@ class ApplicantList(LoginRequiredMixin,View):
 class Applicantinfo(LoginRequiredMixin,View):
     
     def get(self,*args,**kwargs):
-        jobapplicant=JobApplication.objects.filter(vacancy=self.kwargs['id'])
-        context = {'jobapplicant':jobapplicant,'vacancy':self.kwargs['id']}
+        jobapplicant=JobApplication.objects.filter(vacancy=self.kwargs['id']) 
+        vacancyDetail = Vacancy.objects.get(id=self.kwargs['id'])
+        context = {'jobapplicant':jobapplicant,'vacancy':self.kwargs['id'],'vacancyDetail':vacancyDetail}
         template_name = "admin/pages/applicant_list.html"
         return render(self.request, template_name,context)
 
@@ -238,8 +249,11 @@ class JobCategoryDetail(LoginRequiredMixin,View):
     def post(self,*args,**kwarges):
         form = JobCategoryForm(self.request.POST)
         if form.is_valid():
-            category = form.save(commit=False)
+            category = JobCategoty.objects.get(id=self.kwargs['id'])
+            category.categoryName_am=self.request.POST['categoryName_am']
+            category.categoryName = self.request.POST['categoryName']
             category.save()
+            
             messages.success(self.request, "Job category Edited Successfully")
             form = JobCategoty()
             context = {'form':form}
@@ -254,23 +268,44 @@ class VacancyDetail(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         form = Vacancy.objects.get(id=self.kwargs['id'])
         form2 = JobCategoty.objects.all()
+        vacancy = VacancyForm() 
         #print(str(self.kwargs['id'])+"-----------------"+str(form.categoryName))
-        context = {'form':form,'form2':form2}
+        context = {'form':form,'form2':form2,"vacancy":vacancy}
         return render(self.request,"admin/pages/job_detail.html",context)
     def post(self,*args,**kwarges):
         form = VacancyForm(self.request.POST,self.request.FILES)
         context = {'form':form}
         if form.is_valid():
-            vacancy = form.save(commit=False)
-            vacancy.user=self.request.user
+            vacancy = Vacancy.objects.get(id=self.kwargs['id'])
+            vacancy.user=self.request.user,
             vacancy.company=self.company_admin()
+            vacancy.location=self.request.POST['location']
+            vacancy.salary=self.request.POST['salary'],
+            vacancy.job_title=self.request.POST['job_title'],
+            vacancy.description=self.request.POST['description'],
+            vacancy.requirement=self.request.POST['requirement'],
+            vacancy.job_title_am=self.request.POST['job_title_am'],
+            vacancy.description_am=self.request.POST['description_am'],
+            vacancy.requirement_am=self.request.POST['requirement_am'],
+            vacancy.ending_date=form.cleaned_data.get("ending_date"),
+            vacancy.starting_date=form.cleaned_data.get("starting_date"),
+            vacancy.category=self.request.POST['category'],
+            vacancy.employement_type=self.request.POST['employement_type']
             vacancy.save()
+            
             messages.success(self.request, "Vacancy Edited Successfully")
             form = JobCategoty()
             context = {'form':form}
             return redirect("admin:Job_list")
         return render(self.request,"admin/pages/job_detail.html",context)
 
+class SuperAdminVacancyList(LoginRequiredMixin,View):
+    
+    def get(self,*args,**kwargs):
+        vacancy=Vacancy.objects.all()
+        context = {'vacancy':vacancy}
+        template_name = "admin/pages/super_job_list.html"
+        return render(self.request, template_name,context)
 
 class AdminVacancyList(LoginRequiredMixin,View):
     
@@ -288,7 +323,7 @@ class CreateVacancy(LoginRequiredMixin, View):
         return force
 
     def get(self,*args,**kwargs):        
-        vacancy = VacancyForm()
+        vacancy = VacancyForm() 
         context = {'vacancy':vacancy}
         return render(self.request,"admin/pages/job_form.html",context)
 
@@ -350,7 +385,7 @@ class VacancyList(LoginRequiredMixin,View):
 
 
 #blog-grid-right 
-class BlogList(LoginRequiredMixin,View):
+class BlogList(View):
 
     def get(self,*args,**kwargs):
         blog = Blog.objects.filter(publish=True) 
@@ -361,7 +396,7 @@ class BlogList(LoginRequiredMixin,View):
 
 
 
-class BlogDetail(LoginRequiredMixin,View):
+class BlogDetail(View):
 
 	def get(self,*args,**kwargs):
 		blog = Blog.objects.get(id=self.kwargs['id'])
@@ -383,7 +418,7 @@ class BlogDetail(LoginRequiredMixin,View):
 			return render(self.request, template_name,context)
 
 
-class FaqList(LoginRequiredMixin,View):
+class FaqList(View):
 	def get(self,*args,**kwargs):
 		template_name="frontpages/faq.html"
 		faq = Faqs.objects.all()
