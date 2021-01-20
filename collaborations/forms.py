@@ -78,7 +78,7 @@ class TenderForm(forms.ModelForm):
     # user, bank_account, document
     tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
     status = forms.ChoiceField(choices = [ ('Pending', 'Pending'),('Open', 'Open' ),                                                                                         ('Closed', 'Closed'), ('Suspended', 'Suspended')
-                                          ], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
+                                          ], required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
                                 
     
     

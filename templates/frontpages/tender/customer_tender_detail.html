@@ -41,8 +41,16 @@
                                     <a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>{{tender.tender_type}}</a>
                                     
                                 </div>
-                                
-                                
+                                {% if tender.status == 'Open' %}
+								<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >Open</div>
+								{%elif tender.status == 'Pending' %}
+								<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >Pending</div>
+								{%elif tender.status == 'Closed' %}
+								<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >Closed</div>
+								{%else%} 
+								<div style="background-color: blue; color:white; width: fit-content; padding: 5px;" >Suspended</div>
+								{%endif%}
+								<br>
 
                                 <h4>Tender description</h4>
                                 <p>{{tender.description|safe}}</p>

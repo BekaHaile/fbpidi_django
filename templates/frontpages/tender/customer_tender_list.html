@@ -226,7 +226,15 @@
 														</a>
 													</div>
 												</div>
-												
+												{% if tender.status == 'Open' %}
+												<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >Open</div>
+												{%elif tender.status == 'Pending' %}
+												<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >Pending</div>
+												{%elif tender.status == 'Closed' %}
+												<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >Closed</div>
+												{%else%} 
+												<div style="background-color: blue; color:white; width: fit-content; padding: 5px;" >Suspended</div>
+												{%endif%}
 												<a href="/collaborations/customer_tender_detail/{{tender.id}}/" class="btn btn-secondary btn-sm mt-4">
 													View Detail
 												</a>

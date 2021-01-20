@@ -191,22 +191,23 @@ class TenderList(LoginRequiredMixin,View):
 
 
 class TenderDetail(LoginRequiredMixin,View):
-    def get(self, *args, **kwargs):  
-          
-        if self.kwargs['id'] :
+    def get(self, *args, **kwargs):         
+        form = TenderForm()
+        if self.kwargs['id']:
             try:
-                poll = PollsQuestion.objects.get(id = self.kwargs['id']  )
-                return render(self.request, "admin/pages/admin_poll_detail.html", {'poll':poll,})
-
+                tender = Tender.objects.get(id =self.kwargs['id'] )
+                company = tender.get_company()
+                company_bank_accounts = company.get_bank_accounts()
+                context = {'form':form, 'banks':banks, 'company_bank_accounts':company_bank_accounts, 'tender':tender}
+                return render(self.request,'admin/collaborations/tender_detail.html',context)
             except Exception as e:
-                print("eeeeeeeeeeeeeeeee", str(e))
-                messages.error(self.request, "Poll not found")
-                return redirect("admin:admin_polls") 
+                print(str(e))
+                messages.error(self.request,"Tender  edit error")
+                return redirect("admin:tenders")
 
-        else:
+        print("error at tenderDetail for admin")
+        return redirect("admin:tenders")
 
-            messages.error(self.request, "Nothing selected!")
-            return redirect("admin:admin_polls")
 
 
 class AddTenderBankAccount(LoginRequiredMixin,View):
@@ -235,11 +236,11 @@ class AddTenderBankAccount(LoginRequiredMixin,View):
             print(poll.choices.all())
             
             messages.success(self.request,"Choice Successfully Created!")
-            return redirect("admin:admin_polls")
+            return redirect("admin:tenders")
 
         else:
             messages.error(self.request, "Error! Choice Creation Failed! form case! " )
-            return redirect("admin:admin_polls")
+            return redirect("admin:tenders")
 
 
 class EditTender(LoginRequiredMixin,View):
