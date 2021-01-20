@@ -1,7 +1,7 @@
 # django imports
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.contrib import messages
 from django.views import View
 from django.views.generic import CreateView
@@ -53,20 +53,23 @@ class CustomerSignUpView(CreateView):
             +"If you can\'t find the mail please check it in your spam folder!"})
 
 
-class SocialLoginView(LoginRequiredMixin,View):
+# class SocialLoginView(LoginRequiredMixin,View):
+class CompleteLoginView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         
         user = User.objects.get(id=self.request.user.id)
-        if user.is_customer == False:
-            user.is_customer = True
-            user.save()
-            customer = Customer(
-                user=user
-            )
-            customer.save()
-            
-            return redirect("/accounts/login/", messages  = "Account Created Successfully! Please Login Again! \n Then you can modify your Email my clicking on My Profile.")
-        return redirect("index")
+        if user.is_staff:
+            return redirect("admin:index")
+        else:
+            if user.is_customer == False:
+                user.is_customer = True
+                user.save()
+                customer = Customer(
+                    user=user
+                )
+                customer.save()
+            return redirect("index")
+
 
 
 def activate(request, uidb64, token):
@@ -224,7 +227,7 @@ class GroupView(LoginRequiredMixin,View):
         group,created = Group.objects.get_or_create(name = self.request.POST.get('group_name'))
         group.permissions.set(permission_list)
         group.save()
-        return HttpResponse({"message":"Role Group Created SuccessFully","group":group})
+        return JsonResponse({"message":"Role Group Created SuccessFully"})
 
 
 class RolesView(LoginRequiredMixin,View):

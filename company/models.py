@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from admin_site.models import SubCategory
 
 
     
@@ -18,7 +19,7 @@ class Company(models.Model):
     detail = models.TextField(verbose_name="Company Detail(English)")
     detail_am = models.TextField(verbose_name="Company Detail(Amharic)")
     company_logo = models.ImageField(verbose_name="Company Logo",help_text="png,jpg,gif files, Max size 10MB")
-    company_intro = models.FileField(verbose_name="Company Intro",help_text="mp4,mkv,avi files, Max size 10MB")
+    company_intro = models.FileField(verbose_name="Company Intro",default="",null=True,blank=True, help_text="mp4,mkv,avi files, Max size 10MB")
     company_type = models.CharField(max_length=255)
     company_type_am = models.CharField(max_length=255)
     number_of_employees = models.IntegerField(default=0,verbose_name="Number Of Employees")
@@ -26,13 +27,15 @@ class Company(models.Model):
     certification = models.CharField(max_length=100,verbose_name="Certification")
     city = models.CharField(max_length=100,default="",verbose_name="City")
     postal_code = models.CharField(max_length=100,null=True,default="")
-    products = models.CharField(max_length=200,default="",verbose_name="Main Products")
+    product_category = models.ForeignKey(SubCategory,null=True,blank=True,on_delete=models.CASCADE,verbose_name="Main Products")
     capital = models.FloatField(default=0)
     color = models.CharField(default="#000000",max_length=10,verbose_name="Your Company Theme")
-    facebook_link = models.CharField(max_length=100,default="")
-    twiter_link = models.CharField(max_length=100,default="")
-    google_link = models.CharField(max_length=100,default="")
-    pintrest_link = models.CharField(max_length=100,default="")
+    facebook_link = models.CharField(max_length=100,default="",null=True,blank=True)
+    twiter_link = models.CharField(max_length=100,default="",null=True,blank=True)
+    google_link = models.CharField(max_length=100,default="",null=True,blank=True)
+    pintrest_link = models.CharField(max_length=100,default="",null=True,blank=True)
+    instagram_link = models.CharField(max_length=100,default="",null=True,blank=True)
+    linkedin_link = models.CharField(max_length=100,default="",null=True,blank=True)
        # Trade Capacity
     incoterms = models.CharField(max_length=100,null=True,blank=True,verbose_name="International Commercial Terms(English)",help_text="Incoterms")
     incoterms_am  = models.CharField(max_length=100,null=True,blank=True,verbose_name="International Commercial Terms(Amharic)",help_text="Incoterms")

@@ -1,30 +1,44 @@
 from django import forms
-from collaborations.models import Blog,BlogComment
 from django_summernote.widgets import SummernoteWidget
 from collaborations.models import Faqs
-from .models import PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications
+from collaborations.models import Faqs,Blog,BlogComment,Vacancy,JobApplication
+from .models import  PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications JobCategoty
 from django.forms.widgets import SelectDateWidget
 
-class CreateFaqs(forms.ModelForm):
-    questions_am = forms.CharField(label='questions_am',widget=forms.TextInput(
-    	attrs={'placeholder': 'question in amharic'}))
+
+JOB_CHOICES=[('Temporary','Temporary'),
+            ('Permanent','Permanent'),
+            ('Contract','Contract')]
+
+class FaqsForm(forms.ModelForm):
+    
 
     class Meta:
         model = Faqs
         fields = ('questions', 'questions_am',
                   'answers', 'answers_am')
-        widgets = {'answers': SummernoteWidget,'answers_am': SummernoteWidget}
+        widgets = {'answers': forms.Textarea(attrs={'class':'summernote'}),
+                    'answers_am': forms.Textarea(attrs={'class':'summernote'}),
+                    'questions':forms.TextInput(attrs={'class':'form-control'}),
+                    'questions_am':forms.TextInput(attrs={'class':'form-control'})}
 
-
-class CreateBlogs(forms.ModelForm):
+class BlogsForm(forms.ModelForm):
     
     class Meta:
         model = Blog
         fields = ('title', 'tag', 'content','publish','blogImage','title_am','tag_am','content_am')
-        widgets = {'content': SummernoteWidget,'content_am': SummernoteWidget}
+        widgets = {'content': forms.Textarea(attrs={'class':'summernote'}),
+                    'content_am': forms.Textarea(attrs={'class':'summernote'}),
+                    'title':forms.TextInput(attrs={'class':'form-control'}),
+                    'tag':forms.TextInput(attrs={'class':'form-control'}),
+                    'title_am':forms.TextInput(attrs={'class':'form-control'}),
+                    'tag_am':forms.TextInput(attrs={'class':'form-control'}),
 
 
-class CreateBlogComment(forms.ModelForm):
+                            }
+
+
+class BlogCommentForm(forms.ModelForm):
 	
 	class Meta:
 		model = BlogComment
@@ -56,8 +70,7 @@ class CreatePollForm(forms.ModelForm):
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),
             'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
-            'description_am':forms.Textarea(attrs={'class':'summernote'}),
-           
+            'description_am':forms.Textarea(attrs={'class':'summernote'}),          
         }
 
 
@@ -117,3 +130,66 @@ class TenderEditForm(forms.ModelForm):
                 'description_am':forms.Textarea(attrs={'class':'summernote'}),
             
             }
+
+
+
+'''
+class DateForm(forms.Form):
+    date = forms.DateTimeField(
+        input_formats=['%d/%m/%Y %H:%M'],
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control datetimepicker-input',
+            'data-target': '#datetimepicker1'
+        })
+    ) 
+'''
+
+class VacancyForm(forms.ModelForm):
+
+    employement_type = forms.CharField(label='job type', widget=forms.Select(choices=JOB_CHOICES))
+    starting_date = forms.DateField(widget=SelectDateWidget())
+
+    ending_date = forms.DateField(widget=SelectDateWidget())
+
+    class Meta:
+        model = Vacancy
+        fields = ('location', 'salary', 'category'
+                  ,'job_title', 'description','requirement',
+                  'job_title_am','description_am','requirement_am')
+        
+        widgets = {
+            'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'location':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirement'}),
+            'job_title':forms.TextInput(attrs={'class':'form-control'}),
+            'job_title_am':forms.TextInput(attrs={'class':'form-control'}),
+            'description':forms.Textarea(attrs={'class':'summernote'}),
+            'description_am':forms.Textarea(attrs={'class':'summernote'}),
+            'requirement':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirement'}),
+            'requirement_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirement in Amharic'})
+                      
+        }
+
+
+
+class CreateJobApplicationForm(forms.ModelForm):
+    class Meta:
+        model = JobApplication
+        fields = ('status', 'bio',
+                  'cv', 'documents') 
+        
+        widgets = {
+            'status':forms.TextInput(attrs={'class':'form-control','placeholder':'Current employement status'}),
+            'bio':forms.Textarea(attrs={'class':'summernote'}),         
+        }
+
+class JobCategoryForm(forms.ModelForm):
+    class Meta:
+        model = JobCategoty
+        fields = ('categoryName','categoryName_am')
+        widgets ={
+            'categoryName':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
+             'categoryName_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
+        }
+
+
+

@@ -2,39 +2,13 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
-CAT_LIST = (
-    ("Food",'Food'),
-    ("Beverages",'Beverages'),
-    ("Pharmaceuticals",'Pharmaceuticals'),
-)
-class Category(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=False,null=False)
-    category_type = models.CharField(choices=CAT_LIST,max_length=200,verbose_name="Category Type(English)")
-    category_type_am = models.CharField(choices=CAT_LIST,max_length=200,verbose_name="Category Type(Amharic)")
-    category_name = models.CharField(max_length=200,verbose_name="Category Name(English)")
-    category_name_am = models.CharField(max_length=200,verbose_name="Category Name(Amharic)")
-    description = models.TextField(verbose_name="Description(English)")
-    description_am = models.TextField(verbose_name="Description(Amharic)")
-    timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.category_name
-
-
-class SubCategory(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=False,null=False)
-    category_name = models.ForeignKey(Category,on_delete=models.CASCADE,null=False,blank=False,verbose_name="Category Type")
-    sub_category_name = models.CharField(max_length=200,verbose_name="Sub-Category Name(English)")
-    sub_category_name_am = models.CharField(max_length=200,verbose_name="Sub-Category Name(Amharic)")
-    description = models.TextField(verbose_name="Description (English)")
-    description_am = models.TextField(verbose_name="Description (Amharic)")
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.sub_category_name
+from admin_site.models import SubCategory
+from company.models import Company
 
 class Product(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=False)
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
     name = models.CharField(max_length=255,verbose_name="Product Name(English)")
     name_am = models.CharField(max_length=255,verbose_name="Product Name(Amharic)")
     category = models.ForeignKey(SubCategory,on_delete=models.CASCADE, blank=True,null=True, verbose_name="Product Category")
@@ -68,3 +42,22 @@ class ProductPrice(models.Model):
 
     def __str__(self):
         return self.price
+
+
+class Review(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField(max_length=200)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    review = models.TextField()
+    time_stamp = models.DateTimeField(auto_now_add=True)
+
+
+class AbuseReport(models.Model):
+    url_link = models.CharField(max_length=100)
+    category = models.CharField(max_length=100)
+    email = models.EmailField(max_length=200)
+    message  = models.TextField()
+    time_stamp = models.DateTimeField(auto_now_add=True)
+    
+

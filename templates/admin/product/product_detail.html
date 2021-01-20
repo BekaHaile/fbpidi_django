@@ -1,0 +1,265 @@
+{%extends 'admin/base_site.html'%}
+{%load i18n%}
+{% block extrastyle %}
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/media/fancybox.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script> 
+	<script src="/static/admin/global_assets/js/demo_pages/ecommerce_product_list.js"></script>
+	<!-- /theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/media/fancybox.min.js"></script> 
+	<script src="/static/admin/global_assets/js/demo_pages/gallery.js"></script>
+
+	<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/anytime.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.date.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.time.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/legacy.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/notifications/jgrowl.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/picker_date.js"></script>
+	
+
+	<!-- /theme JS files -->
+	
+{% endblock %}
+{%block pagename%}{% trans "Ecommerce - Product Detail" %}{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Inner container -->
+				
+					<div class="card">
+						<div class="card-header header-elements-inline">
+							<h5 class="card-title"></h5>
+							{%if product.user == user%}
+							<div class="header-elements">
+								<div class="list-icons">
+									{%if product_price.count > 0%}
+									<!-- <button type="button" data-toggle="modal" data-target="#price_modal_form_change"  class="btn btn-warning rounded-round ">Change Price</button> -->
+									{%else%}
+									<button type="button" data-toggle="modal" data-target="#price_modal_form_new"  class="btn btn-success rounded-round ">Add Price</button>
+									{%endif%}
+								</div>
+							</div>
+							{%endif%}
+						</div>
+						<!-- List -->
+						<div class="card card-body">
+							<form action="{% url 'admin:add_product_image'%}" method="post" enctype="multipart/form-data">{%csrf_token%}
+								<div class="media align-items-center align-items-lg-start text-center text-lg-left flex-column flex-lg-row">
+									<div class="mr-lg-3 mb-3 mb-lg-0">
+										<a href="{{product.image.url}}" data-popup="lightbox">
+											<img src="{{product.image.url}}" width="200" alt="">
+										</a>
+									</div>
+	
+									<div class="media-body">
+										<h6 class="media-title font-weight-semibold">
+											<a href="#">{{product.name}}</a>
+										</h6>
+	
+										<ul class="list-inline list-inline-dotted mb-3 mb-lg-2">
+											<li class="list-inline-item"><a href="#" class="text-muted">Product of</a></li>
+											<li class="list-inline-item"><a href="#" class="text-muted">{%if company%}{{company.company_name|title}}{%else%}Super Admin{%endif%} </a></li>
+										</ul>
+	
+										<p class="mb-3 mr-2">{{product.description|safe|truncatewords:30}}</p>
+	
+										<ul class="list-inline list-inline-dotted mb-0">
+											<li class="list-inline-item">All items from <a href="#">Aloha</a></li>
+											<li class="list-inline-item">Add to <a href="#">wishlist</a></li>
+										</ul>
+									</div>
+	
+									<div class="mt-3 mt-lg-0 ml-lg-3 text-center">
+										{%if product_price.count > 0 %}
+											{%for prc in product_price%}
+											<h3 class="mb-0 font-weight-semibold">ETB {{prc.price}}</h3>
+											{%endfor%}
+										{%else%}
+										Not Priced Yet
+										{%endif%}
+										<div>
+											<i class="icon-star-full2 font-size-base text-warning-300"></i>
+											<i class="icon-star-full2 font-size-base text-warning-300"></i>
+											<i class="icon-star-full2 font-size-base text-warning-300"></i>
+											<i class="icon-star-full2 font-size-base text-warning-300"></i>
+											<i class="icon-star-full2 font-size-base text-warning-300"></i>
+										</div>
+	
+										<div class="text-muted">85 reviews</div>
+	
+										<!-- <button type="button" class="btn bg-teal-400 mt-3"><i class="icon-cart-add mr-2"></i> Add to cart</button> -->
+									</div>
+								</div>
+
+								<div class="mt-4 row">
+									<h3 class="mb-2 mt-2 font-weight-bold"> More Description</h3>
+									<p class="ml-3 mr-3">{{product.description|safe}}</p>
+								</div>
+								<hr>
+								<h3 class="m-2">More Images</h3>
+								<div class="mt-4 mb-3 row">
+									{%for pd_img in product_imgs%}
+									<div class="col-sm-6 col-lg-3">
+										<div class="card">
+											<div class="card-img-actions m-1">
+												<img class="card-img img-fluid" src="{{pd_img.image.url}}" alt="">
+												<div class="card-img-actions-overlay card-img">
+													<a href="{{pd_img.image.url}}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round" data-popup="lightbox" rel="group">
+														<i class="icon-plus3"></i>
+													</a>
+				
+													<a href="{%url 'admin:delete' model_name='product_image' id=pd_img.id%}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+														<i class="icon-trash"></i>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+									{%endfor%}
+								</div>
+									
+									<div class="form-group row">
+										<input type="hidden" name="product" value="{{product.id}}">
+										<label class="col-form-label col-lg-2">Add More Images</label>
+										<div class="col-lg-10">
+											<input type="file" required name="image" class="form-input-styled" data-fouc="">
+											
+										</div>
+									</div>
+									<div class="text-right">
+										<button style="padding-left: 10%; padding-right: 10%;" type="submit" class="btn btn-primary">Save Image</button>
+									</div>
+									
+								
+							</form>
+							 
+						</div>
+						<div class="card card-footer">
+							<div>
+								<a href="{%url 'admin:delete' model_name='product' id=product.id%}" class="btn btn-danger rounded-round ">Delete This Product</a>
+							</div>
+						</div>
+						 
+
+					</div>
+					<!-- /Inner content -->					 
+				 
+
+			</div>
+			<!-- /content area -->
+			<div class="modal fade" id="price_modal_form_new" role="dialog">
+				<div class="modal-dialog modal-md">
+
+				   <div class="modal-content">
+					   <div class="modal-header">
+						   <button type="button" class="close" id="combo_btn_head"
+							   data-dismiss="modal" style="font-size: 30px;">&times;</button>
+						   
+					   </div>
+					   <div class="modal-body">
+						   <h4>Add Price For {{product.name}}</h4>
+						   <form action="{%url 'admin:create_price'%}" method="POST" >{%csrf_token%}
+							   <input type="hidden" value="{{product.id}}" name="product">
+							   <input type="hidden" name="option" value="new" id="">
+							  <div class="form-group row">
+								<div class="col-md-11">
+									<input type="text" name="price" class="form-control" placeholder="Enter Price">
+								</div>
+							  </div>
+							  <div class="row">
+								<div class="col-md-6">
+										<div class="col-md-10 input-group">
+											<span class="input-group-prepend">
+												<span class="input-group-text"><i class="icon-calendar5"></i></span>
+											</span>
+											<input type="text" name="start_date" class="form-control pickadate" placeholder="Start Date">
+										</div>
+								</div>
+								<div class="col-md-6">
+									 
+										<div class="col-md-10 input-group">
+											<span class="input-group-prepend">
+												<span class="input-group-text"><i class="icon-calendar5"></i></span>
+											</span>
+											<input type="text" name="end_date" class="form-control pickadate" placeholder="End Date">
+										</div>
+								</div>
+								
+							  </div>
+							  <div class="mt-3 text-right">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						   </form>
+					   </div>
+
+					   <div class="modal-footer">
+						   
+					   </div>
+				   </div>
+			   </div>
+		   </div>
+		   <div class="modal fade" id="price_modal_form_change" role="dialog">
+			<div class="modal-dialog modal-md">
+
+			   <div class="modal-content">
+				   <div class="modal-header">
+					   <button type="button" class="close" id="combo_btn_head"
+						   data-dismiss="modal" style="font-size: 30px;">&times;</button>
+					   
+				   </div>
+				   <div class="modal-body">
+					   <h4>Chage the Price For a Product</h4>
+					   {%for pprice in product_price%}
+					   <form action="{%url 'admin:create_price'%}" method="POST" >{%csrf_token%}
+						<input type="hidden" value="{{product.id}}" name="product">
+						<input type="hidden" value="{{pprice.id}}" name="priceid">
+						<input type="hidden" name="option" value="change" id="">
+					   <div class="form-group row">
+						 <div class="col-md-11">
+							 <input type="text" name="price" value="{{pprice.price}}" class="form-control" placeholder="Enter Price">
+						 </div>
+					   </div>
+					   <div class="row">
+						 <div class="col-md-6">
+								 <div class="col-md-10 input-group">
+									 <span class="input-group-prepend">
+										 <span class="input-group-text"><i class="icon-calendar5"></i></span>
+									 </span>
+									 <input type="text" value="{{pprice.startdate}}" name="start_date" class="form-control pickadate" placeholder="Start Date">
+								 </div>
+						 </div>
+						 <div class="col-md-6">
+							  
+								 <div class="col-md-10 input-group">
+									 <span class="input-group-prepend">
+										 <span class="input-group-text"><i class="icon-calendar5"></i></span>
+									 </span>
+									 <input type="text" value="{{pprice.end_date}}" name="end_date" class="form-control pickadate" placeholder="End Date">
+								 </div>
+						 </div>
+						 
+					   </div>
+					   <div class="mt-3 text-right">
+						 <button type="submit" class="btn btn-primary">Submit</button>
+					 </div>
+					</form>
+					   {%endfor%}
+				   </div>
+
+				   <div class="modal-footer">
+					   
+				   </div>
+			   </div>
+		   </div>
+	   </div>
+			<script>
+				$(document).ready(function() {
+					$('#summernote').summernote();
+				});
+			  </script> 
+{%endblock%}

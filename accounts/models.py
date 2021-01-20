@@ -33,6 +33,9 @@ class Customer(models.Model):
     def __str__(self):
         return self.user.username
 
+    def get_year(self):
+        return self.time_stamp.year
+
 class CompanyAdmin(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     is_suplier = models.BooleanField(default=False) # if the user is from a suplier company.

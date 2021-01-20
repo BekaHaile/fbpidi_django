@@ -1,17 +1,26 @@
 from django import forms
 from company.models import Company,CompanySolution,CompanyEvent,CompanyBankAccount,Bank
+from admin_site.models import SubCategory
+
+from company.models import Company,CompanySolution,CompanyEvent
 
 class CompanyForm(forms.ModelForm):
     # color = forms.CharField(label='Company Theme Color',
     #     widget=forms.TextInput(attrs={'class':"form-control colorpicker-show-input",
     #                 'data-preferred-format':"hex",'data-fouc':'data-fouc', 'type': 'text'}))
+    product_category = forms.ModelChoiceField(
+        empty_label="Select Main Product Type",
+        queryset=SubCategory.objects.all(),
+        widget=forms.Select(attrs={'class':'form-control form-control-uniform'}),
+        required=True
+    )
     class Meta:
         model = Company
         fields = (
             # Company Profile
                 'company_name', 'company_name_am', 'email', 'phone_number','city','postal_code',
                   'detail', 'detail_am', 'company_logo', 'location', 'company_intro','color',
-                  'number_of_employees','established_year','certification','products','capital',
+                  'number_of_employees','established_year','certification','capital',
                 #   'facebook_link','twitter_link','google_link','pintrest_link'
             # trade capacity
             'incoterms','incoterms_am','terms_of_payment','average_lead_time','average_lead_time_am',
@@ -35,7 +44,7 @@ class CompanyForm(forms.ModelForm):
             'certification':forms.TextInput(attrs={'class':'form-control','placeholder':'Management System Certification'}),
             'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
             'postal_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Postal Code'}),
-            'products':forms.TextInput(attrs={'class':'form-control','placeholder':'Main Products'}),
+            # 'product_category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'capital':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_capital")','placeholder':'Capital'}),
             'detail': forms.Textarea(attrs={'class': 'summernote'}),
             'detail_am': forms.Textarea(attrs={'class': 'summernote'}),
@@ -104,4 +113,40 @@ class CompanyBankAccountForm(forms.ModelForm):
             'company':forms.Select(attrs={'class':'hidden'}),
             'account_number':forms.TextInput( attrs = {'class': 'form-control', 'placeholder': 'Valid bank account (for the selected bank)'}),
         }
+
+        
 # class FbpidiCompanyForm()
+class FbpidiCompanyForm(forms.ModelForm):
+
+    class Meta:
+        model = Company
+        fields = (
+            # Company Profile
+                'company_name', 'company_name_am', 'email', 'phone_number','city','postal_code',
+                  'detail', 'detail_am', 'company_logo', 'location', 'company_intro',
+                  'established_year','linkedin_link','instagram_link',
+                  'facebook_link','twiter_link','google_link','pintrest_link',
+            )
+        widgets = {
+            # Profile
+            'company_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Company Name(English)'}),
+            'company_name_am': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Company Name(Amharic)'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address..'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number...', "data-mask": "+251-99999-9999"}),
+            'company_logo': forms.FileInput(attrs={'class': 'form-input-styled'}),
+            'company_intro': forms.FileInput(attrs={'class': 'form-input-styled'}),
+            'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address'}),
+            'established_year':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_year")','placeholder':'Year Of Establishement'}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
+            'postal_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Postal Code'}),
+            'instagram_link':forms.TextInput(attrs={'class':'form-control','placeholder':'Main Products'}),
+            'linkedin_link':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_capital")','placeholder':'Capital'}),
+            'detail': forms.Textarea(attrs={'class': 'summernote'}),
+            'detail_am': forms.Textarea(attrs={'class': 'summernote'}),
+            # 'color':forms.TextInput(attrs={'class':"form-control colorpicker-show-input",
+            #     'data-preferred-format':"hex",'data-fouc':'data-fouc', 'type': 'text'}),
+            'facebook_link': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Facebook Link'}),
+            'twiter_link': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Twitter Link'}),
+            'google_link': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Google Link'}),
+            'pintrest_link': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Pintrest Link'}),
+        }

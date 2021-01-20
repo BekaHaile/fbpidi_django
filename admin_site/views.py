@@ -4,414 +4,27 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+import os
 
 # 
 from product import models
-from product.forms import SubCategoryForm,ProductCreationForm
 from accounts.models import User
 from company.models import Company
-from collaborations.forms import CreateBlogs, CreateBlogComment, CreateFaqs
-from collaborations.models import Blog, BlogComment,Faqs
+
 
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
-from collaborations.models import PollsQuestion, PollsResult, Choices
+from collaborations.models import PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategoty, Blog
+from django.http import HttpResponse, FileResponse
+ 
+# 
 
-## Faqs
-class FaqsFormView(View):
-    def get(self,*args,**kwargs):
-        form = CreateFaqs()
-        context = {'form':form}
-        return render(self.request,"admin/pages/faqs_forms.html",context)
-
-
-    def post(self,*args,**kwargs):
-        form = CreateFaqs(self.request.POST)
-        context = {"form":form}
-        if form.is_valid():
-            faqs=Faqs(questions=self.request.POST['questions'],
-                questions_am=self.request.POST['questions_am'],
-                answers=self.request.POST['answers'],
-                answers_am=self.request.POST['answers_am'])
-            faqs.save()
-            form = CreateFaqs()
-            context = {'form':form}
-            messages.success(self.request, "New Faqs Added Successfully")
-            return redirect("admin:admin_Faqs")
-        return render(self.request, "admin/pages/faqs_forms.html",context)
-
-
-class FaqsView(View):
-    template_name="admin/pages/blog_list.html"
-    def get(self,*args,**kwargs):
-        faqs=Faqs.objects.get(id=self.kwargs['id'])
-        template_name="admin/pages/faqs_detail.html"
-        context={'faq':faqs}
-        return render(self.request, template_name,context)
-    def post(self,*args,**kwargs):
-        form = CreateFaqs(self.request.POST)
-        context={'form':form}
-        faqs = Faqs.objects.get(id=self.kwargs['id'])
-         
-        faqs.questions = self.request.POST['questions']
-        faqs.questions_am = self.request.POST['questions_am']
-        faqs.answers = self.request.POST['answers']
-        faqs.answers_am = self.request.POST['answers_am']
-        messages.success(self.request, "Edited Faqs Successfully")
-        faqs.save()
-        return redirect("admin:admin_Faqs",option=option) 
-
-class FaqsList(View):
-    template_name = "admin/pages/faqs_forms.html"
-    def get(self,*args,**kwargs):
-        faqs=Faqs.objects.all()
-        context = {'faqs':faqs}
-        template_name = "admin/pages/faqs_list.html"
-        return render(self.request, template_name,context)
-
-    
 
 # INDEX VIEW
 class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = dict()
         return render(self.request,"admin/index.html",context)
-
-## blogform
-class BlogForm(View):
-    template_name="admin/pages/blog_form.html"
-    def get(self,*args,**kwargs):
-        form = CreateBlogs()
-        template_name="admin/pages/blog_form.html"
-        context={'form':form}
-        return render(self.request, template_name,context)
-    def post(self,*args,**kwargs):
-        form = CreateBlogs(self.request.POST,self.request.FILES)
-        context={'form':form}
-        if form.is_valid():
-            blog = Blog()
-            blog.user = self.request.user
-            blog.title = self.request.POST['title']
-            blog.tag = self.request.POST['tag']
-            blog.content = self.request.POST['content']
-            blog.title_am = self.request.POST['title_am']
-            blog.tag_am = self.request.POST['tag_am']
-            blog.content_am = self.request.POST['content_am']
-            publish =self.request.POST['publish']
-            if publish =="on":
-                blog.publish=True 
-            else:
-                blog.publish=True
-
-            print("-----------"+ str(blog.publish))
-            blog.blogImage = form.cleaned_data.get("blogImage")
-            blog.save()
-            messages.success(self.request, "Added New Blog Successfully")
-            form = CreateBlogs()
-            context={'form':form}
-            return render(self.request, "admin/pages/blog_form.html",context)
-        return render(self.request, "admin/pages/blog_form.html",context)
-
-
-
-class BlogList(View):
-    template_name="admin/pages/blog_list.html"
-    def get(self,*args,**kwargs):
-        blogs = Blog.objects.all()
-        template_name="admin/pages/blog_list.html"
-        context={'blogs':blogs}
-        return render(self.request, template_name,context)
-# def post(self,*args,**kwargs):
-#         product = models.Product.objects.get(id=self.kwargs['id'])
-#         if self.kwargs['option'] == 'edit_all':
-#             category = models.SubCategory.objects.get(id=self.request.POST['category'])
-#             product.name=self.request.POST['name']
-#             product.name_am = self.request.POST['name_am']
-#             product.category=category
-#             product.description = self.request.POST['description']
-#             product.description_am = self.request.POST['description_am']
-#             if self.request.FILES.get('image') == None:
-#                 pass
-#             elif self.request.FILES.get('image') != None:
-#                 product.image = self.request.FILES.get('image')
-#             product.save()
-class BlogView(View):
-    template_name="admin/pages/blog_list.html"
-    def get(self,*args,**kwargs):
-        blogs = Blog.objects.get(id=self.kwargs['id'])
-        template_name="admin/pages/blog_detail.html"
-        context={'form':blogs}
-        return render(self.request, template_name,context)
-    def post(self,*args,**kwargs):
-        form = CreateBlogs(self.request.POST,self.request.FILES)
-        context={'form':form}
-        blog = Blog.objects.get(id=self.kwargs['id'])
-         
-        blog.title = self.request.POST['title']
-        blog.tag = self.request.POST['tag']
-        blog.content = self.request.POST['content']
-        blog.title_am = self.request.POST['title_am']
-        blog.tag_am = self.request.POST['tag_am']
-        blog.content_am = self.request.POST['content_am']
-        is_private = 'is_private' in self.request.POST
-        if is_private == 'on':
-            blog.publish = True
-        else:
-            blog.publish = False
-        if self.request.FILES.get('blogImage') == None:
-                 pass
-        elif self.request.FILES.get('blogImage') != None:
-                 blog.blogImage = self.request.FILES.get('blogImage')
-        
-        blog.save()
-        messages.success(self.request, "Edited Blogs Successfully")
-        return render(self.request, "admin/pages/blog_list.html",context)
-
-class BlogCommentForm(View):
-    template_name="admin/pages/blog_form.html"
-    def post(self,*args,**kwargs):
-        form = CreateBlogComment(self.request.POST)
-        context={'form':form}
-        if form.is_valid():
-            comment = Blog()
-            blog.title = self.request.POST['content']
-            blog.user = self.request.user
-            #blog.blog = 
-            blog.save()
-            form = CreateBlogs()
-            context={'form':form}
-            messages.success(self.request, "You commented on a blog")
-            return render(self.request, "admin/pages/blog_form.html",context)
-        return render(self.request, "admin/pages/blog_form.html",context)
-
-# class BlogComment(models.Model):
-#     blog = models.ForeignKey(Blog, on_delete=models.CASCADE,null=False)
-#     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=False)
-#     content = models.TextField(null=False)
-#     timestamp = models.DateTimeField(auto_now_add=True)
-
-# category related views
-
-# This is class/view is crated for displaying all categories and sub categories
-class CategoryView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        context = {}
-        if self.kwargs['option'] == 'category':
-            categories = models.Category.objects.all()
-            context = {'categories':categories,'option':'category'}
-        elif self.kwargs['option'] == 'sub_category':
-            sub_categories = models.SubCategory.objects.all()
-            context = {
-                "sub_categories":sub_categories,'option':'sub_category'
-            }
-        return render(self.request,"admin/pages/categories.html",context)
-
-# This class/view is created for displaying category and sub category detail and editing
-class CategoryDetail(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        context = {}
-        if self.kwargs['option'] == "category":
-            category = models.Category.objects.get(id=self.kwargs['cat_id'])
-            context = {
-                'category':category,
-                'edit':'edit'
-            }
-        elif self.kwargs['option'] == "sub_category":
-            sub_category = models.SubCategory.objects.get(id=self.kwargs['cat_id'])
-            cat_types = models.Category.objects.all().distinct('category_name')
-            context = {
-                'sub_category':sub_category,
-                'categories_name':cat_types,
-                'edit':'edit'
-            }
-        return render(self.request,"admin/pages/category_form.html",context)
-    
-    def post(self,*args,**kwargs):
-        context = {}
-        message = ""
-        option = ""
-        if self.kwargs['option'] == "category":
-            category = models.Category.objects.get(id=self.kwargs['cat_id'])
-            category.category_name = self.request.POST['category_name']
-            category.category_type = self.request.POST['category_type']
-            category.description = self.request.POST['description']
-            category.category_name_am = self.request.POST['category_name_am']
-            category.category_type_am = self.request.POST['category_type']
-            category.description_am = self.request.POST['description_am']
-            category.save()
-            message = "Category Updated Successfully"
-            option = "category"
-        elif self.kwargs['option'] == "sub_category":
-            sub_category = models.SubCategory.objects.get(id=self.kwargs['cat_id'])
-            sub_category.category_name = models.Category.objects.get(id=self.request.POST['category_name'])
-            sub_category.sub_category_name = self.request.POST['sub_category_name']
-            sub_category.description = self.request.POST['description']
-            sub_category.sub_category_name_am = self.request.POST['sub_category_name_am']
-            sub_category.description_am = self.request.POST['description_am']
-            sub_category.save()
-            message = "Sub-Category Updated Successfully"
-            option = "sub_category"
-        messages.success(self.request,message)
-        return redirect("admin:p_categories",option=option)
-
-# This class/view is created for creating new categories
-class CreateCategories(LoginRequiredMixin,View):
-    cat_list_am = { "Food":'ምግብ',"Beverage":'መጠጥ',"pharmaceuticals":'መድሃኒት' }
-     
-    def get(self,*args,**kwargs):
-        context = {}
-        if self.kwargs['option'] == "category":
-            context = {
-                'category':"category"
-            }
-        elif self.kwargs['option'] == "sub_category":
-            form = SubCategoryForm()
-            context = {
-                'sub_category':'sub_category',
-                'form':form,
-            }
-        return render(self.request,"admin/pages/category_form.html",context)
-    
-    def post(self,*args,**kwargs):
-        if self.kwargs['option'] == "category":
-            category = models.Category(
-                user=self.request.user,
-                category_name=self.request.POST['category_name'],
-                category_type=self.request.POST['category_type'],
-                description=self.request.POST['description'],
-                category_name_am=self.request.POST['category_name_am'],
-                category_type_am=self.cat_list_am[self.request.POST['category_type']],
-                description_am=self.request.POST['description_am']
-            ) 
-            category.save()
-            messages.success(self.request,"You Created a New Category")
-            return redirect("admin:p_categories",option='category')
-        elif self.kwargs['option'] == "sub_category":
-            form = SubCategoryForm(self.request.POST)
-            if form.is_valid():
-                sub_category = models.SubCategory(
-                    user=self.request.user,
-                    category_name=form.cleaned_data.get('category_name'),
-                    sub_category_name=form.cleaned_data.get('sub_category_name'),
-                    description=form.cleaned_data.get('description'),
-                    sub_category_name_am=form.cleaned_data.get('sub_category_name_am'),
-                    description_am=form.cleaned_data.get('description_am')
-                )
-                sub_category.save()
-                messages.success(self.request,"You Created a New Sub Category")
-                return redirect("admin:p_categories", option='sub_category')
-
-
-
-class AdminProductListView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        products = ""
-        if self.kwargs['user_type'] == 'admin':
-            products = models.Product.objects.all()
-            company = Company.objects.all()
-            context = {'products':products,'companies':company}
-        elif self.kwargs['user_type'] == 'provider':
-            products = models.Product.objects.filter(user=self.request.user)
-            company = Company.objects.filter(user=self.request.user)
-            context = {'products':products,'companies':company}
-        else:
-            company = Company.objects.get(id=self.kwargs['user_type'])
-            products = models.Product.objects.filter(user=company.user)
-            context = {'products':products,'company':company}
-        return render(self.request,"admin/pages/product_list.html",context)
-
-class ProductDetailView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        product = get_object_or_404(models.Product,id=self.kwargs['id'])
-        company = ""
-        try:
-            company = Company.objects.get(user=product.user)
-        except ObjectDoesNotExist:
-            company = None
-        product_image = models.ProductImage.objects.filter(product=product)
-        product_price = models.ProductPrice.objects.filter(product=product)
-        if self.kwargs['option'] == 'edit':
-            pcats = models.SubCategory.objects.all().exclude(id=product.category.id)
-            return render(self.request,"admin/pages/product_form.html",{'product':product,'pcats':pcats,'company':company,'edit':'edit'})    
-        elif self.kwargs['option'] == 'view':
-            return render(self.request,"admin/pages/product_detail.html",{'product':product,'company':company,'product_imgs':product_image,'product_price':product_price})
-
-    def post(self,*args,**kwargs):
-        product = models.Product.objects.get(id=self.kwargs['id'])
-        if self.kwargs['option'] == 'edit_all':
-            category = models.SubCategory.objects.get(id=self.request.POST['category'])
-            product.name=self.request.POST['name']
-            product.name_am = self.request.POST['name_am']
-            product.category=category
-            product.description = self.request.POST['description']
-            product.description_am = self.request.POST['description_am']
-            if self.request.FILES.get('image') == None:
-                pass
-            elif self.request.FILES.get('image') != None:
-                product.image = self.request.FILES.get('image')
-            product.save()
-            messages.success(self.request,"Successfully Edited Product")
-            return redirect("admin:product_detail",id=product.id,option='view')
-        else:
-            product.description = self.request.POST['description']
-            product.save()
-            messages.success(self.request,"Successfully Edited Product")
-            return redirect("admin:product_detail",id=product.id,option='view')
-
-class AddProductImage(LoginRequiredMixin,View):
-    def post(self,*args,**kwargs):
-        item = self.request.POST['product']
-        image = self.request.FILES['image']
-        product = models.Product.objects.get(id=item)
-        product_image = models.ProductImage(
-            product=product,image=image
-        )
-        product_image.save()
-        messages.success(self.request,"Image Added Successfully!")
-        return redirect("admin:product_detail",id=product.id,option='view')
-
-class CreateProductView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        form = ProductCreationForm()
-        context = {'form':form}
-        return render(self.request,'admin/pages/product_form.html',context)
-    
-    def post(self,*args,**kwargs):
-        form = ProductCreationForm(self.request.POST,self.request.FILES)
-        if form.is_valid():
-            product = models.Product(
-                user=self.request.user,
-                name=form.cleaned_data.get('name'),
-                name_am=form.cleaned_data.get('name_am'),
-                category=form.cleaned_data.get('category'),
-                description=form.cleaned_data.get("description"),
-                description_am=form.cleaned_data.get('description_am'),
-                image=form.cleaned_data.get("image")
-            )
-            product.save()
-            messages.success(self.request,"Product Created Successfully!")
-            return redirect("admin:index")
-
-class CreatePrice(LoginRequiredMixin,View):
-    def post(self,*args,**kwargs):
-        pid = self.request.POST['product']
-        price = self.request.POST['price']
-        start_date = self.request.POST['start_date']
-        end_date = self.request.POST['end_date']
-        product = models.Product.objects.get(id=pid)
-        if self.request.POST['option'] == 'change':
-            old_price = models.ProductPrice.objects.get(id=self.request.POST['priceid'])
-            old_price.price = float(price)
-            old_price.save()
-        elif self.request.POST['option'] == 'new':
-            price_obj = models.ProductPrice(
-                user=self.request.user,
-                product=product,
-                price=float(price)
-            )
-            price_obj.save()
-        messages.success(self.request,"Price Added Successfully!")
-        return redirect("admin:product_detail", id=product.id,option='view')
 
 
 class DeleteView(LoginRequiredMixin,View):
@@ -423,6 +36,18 @@ class DeleteView(LoginRequiredMixin,View):
             message = "Category Deleted"
             messages.success(self.request,message)
             return redirect("admin:p_categories",option='category')
+        elif self.kwargs['model_name'] == 'Vacancy':
+            vacancy = Vacancy.objects.get(id=self.kwargs['id'])
+            vacancy.delete()
+            message ="Vacancy Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:Job_list")
+        elif self.kwargs['model_name'] == 'JobCategoty':
+            jobcategory = JobCategoty.objects.get(id=self.kwargs['id'])
+            jobcategory.delete()
+            message ="Job category Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:admin_jobcategoty")
         elif self.kwargs['model_name'] == 'Blog':
             Blog1 = Blog.objects.get(id=self.kwargs['id'])
             Blog1.delete()
@@ -434,7 +59,7 @@ class DeleteView(LoginRequiredMixin,View):
             faqs.delete()
             message ="Faqs Deleted"
             messages.success(self.request,message)
-            return redirect("admin:index")
+            return redirect("admin:admin_Faqs") 
         elif self.kwargs['model_name'] == 'sub_category':
             sub_category = models.SubCategory.objects.get(id=self.kwargs['id'])
             sub_category.delete()
@@ -522,7 +147,6 @@ class DetailPoll(LoginRequiredMixin,View):
                 return redirect("admin:admin_polls") 
 
         else:
-
             messages.error(self.request, "Nothing selected!")
             return redirect("admin:admin_polls")
 
