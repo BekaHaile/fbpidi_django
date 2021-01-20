@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import Permission, Group
 
 from django.conf import settings
+from company.models import Company
 
 
 class PollsQuestion(models.Model):
@@ -12,7 +13,6 @@ class PollsQuestion(models.Model):
     description_am = models.TextField( verbose_name="Poll Description(Amharic)" )
     timestamp = models.DateTimeField(auto_now_add=True)
     choices = models.ManyToManyField('Choices',related_name='choices',default="",)
-    
     
     def __str__(self):
         return self.title
@@ -102,6 +102,56 @@ class Faqs(models.Model):
     answers_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     
+
+## Vacancy
+
+class JobCategoty(models.Model):
+    categoryName = models.CharField(max_length=50,null=False)
+    categoryName_am = models.CharField(max_length=50,null=False)
+
+    def countjobs(self):
+        return self.vacancy_set.all().count()
+
+    def __str__(self):
+        return self.categoryName
+
+    
+class Vacancy(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    #company = models.CharField(max_length=100,null=False)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    location = models.CharField(max_length=100,null=False)
+    salary = models.IntegerField(null=True,default=0)
+    category = models.ForeignKey(JobCategoty, on_delete=models.CASCADE)
+    employement_type = models.CharField(max_length=100,null=False)
+    starting_date = models.DateTimeField()
+    ending_date = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    job_title = models.CharField(max_length=100,null=False)
+    description = models.TextField(null=False)
+    requirement = models.TextField(null=False)
+    job_title_am = models.CharField(max_length=100,null=False)
+    description_am = models.TextField(null=False)
+    requirement_am = models.TextField(null=False)
+    closed = models.BooleanField(null=False,default=False)
+
+    def countApplicant(self):
+        return self.jobapplication_set.all().count()
+
+
+class JobApplication(models.Model):
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    status = models.CharField(max_length=50,null=False) 
+    bio = models.TextField(null=False)
+    cv = models.FileField(upload_to="cv/", max_length=254,help_text="only pdf files, Max size 10MB")
+    documents = models.FileField(upload_to="documents/", max_length=254,help_text="pdf, jpeg files, Max size 10MB")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+
+
+
 
     
     

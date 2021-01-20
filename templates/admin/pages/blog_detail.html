@@ -32,7 +32,7 @@
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3">Title Amharic *</label>
 							<div class="col-lg-9">
-							<input type="text" name="title_am" class="form-control" value="{{form.title_am}}" id="">
+							<input type="text"required name="title_am" class="form-control" value="{{form.title_am}}" id="">
 						</div>
 							
 					</div> 
@@ -40,7 +40,7 @@
 						<label class="col-form-label col-lg-3">Tag *</label>
 						
 							<div class="col-lg-9">
-							<input type="text" name="tag" class="form-control" value="{{form.tag}} " id="">
+							<input type="text" required name="tag" class="form-control" value="{{form.tag}} " id="">
 						
 							
 						</div>
@@ -49,7 +49,7 @@
 						<label class="col-form-label col-lg-3">Tag Amharic *</label>
 						
 							<div class="col-lg-9">
-							<input type="text" name="tag_am" class="form-control" value="{{form.tag_am}} " id="">
+							<input type="text" required name="tag_am" class="form-control" value="{{form.tag_am}} " id="">
 						
 							
 						</div>
@@ -58,7 +58,7 @@
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3"> Content *</label>
 						<div class="col-lg-9">
-								<textarea id="summernote" name="content" >{{form.content}}</textarea>
+								<textarea  required class="summernote" name="content" >{{form.content}}</textarea>
 						</div>
 							
 					</div>
@@ -66,7 +66,7 @@
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3"> Content Amharic *</label>
 						<div class="col-lg-9">
-								<textarea id="summernote" name="content_am" >{{form.content_am}}</textarea>
+								<textarea required class="summernote" name="content_am" >{{form.content_am}}</textarea>
 						</div>
 							
 					</div>
@@ -76,7 +76,7 @@
 						
 
 							<div class="col-lg-9">
-							<input type="checkbox" name="pubish" value="{{form.pubish}}" class="form-check-input" id="exampleCheck1">
+							<input type="checkbox" name="publish" value="{{form.publish}}" class="form-check-input" id="exampleCheck1">
 							
 						</div>
 							
@@ -87,7 +87,7 @@
 					<div class="form-group row">
 						<label class="col-form-label col-lg-2">Blog Image</label>
 						<div class="col-lg-10">
-							<div class="uniform-uploader"><input type="file" name="blogImage" value="{{form.blogImage.url}}" class="form-input-styled" data-fouc=""><span
+							<div class="uniform-uploader"><input required type="file" name="blogImage" value="{{form.blogImage.url}}" class="form-input-styled" data-fouc=""><span
 								class="filename" style="user-select: none;">No file selected</span><span
 								class="action btn bg-warning" style="user-select: none;">Choose File</span></div>
 						</div>

@@ -4,14 +4,17 @@ from django.template.response import TemplateResponse
 from django.urls import path,include
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
-# from accounts.forms import UserCreationForm
+# from accounts.forms import UserCreationForm 
 # views from accounts app
 from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLogView,
                         UserDetailView,UpdateAdminProfile,CreateUserView,GroupView)
 # views from admin_site app
-from admin_site.views import (AdminIndex,DeleteView, BlogForm,BlogList,BlogView,
-                        FaqsFormView,FaqsView,FaqsList, Polls, CreatePoll, AddChoice,
-                        EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice,
+from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,
+                        EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
+
+from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,FaqsView,FaqsList,
+                        CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
+                        JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView
@@ -22,6 +25,7 @@ from company.views import (
     CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
     CreateFbpidiCompanyProfile,ViewFbpidiCompany
 )
+
 
 
 class CustomAdminSite(admin.AdminSite):
@@ -36,13 +40,27 @@ class CustomAdminSite(admin.AdminSite):
 
         my_urls = [
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
+            path('download/<name>/<id>',Download.as_view(),name="Download"),
+            path('close/<id>',CloseVacancy.as_view(),name="close"),
+            path('applicant-info/<id>',Applicantinfo.as_view(),name="Applicant_info"),
+            path('applicant-list',ApplicantList.as_view(),name="Applicant_list"),
             
+            path('jobCategoty-form',JobcategoryFormView.as_view(),name="JobCategoty_form"),
+            path('jobCategoty-list',JobCategoryList.as_view(),name="admin_jobcategoty"),
+            path('jobCategoty-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),
+           
+            path("Vacancy-form/",CreateVacancy.as_view(),name="Job_form"),
+            path("Vacancy-list/",AdminVacancyList.as_view(),name="Job_list"),
+            path("Vacancy-detail/<model_name>/<id>",VacancyDetail.as_view(),name="job_detail"),
+           
             path("faqs-detail/<model_name>/<id>",FaqsView.as_view(),name="faqs_detail"),
-            path("faq-form/",FaqsFormView.as_view(),name="admin_Faqsform"),
+            path("faq-form/",CreateFaqs.as_view(),name="admin_Faqsform"),
             path("faq-list/",FaqsList.as_view(),name="admin_Faqs"),
-            path("blog-list/",BlogList.as_view(),name="admin_Blogs"),
+            
+            path("blog-list/",AdminBlogList.as_view(),name="admin_Blogs"),
             path("blog-detail/<model_name>/<id>/",BlogView.as_view(),name="blog_detail"),
-            path("blog-create/",BlogForm.as_view(),name="create_blog"),
+            path("blog-create/",CreatBlog.as_view(),name="create_blog"),
+            
             path("signup/",CompanyAdminSignUpView.as_view(),name="signup"),
             path("create_user/",wrap(CreateUserView.as_view()),name="create_user"),
             path("users_list/",wrap(UserListView.as_view()),name="users_list"),

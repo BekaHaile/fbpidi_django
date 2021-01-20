@@ -234,6 +234,10 @@
 										<span>Faqs</span>										 
 									</a>
 								</li>
+								<li class="nav-item">
+									<a href="{%url 'admin:admin_jobcategoty' %}" class="nav-link"><i class="icon-users"></i>
+										<span>Job categoty</span></a>
+								</li>
 							</ul>
 						</li>
 						<li class="nav-item-header">
@@ -272,7 +276,12 @@
 						
 						
 						 
-						{%else%}
+						{%else%} 
+						
+						<li class="nav-item">
+							<a href="{%url 'admin:Job_list' %}" class="nav-link"><i class="icon-users"></i>
+								<span>Vacancy</span></a>
+						</li>
 						<li class="nav-item">
 							<a href="{%url 'admin:users_list' %}" class="nav-link"><i class="icon-users"></i>
 								<span>Users</span></a>

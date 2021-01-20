@@ -8,7 +8,7 @@
 <!-- /theme JS files -->
 
 {% endblock %}
-{%block pagename%}Vacancy List{%endblock%}
+{%block pagename%}Job Cateory{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -22,11 +22,11 @@
 	
 	<div class="card">
 		<div class="card-header header-elements-inline">
-			<h5 class="card-title">Vacancys</h5>
+			<h5 class="card-title">Job Cateory</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					<a href="{% url 'admin:Job_form'%}" class="btn bg-teal btn-sm rounded-round"><i
-							class="icon-add mr-2"></i>Add New Vacancy</a>
+					<a href="{% url 'admin:JobCategoty_form'%}" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Job cateory</a>
 				</div>
 			</div>
 		</div>
@@ -34,33 +34,18 @@
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
-
-					<th>company</th>
-					<th>location </th>
-					<th>salary</th>
-
-
-					<th>starting_date</th>
-					<th>job_title</th>
-					<th>Closed</th>
-					<th>Applicants</th>
+					<th>categoryName</th>
+					<th>categoryName Amharic</th>
 					<th class="text-center">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
-				{%for vacancy in vacancy%}
+
+				{%for form in forms%}
 				<tr>
 					
-					<td>{{vacancy.company|safe|truncatewords:10}}</td>
-					<td>{{vacancy.location|safe|truncatewords:10}}</td>
-					<td>{{vacancy.salary|safe}}</td>
-
-					<td>{{vacancy.starting_date|safe}}</td>
-					<td>{{vacancy.job_title|safe|truncatewords:10}}</td>
-					<td>{{vacancy.closed}}</td>
-					<th><a href="{% url 'admin:Applicant_info' id=vacancy.id %}" >
-						<i class="icon-eye"></i> {{vacancy.countApplicant}}</a> 
-					</th>
+					<td>{{form.categoryName}}</td>
+					<td>{{form.categoryName_am}}</td>
 					<td class="text-center">
 						<div class="list-icons">
 							<div class="dropdown">
@@ -69,9 +54,9 @@
 								</a>
 									
 								<div class="dropdown-menu dropdown-menu-right">
-									<a href="{%url 'admin:delete' model_name='Vacancy' id=vacancy.id%}" class="dropdown-item" onclick="return confirm('are you sure you want to delete this')"><i class="icon-trash"></i>Delete Vacancy</a>
-									<a href="{%url 'admin:job_detail'  model_name='Vacancy' id=vacancy.id%}" class="dropdown-item"  >
-										<i class="icon-pencil"></i>Edit Vacancy</a>
+									<a href="{%url 'admin:delete' model_name='JobCategoty' id=form.id%}" class="dropdown-item" onclick="return confirm('are you sure you want to delete this')"><i class="icon-trash"></i>Delete Blog</a>
+									<a href="{%url 'admin:Category_form'  model_name='JobCategoty' id=form.id%}" class="dropdown-item" >
+										<i class="icon-pencil"></i>Edit Blog</a>
 									
 									
 								</div>

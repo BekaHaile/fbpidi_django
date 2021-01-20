@@ -1,0 +1,144 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+	<!-- /theme JS files -->
+ 
+{% endblock %}
+{%block pagename%}Product Categories{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+				{%if option == 'category'%}
+				<!-- Page length options main category -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Categories</h5>
+						<div class="header-elements">
+							{%if perms.admin_site.add_category%}
+							<div class="list-icons">
+								<a href="{%url 'admin:create_category' option='category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
+							</div>
+							{%endif%}
+						</div>
+					</div>
+
+					<table class="table datatable-show-all">
+						<thead>
+							<tr>
+								<th>Category Name</th>
+								<th>Category Type</th>
+								<th>Description</th>
+								<th>Created By</th>
+								<th>Created Date</th>
+								<th class="text-center">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for cat in categories%}
+							<tr>
+								<td>{{cat.category_name}}</td>
+								<td>{{cat.category_type}}</td>
+								<td><div class="summernote">{{cat.description|safe|truncatewords:5}}</div></td>
+								<td>{{cat.user.username}}</td>
+								<td><span class="badge badge-success">{{cat.timestamp}}</span></td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+												{%if user.is_superuser%}
+												<a href="{%url 'admin:delete' model_name='category' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Category</a>
+												<a href="{%url 'admin:edit_category' option='category' cat_id=cat.id%}" class="dropdown-item">
+													<i class="icon-pencil"></i>Edit Category</a>
+													{%endif%}
+												<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
+												<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
+												<a href="#" class="dropdown-item"><i class="icon-file-word"></i> Export to .doc</a> -->
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</div>
+				<!-- /page length options -->
+				{%elif option == 'sub_category'%}
+					<!-- Page length options sub-category-->
+					<div class="card">
+						<div class="card-header header-elements-inline">
+							<h5 class="card-title">Sub Categories</h5>
+							{%if perms.admin_site.add_sub_category%}
+							<div class="header-elements">
+								<div class="list-icons">
+									<a href="{%url 'admin:create_category' option='sub_category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
+								</div>
+							</div>
+							{%endif%}
+						</div>
+	
+						<table class="table datatable-show-all">
+							<thead>
+								<tr>
+									<th>Category Name</th>
+									<th>Sub-Category Name</th>
+									<th>Description</th>
+									<th>Created By</th>
+									<th>Created Date</th>
+									<th class="text-center">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for cat in sub_categories%}
+							<tr>
+								<td>{{cat.category_name}}</td>
+								<td>{{cat.sub_category_name}}</td>
+								<td><div class="summernote">{{cat.description|safe|truncatewords:5}}</div></td>
+								<td>{{cat.user.username}}</td>
+								<td><span class="badge badge-success">{{cat.timestamp}}</span></td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+												{%if user.is_superuser%}
+												<a href="{%url 'admin:delete' model_name='sub_category' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Sub-Category</a>
+												<a href="{%url 'admin:edit_category' option='sub_category' cat_id=cat.id%}" class="dropdown-item">
+													<i class="icon-pencil"></i>Edit Sub-Category</a>
+													{%endif%}
+												<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
+												<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
+												<a href="#" class="dropdown-item"><i class="icon-file-word"></i> Export to .doc</a> -->
+												
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+							{%endfor%}
+							</tbody>
+						</table>
+					</div>
+					<!-- /page length options -->
+				{%endif%}
+ 
+			</div>
+			<!-- /content area -->
+			<!-- <script>
+				$(document).ready(function() {
+					$('.summernote').summernote('code', 'html_tags_string_from_db');
+				});
+			  </script> -->
+{%endblock%}

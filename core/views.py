@@ -10,6 +10,9 @@ from social_django.context_processors import REDIRECT_FIELD_NAME, login_redirect
 from product.models import Product, ProductImage
 from admin_site.models import Category,SubCategory
 from company.models import Company
+# 
+from accounts.models import User,Company,Customer
+from accounts.forms import CompanyForm
 
 
 class IndexView(View):
