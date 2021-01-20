@@ -14,7 +14,7 @@ from company.models import Company
 
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
-from collaborations.models import PollsQuestion, PollsResult, Choices
+from collaborations.models import PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategoty, Blog
 from django.http import HttpResponse, FileResponse
  
 # 
@@ -59,7 +59,7 @@ class DeleteView(LoginRequiredMixin,View):
             faqs.delete()
             message ="Faqs Deleted"
             messages.success(self.request,message)
-            return redirect("admin:admin_Faqs")
+            return redirect("admin:admin_Faqs") 
         elif self.kwargs['model_name'] == 'sub_category':
             sub_category = models.SubCategory.objects.get(id=self.kwargs['id'])
             sub_category.delete()
