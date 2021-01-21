@@ -23,7 +23,6 @@ from company.models import CompanyStaff
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
  
 class CompanyAdminSignUpView(CreateView):
-        user = form.save()
     def get(self,*args,**kwargs):
         if self.request.user.is_authenticated:
             messages.warning(self.request,"You Already have Account,Please logout and create an account")
