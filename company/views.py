@@ -146,11 +146,17 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
                 company.anual_op_main_products_am =   self.request.POST['anual_op_main_products_am']
             company.save()
             messages.success(self.request,"Company Updated")
-            return redirect("admin:view_company_profile")
+            if self.request.user.is_superuser:
+                return redirect("admin:company_detail",id=company.id)
+            else:
+                return redirect("admin:view_company_profile")
         except ObjectDoesNotExist:
             messages.warning(self.request,"Company Does Not Exist")
-            return redirect("admin:view_company_profile")
-
+            if self.request.user.is_superuser:
+                return redirect("admin:company_detail",id=company.id)
+            else:
+                return redirect("admin:view_company_profile")
+    
 class CompaniesView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = {}
