@@ -2,7 +2,7 @@ from django import forms
 from django_summernote.widgets import SummernoteWidget
 from collaborations.models import Faqs
 from collaborations.models import Faqs,Blog,BlogComment,Vacancy,JobApplication
-from .models import PollsQuestion, Choices, PollsResult, JobCategoty
+from .models import  PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications, JobCategoty
 from django.forms.widgets import SelectDateWidget
 
 
@@ -45,7 +45,6 @@ class BlogCommentForm(forms.ModelForm):
 		fields = ('content',)
 
 
-
 class PollsForm(forms.ModelForm):
     
     class Meta:
@@ -60,24 +59,20 @@ class PollsForm(forms.ModelForm):
             'description_am':forms.Textarea(attrs={'class':'summernote'}),
             
         }
- 
+
 
 class CreatePollForm(forms.ModelForm):
     class Meta:
         model = PollsQuestion
         fields = ('title', 'title_am',
-                  'description', 'description_am')
-        # choices = forms.ModelMultipleChoiceField(
-        #     queryset=Choices.objects.all(),
-        #     widget = forms.CheckboxSelectMultiple
-
-        # )
+                  'description', 'description_am',)
         widgets = {
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),
             'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
             'description_am':forms.Textarea(attrs={'class':'summernote'}),          
         }
+
 
 class CreateChoiceForm(forms.ModelForm):
     class Meta:
@@ -92,6 +87,49 @@ class CreateChoiceForm(forms.ModelForm):
             'description_am':forms.Textarea(attrs={'class':'summernote'}),          
         }
 
+class TenderForm(forms.ModelForm):
+    # user, bank_account, document
+    STATUS_CHOICE = [ ('Pending', 'Pending'),('Open', 'Open' )]
+    tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
+    status = forms.ChoiceField(choices = STATUS_CHOICE, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
+                                
+    
+    
+    start_date = forms.DateTimeField( input_formats=['%d/%m/%Y %H:%M'],  widget=forms.DateTimeInput(attrs={
+                                                                                'class': 'form-control datetimepicker-input', 'placeholder': 'dd/mm/YYYY HH:mm'}))
+
+    end_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'],  widget=forms.DateTimeInput(attrs={
+                                                                                'class': 'form-control datetimepicker-input', 'placeholder': 'dd/mm/YYYY HH:mm'}))
+    class Meta:
+        model = Tender
+        fields = ('title', 'title_am','description', 'description_am','tender_type', 'status', 
+                'start_date', 'end_date')
+        widgets = {
+                'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
+                'description':forms.Textarea(attrs={'class':'summernote'}),
+                'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
+                'description_am':forms.Textarea(attrs={'class':'summernote'}),
+            
+            }
+
+class TenderEditForm(forms.ModelForm):
+    # user, bank_account, document
+    tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
+    status = forms.ChoiceField(choices = [ ('Pending', 'Pending'),('Open', 'Open' ),  ('Closed', 'Closed'), ('Suspended', 'Suspended')
+                                          ], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
+                                
+    
+    
+    class Meta:
+        model = Tender
+        fields = ('title', 'title_am','description', 'description_am','tender_type', 'status')
+        widgets = {
+                'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
+                'description':forms.Textarea(attrs={'class':'summernote'}),
+                'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
+                'description_am':forms.Textarea(attrs={'class':'summernote'}),
+            
+            }
 
 
 

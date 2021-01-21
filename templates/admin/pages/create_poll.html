@@ -81,7 +81,7 @@
 		
 						<div class="text-right">
 							<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-								class="btn btn-primary rounded-round" onclick="return confirm ('Are you sure you want to Edit this Poll?')">Edit Poll </button>
+								class="btn btn-primary rounded-round col-lg-2" onclick="return confirm ('Are you sure you want to Edit this Poll?')">Edit Poll </button>
 						</div>
 					</form>
 					<br>
@@ -89,7 +89,7 @@
 						{%csrf_token%}
 						<div class="text-right">
 							<button style="padding-left: 10%; padding-right: 10%; background-color: grey;" type="submit"
-								class="btn btn-primary rounded-round">Cancel </button>
+								class="btn btn-primary rounded-round col-lg-2">Cancel </button>
 						</div>
 					</form>
 					<br>
@@ -104,26 +104,26 @@
 								<div class="form-group row" >
 									<label class="col-form-label col-lg-3">Edit Poll Choices </label>
 												<div style="width: 100%;">
-												<div class="col-lg-9" style="width: 95%; display: inline-block;">
+													<div class="col-lg-9" style="width: 95%; display: inline-block;">
 
-													<select required name="choice" class="form-control form-control-uniform" data-fouc>
-														
-														
-														{%for choice in poll.choices.all%}
-															<option  value="{{choice.id}}">{{choice.choice_name}}</option>
-															<div class="list-icons" style="width: 3%; display: inline-block;" >
-																<div class="dropdown">
-																	<a href="#" class="list-icons-item" data-toggle="dropdown">
-																		<i class="icon-menu9"></i>
-																	</a>
-										
-																	
+														<select required name="choice" class="form-control form-control-uniform" data-fouc>
+															
+															
+															{%for choice in poll.choices.all%}
+																<option  value="{{choice.id}}">{{choice.choice_name}}</option>
+																<div class="list-icons" style="width: 3%; display: inline-block;" >
+																	<div class="dropdown">
+																		<a href="#" class="list-icons-item" data-toggle="dropdown">
+																			<i class="icon-menu9"></i>
+																		</a>
+											
+																		
+																	</div>
 																</div>
-															</div>
-														{%endfor%}
-						
-													</select>
-												</div>
+															{%endfor%}
+							
+														</select>
+													</div>
 											
 												
 												</div>
@@ -139,7 +139,12 @@
 							
 						</form>
 					{%else%}
+					<div class="text-right">
 						<h3 class = "text-center"> No Choice to Edit or Delete</h3>
+						<div class="list-icons">
+							<a href="{%url 'admin:add_choice' id=poll.id %}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New Choice</a>
+						</div>							
+					</div>
 					{%endif%}
 						
 				</div>

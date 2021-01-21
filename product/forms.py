@@ -59,12 +59,15 @@ class ProductCreationForm(forms.ModelForm):
             'image':forms.FileInput(attrs={'class':"form-control form-input-styled"})
         } 
 
-# class ReviewForm(forms.ModelForm):
-#     class Meta:
-#         model = models.Review
-#         fields = (
-#             'rating','name','email','review'
-#         )
-#         widgets = {
-#             'rating':forms.TextInput()
-#         }
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = models.Review
+        fields = (
+            'rating','name','email','review'
+        )
+        widgets = {
+            'rating':forms.TextInput(attrs={'type':'hidden'}),
+            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Your Name'}),
+            'email':forms.TextInput(attrs={'class':'form-control','placeholder':'Your Email'}),
+            'review':forms.Textarea(attrs={'class':'form-control','placeholder':'Your Message Here','row':'3'}),
+        }

@@ -4,15 +4,14 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 
-from social_django.context_processors import REDIRECT_FIELD_NAME, login_redirect
-
 # 
-from product.models import Product, ProductImage
+from product.models import Product, ProductImage,Review
 from admin_site.models import Category,SubCategory
 from company.models import Company
 # 
 from accounts.models import User,Company,Customer
 from accounts.forms import CompanyForm
+from product.forms import ReviewForm
 
 
 class IndexView(View):
@@ -31,15 +30,101 @@ class ProductByCategoryView(View):
         context = {'products':products,'count':products.count()}
         return render(self.request,"frontpages/product/product_category.html",context)
 
+
+class ProductByMainCategory(View):
+    def get(self,*args,**kwargs):
+        products = Product.objects.all()
+        product_list = []
+        context = {}
+        if self.kwargs['option'] == "Beverage":
+            for product in products:
+                if product.category.category_name.category_type == "Beverage":
+                    product_list.append(product)
+        elif self.kwargs['option'] == "Food":
+            for product in products:
+                if product.category.category_name.category_type == "Food":
+                    product_list.append(product)
+        elif self.kwargs['option'] == "Pharmaceuticals":
+            for product in products:
+                if product.category.category_name.category_type == "Pharmaceuticals":
+                    product_list.append(product)
+        elif self.kwargs['option'] == "all":
+            for product in products:
+                product_list.append(product)
+        context['products'] = product_list
+        context['count'] = len(product_list)
+        return render(self.request,"frontpages/product/product_category.html",context)
+
+class MnfcCompanyByMainCategory(View):
+    def get(self,*args,**kwargs):
+        companies = Company.objects.filter(company_type="manufacturer")
+        company_list = []
+        context = {}
+        if self.kwargs['option'] == "Beverage":
+            for company in companies:
+                if company.product_category.category_name.category_type == "Beverage":
+                    company_list.append(company)
+        elif self.kwargs['option'] == "Food":
+            for company in companies:
+                if company.product_category.category_name.category_type == "Food":
+                    company_list.append(company)
+        elif self.kwargs['option'] == "Pharmaceuticals":
+            for company in companies:
+                if company.product_category.category_name.category_type == "Pharmaceuticals":
+                    company_list.append(company)
+        elif self.kwargs['option'] == "all":
+            for company in companies:
+                company_list.append(company)
+        context['companies'] = company_list
+        context['count'] = len(company_list)
+        return render(self.request,"frontpages/company/company_list.html",context)
+
+class SupCompanyByMainCategory(View):
+    def get(self,*args,**kwargs):
+        companies = Company.objects.filter(company_type="supplier")
+        company_list = []
+        context = {}
+        if self.kwargs['option'] == "Beverage":
+            for company in companies:
+                if company.product_category.category_name.category_type == "Beverage":
+                    company_list.append(company)
+        elif self.kwargs['option'] == "Food":
+            for company in companies:
+                if company.product_category.category_name.category_type == "Food":
+                    company_list.append(company)
+        elif self.kwargs['option'] == "Pharmaceuticals":
+            for company in companies:
+                if company.product_category.category_name.category_type == "Pharmaceuticals":
+                    company_list.append(company)
+        elif self.kwargs['option'] == "all":
+            for company in companies:
+                company_list.append(company)
+        context['companies'] = company_list
+        context['count'] = len(company_list)
+        return render(self.request,"frontpages/company/company_list.html",context)
+
+
 class ProductDetailView(View):
     def get(self,*args,**kwargs):
         try:
+            form = ReviewForm()
             product = Product.objects.get(id=self.kwargs['id'])
+            reviews = Review.objects.filter(product=product)
             images = ProductImage.objects.filter(product=product)
-            context = {'product':product,'images':images}
+            context = {'product':product,'images':images,'form':form,'reviews':reviews}
             return render(self.request,'frontpages/product/product_detail.html',context)
         except ObjectDoesNotExist:
             return redirect("index")
+    
+    def post(self, *args,**kwargs):
+        form = ReviewForm(self.request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = Product.objects.get(id=self.kwargs['id'])
+            review.save()
+            return redirect('product_detail',id=self.kwargs['id'])
+        else:
+            return redirect("product_detail",id=self.kwargs['id'])
 
 class ProfileView(LoginRequiredMixin, View):
     def get(self,*args,**kwargs):

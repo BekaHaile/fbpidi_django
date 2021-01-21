@@ -1,6 +1,8 @@
 from django import forms
-from company.models import Company,CompanySolution,CompanyEvent
+from company.models import Company,CompanySolution,CompanyEvent,CompanyBankAccount,Bank
 from admin_site.models import SubCategory
+
+from company.models import Company,CompanySolution,CompanyEvent
 
 class CompanyForm(forms.ModelForm):
     # color = forms.CharField(label='Company Theme Color',
@@ -72,7 +74,6 @@ class CompanyForm(forms.ModelForm):
             'anual_op_main_products_am': forms.Textarea(attrs={'class': 'summernote'}),
         }
 
-
 class CompanySolutionForm(forms.ModelForm):
 
     class Meta:
@@ -100,7 +101,21 @@ class CompanyEventForm(forms.ModelForm):
             'image': forms.FileInput(attrs={'class': 'form-input-styled'}),
         }
 
+class CompanyBankAccountForm(forms.ModelForm):
+    bank = forms.ModelChoiceField(queryset=Bank.objects.all(), required=True)
+    company = forms.ModelChoiceField(queryset=Company.objects.all(), required=True)
 
+    class Meta:
+        model = CompanyBankAccount()
+        fields = ('company', 'bank', 'account_number')
+        widgets = {
+            'bank':forms.Select(attrs={'class':'hidden'}),
+            'company':forms.Select(attrs={'class':'hidden'}),
+            'account_number':forms.TextInput( attrs = {'class': 'form-control', 'placeholder': 'Valid bank account (for the selected bank)'}),
+        }
+
+        
+# class FbpidiCompanyForm()
 class FbpidiCompanyForm(forms.ModelForm):
 
     class Meta:

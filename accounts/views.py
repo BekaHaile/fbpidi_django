@@ -22,17 +22,24 @@ from accounts.models import User,Company,CompanyAdmin,Customer
 from company.models import CompanyStaff
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
  
+ 
 class CompanyAdminSignUpView(CreateView):
-    model = User
-    form_class = CompanyAdminCreationForm
-    template_name = 'registration/admin_signup.html'
+    def get(self,*args,**kwargs):
+        if self.request.user.is_authenticated:
+            messages.warning(self.request,"You Already have Account,Please logout and create an account")
+            return redirect("admin:index")
+        else:
+            form = CompanyAdminCreationForm()
+            return render(self.request,'registration/admin_signup.html',{"form":form})
+     
+    def post(self, *args,**kwargs):
+        form = CompanyAdminCreationForm(self.request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('admin:complete_company_profile')
+        else:
+            return render(self.request,'registration/admin_signup.html',{'form':form})
 
-    def get_context_data(self, **kwargs):
-        return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        user = form.save()
-        return redirect('admin:complete_company_profile')
 
 class CustomerSignUpView(CreateView):
     model = User
@@ -50,6 +57,8 @@ class CustomerSignUpView(CreateView):
             {'message':"Please Verify your email address to complete the registration\n"
             +"If you can\'t find the mail please check it in your spam folder!"})
 
+
+# class SocialLoginView(LoginRequiredMixin,View):
 class CompleteLoginView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         
@@ -65,6 +74,7 @@ class CompleteLoginView(LoginRequiredMixin,View):
                 )
                 customer.save()
             return redirect("index")
+
 
 
 def activate(request, uidb64, token):
@@ -202,6 +212,7 @@ class CreateUserView(LoginRequiredMixin, View):
             else:
                 return render(self.request, "admin/pages/user_form.html", {"form": form})
 
+
 class GroupList(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         groups = Group.objects.all()
@@ -222,9 +233,6 @@ class GroupView(LoginRequiredMixin,View):
         group.permissions.set(permission_list)
         group.save()
         return JsonResponse({"message":"Role Group Created SuccessFully"})
-
-
-
 
 
 class RolesView(LoginRequiredMixin,View):

@@ -1,6 +1,9 @@
 {%extends 'frontpages/layout.html'%}
+{%load i18n%}
 {%load core_template_tags%}
 {%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+
 		<!--Sliders Section-->
 		<div>
 			<div class="cover-image sptb-1 bg-background" data-image-src="/static/frontpages/images/banners/banner1.jpg">
@@ -114,12 +117,12 @@
 														<div class="item-card9-icons">
 															<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
 														</div>
-														<div class="item-cardreview-absolute bg-secondary">{{product.category.sub_category_name|title}}</div>
+														<div class="item-cardreview-absolute bg-secondary">{% print_translated product.category.sub_category_name product.category.sub_category_name_am LANGUAGE_CODE%}</div>
 													</div>
 													<div class="card border-0 mb-0">
 														<div class="card-body h-100">
 															<div class="item-card9">
-																<a href="{%url 'product_detail' id=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{{product.name|title}}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
+																<a href="{%url 'product_detail' id=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
 																<div class="rating-stars d-flex mr-5">
 																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
 																	<div class="rating-stars-container mr-2">

@@ -1,0 +1,117 @@
+{%extends 'frontpages/layout.html'%}
+{%block content%}
+        <!--Breadcrumb-->
+        <!-- Note -->
+        
+       
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white">
+							<h1 class="">Tender-Details</h1>
+							<ol class="breadcrumb">
+								<li class="breadcrumb-item"><a href="">Home</a></li>
+								<li class="breadcrumb-item"><a href="/collaborations/tender_list/">Tender</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">Tender List</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Breadcrumb-->
+
+		<!--Tender Detail-->
+		<section class="sptb">
+            {% if tender %}
+			<div class="container">
+				<div class="row">
+					<div class="d-block mx-auto col-lg-10 col-md-12">
+						<div class="card">
+							    <div class="card-body">
+								    <a href="#" class="text-body"><h2 class="font-weight-semibold text-capitalize">{{tender.title}}</h2></a>
+							    <div class="item7-card-desc d-flex mb-2 mt-3">
+
+                                                                    
+                                    <br><a href="#"><i class="fa fa-calendar-o text-muted mr-2" style = "margin-right: 20px;" ></i>{{tender.start_date}}</a><p style="margin-left: 10px;"> To </p>
+                                    <a href="#"><i style = "margin-left: 10px;"class="fa fa-calendar-o text-muted mr-2" ></i>{{tender.end_date}}</a>
+                                    
+                                    <a href="#"><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i>By {{tender.get_company.company_name}}</a>
+                                    <a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>{{tender.tender_type}}</a>
+                                    
+                                </div>
+                                {% if tender.status == 'Open' %}
+								<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >Open</div>
+								{%elif tender.status == 'Pending' %}
+								<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >Pending</div>
+								{%elif tender.status == 'Closed' %}
+								<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >Closed</div>
+								{%else%} 
+								<div style="background-color: blue; color:white; width: fit-content; padding: 5px;" >Suspended</div>
+								{%endif%}
+								<br>
+
+                                <h4>Tender description</h4>
+                                <p>{{tender.description|safe}}</p>
+                                
+                                <form action="{%url 'customer_tender_detail' id=tender.id %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                
+                                    <div class = "choice-btn-group" class="badge badge-secondary">
+                                        <span class="badge badge-secondary">
+                                            {% if tender.tender_type == "Free" %}
+                                            
+                                                <a id = "download" href="{{tender.document.url}}" download="{{tender.document.url}}"><span style=" padding:4px; color:white; font-size: medium;">Join and download document </span></a>
+                                            
+                                            {%else%}
+                                                <label for = "download" ><span style="font-size: medium;">Join and download document </span></label>
+                                            
+                                                <a id = "download" href="#"> 
+                                                    <div class="mb-3"><b>Buy Document</b></div>
+                                                </a>
+
+                                            {% endif %}
+                                        </span>
+                                    </div>
+
+                                </form>
+
+
+							</div>
+						</div>
+
+                        
+					</div>
+				</div>
+            </div>
+
+            {% else %}
+                <h2> Tender Not found!</h2>
+            {% endif %}
+		</section>
+		<!--/Add listing-->
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Subscribe To Our Newsletter</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+						<div class="input-group sub-input mt-0">
+							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Newsletter-->
+{%endblock%}
