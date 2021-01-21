@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-21 15:10+0300\n"
+"POT-Creation-Date: 2021-01-21 22:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\fbpims\settings.py:156 .\templates\frontpages\layout.html:149
+#: .\fbpims\settings.py:156 .\templates\frontpages\layout.html:155
 msgid "Amharic"
 msgstr "አማርኛ"
 
@@ -30,7 +29,7 @@ msgid "We’re sorry, but the requested page could not be found."
 msgstr ""
 
 #: .\templates\admin\500.html:6 .\templates\admin\base.html:65
-#: .\templates\frontpages\layout.html:190
+#: .\templates\frontpages\layout.html:196
 #: .\templates\registration\logged_out.html:4
 #: .\templates\registration\password_change_done.html:6
 #: .\templates\registration\password_change_form.html:8
@@ -105,7 +104,6 @@ msgid ""
 msgstr "አንባቢ በሚነበብ ነገር ሊዘናጋ መሆኑ ረጅም የተረጋገጠ ሀቅ ነው ፡፡"
 
 #: .\templates\frontpages\index.html:22
-
 msgid "Search Products"
 msgstr "ምርት ፈልግ"
 
@@ -119,8 +117,6 @@ msgstr "ጨረታና ማስታወቂያ ፈልግ"
 
 #: .\templates\frontpages\index.html:32 .\templates\frontpages\index.html:67
 #: .\templates\frontpages\index.html:102
-
-#| msgid "Phrase or Keywords"
 msgid "Enter Your Keywords"
 msgstr "የመፈለግያ ቃላት ጻፍ"
 
@@ -131,8 +127,6 @@ msgstr "ምድብ ምረጥ"
 
 #: .\templates\frontpages\index.html:57 .\templates\frontpages\index.html:92
 #: .\templates\frontpages\index.html:127
-
-#| msgid "Search Here"
 msgid "Search Now"
 msgstr "ፈልግ"
 
@@ -140,7 +134,7 @@ msgstr "ፈልግ"
 msgid "Companies"
 msgstr "ድርጅቶች"
 
-#: .\templates\frontpages\index.html:174 .\templates\frontpages\layout.html:206
+#: .\templates\frontpages\index.html:174 .\templates\frontpages\layout.html:212
 msgid "Products"
 msgstr "ምርት"
 
@@ -181,7 +175,7 @@ msgid "How It Works?"
 msgstr "እንደት ይሰራል"
 
 #: .\templates\frontpages\index.html:425 .\templates\frontpages\index.html:677
-#: .\templates\frontpages\layout.html:127
+#: .\templates\frontpages\layout.html:133
 msgid "Register"
 msgstr "ተመዝገብ"
 
@@ -241,7 +235,7 @@ msgstr ""
 "የሚነበብ እንግሊዝኛ ይመስላል። ብዙ የዴስክቶፕ ማተሚያ ጥቅሎች እና ድረ-ገጽ አርታኢዎች አሁን ሎረም አይፕሱምን እንደ "
 "ነባሪ አምሳያ ጽሑፋቸው ይጠቀማሉ"
 
-#: .\templates\frontpages\index.html:645 .\templates\frontpages\layout.html:131
+#: .\templates\frontpages\index.html:645 .\templates\frontpages\layout.html:137
 msgid "Login"
 msgstr "ግባ"
 
@@ -250,8 +244,6 @@ msgid "New User"
 msgstr "አዲስ ተጠቃሚ"
 
 #: .\templates\frontpages\index.html:691
-
-#| msgid "Latest Suppliers"
 msgid "Latest News"
 msgstr "አቅራቢዎች"
 
@@ -260,8 +252,6 @@ msgid "All"
 msgstr ""
 
 #: .\templates\frontpages\index.html:701
-
-#| msgid "Manufacturers"
 msgid "Manufacturing"
 msgstr "አምራቾች"
 
@@ -269,7 +259,7 @@ msgstr "አምራቾች"
 msgid "Sales"
 msgstr "ሽያጭ"
 
-#: .\templates\frontpages\index.html:703 .\templates\frontpages\layout.html:199
+#: .\templates\frontpages\index.html:703 .\templates\frontpages\layout.html:205
 msgid "Suppliers"
 msgstr "አቅራቢዎች"
 
@@ -305,13 +295,10 @@ msgid "Food Sectors"
 msgstr "መግብ"
 
 #: .\templates\frontpages\index.html:1329
-
-#| msgid "Beverages"
 msgid "Beverage Sectors"
 msgstr "መጠጥ"
 
 #: .\templates\frontpages\index.html:1354
-#| msgid "Pharmaceuticals"
 msgid "Pharmaceutical Sectors"
 msgstr "መድሃኒት"
 
@@ -320,69 +307,81 @@ msgid "Download App"
 msgstr "መተግበሪያ አዉርድ"
 
 #: .\templates\frontpages\layout.html:110
-#: .\templates\frontpages\layout.html:117
+msgid "My Cart"
+msgstr "ዘንቢል"
+
+#: .\templates\frontpages\layout.html:116
+#: .\templates\frontpages\layout.html:123
 msgid "My Profile"
 msgstr "የራስ አካውንት"
 
-#: .\templates\frontpages\layout.html:123
+#: .\templates\frontpages\layout.html:129
 msgid "Logout"
 msgstr "ውጣ"
 
-#: .\templates\frontpages\layout.html:137
+#: .\templates\frontpages\layout.html:143
 msgid "Language"
 msgstr "ቋንቋ"
 
-#: .\templates\frontpages\layout.html:143
+#: .\templates\frontpages\layout.html:149
 msgid "English"
 msgstr "እንግሊዝኛ"
 
-#: .\templates\frontpages\layout.html:191
+#: .\templates\frontpages\layout.html:197
 msgid "About Us"
 msgstr "ስለ እኛ"
 
-#: .\templates\frontpages\layout.html:192
+#: .\templates\frontpages\layout.html:198
 msgid "Manufacturers"
 msgstr "አምራቾች"
 
-#: .\templates\frontpages\layout.html:194
-#: .\templates\frontpages\layout.html:201
-#: .\templates\frontpages\layout.html:208
+#: .\templates\frontpages\layout.html:200
+#: .\templates\frontpages\layout.html:207
+#: .\templates\frontpages\layout.html:214
 msgid "Foods"
 msgstr "ምግብ"
 
-#: .\templates\frontpages\layout.html:195
-#: .\templates\frontpages\layout.html:202
-#: .\templates\frontpages\layout.html:209
+#: .\templates\frontpages\layout.html:201
+#: .\templates\frontpages\layout.html:208
+#: .\templates\frontpages\layout.html:215
 msgid "Beverages"
 msgstr "መጠጥ"
 
-#: .\templates\frontpages\layout.html:196
-#: .\templates\frontpages\layout.html:203
-#: .\templates\frontpages\layout.html:210
+#: .\templates\frontpages\layout.html:202
+#: .\templates\frontpages\layout.html:209
+#: .\templates\frontpages\layout.html:216
 msgid "Pharmaceuticals"
 msgstr "መድሃኒት"
 
-#: .\templates\frontpages\layout.html:213
+#: .\templates\frontpages\layout.html:219
 msgid "Collaborations"
 msgstr "መተባበሪያ"
 
-#: .\templates\frontpages\layout.html:215
+#: .\templates\frontpages\layout.html:221
 msgid "Blog"
 msgstr "ብሎግ"
 
-#: .\templates\frontpages\layout.html:216
+#: .\templates\frontpages\layout.html:222
 msgid "Forums"
 msgstr "ዉይይት"
 
-#: .\templates\frontpages\layout.html:217
+#: .\templates\frontpages\layout.html:223
 msgid "Polls"
 msgstr "ምረጫ"
 
-#: .\templates\frontpages\layout.html:218
+#: .\templates\frontpages\layout.html:224
+msgid "Tenders"
+msgstr ""
+
+#: .\templates\frontpages\layout.html:226
 msgid "Faqs"
 msgstr "ተየጥ"
 
-#: .\templates\frontpages\layout.html:221
+#: .\templates\frontpages\layout.html:227
+msgid "Vacancy"
+msgstr ""
+
+#: .\templates\frontpages\layout.html:230
 msgid "Contact Us"
 msgstr "ተገናኙን"
 
@@ -496,11 +495,9 @@ msgstr ""
 msgid "Reset my password"
 msgstr ""
 
-
 #~| msgid "Currency"
 #~ msgid "Currently"
 #~ msgstr "ገንዘብ"
-
 
 #~| msgid "Amharic"
 #~ msgid "mar"
@@ -511,7 +508,6 @@ msgstr ""
 
 #~ msgid "Select Type"
 #~ msgstr "አይነት ምረጥ"
-
 
 #~| msgid "Categories"
 #~ msgid "All Categories"
