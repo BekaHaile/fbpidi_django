@@ -107,7 +107,6 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
                 company.detail = self.request.POST['detail']
                 company.detail_am = self.request.POST['detail_am']
                 company.color = self.request.POST['color']
-                company.product_category = self.request.POST['product_category']
                 company.facebook_link = self.request.POST['facebook_link']
                 company.twiter_link = self.request.POST['twiter_link']
                 company.linkedin_link = self.request.POST['linkedin_link']
@@ -151,7 +150,6 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
         except ObjectDoesNotExist:
             messages.warning(self.request,"Company Does Not Exist")
             return redirect("admin:view_company_profile")
-
 
 class CompaniesView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
