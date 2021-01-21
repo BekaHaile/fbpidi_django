@@ -19,10 +19,9 @@
 						<div class="item-search-tabs">
 							<div class="item-search-menu">
 								<ul class="nav pl-0">
-									<li class=""><a href="#tab1" class="active ml-0" data-toggle="tab">Search
-											Products</a></li>
-									<li><a href="#tab2" data-toggle="tab">Search Companies</a></li>
-									<li><a href="#tab3" data-toggle="tab">Search Tender & Vacancy</a></li>
+									<li class=""><a href="#tab1" class="active ml-0" data-toggle="tab">{% trans "Search Products" %}</a></li>
+									<li><a href="#tab2" data-toggle="tab">{% trans "Search Companies" %}</a></li>
+									<li><a href="#tab3" data-toggle="tab">{% trans "Search Tender & Vacancy" %}</a></li>
 								</ul>
 							</div>
 							<div class="tab-content">
@@ -30,7 +29,7 @@
 									<div class="form row">
 										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
 											<input type="text" class="form-control " id="text6"
-												placeholder="Enter Your Keywords">
+												placeholder="{% trans 'Enter Your Keywords' %}">
 										</div>
 										<div class="form-group col-xl-6 col-lg-7 col-md-12 mb-0">
 											<div class="row">
@@ -55,7 +54,7 @@
 													</select>
 												</div>
 												<div class="col-xl-4 col-lg-5 col-md-12 mb-0">
-													<a href="#" class="btn btn-block btn-secondary">Search Now</a>
+													<a href="#" class="btn btn-block btn-secondary">{% trans "Search Now" %}</a>
 												</div>
 											</div>
 										</div>
@@ -65,7 +64,7 @@
 									<div class="form row">
 										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
 											<input type="text" class="form-control  " id="text8"
-												placeholder="Enter Your Keywords">
+												placeholder="{% trans 'Enter Your Keywords' %}">
 										</div>
 										<div class="form-group col-xl-6 col-lg-7 col-md-12 mb-0">
 											<div class="row">
@@ -90,7 +89,7 @@
 													</select>
 												</div>
 												<div class="col-xl-4 col-lg-5 col-md-12 mb-0">
-													<a href="#" class="btn btn-block btn-secondary">Search Now</a>
+													<a href="#" class="btn btn-block btn-secondary">{% trans "Search Now" %}</a>
 												</div>
 											</div>
 										</div>
@@ -100,7 +99,7 @@
 									<div class="form row">
 										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
 											<input type="text" class="form-control  " id="text9"
-												placeholder="Enter Your Keywords">
+												placeholder="{% trans 'Enter Your Keywords' %}">
 										</div>
 										<div class="form-group col-xl-6 col-lg-7 col-md-12 mb-0">
 											<div class="row">
@@ -125,7 +124,7 @@
 													</select>
 												</div>
 												<div class="col-xl-4 col-lg-5 col-md-12 mb-0">
-													<a href="#" class="btn btn-block btn-secondary">Search Now</a>
+													<a href="#" class="btn btn-block btn-secondary">{% trans "Search Now" %}</a>
 												</div>
 											</div>
 										</div>
@@ -159,7 +158,7 @@
 								<!--Real-Estate Icon Svg --->
 							</div>
 							<div class="cat-desc">
-								<h5 class="mb-0">{{category.sub_category_name|title}}</h5>
+								<h5 class="mb-0">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</h5>
 							</div>
 						</div>
 					</div>
@@ -194,7 +193,6 @@
 		</div>
 		<div id="myCarousel1" class="owl-carousel owl-carousel-icons2">
 			{%for product in products%}
-			{%if LANGUAGE_CODE == 'en'%}
 			<div class="item">
 				<div class="card mb-0 overflow-hidden">
 					<div class="power-ribbon power-ribbon-top-left text-warning"><span class="bg-warning"><i
@@ -206,19 +204,19 @@
 							<a href="{%url 'product_detail' id=product.id %}" class="item-card2-icons-l"><i class="fa fa-cutlery"></i></a>
 							<a href="#" class="item-card2-icons-r"><i class="fa fa fa-heart-o"></i></a>
 						</div>
-						<div class="blog--category">{{product.category.category_name.category_name}}</div>
+						<div class="blog--category">{% print_translated product.category.category_name.category_name product.category.category_name.category_name_am LANGUAGE_CODE%}</div>
 					</div>
 					<div class="card-body pb-0">
 						<div class="item-card2">
 							<div class="item-card2-desc">
 								<div class="item-card2-text">
 									<a href="{%url 'product_detail' id=product.id %}" class="text-dark">
-										<h4 class="mb-0">{{product.name|title}}</h4>
+										<h4 class="mb-0">{%print_translated product.name product.name_am LANGUAGE_CODE%}</h4>
 									</a>
 								</div>
 								<div class="pt-3">
 									<a href="mb-1">
-										<p class="pb-0 pt-0 mb-2 mt-2"><i class="fa fa-map-marker mr-2"></i>Location</p>
+										<p class="pb-0 pt-0 mb-2 mt-2"><i class="fa fa-map-marker mr-2"></i>{{product.company.location}}</p>
 									</a>
 									<a href="mb-1">
 										<p class="pb-0 pt-0 mb-2 mt-2"><i
@@ -262,76 +260,7 @@
 					</div>
 				</div>
 			</div>
-			{%elif LANGUAGE_CODE == 'am'%}
-			<div class="item">
-				<div class="card mb-0 overflow-hidden">
-					<div class="power-ribbon power-ribbon-top-left text-warning"><span class="bg-warning"><i
-								class="fa fa-bolt"></i></span></div>
-					<div class="item-card2-img">
-						<a href="{%url 'product_detail' id=product.id %}" class="absolute-link"></a>
-						<img src="{{product.image.url}}" style="height: 300px;" alt="img" class="cover-image">
-						<div class="item-card2-icons">
-							<a href="{%url 'product_detail' id=product.id %}" class="item-card2-icons-l"><i class="fa fa-cutlery"></i></a>
-							<a href="#" class="item-card2-icons-r"><i class="fa fa fa-heart-o"></i></a>
-						</div>
-						<div class="blog--category">{{product.category.category_name.category_name_am}}</div>
-					</div>
-					<div class="card-body pb-0">
-						<div class="item-card2">
-							<div class="item-card2-desc">
-								<div class="item-card2-text">
-									<a href="{%url 'product_detail' id=product.id %}" class="text-dark">
-										<h4 class="mb-0">{{product.name_am|title}}</h4>
-										 
-									</a>
-								</div>
-								<div class="pt-3">
-									<a href="mb-1">
-										<p class="pb-0 pt-0 mb-2 mt-2"><i class="fa fa-map-marker mr-2"></i>Location</p>
-									</a>
-									<a href="mb-1">
-										<p class="pb-0 pt-0 mb-2 mt-2"><i
-												class="fa fa-phone mr-2"></i>{{product.user.phone_number}}</p>
-									</a>
-									<p class="pb-0 pt-0 mb-2 mt-2"><i class="fa fa-clock-o mr-2"></i>10am - 9pm<a> <span
-												class="badge badge-success ml-2 fs-13">Open Now</span></a></p>
-								</div>
-								<!-- <p class="">{{product.description_am|safe|truncatewords:4}}</p> -->
-							</div>
-						</div>
-					</div>
-					<div class="card-footer">
-						<div class="item-card2-footer">
-							<div class="item-card2-footer-u">
-								<div class="d-flex">
-									<div class="rating-stars d-inline-flex">
-										<input type="number" readonly="readonly" class="rating-value star"
-											name="rating-stars-value" value="4">
-										<div class="rating-stars-container">
-											<div class="rating-star sm">
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="rating-star sm">
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="rating-star sm">
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="rating-star sm">
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="rating-star sm">
-												<i class="fa fa-star"></i>
-											</div>
-										</div> (25 Reviews)
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			{%endif%}
+			
 			{%endfor%}
 
 
@@ -380,7 +309,7 @@
 								<i class="icon icon-emotsmile"></i>
 							</div>
 							<h5>{% trans "Happy Customers" %}</h5>
-							<h2 class="counter mb-0">7,253</h2>
+							<h2 class="counter mb-0">{{''|happy_customer}}</h2>
 						</div>
 					</div>
 				</div>
@@ -401,7 +330,6 @@
 			<!-- Wrapper for carousel items -->
 			{%for company in companies%}
 			{%if company.company_type == "manufacturer"%}
-			{%if LANGUAGE_CODE == 'en'%}
 			<div class="item">
 				<div class="card mb-0 overflow-hidden">
 					<!-- <div class="arrow-ribbon bg-success">Open</div> -->
@@ -410,13 +338,13 @@
 						<img src="{{company.company_logo.url}}" alt="img" class="cover-image">
 					</div>
 					<div class="item-card7-overlaytext">
-						<a href="{% url 'bs' %}" class="text-white">{{company.company_type}}</a>
+						<a href="{% url 'bs' %}" class="text-white">{%print_translated company.company_type company.company_type_am LANGUAGE_CODE%}</a>
 					</div>
 					<div class="card-body">
 						<div class="item-card7-desc">
 							<div class="item-card7-text">
 								<a href="{% url 'bs' %}" class="text-dark">
-									<h4 class="">{{company.company_name}}</h4>
+									<h4 class="">{%print_translated company.company_name company.company_name_am LANGUAGE_CODE%}</h4>
 								</a>
 							</div>
 							<ul class="item-cards7-ic mb-0">
@@ -449,55 +377,7 @@
 					</div>
 				</div>
 			</div>
-			{%elif LANGUAGE_CODE == 'am' %}
-			<div class="item">
-				<div class="card mb-0 overflow-hidden">
-					<!-- <div class="arrow-ribbon bg-success">Open</div> -->
-					<div class="item-card7-imgs">
-						<a href="{% url 'bs' %}" class="absolute-link"></a>
-						<img src="{{company.company_logo.url}}" alt="img" class="cover-image">
-					</div>
-					<div class="item-card7-overlaytext">
-						<a href="{% url 'bs' %}" class="text-white">{{company.company_type_am}}</a>
-					</div>
-					<div class="card-body">
-						<div class="item-card7-desc">
-							<div class="item-card7-text">
-								<a href="{% url 'bs' %}" class="text-dark">
-									<h4 class="">{{company.company_name_am}}</h4>
-								</a>
-							</div>
-							<ul class="item-cards7-ic mb-0">
-								<li><a href="#"><span class=""><i class="icon icon-eye mr-1"></i> 12 Views</span></a>
-								</li>
-								<li><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>
-										{{company.location}}</a></li>
-								<li class="mb-md-0"><a href="#" class="icons"><i
-											class="icon icon-event text-muted mr-1"></i> 1 hour ago</a></li>
-								<li class="mb-0"><a href="#" class="icons"><i
-											class="icon icon-phone text-muted mr-1"></i>{{company.phone_number}}</a>
-								</li>
-							</ul>
-							<!-- <p class="mb-0">{{company.detail|safe|truncatewords:4}}</p> -->
-						</div>
-					</div>
-					<div class="card-footer">
-						<div class="footerimg d-flex mt-0 mb-0">
-							<div class="d-flex footerimg-l mb-0">
-								<img src="{{company.company_logo.url}}" alt="image" class="avatar brround  mr-2">
-								<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">{{company.location}}<i
-										class="icon icon-check text-success fs-12 ml-1" data-toggle="tooltip"
-										data-placement="top" title="verified"></i></h5>
-							</div>
-							<div class="mt-2 footerimg-r ml-auto">
-								<a href="#" class="text-pink" data-toggle="tooltip" data-placement="top"
-									title="Remove from Wishlist"><i class="fa fa-heart"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			{%endif%}
+			
 			{%endif%}
 			{%endfor%}
 
@@ -510,8 +390,8 @@
 <section class="sptb">
 	<div class="container">
 		<div class="section-title center-block text-center">
-			<h2>How It Works?</h2>
-			<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+			<h2>{% trans "How It Works?" %}</h2>
+			<p>{% trans "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula" %}</p>
 		</div>
 		<div class="row">
 			<div class="col-lg-3 col-md-6 col-sm-6">
@@ -542,9 +422,8 @@
 								<!-- Register Svg-->
 							</div>
 							<div class="servic-data mt-3">
-								<h4 class="font-weight-semibold mb-2">Register</h4>
-								<p class="text-muted mb-0">Nam libero tempore, cum soluta nobis est eligendi cumque
-									facere possimus</p>
+								<h4 class="font-weight-semibold mb-2">{% trans "Register" %}</h4>
+								<p class="text-muted mb-0">{% trans "You can register and get Unlimited Functionalities" %}</p>
 							</div>
 						</div>
 					</div>
@@ -568,9 +447,8 @@
 								<!-- Create account Svg-->
 							</div>
 							<div class="servic-data mt-3">
-								<h4 class="font-weight-semibold mb-2">Create Account</h4>
-								<p class="text-muted mb-0">Nam libero tempore, cum soluta nobis est eligendi cumque
-									facere possimus</p>
+								<h4 class="font-weight-semibold mb-2">{% trans "Create Account" %}</h4>
+								<p class="text-muted mb-0">{% trans "You Can Create Account and Get Unlimited Functionalities" %}</p>
 							</div>
 						</div>
 					</div>
@@ -598,9 +476,8 @@
 								<!-- add post Svg-->
 							</div>
 							<div class="servic-data mt-3">
-								<h4 class="font-weight-semibold mb-2">Add Posts</h4>
-								<p class="text-muted mb-0">Nam libero tempore, cum soluta nobis est eligendi cumque
-									facere possimus</p>
+								<h4 class="font-weight-semibold mb-2">{% trans "Add Products" %}</h4>
+								<p class="text-muted mb-0">{% trans "You Can Add your Products and comunicate with buyers" %}</p>
 							</div>
 						</div>
 					</div>
@@ -626,9 +503,8 @@
 								<!-- Earnings Svg-->
 							</div>
 							<div class="servic-data mt-3">
-								<h4 class="font-weight-semibold mb-2">Get Earnings</h4>
-								<p class="text-muted mb-0">Nam libero tempore, cum soluta nobis est eligendi cumque
-									facere possimus</p>
+								<h4 class="font-weight-semibold mb-2">{% trans "Get Earnings" %}</h4>
+								<p class="text-muted mb-0">{% trans "You can register, add products,buy products and get Your earnings" %}</p>
 							</div>
 						</div>
 					</div>
@@ -650,7 +526,6 @@
 			<!-- Wrapper for carousel items -->
 			{%for company in companies%}
 			{%if company.company_type == "supplier"%}
-			{%if LANGUAGE_CODE == 'en'%}
 			<div class="item">
 				<div class="card mb-0 overflow-hidden">
 					<!-- <div class="arrow-ribbon bg-success">Open</div> -->
@@ -659,13 +534,13 @@
 						<img src="{{company.company_logo.url}}" alt="img" class="cover-image">
 					</div>
 					<div class="item-card7-overlaytext">
-						<a href="{% url 'bs' %}" class="text-white">{{company.company_type}}</a>
+						<a href="{% url 'bs' %}" class="text-white">{%print_translated company.company_type company.company_type_am LANGUAGE_CODE%}</a>
 					</div>
 					<div class="card-body">
 						<div class="item-card7-desc">
 							<div class="item-card7-text">
 								<a href="{% url 'bs' %}" class="text-dark">
-									<h4 class="">{{company.company_name}}</h4>
+									<h4 class="">{%print_translated company.company_name company.company_name_am LANGUAGE_CODE%}</h4>
 								</a>
 							</div>
 							<ul class="item-cards7-ic mb-0">
@@ -698,55 +573,7 @@
 					</div>
 				</div>
 			</div>
-			{%elif LANGUAGE_CODE == 'am' %}
-			<div class="item">
-				<div class="card mb-0 overflow-hidden">
-					<!-- <div class="arrow-ribbon bg-success">Open</div> -->
-					<div class="item-card7-imgs">
-						<a href="{% url 'bs' %}" class="absolute-link"></a>
-						<img src="{{company.company_logo.url}}" alt="img" class="cover-image">
-					</div>
-					<div class="item-card7-overlaytext">
-						<a href="{% url 'bs' %}" class="text-white">{{company.company_type_am}}</a>
-					</div>
-					<div class="card-body">
-						<div class="item-card7-desc">
-							<div class="item-card7-text">
-								<a href="{% url 'bs' %}" class="text-dark">
-									<h4 class="">{{company.company_name_am}}</h4>
-								</a>
-							</div>
-							<ul class="item-cards7-ic mb-0">
-								<li><a href="#"><span class=""><i class="icon icon-eye mr-1"></i> 12 Views</span></a>
-								</li>
-								<li><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>
-										{{company.location}}</a></li>
-								<li class="mb-md-0"><a href="#" class="icons"><i
-											class="icon icon-event text-muted mr-1"></i> 1 hour ago</a></li>
-								<li class="mb-0"><a href="#" class="icons"><i
-											class="icon icon-phone text-muted mr-1"></i>{{company.phone_number}}</a>
-								</li>
-							</ul>
-							<!-- <p class="mb-0">{{company.detail|safe|truncatewords:4}}</p> -->
-						</div>
-					</div>
-					<div class="card-footer">
-						<div class="footerimg d-flex mt-0 mb-0">
-							<div class="d-flex footerimg-l mb-0">
-								<img src="{{company.company_logo.url}}" alt="image" class="avatar brround  mr-2">
-								<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">{{company.location}}<i
-										class="icon icon-check text-success fs-12 ml-1" data-toggle="tooltip"
-										data-placement="top" title="verified"></i></h5>
-							</div>
-							<div class="mt-2 footerimg-r ml-auto">
-								<a href="#" class="text-pink" data-toggle="tooltip" data-placement="top"
-									title="Remove from Wishlist"><i class="fa fa-heart"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			{%endif%}
+			 
 			{%endif%}
 			{%endfor%}
 
@@ -762,19 +589,18 @@
 			<div class="content-text mb-0">
 				<div class="container">
 					<div class="text-center text-white ">
-						<h2 class="mb-2">Subscribe</h2>
-						<p class="fs-16 mb-0">It is a long established fact that a reader will be distracted by the
-							readable.</p>
+						<h2 class="mb-2">{% trans "Subscribe" %}</h2>
+						<p class="fs-16 mb-0">{% trans "It is a long established fact that a reader will be distracted by the readable." %}</p>
 						<div class="row">
 							<div class="col-lg-8 mx-auto d-block">
 								<div class="mt-5">
 									<div class="input-group sub-input mt-1">
 										<input type="text" class="form-control input-lg "
-											placeholder="Enter your Email">
+											placeholder="{% trans 'Enter your Email' %}">
 										<div class="input-group-append ">
 											<button type="button"
 												class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
-												Subscribe
+												{% trans "Subscribe" %}
 											</button>
 										</div>
 									</div>
@@ -793,8 +619,8 @@
 <section class="sptb bg-white">
 	<div class="container">
 		<div class="section-title center-block text-center">
-			<h2>Getting Started</h2>
-			<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+			<h2>{% trans "Getting Started" %}</h2>
+			<p>{% trans "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula"%}</p>
 		</div>
 		<div class="card overflow-hidden">
 			<div class="row no-gutters row-deck">
@@ -814,10 +640,9 @@
 								</svg>
 								<!-- User Icon Svg --->
 							</div>
-							<h4 class="mb-4 fs-20">Exsiting User</h4>
-							<p>it look like readable English. Many desktop publishing packages and web page editors now
-								use Lorem Ipsum as their default model text</p>
-							<a href="jobs-list.html" class="btn btn-primary text-white px-6">Login</a>
+							<h4 class="mb-4 fs-20">{% trans "Exsiting User" %}</h4>
+							<p>{% trans "it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text" %}</p>
+							<a href="{%url 'login'%}" class="btn btn-primary text-white px-6">{% trans "Login" %}</a>
 						</div>
 					</div>
 				</div>
@@ -847,10 +672,9 @@
 								</svg>
 								<!--User Icon Svg --->
 							</div>
-							<h4 class="mb-4 fs-20">New User</h4>
-							<p>it look like readable English. Many desktop publishing packages and web page editors now
-								use Lorem Ipsum as their default model text</p>
-							<a href="candidate-listing.html" class="btn btn-primary text-white px-6">Register</a>
+							<h4 class="mb-4 fs-20">{% trans "New User"%}</h4>
+							<p>{% trans "it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text" %}</p>
+							<a href="{%if not user.is_authenticated%}{%url 'register'%}{%else%}#{%endif%}" class="btn btn-primary text-white px-6">{% trans "Register" %}</a>
 						</div>
 					</div>
 				</div>

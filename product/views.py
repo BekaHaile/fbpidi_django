@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 from admin_site.models import Category, SubCategory
-from product.models import Product
+from product.models import Product,ProductImage,ProductPrice
 from product.forms import SubCategoryForm,ProductCreationForm,CategoryForm
 from accounts.models import User
 from company.models import Company
