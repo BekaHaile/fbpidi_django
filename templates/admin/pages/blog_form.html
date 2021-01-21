@@ -26,31 +26,31 @@
 					{% endif %}
 					{%csrf_token%}
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.title.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Title (English)  *</label>
 						<div class="col-lg-9">
 							{{form.title}}
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Title Amharic *</label>
+						<label class="col-form-label col-lg-3">Title (Amharic) *</label>
 						<div class="col-lg-9">
 							{{form.title_am}}
 						</div>
 					</div> 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.tag.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Tag (English)*</label>
 						<div class="col-lg-9">
 							{{form.tag}}
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Tag Amharic *</label>
+						<label class="col-form-label col-lg-3">Tag (Amharic) *</label>
 						<div class="col-lg-9">
 							{{form.tag_am}}
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.content.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Content (English) *</label>
 						<div class="col-lg-9">
 							{{form.content|safe}}
 						</div>
@@ -58,14 +58,14 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Content Amharic *</label>
+						<label class="col-form-label col-lg-3">Content (Amharic) *</label>
 						<div class="col-lg-9">
 							{{form.content_am}}
 						</div>
 					</div>
 
 					<div class="form-group row">
-				    <label class="col-form-label col-lg-3" >{{form.publish.label|title}} </label>
+				    <label class="col-form-label col-lg-3" >Publish  </label>
 						<div class="col-lg-9" name="publish" value="True">
 							{{form.publish}}
 							<!--

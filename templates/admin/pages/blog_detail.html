@@ -22,7 +22,7 @@
 					{{form.errors}}
 					{%csrf_token%}
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Title *</label>
+						<label class="col-form-label col-lg-3">Title (English)*</label>
 						<div class="col-lg-9">
 							<input type="text" name="title" class="form-control" value="{{form.title}} " id="">
 						 
@@ -30,14 +30,14 @@
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Title Amharic *</label>
+						<label class="col-form-label col-lg-3">Title (Amharic) *</label>
 							<div class="col-lg-9">
 							<input type="text"required name="title_am" class="form-control" value="{{form.title_am}}" id="">
 						</div>
 							
 					</div> 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Tag *</label>
+						<label class="col-form-label col-lg-3">Tag (English) *</label>
 						
 							<div class="col-lg-9">
 							<input type="text" required name="tag" class="form-control" value="{{form.tag}} " id="">
@@ -46,7 +46,7 @@
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Tag Amharic *</label>
+						<label class="col-form-label col-lg-3">Tag (Amharic) *</label>
 						
 							<div class="col-lg-9">
 							<input type="text" required name="tag_am" class="form-control" value="{{form.tag_am}} " id="">
@@ -56,7 +56,7 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3"> Content *</label>
+						<label class="col-form-label col-lg-3"> Content (English)*</label>
 						<div class="col-lg-9">
 								<textarea  required class="summernote" name="content" >{{form.content}}</textarea>
 						</div>
@@ -64,20 +64,24 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3"> Content Amharic *</label>
+						<label class="col-form-label col-lg-3"> Content (Amharic) *</label>
 						<div class="col-lg-9">
 								<textarea required class="summernote" name="content_am" >{{form.content_am}}</textarea>
 						</div>
 							
 					</div>
-
+					
 					<div class="form-group row">
 				    <label class="col-form-label col-lg-3">Publish </label>
 						
 
 							<div class="col-lg-9">
-							<input type="checkbox" name="publish" value="{{form.publish}}" class="form-check-input" id="exampleCheck1">
-							
+								{%if form.publish == True %}
+							<input type="checkbox" name="publish" value=on class="form-check-input" id="exampleCheck1">
+								{%endif%}
+								{%if form.publish == False %}
+							<input type="checkbox" name="publish" value=off class="form-check-input" id="exampleCheck1">
+								{%endif%}
 						</div>
 							
 				  	</div>
