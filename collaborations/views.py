@@ -474,16 +474,22 @@ class PollDetail(LoginRequiredMixin,View):
 ###
 class CreateTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
+        print("get")
         try:    
             form = TenderForm()
-            company = Company.objects.filter(user = self.request.user).first()
+            if Company.objects.filter(user = self.request.user).first():
+                company = Company.objects.filter(user = self.request.user).first()
+            else:
+                return redirect("admin:create_company_profile")
+
             company_bank_accounts = company.get_bank_accounts()
             banks= Bank.objects.all() # if there will be a scenario where the admin needs to add register new bank account
             
             context = {'form':form, 'banks':banks, 'company_bank_accounts':company_bank_accounts}
             return render(self.request,'admin/collaborations/create_tender.html',context)
-        except Exception:
-            return redirect("admin:polls")
+        except Exception as e: 
+            print("execption at createtender ", str(e))
+            return redirect("admin:index")
     
     def post(self,*args,**kwargs):
         form = TenderForm(self.request.POST)  
@@ -509,9 +515,8 @@ class CreateTender(LoginRequiredMixin,View):
                 
             else:
                 import pprint
-                
                 pprint.pprint(self.request.POST)
-                print("2")
+           
                 pprint.pprint(self.request.FILES)
                 print(form.errors)
                 messages.error(self.request, "Error! Poll was not Created!" )
@@ -528,8 +533,9 @@ class TenderList(LoginRequiredMixin,View):
                 tenders = Tender.objects.all()
                 return render(self.request, "admin/collaborations/tenders.html", {'tenders':tenders,})
         except Exception as e:
-                messages.error(self.request, "Error while getting tenders")
-                return redirect("admin:tenders") 
+                messages.error(self.request, "Error while getting tenders",)
+                print(str(e))
+                return redirect("admin:index") 
 
 
 class TenderDetail(LoginRequiredMixin,View):
@@ -548,7 +554,7 @@ class TenderDetail(LoginRequiredMixin,View):
                 return redirect("admin:tenders")
 
         print("error at tenderDetail for admin")
-        return redirect("admin:tenders")
+        return redirect("admin:admin_polls")
 
 
 
@@ -615,13 +621,6 @@ class EditTender(LoginRequiredMixin,View):
         form = TenderEditForm(self.request.POST)  
         try:                 
             if form.is_valid():
-                import pprint
-                
-                pprint.pprint(self.request.POST)
-                print("2")
-                pprint.pprint(self.request.FILES)
-                print(form.errors)
-                print("form is valid")
                 tender= Tender.objects.get(id = self.kwargs['id'])
                 message = []
                 
@@ -647,7 +646,7 @@ class EditTender(LoginRequiredMixin,View):
                 tender.status = form.cleaned_data.get("status")
                 tender.save()
                 
-                messages.success(self.request,"Tender Successfully Created")
+                messages.success(self.request,"Tender Successfully Edited")
                 return redirect("admin:tenders")
                 
             else:

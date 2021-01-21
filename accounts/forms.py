@@ -119,7 +119,7 @@ class CompanyAdminCreationForm(AbstractUserCreationForm):
         user.save()
         perm_list = []
         for code_name in ADMIN_PERMISSION_LIST:
-            print("9999999999999999999",code_name)
+            
             perm_list.append(Permission.objects.get(codename=code_name))
         user.user_permissions.set(perm_list)
         

@@ -60,7 +60,7 @@
 											<div class="dropdown-menu dropdown-menu-right">
 												
 													{% if perms.collaborations.view_tender %}
-													<a href="{%url 'admin:tender_detail' id=tender.id%}" class="dropdown-item"><i class="icon-pencil"></i>View tender Detail</a>
+													<a href="{%url 'admin:tenders'%}" onclick="return confirm ('Are you sure you want to delete this tender?')" class="dropdown-item"><i class="icon-eye"></i>View tender Detail</a>
 													{% endif %}
 
 													{% if perms.collaborations.change_tender %}

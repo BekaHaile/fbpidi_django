@@ -75,7 +75,7 @@
 											<div class="dropdown-menu dropdown-menu-right">
 												
 													
-													<a href="{%url 'admin:detail_poll' id=poll.id%}" class="dropdown-item"><i class="icon-pencil"></i>View Poll Detail</a>
+													<a href="{%url 'admin:detail_poll' id=poll.id%}" class="dropdown-item"><i class="icon-eye"></i>View Poll Detail</a>
 													{% if poll.user == user %}
 														{% if poll.count_votes != 0 %}
 															<a style="pointer-events: none;color: currentColor; cursor: not-allowed; opacity: 0.5; text-decoration: none;" href="{%url 'admin:edit_poll' id=poll.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Poll</a>

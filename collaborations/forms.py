@@ -2,7 +2,7 @@ from django import forms
 from django_summernote.widgets import SummernoteWidget
 from collaborations.models import Faqs
 from collaborations.models import Faqs,Blog,BlogComment,Vacancy,JobApplication
-from .models import  PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications JobCategoty
+from .models import  PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications, JobCategoty
 from django.forms.widgets import SelectDateWidget
 
 
@@ -89,9 +89,9 @@ class CreateChoiceForm(forms.ModelForm):
 
 class TenderForm(forms.ModelForm):
     # user, bank_account, document
+    STATUS_CHOICE = [ ('Pending', 'Pending'),('Open', 'Open' )]
     tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
-    status = forms.ChoiceField(choices = [ ('Pending', 'Pending'),('Open', 'Open' ),                                                                                         ('Closed', 'Closed'), ('Suspended', 'Suspended')
-                                          ], required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
+    status = forms.ChoiceField(choices = STATUS_CHOICE, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
                                 
     
     
@@ -115,7 +115,7 @@ class TenderForm(forms.ModelForm):
 class TenderEditForm(forms.ModelForm):
     # user, bank_account, document
     tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
-    status = forms.ChoiceField(choices = [ ('Pending', 'Pending'),('Open', 'Open' ),                                                                                         ('Closed', 'Closed'), ('Suspended', 'Suspended')
+    status = forms.ChoiceField(choices = [ ('Pending', 'Pending'),('Open', 'Open' ),  ('Closed', 'Closed'), ('Suspended', 'Suspended')
                                           ], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
                                 
     

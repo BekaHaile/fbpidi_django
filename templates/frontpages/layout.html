@@ -210,16 +210,19 @@
 									<li><a href="{% url 'bs_list3' %}">{% trans "Pharmaceuticals" %}</a></li>
 								</ul>
 							</li>			
-							<li><a href="{%url 'blog_grid_right'%}">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
+							<li><a href="#">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
 								<ul class="sub-menu">
 									<li><a href="{% url 'blog_grid_right' %}">{% trans "Blog" %}</a></li>
 									<li><a href="#">{% trans "Forums" %}</a></li>
 									<li><a href="{% url 'polls' %}">{% trans "Polls" %}</a></li>
+									<li><a href="{% url 'tender_list' %}">{% trans "Tenders" %}</a></li>
+									
 									<li><a href="{% url 'faq' %}">{% trans "Faqs" %}</a></li>
 								</ul>
 							</li>
-                            <li><span></span><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
+							<li><span></span><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
 
+							
 						</ul>
 
 					</nav>

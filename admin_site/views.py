@@ -23,8 +23,13 @@ from django.http import HttpResponse, FileResponse
 # INDEX VIEW
 class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        context = dict()
-        return render(self.request,"admin/index.html",context)
+        try:
+            context = dict()
+            print("works")
+            return render(self.request,"admin/index.html",context)
+        except Exception as e:
+            print ("index error",str(e))
+            return render(self.request,"admin/index.html",context)
 
 
 class DeleteView(LoginRequiredMixin,View):

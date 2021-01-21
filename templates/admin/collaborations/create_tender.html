@@ -318,13 +318,49 @@
 									</div>
 								</div>
 
+
+
+
 								<div class="col-md-4">
 									<div class="form-group ">
-										<label class="col-form-label ">{{form.status.label|title}}</label>
-											{{form.status}}
+										<div style="width: 100%;">
+											<div class="col-lg-9" style="width: 95%; display: inline-block;">
+												
+												<select required name="status"  class="form-control form-control-uniform" data-fouc>
+
+													{% for status in form.STATUS_CHOICE %}
+
+														<option  value="{{status.0}}">{{status.0 }}</option>
+														<div class="list-icons" style="width: 3%; display: inline-block;" >
+															<div class="dropdown">
+																<a href="#" class="list-icons-item" data-toggle="dropdown">
+																	
+																</a>
+									
+																
+															</div>
+														</div>
+
+													{%endfor%}
+					
+												</select>
+											</div>
+									
+										
+										</div>
+		
+		
 											
 									</div>
 								</div>
+
+
+
+
+
+
+
+								
 
 							</div>
 							
@@ -365,8 +401,8 @@
 							
 							
 							<div class="text-left">
-									<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-										class="btn btn-primary rounded-round">Register new bank account </button>
+									<button style="padding-left: 10%; padding-right: 10%;" 
+										class="btn btn-primary rounded-round" onclick="return confirm ('I am working on this part')">Register new bank account </button>
 							</div>	
 							
 

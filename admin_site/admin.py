@@ -101,7 +101,7 @@ class CustomAdminSite(admin.AdminSite):
             path("add_tenderbankaccount/<id>/",wrap(DeletePoll.as_view()), name = "add_tenderbankaccount"),
             
 
-            path("",include("company.urls")),
+            # path("",include("company.urls")),
             
 
         
