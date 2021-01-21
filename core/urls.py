@@ -1,10 +1,11 @@
 from django.urls import path,include
 from django.views.generic import TemplateView
 
-from core.views import IndexView,ProfileView,ProductDetailView,ProductByCategoryView
+from core.views import (IndexView,ProfileView,ProductDetailView,ProductByCategoryView,
+                    ProductByMainCategory,MnfcCompanyByMainCategory,SupCompanyByMainCategory )
 from collaborations.views import BlogList,BlogDetail,FaqList
 from accounts.views import CustomerSignUpView
-
+from product.views import AddToCartView,CartSummary,DecrementFromCart
 # busines-meditation/,tips/,orders
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
@@ -12,6 +13,12 @@ urlpatterns = [
     path("blog-detail-right/<id>",BlogDetail.as_view(),name="blog_details"),
     path("product-detail/<id>",ProductDetailView.as_view(),name="product_detail"),
     path("product-by-category/<cat_id>/",ProductByCategoryView.as_view(),name="product_category"),
+    path("product-by-main-category/<option>/",ProductByMainCategory.as_view(),name="product_category_main"),
+    path("man_comp-by-main-category/<option>/",MnfcCompanyByMainCategory.as_view(),name="manufac_category_main"),
+    path("sup_comp-by-main-category/<option>/",SupCompanyByMainCategory.as_view(),name="suplier_category_main"),
+    path("add-to-cart/<id>/",AddToCartView.as_view(),name="add_to_cart"),
+    path("cart_summary/",CartSummary.as_view(),name="cart_summary"),
+    path("decrement_cart/<id>/",DecrementFromCart.as_view(),name="decrement_cart"),
     path("mydash/",ProfileView.as_view(),name="mydash"),
     path("",include("accounts.urls")),
 
@@ -64,8 +71,8 @@ urlpatterns = [
     path("pricing/",TemplateView.as_view(template_name="frontpages/pricing.html"),name="pricing"),
     path("business-list/",TemplateView.as_view(template_name="frontpages/business-list.html"),name="bs_list"),
     path("business-list2/",TemplateView.as_view(template_name="frontpages/business-list2.html"),name="bs_list2"),
-    path("bussiness-list3/",TemplateView.as_view(template_name="frontpages/business-list3.html"),name="bs_list3"),
-    path("bussiness-list-right/",TemplateView.as_view(template_name="frontpages/business-list-right.html"),name="bs_list_right"),
+    path("business-list3/",TemplateView.as_view(template_name="frontpages/business-list3.html"),name="bs_list3"),
+    path("business-list-right/",TemplateView.as_view(template_name="frontpages/business-list-right.html"),name="bs_list_right"),
     path("business-map/",TemplateView.as_view(template_name="frontpages/business-list-map.html"),name="bs_list_map"),
     path("business-map2/",TemplateView.as_view(template_name="frontpages/business-list-map2.html"),name="bs_list_map2"),
     path("business-map3/",TemplateView.as_view(template_name="frontpages/business-list-map3.html"),name="bs_list_map3"),

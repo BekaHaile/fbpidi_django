@@ -23,16 +23,21 @@ from company.models import CompanyStaff
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
  
 class CompanyAdminSignUpView(CreateView):
-    model = User
-    form_class = CompanyAdminCreationForm
-    template_name = 'registration/admin_signup.html'
-
-    def get_context_data(self, **kwargs):
-        return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        user = form.save()
-        return redirect('admin:complete_company_profile')
+    def get(self,*args,**kwargs):
+        if self.request.user.is_authenticated:
+            messages.warning(self.request,"You Already have Account,Please logout and create an account")
+            return redirect("admin:index")
+        else:
+            form = CompanyAdminCreationForm()
+            return render(self.request,'registration/admin_signup.html',{"form":form})
+     
+    def post(self, *args,**kwargs):
+        form = CompanyAdminCreationForm(self.request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('admin:complete_company_profile')
+        else:
+            return render(self.request,'registration/admin_signup.html',{'form':form})
 
 class CustomerSignUpView(CreateView):
     model = User
