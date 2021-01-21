@@ -4,10 +4,11 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 
 
 from admin_site.models import Category, SubCategory
-from product.models import Product,ProductImage,ProductPrice
+from product.models import Product,ProductImage,ProductPrice,Order,OrderProduct
 from product.forms import SubCategoryForm,ProductCreationForm,CategoryForm
 from accounts.models import User
 from company.models import Company
@@ -238,3 +239,74 @@ class CreatePrice(LoginRequiredMixin,View):
             price_obj.save()
         messages.success(self.request,"Price Added Successfully!")
         return redirect("admin:product_detail", id=product.id,option='view')
+
+
+class AddToCartView(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        product = get_object_or_404(Product,id=kwargs['id'])
+        
+        order_product,created = OrderProduct.objects.get_or_create(
+            product=product,
+            user=self.request.user,
+            ordered=False
+        )
+        order_queryset = Order.objects.filter(
+            user=self.request.user,
+            ordered=False
+        )
+        if order_queryset.exists():
+            order = order_queryset[0]
+            if order.products.filter(product__id=product.id).exists():
+                order_product.quantity +=1
+                order_product.save()
+                return redirect("cart_summary")
+            else:
+                order.products.add(order_product)
+                order.save()
+                messages.success(self.request,"New Product is added to your cart")
+                return redirect("cart_summary")
+        else:
+            order = Order.objects.create(user=self.request.user,order_date=timezone.now())
+            order.products.add(order_product)
+            order.save()
+            messages.success(self.request,"The Order is added to your cart")
+            return redirect("cart_summary")
+
+
+class CartSummary(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        try:
+            order = Order.objects.get(user=self.request.user,ordered=False)
+            products = Product.objects.all().order_by("timestamp")[:4]
+            return  render(self.request,"frontpages/product/carts.html",{'orders':order,'products':products})
+        except ObjectDoesNotExist:
+            messages.warning(self.request,"You Do Not have active order")
+            return redirect("index")
+
+
+class DecrementFromCart(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        product = get_object_or_404(Product,id=self.kwargs['id'])
+        order_qset = Order.objects.filter(user=self.request.user,ordered=False)
+        if order_qset.exists():
+            order = order_qset[0]
+            if order.products.filter(product__id=product.id).exists():
+                print("here")
+                order_product = OrderProduct.objects.filter( 
+                    user=self.request.user,product=product,ordered=False )[0]
+                if order_product.quantity > 1:
+                    order_product.quantity -= 1
+                    order_product.save()
+                    return redirect("cart_summary")
+                else:
+                    order.products.remove(order_product)
+                    messages.success(self.request,"All Items removed from your cart")
+                    return redirect("index")
+                
+               
+            else: 
+                messages.warning(self.request,"This item was not in your cart")
+                return redirect("index")
+        else: 
+            messages.warning(self.request,"You do not have order")
+            return redirect("index")    
