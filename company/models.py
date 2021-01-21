@@ -2,6 +2,10 @@ from django.db import models
 from django.conf import settings
 from admin_site.models import SubCategory
 
+
+    
+
+
 class Company(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
@@ -60,10 +64,12 @@ class Company(models.Model):
         return self.company_name
     
     def get_image(self):
-        if self.company_logo.url:
-            return self.company_logo.url
-        else:
-            return None
+        return self.company_logo.url if self.company_logo.url else None
+        
+
+    def get_bank_accounts(self):
+        return self.companybankaccount_set.all() if self.companybankaccount_set.all().count() > 0 else None
+
 
 class CompanyStaff(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
@@ -92,3 +98,23 @@ class CompanyEvent(models.Model):
     description_am = models.TextField(verbose_name="Description(Amharic)")
     image = models.ImageField()
     time_stamp = models.DateTimeField(auto_now_add=True)
+
+
+class Bank(models.Model):
+    bank_name = models.CharField(verbose_name="bank name", max_length=255,)
+    bank_name_am = models.CharField(verbose_name="bank name", max_length=255,default="")
+    api_link = models.CharField(verbose_name="bank_api_link", max_length=255)
+
+    def __str__(self):
+        return self.bank_name
+
+class CompanyBankAccount(models.Model):
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
+    bank = models.ForeignKey(Bank, on_delete = models.CASCADE)
+    account_number = models.CharField(verbose_name="account number", max_length=30)
+
+    def __str__(self):
+        return f"{self.company.company_name}'s  {bank.bank_name} account"
+
+    class Meta:
+        unique_together = (('company', 'bank','account_number'))

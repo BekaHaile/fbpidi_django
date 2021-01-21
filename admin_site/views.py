@@ -23,8 +23,13 @@ from django.http import HttpResponse, FileResponse
 # INDEX VIEW
 class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        context = dict()
-        return render(self.request,"admin/index.html",context)
+        try:
+            context = dict()
+            print("works")
+            return render(self.request,"admin/index.html",context)
+        except Exception as e:
+            print ("index error",str(e))
+            return render(self.request,"admin/index.html",context)
 
 
 class DeleteView(LoginRequiredMixin,View):
@@ -118,7 +123,6 @@ class CreatePoll(LoginRequiredMixin,View):
                     title_am=form.cleaned_data.get('title_am'),
                     description=form.cleaned_data.get("description"),
                     description_am=form.cleaned_data.get('description_am'),
-                    image = form.cleaned_data.get("image"),                 
                     
                 )
                 poll.save()
@@ -186,39 +190,30 @@ class AddChoice(LoginRequiredMixin,View):
 
 class EditPoll(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        
         pollform = CreatePollForm()
         choiceform = CreateChoiceForm()
-        
         try:
             poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
             # little verification (this verification is done at the front end, this is just for safety, like if user uses url)            
             if poll.count_votes() != 0:
                 messages.error(self.request, "Couldn't Edit poll, because poll Edit has started!")
                 return redirect('admin:admin_polls')
-
             context = {'pollform':pollform, 'choiceform':choiceform, 'poll':poll}
             context['edit'] = True
-            
         except Exception as e:          
             print(str(e))
             messages.error(self.request, "Error, Couldn't Edit poll!")
             return redirect('admin:admin_polls')
-    
         return render(self.request,'admin/pages/create_poll.html',context)
 
     def post(self,*args,**kwargs):
-        
-        form = CreatePollForm(self.request.POST)
-        
+        form = CreatePollForm(self.request.POST)     
         try:
             poll = PollsQuestion.objects.get(id = self.kwargs['id'])
-
         except Exception as e:
                 print("error at Editpoll post", str(e))
                 messages.error(self.request, "Error! Poll was not Edited!" )
                 return redirect("admin:admin_polls")
-
         poll.title=self.request.POST['title']
         poll.title_am=self.request.POST['title_am']
         poll.description=self.request.POST["description"]

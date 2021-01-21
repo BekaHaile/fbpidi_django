@@ -22,6 +22,7 @@ from accounts.models import User,Company,CompanyAdmin,Customer
 from company.models import CompanyStaff
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
  
+ 
 class CompanyAdminSignUpView(CreateView):
     def get(self,*args,**kwargs):
         if self.request.user.is_authenticated:
@@ -39,6 +40,7 @@ class CompanyAdminSignUpView(CreateView):
         else:
             return render(self.request,'registration/admin_signup.html',{'form':form})
 
+
 class CustomerSignUpView(CreateView):
     model = User
     form_class = CustomerCreationForm
@@ -55,6 +57,8 @@ class CustomerSignUpView(CreateView):
             {'message':"Please Verify your email address to complete the registration\n"
             +"If you can\'t find the mail please check it in your spam folder!"})
 
+
+# class SocialLoginView(LoginRequiredMixin,View):
 class CompleteLoginView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         
@@ -70,6 +74,7 @@ class CompleteLoginView(LoginRequiredMixin,View):
                 )
                 customer.save()
             return redirect("index")
+
 
 
 def activate(request, uidb64, token):
@@ -207,6 +212,7 @@ class CreateUserView(LoginRequiredMixin, View):
             else:
                 return render(self.request, "admin/pages/user_form.html", {"form": form})
 
+
 class GroupList(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         groups = Group.objects.all()
@@ -227,9 +233,6 @@ class GroupView(LoginRequiredMixin,View):
         group.permissions.set(permission_list)
         group.save()
         return JsonResponse({"message":"Role Group Created SuccessFully"})
-
-
-
 
 
 class RolesView(LoginRequiredMixin,View):

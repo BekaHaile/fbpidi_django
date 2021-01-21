@@ -28,6 +28,8 @@ from company.views import (
 
 
 
+from collaborations.views import TenderList, CreateTender, TenderDetail, EditTender, AddTenderBankAccount, DeleteTender
+
 class CustomAdminSite(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
@@ -80,7 +82,7 @@ class CustomAdminSite(admin.AdminSite):
             path("add_more_images/",wrap(AddProductImage.as_view()),name="add_product_image"),
             path("create_price/",wrap(CreatePrice.as_view()),name="create_price"),
         
-            # paths for polls app, 
+            # paths for polls, 
             path("polls/", wrap(Polls.as_view()), name = "admin_polls"),
             path("create_poll/", wrap(CreatePoll.as_view()), name = "create_poll"),
             path("edit_poll/<id>/", wrap(EditPoll.as_view()), name = "edit_poll"),
@@ -89,6 +91,18 @@ class CustomAdminSite(admin.AdminSite):
             path("delete_poll/<id>/", wrap(DeletePoll.as_view()), name = "delete_poll"),
             path("delete_choice/<id>/", wrap(DeleteChoice.as_view()), name = "delete_choice"),
             path("detail_poll/<id>/", wrap(DetailPoll.as_view()), name = "detail_poll"),
+
+            # paths for tenders
+            path("tenders/", TenderList.as_view(), name = "tenders"),
+            path("create_tender/", CreateTender.as_view(), name = "create_tender"),
+            path("tender_detail/<id>/", wrap(DetailPoll.as_view()), name = "tender_detail"),
+            path("edit_tender/<id>/", EditTender.as_view(), name = "edit_tender"),
+            path("delete_tender/<id>/", DeleteTender.as_view(), name = "delete_tender"),
+            path("add_tenderbankaccount/<id>/",wrap(DeletePoll.as_view()), name = "add_tenderbankaccount"),
+            
+
+            # path("",include("company.urls")),
+            
 
         
             # path("",wrap(include("company.urls"))),
