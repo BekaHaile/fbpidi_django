@@ -46,7 +46,7 @@
 				{%for blog in blogs%}
 				<tr>
 					
-					<td>{{blog.title}}</td>
+					<td>{{blog.title|truncatewords:20}}</td>
 					<td>{{blog.tag}}</td>
 					<td>{{blog.timestamp}}</td>
 					<td>{{blog.publish}}</td>

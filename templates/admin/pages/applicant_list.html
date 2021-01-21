@@ -23,8 +23,11 @@
 	<div class="card">
 		<div class="card-header header-elements-inline">
 			<h5 class="card-title">Applicants</h5> 
-
-			<a href="{%url 'admin:close' id=vacancy%}" class="btn btn-secondary">Close the Vacancy</a>
+			{% if vacancyDetail.closed == True %}
+			<a href="{%url 'admin:close' id=vacancy closed=True %}" class="btn btn-secondary"> Open the Vacancy</a>
+			{%else %}
+			<a href="{%url 'admin:close' id=vacancy closed=False %}" class="btn btn-secondary"> Close the Vacancy</a>
+			{%endif%}
 		</div>
 				{%for job in jobapplicant %}
 				<div class="card shadow mb-4">

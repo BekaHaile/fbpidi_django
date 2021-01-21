@@ -159,7 +159,7 @@ class VacancyForm(forms.ModelForm):
         
         widgets = {
             'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-            'location':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirement'}),
+            'location':forms.TextInput(attrs={'class':'form-control','placeholder':'Location'}),
             'job_title':forms.TextInput(attrs={'class':'form-control'}),
             'job_title_am':forms.TextInput(attrs={'class':'form-control'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),
@@ -188,7 +188,7 @@ class JobCategoryForm(forms.ModelForm):
         fields = ('categoryName','categoryName_am')
         widgets ={
             'categoryName':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
-             'categoryName_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
+             'categoryName_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
         }
 
 

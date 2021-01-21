@@ -235,7 +235,11 @@
 								{%endfor%}
 						</div>
 						<!--/Comments-->
+						{%if user.is_anonymous%}
+						<div>
 
+						</div>
+						{%else%}
 						<div class="card mb-lg-0">
 							<div class="card-header">
 								<h3 class="card-title">Add a Comment</h3>
@@ -244,16 +248,18 @@
 								<form action="" method="POST" enctype="multipart/form-data">
 									{%csrf_token%}
 									<div class="form-group">
-										{{comment.content}}
+										{{comment.content}} 
 									</div>
 									
 									<div class="text-right">
-										<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+										<button style="padding-left: 10%; padding-right: 10%;" type="submit" 
+										href="{%url 'CreateComment' id=blog.id%}" 
 											class="btn btn-primary rounded-round">Submit </button>
 									</div>
 								</form>
 								</div>
 							</div>
+							{%endif%}
 						</div>
 					</div>
 					<!--/Add Lists-->
