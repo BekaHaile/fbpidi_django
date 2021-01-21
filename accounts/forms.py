@@ -230,6 +230,7 @@ class CompanyUserCreationForm(AbstractUserCreationForm):
     #                                    )
     #                                )
     user_group = forms.ModelChoiceField(
+        empty_label="Select User Role",
         queryset=Group.objects.all(),
         widget=forms.Select(attrs={}),
         required=True
