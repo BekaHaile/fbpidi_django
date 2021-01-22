@@ -36,8 +36,8 @@
 										<ul class="list-group mb-0">
 											<li class="list-group-item">
 												<a href="{%url 'vacancy_search' id=cat.id%}" class="text-dark">
-													 {{cat}}
-													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">{{cat.countjobs}}</span>
+													<i class="fa fa-building bg-secondary text-secondary"></i> {{cat}}
+													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">({{cat.countjobs}})</span>
 												</a>
 											</li>
 										</ul>
@@ -46,12 +46,11 @@
 							</div>
 							{%endfor%}
 							
-						</div> </div> 
+						</div> </div>
 								
 
 							
 					<div class="col-xl-9 col-lg-12 col-md-12">
-						{%for vacancy in vacancys%}
 						
 
 						<div class="col-lg-12">
@@ -69,19 +68,37 @@
                                     <div class="mb-4">
                                     	<b>Campany</b>:{{vacancy.company}} 
                                     </div>
+                                    <div class='mb-4'>
+                                    	<b>Location</b>:{{vacancy.location}}
+                                    </div>
+                                    <div class='mb-4'>
+                                    	<b>Salary</b>:{{vacancy.salary}}
+                                    </div>
+
+                                    <div class='mb-4'>
+                                    	
+                                    	<b>requirement</b>:{{vacancy.requirement|safe}}
+                                    </div>
+                                    <div class='mb-4'>
+                                    	
+                                    	<b>starting_date</b>:{{vacancy.starting_date}}
+                                    </div>
+                                    <div class='mb-4'>
+                                    	
+                                    	<b>ending_date</b>:{{vacancy.ending_date}}
+                                    </div>
+                                    <div class='mb-4'>
+                                    	
+                                    	<b>description</b>:{{vacancy.description|safe}}
+                                    </div>
                                     
-								</div>
-								
+                                </div>
                                 <div class="card-footer">
-								<a href="{%url 'vacancy_detail' id=vacancy.id%}" class="btn btn-secondary">View job details</a>
-							</div>
-							<div class="card-footer">
 								<a href="{%url 'applications'  model_name='Vacancy' id=vacancy.id%}" class="btn btn-secondary">Apply</a>
 							</div>
                             </div>
 
                         </div>
-						{%endfor%}
 						 
 
 

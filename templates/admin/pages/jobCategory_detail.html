@@ -27,19 +27,19 @@
 					{%csrf_token%}
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Cateory  *</label>
+						<label class="col-form-label col-lg-3">Cateory (English)*</label>
 						
 							
 							<div class="col-lg-9">
-							<input type="text" name="categoryName" class="form-control" value="{{form.categoryName}}">
+							<input requierd type="text" name="categoryName" class="form-control" value="{{form.categoryName}}">
 							</div>
 					</div>
 
 					<div class="form-group row">
-				    <label class="col-form-label col-lg-3" >Cateory Amharic </label>
+				    <label class="col-form-label col-lg-3" >Cateory (Amharic)* </label>
 						<div class="col-lg-9" name="categoryName_am" value="True">
 							
-							<input type="text" name="categoryName_am" class="form-control" value="{{form.categoryName_am}}">
+							<input requierd type="text" name="categoryName_am" class="form-control" value="{{form.categoryName_am}}">
 				  		</div>
 				  	</div>
 				  		

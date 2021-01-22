@@ -6,13 +6,13 @@ from company.models import Company
 
 
 class PollsQuestion(models.Model):
-    user = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.CASCADE )
-    title = models.CharField( max_length=2000, verbose_name="Poll title (English)" )
-    title_am = models.CharField( max_length=2000, verbose_name="Poll title(Amharic)" )
-    description = models.TextField( verbose_name="Poll Description(English)" )
-    description_am = models.TextField( verbose_name="Poll Description(Amharic)" )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=2000, verbose_name="Poll title (English)")
+    title_am = models.CharField(max_length=2000, verbose_name="Poll title(Amharic)")
+    description = models.TextField(verbose_name="Poll Description(English)")
+    description_am = models.TextField(verbose_name="Poll Description(Amharic)")
     timestamp = models.DateTimeField(auto_now_add=True)
-    choices = models.ManyToManyField('Choices',related_name='choices',default="",)
+    choices = models.ManyToManyField('Choices',related_name='choices',default="")
     
     def __str__(self):
         return self.title

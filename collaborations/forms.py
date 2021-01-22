@@ -17,22 +17,22 @@ class FaqsForm(forms.ModelForm):
         model = Faqs
         fields = ('questions', 'questions_am',
                   'answers', 'answers_am')
-        widgets = {'answers': forms.Textarea(attrs={'class':'summernote'}),
-                    'answers_am': forms.Textarea(attrs={'class':'summernote'}),
-                    'questions':forms.TextInput(attrs={'class':'form-control'}),
-                    'questions_am':forms.TextInput(attrs={'class':'form-control'})}
+        widgets = {'answers': forms.Textarea(attrs={'class':'summernote','placeholder':'Answer '}),
+                    'answers_am': forms.Textarea(attrs={'class':'summernote','placeholder':'Answer in amharic'}),
+                    'questions':forms.TextInput(attrs={'class':'form-control','placeholder':'The Frequently asked Question '}),
+                    'questions_am':forms.TextInput(attrs={'class':'form-control','placeholder':'The Frequently asked Question in Amharic'})}
 
 class BlogsForm(forms.ModelForm):
     
     class Meta:
         model = Blog
         fields = ('title', 'tag', 'content','publish','blogImage','title_am','tag_am','content_am')
-        widgets = {'content': forms.Textarea(attrs={'class':'summernote'}),
-                    'content_am': forms.Textarea(attrs={'class':'summernote'}),
-                    'title':forms.TextInput(attrs={'class':'form-control'}),
-                    'tag':forms.TextInput(attrs={'class':'form-control'}),
-                    'title_am':forms.TextInput(attrs={'class':'form-control'}),
-                    'tag_am':forms.TextInput(attrs={'class':'form-control'}),
+        widgets = {'content': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in English'}),
+                    'content_am': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in Amharic'}),
+                    'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in English'}),
+                    'tag':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in English'}),
+                    'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in Amharic'}),
+                    'tag_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in Amharic'}),
 
 
                             }
@@ -44,7 +44,7 @@ class BlogCommentForm(forms.ModelForm):
 		model = BlogComment
 		fields = ('content',)
 
-
+        
 class PollsForm(forms.ModelForm):
     
     class Meta:
@@ -54,9 +54,9 @@ class PollsForm(forms.ModelForm):
         widgets = {
             'user':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title in English'}),
-            'description':forms.Textarea(attrs={'class':'summernote'}),
+            'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in English'}),
             'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title in Amharic'}),
-            'description_am':forms.Textarea(attrs={'class':'summernote'}),
+            'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in Amharic'}),
             
         }
 
@@ -106,9 +106,9 @@ class TenderForm(forms.ModelForm):
                 'start_date', 'end_date')
         widgets = {
                 'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
-                'description':forms.Textarea(attrs={'class':'summernote'}),
+                'description':forms.Textarea(attrs={'class':'summernote','placeholder':'description of the Tender'}),
                 'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
-                'description_am':forms.Textarea(attrs={'class':'summernote'}),
+                'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'description of the Tender in amharic'}),
             
             }
 
@@ -145,11 +145,10 @@ class DateForm(forms.Form):
 '''
 
 class VacancyForm(forms.ModelForm):
-
-    employement_type = forms.CharField(label='job type', widget=forms.Select(choices=JOB_CHOICES))
+    
     starting_date = forms.DateField(widget=SelectDateWidget())
-
     ending_date = forms.DateField(widget=SelectDateWidget())
+    employement_type = forms.CharField(label='job type', widget=forms.Select(choices=JOB_CHOICES))
 
     class Meta:
         model = Vacancy
@@ -157,15 +156,17 @@ class VacancyForm(forms.ModelForm):
                   ,'job_title', 'description','requirement',
                   'job_title_am','description_am','requirement_am')
         
-        widgets = {
+        widgets = { 
+            #'employement_type':forms.Select(attrs={'class':'form-control form-control-uniform','choices':JOB_CHOICES}),
             'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'location':forms.TextInput(attrs={'class':'form-control','placeholder':'Location'}),
-            'job_title':forms.TextInput(attrs={'class':'form-control'}),
-            'job_title_am':forms.TextInput(attrs={'class':'form-control'}),
-            'description':forms.Textarea(attrs={'class':'summernote'}),
-            'description_am':forms.Textarea(attrs={'class':'summernote'}),
-            'requirement':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirement'}),
-            'requirement_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirement in Amharic'})
+            'salary':forms.TextInput(attrs={'class':'form-control','type':'number','placeholder':'Salary in Birr'}),
+            'job_title':forms.TextInput(attrs={'class':'form-control','placeholder':'Job Title in English'}),
+            'job_title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Job Title in Amharic'}),
+            'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in English'}),
+            'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in Amharic'}),
+            'requirement':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirements for the Job in English'}),
+            'requirement_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirements for the Job in Amharic'})
                       
         }
 
@@ -179,7 +180,7 @@ class CreateJobApplicationForm(forms.ModelForm):
         
         widgets = {
             'status':forms.TextInput(attrs={'class':'form-control','placeholder':'Current employement status'}),
-            'bio':forms.Textarea(attrs={'class':'summernote'}),         
+            'bio':forms.Textarea(attrs={'class':'summernote','placeholder':'Introduce your self and why you are appling'}),         
         }
 
 class JobCategoryForm(forms.ModelForm):
@@ -187,8 +188,8 @@ class JobCategoryForm(forms.ModelForm):
         model = JobCategoty
         fields = ('categoryName','categoryName_am')
         widgets ={
-            'categoryName':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
-             'categoryName_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
+            'categoryName':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory in English'}),
+             'categoryName_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Category in Amharic'}),
         }
 
 

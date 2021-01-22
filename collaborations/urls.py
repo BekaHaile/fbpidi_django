@@ -1,7 +1,7 @@
 from django.urls import path,include
 
-from .views import (PollIndex, PollDetail, 
-                    CustomerTenderList, CustomerTenderDetail, CreateApplication, VacancyList, CategoryBasedSearch ,CreateBlogComment)
+from .views import (PollIndex, PollDetail, VacancyMoreDetail,CreateComment,
+                    CustomerTenderList, CustomerTenderDetail, CreateApplication, VacancyList, CategoryBasedSearch )
 
 urlpatterns = [
     path("polls/", PollIndex.as_view(), name = "polls" ),
@@ -12,8 +12,9 @@ urlpatterns = [
     # path("download_document/<id>/", DownloadDocument.as_view(), name = "download_document"),
     path("apply/<model_name>/<id>",CreateApplication.as_view(),name="applications"),
     path("vacancy-list/",VacancyList.as_view(),name="vacancy"),
+    path("blog-comment/<id>",CreateComment.as_view(),name="Comment"),
     path("vacancy-search/<id>",CategoryBasedSearch.as_view(),name="vacancy_search"),
-    path("create-comment/<id>",CreateBlogComment.as_view(),name="CreateComment")
+    path("vacancy-detail/<id>",VacancyMoreDetail.as_view(),name="vacancy_detail"),
 
     
         

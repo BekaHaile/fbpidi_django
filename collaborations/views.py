@@ -98,17 +98,7 @@ class BlogView(LoginRequiredMixin,View):
             return redirect("admin:admin_Blogs")
         return render(self.request, "admin/pages/blog_detail.html",context)
 
-class CreateBlogComment(LoginRequiredMixin,View):
-    def post(self,*args,**kwargs):
-        form = BlogCommentForm(self.request.POST)
-        blog = Blog.objects.get(id=self.kwargs['id'])
-        template_name="frontpages/blog-details-right.html"
-        if form.is_valid():
-            blogComment=BlogComment(blog=blog,sender=self.request.user,content=self.request.POST['content'])
-            blogComment.save()
-            comment = BlogCommentForm()
-            context = {'blog':blog,'comment':comment}
-            return redirect("blog_grid_right")
+
 
 ## --- Faqs views
 
@@ -273,30 +263,32 @@ class VacancyDetail(LoginRequiredMixin,View):
         return force
     def get(self,*args,**kwargs):
         form = Vacancy.objects.get(id=self.kwargs['id'])
-        form2 = JobCategoty.objects.all()
+        jobcategory = JobCategoty.objects.all()
         vacancy = VacancyForm() 
         #print(str(self.kwargs['id'])+"-----------------"+str(form.categoryName))
-        context = {'form':form,'form2':form2,"vacancy":vacancy}
+        context = {'form':form,'jobcategory':jobcategory,"vacancy":vacancy}
         return render(self.request,"admin/pages/job_detail.html",context)
     def post(self,*args,**kwarges):
         form = VacancyForm(self.request.POST,self.request.FILES)
         context = {'form':form}
         if form.is_valid():
             vacancy = Vacancy.objects.get(id=self.kwargs['id'])
-            vacancy.user=self.request.user,
+            vacancy.user=self.request.user
+            print("-----+++++-------"+str(form.cleaned_data.get('employement_type')))
             vacancy.company=self.company_admin()
-            vacancy.location=self.request.POST['location']
-            vacancy.salary=self.request.POST['salary'],
-            vacancy.job_title=self.request.POST['job_title'],
-            vacancy.description=self.request.POST['description'],
-            vacancy.requirement=self.request.POST['requirement'],
-            vacancy.job_title_am=self.request.POST['job_title_am'],
-            vacancy.description_am=self.request.POST['description_am'],
-            vacancy.requirement_am=self.request.POST['requirement_am'],
-            vacancy.ending_date=form.cleaned_data.get("ending_date"),
-            vacancy.starting_date=form.cleaned_data.get("starting_date"),
-            vacancy.category=self.request.POST['category'],
-            vacancy.employement_type=self.request.POST['employement_type']
+            vacancy.location=form.cleaned_data.get('location')
+            vacancy.salary=form.cleaned_data.get('salary')
+            vacancy.job_title=form.cleaned_data.get('job_title')
+            vacancy.description=form.cleaned_data.get('description')
+            vacancy.requirement=form.cleaned_data.get('requirement')
+            vacancy.job_title_am=form.cleaned_data.get('job_title_am')
+            vacancy.description_am=form.cleaned_data.get('description_am')
+            vacancy.requirement_am=form.cleaned_data.get('requirement_am')
+            vacancy.ending_date=form.cleaned_data.get("ending_date")
+            vacancy.starting_date=form.cleaned_data.get("starting_date")
+            vacancy.category=form.cleaned_data.get('category')
+            vacancy.employement_type=form.cleaned_data.get('employement_type')
+            print(str(self.kwargs['id'])+"-----------------"+str(vacancy.employement_type))
             vacancy.save()
             
             messages.success(self.request, "Vacancy Edited Successfully")
@@ -339,11 +331,13 @@ class CreateVacancy(LoginRequiredMixin, View):
         template = "admin/pages/job_form.html"
         if form.is_valid():
             category = JobCategoty.objects.get(id=self.request.POST['category'],)
+            
             vacancy=form.save(commit=False)
             vacancy.user=self.request.user
             vacancy.company=self.company_admin()
             vacancy.category=category
             vacancy.starting_date = form.cleaned_data.get("starting_date")
+            print("----------------------"+str(vacancy.starting_date))
             vacancy.ending_date = form.cleaned_data.get("ending_date")
             vacancy.save()
 
@@ -372,7 +366,7 @@ class CreateApplication(LoginRequiredMixin,View):
             job.save()
             return redirect("vacancy")
 
-class CategoryBasedSearch(LoginRequiredMixin,View):
+class CategoryBasedSearch(View):
     def get(self,*args,**kwargs):
         vacancy = Vacancy.objects.filter(category=self.kwargs['id'],closed=False) 
         cateory = JobCategoty.objects.get(id=self.kwargs['id'])
@@ -381,12 +375,20 @@ class CategoryBasedSearch(LoginRequiredMixin,View):
         context = {'vacancys':vacancy,'category':jobcategory,'message':'Vacancies on '+str(cateory)}
         return render(self.request, template_name,context)
 
-class VacancyList(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
+class VacancyList(View):
+    def get(self,*args,**kwargs): 
         vacancy = Vacancy.objects.filter(closed=False)
         jobcategory = JobCategoty.objects.all()
         template_name="frontpages/vacancy_list.html"
         context = {'vacancys':vacancy,'category':jobcategory,'message':'All Vacancys '}
+        return render(self.request, template_name,context)
+
+class VacancyMoreDetail(View):
+    def get(self,*args,**kwargs):
+        vac = Vacancy.objects.get(id=self.kwargs['id'],closed=False)
+        jobcategory = JobCategoty.objects.all()
+        template_name="frontpages/vacancy_detail.html"
+        context = {'vacancy':vac,'category':jobcategory,'message':'Vacancy Detail'}
         return render(self.request, template_name,context)
 
 
@@ -401,7 +403,17 @@ class BlogList(View):
         return render(self.request, template_name,context)
 
 
-
+class CreateComment(LoginRequiredMixin,View):
+	def post(self,*args,**kwargs):
+		form = BlogCommentForm(self.request.POST)
+		blog = Blog.objects.get(id=self.kwargs['id'])
+		template_name="frontpages/blog-details-right.html" 
+		if form.is_valid():
+			blogComment=BlogComment(blog=blog,sender=self.request.user,content=form.cleaned_data.get('content'))
+			blogComment.save()
+			comment = BlogCommentForm()
+			context = {'blog':blog,'comment':comment}
+			return render(self.request, template_name,context)
 
 class BlogDetail(View):
 
@@ -411,18 +423,6 @@ class BlogDetail(View):
 		template_name="frontpages/blog-details-right.html" 
 		context = {'blog':blog,'comment':comment}
 		return render(self.request, template_name,context)
-	def post(self,*args,**kwargs):
-		form = BlogCommentForm(self.request.POST)
-		blog = Blog.objects.get(id=self.kwargs['id'])
-		template_name="frontpages/blog-details-right.html" 
-		if form.is_valid():
-			blogComment=BlogComment(blog=blog,
-				sender=self.request.user,
-				content=self.request.POST['content'])
-			blogComment.save()
-			comment = BlogCommentForm()
-			context = {'blog':blog,'comment':comment}
-			return render(self.request, template_name,context)
 
 
 class FaqList(View):
