@@ -22,34 +22,34 @@
 					{{form.errors}}
 					{%csrf_token%}
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Questions *</label>
+						<label class="col-form-label col-lg-3">Questions (English) *</label>
 						<div class="col-lg-9">
-							<input type="text" name="questions" class="form-control" value="{{faq.questions}} " id="">
+							<input requierd type="text" name="questions" class="form-control" value="{{faq.questions}} " id="">
 						 
 
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Questions Amharic *</label>
+						<label class="col-form-label col-lg-3">Questions (Amharic) *</label>
 							<div class="col-lg-9">
-							<input type="text" name="questions_am" class="form-control" value="{{faq.questions_am}}" id="">
+							<input requierd type="text" name="questions_am" class="form-control" value="{{faq.questions_am}}" id="">
 						</div>
 							
 					</div> 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Answer *</label>
+						<label class="col-form-label col-lg-3">Answer (English)*</label>
 						
 							<div class="col-lg-9">
-							<textarea class="summernote" name="answers" >{{faq.answers}}</textarea>
+							<textarea requierd class="summernote" name="answers" >{{faq.answers}}</textarea>
 						
 							
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Answer amharic *</label>
+						<label class="col-form-label col-lg-3">Answer (Amharic)*</label>
 						
 							<div class="col-lg-9">
-								<textarea class="summernote" name="answers_am" >{{faq.answers_am}}</textarea>
+								<textarea requierd class="summernote" name="answers_am" >{{faq.answers_am}}</textarea>
 						</div>
 					</div>
 

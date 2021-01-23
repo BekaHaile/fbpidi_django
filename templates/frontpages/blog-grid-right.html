@@ -189,16 +189,17 @@
 
 					<div class="col-xl-8 col-lg-8 col-md-12">
 						<!--Add Lists-->
-						{%for blog in blogs%}
+						
 						<div class="row">
+						{%for blog in blogs%}
 							
 							<div class="col-xl-6 col-lg-12 col-md-12">
 								<div class="card">
 									<div class="item7-card-img">
-										<a href="#"></a>
+										<a href="{% url 'blog_details' id=blog.id %}"></a>
 										<img src="{{blog.blogImage.url}}" alt="img" class="cover-image">
 										<div class="item7-card-text">
-											<span class="badge badge-info">{{blog.title}}</span>
+											
 										</div>
 									</div>
 									<div class="card-body">
@@ -210,14 +211,15 @@
 										</div>
 
 
-										<h4 class="font-weight-semibold">{{blog.content|safe}}</h4>
+										<h4 class="font-weight-semibold">{{blog.content|safe|truncatewords:30}}</h4>
+
 										<a href="{% url 'blog_details' id=blog.id %}" class="btn btn-secondary btn-sm">Read More</a>
 									</div>
 								</div>
 							</div>
 							
-						</div>
 						{%endfor%}
+						</div>
 						<div class="d-sm-flex">
 							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>
 							<ul class="pagination mb-lg-0 mb-5 ml-auto">

@@ -84,7 +84,7 @@
 								<textarea value="" class="form-control" name="location" > {{form.location|safe}}</textarea>
 						</div>
 							
-					</div>
+					</div> 
 
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3"> Salary *</label>
@@ -95,31 +95,43 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3"> Category *</label>
+						<label class="col-form-label col-lg-3">Category Name *</label>
 						<div class="col-lg-9">
-								<select name="category" id="category" >{
-								<option value="{{form.category}}">{{form.Category}}</option>
-									{%for form1 in form2%}
-								  <option value="{{form1}}">{{form1}}</option>
-								  		{%endfor%}
-								</select>
+							<select required name="category" class="form-control form-control-uniform" data-fouc>
+								<option value="{{form.category.id}}">{{form.category}}</option>
+								{%for cat_names in jobcategory%}
+									{%if cat_names == form.category %}
+									{%else%}
+									<option value="{{cat_names.id}}">{{cat_names}}</option>
+									{%endif%}
+								{%endfor%}
+								 
+							</select>
 						</div>
-							
 					</div>
-
-					<div class="form-group row">
-						<label class="col-form-label col-lg-3"> Category Amharic *</label>
-						<div class="col-lg-9">
-								<input name="category_am" value="{{form.category_am|safe}}" class="form-control" name="category_am" ></input>
-						</div>
-							
-					</div>
-
+					
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3"> Employement Type *</label>
 						<div class="col-lg-9">
-								<input value="{{form.employement_type}}" class="form-control" name="employement_type" ></input>
-						</div>
+						<select required name="employement_type" class="form-control form-control-uniform" data-fouc>
+							<option value="{{form.employement_type}}">{{form.employement_type}}</option>
+							
+								{%if form.employement_type == "Temporary" %}
+								<option value="Permanent">Permanent</option>
+								<option value="Contract">Contract</option>
+								{%endif%}
+								{%if form.employement_type == "Permanent" %}
+								<option value="Temporary">Temporary</option>
+								<option value="Contract">Contract</option>
+								{%endif%}
+								{%if form.employement_type == "Contract"  %}
+								<option value="Temporary">Temporary</option>
+								<option value="Permanent">Permanent</option>
+								{%endif%}
+							
+							 
+						</select>
+					</div>
 							
 					</div>
 
@@ -129,7 +141,7 @@
 							<span class="input-group-prepend">
 											<span class="input-group-text"><i class="icon-calendar22"></i></span>
 										</span>
-								<input type="text" name="starting_date" class="form-control daterange-single" value="{{form.starting_date}}">
+								<input type="text" name="starting_date" class="form-control daterange-single" value="">
 						</div>
 							
 					</div>
@@ -140,7 +152,7 @@
 							<span class="input-group-prepend">
 											<span class="input-group-text"><i class="icon-calendar22"></i></span>
 										</span>
-								<input type="text" name ="ending_date" class="form-control daterange-single" value="{{form.ending_date}}">
+								<input type="text" name ="ending_date" class="form-control daterange-single" value="">
 						</div>
 							
 					</div>

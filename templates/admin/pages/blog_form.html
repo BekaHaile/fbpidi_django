@@ -4,7 +4,7 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
-{%block pagename%}Create Blog{%endblock%}
+{%block pagename%}Blog{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -26,31 +26,31 @@
 					{% endif %}
 					{%csrf_token%}
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.title.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Title (English)  *</label>
 						<div class="col-lg-9">
 							{{form.title}}
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.title_am.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Title (Amharic) *</label>
 						<div class="col-lg-9">
 							{{form.title_am}}
 						</div>
 					</div> 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.tag.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Tag (English)*</label>
 						<div class="col-lg-9">
 							{{form.tag}}
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.tag_am.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Tag (Amharic) *</label>
 						<div class="col-lg-9">
 							{{form.tag_am}}
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.content.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Content (English) *</label>
 						<div class="col-lg-9">
 							{{form.content|safe}}
 						</div>
@@ -58,14 +58,14 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.content_am.label|title}} *</label>
+						<label class="col-form-label col-lg-3">Content (Amharic) *</label>
 						<div class="col-lg-9">
 							{{form.content_am}}
 						</div>
 					</div>
 
 					<div class="form-group row">
-				    <label class="col-form-label col-lg-3" >{{form.publish.label|title}} </label>
+				    <label class="col-form-label col-lg-3" >Publish  </label>
 						<div class="col-lg-9" name="publish" value="True">
 							{{form.publish}}
 							<!--
@@ -79,7 +79,7 @@
 					
 					 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-2">Blog Image</label>
+						<label class="col-form-label col-lg-2">Blog Image *</label>
 						<div class="col-lg-10">
 							<div class="uniform-uploader"><input type="file" name="blogImage" value="{{form.blogImage.url}}" class="form-input-styled" data-fouc=""><span
 								class="filename" style="user-select: none;">No file selected</span><span

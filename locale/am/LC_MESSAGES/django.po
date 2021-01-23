@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-02 10:38+0300\n"
+"POT-Creation-Date: 2021-01-21 22:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,25 +16,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\fbpims\settings.py:138 .\templates\frontpages\layout.html:124
+#: .\fbpims\settings.py:156 .\templates\frontpages\layout.html:155
 msgid "Amharic"
 msgstr "አማርኛ"
 
 #: .\templates\admin\404.html:4 .\templates\admin\404.html:8
 msgid "Page not found"
-msgstr ""
+msgstr "የፈለጉት ገጽ የለም"
 
 #: .\templates\admin\404.html:10
 msgid "We’re sorry, but the requested page could not be found."
 msgstr ""
 
-#: .\templates\admin\500.html:6 .\templates\admin\app_index.html:9
-#: .\templates\admin\base.html:65 .\templates\admin\change_form.html:19
-#: .\templates\admin\delete_confirmation.html:14
-#: .\templates\admin\delete_selected_confirmation.html:14
-#: .\templates\admin\invalid_setup.html:6
-#: .\templates\admin\object_history.html:6
-#: .\templates\frontpages\layout.html:156
+#: .\templates\admin\500.html:6 .\templates\admin\base.html:65
+#: .\templates\frontpages\layout.html:196
 #: .\templates\registration\logged_out.html:4
 #: .\templates\registration\password_change_done.html:6
 #: .\templates\registration\password_change_form.html:8
@@ -64,89 +58,6 @@ msgid ""
 "email and should be fixed shortly. Thanks for your patience."
 msgstr ""
 
-#: .\templates\admin\actions.html:16
-msgid "Run the selected action"
-msgstr ""
-
-#: .\templates\admin\actions.html:16
-msgid "Go"
-msgstr ""
-
-#: .\templates\admin\actions.html:27
-msgid "Click here to select the objects across all pages"
-msgstr ""
-
-#: .\templates\admin\actions.html:27
-#, python-format
-msgid "Select all %(total_count)s %(module_name)s"
-msgstr ""
-
-#: .\templates\admin\actions.html:29
-msgid "Clear selection"
-msgstr ""
-
-#: .\templates\admin\app_list.html:12 .\templates\admin\app_list.html:27
-#: .\templates\admin\app_list.html:44
-#, python-format
-msgid "Models in the %(name)s application"
-msgstr ""
-
-#: .\templates\admin\app_list.html:55
-#: .\templates\admin\widgets\related_widget_wrapper.html:18
-msgid "Add"
-msgstr ""
-
-#: .\templates\admin\app_list.html:62
-#: .\templates\admin\edit_inline\stacked.html:12
-#: .\templates\admin\edit_inline\tabular.html:34
-msgid "View"
-msgstr ""
-
-#: .\templates\admin\app_list.html:64
-#: .\templates\admin\edit_inline\stacked.html:12
-#: .\templates\admin\edit_inline\tabular.html:34
-#: .\templates\admin\widgets\related_widget_wrapper.html:11
-msgid "Change"
-msgstr ""
-
-#: .\templates\admin\app_list.html:75
-msgid "You don’t have permission to view or edit anything."
-msgstr ""
-
-#: .\templates\admin\auth\user\add_form.html:6
-msgid ""
-"First, enter a username and password. Then, you’ll be able to edit more user "
-"options."
-msgstr ""
-
-#: .\templates\admin\auth\user\add_form.html:8
-msgid "Enter a username and password."
-msgstr ""
-
-#: .\templates\admin\auth\user\change_password.html:17
-#: .\templates\admin\change_form.html:58 .\templates\admin\change_list.html:39
-#: .\templates\admin\login.html:107
-msgid "Please correct the error below."
-msgstr ""
-
-#: .\templates\admin\auth\user\change_password.html:17
-#: .\templates\admin\change_form.html:58 .\templates\admin\change_list.html:39
-#: .\templates\admin\login.html:107
-msgid "Please correct the errors below."
-msgstr ""
-
-#: .\templates\admin\auth\user\change_password.html:21
-#, python-format
-msgid "Enter a new password for the user <strong>%(username)s</strong>."
-msgstr ""
-
-#: .\templates\admin\auth\user\change_password.html:45
-#: .\templates\admin\base.html:53
-#: .\templates\registration\password_change_done.html:3
-#: .\templates\registration\password_change_form.html:5
-msgid "Change password"
-msgstr ""
-
 #: .\templates\admin\base.html:39
 msgid "Welcome,"
 msgstr ""
@@ -161,6 +72,12 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
+#: .\templates\admin\base.html:53
+#: .\templates\registration\password_change_done.html:3
+#: .\templates\registration\password_change_form.html:5
+msgid "Change password"
+msgstr ""
+
 #: .\templates\admin\base.html:55
 #: .\templates\registration\password_change_done.html:3
 #: .\templates\registration\password_change_form.html:5
@@ -171,370 +88,300 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: .\templates\admin\change_form.html:22
-#: .\templates\admin\change_list_object_tools.html:8
-#, python-format
-msgid "Add %(name)s"
-msgstr ""
-
-#: .\templates\admin\change_form_object_tools.html:6
-#: .\templates\admin\object_history.html:10
-msgid "History"
-msgstr ""
-
-#: .\templates\admin\change_form_object_tools.html:8
-#: .\templates\admin\edit_inline\stacked.html:14
-#: .\templates\admin\edit_inline\tabular.html:36
-msgid "View on site"
-msgstr ""
-
-#: .\templates\admin\change_list.html:114
-msgid "Filter"
-msgstr ""
-
-#: .\templates\admin\change_list.html:126
-msgid "Clear all filters"
-msgstr ""
-
-#: .\templates\admin\change_list_results.html:17
-msgid "Remove from sorting"
-msgstr ""
-
-#: .\templates\admin\change_list_results.html:19
-#, python-format
-msgid "Sorting priority: %(priority_number)s"
-msgstr ""
-
-#: .\templates\admin\change_list_results.html:22
-msgid "Toggle sorting"
-msgstr ""
-
-#: .\templates\admin\delete_confirmation.html:18
-#: .\templates\admin\submit_line.html:7
-#: .\templates\admin\widgets\related_widget_wrapper.html:25
-msgid "Delete"
-msgstr ""
-
-#: .\templates\admin\delete_confirmation.html:31
-#, python-format
-msgid ""
-"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
-"related objects, but your account doesn't have permission to delete the "
-"following types of objects:"
-msgstr ""
-
-#: .\templates\admin\delete_confirmation.html:38
-#, python-format
-msgid ""
-"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
-"following protected related objects:"
-msgstr ""
-
-#: .\templates\admin\delete_confirmation.html:45
-#, python-format
-msgid ""
-"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
-"All of the following related items will be deleted:"
-msgstr ""
-
-#: .\templates\admin\delete_confirmation.html:47
-#: .\templates\admin\delete_selected_confirmation.html:39
-msgid "Objects"
-msgstr ""
-
-#: .\templates\admin\delete_confirmation.html:54
-#: .\templates\admin\delete_selected_confirmation.html:50
-msgid "Yes, I’m sure"
-msgstr ""
-
-#: .\templates\admin\delete_confirmation.html:55
-#: .\templates\admin\delete_selected_confirmation.html:51
-msgid "No, take me back"
-msgstr ""
-
-#: .\templates\admin\delete_selected_confirmation.html:17
-msgid "Delete multiple objects"
-msgstr ""
-
-#: .\templates\admin\delete_selected_confirmation.html:23
-#, python-format
-msgid ""
-"Deleting the selected %(objects_name)s would result in deleting related "
-"objects, but your account doesn't have permission to delete the following "
-"types of objects:"
-msgstr ""
-
-#: .\templates\admin\delete_selected_confirmation.html:30
-#, python-format
-msgid ""
-"Deleting the selected %(objects_name)s would require deleting the following "
-"protected related objects:"
-msgstr ""
-
-#: .\templates\admin\delete_selected_confirmation.html:37
-#, python-format
-msgid ""
-"Are you sure you want to delete the selected %(objects_name)s? All of the "
-"following objects and their related items will be deleted:"
-msgstr ""
-
-#: .\templates\admin\edit_inline\tabular.html:20
-msgid "Delete?"
-msgstr ""
-
-#: .\templates\admin\filter.html:6
-#, python-format
-msgid " By %(filter_title)s "
-msgstr ""
-
-#: .\templates\admin\includes\object_delete_summary.html:2
-msgid "Summary"
-msgstr ""
-
-#: .\templates\admin\invalid_setup.html:12
-msgid ""
-"Something’s wrong with your database installation. Make sure the appropriate "
-"database tables have been created, and make sure the database is readable by "
-"the appropriate user."
-msgstr ""
-
-#: .\templates\admin\login.html:123
-#, python-format
-msgid ""
-"You are authenticated as %(username)s, but are not authorized to access this "
-"page. Would you like to login to a different account?"
-msgstr ""
-
-#: .\templates\admin\login.html:143
-msgid "Forgotten your password or username?"
-msgstr ""
-
-#: .\templates\admin\login.html:147
-#: .\templates\registration\password_reset_complete.html:18
-msgid "Log in"
-msgstr ""
-
-#: .\templates\admin\nav_sidebar.html:2
-msgid "Toggle navigation"
-msgstr ""
-
-#: .\templates\admin\object_history.html:27
-msgid "Date/time"
-msgstr ""
-
-#: .\templates\admin\object_history.html:28
-msgid "User"
-msgstr ""
-
-#: .\templates\admin\object_history.html:29
-msgid "Action"
-msgstr ""
-
-#: .\templates\admin\object_history.html:43
-msgid ""
-"This object doesn’t have a change history. It probably wasn’t added via this "
-"admin site."
-msgstr ""
-
 #: .\templates\admin\pages\product_detail.html:26
+#: .\templates\admin\product\product_detail.html:26
 msgid "Ecommerce - Product Detail"
 msgstr ""
 
-#: .\templates\admin\pagination.html:11 .\templates\admin\search_form.html:18
-msgid "Show all"
-msgstr ""
-
-#: .\templates\admin\pagination.html:12 .\templates\admin\submit_line.html:12
-msgid "Save"
-msgstr ""
-
-#: .\templates\admin\popup_response.html:3
-msgid "Popup closing…"
-msgstr ""
-
-#: .\templates\admin\search_form.html:15
-msgid "Search"
-msgstr ""
-
-#: .\templates\admin\search_form.html:18
-#, python-format
-msgid "%(counter)s result"
-msgid_plural "%(counter)s results"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\templates\admin\search_form.html:18
-#, python-format
-msgid "%(full_result_count)s total"
-msgstr ""
-
-#: .\templates\admin\submit_line.html:15
-msgid "Save as new"
-msgstr ""
-
-#: .\templates\admin\submit_line.html:16
-msgid "Save and add another"
-msgstr ""
-
-#: .\templates\admin\submit_line.html:17
-msgid "Save and continue editing"
-msgstr ""
-
-#: .\templates\admin\submit_line.html:17
-msgid "Save and view"
-msgstr ""
-
-#: .\templates\admin\submit_line.html:18
-msgid "Close"
-msgstr ""
-
-#: .\templates\admin\widgets\related_widget_wrapper.html:10
-#, python-format
-msgid "Change selected %(model)s"
-msgstr ""
-
-#: .\templates\admin\widgets\related_widget_wrapper.html:17
-#, python-format
-msgid "Add another %(model)s"
-msgstr ""
-
-#: .\templates\admin\widgets\related_widget_wrapper.html:24
-#, python-format
-msgid "Delete selected %(model)s"
-msgstr ""
-
-#: .\templates\frontpages\index.html:13
+#: .\templates\frontpages\index.html:14
 msgid "Welcome To The Biggest Business Directory"
 msgstr "ወደ ትልቁ የንግድ ማውጫ እንኳን በደህና መጡ"
 
-#: .\templates\frontpages\index.html:14
+#: .\templates\frontpages\index.html:15 .\templates\frontpages\index.html:593
 msgid ""
 "It is a long established fact that a reader will be distracted by the "
 "readable."
 msgstr "አንባቢ በሚነበብ ነገር ሊዘናጋ መሆኑ ረጅም የተረጋገጠ ሀቅ ነው ፡፡"
 
 #: .\templates\frontpages\index.html:22
-msgid "Phrase or Keywords"
+msgid "Search Products"
+msgstr "ምርት ፈልግ"
+
+#: .\templates\frontpages\index.html:23
+msgid "Search Companies"
+msgstr "ድርጅቶችን ፈልግ"
+
+#: .\templates\frontpages\index.html:24
+msgid "Search Tender & Vacancy"
+msgstr "ጨረታና ማስታወቂያ ፈልግ"
+
+#: .\templates\frontpages\index.html:32 .\templates\frontpages\index.html:67
+#: .\templates\frontpages\index.html:102
+msgid "Enter Your Keywords"
 msgstr "የመፈለግያ ቃላት ጻፍ"
 
-#: .\templates\frontpages\index.html:27
-msgid "Type"
-msgstr "አይነት"
-
-#: .\templates\frontpages\index.html:28
-msgid "Select Type"
-msgstr "አይነት ምረጥ"
-
-#: .\templates\frontpages\index.html:29 .\templates\frontpages\layout.html:158
-msgid "Manufacturers"
-msgstr "አምራቾች"
-
-#: .\templates\frontpages\index.html:30 .\templates\frontpages\layout.html:165
-msgid "Suppliers"
-msgstr "አቅራቢዎች"
-
-#: .\templates\frontpages\index.html:31 .\templates\frontpages\layout.html:171
-msgid "Products"
-msgstr "ምርት"
-
-#: .\templates\frontpages\index.html:38
-msgid "Categories"
-msgstr "ምድቦች"
-
-#: .\templates\frontpages\index.html:39
+#: .\templates\frontpages\index.html:41 .\templates\frontpages\index.html:76
+#: .\templates\frontpages\index.html:111
 msgid "Select Category"
 msgstr "ምድብ ምረጥ"
 
-#: .\templates\frontpages\index.html:40
-#, fuzzy
-#| msgid "Categories"
-msgid "All Categories"
-msgstr "ምድቦች"
-
-#: .\templates\frontpages\index.html:60
-msgid "Search Here"
+#: .\templates\frontpages\index.html:57 .\templates\frontpages\index.html:92
+#: .\templates\frontpages\index.html:127
+msgid "Search Now"
 msgstr "ፈልግ"
 
-#: .\templates\frontpages\index.html:761
-msgid "Latest Products"
+#: .\templates\frontpages\index.html:169
+msgid "Companies"
+msgstr "ድርጅቶች"
+
+#: .\templates\frontpages\index.html:174 .\templates\frontpages\layout.html:212
+msgid "Products"
 msgstr "ምርት"
 
-#: .\templates\frontpages\index.html:762 .\templates\frontpages\index.html:916
-#: .\templates\frontpages\index.html:975
+#: .\templates\frontpages\index.html:191
+msgid "Latest Products"
+msgstr "አዲስ ምርቶች"
+
+#: .\templates\frontpages\index.html:192 .\templates\frontpages\index.html:327
+#: .\templates\frontpages\index.html:394 .\templates\frontpages\index.html:523
+#: .\templates\frontpages\index.html:623 .\templates\frontpages\index.html:692
+#: .\templates\frontpages\index.html:1297
+#: .\templates\frontpages\index.html:1385
 msgid "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula"
 msgstr "ሞርቢ አሥራ አንድ ፣ ሊጉላ በሴሴቲተር ተሸከርካሪ ላይ ሞርቢ አሥራ አንድ ፣ ሊጉላ በሴሴቲተር ተሸከርካሪ ላይ"
 
-#: .\templates\frontpages\index.html:915
-msgid "Latest Manufacturers"
-msgstr "አምራቾች"
-
-#: .\templates\frontpages\index.html:974
-msgid "Latest Suppliers"
-msgstr "አቅራቢዎች"
-
-#: .\templates\frontpages\index.html:1096
+#: .\templates\frontpages\index.html:284
 msgid "Total Products"
 msgstr "ምርት"
 
-#: .\templates\frontpages\index.html:1105
+#: .\templates\frontpages\index.html:293
 msgid "Total Suppliers"
 msgstr "አቅራቢዎች"
 
-#: .\templates\frontpages\index.html:1114
+#: .\templates\frontpages\index.html:302
 msgid "Total Manufacturers"
 msgstr "አምራቾች"
 
-#: .\templates\frontpages\index.html:1123
+#: .\templates\frontpages\index.html:311
 msgid "Happy Customers"
 msgstr "ደንበኞች"
 
-#: .\templates\frontpages\layout.html:97
+#: .\templates\frontpages\index.html:326
+msgid "Latest Manufacturers"
+msgstr "አምራቾች"
+
+#: .\templates\frontpages\index.html:393
+msgid "How It Works?"
+msgstr "እንደት ይሰራል"
+
+#: .\templates\frontpages\index.html:425 .\templates\frontpages\index.html:677
+#: .\templates\frontpages\layout.html:133
 msgid "Register"
 msgstr "ተመዝገብ"
 
-#: .\templates\frontpages\layout.html:101
+#: .\templates\frontpages\index.html:426
+msgid "You can register and get Unlimited Functionalities"
+msgstr "ተመዝግበዉ የማያልቁ አገልግሎት ያግኙ"
+
+#: .\templates\frontpages\index.html:450
+msgid "Create Account"
+msgstr "አካዉንት ከፈት"
+
+#: .\templates\frontpages\index.html:451
+msgid "You Can Create Account and Get Unlimited Functionalities"
+msgstr "አካዉንት ከፍተዉ የማያልቅ አገልግሎት ያግኙ"
+
+#: .\templates\frontpages\index.html:479
+msgid "Add Products"
+msgstr "ምርት ጨምር"
+
+#: .\templates\frontpages\index.html:480
+msgid "You Can Add your Products and comunicate with buyers"
+msgstr "መርቶትን ለሸማቾች ያቀርቡ"
+
+#: .\templates\frontpages\index.html:506
+msgid "Get Earnings"
+msgstr "ትረፍ ያግኙ"
+
+#: .\templates\frontpages\index.html:507
+msgid "You can register, add products,buy products and get Your earnings"
+msgstr "አካዉንት ከፍተዉ የማያልቅ አገልግሎት ያግኙ"
+
+#: .\templates\frontpages\index.html:522
+msgid "Latest Suppliers"
+msgstr "አቅራቢዎች"
+
+#: .\templates\frontpages\index.html:592 .\templates\frontpages\index.html:603
+msgid "Subscribe"
+msgstr "ይመዝገቡ"
+
+#: .\templates\frontpages\index.html:599
+msgid "Enter your Email"
+msgstr "ኢመይል ያስገቡ"
+
+#: .\templates\frontpages\index.html:622
+msgid "Getting Started"
+msgstr "አሁን ይጀምሩ"
+
+#: .\templates\frontpages\index.html:643
+msgid "Exsiting User"
+msgstr "በፊት የተመዝገበ"
+
+#: .\templates\frontpages\index.html:644 .\templates\frontpages\index.html:676
+msgid ""
+"it look like readable English. Many desktop publishing packages and web page "
+"editors now use Lorem Ipsum as their default model text"
+msgstr ""
+"የሚነበብ እንግሊዝኛ ይመስላል። ብዙ የዴስክቶፕ ማተሚያ ጥቅሎች እና ድረ-ገጽ አርታኢዎች አሁን ሎረም አይፕሱምን እንደ "
+"ነባሪ አምሳያ ጽሑፋቸው ይጠቀማሉ"
+
+#: .\templates\frontpages\index.html:645 .\templates\frontpages\layout.html:137
 msgid "Login"
 msgstr "ግባ"
 
-#: .\templates\frontpages\layout.html:106
-msgid "My Dashboard"
-msgstr "የራስ መቆጣጠሪያ"
+#: .\templates\frontpages\index.html:675
+msgid "New User"
+msgstr "አዲስ ተጠቃሚ"
 
-#: .\templates\frontpages\layout.html:112
+#: .\templates\frontpages\index.html:691
+msgid "Latest News"
+msgstr "አቅራቢዎች"
+
+#: .\templates\frontpages\index.html:700
+msgid "All"
+msgstr ""
+
+#: .\templates\frontpages\index.html:701
+msgid "Manufacturing"
+msgstr "አምራቾች"
+
+#: .\templates\frontpages\index.html:702
+msgid "Sales"
+msgstr "ሽያጭ"
+
+#: .\templates\frontpages\index.html:703 .\templates\frontpages\layout.html:205
+msgid "Suppliers"
+msgstr "አቅራቢዎች"
+
+#: .\templates\frontpages\index.html:704
+msgid "Import & Export"
+msgstr "ኢምፖርት እክስፖርት"
+
+#: .\templates\frontpages\index.html:718
+msgid "Restaurants"
+msgstr "ረስቶራንት"
+
+#: .\templates\frontpages\index.html:724 .\templates\frontpages\index.html:760
+#: .\templates\frontpages\index.html:796
+msgid ""
+"Lorem ipsum dolor sit amet, quis nostrum exercitationem ullam corporis "
+"suscipit laboriosam"
+msgstr "ዝምብሎ ለሙከራ የትቅመጠ ጽሁፍ"
+
+#: .\templates\frontpages\index.html:754
+msgid "Real State"
+msgstr "ሪልስተት"
+
+#: .\templates\frontpages\index.html:790
+msgid "Beauty Spa"
+msgstr "ቢዩቲናስፓ"
+
+#: .\templates\frontpages\index.html:1296
+msgid "Categories List"
+msgstr "የምርት አይነቶች"
+
+#: .\templates\frontpages\index.html:1304
+msgid "Food Sectors"
+msgstr "መግብ"
+
+#: .\templates\frontpages\index.html:1329
+msgid "Beverage Sectors"
+msgstr "መጠጥ"
+
+#: .\templates\frontpages\index.html:1354
+msgid "Pharmaceutical Sectors"
+msgstr "መድሃኒት"
+
+#: .\templates\frontpages\index.html:1384
+msgid "Download App"
+msgstr "መተግበሪያ አዉርድ"
+
+#: .\templates\frontpages\layout.html:110
+msgid "My Cart"
+msgstr "ዘንቢል"
+
+#: .\templates\frontpages\layout.html:116
+#: .\templates\frontpages\layout.html:123
+msgid "My Profile"
+msgstr "የራስ አካውንት"
+
+#: .\templates\frontpages\layout.html:129
+msgid "Logout"
+msgstr "ውጣ"
+
+#: .\templates\frontpages\layout.html:143
 msgid "Language"
 msgstr "ቋንቋ"
 
-#: .\templates\frontpages\layout.html:118
+#: .\templates\frontpages\layout.html:149
 msgid "English"
 msgstr "እንግሊዝኛ"
 
-#: .\templates\frontpages\layout.html:157
+#: .\templates\frontpages\layout.html:197
 msgid "About Us"
 msgstr "ስለ እኛ"
 
-#: .\templates\frontpages\layout.html:160
-#: .\templates\frontpages\layout.html:167
-#: .\templates\frontpages\layout.html:173
+#: .\templates\frontpages\layout.html:198
+msgid "Manufacturers"
+msgstr "አምራቾች"
+
+#: .\templates\frontpages\layout.html:200
+#: .\templates\frontpages\layout.html:207
+#: .\templates\frontpages\layout.html:214
 msgid "Foods"
 msgstr "ምግብ"
 
-#: .\templates\frontpages\layout.html:161
-#: .\templates\frontpages\layout.html:168
-#: .\templates\frontpages\layout.html:174
+#: .\templates\frontpages\layout.html:201
+#: .\templates\frontpages\layout.html:208
+#: .\templates\frontpages\layout.html:215
 msgid "Beverages"
 msgstr "መጠጥ"
 
-#: .\templates\frontpages\layout.html:162
-#: .\templates\frontpages\layout.html:169
-#: .\templates\frontpages\layout.html:175
+#: .\templates\frontpages\layout.html:202
+#: .\templates\frontpages\layout.html:209
+#: .\templates\frontpages\layout.html:216
 msgid "Pharmaceuticals"
 msgstr "መድሃኒት"
 
-#: .\templates\frontpages\layout.html:177
+#: .\templates\frontpages\layout.html:219
+msgid "Collaborations"
+msgstr "መተባበሪያ"
+
+#: .\templates\frontpages\layout.html:221
 msgid "Blog"
 msgstr "ብሎግ"
 
-#: .\templates\frontpages\layout.html:178
+#: .\templates\frontpages\layout.html:222
+msgid "Forums"
+msgstr "ዉይይት"
+
+#: .\templates\frontpages\layout.html:223
+msgid "Polls"
+msgstr "ምረጫ"
+
+#: .\templates\frontpages\layout.html:224
+msgid "Tenders"
+msgstr ""
+
+#: .\templates\frontpages\layout.html:226
+msgid "Faqs"
+msgstr "ተየጥ"
+
+#: .\templates\frontpages\layout.html:227
+msgid "Vacancy"
+msgstr ""
+
+#: .\templates\frontpages\layout.html:230
 msgid "Contact Us"
 msgstr "ተገናኙን"
 
@@ -568,6 +415,10 @@ msgstr ""
 
 #: .\templates\registration\password_reset_complete.html:16
 msgid "Your password has been set.  You may go ahead and log in now."
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.html:18
+msgid "Log in"
 msgstr ""
 
 #: .\templates\registration\password_reset_confirm.html:8
@@ -644,11 +495,26 @@ msgstr ""
 msgid "Reset my password"
 msgstr ""
 
-#~ msgid "Currency"
+#~| msgid "Currency"
+#~ msgid "Currently"
 #~ msgstr "ገንዘብ"
 
-#~ msgid "My Profile"
-#~ msgstr "የራስ አካውንት"
+#~| msgid "Amharic"
+#~ msgid "mar"
+#~ msgstr "አማርኛ"
+
+#~ msgid "Type"
+#~ msgstr "አይነት"
+
+#~ msgid "Select Type"
+#~ msgstr "አይነት ምረጥ"
+
+#~| msgid "Categories"
+#~ msgid "All Categories"
+#~ msgstr "ምድቦች"
+
+#~ msgid "My Dashboard"
+#~ msgstr "የራስ መቆጣጠሪያ"
 
 #~ msgid "Inbox"
 #~ msgstr "በሳጥን"

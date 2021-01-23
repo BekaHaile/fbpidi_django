@@ -106,6 +106,12 @@
 									
 										{%if user.is_customer%}
 										<li class="dropdown">
+											<a href="{% url 'cart_summary' %}" class="text-dark">
+												<i class="fa fa-shopping-cart mr-1"></i><span>{% trans "My Cart" %}</span>
+											</a>
+
+										</li> 
+										<li class="dropdown">
 											<a href="{% url 'mydash' %}" class="text-dark">
 												<i class="fa fa-home mr-1"></i><span>{% trans "My Profile" %}</span>
 											</a>
@@ -189,25 +195,25 @@
                         <ul class="horizontalMenu-list">
 							<li><a href="{%url 'index' %}">{% trans "Home" %} <span class="fa fa-caret m-0"></span></a></li>
 							<li><a href="{%url 'about'%}">{% trans "About Us" %} </a></li>
-                            <li><a href="{% url 'bs_list' %}">{% trans "Manufacturers" %} <span class="fa fa-caret-down m-0"></span></a>
+                            <li><a href="{% url 'manufac_category_main' option='all' %}">{% trans "Manufacturers" %} <span class="fa fa-caret-down m-0"></span></a>
                                 <ul class="sub-menu">
-                                    <li><a href="{% url 'bs_list' %}">{% trans "Foods" %}</a></li>
-                                    <li><a href="{% url 'bs_list' %}">{% trans "Beverages" %}</a></li>
-                                    <li><a href="{% url 'bs_list' %}">{% trans "Pharmaceuticals" %}</a></li>
+                                    <li><a href="{% url 'manufac_category_main' option='Food' %}">{% trans "Foods" %}</a></li>
+                                    <li><a href="{% url 'manufac_category_main' option='Beverage' %}">{% trans "Beverages" %}</a></li>
+                                    <li><a href="{% url 'manufac_category_main' option='Pharmaceuticals' %}">{% trans "Pharmaceuticals" %}</a></li>
                                 </ul>
                             </li>
-                            <li><a href="{%url 'bs_list_right'%}">{% trans "Suppliers" %} <span class="fa fa-caret-down m-0"></span></a>
+                            <li><a href="{% url 'suplier_category_main' option='all' %}">{% trans "Suppliers" %} <span class="fa fa-caret-down m-0"></span></a>
                                 <ul class="sub-menu">
-                                    <li><a href="{% url 'bs_list_right' %}">{% trans "Foods" %}</a></li>
-                                    <li><a href="{% url 'bs_list_right' %}">{% trans "Beverages" %}</a></li>
-                                    <li><a href="{% url 'bs_list_right' %}">{% trans "Pharmaceuticals" %}</a></li>
+                                    <li><a href="{% url 'suplier_category_main' option='Food' %}">{% trans "Foods" %}</a></li>
+                                    <li><a href="{% url 'suplier_category_main' option='Beverage' %}">{% trans "Beverages" %}</a></li>
+                                    <li><a href="{% url 'suplier_category_main' option='Pharmaceuticals' %}">{% trans "Pharmaceuticals" %}</a></li>
 								</ul>
 							</li>
-                            <li><a href="{%url 'bs_list3'%}">{% trans "Products" %} <span class="fa fa-caret-down m-0"></span></a>
+                            <li><a href="{% url 'product_category_main' option='all' %}">{% trans "Products" %} <span class="fa fa-caret-down m-0"></span></a>
 								<ul class="sub-menu">
-									<li><a href="{% url 'bs_list3' %}">{% trans "Foods" %}</a></li>
-									<li><a href="{% url 'bs_list3' %}">{% trans "Beverages" %}</a></li>
-									<li><a href="{% url 'bs_list3' %}">{% trans "Pharmaceuticals" %}</a></li>
+									<li><a href="{% url 'product_category_main' option='Food' %}">{% trans "Foods" %}</a></li>
+									<li><a href="{% url 'product_category_main' option='Beverage' %}">{% trans "Beverages" %}</a></li>
+									<li><a href="{% url 'product_category_main' option='Pharmaceuticals' %}">{% trans "Pharmaceuticals" %}</a></li>
 								</ul>
 							</li>			
 							<li><a href="#">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
@@ -218,6 +224,7 @@
 									<li><a href="{% url 'tender_list' %}">{% trans "Tenders" %}</a></li>
 									
 									<li><a href="{% url 'faq' %}">{% trans "Faqs" %}</a></li>
+									<li><a href="{% url 'vacancy' %}">{% trans "Vacancy" %}</a></li>
 								</ul>
 							</li>
 							<li><span></span><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span class="wsarrow"></span></a></li>
