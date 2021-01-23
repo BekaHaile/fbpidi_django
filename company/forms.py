@@ -102,15 +102,13 @@ class CompanyEventForm(forms.ModelForm):
         }
 
 class CompanyBankAccountForm(forms.ModelForm):
-    bank = forms.ModelChoiceField(queryset=Bank.objects.all(), required=True)
-    company = forms.ModelChoiceField(queryset=Company.objects.all(), required=True)
-
+    bank = forms.ModelChoiceField(queryset=Bank.objects.all().order_by('bank_name'), required=True)
+    
     class Meta:
-        model = CompanyBankAccount()
-        fields = ('company', 'bank', 'account_number')
+        model = CompanyBankAccount
+        fields = ('bank', 'account_number')
         widgets = {
             'bank':forms.Select(attrs={'class':'hidden'}),
-            'company':forms.Select(attrs={'class':'hidden'}),
             'account_number':forms.TextInput( attrs = {'class': 'form-control', 'placeholder': 'Valid bank account (for the selected bank)'}),
         }
 

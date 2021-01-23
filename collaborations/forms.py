@@ -92,14 +92,13 @@ class TenderForm(forms.ModelForm):
     STATUS_CHOICE = [ ('Pending', 'Pending'),('Open', 'Open' )]
     tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
     status = forms.ChoiceField(choices = STATUS_CHOICE, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
-                                
-    
+                                 
     
     start_date = forms.DateTimeField( input_formats=['%d/%m/%Y %H:%M'],  widget=forms.DateTimeInput(attrs={
-                                                                                'class': 'form-control datetimepicker-input', 'placeholder': 'dd/mm/YYYY HH:mm'}))
+                                                                                'class': 'form-control datetimepicker-input', 'placeholder': '12/12/2012 12:23'}))
 
     end_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'],  widget=forms.DateTimeInput(attrs={
-                                                                                'class': 'form-control datetimepicker-input', 'placeholder': 'dd/mm/YYYY HH:mm'}))
+                                                                                'class': 'form-control datetimepicker-input', 'placeholder': '12/12/2012 12:23'}))
     class Meta:
         model = Tender
         fields = ('title', 'title_am','description', 'description_am','tender_type', 'status', 

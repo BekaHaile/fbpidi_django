@@ -6,7 +6,7 @@ from django.contrib.auth.models import Permission, Group
 
 from django.conf import settings
 from django.db.models.signals import post_save
-from company.models import Company
+from company.models import Company, CompanyStaff
 
 class User(AbstractUser):
     phone_number = models.CharField(max_length=20,blank=True,null=True)
@@ -15,6 +15,13 @@ class User(AbstractUser):
     is_company_staff = models.BooleanField(default=False) # if user is company staff
     profile_image = models.ImageField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def get_company_name(self):
+        if self.is_company_admin:
+           return CompanyAdmin.objects.get(user = self).get_company_name()
+        elif self.is_company_staff:
+            return CompanyStaff.objects.get(user = self).get_company_name()
+
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -44,6 +51,11 @@ class CompanyAdmin(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    #this method works fine for only the company admin that created the company object (how to )
+    def get_company_name(self):
+        return Company.objects.get(user = self.user).company_name if Company.objects.get(user = self.user).company_name else None
+
 
 # class CompanyStaff(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
