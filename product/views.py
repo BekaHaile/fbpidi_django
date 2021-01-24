@@ -14,7 +14,7 @@ from accounts.models import User
 from company.models import Company
 
 # Create your views here.
-# This is class/view is crated for displaying all categories and sub categories
+# This is class/view is crated for displaying all categories and sub categories 
 class CategoryView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = {}
