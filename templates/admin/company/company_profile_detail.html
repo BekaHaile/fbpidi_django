@@ -68,6 +68,7 @@
 												Services
 											</a>
 										</li>
+				
 										<li class="nav-item">
 											<a href="#events" class="nav-link" data-toggle="tab">
 												<i class="icon-calendar3"></i>
@@ -95,6 +96,16 @@
 												<span class="badge bg-success badge-pill ml-auto">16</span>
 											</a>
 										</li>
+										
+										<li class="nav-item">
+											<a href="#bank_accounts" class="nav-link" data-toggle="tab">
+												<i class="fa fa-bank" ></i>
+												Bank Accounts
+												<span class="badge bg-success badge-pill ml-auto">{{company_bank_accounts.count}}</span>
+											</a>
+										</li>
+
+										
 										<li class="nav-item-divider"></li>
 										<li class="nav-item">
 											<a href="{%url 'admin:logout'%}" class="nav-link" data-toggle="tab">
@@ -742,6 +753,7 @@
 								</div>
 							</div>
 						</div>
+
 						<div class="tab-pane fade" id="events">
 							<div class="card">
 								<div class="card-header header-elements-inline">
@@ -1980,7 +1992,92 @@
 							</div>
 							<!-- /orders history -->
 
-				    	</div>
+						</div>
+
+
+						<div class="tab-pane fade" id="bank_accounts">
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h6 class="card-title">Company Bank Accounts</h6>
+									<div class="header-elements">
+										<div class="list-icons">
+											<a data-toggle="modal" data-target="#bank_form_id" class="btn btn-outline-success btn-sm"><i class="icon-add mr-2"></i> Create New</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							{%for bank_account in company_bank_accounts%}
+							
+							<div class="card card-body">
+								<div class="media flex-column flex-sm-row">
+									<div class="mr-sm-3 mb-2 mb-sm-0">
+										<a href="#">
+											<img src="{{company.get_image}}" class="rounded" width="44" height="44" alt="">
+										</a>
+									</div>
+									
+									<div class="media-body">
+										<h3 class="media-title font-weight-semibold">
+											<a href="#">{{bank_account.bank.bank_name}}'s Account</a>
+										</h3>
+	
+										
+	
+										<h5>{{bank_account.account_number}}</h5>
+									</div>
+	
+									<div class="ml-sm-3 mt-2 mt-sm-0">
+										<span class="badge bg-blue">New</span>
+									</div>
+								</div>
+							</div>
+							{%endfor%}
+							
+							<div id="bank_form_id" class="modal fade" tabindex="-1">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Company Bank Creation Form</h5>
+											
+										</div>
+			
+										<form action="{%url 'admin:create_company_bank_account' company_id=company.id%}" method="POST" enctype="multipart/form-data">
+											{%csrf_token%}
+											<div class="modal-body">
+												<div class="form-group">
+													
+													<div class="row" style="margin-right: 5px; " >	
+														<label style="margin-right: 5px;">Bank</label>
+														{{account_form.bank}}
+
+													</div>
+													<div style="margin-bottom: 10px;"></div>
+													<div style="margin-right: 5px;" class="row">
+														<label>Account Number</label>
+														{{account_form.account_number}}
+												</div>
+
+												</div>
+			
+												
+												
+											</div>
+			
+											<div class="modal-footer">
+												<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+												<button type="submit" class="btn bg-primary">Submit form</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+
+
 					</div>
 					<!-- /right content -->
 

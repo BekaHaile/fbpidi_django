@@ -79,6 +79,10 @@ class CompanyStaff(models.Model):
     def __str__(self):
         return self.user.username
 
+    def get_company_name(self):
+        return self.company.company_name if self.company.company_name else None
+
+
 
 class CompanySolution(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
@@ -114,7 +118,9 @@ class CompanyBankAccount(models.Model):
     account_number = models.CharField(verbose_name="account number", max_length=30)
 
     def __str__(self):
-        return f"{self.company.company_name}'s  {bank.bank_name} account"
+        return f"{self.company.company_name}'s  {self.bank.bank_name} account"
+    def get_bank_name(self):
+        return f"{self.bank.bank_name}"
 
     class Meta:
         unique_together = (('company', 'bank','account_number'))

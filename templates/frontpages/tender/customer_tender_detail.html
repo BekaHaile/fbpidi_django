@@ -30,52 +30,161 @@
 					<div class="d-block mx-auto col-lg-10 col-md-12">
 						<div class="card">
 							    <div class="card-body">
-								    <a href="#" class="text-body"><h2 class="font-weight-semibold text-capitalize">{{tender.title}}</h2></a>
+								    <a href="#" ><h2 class="font-weight-semibold text-capitalize">Title: {{tender.title}}</h2></a>
 							    <div class="item7-card-desc d-flex mb-2 mt-3">
+                                
+                                    <br><a href="#"><i class="fa fa-calendar-o text-muted mr-2" style = "margin-right: 20px;" ></i>Start Date:- <b>{{tender.start_date}}</b></a><p style="margin-left: 10px;"> To </p>
+                                    <a href="#"><i style = "margin-left: 10px;"class="fa fa-calendar-o text-muted mr-2" ></i>End Date:-<b> {{tender.end_date}}</b></a>
+                                                  
+								</div>
 
-                                                                    
-                                    <br><a href="#"><i class="fa fa-calendar-o text-muted mr-2" style = "margin-right: 20px;" ></i>{{tender.start_date}}</a><p style="margin-left: 10px;"> To </p>
-                                    <a href="#"><i style = "margin-left: 10px;"class="fa fa-calendar-o text-muted mr-2" ></i>{{tender.end_date}}</a>
-                                    
-                                    <a href="#"><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i>By {{tender.get_company.company_name}}</a>
-                                    <a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>{{tender.tender_type}}</a>
-                                    
-                                </div>
+								<div class="item7-card-desc d-flex mb-2 mt-3">
+
+								<a href="#"><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i>By:-<b> {{tender.get_company.company_name}}</b></a>
+								<a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>Type:-<b> {{tender.tender_type}}</b></a>
+								<a href="#"><i class="icon-users" style="margin-left: 10px;"></i>Total Applications:-<b> {{tender.get_applications.count}}</b></a>
+								
+								</div>
+
                                 {% if tender.status == 'Open' %}
-								<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >Open</div>
+								<div class = "btn btn-primary" style="background-color: #66bb6a;; color:white; width: fit-content; padding: 5px; " >Open</div>
 								{%elif tender.status == 'Pending' %}
 								<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >Pending</div>
 								{%elif tender.status == 'Closed' %}
-								<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >Closed</div>
+								<div style="background-color: #ef5350; color:white; width: fit-content; padding: 5px;" >Closed</div>
 								{%else%} 
 								<div style="background-color: blue; color:white; width: fit-content; padding: 5px;" >Suspended</div>
 								{%endif%}
 								<br>
+								
 
-                                <h4>Tender description</h4>
-                                <p>{{tender.description|safe}}</p>
+								{% if tender.tender_type == "Free" %}
+									<div style = "margin-top: 10px;" class = "row">
+										<!-- <div class = "choice-btn-group" class="badge badge-secondary" style="margin-right: 20px;">
+												<span class="badge badge-secondary" style="padding: 10px;">
+														<a id = "download" href="{{tender.document.url}}" download="{{tender.document.url}}" style="color: white;">Download Document</a>							
+												</span>
+										</div> -->
+										<!-- <form action ="{% url 'download' id=tender.id %}" method="GET" enctype="multipart/form-data">
+												<input type="submit" value = "Download">
+										</form> -->
+										{% if tender.status == "Open"%}
+											<div>
+													<a style = "padding:5px; margin-left: 10px;" data-toggle="modal" data-target="#participate" class = "btn btn-secondary btn-sm mt-4" >
+														<i class="fa fa-money" style="margin-right: 5px;" ></i>Participate in tender
+													</a>
+											</div>
+										{%else%}
+											<div >
+												<label style="margin-left: 10px; background-color:orangered; color: white;">This tender is now in {{tender.status}} status. So, you can't participate in this tender. </label>
+												
+											</div>
+										{%endif%}
+									</div>
+
+								{%else%}
+								<br>
+								<div    >
+									
+									<a style = "margin-top: 10px;" data-toggle="modal" data-target="#buy_document" class = "btn btn-secondary btn-sm mt-4">
+										<i class="fa fa-money" style="margin-right: 5px;" ></i>Buy Document</a>
+									
+								</div>
+								{% endif %}
+
+								<h4 style =  "margin-top: 20px;"class  = "text-center">Tender description</h4>
+								<p class="font-13  col-lg-10 col-md-12">{{tender.description|safe}}</p>
+								
+								
+							
+								<div class="modal fade" id="buy_document" tabindex="-1" role="dialog"  aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<!-- Change the gate to post when saving method is completed -->
+												<form action="/collaborations/tender_application/{{tender.id}}/" method="POST" enctype="multipart/form-data">
+													{%csrf_token%}
+													<div class="modal-header">
+														<h5 class="modal-title" id="examplecontactLongTitle">Payment Form</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="modal-body">
+														<div class="form-group">
+															<input type="text" class="form-control" name = "first_name" id="first-name" placeholder="First Name">
+														</div>
+														<div class="form-group">
+															<input type="text" class="form-control" name = "last_name" id="last-name" placeholder="Last Name">
+														</div>
+														<div class="form-group">
+															<input type="text" class="form-control" name = "company_name" id="company_name" placeholder="Company Name">
+														</div>
+														<div class="form-group">
+															<input type="text" class="form-control" name = "company_tin_number" id="company_tin_number" placeholder="Company Tin Number">
+														</div>
+														
+														<div class="form-group">
+															<input type="email" class="form-control" name = "email" id="email" placeholder="Email Address">
+														</div>
+														<div class="form-group">
+															<input type="phone" class="form-control" name = "phone_number" id="phone" placeholder="Phone">
+														</div>
+														
+														<div class="form-group">
+															<input type="text" class="form-control" name = "account_number" id="account_number" placeholder="Payment Method">
+														</div>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+														<button type="submit" class="btn btn-success">Buy</button>
+													</div>
+												</form>
+										</div>
+									</div>
+								</div>
+								
+								
+								<div class="modal fade" id="participate" tabindex="-1" role="dialog"  aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+												<form action="/collaborations/tender_application/{{tender.id}}/" method="POST" enctype="multipart/form-data">
+													{%csrf_token%}
+													<div class="modal-header">
+														<h5 class="modal-title" id="examplecontactLongTitle">Applicant Form</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="modal-body">
+														<div class="form-group">
+															<input type="text" class="form-control" name = "first_name" id="first-name" placeholder="First Name">
+														</div>
+														<div class="form-group">
+															<input type="text" class="form-control" name = "last_name" id="last-name" placeholder="Last Name">
+														</div>
+														<div class="form-group">
+															<input type="text" class="form-control" name = "company_name" id="company_name" placeholder="Company Name">
+														</div>
+														<div class="form-group">
+															<input type="text" class="form-control" name = "company_tin_number" id="company_tin_number" placeholder="Company Tin Number">
+														</div>
+														
+														<div class="form-group">
+															<input type="email" class="form-control" name = "email" id="email" placeholder="Email Address">
+														</div>
+														<div class="form-group">
+															<input type="phone" class="form-control" name = "phone_number" id="phone" placeholder="Phone">
+														</div>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+														<button type="submit" class="btn btn-success">Submit</button>
+													</div>
+												</form>
+										</div>
+									</div>
+								</div>
                                 
-                                <form action="{%url 'customer_tender_detail' id=tender.id %}" method="POST" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                
-                                    <div class = "choice-btn-group" class="badge badge-secondary">
-                                        <span class="badge badge-secondary">
-                                            {% if tender.tender_type == "Free" %}
-                                            
-                                                <a id = "download" href="{{tender.document.url}}" download="{{tender.document.url}}"><span style=" padding:4px; color:white; font-size: medium;">Join and download document </span></a>
-                                            
-                                            {%else%}
-                                                <label for = "download" ><span style="font-size: medium;">Join and download document </span></label>
-                                            
-                                                <a id = "download" href="#"> 
-                                                    <div class="mb-3"><b>Buy Document</b></div>
-                                                </a>
-
-                                            {% endif %}
-                                        </span>
-                                    </div>
-
-                                </form>
 
 
 							</div>
