@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from company.models import Company,CompanySolution,CompanyEvent,CompanyStaff
 from accounts.models import CompanyAdmin
-
+from product.models import Order,OrderProduct
 
 from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm,FbpidiCompanyForm
 
@@ -83,8 +83,9 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
             solutions = CompanySolution.objects.filter(company=company)
             events = CompanyEvent.objects.filter(company=company)
             event_form = CompanyEventForm
+            order_product = OrderProduct.objects.filter(to_company=company)
             context = {'company':company,'staff_users':staff_users,'solution_form':sol_form,
-                        'solutions':solutions,'event_form':event_form,'events':events}
+                        'solutions':solutions,'event_form':event_form,'events':events,'orders':order_product}
             return render(self.request,'admin/company/company_profile_detail.html',context)
         except ObjectDoesNotExist:
             return redirect("admin:create_company_profile")

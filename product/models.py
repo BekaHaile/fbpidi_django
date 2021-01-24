@@ -49,6 +49,7 @@ class ProductPrice(models.Model):
 class OrderProduct(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    to_company = models.ForeignKey(Company,on_delete=models.CASCADE,null=True,blank=True)
     quantity = models.IntegerField(default=1)
     ordered = models.BooleanField(default=False)
     time_stamp = models.DateTimeField(auto_now_add=True)

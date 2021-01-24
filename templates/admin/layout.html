@@ -265,6 +265,8 @@
 								title="Forms"></i>
 						</li>
 						
+						 
+						{%else%} 
 						<li class="nav-item nav-item-submenu">
 							<a href="#" class="nav-link"><i class="icon-users"></i> <span>Users</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
@@ -273,26 +275,12 @@
 										<span>User</span></a>
 								</li>
 								<li class="nav-item">
-									<a href="{% url 'admin:group_view'%}" class="nav-link"><i class="icon-users"></i>
+									<a href="{% url 'admin:view_group'%}" class="nav-link"><i class="icon-users"></i>
 										<span>Group</span></a>
 								</li>
-								<!-- <li class="nav-item">
-									<a href="{% url 'admin:roles_list'%}" class="nav-link"><i class="icon-users"></i>
-										<span>Roles</span></a>
-								</li> -->
 							</ul>
 						</li>
-
-						 
 						
-						
-						 
-						{%else%} 
-						
-						<li class="nav-item">
-							<a href="{%url 'admin:users_list' %}" class="nav-link"><i class="icon-users"></i>
-								<span>Users</span></a>
-						</li>
 						<li class="nav-item">
 							<a href="{{user|my_company_link}}" class="nav-link"><i class="icon-coins"></i><span>My Company</span></a>
 						</li>

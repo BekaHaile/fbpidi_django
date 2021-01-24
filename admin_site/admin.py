@@ -7,7 +7,7 @@ from django.contrib import messages
 # from accounts.forms import UserCreationForm 
 # views from accounts app
 from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLogView,
-                        UserDetailView,UpdateAdminProfile,CreateUserView,GroupView)
+                        UserDetailView,UpdateAdminProfile,CreateUserView,GroupView,GroupList)
 # views from admin_site app
 from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
@@ -72,7 +72,8 @@ class CustomAdminSite(admin.AdminSite):
             path("user_detail/<option>/<id>/",wrap(UserDetailView.as_view()),name="user_detail"),
             path("update_profile/",wrap(UpdateAdminProfile.as_view()),name="add_profile"),
             path("user_audit/",wrap(UserLogView.as_view()),name="useraudit"),
-            path("manage_group/",wrap(GroupView.as_view()),name="group_view"),
+            path("group_list/",wrap(GroupList.as_view()),name="view_group"),
+            path("manage_group/",wrap(GroupView.as_view()),name="create_group"),
 
             path("categories/<option>/",wrap(CategoryView.as_view()),name="p_categories"),
             path("create_category/<option>",wrap(CreateCategories.as_view()),name="create_category"),

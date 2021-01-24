@@ -247,6 +247,7 @@ class AddToCartView(LoginRequiredMixin,View):
         
         order_product,created = OrderProduct.objects.get_or_create(
             product=product,
+            to_company=product.company,
             user=self.request.user,
             ordered=False
         )
@@ -310,3 +311,7 @@ class DecrementFromCart(LoginRequiredMixin,View):
         else: 
             messages.warning(self.request,"You do not have order")
             return redirect("index")    
+
+class CheckoutView(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        return render(self.request,"frontpages/product/checkout.html")
