@@ -210,8 +210,8 @@
 						</div>
 
 						<!--Comments-->
+						{%for comment in blog.comments%}
 						<div class="card"> 
-							{%for comment in blog.comments%}
 							<div class="card-body">
 								<div class="d-sm-flex mt-0 p-5 sub-review-section border border-bottom-0 br-bl-0 br-br-0">
                                     <div class="d-flex mr-3">
@@ -230,17 +230,16 @@
 
 									</div>
 								</div>
-								
-								</div>
-								{%endfor%}
+							</div>
 						</div>
+						{%endfor%}
 						<!--/Comments-->
 						<div class="card mb-lg-0">
 							<div class="card-header">
 								<h3 class="card-title">Add a Comment</h3>
 							</div>
 							<div class="card-body">
-								<form action="{%url 'Comment' id=blog.id%}"" method="POST" enctype="multipart/form-data">
+								<form action="{%url 'Comment' id=blog.id%}" method="POST" enctype="multipart/form-data">
 									{%csrf_token%}
 									<div class="form-group">
 										{{comment.content}} 

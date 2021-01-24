@@ -1,11 +1,9 @@
-from collaborations.models import Blog, BlogComment
-from collaborations.forms import FaqsForm
+
 from django.shortcuts import render, redirect
-from django.views import View
+from django.urls import reverse
 import datetime
 
-from collaborations.models import Faqs, Vacancy
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.views import View
 from .models import PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications
 from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
@@ -14,20 +12,110 @@ from django.contrib import messages
 from company.models import Company, CompanyBankAccount, Bank
 from accounts.models import User, CompanyAdmin, Company
 import os
-from django.http import FileResponse
-from django.http import HttpResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 import mimetypes
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 from django.http import HttpResponse, FileResponse
 
-from collaborations.forms import BlogsForm, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm
-from collaborations.models import Blog, BlogComment,Faqs,Vacancy,JobApplication, JobCategoty
+from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
+                                 VacancyForm,JobCategoryForm,
+                                 ForumQuestionForm,CommentForm,CommentReplayForm
+                                 )
+from collaborations.models import (Blog, BlogComment,Faqs,
+                                    Vacancy,JobApplication, JobCategoty,
+                                    ForumQuestion, ForumComments, CommentReplay)
+
+class SearchForum(View):
+    def post(self,*args,**kwargs):
+        print("============")
+        print(self.request.POST["search"])
+        forum = ForumQuestion.objects.filter(title=self.request.POST['search'])
+        template_name = "frontpages/forums/forum_list.html"
+        context = {'forums':forum}
+        return render(self.request, template_name,context)
+
+class CreateCommentReplay(LoginRequiredMixin,View):
+    def post(self,*args,**kwargs):
+        print("We are here")
+        comment = CommentReplayForm(self.request.POST,self.request.FILES)
+        forum = ForumQuestion.objects.get(id=self.kwargs['forum'])
+        main = ForumComments.objects.get(id=self.kwargs['id'])
+        empity = CommentForm()
+        context = {'forum':forum,'commentForm':empity}
+        if comment.is_valid():
+            form = CommentReplay()
+            form = comment.save(commit=False)
+            form.comment = main
+            form.user = self.request.user
+            form.save()
+            print("this worked")
+            return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
+        print("it didn't worked")
+        template_name = "frontpages/forums/forum_detail.html"
+        return render(self.request, template_name,context)
+
+
+
+#----- create forum quesion
+class CreateForumQuestion(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        forum = ForumQuestionForm()
+        template_name="frontpages/forums/forums_form.html" 
+        context = {'form':forum}
+        return render(self.request,template_name,context)
+    def post(self,*args,**kwargs):
+        form = ForumQuestionForm(self.request.POST,self.request.FILES)
+        context={'form':form}
+        template_name="frontpages/forums/forums_form.html" 
+        if form.is_valid():
+            forum = ForumQuestion()
+            forum = form.save(commit=False)
+            forum.user = self.request.user
+            forum.attachements = form.cleaned_data.get("attachements")
+            print("one")
+            forum.save()
+            forum = ForumQuestionForm()
+            context={'form':forum}
+            return redirect("forum_list")
+        return render(self.request, template_name,context)
+
+class ListForumQuestions(View):
+    def get(self,*args,**kwargs):
+        forum = ForumQuestion.objects.all()
+        template_name = "frontpages/forums/forum_list.html"
+        context = {'forums':forum}
+        return render(self.request, template_name,context)
+
+class ForumQuestionsDetail(View):
+    def get(self,*args,**kwargs):
+        forum = ForumQuestion.objects.get(id=self.kwargs['id'])
+        comment = CommentForm()
+        commentreplay=CommentReplayForm()
+        print("-----0--------")
+        print(self.request.user)
+        template_name = "frontpages/forums/forum_detail.html"
+        context = {'forum':forum,'commentForm':comment,'commentreplay':commentreplay}
+        return render(self.request, template_name,context)
+    def post(self,*args,**kwargs):
+        form = CommentForm(self.request.POST,self.request.FILES)
+        if form.is_valid():
+            forum = ForumComments()
+            forum = form.save(commit=False)
+            question = ForumQuestion.objects.get(id=self.kwargs['id'])
+            forum.forum_question = question
+            forum.user = self.request.user
+            forum.save()
+            forum = ForumQuestion.objects.get(id=self.kwargs['id'])
+            comment = CommentForm()
+            template_name = "frontpages/forums/forum_detail.html"
+            context = {'forum':question,'comment':comment}
+            return render(self.request, template_name,context)
+        return render(self.request, template_name,context)
+
+
 
 ## --- Blogs Views
 class CreatBlog(LoginRequiredMixin,View):
@@ -268,7 +356,7 @@ class VacancyDetail(LoginRequiredMixin,View):
         start=str(form.starting_date)
         start=start[:19]
         end=str(form.ending_date)
-        end=start[:19]
+        end=end[:19]
         form.starting_date = datetime.datetime.strptime(start, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
         form.ending_date =  datetime.datetime.strptime(end, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
         vacancy = VacancyForm() 
@@ -353,7 +441,6 @@ class CreateVacancy(LoginRequiredMixin, View):
             starting_date=datetime.datetime.strptime(self.request.POST['starting_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
             ending_date=datetime.datetime.strptime(self.request.POST['ending_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
             vacancy.starting_date = starting_date
-            print("---------after save---------"+str(vacancy.starting_date))
             vacancy.ending_date = ending_date
             vacancy.save()
 

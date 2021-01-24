@@ -57,6 +57,12 @@
 
 		<!-- Color-Skins -->
 		<link id="theme" href="/static/frontpages/color-skins/color1.css"  rel="stylesheet"/>
+
+		<link rel="stylesheet" href="/static/summernote/summernote-bs4.css">
+		<script src="/static/summernote/summernote-bs4.js"></script>
+
+		<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+		<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 		<style>
 			#lan_btn{
 				border: none;
@@ -219,7 +225,7 @@
 							<li><a href="#">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
 								<ul class="sub-menu">
 									<li><a href="{% url 'blog_grid_right' %}">{% trans "Blog" %}</a></li>
-									<li><a href="#">{% trans "Forums" %}</a></li>
+									<li><a href="{% url 'forum_list' %}">{% trans "Forums" %}</a></li>
 									<li><a href="{% url 'polls' %}">{% trans "Polls" %}</a></li>
 									<li><a href="{% url 'tender_list' %}">{% trans "Tenders" %}</a></li>
 									

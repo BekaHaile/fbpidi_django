@@ -195,4 +195,36 @@ class TenderApplications(models.Model):
     class Meta:
         unique_together = (('applicant', 'tender'))
 
-        
+class ForumQuestion(models.Model):
+    title = models.CharField(max_length=500,null=False)
+    description = models.TextField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    attachements = models.FileField(upload_to="Attachements/", null=True,max_length=254,help_text="only pdf files, Max size 10MB")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def countComment(self):
+        return self.forumcomments_set.all().count()
+
+    def comments(self):
+        return self.forumcomments_set.all()
+    
+     
+
+class ForumComments(models.Model):
+    forum_question=models.ForeignKey(ForumQuestion,on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    comment = models.TextField(null=False)
+    attachements = models.FileField(upload_to="Attachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def commentreplay(self):
+        return self.commentreplay_set.all()
+
+
+class CommentReplay(models.Model):
+    comment = models.ForeignKey(ForumComments,on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField(null=False)
+    attachements = models.FileField(upload_to="Attachements/", null=True,max_length=254,help_text="only pdf files, Max size 10MB")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
