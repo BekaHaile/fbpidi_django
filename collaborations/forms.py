@@ -138,8 +138,6 @@ class DateForm(forms.Form):
 
 class VacancyForm(forms.ModelForm):
     
-    starting_date = forms.DateField(widget=SelectDateWidget())
-    ending_date = forms.DateField(widget=SelectDateWidget())
     employement_type = forms.CharField(label='job type', widget=forms.Select(choices=JOB_CHOICES))
 
     class Meta:
@@ -148,7 +146,7 @@ class VacancyForm(forms.ModelForm):
                   ,'job_title', 'description','requirement',
                   'job_title_am','description_am','requirement_am')
         
-        widgets = { 
+        widgets = {  
             #'employement_type':forms.Select(attrs={'class':'form-control form-control-uniform','choices':JOB_CHOICES}),
             'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'location':forms.TextInput(attrs={'class':'form-control','placeholder':'Location'}),

@@ -2,6 +2,7 @@ from collaborations.models import Blog, BlogComment
 from collaborations.forms import FaqsForm
 from django.shortcuts import render, redirect, reverse
 from django.views import View
+import datetime
 
 from collaborations.models import Faqs, Vacancy
                                      #redirect with context
@@ -274,6 +275,12 @@ class VacancyDetail(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         form = Vacancy.objects.get(id=self.kwargs['id'])
         jobcategory = JobCategoty.objects.all()
+        start=str(form.starting_date)
+        start=start[:19]
+        end=str(form.ending_date)
+        end=start[:19]
+        form.starting_date = datetime.datetime.strptime(start, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
+        form.ending_date =  datetime.datetime.strptime(end, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
         vacancy = VacancyForm() 
         #print(str(self.kwargs['id'])+"-----------------"+str(form.categoryName))
         context = {'form':form,'jobcategory':jobcategory,"vacancy":vacancy}
@@ -294,11 +301,12 @@ class VacancyDetail(LoginRequiredMixin,View):
             vacancy.job_title_am=form.cleaned_data.get('job_title_am')
             vacancy.description_am=form.cleaned_data.get('description_am')
             vacancy.requirement_am=form.cleaned_data.get('requirement_am')
-            vacancy.ending_date=form.cleaned_data.get("ending_date")
-            vacancy.starting_date=form.cleaned_data.get("starting_date")
+            starting_date=datetime.datetime.strptime(self.request.POST['starting_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+            ending_date=datetime.datetime.strptime(self.request.POST['ending_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+            vacancy.starting_date = starting_date
+            vacancy.ending_date = ending_date
             vacancy.category=form.cleaned_data.get('category')
             vacancy.employement_type=form.cleaned_data.get('employement_type')
-            print(str(self.kwargs['id'])+"-----------------"+str(vacancy.employement_type))
             vacancy.save()
             
             messages.success(self.request, "Vacancy Edited Successfully")
@@ -341,14 +349,22 @@ class CreateVacancy(LoginRequiredMixin, View):
         template = "admin/pages/job_form.html"
         if form.is_valid():
             category = JobCategoty.objects.get(id=self.request.POST['category'],)
-            
+            print("------")
+            print(self.request.POST['starting_date'])
+            print("======")
+            print()
+            print("======")
+            print(self.request.POST['ending_date'])
             vacancy=form.save(commit=False)
+            vacancy.employement_type = form.cleaned_data.get('employement_type')
             vacancy.user=self.request.user
             vacancy.company=self.company_admin()
             vacancy.category=category
-            vacancy.starting_date = form.cleaned_data.get("starting_date")
-            print("----------------------"+str(vacancy.starting_date))
-            vacancy.ending_date = form.cleaned_data.get("ending_date")
+            starting_date=datetime.datetime.strptime(self.request.POST['starting_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+            ending_date=datetime.datetime.strptime(self.request.POST['ending_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+            vacancy.starting_date = starting_date
+            print("---------after save---------"+str(vacancy.starting_date))
+            vacancy.ending_date = ending_date
             vacancy.save()
 
             messages.success(self.request, "New vacancy Added Successfully")
