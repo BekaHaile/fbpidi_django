@@ -95,7 +95,7 @@ class Faqs(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
  
 class Tender(models.Model):
-    TENDER_STATUS = ['Open', 'Panding', 'Closed', 'Suspended']
+    TENDER_STATUS = ['Open', 'Pending', 'Closed', 'Suspended']
     user = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.CASCADE )
     title = models.CharField( max_length=200, verbose_name="Tender title (English)" )
     title_am = models.CharField( max_length=200, verbose_name="Tender title(Amharic)" )

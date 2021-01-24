@@ -1,10 +1,11 @@
 from collaborations.models import Blog, BlogComment
 from collaborations.forms import FaqsForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.views import View
 
 from collaborations.models import Faqs, Vacancy
-from django.http import HttpResponse
+                                     #redirect with context
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
 from .models import PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications
 from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
@@ -17,17 +18,23 @@ from django.http import FileResponse
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-import mimetypes
+
+import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models import User
 from company.models import Company, CompanyStaff
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 from django.http import HttpResponse, FileResponse
+                         
 from wsgiref.util import FileWrapper
 
 from collaborations.forms import BlogsForm, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm
 from collaborations.models import Blog, BlogComment,Faqs,Vacancy,JobApplication, JobCategoty
+
+
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
 
 ## --- Blogs Views
 class CreatBlog(LoginRequiredMixin,View):
@@ -165,16 +172,6 @@ class Download(LoginRequiredMixin,View):
             message.error(self.request, "File does not exists")
             return redirect("admin:Applicant_info")
         return response
-
-def pdf_download(request, id):
-    tender = Tender.objects.get(id = id)
-    path = tender.document.path
-    print(path)
-    f = open(path, "r")
-    response = HttpResponse(FileWrapper(f), content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=resume.pdf'
-    f.close()
-    return response
 
 
 
@@ -454,7 +451,6 @@ class PollIndex(View):
         return render(self.request, "frontpages/polls-list.html", context)
 
        
-
 #only visible to logged in and never voted before
 class PollDetail(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):
@@ -514,25 +510,18 @@ class PollDetail(LoginRequiredMixin,View):
         
 
 
-
 ########## tender related views
 ###
 class CreateTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        print("get")
         try:    
             form = TenderForm()
-
             try:
-                
                 company = Company.objects.get(user = self.request.user)
             except Exception as e:
-
                 return redirect("admin:create_company_profile")
-
             company_bank_accounts = company.get_bank_accounts()
             banks= Bank.objects.all() # if there will be a scenario where the admin needs to add register new bank account
-            
             context = {'form':form, 'banks':banks, 'company_bank_accounts':company_bank_accounts}
             return render(self.request,'admin/collaborations/create_tender.html',context)
         except Exception as e: 
@@ -559,7 +548,12 @@ class CreateTender(LoginRequiredMixin,View):
                     tender.document_price = self.request.POST['document_price']
                 else:
                     tender.document_price = 0
-                
+
+                starting_date=datetime.datetime.strptime(self.request.POST['start_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+                ending_date=datetime.datetime.strptime(self.request.POST['end_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+                tender.start_date = starting_date
+                tender.end_date = ending_date
+
                 
                 tender.save()
                 tender.bank_account.add(self.request.POST['company_bank_account'])
@@ -580,12 +574,35 @@ class CreateTender(LoginRequiredMixin,View):
             print("Exception at collaborations.views.CreateTender post" , str (e))
             return redirect("admin:tenders")
 
+def check_tender_enddate(request, tenders):
+    now = datetime.datetime.now()
+    for tender in tenders:
+        endstr = str(tender.end_date.date)
+        if tender.end_date.day < datetime.datetime.now().day and tender.status == "Open":
+            # if tender.end_date.time() <= datetime.datetime.now().time():
+                    tender.status = "Closed"
+                    tender.save()
+                    sendTenderClosedEmailNotification(request, tender.user, tender)
+    return tenders
+
+def sendTenderClosedEmailNotification(request, user, tender):
+    current_site = get_current_site(request)
+    mail_message = f'The tender you created with a title "{tender.title}" has been just automatically closed by the system.\n This happens when the date you entered as an end date for the tender passes and you (the creator) did not update the status'
+
+    mail_subject = f'Tender closed'
+    to_email = user.email
+    email = EmailMessage(
+    mail_subject, mail_message, to=[tender.user.email]
+    )
+    email.content_subtype = "html"
+    email.send()
+    return email
 
 class TenderList(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):          
-        try:
-                
+        try:    
                 tenders = Tender.objects.all()
+                tenders = check_tender_enddate(self.request, tenders)       
                 return render(self.request, "admin/collaborations/tenders.html", {'tenders':tenders,})
         except Exception as e:
                 messages.warning(self.request, "Error while getting tenders",)
@@ -631,11 +648,21 @@ class EditTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         
         form = TenderEditForm()
+        context = {}
         tender = Tender.objects.get(id =self.kwargs['id'] )
-        
         company = tender.get_company()
+
         if company:
             company_bank_accounts = company.get_bank_accounts()
+            
+            start_date =str(tender.start_date)
+            start_date =start_date[:19]
+            end_date =str(tender.end_date)
+            end_date = end_date[:19]
+            start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
+            end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
+            context['start_date'] = start_date
+            context['end_date'] = end_date
             banks= Bank.objects.all() # if there will be a scenario where the admin needs to add register new bank account
             context = {'form':form, 'banks':banks, 'company_bank_accounts':company_bank_accounts}
             if self.kwargs['id']:   
@@ -648,55 +675,42 @@ class EditTender(LoginRequiredMixin,View):
 
         return render(self.request,'admin/collaborations/create_tender.html',{})
 
-    def post(self,*args,**kwargs):
-
-        print("Edit tender")        
-        form = TenderEditForm(self.request.POST)  
-        try:                 
-            if form.is_valid():
+    def post(self,*args,**kwargs):  
+        form = TenderEditForm(self.request.POST)                       
+        if form.is_valid():
+            try:
                 tender= Tender.objects.get(id = self.kwargs['id'])
-                message = []
-                
-                if self.request.FILES['document'] != "":
-                    tender.document = self.request.FILES['document'] 
-                if self.request.POST['start_date']  != "":
-                    try:
-                        tender.start_date = self.request.POST['start_date']
-                    except Exception:
-                        message.append("Start date Error")
-
-                if self.request.POST['end_date']  != "":
-                    try:
-                        tender.start_date = self.request.POST['end_date']
-                    except Exception:
-                        message.append("end date Error")
-                
+                message = []             
+                starting_date=datetime.datetime.strptime(self.request.POST['start_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+                ending_date=datetime.datetime.strptime(self.request.POST['end_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+                tender.start_date = starting_date
+                tender.end_date = ending_date
                 tender.title = form.cleaned_data.get('title')
                 tender.title_am = form.cleaned_data.get('title_am')
                 tender.description = form.cleaned_data.get('description')
                 tender.description_am = form.cleaned_data.get('description_am')
-                tender.type = form.cleaned_data.get('tender_type')
+                tender.tender_type = form.cleaned_data.get('tender_type')
                 tender.status = form.cleaned_data.get("status")
+                if self.request.FILES:
+                    tender.document = self.request.FILES['document'] 
                 tender.save()
+
+            except Exception as e:
+                print("There is an Exception while tying to edit a tender!")   
+            
+            messages.success(self.request,"Tender Successfully Edited")
+            return redirect("admin:tenders") 
                 
-                messages.success(self.request,"Tender Successfully Edited")
-                return redirect("admin:tenders")
-                
-            else:
+        else:
                 import pprint
-                
+                print("Form is not valid")
                 pprint.pprint(self.request.POST)
                 print("2")
                 pprint.pprint(self.request.FILES)
                 print(form.errors)
-                messages.warning(self.request, "Error! Poll was not Created!" )
+                messages.warning(self.request, "Error! Tender was not Edited!" )
                 return redirect("admin:tenders")
-                
-        except Exception as e:
-            print("Exception at collaborations.views.editTender post" , str (e))
-            return redirect("admin:tenders")
-       
-       
+
 class DeleteTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         message = ""
@@ -727,16 +741,18 @@ class CustomerTenderList(View):
                 messages.warning(self.request, "Error while getting tenders")
                 return redirect("tender_list")     
 
+
 class CustomerTenderDetail(View):
     def get(self, *args, **kwargs):  
           
         if self.kwargs['id'] :
             try:
                 tender = Tender.objects.get(id = self.kwargs['id']  )
+                
                 return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender,})
 
             except Exception as e:
-                print("eeeeeeeeeeeeeeeee", str(e))
+                print("Exception at customerTenderDetail :", str(e))
                 messages.warning(self.request, "tender not found")
                 return redirect("tender_list") 
 
@@ -747,6 +763,7 @@ class CustomerTenderDetail(View):
 
 class ApplyForTender(View):
     def post(self, *args, **kwargs):   
+ 
         tender = Tender.objects.get(id = self.kwargs['id'])
         if tender:
             applicant = TenderApplicant(
@@ -762,8 +779,27 @@ class ApplyForTender(View):
             application.save()
             messages.success(self.request, "Application Successfully Completed")
             print("Created successfully") 
+            # pdf_download(self.request, tender.id)
             return redirect("/collaborations/tender_list/")
+
+            # return HttpResponseRedirect(reverse('customer_tender_detail',  kwargs={'id':tender.id} ))
+                                        
+            # return redirect(reverse("/collaborations/tender_list/", kwargs={ 'applied': True }))
+            # return redirect(CustomerTenderDetail, id = tender.id, applied=True)
+
+            # return HttpResponseRedirect(redirect_to= f"/collaborations/customer_tender_detail/{tender.id}/", kwargs={'applied':True})
+            # HttpResponseRedirect()
         print("Error Occured!")
         messages.warning(self.request,"Error while Applying!")
         return redirect("/collaborations/tender_list/")
+
+def pdf_download(request, id):
+    tender = Tender.objects.get(id = id)
+    path = tender.document.path
+    print(path)
+    f = open(path, "r")
+    response = HttpResponse(FileWrapper(f), content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=resume.pdf'
+    f.close()
+    return response
 
