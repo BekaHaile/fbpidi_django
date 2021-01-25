@@ -228,3 +228,12 @@ class CommentReplay(models.Model):
     attachements = models.FileField(upload_to="Attachements/", null=True,max_length=254,help_text="only pdf files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
 
+class Announcement(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    title = models.CharField(max_length=500,null=False)
+    title_am = models.CharField(max_length=500,null=False)
+    containt = models.TextField(null=False)
+    containt_am = models.TextField(null=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+

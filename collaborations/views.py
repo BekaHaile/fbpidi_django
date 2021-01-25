@@ -22,17 +22,77 @@ from django.http import HttpResponse, FileResponse
 
 from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
                                  VacancyForm,JobCategoryForm,
-                                 ForumQuestionForm,CommentForm,CommentReplayForm
-                                 )
+                                 ForumQuestionForm,CommentForm,CommentReplayForm,
+                                 AnnouncementForm)
 from collaborations.models import (Blog, BlogComment,Faqs,
                                     Vacancy,JobApplication, JobCategoty,
-                                    ForumQuestion, ForumComments, CommentReplay)
+                                    ForumQuestion, ForumComments, CommentReplay,
+                                    Announcement)
 
+#---------------- Announcement
+class ListAnnouncement(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        form = Announcement.objects.all()
+        template_name="admin/announcement/announcement_list.html"
+        context={'Announcements':form}
+        return render(self.request, template_name,context)
+
+
+class AnnouncementDetail(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        form = Announcement.objects.get(id=self.kwargs['id'])
+        template_name="admin/announcement/announcement_detail.html"
+        context={'form':form}
+        return render(self.request, template_name,context)
+    def post(self,*agrs,**kwargs):
+        form = AnnouncementForm(self.request.POST)
+        post = Announcement.objects.get(id=self.kwargs['id'])
+        context={'form':form}
+        template_name="admin/announcement/announcement_detail.html"
+        if form.is_valid():
+            post.title = form.cleaned_data.get('title')
+            post.title_am = form.cleaned_data.get('title_am')
+            post.containt = form.cleaned_data.get('containt')
+            post.containt_am = form.cleaned_data.get('containt_am')
+            post.save()
+            messages.success(self.request, "Edited Announcement Successfully")
+            return redirect("admin:anounce_list")
+        return render(self.request, template_name,context)
+
+
+
+class CreatAnnouncement(LoginRequiredMixin,View):
+    def company_admin(self,*args,**kwarges):
+        force = Company.objects.get(user=self.request.user)
+        print("----------------"+str(force))
+        return force
+    
+    def get(self,*args,**kwargs):
+        form = AnnouncementForm()
+        template_name="admin/announcement/announcement_form.html"
+        context={'form':form}
+        return render(self.request, template_name,context)
+    def post(self,*args,**kwargs):
+        form = AnnouncementForm(self.request.POST,self.request.FILES)
+        context={'form':form}
+        template_name="admin/announcement/announcement_form.html"
+        context={'form':form}
+        if form.is_valid():
+            post = Announcement()
+            post = form.save(commit=False)
+            post.user = self.request.user  
+            post.company = self.company_admin()                 
+            post.save()
+            messages.success(self.request, "Added New Announcement Successfully")
+            return redirect("admin:anounce_Create")
+        return render(self.request, template_name,context)
+
+#---------------- forum and comment on forum
 class SearchForum(View):
     def post(self,*args,**kwargs):
         print("============")
         print(self.request.POST["search"])
-        forum = ForumQuestion.objects.filter(title=self.request.POST['search'])
+        forum = ForumQuestion.objects.filter(title__contains=self.request.POST['search'])
         template_name = "frontpages/forums/forum_list.html"
         context = {'forums':forum}
         return render(self.request, template_name,context)
@@ -117,7 +177,7 @@ class ForumQuestionsDetail(View):
 
 
 
-## --- Blogs Views
+## ------------- Blogs Views
 class CreatBlog(LoginRequiredMixin,View):
     template_name="admin/pages/blog_form.html"
     def get(self,*args,**kwargs):

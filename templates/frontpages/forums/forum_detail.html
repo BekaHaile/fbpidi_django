@@ -23,16 +23,20 @@
 					<!--Left Side Content-->
 					<div class="col-xl-4 col-lg-4 col-md-12">
 						<div class="card">
+						 <form action="{%url 'forum_search' %}" method="POST" enctype="multipart/form-data">
+						 	{%csrf_token%}
 							<div class="card-body">
 								<div class="input-group">
 									<input type="text" name="search" class="form-control br-tl-3  br-bl-3" placeholder="Search">
 									<div class="input-group-append ">
-										<button type="button" class="btn btn-secondary br-tr-3  br-br-3">
+										
+										<button type="submit" class="btn btn-secondary br-tr-3  br-br-3">
 											Search
-										</button>
+										</button></a>
 									</div>
 								</div>
 							</div>
+						</form>
 						</div>
 						<div class="card">
 							<div class="card-body p-0">

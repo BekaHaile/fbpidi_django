@@ -5,7 +5,7 @@ from .models import  (PollsQuestion, Choices, PollsResult,
                       JobCategoty,Vacancy,JobApplication,
                       Faqs,Blog,BlogComment,
                       ForumQuestion,ForumComments,CommentReplay,
-                      ForumComments,
+                      ForumComments,Announcement
                       )
 
 from django.forms.widgets import SelectDateWidget
@@ -225,5 +225,26 @@ class CommentReplayForm(forms.ModelForm):
         widgets = {
             'content':forms.Textarea(attrs={'class':'form-control','placeholder':'Your Comment on the Forum'}),
         }
+
+class AnnouncementForm(forms.ModelForm):
+    class Meta:
+        model = Announcement
+        fields = ('title','title_am','containt','containt_am')
+        widgets = {
+        'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Announcement in English'}),
+        'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Announcement in Amharic'}),
+        'containt':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in English'}),
+        'containt_am':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in Amharic'}),
+
+        }
+
+
+
+
+
+
+
+
+
 
 

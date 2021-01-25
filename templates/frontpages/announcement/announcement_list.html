@@ -23,20 +23,16 @@
 					<!--Left Side Content-->
 					<div class="col-xl-4 col-lg-4 col-md-12">
 						<div class="card">
-						 <form action="{%url 'forum_search' %}" method="POST" enctype="multipart/form-data">
-						 	{%csrf_token%}
 							<div class="card-body">
 								<div class="input-group">
-									<input type="text" name="search" class="form-control br-tl-3  br-bl-3" placeholder="Search">
+									<input type="text" class="form-control br-tl-3  br-bl-3" placeholder="Search">
 									<div class="input-group-append ">
-										
-										<button type="submit" class="btn btn-secondary br-tr-3  br-br-3">
+										<button type="button" class="btn btn-secondary br-tr-3  br-br-3">
 											Search
-										</button></a>
+										</button>
 									</div>
 								</div>
 							</div>
-						</form>
 						</div>
 						<div class="card">
 							<div class="card-body p-0">
@@ -96,45 +92,44 @@
 
                     
 
-					
 
 					<div class="col-xl-8 col-lg-8 col-md-12">
 						<!--Add Lists-->
 						
-
-						<div class="card">
-							<div class="card-body">
-								<div class="col-xl-11 col-lg-12 col-md-12">
-								<a href="{%url 'forum_form' %}"><button style="padding-left: 40%; padding-right: 40%;" type="submit" 
-								href="{%url 'forum_form' %}" 
-									class="btn btn-primary rounded-round">
-									<h5>Start New Forum Question </h5>
-								</button>
-								</a>
-							</div>
-							</div>
-						</div>
 						<div class="row">
-							
 							<div class="col-xl-12 col-lg-12 col-md-12">
-								{%for forum in forums%}
 								<div class="card">
-									<div class="card-body">
-										<div class="item7-card-desc d-flex mb-2">
-											<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{forum.timestamp}}</a>
-											<div class="ml-auto">
-												<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>{{forum.countComment}}</a>
+									<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+									<div class="header-text mb-0">
+										<div class="container">
+											<div class="text-center text-white">
+												<h1 class="">Forum List</h1>
+												
 											</div>
 										</div>
-
-
-										<h4 class="font-weight-semibold">{{forum.description|safe|truncatewords:35}}</h4>
-
-										<a href="{%url 'forum_detail' id=forum.id %}" class="btn btn-secondary btn-sm">Read More</a>
 									</div>
 								</div>
-								{%endfor%}
-                            </div>
+								</div>
+							</div>
+
+							<div class="col-xl-12 col-lg-12 col-md-12">
+								<div class="card">
+									<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+										<div class="card-header">
+											
+										</div>
+										<div class="card-body">
+											<h1 class="">Forum List</h1>
+										</div>
+												
+												
+											</div>
+										</div>
+									</div>
+								</div>
+								</div>
+							</div>
+                            
 
                             
 						</div>
