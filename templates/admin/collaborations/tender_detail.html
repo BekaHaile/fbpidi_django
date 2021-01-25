@@ -14,130 +14,146 @@
 	<!-- /theme JS files -->
  
 {% endblock %}
-{%block pagename%}Poll Detail{%endblock%}
+{%block pagename%}Tenders List{%endblock%}
 {%block content%}
 
  <!--  Only super users can watch this -->
 
  {% if perms.collaborations.view_pollsquestion %}
-<!--Breadcrumb-->
-        <!-- Note -->
+
         
-		<section>
-			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
-				<div class="header-text mb-0">
-					<div class="container">
-						<div class="text-center " style="color: lightskyblue;">
-							<h1 class="">Poll-Details</h1>
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="/admin/">Home</a></li>
-								<li class="breadcrumb-item"><a href="/admin/polls/">Polls</a></li>
-								<li class="breadcrumb-item active " aria-current="page">Poll-Details</li>
-							</ol>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-        <!--/Breadcrumb-->
         
-        <div class="card-header header-elements-inline">
-						
-            <div class="header-elements">
-                {% if poll.count_votes == 0  %}
-                    {% if perms.collaborations.edit_polls or poll.user == user %}
-                    <div class="list-icons">
-                        <a href="{%url 'admin:edit_poll' id=poll.id %}"   style = "margin-left: 40px; " class = "btn bg-teal btn-sm rounded-round"><i class="icon-pencil mr-2"></i>Edit this Poll</a>
-                    </div>
-                    {%endif%}
-                {% endif %}
-                
-            </div>
-        </div>
 
 		<!--Poll Detail-->
 		<section class="sptb">
-            {% if poll %}
+            {% if tender %}
 			<div class="container">
 				<div class="row">
 					<div class="d-block mx-auto col-lg-12 col-md-12">
 						<div class="card">
 
+                           
 							<div class="card-body">
-								<a href="#" class="text-body"><h2 class="font-weight-semibold text-capitalize">Poll title: {{poll.title}}</h2></a>
-																<div class="item7-card-desc d-flex mb-2 mt-3">
-
-                                                                    
-									<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>poll created at : {{poll.timestamp}}</a>
-                                    <a href="#"><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i>By {{poll.user}}</a>
-                                    <a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>Total votes {{poll.count_votes}}</a>
-                                    
+                                <div class = "text-center">
+                                    <h3><b>Tender Detail</b></h3>
                                 </div>
-                                                                 
-                                <h2>Poll description</h2>
-                                <h5>{{poll.description|safe}}</h5>
+    
+                                <div class= "text-right" class="card-header header-elements-inline">					
+                                    <div class="header-elements">
+                                        {% if perms.collaborations.change_tender and tender.get_company.company_name == user.get_company_name  %}
+                                            
+                                            <div class="list-icons">
+                                                <a href="{%url 'admin:edit_tender' id=tender.id %}"   style = "margin-left: 40px; " class = "btn bg-teal btn-sm rounded-round"><i class="icon-pencil mr-2"></i>Edit this Tender</a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+								<a href="#" class="text-body"><h2 class="font-weight-semibold text-capitalize">Title: {{tender.title}}</h2></a>
+																<div class="item7-card-desc d-flex mb-2 mt-3">
+                 
+									<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>Created at : {{tender.timestamp}}</a>
+                                    <a href="#"><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i>By {{tender.get_company.company_name}}</a>
+                                    <a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>Total applications {{tender.get_applications.count}}</a>                                    
+                                </div>
+                                <div class="row" >
+                                    <div class="col-md-6">
+                                        <p style="display: inline; margin-right: 10px;"><i class="fa fa-calendar-o text-muted mr-2"></i>Start date :<a href="#"  style="display: inline;" >{{tender.start_date}}</a></p> 
+                                        <p style="display: inline; "><i class="fa fa-calendar-o text-muted mr-2"></i>End date :<a href="#"  style="display: inline;" >{{tender.end_date}}</a></p> 
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <a href="#" style="display: inline;"><i class="fa fa-calendar-o text-muted mr-2"></i>Status : 
+                                            {% if tender.status == 'Open' %}
+                                            <div class = "btn btn-primary" style="background-color: #66bb6a;; color:white; width: fit-content; padding: 5px; display: inline; " >Open</div>
+                                            {%elif tender.status == 'Pending' %}
+                                            <div style="background-color: yellow; color:#ef5350; width: fit-content; padding: 5px;  display: inline;" >Pending</div>
+                                            {%elif tender.status == 'Closed' %}
+                                            <div style="background-color: #ef5350; color:white; width: fit-content; padding: 5px; display: inline;" >Closed</div>
+                                            {%else%} 
+                                            <div style="background-color: blue; color:white; width: fit-content; padding: 5px;  display: inline;" >Suspended</div>
+                                            {%endif%}
+                                        </a>
+                                        <a href="#" style="padding-left: 10px;"><i class="fa fa-calendar-o text-muted mr-2"></i>Type : {{tender.tender_type}}</a>
+                                        {% if tender.tender_type == "Paid"%}
+                                        <a href="#" style="padding-left: 10px;"><i class="fa fa-calendar-o text-muted mr-2"></i>Document price : {{tender.document_price}}</a>
+                                        {%endif%}
+                                    
+                                    </div>
+                                </div>                                 
 							</div>
 						</div>
 
-                        <!--Choices-->
-                            <div class="card">
-                                <div class="card-header">
-
-                                    {% if poll.choices.all.count > 1 %}
-                                        <h3 class="card-title">{{poll.choices.all.count}} Choices</h3>
-                                        
-                                    {% else %}
-                                        <h3 class="card-title">{{poll.choices.all.count}} Choice</h3>
-                                    {% endif %}
-                                    <!-- <h4 style="color: lightsalmon;"> Super users cannot Vote.</h4> -->
-                                </div>
-
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Related Bank Accounts</h2>
+                            </div>
+                            <div class="card-body">    
+                                    <div class="media-body">
+                                        {%for bank_account in tender.get_bank_accounts%}
+                                            <p><b>{{bank_account.get_bank_name}}'s Account </b><br>{{bank_account.account_number}}</p>
+                                        {%endfor%}
+                                    </div>
                                 
-                                
-                                    {% for choice in poll.choices.all %}
-                                        <div class="card-body">
-                                            
-                                            
-                                            <div class="d-sm-flex p-5 mt-4 border sub-review-section">
-                                                
-                                                <div class="media-body">
-                                                    <h5 class="mt-0 mb-1 font-weight-semibold"> {{ choice.choice_name}}
-                                                       
-                                                    </h5>
-                                                   
-                                                        <span class="fs-14 ml-2"><h6 style="display: inline;"> {{choice.count_votes}} Vote from a total of {{poll.count_votes}} poll votes</h6><i class="fa fa-star " style="color: yellow;"></i></span>
-                                                   <br>
-                                                    <p class="text-muted"><i class="fa fa-calendar"></i> {{choice.timestamp}} </p>
-                                                    <br><br>
-                                                    <h4>Poll Description</h4>
-                                                    <p class="font-13  mb-2 mt-2">{{choice.description|safe}}</p>
-                                                    
-                                                    <!-- if the user is the creator or has voted hide the vote button -->
-
-                                                    {% if user.is_superuser == False and not user == poll.user and has_voted == False %}
-                                                        <div class = "choice-btn-group" class="badge badge-secondary">
-                                                            <span class="badge badge-secondary">
-                                                                <label for = "{{choice.pk}}"><span style="font-size: medium;">Vote</span></label>
-                                                                <input id = "{{choice.pk}}" type="radio" name="selected_choice" value="{{choice.pk}}" /> 
-                                                                
-                                                            </span>
-                                                        </div>
-                                    
-                                                    {% endif %}
-                                                    
-                                                    
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-
-     
+                            </div>           
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Tender Application Information</h2>
                             </div>
 
-                            <!--/Choices-->
+                            <div class="card-body">    
+                                <table class="table datatable-show-all">
+                                    <thead>
+                                        <tr>
+                                            <th>Applicant Name</th>
+                                            <th>Company Name</th>
+                                            <th>Phone</th>
+                                            <th>Email</th>
+                                            <th>Applied At</th>
+                                           
+                                        </tr>
+                                    </thead>
+                                    {%if tender.get_applications %}
+                                    <tbody>
+                                        {%for application in tender.get_applications %}
+                                        <tr>
+                                           
+                                            <td>{{application.applicant.first_name}} {{application.applicant.last_name}}</td>
+                                            <td>{{application.applicant.company_name}}</td>
+                                            <td>{{application.applicant.phone_number}}</td>	
+            
+                                            <td>{{application.applicant.email}}</td>
+                                            <td><a href="#">{{application.applicant.timestamp}}</a></td>
+                                            
+                                            
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                    {%endif%}
+                                </table>
+                                
+                            </div>           
+                        </div>
                         
-						
+                        
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Description</h2>
+                            </div>
+                            <div class="card-body">    
+                                    <div class="media-body">
+                                        
+                                        <p class="font-13  mb-2 mt-2">{{tender.description|safe}}</p>
+                                        
+                                    </div>
+                                
+                            </div>           
+                        </div>
+
 					</div>
                 </div>
                 
@@ -153,7 +169,7 @@
             <!-- Marketing campaigns -->
             <div class="card">
                 <div class="card-header header-elements-inline">
-                    <h5 class="card-title">Statics of Choices</h5>
+                    <h5 class="card-title">Statistics of Applications</h5>
                     <div class="header-elements">
                         <div class="list-icons">
                             <a class="list-icons-item" data-action="collapse"></a>

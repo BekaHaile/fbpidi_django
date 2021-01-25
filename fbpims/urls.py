@@ -34,6 +34,7 @@ urlpatterns = [
     path("blog-list-right/",BlogList.as_view(),name="blog_grid_right"),
     re_path(r'^i18n/', include('django.conf.urls.i18n')),
     path("collaborations/", include('collaborations.urls')),
+
 ]  
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

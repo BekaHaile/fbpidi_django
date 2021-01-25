@@ -24,13 +24,12 @@ from product.views import (CreateCategories,CategoryDetail, AdminProductListView
 from company.views import (
     CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,
     CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
-    CreateFbpidiCompanyProfile,ViewFbpidiCompany
+    CreateFbpidiCompanyProfile,ViewFbpidiCompany, CreateCompanyBankAccount
 )
 
 
 
-from collaborations.views import TenderList, CreateTender, TenderDetail, EditTender, AddTenderBankAccount, DeleteTender
-
+from collaborations.views import TenderList, CreateTender, TenderDetail, EditTender,  DeleteTender, ManageBankAccount
 class CustomAdminSite(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
@@ -84,7 +83,7 @@ class CustomAdminSite(admin.AdminSite):
             path("product_detail/<option>/<id>/",wrap(ProductDetailView.as_view()),name="product_detail"),
             path("add_more_images/",wrap(AddProductImage.as_view()),name="add_product_image"),
             path("create_price/",wrap(CreatePrice.as_view()),name="create_price"),
-        
+            
             # paths for polls, 
             path("polls/", wrap(Polls.as_view()), name = "admin_polls"),
             path("create_poll/", wrap(CreatePoll.as_view()), name = "create_poll"),
@@ -98,10 +97,11 @@ class CustomAdminSite(admin.AdminSite):
             # paths for tenders
             path("tenders/", TenderList.as_view(), name = "tenders"),
             path("create_tender/", CreateTender.as_view(), name = "create_tender"),
-            path("tender_detail/<id>/", wrap(DetailPoll.as_view()), name = "tender_detail"),
+            path("tender_detail/<id>/", wrap(TenderDetail.as_view()), name = "tender_detail"),
             path("edit_tender/<id>/", EditTender.as_view(), name = "edit_tender"),
             path("delete_tender/<id>/", DeleteTender.as_view(), name = "delete_tender"),
-            path("add_tenderbankaccount/<id>/",wrap(DeletePoll.as_view()), name = "add_tenderbankaccount"),
+            path("manage_bank_account/<option>/<id>/",ManageBankAccount.as_view(), name = "manage_bank_account"),
+            
             
 
             # path("",include("company.urls")),
@@ -120,6 +120,8 @@ class CustomAdminSite(admin.AdminSite):
             path("create_fbpidi_company/",wrap(CreateFbpidiCompanyProfile.as_view()),name="create_fbpidi_company"),
             path("view_fbpidi_company/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
             path("edit_fbpidi_profile/<id>/",wrap(ViewFbpidiCompany.as_view()),name="edit_fbpidi_profile"),
+            path("create_company_bank_account/<company_id>/", CreateCompanyBankAccount.as_view(), name = "create_company_bank_account"),
+            
         ]
         return my_urls + urls
 

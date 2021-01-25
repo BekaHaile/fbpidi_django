@@ -6,11 +6,11 @@ from django.views import View
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from company.models import Company,CompanySolution,CompanyEvent,CompanyStaff
+from company.models import Company,CompanySolution,CompanyEvent,CompanyStaff, Bank, CompanyBankAccount
 from accounts.models import CompanyAdmin
 from product.models import Order,OrderProduct
 
-from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm,FbpidiCompanyForm
+from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm,FbpidiCompanyForm, CompanyBankAccountForm
 
 class CreateCompanyProfile(LoginRequiredMixin,View):
     def get(self, *args,**kwargs):
@@ -83,9 +83,13 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
             solutions = CompanySolution.objects.filter(company=company)
             events = CompanyEvent.objects.filter(company=company)
             event_form = CompanyEventForm
-            order_product = OrderProduct.objects.filter(to_company=company)
+            banks = Bank.objects.all()
+            company_bank_accounts = CompanyBankAccount.objects.filter(company=company)
+            account_form = CompanyBankAccountForm()
+
             context = {'company':company,'staff_users':staff_users,'solution_form':sol_form,
-                        'solutions':solutions,'event_form':event_form,'events':events,'orders':order_product}
+                        'solutions':solutions,'event_form':event_form,'events':events, 
+                        'banks':banks, 'company_bank_accounts': company_bank_accounts, 'account_form':account_form}
             return render(self.request,'admin/company/company_profile_detail.html',context)
         except ObjectDoesNotExist:
             return redirect("admin:create_company_profile")
@@ -278,4 +282,19 @@ class ViewFbpidiCompany(LoginRequiredMixin,View):
             messages.warning(self.request,"Company Does Not Exist")
             return redirect("admin:view_fbpidi_company")
 
+class CreateCompanyBankAccount(LoginRequiredMixin, View):
+        def post(self, *ags, **kwargs):
+            print ("Creating company bank Account")
+            form  = CompanyBankAccountForm(self.request.POST)
+
+            if form.is_valid:
+               
+                account = form.save(commit=False)
+                account.company = Company.objects.get(id = self.kwargs['company_id'])
+                account.save()
+                messages.success(self.request, "New Bank Account Successfully Added!")
+                return redirect("admin:view_company_profile")
+
+            messages.warning(self.request, "Error While Adding New Bank Account!")            
+            return redirect("admin:view_company_profile")
 

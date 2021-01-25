@@ -3,14 +3,41 @@
 {% block extrastyle %}
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/anytime.min.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.date.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.time.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/legacy.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/notifications/jgrowl.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/picker_date.js"></script>
+	
+
+<style>
+	.reveal-if-active {
+  opacity: 0;
+  max-height: 0;
+  overflow:hidden;
+  
+}
+input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
+  opacity: 1;
+  max-height: 100px; /* little bit of a magic number :( */
+  overflow: visible;
+
+  
+}
+</style>
 {% endblock %}
 {%block pagename%}Tenders Form{%endblock%}
 {%block content%}
 
-
 <!-- Content area -->
 <div class="content">
 
+			
 	{% if edit and perms.collaborations.change_tender %}
 	    
 			<div class="card">
@@ -79,10 +106,10 @@
 											
 										
 										<label class="col-form-label col-lg-8">Change tender document</label>
-										<input type = "file" name = "document"/>
+										<input type = "file" name = "document" value="{{tender.document.url}}"/>
 											
 											<span class="form-text text-muted">Accepted formats:pdf, Docx, png, gif</span>
-											<a href="{{tender.document.url}}" target="blank"class="btn btn-primary rounded-round">Show current document</a>
+											<a href="{{tender.document.url}}" target="blank"class=" btn btn-primary rounded-round">Show current document</a>
 											
 										
 									</div>
@@ -93,27 +120,31 @@
 							<div class = "row">
 								
 								
+																	
 								<div class="col-md-4">
-									<div class="form-group ">
-										<label class="col-form-label ">Current start date {{tender.start_date}}</label>
-										<input input type="datetime" name = "start_date" placeholder="dd/mm/yyyy hh:mm" value=""/> 
-										<span class="form-text text-muted">New start date</span>
+									<div class="form-group row">
+										<label class="col-form-label col-lg-3">Start Date</label>
+										<div class="col-lg-9">
+											<span class="input-group-prepend">
+															<span class="input-group-text"><i class="icon-calendar22"></i></span>
+														</span>
+												<input type="text" name="start_date" class="form-control daterange-single" value="{{start_date}}">
+										</div>
 											
 									</div>
 								</div>
 								<div class="col-md-4">
-									<div class="form-group ">
-										<label class="col-form-label ">Current end date {{tender.end_date}}</label>
-										<input input type="datetime" name = "end_date" placeholder="dd/mm/yyyy hh:mm" value=""/> 
-										<span class="form-text text-muted">New end date</span>
+									<div class="form-group row">
+										<label class="col-form-label col-lg-3">End Date </label>
+										<div class="col-lg-9">
+											<span class="input-group-prepend">
+															<span class="input-group-text"><i class="icon-calendar22"></i></span>
+														</span>
+												<input type="text" name ="end_date" class="form-control daterange-single" value="{{end_date}}">
+										</div>
 											
 									</div>
 								</div>
-
-
-
-								
-
 
 								<div class="col-md-4">
 									<div class="form-group ">
@@ -139,35 +170,22 @@
 					
 												</select>
 											</div>
-									
-										
 										</div>
-		
-		
-											
 									</div>
 								</div>
-
-							</div>
-
-
-							
-							
+							</div>		
 						</fieldset>
-
 						<div class="text-right">
-							<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+							<button style="padding-left: 2%; padding-right: 2%;" type="submit"
 								class="btn btn-primary rounded-round col-lg-2" onclick="return confirm ('Are you sure you want to Edit this tender?')">Edit Tender </button>
 						</div>
-
-
 					</form>
 
 					<br>
 					<form action="{% url 'admin:tenders' %}" method="GET" enctype="multipart/form-data" >
 						{%csrf_token%}
 						<div class="text-right">
-							<button style="padding-left: 10%; padding-right: 10%; background-color: grey;" type="submit"
+							<button style="padding-left: 2%; padding-right: 2%; background-color: grey;" type="submit"
 								class="btn btn-primary rounded-round col-lg-2">Cancel </button>
 						</div>
 					</form>
@@ -175,62 +193,100 @@
 					<br>
 					<br><br><br>
 
-					{% if tender.bankaccount.set.all.count > 0 %}
-						<h3 class = "text-center"> Select the bank account you want to Relate from the bank accounts of this tender.</h3>
 
-						<form action="{%url 'admin:add_tenderbankaccount'  id=tender.id%}" method="GET" enctype="multipart/form-data">
-							
-							<!-- <fieldset>
-								
-								<div class="form-group row" >
-									<label class="col-form-label col-lg-3">Edit tender bank accounts </label>
+					<h3 class= "text-center">Manage Bank Accounts</h3>
+					<div class="row">
+
+
+						<div class="col-md-6">
+							<div class="form-group ">
+								<form action="{%url 'admin:manage_bank_account'  option='remove' id=tender.id %}" method="POST" enctype="multipart/form-data">
+									{%csrf_token%}
+									{% if tender.get_bank_accounts.count > 0 %}
+											<label class="col-form-label " style="margin-left: 10px;">Remove a bank account</label>
+											<div class="form-group ">
 												<div style="width: 100%;">
-												<div class="col-lg-9" style="width: 95%; display: inline-block;">
+													<div class="col-lg-9" style="width: 95%; display: inline-block;">			
+														<select name="remove_bank_account"  class="form-control form-control-uniform" data-fouc>
+															{% for bank_account in tender.get_bank_accounts %}
+																<option  value="{{bank_account.id}}">{{bank_account.bank.bank_name}}'s account {{bank_account.account_number}}</option>
+																<div class="list-icons" style="width: 3%; display: inline-block;" >
+																	<div class="dropdown">
+																		<a href="#" class="list-icons-item" data-toggle="dropdown">
+																		</a>									
+																	</div>
+																</div>
+															{%endfor%}
+														</select>
+													</div>
+												</div>
+											</div>
+											{% if tender.get_bank_accounts.count != 1 %}
+												<div class="text-center">
+													<button style="padding-left: 2%; padding-right: 2%; background-color: #ef5350;" type="submit"
+														class="btn btn-primary col-lg-6" onclick="return confirm ('Are you sure you want to Remove this bank account from this tender?')">Remove bank Account  </button>
+												</div>
+											{% else %}
+												<div class="text-center">
+													<button style="padding-left: 2%; padding-right: 2%; background-color: #ef5350;" 
+														class="btn btn-primary col-lg-6" disabled >Remove bank Account  </button>
+												</div>
+											{%endif%}
 
-													<select required name="choice" class="form-control form-control-uniform" data-fouc>
-														
-														
-														{%for choice in tender.choices.all%}
-															<option  value="{{choice.id}}">{{choice.choice_name}}</option>
+									{% else %}
+									<h3>No Related Bank Account For this tender</h3>
+									{% endif %}
+								</form>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group ">
+								<form action="{%url 'admin:manage_bank_account' option='relate'  id=tender.id %}" method="POST" enctype="multipart/form-data">
+									{%csrf_token%}
+									{% if tender.get_unrelated_bank_accounts %}
+										<label class="col-form-label col-lg-8">Relate new bank account</label>
+										<div class="form-group ">
+											<div style="width: 100%;">
+												<div class="col-lg-9" style="width: 95%; display: inline-block;">							
+													<select name="relate_bank_account"  class="form-control form-control-uniform" data-fouc>
+														{% for bank_account in tender.get_unrelated_bank_accounts %}
+															<!-- if the bank account was not previously related to the tender -->
+															<option  value="{{bank_account.id}}">{{bank_account.bank.bank_name}}'s account ({{bank_account.account_number}})</option>
 															<div class="list-icons" style="width: 3%; display: inline-block;" >
 																<div class="dropdown">
 																	<a href="#" class="list-icons-item" data-toggle="dropdown">
-																		<i class="icon-menu9"></i>
 																	</a>
-										
-																	
 																</div>
 															</div>
 														{%endfor%}
-						
 													</select>
 												</div>
-											
-												
-												</div>
-											
-								</div>
-							</fieldset> -->
+											</div>
+										</div>
 
-							<div class="text-right">
-								<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-									class="btn btn-primary rounded-round">Unrelate this account </button>
+										<div class="text-center">
+											<button style="padding-left: 2%; padding-right: 2%;  background-color: #66bb6a;" type="submit"
+												class="btn btn-primary col-lg-6" onclick="return confirm ('Are you sure you want to Relate this bank account to this tender?')">Relate this bank Account  </button>
+										</div>
+									{%else%}
+									{{tender.get_unrelated_bank_accounts}}
+										<div class="text-center">
+											<button style="padding-left: 2%; padding-right: 2%;  background-color: #66bb6a;" 
+												class="btn btn-primary col-lg-6" disabled onclick="return confirm ('Are you sure you want to Relate this bank account to this tender?')">Relate this bank Account  </button>
+										</div>
+									{% endif %}
+
+								</form>
+								
 							</div>
-
-							
-						</form>
-					{%else%}
-					<div class="text-right">
-						<h3 class = "text-center"> No bank account Remove</h3>
-						<div class="list-icons">
-							<a href="{%url 'admin:add_tenderbankaccount' id=tender.id %}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Relate new bank account</a>
-						</div>							
+						</div>
 					</div>
-					{%endif%}
+					
 
 
 						
 				</div>
+
 			</div>
 
 
@@ -283,16 +339,36 @@
 
 							<div class="row">
 								<div class="col-md-6">
+									
 									<div class="form-group ">
-										<label class="col-form-label ">{{form.tender_type.label|title}}</label>
-											{{form.tender_type}}
-											<span class="form-text text-muted">If you set the type to be free, the document will be downloaded freely</span>
+										
+											<label class="col-form-label ">{{form.tender_type.label|title}}</label>
 											
+											<span class="form-text text-muted">If you set the type to be free, the document will be downloaded freely</span>
+											<input type="radio" name="tender_type" id="create_free" value="Free">
+											<label for="create_free">Free</label>
+											<br>
+											<input type="radio" name="tender_type" id="create_paid" value="Paid">
+											<label for="create_paid">Paid</label>
+											<br>
+
+											<div class="reveal-if-active">
+												<label style="margin-right: 10px;">Document Price:</label>
+												<input type="number" required name = "document_price" placeholder="document price" value="0"/>
+											</div>
+									
+								
 									</div>
+									
+
 								</div>
+								
+								
+
+							
 								<div class="col-md-6">
 									<div class="form-group ">
-										<label class="col-form-label col-lg-8">Upload your tender document</label>
+										<label class="col-form-label ">Upload your tender document</label>
 										<input required type = "file" name = "document"  >
 											<span class="form-text text-muted">Accepted formats:pdf, Docx, png, gif</span>
 											<!-- <span class="form-text text-warning">{{form.company_logo.errors}}</span> -->
@@ -301,23 +377,28 @@
 							</div>
 							
 							<div class = "row">
-								
-								
 								<div class="col-md-4">
-									<div class="form-group ">
-										<label class="col-form-label ">{{form.start_date.label|title}}</label>
-											{{form.start_date}}
+									<div class="form-group row">
+										<div class="col-lg-9">
+											<span class="input-group-prepend" >
+															<span class="input-group-text"><i class="icon-calendar22">	Start Date *</i></span>
+														</span>
+												<input type="text" name="start_date" class="form-control daterange-single" value="">
+										</div>
 											
 									</div>
 								</div>
 								<div class="col-md-4">
-									<div class="form-group ">
-										<label class="col-form-label ">{{form.end_date.label|title}}</label>
-											{{form.end_date}}
+									<div class="form-group row">
+										<div class="col-lg-9">
+											<span class="input-group-prepend" >
+															<span class="input-group-text"><i class="icon-calendar22">	End Date *</i></span>
+														</span>
+												<input type="text" name ="end_date" class="form-control daterange-single" value="">
+										</div>
 											
 									</div>
 								</div>
-
 
 
 
@@ -325,32 +406,19 @@
 									<div class="form-group ">
 										<div style="width: 100%;">
 											<div class="col-lg-9" style="width: 95%; display: inline-block;">
-												
+												<label class="col-form-label col-lg-8">Status</label>
 												<select required name="status"  class="form-control form-control-uniform" data-fouc>
-
 													{% for status in form.STATUS_CHOICE %}
-
 														<option  value="{{status.0}}">{{status.0 }}</option>
 														<div class="list-icons" style="width: 3%; display: inline-block;" >
 															<div class="dropdown">
-																<a href="#" class="list-icons-item" data-toggle="dropdown">
-																	
-																</a>
-									
-																
+																<a href="#" class="list-icons-item" data-toggle="dropdown">	</a>
 															</div>
 														</div>
-
 													{%endfor%}
-					
 												</select>
 											</div>
-									
-										
 										</div>
-		
-		
-											
 									</div>
 								</div>
 
@@ -369,7 +437,7 @@
 								<div class="form-group row" >
 									<div style="width: 100%;">
 										<div class="col-lg-9" style="width: 95%; display: inline-block;">
-
+											<label>Choose your bank account</label>
 											<select required name="company_bank_account" class="form-control form-control-uniform" data-fouc>
 												
 												<label class="col-form-label ">Choose your main bank account for this tender.</label>

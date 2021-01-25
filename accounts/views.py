@@ -76,7 +76,6 @@ class CompleteLoginView(LoginRequiredMixin,View):
             return redirect("index")
 
 
-
 def activate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
