@@ -137,7 +137,7 @@ class CreatePoll(LoginRequiredMixin,View):
                 messages.success(self.request,"Poll was Successfully Created!")
                 return redirect("admin:admin_polls")
             else:
-                messages.error(self.request, "Error! Poll was not Created!" )
+                messages.warning(self.request, "Error! Poll was not Created!" )
                 return redirect("admin:admin_polls")
                 
         except Exception as e:
@@ -156,11 +156,11 @@ class DetailPoll(LoginRequiredMixin,View):
 
             except Exception as e:
                 print("eeeeeeeeeeeeeeeee", str(e))
-                messages.error(self.request, "Poll not found")
+                messages.warning(self.request, "Poll not found")
                 return redirect("admin:admin_polls") 
 
         else:
-            messages.error(self.request, "Nothing selected!")
+            messages.warning(self.request, "Nothing selected!")
             return redirect("admin:admin_polls")
 
 class AddChoice(LoginRequiredMixin,View):
@@ -192,7 +192,7 @@ class AddChoice(LoginRequiredMixin,View):
             return redirect("admin:admin_polls")
 
         else:
-            messages.error(self.request, "Error! Choice Creation Failed! form case! " )
+            messages.warning(self.request, "Error! Choice Creation Failed! form case! " )
             return redirect("admin:admin_polls")
 
 
@@ -204,13 +204,13 @@ class EditPoll(LoginRequiredMixin,View):
             poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
             # little verification (this verification is done at the front end, this is just for safety, like if user uses url)            
             if poll.count_votes() != 0:
-                messages.error(self.request, "Couldn't Edit poll, because poll Edit has started!")
+                messages.warning(self.request, "Couldn't Edit poll, because poll Edit has started!")
                 return redirect('admin:admin_polls')
             context = {'pollform':pollform, 'choiceform':choiceform, 'poll':poll}
             context['edit'] = True
         except Exception as e:          
             print(str(e))
-            messages.error(self.request, "Error, Couldn't Edit poll!")
+            messages.warning(self.request, "Error, Couldn't Edit poll!")
             return redirect('admin:admin_polls')
         return render(self.request,'admin/pages/create_poll.html',context)
 
@@ -220,7 +220,7 @@ class EditPoll(LoginRequiredMixin,View):
             poll = PollsQuestion.objects.get(id = self.kwargs['id'])
         except Exception as e:
                 print("error at Editpoll post", str(e))
-                messages.error(self.request, "Error! Poll was not Edited!" )
+                messages.warning(self.request, "Error! Poll was not Edited!" )
                 return redirect("admin:admin_polls")
         poll.title=self.request.POST['title']
         poll.title_am=self.request.POST['title_am']
@@ -242,7 +242,7 @@ class EditChoice(LoginRequiredMixin,View):
         except Exception as e:
     
             print(str(e))
-            messages.error(self.request, "Error, Couldn't Edit Choice!")
+            messages.warning(self.request, "Error, Couldn't Edit Choice!")
             return redirect('admin:admin_polls')
     
         return render(self.request,'admin/pages/add_choice.html',context)
@@ -256,7 +256,7 @@ class EditChoice(LoginRequiredMixin,View):
 
         except Exception as e:
                 print("error at Editpoll post", str(e))
-                messages.error(self.request, "Error! Choice was not Edited!" )
+                messages.warning(self.request, "Error! Choice was not Edited!" )
                 return redirect("admin:admin_polls")
 
         
@@ -279,12 +279,12 @@ class DeletePoll(LoginRequiredMixin,View):
                 messages.success(self.request,message)
                 return redirect("admin:admin_polls")
             else:
-                messages.error(self.request, "NO such poll was found!")
+                messages.warning(self.request, "NO such poll was found!")
                 return redirect("admin:admin_polls")
 
 
         else:
-            messages.error(self.request, "Nothing selected!")
+            messages.warning(self.request, "Nothing selected!")
             return redirect("admin:admin_polls")
 
 class DeleteChoice(LoginRequiredMixin,View):
@@ -298,10 +298,10 @@ class DeleteChoice(LoginRequiredMixin,View):
                 messages.success(self.request, message)
                 return redirect("admin:admin_polls")
             else:
-                messages.error(self.request, "NO such Choice was found!")
+                messages.warning(self.request, "NO such Choice was found!")
                 return redirect("admin:admin_polls")
 
 
         else:
-            messages.error(self.request, "Nothing selected!")
+            messages.warning(self.request, "Nothing selected!")
             return redirect("admin:admin_polls")

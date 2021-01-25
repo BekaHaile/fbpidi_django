@@ -42,7 +42,7 @@
 							{%endif%}
 						</div>
 					</div>
-					{%if polls %}
+					
 
 					<table class="table datatable-show-all">
 						<thead>
@@ -57,6 +57,7 @@
 							</tr>
 						</thead>
 						<tbody>
+							{%if polls %}
 							{%for poll in polls%}
 							<tr>
 								<td>{{poll.title}}</td>

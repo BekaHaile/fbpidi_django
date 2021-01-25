@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import Permission, Group
 
 from django.conf import settings
-from company.models import Company
+from company.models import Company,CompanyBankAccount
 
 
 class PollsQuestion(models.Model):
@@ -42,8 +42,7 @@ class Choices (models.Model):
 
     def count_votes(self):
         return self.pollsresult_set.count()
-    
-    
+       
 class PollsResult(models.Model):    
     poll = models.ForeignKey(PollsQuestion, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -96,20 +95,21 @@ class Faqs(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
  
 class Tender(models.Model):
-    TENDER_STATUS = ['Open', 'Panding', 'Closed', 'Suspended']
+    TENDER_STATUS = ['Open', 'Pending', 'Closed', 'Suspended']
     user = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.CASCADE )
     title = models.CharField( max_length=200, verbose_name="Tender title (English)" )
     title_am = models.CharField( max_length=200, verbose_name="Tender title(Amharic)" )
     description = models.TextField( verbose_name="Tender Description(English)" )
     description_am = models.TextField( verbose_name="Tender Description(Amharic)" )
+    document = models.FileField(upload_to = "TenderDocuments/", max_length=254, verbose_name="Tender document",help_text="pdf, Max size 3MB", blank=True)
     tender_type = models.CharField(max_length=4, verbose_name="Tender type", choices=[ ('Free', 'Free'), ('Paid', 'Paid')], default="Free" )
+    document_price = models.FloatField(verbose_name="documnet price (for paid tenders)", max_length = 6, default=0)
     status = models.CharField(max_length=10, verbose_name="Tender status", choices=[
                                                                                         ('Pending', 'Pending'),('Open', 'Open' ), 
                                                                                         ('Closed', 'Closed'), ('Suspended', 'Suspended')
                                                                                     ])
     #if we r using the company logo there is no need to save it twice, we can get it from user.company.get_image()   
     #image = models.ImageField(verbose_name="Company image",help_text="png,jpg,gif files, Max size 10MB") 
-    document = models.FileField(upload_to = "TenderDocuments/", max_length=254, verbose_name="Tender document",help_text="pdf, Max size 3MB", blank=True)
     bank_account = models.ManyToManyField('company.CompanyBankAccount', related_name="accounts")
     start_date = models.DateTimeField(verbose_name="Tender start date")
     end_date = models.DateTimeField(verbose_name="Tender end date")
@@ -119,8 +119,45 @@ class Tender(models.Model):
         return TenderApplications.objects.filter( tender = self )
     
     def get_company(self):
+       
         return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None
     
+    def get_bank_accounts(self):
+        return self.bank_account.all()
+    
+    def get_unrelated_bank_accounts(self):
+        company = self.get_company()
+        if company:
+            company_bank_accounts = CompanyBankAccount.objects.filter(company=company)
+            related_bank_accounts = self.get_bank_accounts()
+            unrelated_bank_accounts = []
+            for account in company_bank_accounts:
+                if not account in related_bank_accounts:
+                    unrelated_bank_accounts.append(account)
+            return unrelated_bank_accounts
+        return None  
+      
+class TenderApplicant(models.Model):
+    first_name = models.CharField(verbose_name="first_name", max_length=50)
+    last_name = models.CharField(verbose_name="first_name", max_length=50)
+    phone_number = models.CharField(max_length=20,blank=True,null=True)
+    email = models.EmailField(verbose_name="applicant email", max_length=255)
+    company_name = models.CharField(verbose_name="first_name", max_length=50)
+    company_tin_number = models.CharField(verbose_name="first_name", max_length=50)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} from {self.company_name}"
+            
+
+class TenderApplications(models.Model):
+    applicant = models.ForeignKey(TenderApplicant, on_delete=models.CASCADE)
+    tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (('applicant', 'tender'))
+
 ## Vacancy
 
 class JobCategoty(models.Model):
