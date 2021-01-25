@@ -286,7 +286,9 @@ class CreateCompanyBankAccount(LoginRequiredMixin, View):
         def post(self, *ags, **kwargs):
             print ("Creating company bank Account")
             form  = CompanyBankAccountForm(self.request.POST)
+
             if form.is_valid:
+               
                 account = form.save(commit=False)
                 account.company = Company.objects.get(id = self.kwargs['company_id'])
                 account.save()

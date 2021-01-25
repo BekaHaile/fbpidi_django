@@ -93,16 +93,9 @@ class TenderForm(forms.ModelForm):
     tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
     status = forms.ChoiceField(choices = STATUS_CHOICE, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
                                  
-    
-    start_date = forms.DateTimeField( input_formats=['%d/%m/%Y %H:%M'],  widget=forms.DateTimeInput(attrs={
-                                                                                'class': 'form-control datetimepicker-input', 'placeholder': '12/12/2012 12:23'}))
-
-    end_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'],  widget=forms.DateTimeInput(attrs={
-                                                                                'class': 'form-control datetimepicker-input', 'placeholder': '12/12/2012 12:23'}))
     class Meta:
         model = Tender
-        fields = ('title', 'title_am','description', 'description_am','tender_type', 'status', 
-                'start_date', 'end_date')
+        fields = ('title', 'title_am','description', 'description_am','tender_type', 'status', )
         widgets = {
                 'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
                 'description':forms.Textarea(attrs={'class':'summernote','placeholder':'description of the Tender'}),
@@ -115,7 +108,7 @@ class TenderEditForm(forms.ModelForm):
     # user, bank_account, document
     tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
     status = forms.ChoiceField(choices = [ ('Pending', 'Pending'),('Open', 'Open' ),  ('Closed', 'Closed'), ('Suspended', 'Suspended')
-                                          ], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
+                                          ], required=True,)
                                 
     
     

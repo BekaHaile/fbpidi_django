@@ -38,4 +38,3 @@ def sendWelcomeEmail(request,user):
     email.content_subtype = "html"
     email.send()
     return email
-

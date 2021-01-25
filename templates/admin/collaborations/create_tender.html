@@ -3,6 +3,18 @@
 {% block extrastyle %}
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/anytime.min.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.date.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.time.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/legacy.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/notifications/jgrowl.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/picker_date.js"></script>
+	
+
 <style>
 	.reveal-if-active {
   opacity: 0;
@@ -94,10 +106,10 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 											
 										
 										<label class="col-form-label col-lg-8">Change tender document</label>
-										<input type = "file" name = "document"/>
+										<input type = "file" name = "document" value="{{tender.document.url}}"/>
 											
 											<span class="form-text text-muted">Accepted formats:pdf, Docx, png, gif</span>
-											<a href="{{tender.document.url}}" target="blank"class="btn btn-primary rounded-round">Show current document</a>
+											<a href="{{tender.document.url}}" target="blank"class=" btn btn-primary rounded-round">Show current document</a>
 											
 										
 									</div>
@@ -108,27 +120,31 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 							<div class = "row">
 								
 								
+																	
 								<div class="col-md-4">
-									<div class="form-group ">
-										<label class="col-form-label ">Current start date {{tender.start_date}}</label>
-										<input input type="datetime" name = "start_date" placeholder="12/12/2012 12:23" value=""/> 
-										<span class="form-text text-muted">New start date</span>
+									<div class="form-group row">
+										<label class="col-form-label col-lg-3">Start Date</label>
+										<div class="col-lg-9">
+											<span class="input-group-prepend">
+															<span class="input-group-text"><i class="icon-calendar22"></i></span>
+														</span>
+												<input type="text" name="start_date" class="form-control daterange-single" value="{{start_date}}">
+										</div>
 											
 									</div>
 								</div>
 								<div class="col-md-4">
-									<div class="form-group ">
-										<label class="col-form-label ">Current end date {{tender.end_date}}</label>
-										<input input type="datetime"  name = "end_date" placeholder="12/12/2012 12:23" value=""/> 
-										<span class="form-text text-muted">New end date</span>
+									<div class="form-group row">
+										<label class="col-form-label col-lg-3">End Date </label>
+										<div class="col-lg-9">
+											<span class="input-group-prepend">
+															<span class="input-group-text"><i class="icon-calendar22"></i></span>
+														</span>
+												<input type="text" name ="end_date" class="form-control daterange-single" value="{{end_date}}">
+										</div>
 											
 									</div>
 								</div>
-
-
-
-								
-
 
 								<div class="col-md-4">
 									<div class="form-group ">
@@ -361,23 +377,28 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 							</div>
 							
 							<div class = "row">
-								
-								
 								<div class="col-md-4">
-									<div class="form-group ">
-										<label class="col-form-label ">{{form.start_date.label|title}}</label>
-											{{form.start_date}}
+									<div class="form-group row">
+										<div class="col-lg-9">
+											<span class="input-group-prepend" >
+															<span class="input-group-text"><i class="icon-calendar22">	Start Date *</i></span>
+														</span>
+												<input type="text" name="start_date" class="form-control daterange-single" value="">
+										</div>
 											
 									</div>
 								</div>
 								<div class="col-md-4">
-									<div class="form-group ">
-										<label class="col-form-label ">{{form.end_date.label|title}}</label>
-											{{form.end_date}}
+									<div class="form-group row">
+										<div class="col-lg-9">
+											<span class="input-group-prepend" >
+															<span class="input-group-text"><i class="icon-calendar22">	End Date *</i></span>
+														</span>
+												<input type="text" name ="end_date" class="form-control daterange-single" value="">
+										</div>
 											
 									</div>
 								</div>
-
 
 
 
@@ -416,7 +437,7 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 								<div class="form-group row" >
 									<div style="width: 100%;">
 										<div class="col-lg-9" style="width: 95%; display: inline-block;">
-
+											<label>Choose your bank account</label>
 											<select required name="company_bank_account" class="form-control form-control-uniform" data-fouc>
 												
 												<label class="col-form-label ">Choose your main bank account for this tender.</label>
