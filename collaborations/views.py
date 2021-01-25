@@ -23,6 +23,10 @@ from accounts.models import User, CompanyAdmin, Company
 import os
 
 
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
+
+
 import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models import User
@@ -190,15 +194,10 @@ class ForumQuestionsDetail(View):
 
 
 
-<<<<<<< HEAD
 ## ------------- Blogs Views
-=======
 
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
 
 ## --- Blogs Views
->>>>>>> f996af74808bee2f3c37558b154b487374a82d65
 class CreatBlog(LoginRequiredMixin,View):
     template_name="admin/pages/blog_form.html"
     def get(self,*args,**kwargs):
