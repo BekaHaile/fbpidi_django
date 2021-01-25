@@ -97,41 +97,30 @@
 						<!--Add Lists-->
 						
 						<div class="row">
-							<div class="col-xl-12 col-lg-12 col-md-12">
-								<div class="card">
-									<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
-									<div class="header-text mb-0">
-										<div class="container">
-											<div class="text-center text-white">
-												<h1 class="">Forum List</h1>
-												
-											</div>
-										</div>
+						
+							{%for post in Announcements%}
+						<div class="card"> 
+							<div class="card-body">
+								<div class="d-sm-flex mt-0 p-5 sub-review-section border border-bottom-0 br-bl-0 br-br-0">
+                                    <div class="d-flex mr-3">
+                                        <a href="#">{{post.sender.profile_image}} </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="mt-0 mb-1 font-weight-semibold">{{post.user}}
+											<span class="fs-14 ml-0" data-toggle="tooltip" data-placement="top" title="verified"><i class="fa fa-check-circle-o text-success">{{post.title}}</i></span>
+											<span class="fs-14 ml-2">{{post.company}} </span>
+										</h5>
+										{{post.timestamp}}
+										                                        <p class="font-13  mb-2 mt-2">
+                                           {{post.containt|safe}}
+                                        </p>
+
+
 									</div>
 								</div>
-								</div>
 							</div>
-
-							<div class="col-xl-12 col-lg-12 col-md-12">
-								<div class="card">
-									<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
-										<div class="card-header">
-											
-										</div>
-										<div class="card-body">
-											<h1 class="">Forum List</h1>
-										</div>
-												
-												
-											</div>
-										</div>
-									</div>
-								</div>
-								</div>
-							</div>
-                            
-
-                            
+						</div>
+						{%endfor%}
 						</div>
 						<div class="d-sm-flex">
 							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>

@@ -50,7 +50,7 @@ from collaborations.models import (Blog, BlogComment,Faqs,
 class ListAnnouncement(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         form = Announcement.objects.all()
-        template_name="admin/announcement/announcement_list.html"
+        template_name="frontpages/announcement/announcement_list.html"
         context={'Announcements':form}
         return render(self.request, template_name,context)
 
