@@ -89,10 +89,12 @@ class CreateChoiceForm(forms.ModelForm):
 
 class TenderForm(forms.ModelForm):
     # user, bank_account, document
+    
     STATUS_CHOICE = [ ('Pending', 'Pending'),('Open', 'Open' )]
     tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
     status = forms.ChoiceField(choices = STATUS_CHOICE, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
-                                 
+
+
     class Meta:
         model = Tender
         fields = ('title', 'title_am','description', 'description_am','tender_type', 'status', )
