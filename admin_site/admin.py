@@ -24,7 +24,7 @@ from product.views import (CreateCategories,CategoryDetail, AdminProductListView
 from company.views import (
     CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,
     CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
-    CreateFbpidiCompanyProfile,ViewFbpidiCompany, CreateCompanyBankAccount
+    CreateFbpidiCompanyProfile,ViewFbpidiCompany, CreateCompanyBankAccount, EditCompanyBankAccount, DeleteCompanyBankAccount
 )
 
 
@@ -119,8 +119,10 @@ class CustomAdminSite(admin.AdminSite):
             path("create_fbpidi_company/",wrap(CreateFbpidiCompanyProfile.as_view()),name="create_fbpidi_company"),
             path("view_fbpidi_company/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
             path("edit_fbpidi_profile/<id>/",wrap(ViewFbpidiCompany.as_view()),name="edit_fbpidi_profile"),
-            path("create_company_bank_account/<company_id>/", CreateCompanyBankAccount.as_view(), name = "create_company_bank_account"),
-            
+            path("create_company_bank_account/<id>/", CreateCompanyBankAccount.as_view(), name = "create_company_bank_account"),
+            path("edit_company_bank_account/<id>/", EditCompanyBankAccount.as_view(), name = "edit_company_bank_account"),
+            path("delete_company_bank_account/<id>/", DeleteCompanyBankAccount.as_view(), name = "delete_company_bank_account"),
+
         ]
         return my_urls + urls
 

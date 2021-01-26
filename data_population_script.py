@@ -7,8 +7,6 @@ from django.contrib.auth.models import User
 import time
 from company.models import Bank
 
-print(type(AUTH_USER_MODEL))
-
 def add_banks():
     names = ["Commerial Bank of Ethiopia ", "Addis International Bank", "Wogagen Bank", "Abyssiniya Bank"]
     for n in names:

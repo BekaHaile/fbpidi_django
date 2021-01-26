@@ -2001,7 +2001,9 @@
 									<h6 class="card-title">Company Bank Accounts</h6>
 									<div class="header-elements">
 										<div class="list-icons">
+											{% if perms.company.add_companybankaccount%}
 											<a data-toggle="modal" data-target="#bank_form_id" class="btn btn-outline-success btn-sm"><i class="icon-add mr-2"></i> Create New</a>
+											{%endif%}
 										</div>
 									</div>
 								</div>
@@ -2022,18 +2024,86 @@
 											<a href="#">{{bank_account.bank.bank_name}}'s Account</a>
 										</h3>
 	
-										
-	
 										<h5>{{bank_account.account_number}}</h5>
 									</div>
 	
+
 									<div class="ml-sm-3 mt-2 mt-sm-0">
-										<span class="badge bg-blue">New</span>
+										<button class="badge bg-blue" style="border: hidden;">
+											<div class="list-icons">
+												<div class="dropdown">
+													<a href="#" class="list-icons-item" data-toggle="dropdown">
+														<i class="icon-menu9"></i>
+													</a>
+													
+													<div class="dropdown-menu dropdown-menu-right">					
+																	<a href="#edit{{bank_account.id}}" class="dropdown-item" data-toggle="modal" data-target="#edit{{bank_account.id}}"><i class="icon-pencil"></i>Edit Account</a>	
+																	<a href="{%url 'admin:delete_company_bank_account'  id=bank_account.id %}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this Bank Account?')"><i class="icon-trash"></i>Delete Account</a>
+																	
+														
+													</div>
+												</div>
+											</div>
+										</button>
 									</div>
+
+
+									
+
+									<div id="edit{{bank_account.id}}" class="modal fade" tabindex="-1">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">Edit Bank Account</h5>
+													
+												</div>
+					
+												<form action="{%url 'admin:edit_company_bank_account' id=bank_account.id %}" method="POST" enctype="multipart/form-data">
+												
+													{%csrf_token%}
+													<div class="modal-body">
+														<div class="form-group" style="padding-left: 20px;">
+															
+															<div class="row" style="margin-right: 5px; " >	
+																<h5>Current bank is : {{bank_account.bank.bank_name}}</h5>
+
+															</div>
+															<div class="row" style="margin-right: 5px; ">
+																<label style="margin-right: 5px;"><b>Bank</b></label>
+																{{account_form.bank}}
+		
+															</div>
+															<br>
+
+															<div style="margin-bottom: 10px;" class="row">
+																<h5> Current Account number is : {{bank_account.account_number}}</h5>
+															</div>
+															<div style="margin-right: 5px;" class="row">
+																
+																<label><b>Account Number: </b></label>
+																<input style = "padding: 5px;" type="text" name = "account_number" value="{{bank_account.account_number}}">
+															</div>
+														</div>						
+													</div>
+					
+													<div class="modal-footer">
+														<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+														<button type="submit" onclick="return confirm ('Are you sure you want to Edit this Account?')" class="btn bg-primary">Edit Account</button>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+
+
+
 								</div>
 							</div>
+							
 							{%endfor%}
 							
+							
+
 							<div id="bank_form_id" class="modal fade" tabindex="-1">
 								<div class="modal-dialog">
 									<div class="modal-content">
@@ -2042,7 +2112,7 @@
 											
 										</div>
 			
-										<form action="{%url 'admin:create_company_bank_account' company_id=company.id%}" method="POST" enctype="multipart/form-data">
+										<form action="{%url 'admin:create_company_bank_account' id=company.id%}" method="POST" enctype="multipart/form-data">
 											{%csrf_token%}
 											<div class="modal-body">
 												<div class="form-group">
@@ -2057,11 +2127,7 @@
 														<label>Account Number</label>
 														{{account_form.account_number}}
 												</div>
-
-												</div>
-			
-												
-												
+												</div>						
 											</div>
 			
 											<div class="modal-footer">
@@ -2072,6 +2138,8 @@
 									</div>
 								</div>
 							</div>
+
+
 						</div>
 
 
