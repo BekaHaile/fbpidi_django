@@ -40,10 +40,11 @@
                                     <div class="mb-3"><b>Status</b>:{{job.status}}</div>
                                     <div class="mb-3"><b>Bio</b>:{{job.bio}}</div> 
                                     <div class="mb-3"><b>Date</b>:{{job.timestamp}}</div> 
-                                   <a href="{%url 'admin:Download' name='cv' id=job.id%}"> 
+                                   <a href="{{job.cv.url}}" download="{{job.cv.url}}"> 
                                    		<div class="mb-3"><b>Cv</b>:{{job.cv}}</div>
                                    	</a>
-                                   	<a href="{%url 'admin:Download' name='documents' id=job.id%}"> 
+
+                                   	<a href="{{job.documents}}" download="{{job.documents}}"> 
                                    		<div class="mb-3"><b>Documents</b>:{{job.documents}}</div>
                                    	</a>
                                     

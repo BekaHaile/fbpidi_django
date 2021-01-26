@@ -1,8 +1,13 @@
 from django import forms
 from django_summernote.widgets import SummernoteWidget
-from collaborations.models import Faqs
-from collaborations.models import Faqs,Blog,BlogComment,Vacancy,JobApplication
-from .models import  PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications, JobCategoty
+from .models import  (PollsQuestion, Choices, PollsResult,
+                     Tender, TenderApplicant, TenderApplications,
+                      JobCategoty,Vacancy,JobApplication,
+                      Faqs,Blog,BlogComment,
+                      ForumQuestion,ForumComments,CommentReplay,
+                      ForumComments,Announcement
+                      )
+
 from django.forms.widgets import SelectDateWidget
 
 
@@ -183,6 +188,57 @@ class JobCategoryForm(forms.ModelForm):
             'categoryName':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory in English'}),
              'categoryName_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Category in Amharic'}),
         }
+
+
+class ForumQuestionForm(forms.ModelForm):
+    attachements = forms.FileField(required=False)
+
+    class Meta:
+        model = ForumQuestion
+        fields = ('title','description',)
+        widgets = {
+            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Forum Question'}),
+            'description':forms.Textarea(attrs={'class': 'summernote','placeholder':'Elaborate your question'}),
+        }               
+
+class CommentForm(forms.ModelForm):
+    
+    attachements = forms.FileField(required=False)
+    class Meta:
+        model = ForumComments
+        fields = ('comment',)
+        widgets = {
+            'comment':forms.Textarea(attrs={'class':'form-control','placeholder':'Your Comment on the Forum'}),
+        }
+
+class CommentReplayForm(forms.ModelForm):
+    attachements = forms.FileField(required=False)
+    class Meta:
+        model = CommentReplay
+        fields = ('content',)
+        widgets = {
+            'content':forms.Textarea(attrs={'class':'form-control','placeholder':'Your Comment on the Forum'}),
+        }
+
+class AnnouncementForm(forms.ModelForm):
+    class Meta:
+        model = Announcement
+        fields = ('title','title_am','containt','containt_am')
+        widgets = {
+        'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Announcement in English'}),
+        'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Announcement in Amharic'}),
+        'containt':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in English'}),
+        'containt_am':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in Amharic'}),
+
+        }
+
+
+
+
+
+
+
+
 
 
 

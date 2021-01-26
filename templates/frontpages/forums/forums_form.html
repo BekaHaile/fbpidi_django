@@ -1,0 +1,193 @@
+{%extends 'frontpages/layout.html'%}
+
+{%block content%}
+
+		<!--Breadcrumb-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white">
+							<h1 class="">Forum List</h1>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Breadcrumb-->
+
+		<!--Add listing-->
+		<section class="sptb">
+			<div class="container">
+				<div class="row">
+					<!--Left Side Content-->
+					<div class="col-xl-4 col-lg-4 col-md-12">
+						<div class="card">
+						 <form action="{%url 'forum_search' %}" method="POST" enctype="multipart/form-data">
+						 	{%csrf_token%}
+							<div class="card-body">
+								<div class="input-group">
+									<input type="text" name="search" class="form-control br-tl-3  br-bl-3" placeholder="Search">
+									<div class="input-group-append ">
+										
+										<button type="submit" class="btn btn-secondary br-tr-3  br-br-3">
+											Search
+										</button></a>
+									</div>
+								</div>
+							</div>
+						</form>
+						</div>
+						<div class="card">
+							<div class="card-body p-0">
+								<div class="list-catergory">
+									<div class="item-list">
+										<ul class="list-group mb-0">
+											<li class="list-group-item">
+												<a href="#" class="text-dark">
+													 Real Estate
+													<span class="badgetext badge badge-pill badge-light mb-0 mt-1 mt-1">14</span>
+												</a>
+											</li>
+											
+											<li class="list-group-item">
+												<a href="#" class="text-dark">
+													 Mobile
+													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">32</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+                        </div>
+						
+					</div>
+					<!--/Left Side Content-->
+
+                    
+
+
+					<div class="col-xl-8 col-lg-8 col-md-12"> 
+						<!--Add Lists-->
+						 
+						<div class="row">
+                            <div class="card ">
+								<form action="" method="POST" enctype="multipart/form-data">
+									{%csrf_token%}
+									{%if form.errors%}
+									<div class="alert alert-danger" role="alert">
+									  {{form.errors}}
+									</div>
+									{% endif %}
+									<div class="card-header ">
+										<h3 class="card-title">Add a Forum Question</h3>
+									</div>
+									<div class="card-body">
+										<div class="form-group">
+											<label class="form-label text-dark">Title *</label>
+											
+											<div class="col-lg-9">
+												{{form.title}}
+											</div>
+										</div>
+
+										
+																					
+										<div class="form-group">
+											<label class="form-label text-dark">Description *</label>
+
+											<div class="col-lg-9">
+												{{form.description}}
+											</div>
+										</div>
+
+										<div class="form-group row">
+										<label class="col-form-label col-lg-2">Any attachemnt you want to use </label>
+										<div class="col-lg-10">
+											<div class="uniform-uploader">
+												<input type="file" name="attachements" value="{{form.attachements.url}}" class="form-input-styled" data-fouc="">
+											</div>
+										</div>
+									</div>
+										
+									</div>
+
+									<div class="text-right">
+										<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+											class="btn btn-primary rounded-round">Submit </button>
+									</div>
+								</form>
+                            </div>
+
+						
+                            
+						</div>
+						<div class="d-sm-flex">
+							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>
+							<ul class="pagination mb-lg-0 mb-5 ml-auto">
+								<li class="page-item page-prev disabled">
+									<a class="page-link" href="#" tabindex="-1">Prev</a>
+								</li>
+								<li class="page-item active"><a class="page-link" href="#">1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item page-next">
+									<a class="page-link" href="#">Next</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!--/Add Lists-->
+				</div>
+			</div>
+		</section>
+		<!--Add Listing-->
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Subscribe To Our Newsletter</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+						<div class="input-group sub-input mt-0">
+							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Newsletter-->
+
+
+		<!-- Home Video Modal -->
+		<div class="modal fade" id="homeVideo" tabindex="-1" role="dialog"> 
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="pauseVid()"><i class="fa fa-times" aria-hidden="true"></i></button>
+					<div class="embed-responsive embed-responsive-16by9">
+						<video id="gossVideo" class="embed-responsive-item" controls="controls">
+							<source src="/static/frontpages/video/300052515.mp4" type="video/mp4">
+						</video>
+					</div>
+				</div>
+			</div>
+		</div>
+
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+
+	});
+</script>
+		{%endblock%}
