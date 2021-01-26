@@ -744,8 +744,7 @@ class CreateTender(LoginRequiredMixin,View):
             except Exception as e:
                 return redirect("admin:create_company_profile")
             company_bank_accounts = company.get_bank_accounts()
-            banks= Bank.objects.all() # if there will be a scenario where the admin needs to add register new bank account
-            context = {'form':form, 'banks':banks, 'company_bank_accounts':company_bank_accounts}
+            context = {'form':form, 'company_bank_accounts':company_bank_accounts}
             return render(self.request,'admin/collaborations/create_tender.html',context)
         except Exception as e: 
             print("execption at createtender ", str(e))
@@ -776,8 +775,6 @@ class CreateTender(LoginRequiredMixin,View):
                 ending_date=datetime.datetime.strptime(self.request.POST['end_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
                 tender.start_date = starting_date
                 tender.end_date = ending_date
-
-                
                 tender.save()
                 tender.bank_account.add(self.request.POST['company_bank_account'])
                 
@@ -785,10 +782,6 @@ class CreateTender(LoginRequiredMixin,View):
                 return redirect("admin:tenders")
                 
             else:
-                import pprint
-                pprint.pprint(self.request.POST)
-           
-                pprint.pprint(self.request.FILES)
                 print(form.errors)
                 messages.warning(self.request, "Error! Tender was not Created!" )
                 return redirect("admin:tenders")
@@ -811,12 +804,9 @@ def check_tender_enddate(request, tenders):
 def sendTenderClosedEmailNotification(request, user, tender):
     current_site = get_current_site(request)
     mail_message = f'The tender you created with a title "{tender.title}" has been just automatically closed by the system.\n This happens when the date you entered as an end date for the tender passes and you (the creator) did not update the status'
-
     mail_subject = f'Tender closed'
     to_email = user.email
-    email = EmailMessage(
-    mail_subject, mail_message, to=[tender.user.email]
-    )
+    email = EmailMessage(mail_subject, mail_message, to=[tender.user.email])
     email.content_subtype = "html"
     email.send()
     return email

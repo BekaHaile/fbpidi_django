@@ -29,7 +29,8 @@ class PollsQuestion(models.Model):
             return self.user.company_set.first().get_image()
         else:
             return None
-      
+
+
 class Choices (models.Model):
     choice_name = models.CharField( max_length=2000, verbose_name="Choice name (English)" )
     choice_name_am = models.CharField( max_length=2000, verbose_name="Choice name(Amharic)" )
@@ -42,7 +43,8 @@ class Choices (models.Model):
 
     def count_votes(self):
         return self.pollsresult_set.count()
-       
+
+
 class PollsResult(models.Model):    
     poll = models.ForeignKey(PollsQuestion, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -76,6 +78,7 @@ class Blog(models.Model):
     def comments(self):
         return self.blogcomment_set.all()
     
+
 class BlogComment(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE,null=False)
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=False)
@@ -93,6 +96,7 @@ class Faqs(models.Model):
     answers = models.TextField(null=False)  
     answers_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+ 
  
 class Tender(models.Model):
     TENDER_STATUS = ['Open', 'Pending', 'Closed', 'Suspended']
@@ -136,7 +140,8 @@ class Tender(models.Model):
                     unrelated_bank_accounts.append(account)
             return unrelated_bank_accounts
         return None  
-      
+
+
 class TenderApplicant(models.Model):
     first_name = models.CharField(verbose_name="first_name", max_length=50)
     last_name = models.CharField(verbose_name="first_name", max_length=50)

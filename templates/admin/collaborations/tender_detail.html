@@ -51,31 +51,33 @@
 								<a href="#" class="text-body"><h2 class="font-weight-semibold text-capitalize">Title: {{tender.title}}</h2></a>
 																<div class="item7-card-desc d-flex mb-2 mt-3">
                  
-									<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>Created at : {{tender.timestamp}}</a>
-                                    <a href="#"><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i>By {{tender.get_company.company_name}}</a>
-                                    <a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>Total applications {{tender.get_applications.count}}</a>                                    
+									<p><i class="fa fa-calendar-o text-muted mr-2"></i><b>Created at :</b><a href="#"> {{tender.timestamp}}</a></p>
+                                    <p><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i><b>By</b> <a href="#">{{tender.get_company.company_name}}</a></p>
+                                    <p><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i><b>Total applications </b><a href="#">{{tender.get_applications.count}}</a></p>                                    
                                 </div>
                                 <div class="row" >
                                     <div class="col-md-6">
-                                        <p style="display: inline; margin-right: 10px;"><i class="fa fa-calendar-o text-muted mr-2"></i>Start date :<a href="#"  style="display: inline;" >{{tender.start_date}}</a></p> 
-                                        <p style="display: inline; "><i class="fa fa-calendar-o text-muted mr-2"></i>End date :<a href="#"  style="display: inline;" >{{tender.end_date}}</a></p> 
+                                        <p style="display: inline; margin-right: 10px;"><i class="fa fa-calendar-o text-muted mr-2"></i><b>Start date :</b><a href="#"  style="display: inline;" >{{tender.start_date}}</a></p> 
+                                        <p style="display: inline; "><i class="fa fa-calendar-o text-muted mr-2"></i><b>End date :</b><a href="#"  style="display: inline;" >{{tender.end_date}}</a></p> 
                                     </div>
                                 </div>
                                 <br>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <a href="#" style="display: inline;"><i class="fa fa-calendar-o text-muted mr-2"></i>Status : 
-                                            {% if tender.status == 'Open' %}
-                                            <div class = "btn btn-primary" style="background-color: #66bb6a;; color:white; width: fit-content; padding: 5px; display: inline; " >Open</div>
-                                            {%elif tender.status == 'Pending' %}
-                                            <div style="background-color: yellow; color:#ef5350; width: fit-content; padding: 5px;  display: inline;" >Pending</div>
-                                            {%elif tender.status == 'Closed' %}
-                                            <div style="background-color: #ef5350; color:white; width: fit-content; padding: 5px; display: inline;" >Closed</div>
-                                            {%else%} 
-                                            <div style="background-color: blue; color:white; width: fit-content; padding: 5px;  display: inline;" >Suspended</div>
-                                            {%endif%}
-                                        </a>
-                                        <a href="#" style="padding-left: 10px;"><i class="fa fa-calendar-o text-muted mr-2"></i>Type : {{tender.tender_type}}</a>
+                                        <p style="display: inline;"><i class="fa fa-calendar-o text-muted mr-2" ></i><b>Status :</b></p>
+                                            <a href="#" style="display: inline;">
+                                                {% if tender.status == 'Open' %}
+                                                <div class = "btn btn-primary" style="background-color: #66bb6a;; color:white; width: fit-content; padding: 5px; display: inline; " >Open</div>
+                                                {%elif tender.status == 'Pending' %}
+                                                <div style="background-color: yellow; color:#ef5350; width: fit-content; padding: 5px;  display: inline;" >Pending</div>
+                                                {%elif tender.status == 'Closed' %}
+                                                <div style="background-color: #ef5350; color:white; width: fit-content; padding: 5px; display: inline;" >Closed</div>
+                                                {%else%} 
+                                                <div style="background-color: blue; color:white; width: fit-content; padding: 5px;  display: inline;" >Suspended</div>
+                                                {%endif%}
+                                            </a>
+                                        
+                                        <p style="display: inline;"><i class="fa fa-calendar-o text-muted mr-2" ></i><b>Type :</b> </p><a href="#" style="padding-left: 10px;">{{tender.tender_type}}</a>
                                         {% if tender.tender_type == "Paid"%}
                                         <a href="#" style="padding-left: 10px;"><i class="fa fa-calendar-o text-muted mr-2"></i>Document price : {{tender.document_price}}</a>
                                         {%endif%}
