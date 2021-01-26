@@ -248,8 +248,11 @@ class ViewFbpidiCompany(LoginRequiredMixin,View):
         fbpidi = Company.objects.get(company_type="fbpidi")
         events = CompanyEvent.objects.filter(company=fbpidi)
         event_form = CompanyEventForm
+        banks = Bank.objects.all()
+        company_bank_accounts = CompanyBankAccount.objects.filter(company=fbpidi)
+        account_form = CompanyBankAccountForm()
         return render(self.request,"admin/company/company_profile_fbpidi.html",
-        {'company':fbpidi,'events':events,'event_form':event_form})
+        {'company':fbpidi,'events':events,'event_form':event_form, 'banks':banks, 'company_bank_accounts': company_bank_accounts, 'account_form':account_form})
     
     def post(self,*args,**kwargs):
         company = Company.objects.get(id=self.kwargs['id'])
@@ -283,18 +286,81 @@ class ViewFbpidiCompany(LoginRequiredMixin,View):
             return redirect("admin:view_fbpidi_company")
 
 class CreateCompanyBankAccount(LoginRequiredMixin, View):
+        def proper_route(self, company):
+                if company.company_type == "fbpidi":
+                    return redirect("admin:view_fbpidi_company")
+                else:
+                    return redirect("admin:view_company_profile")
         def post(self, *ags, **kwargs):
-            print ("Creating company bank Account")
             form  = CompanyBankAccountForm(self.request.POST)
-
+            
             if form.is_valid:
-               
-                account = form.save(commit=False)
-                account.company = Company.objects.get(id = self.kwargs['company_id'])
-                account.save()
-                messages.success(self.request, "New Bank Account Successfully Added!")
-                return redirect("admin:view_company_profile")
+                if self.kwargs["option"] == "create":
+                    account = form.save(commit=False)
+                    company = Company.objects.get(id = self.kwargs['id'])
+                    account.company = company
+                    account.save()
+                    messages.success(self.request, "New Bank Account Successfully Added!")
+                    if company.company_type == "fbpidi":
+                        return redirect("admin:view_fbpidi_company")
+                    else:
+                        return redirect("admin:view_company_profile")
+            else:   
+                messages.warning(self.request, "Error While Adding New Bank Account!")  
+                company = Company.objects.get(id = self.kwargs['id'])
+                if company.company_type == "fbpidi":
+                        return redirect("admin:view_fbpidi_company")
+                else:
+                        return redirect("admin:view_company_profile")      
 
-            messages.warning(self.request, "Error While Adding New Bank Account!")            
-            return redirect("admin:view_company_profile")
+class EditCompanyBankAccount(LoginRequiredMixin, View):
+       
+        def post(self, *ags, **kwargs):
+            form  = CompanyBankAccountForm(self.request.POST)
+            if form.is_valid:     
+                bank_account = CompanyBankAccount.objects.get(id = self.kwargs['id'])
+                bank_account.bank = Bank.objects.get(id =self.request.POST['bank'])
+                bank_account.account_number = self.request.POST['account_number']
+                bank_account.save()
+                messages.success(self.request, "Bank Account Successfully Edited!")
+                
+                if bank_account.company.company_type == "fbpidi":
+                        return redirect("admin:view_fbpidi_company")
+                else:
+                        return redirect("admin:view_company_profile")      
+
+            else:   
+                messages.warning(self.request, "Error While Adding New Bank Account!")  
+                company = Company.objects.get(id = self.kwargs['id'])
+                if company.company_type == "fbpidi":
+                        return redirect("admin:view_fbpidi_company")
+                else:
+                        return redirect("admin:view_company_profile")      
+
+class DeleteCompanyBankAccount(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        message = ""
+        redirect_url = ""
+        if self.request.user.is_superuser:
+            redirect_url = "admin:view_fbpidi_company"
+        else:
+            redirect_url = "admin:view_company_profile"
+
+        if self.kwargs['id'] :
+            bank_account = CompanyBankAccount.objects.filter(id = self.kwargs['id']  ).first()
+            
+            if bank_account:
+                bank_account.delete()
+                message = "Bank Account Deleted Successfully"
+                messages.success(self.request,message)
+                
+                return redirect(redirect_url)
+            else:
+                messages.warning(self.request, "NO such tender was found!")
+                return redirect(redirect_url)
+
+
+        else:
+            messages.warning(self.request, "Nothing selected!")
+            return redirect(redirect_url)
 

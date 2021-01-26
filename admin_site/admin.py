@@ -15,7 +15,8 @@ from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoic
 from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,FaqsView,FaqsList,
                         CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
                         JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
-                        SuperAdminVacancyList
+                        SuperAdminVacancyList,
+                        CreatAnnouncement,ListAnnouncement,AnnouncementDetail
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView
@@ -24,7 +25,7 @@ from product.views import (CreateCategories,CategoryDetail, AdminProductListView
 from company.views import (
     CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,
     CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
-    CreateFbpidiCompanyProfile,ViewFbpidiCompany, CreateCompanyBankAccount
+    CreateFbpidiCompanyProfile,ViewFbpidiCompany, CreateCompanyBankAccount, EditCompanyBankAccount, DeleteCompanyBankAccount
 )
 
 
@@ -41,6 +42,11 @@ class CustomAdminSite(admin.AdminSite):
             return update_wrapper(wrapper, view)
 
         my_urls = [ 
+            path('anounce-Detail/<model_name>/<id>',AnnouncementDetail.as_view(),name="anounce_Detail"),
+            path('anounce-List',ListAnnouncement.as_view(),name="anounce_list"),
+            path('anounce-Create',CreatAnnouncement.as_view(),name="anounce_Create"),
+            #path('jobCategoty-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),
+           
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
             path('download/<name>/<id>',Download.as_view(),name="Download"),
             path('close/<id>/<closed>',CloseVacancy.as_view(),name="close"),
@@ -120,8 +126,10 @@ class CustomAdminSite(admin.AdminSite):
             path("create_fbpidi_company/",wrap(CreateFbpidiCompanyProfile.as_view()),name="create_fbpidi_company"),
             path("view_fbpidi_company/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
             path("edit_fbpidi_profile/<id>/",wrap(ViewFbpidiCompany.as_view()),name="edit_fbpidi_profile"),
-            path("create_company_bank_account/<company_id>/", CreateCompanyBankAccount.as_view(), name = "create_company_bank_account"),
-            
+            path("create_company_bank_account/<id>/", CreateCompanyBankAccount.as_view(), name = "create_company_bank_account"),
+            path("edit_company_bank_account/<id>/", EditCompanyBankAccount.as_view(), name = "edit_company_bank_account"),
+            path("delete_company_bank_account/<id>/", DeleteCompanyBankAccount.as_view(), name = "delete_company_bank_account"),
+
         ]
         return my_urls + urls
 
