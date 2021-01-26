@@ -7,7 +7,7 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Forum List</h1>
+							<h1 class="">Announcement List</h1>
 							
 						</div>
 					</div>
@@ -22,59 +22,16 @@
 				<div class="row">
 					<!--Left Side Content-->
 					<div class="col-xl-4 col-lg-4 col-md-12">
+						
 						<div class="card">
-							<div class="card-body">
-								<div class="input-group">
-									<input type="text" class="form-control br-tl-3  br-bl-3" placeholder="Search">
-									<div class="input-group-append ">
-										<button type="button" class="btn btn-secondary br-tr-3  br-br-3">
-											Search
-										</button>
-									</div>
-								</div>
+							<div class="card-header">
+                                    <h3 class="card-title">Announcement By companys </h3> 
 							</div>
-						</div>
-						<div class="card">
 							<div class="card-body p-0">
 								<div class="list-catergory">
 									<div class="item-list">
 										<ul class="list-group mb-0">
-											<li class="list-group-item">
-												<a href="#" class="text-dark">
-													 Real Estate
-													<span class="badgetext badge badge-pill badge-light mb-0 mt-1 mt-1">14</span>
-												</a>
-											</li>
-											<li class="list-group-item">
-												<a href="#" class="text-dark">
-													 Hostel & Travels
-													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">63</span>
-												</a>
-											</li>
-											<li class="list-group-item">
-												<a href="#" class="text-dark">
-													 Health & Fitness
-													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">25</span>
-												</a>
-											</li>
-											<li class="list-group-item">
-												<a href="#" class="text-dark">
-													 Restaurant
-													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">74</span>
-												</a>
-											</li>
-											<li class="list-group-item">
-												<a href="#" class="text-dark">
-													 Computer
-													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">18</span>
-												</a>
-											</li>
-											<li class="list-group-item">
-												<a href="#" class="text-dark">
-													 Mobile
-													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">32</span>
-												</a>
-											</li>
+											
 											<li class="list-group-item border-bottom-0">
 												<a href="#" class="text-dark">
 													 Education
@@ -106,12 +63,13 @@
                                         <a href="#">{{post.sender.profile_image}} </a>
                                     </div>
                                     <div class="media-body">
-                                        <h5 class="mt-0 mb-1 font-weight-semibold">{{post.user}}
-											<span class="fs-14 ml-0" data-toggle="tooltip" data-placement="top" title="verified"><i class="fa fa-check-circle-o text-success">{{post.title}}</i></span>
-											<span class="fs-14 ml-2">{{post.company}} </span>
+                                        <h5 class="mt-0 mb-1 font-weight-semibold">{{post.company}}
+											<span class="fs-14 ml-0" data-toggle="tooltip" data-placement="top" title="verified"><i class="fa fa-check-circle-o text-success"></i></span>
+											<span class="fs-14 ml-2"> </span>
 										</h5>
+										<h4>{{post.title}}</h4>
 										{{post.timestamp}}
-										                                        <p class="font-13  mb-2 mt-2">
+										<p class="font-13  mb-2 mt-2">
                                            {{post.containt|safe}}
                                         </p>
 

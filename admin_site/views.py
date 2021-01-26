@@ -14,7 +14,7 @@ from company.models import Company
 
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
-from collaborations.models import PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategoty, Blog, Announcement
+from collaborations.models import PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategoty, Blog, Announcement, ForumComments, CommentReplay
 from django.http import HttpResponse, FileResponse
  
 # 
@@ -36,7 +36,7 @@ class DeleteView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         message = ""
         if self.kwargs['model_name'] == 'category':
-            category = models.Category.objects.get(id=self.kwargs['id'])
+            category = models.Category.objects.get(id=self.kwargs['id']) 
             category.delete()
             message = "Category Deleted"
             messages.success(self.request,message)
@@ -49,6 +49,14 @@ class DeleteView(LoginRequiredMixin,View):
             if self.request.user.is_superuser:
                 return redirect("admin:super_Job_list")
             return redirect("admin:Job_list")
+        elif self.kwargs['model_name'] == 'ForumComments':
+            announcement = ForumComments.objects.get(id=self.kwargs['id'])
+            announcement.delete()
+            return redirect("forum_list")
+        elif self.kwargs['model_name'] == 'CommentReplay':
+            commentreplay = CommentReplay.objects.get(id=self.kwargs['id'])
+            commentreplay.delete()
+            return redirect("forum_list")
         elif self.kwargs['model_name'] == 'Announcement':
             announcement = Announcement.objects.get(id=self.kwargs['id'])
             announcement.delete()

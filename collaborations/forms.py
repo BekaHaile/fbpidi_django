@@ -15,6 +15,9 @@ JOB_CHOICES=[('Temporary','Temporary'),
             ('Permanent','Permanent'),
             ('Contract','Contract')]
 
+CURRENT_STATUS = [('JUST GRADUATED','JUST GRADUATED'),('WORKING','WORKING'),
+                ('LOOKING FOR JOB','LOOKING FOR JOB')]
+
 class FaqsForm(forms.ModelForm):
     
 
@@ -168,13 +171,16 @@ class VacancyForm(forms.ModelForm):
 
 
 class CreateJobApplicationForm(forms.ModelForm):
+
+    status = forms.CharField( widget=forms.Select(choices=CURRENT_STATUS) )
+
     class Meta:
         model = JobApplication
         fields = ('status', 'bio',
                   'cv', 'documents') 
         
         widgets = {
-            'status':forms.TextInput(attrs={'class':'form-control','placeholder':'Current employement status'}),
+            
             'bio':forms.Textarea(attrs={'class':'summernote','placeholder':'Introduce your self and why you are appling'}),         
         }
 

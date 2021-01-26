@@ -46,8 +46,9 @@ from collaborations.models import (Blog, BlogComment,Faqs,
                                     ForumQuestion, ForumComments, CommentReplay,
                                     Announcement)
 
-#---------------- Announcement
-class ListAnnouncement(LoginRequiredMixin,View):
+
+# --------------- Announcement
+class ListAnnouncement(View):
     def get(self,*args,**kwargs):
         form = Announcement.objects.all()
         template_name="frontpages/announcement/announcement_list.html"
@@ -55,7 +56,7 @@ class ListAnnouncement(LoginRequiredMixin,View):
         return render(self.request, template_name,context)
 
 
-class AnnouncementDetail(LoginRequiredMixin,View):
+class AnnouncementDetail(View):
     def get(self,*args,**kwargs):
         form = Announcement.objects.get(id=self.kwargs['id'])
         template_name="admin/announcement/announcement_detail.html"
@@ -114,6 +115,22 @@ class SearchForum(View):
         context = {'forums':forum}
         return render(self.request, template_name,context)
 
+class EditCommentForum(View):
+    def post(self,*args,**kwargs):
+        print("============") 
+        print(self.request.POST["content"])
+        if(self.kwargs['type']=="ForumComments"):
+            comment = ForumComments.objects.get(id=self.kwargs['id'])
+            comment.comment =  self.request.POST["content"]
+            comment.save()
+            return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
+        if(self.kwargs['type']=="CommentReplay"):
+            comment = CommentReplay.objects.get(id=self.kwargs['id'])
+            comment.content =  self.request.POST["content"]
+            comment.save()
+            return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
+            
+
 class CreateCommentReplay(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
         print("We are here")
@@ -141,11 +158,13 @@ class CreateForumQuestion(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         forum = ForumQuestionForm()
         template_name="frontpages/forums/forums_form.html" 
-        context = {'form':forum}
+        userCreated = ForumQuestion.objects.filter(user=self.request.user)
+        context = {'form':forum,'usercreated':userCreated}
         return render(self.request,template_name,context)
     def post(self,*args,**kwargs):
         form = ForumQuestionForm(self.request.POST,self.request.FILES)
-        context={'form':form}
+        userCreated = ForumQuestion.objects.filter(user=self.request.user)
+        context = {'form':forum,'usercreated':userCreated}
         template_name="frontpages/forums/forums_form.html" 
         if form.is_valid():
             forum = ForumQuestion()
@@ -156,25 +175,58 @@ class CreateForumQuestion(LoginRequiredMixin,View):
             forum.save()
             forum = ForumQuestionForm()
             context={'form':forum}
-            return redirect("forum_list")
+            return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
         return render(self.request, template_name,context)
 
 class ListForumQuestions(View):
     def get(self,*args,**kwargs):
         forum = ForumQuestion.objects.all()
+        print("-------"+str(self.request.user))
+        if str(self.request.user) != "AnonymousUser":
+            userCreated = ForumQuestion.objects.filter(user=self.request.user)
+        else:
+            userCreated = ""
         template_name = "frontpages/forums/forum_list.html"
-        context = {'forums':forum}
+        context = {'forums':forum,'usercreated':userCreated}
+        return render(self.request, template_name,context)
+
+class EditForumQuestions(View):
+    def get(self,*args,**kwargs):
+        forum = ForumQuestion.objects.get(id=self.kwargs['id'])
+        if str(self.request.user) != "AnonymousUser":
+            userCreated = ForumQuestion.objects.filter(user=self.request.user)
+        else:
+            userCreated = ""
+        template_name = "frontpages/forums/forum_edit.html"
+        context = {'forum':forum,'usercreated':userCreated}
+        return render(self.request, template_name,context)
+    def post(self,*args,**kwargs):
+        form = ForumQuestionForm(self.request.POST,self.request.FILES)
+        userCreated = ForumQuestion.objects.filter(user=self.request.user)
+        template_name = "frontpages/forums/forum_edit.html"
+        context = {'forum':form,'usercreated':userCreated}
+        if form.is_valid():
+            forum = ForumQuestion.objects.get(id=self.kwargs['id'])
+            forum.title = form.cleaned_data.get('title')
+            forum.description = form.cleaned_data.get('description')
+            forum.attachements = self.request.POST['attachements']
+            forum.save() 
+            return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
         return render(self.request, template_name,context)
 
 class ForumQuestionsDetail(View):
     def get(self,*args,**kwargs):
         forum = ForumQuestion.objects.get(id=self.kwargs['id'])
+        if str(self.request.user) != "AnonymousUser":
+            userCreated = ForumQuestion.objects.filter(user=self.request.user)
+        else:
+            userCreated = ""
         comment = CommentForm()
         commentreplay=CommentReplayForm()
         print("-----0--------")
         print(self.request.user)
         template_name = "frontpages/forums/forum_detail.html"
-        context = {'forum':forum,'commentForm':comment,'commentreplay':commentreplay}
+        context = {'forum':forum,'commentForm':comment,'commentreplay':commentreplay,'usercreated':userCreated}
         return render(self.request, template_name,context)
     def post(self,*args,**kwargs):
         form = CommentForm(self.request.POST,self.request.FILES)
@@ -185,11 +237,7 @@ class ForumQuestionsDetail(View):
             forum.forum_question = question
             forum.user = self.request.user
             forum.save()
-            forum = ForumQuestion.objects.get(id=self.kwargs['id'])
-            comment = CommentForm()
-            template_name = "frontpages/forums/forum_detail.html"
-            context = {'forum':question,'comment':comment}
-            return render(self.request, template_name,context)
+            return redirect(reverse("forum_detail",kwargs={'id':question.id}))
         return render(self.request, template_name,context)
 
 
