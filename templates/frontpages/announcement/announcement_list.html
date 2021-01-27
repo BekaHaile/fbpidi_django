@@ -56,6 +56,56 @@
 						<div class="row">
 						
 							{%for post in Announcements%}
+							<div class="card">
+							<div class="card-body">
+								<div class="item-det mb-4">
+									<a href="#" class="text-dark"><h3>Bizdire University</h3></a>
+									<div class=" d-flex">
+										<ul class="d-flex mb-0">
+											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-briefcase text-muted mr-1"></i> Education</a></li>
+											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-calendar text-muted mr-1"></i> date </a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="product-slider">
+									<div id="carousel" class="carousel slide" data-ride="carousel">
+										<div class="arrow-ribbon bg-secondary">Open</div>
+										<div class="carousel-inner">
+											{%for images in post.announcementimages%}
+											<div class="carousel-item active"><img src="{{images.image.url}}" alt="img"> </div>
+											}
+											{%endfor%}
+
+										</div>
+										<a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+											<i class="fa fa-angle-left" aria-hidden="true"></i>
+										</a>
+										<a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+											<i class="fa fa-angle-right" aria-hidden="true"></i>
+										</a>
+									</div>
+									<div class="clearfix">
+										<div id="thumbcarousel" class="carousel slide" data-interval="false">
+											<div class="carousel-inner">
+												<div class="carousel-item active">
+													{%for images in post.announcementimages%}
+													<div data-target="#carousel" data-slide-to="0" class="thumb"><img src="{{images.image.url}}" alt="img"></div>
+													{%endfor%}
+
+
+												</div>
+											</div>
+											<a class="carousel-control-prev" href="#thumbcarousel" role="button" data-slide="prev">
+												<i class="fa fa-angle-left" aria-hidden="true"></i>
+											</a>
+											<a class="carousel-control-next" href="#thumbcarousel" role="button" data-slide="next">
+												<i class="fa fa-angle-right" aria-hidden="true"></i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="card"> 
 							<div class="card-body">
 								<div class="d-sm-flex mt-0 p-5 sub-review-section border border-bottom-0 br-bl-0 br-br-0">
@@ -79,6 +129,11 @@
 							</div>
 						</div>
 						{%endfor%}
+						<!------------------------------------------------------>
+						
+							<!----------------------------------------->
+
+
 						</div>
 						<div class="d-sm-flex">
 							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>

@@ -44,7 +44,7 @@ from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
 from collaborations.models import (Blog, BlogComment,Faqs,
                                     Vacancy,JobApplication, JobCategoty,
                                     ForumQuestion, ForumComments, CommentReplay,
-                                    Announcement)
+                                    Announcement,AnnouncementImages)
 
 
 # --------------- Announcement
@@ -77,7 +77,12 @@ class AnnouncementDetail(View):
             return redirect("admin:anounce_list")
         return render(self.request, template_name,context)
 
-
+class ListAnnouncementAdmin(View):
+    def get(self,*args,**kwargs):
+        form = Announcement.objects.all()
+        template_name="admin/announcement/announcement_list.html"
+        context={'Announcements':form}
+        return render(self.request, template_name,context)
 
 class CreatAnnouncement(LoginRequiredMixin,View):
     def company_admin(self,*args,**kwarges):
@@ -95,12 +100,22 @@ class CreatAnnouncement(LoginRequiredMixin,View):
         context={'form':form}
         template_name="admin/announcement/announcement_form.html"
         context={'form':form}
+        print("----------")
         if form.is_valid():
             post = Announcement()
             post = form.save(commit=False)
             post.user = self.request.user  
             post.company = self.company_admin()                 
             post.save()
+            for images in self.request.FILES.getlist('images'):
+                print("image name:"+str(images.name))
+                announcementimages= AnnouncementImages()
+                announcementimages.announcement = post
+                announcementimages.image = images
+                announcementimages.save()
+
+
+            announcementimages.image
             messages.success(self.request, "Added New Announcement Successfully")
             return redirect("admin:anounce_Create")
         return render(self.request, template_name,context)
@@ -468,7 +483,6 @@ class JobCategoryDetail(LoginRequiredMixin,View):
             category.categoryName_am=self.request.POST['categoryName_am']
             category.categoryName = self.request.POST['categoryName']
             category.save()
-            
             messages.success(self.request, "Job category Edited Successfully")
             form = JobCategoty()
             context = {'form':form}
@@ -557,10 +571,8 @@ class CreateVacancy(LoginRequiredMixin, View):
         template = "admin/pages/job_form.html"
         if form.is_valid():
             category = JobCategoty.objects.get(id=self.request.POST['category'],)
-            print("------")
-            print(self.request.POST['starting_date'])
             print("======")
-            print()
+            print(self.request.POST['starting_date'])
             print("======")
             print(self.request.POST['ending_date'])
             vacancy=form.save(commit=False)
@@ -584,6 +596,18 @@ class CreateApplication(LoginRequiredMixin,View):
 
     def get(self,*args,**kwargs):
         vacancy=Vacancy.objects.get(id=self.kwargs['id'] ,closed=False)
+        applicants=JobApplication.objects.filter(vacancy=vacancy.id)
+        print("----------")
+        for applicant in applicants:
+            print(applicant.user)
+        print("----------")
+        print(self.request.user)
+        for applicant in applicants:
+            if(applicant.user == self.request.user):
+                print("---vacancy---")
+                messages.warning(self.request, "You can't apply to the same vacancy Twice")
+                return redirect("vacancy")
+                
         job = CreateJobApplicationForm()
         jobcategory = JobCategoty.objects.all()
         template_name="frontpages/job_apply.html"
@@ -612,7 +636,7 @@ class VacancyList(View):
     def get(self,*args,**kwargs): 
         vacancy = Vacancy.objects.filter(closed=False)
         jobcategory = JobCategoty.objects.all()
-        template_name="frontpages/vacancy_list.html"
+        template_name="frontpages/vacancy_list.html" 
         context = {'vacancys':vacancy,'category':jobcategory,'message':'All Vacancys '}
         return render(self.request, template_name,context)
 

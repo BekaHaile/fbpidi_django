@@ -16,7 +16,9 @@ from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,F
                         CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
                         JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
                         SuperAdminVacancyList,
-                        CreatAnnouncement,ListAnnouncement,AnnouncementDetail
+                        CreatAnnouncement,ListAnnouncement,AnnouncementDetail,
+
+                        ListAnnouncementAdmin
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView
@@ -43,7 +45,7 @@ class CustomAdminSite(admin.AdminSite):
 
         my_urls = [ 
             path('anounce-Detail/<model_name>/<id>',AnnouncementDetail.as_view(),name="anounce_Detail"),
-            path('anounce-List',ListAnnouncement.as_view(),name="anounce_list"),
+            path('anounce-List',ListAnnouncementAdmin.as_view(),name="anounce_list"),
             path('anounce-Create',CreatAnnouncement.as_view(),name="anounce_Create"),
             #path('jobCategoty-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),
            

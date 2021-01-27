@@ -227,6 +227,7 @@ class CommentReplayForm(forms.ModelForm):
         }
 
 class AnnouncementForm(forms.ModelForm):
+
     class Meta:
         model = Announcement
         fields = ('title','title_am','containt','containt_am')
