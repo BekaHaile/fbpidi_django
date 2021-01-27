@@ -7,7 +7,7 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h4>{{vacancy.job_title|safe}}</h4>
+							<h4>Appying to :{{vacancy.job_title|safe}}</h4>
 							
 						</div>
 					</div>
@@ -59,8 +59,9 @@
 										<div class="tab-pane active show" id="tab1">
 											
 											<div class="form-group">
-												<label class="form-label">Status</label>
-												<div class="input-group">
+												<label class="col-form-label col-lg-3"> Status *</label>
+													<div class="col-lg-9">
+
 													{{job.status}}
 													
 												</div>
@@ -84,7 +85,7 @@
 															
 
 										<div class="form-group">
-									<label class="col-form-label col-lg-2">Upload your Documents</label>
+									<label class="col-form-label col-lg-2">Upload your Documents (This is for certifivates and other documents)</label>
 											<div class="col-lg-10">
 												{{job.documents}}
 												

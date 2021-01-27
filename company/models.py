@@ -63,7 +63,7 @@ class Company(models.Model):
     def __str__(self):
         return self.company_name
     
-    def get_image(self):
+    def get_image(self): 
         return self.company_logo.url if self.company_logo.url else None
         
 
