@@ -25,7 +25,6 @@ class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
             context = dict()
-            print("works")
             return render(self.request,"admin/index.html",context)
         except Exception as e:
             print ("index error",str(e))
