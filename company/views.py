@@ -286,16 +286,10 @@ class ViewFbpidiCompany(LoginRequiredMixin,View):
             return redirect("admin:view_fbpidi_company")
 
 class CreateCompanyBankAccount(LoginRequiredMixin, View):
-        def proper_route(self, company):
-                if company.company_type == "fbpidi":
-                    return redirect("admin:view_fbpidi_company")
-                else:
-                    return redirect("admin:view_company_profile")
         def post(self, *ags, **kwargs):
             form  = CompanyBankAccountForm(self.request.POST)
             
             if form.is_valid:
-                if self.kwargs["option"] == "create":
                     account = form.save(commit=False)
                     company = Company.objects.get(id = self.kwargs['id'])
                     account.company = company

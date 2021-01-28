@@ -53,7 +53,7 @@
                  
 									<p><i class="fa fa-calendar-o text-muted mr-2"></i><b>Created at :</b><a href="#"> {{tender.timestamp}}</a></p>
                                     <p><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i><b>By</b> <a href="#">{{tender.get_company.company_name}}</a></p>
-                                    <p><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i><b>Total applications </b><a href="#">{{tender.get_applications.count}}</a></p>                                    
+                                    <p><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i><b>Total applications : </b><a href="#">{{tender.get_applications.count}}</a></p>                                    
                                 </div>
                                 <div class="row" >
                                     <div class="col-md-6">
@@ -64,10 +64,10 @@
                                 <br>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <p style="display: inline;"><i class="fa fa-calendar-o text-muted mr-2" ></i><b>Status :</b></p>
+                                        <p style="display: inline;"><b>Status :</b></p>
                                             <a href="#" style="display: inline;">
                                                 {% if tender.status == 'Open' %}
-                                                <div class = "btn btn-primary" style="background-color: #66bb6a;; color:white; width: fit-content; padding: 5px; display: inline; " >Open</div>
+                                                <div  style="background-color: #66bb6a;; color:white; width: fit-content; padding: 5px; display: inline; " >Open</div>
                                                 {%elif tender.status == 'Pending' %}
                                                 <div style="background-color: yellow; color:#ef5350; width: fit-content; padding: 5px;  display: inline;" >Pending</div>
                                                 {%elif tender.status == 'Closed' %}
@@ -77,7 +77,7 @@
                                                 {%endif%}
                                             </a>
                                         
-                                        <p style="display: inline;"><i class="fa fa-calendar-o text-muted mr-2" ></i><b>Type :</b> </p><a href="#" style="padding-left: 10px;">{{tender.tender_type}}</a>
+                                        <p style="display: inline;"><b>Type :</b> </p><a href="#" style="padding-left: 10px;">{{tender.tender_type}}</a>
                                         {% if tender.tender_type == "Paid"%}
                                         <a href="#" style="padding-left: 10px;"><i class="fa fa-calendar-o text-muted mr-2"></i>Document price : {{tender.document_price}}</a>
                                         {%endif%}

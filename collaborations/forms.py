@@ -134,6 +134,18 @@ class TenderEditForm(forms.ModelForm):
             }
 
 
+class ApplicantForm(forms.Form):
+    class Meta:
+        fields = ('first_name', 'last_name',
+                  'company_name', 'company_tin_number','email', 'phone_number')
+        widgets = {
+            'first_name': forms.TextInput(attrs={"placeholder": "First Name", },),
+            'last_name': forms.TextInput(attrs={"placeholder": "Last Name"},),
+            'company_name': forms.TextInput(attrs={"placeholder": "Company Name"},),
+            'company_tin_number': forms.TextInput(attrs={"placeholder": "Company Tin Number"},),
+            'email': forms.TextInput(attrs={"placeholder": "User Email"},),
+            'phone_number': forms.TextInput(attrs={"placeholder": "Phone Number", "data-mask": "+251-99999-9999"},),
+        }
 
 '''
 class DateForm(forms.Form):
@@ -169,8 +181,6 @@ class VacancyForm(forms.ModelForm):
             'requirement_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirements for the Job in Amharic'})
                       
         }
-
-
 
 class CreateJobApplicationForm(forms.ModelForm):
 

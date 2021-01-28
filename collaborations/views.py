@@ -34,7 +34,7 @@ from django.http import HttpResponse, FileResponse
                          
 from wsgiref.util import FileWrapper
 
-from collaborations.forms import BlogsForm, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm
+from collaborations.forms import BlogsForm, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, ApplicantForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
@@ -938,8 +938,8 @@ class CustomerTenderDetail(View):
         if self.kwargs['id'] :
             try:
                 tender = Tender.objects.get(id = self.kwargs['id']  )
-                
-                return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender,})
+                applicant_form = ApplicantForm
+                return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applicant_form':applicant_form})
 
             except Exception as e:
                 print("Exception at customerTenderDetail :", str(e))
