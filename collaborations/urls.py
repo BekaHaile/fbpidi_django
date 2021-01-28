@@ -1,6 +1,7 @@
 from django.urls import path,include
 
-from .views import (PollIndex, PollDetail, VacancyMoreDetail,CreateComment,
+from .views import (BlogList,BlogDetail,FaqList,
+                    PollIndex, PollDetail, VacancyMoreDetail,CreateComment,
                     CustomerTenderList, CustomerTenderDetail, CreateApplication, VacancyList,
                     CategoryBasedSearch, CreateForumQuestion , ListForumQuestions,ForumQuestionsDetail,
                     CreateCommentReplay,ListAnnouncement,EditCommentForum,EditForumQuestions,
@@ -24,8 +25,12 @@ urlpatterns = [
     path("tender_application/<id>/", ApplyForTender.as_view(), name= "tender_application"),
     path("download/<id>/", pdf_download, name = "download"),
 
-    path("vacancy-list/",VacancyList.as_view(),name="vacancy"),
+    path("faq/",FaqList.as_view(),name="faq"),
+    path("blog-list/",BlogList.as_view(),name="blog_grid_right"),
+    path("blog-details/<id>",BlogDetail.as_view(),name="blog_details"),
     path("blog-comment/<id>",CreateComment.as_view(),name="Comment"),
+
+    path("vacancy-list/",VacancyList.as_view(),name="vacancy"),
     path("vacancy-search/<id>",CategoryBasedSearch.as_view(),name="vacancy_search"),
     path("vacancy-detail/<id>",VacancyMoreDetail.as_view(),name="vacancy_detail"),
 

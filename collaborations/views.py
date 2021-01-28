@@ -37,14 +37,17 @@ from django.http import HttpResponse, FileResponse
                          
 from wsgiref.util import FileWrapper
 
+
 from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
                                  VacancyForm,JobCategoryForm,
                                  ForumQuestionForm,CommentForm,CommentReplayForm,
                                  AnnouncementForm)
-from collaborations.models import (Blog, BlogComment,Faqs,
+
+from collaborations.models import ( Blog, BlogComment,Faqs,
                                     Vacancy,JobApplication, JobCategoty,
                                     ForumQuestion, ForumComments, CommentReplay,
-                                    Announcement,AnnouncementImages)
+                                    Announcement,AnnouncementImages,
+                                    )
 
 
 # --------------- Announcement
@@ -73,6 +76,15 @@ class AnnouncementDetail(View):
             post.containt = form.cleaned_data.get('containt')
             post.containt_am = form.cleaned_data.get('containt_am')
             post.save()
+            print("----- | ----")
+            print(self.request.FILES.getlist('images'))
+            for images in self.request.FILES.getlist('images'):
+                print("image name:"+str(images.name))
+                announcementimages= AnnouncementImages()
+                announcementimages.announcement = post
+                announcementimages.image = images
+                announcementimages.save()
+
             messages.success(self.request, "Edited Announcement Successfully")
             return redirect("admin:anounce_list")
         return render(self.request, template_name,context)
@@ -122,12 +134,18 @@ class CreatAnnouncement(LoginRequiredMixin,View):
 
 #---------------- forum and comment on forum
 class SearchForum(View):
+    def get(self,*args,**kwargs):
+        return redirect(reverse("forum_list"))
     def post(self,*args,**kwargs):
         print("============")
         print(self.request.POST["search"])
         forum = ForumQuestion.objects.filter(title__contains=self.request.POST['search'])
         template_name = "frontpages/forums/forum_list.html"
-        context = {'forums':forum}
+        if str(self.request.user) != "AnonymousUser":
+            userCreated = ForumQuestion.objects.filter(user=self.request.user)
+        else:
+            userCreated = ""
+        context = {'forums':forum,'usercreated':userCreated}
         return render(self.request, template_name,context)
 
 class EditCommentForum(View):

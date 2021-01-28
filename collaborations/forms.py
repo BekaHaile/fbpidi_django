@@ -148,7 +148,7 @@ class DateForm(forms.Form):
 
 class VacancyForm(forms.ModelForm):
     
-    employement_type = forms.CharField(label='job type', widget=forms.Select(choices=JOB_CHOICES))
+    employement_type = forms.ChoiceField(choices = JOB_CHOICES, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
 
     class Meta:
         model = Vacancy
@@ -174,7 +174,7 @@ class VacancyForm(forms.ModelForm):
 
 class CreateJobApplicationForm(forms.ModelForm):
 
-    status = forms.CharField( widget=forms.Select(choices=CURRENT_STATUS) )
+    status = forms.ChoiceField(choices = CURRENT_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
 
     class Meta:
         model = JobApplication
@@ -183,7 +183,7 @@ class CreateJobApplicationForm(forms.ModelForm):
         
         widgets = {
             
-            'bio':forms.Textarea(attrs={'class':'summernote','placeholder':'Introduce your self and why you are appling'}),         
+            'bio':forms.Textarea(attrs={'class':'summernote','placeholder':'Introduce your self and wright why you are appling'}),         
         }
 
 class JobCategoryForm(forms.ModelForm):
