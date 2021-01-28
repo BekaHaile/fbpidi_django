@@ -1685,16 +1685,13 @@
 							
 							{%endfor%}
 							
-							
-
 							<div id="bank_form_id" class="modal fade" tabindex="-1">
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h5 class="modal-title">Company Bank Creation Form</h5>
+											<h5 class="modal-title">Company Bank Account Creation Form</h5>
 											
 										</div>
-			
 										<form action="{%url 'admin:create_company_bank_account' id=company.id%}" method="POST" enctype="multipart/form-data">
 											{%csrf_token%}
 											<div class="modal-body">
@@ -1721,14 +1718,7 @@
 									</div>
 								</div>
 							</div>
-
-
 						</div>
-
-
-
-
-
 					</div>
 					<!-- /right content -->
 

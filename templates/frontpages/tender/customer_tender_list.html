@@ -1,7 +1,10 @@
 {%extends 'frontpages/layout.html'%}
-
+{%load i18n%}
+{%load core_template_tags%}
 
 {%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+
 		<!--Sliders Section-->
 		<section>
 			<div class="bannerimg cover-image bg-background3" data-image-src="../../assets/images/banners/banner2.jpg">
@@ -209,7 +212,7 @@
 										<div class="col-xl-8 col-lg-12 col-md-12">
 											<div class="card-body">
 												<a href="/collaborations/customer_tender_detail/{{tender.id}}/" class="text-dark">
-													<h4 class="font-weight-semibold mb-2">{{tender.title}}</h4>
+													<h4 class="font-weight-semibold mb-2">{% print_translated tender.title tender.title_am LANGUAGE_CODE %}</h4>
 												</a>
 												<div class="item7-card-desc d-flex mb-3">
 													<a>

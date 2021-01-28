@@ -16,6 +16,7 @@ from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,F
                         CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
                         JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
                         SuperAdminVacancyList,
+                        AdminNewsList, CreateNews, EditNews, DeleteNews, NewsDetail,DeleteNewsImage,
                         CreatAnnouncement,ListAnnouncement,AnnouncementDetail
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
@@ -107,6 +108,15 @@ class CustomAdminSite(admin.AdminSite):
             path("edit_tender/<id>/", EditTender.as_view(), name = "edit_tender"),
             path("delete_tender/<id>/", DeleteTender.as_view(), name = "delete_tender"),
             path("manage_bank_account/<option>/<id>/",ManageBankAccount.as_view(), name = "manage_bank_account"),
+            
+
+            # paths for news and events
+            path('news_list/', AdminNewsList.as_view(), name = "news_list"),
+            path('create_news/', CreateNews.as_view(), name = "create_news"),
+            path('edit_news/<id>/', EditNews.as_view(), name = "edit_news"),
+            path('news_detail/<id>/', NewsDetail.as_view(), name = "news_detail"),
+            path('delete_news/<id>/', DeleteNews.as_view(), name = "delete_news"),
+            path('delete_news_image/<id>/', DeleteNewsImage.as_view(), name="delete_news_image"),
             
             
 

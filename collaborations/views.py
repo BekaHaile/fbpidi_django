@@ -1,5 +1,4 @@
 
-from django.shortcuts import render, redirect
 from django.urls import reverse
 import datetime
 
@@ -8,9 +7,8 @@ from collaborations.models import Blog, BlogComment
 from collaborations.forms import FaqsForm
 from django.shortcuts import render, redirect, reverse
 from django.views import View
-import datetime
-
-from collaborations.models import Faqs, Vacancy
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
+from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategoty, News, NewsImages
                                      #redirect with context
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
@@ -18,7 +16,7 @@ from .models import PollsQuestion, Choices, PollsResult, Tender, TenderApplicant
 from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
 from django.contrib import messages
 
-from company.models import Company, CompanyBankAccount, Bank
+from company.models import Company, CompanyBankAccount, Bank, CompanyStaff
 from accounts.models import User, CompanyAdmin, Company
 import os
 
@@ -26,17 +24,20 @@ import os
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 
+from django.http import FileResponse, HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models import User
-from company.models import Company, CompanyStaff
 
-from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
+from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
 from django.http import HttpResponse, FileResponse
                          
 from wsgiref.util import FileWrapper
 
+from collaborations.forms import BlogsForm, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
 from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
                                  VacancyForm,JobCategoryForm,
                                  ForumQuestionForm,CommentForm,CommentReplayForm,
@@ -244,6 +245,9 @@ class ForumQuestionsDetail(View):
 
 ## ------------- Blogs Views
 
+
+import datetime
+import os
 
 ## --- Blogs Views
 class CreatBlog(LoginRequiredMixin,View):
@@ -672,7 +676,6 @@ class PollIndex(View):
         polls = PollsQuestion.objects.all()
         context={'polls':polls}
         return render(self.request, "frontpages/polls-list.html", context)
-
        
 #only visible to logged in and never voted before
 class PollDetail(LoginRequiredMixin,View):
@@ -731,7 +734,6 @@ class PollDetail(LoginRequiredMixin,View):
         messages.warning(self.request, "Invalid Vote!")        
         return redirect("polls")
         
-
 
 ########## tender related views
 ###
@@ -874,10 +876,8 @@ class EditTender(LoginRequiredMixin,View):
             end_date = end_date[:19]
             start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
             end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
-            context['start_date'] = start_date
-            context['end_date'] = end_date
             banks= Bank.objects.all() # if there will be a scenario where the admin needs to add register new bank account
-            context = {'form':form, 'banks':banks, 'company_bank_accounts':company_bank_accounts}
+            context = {'form':form, 'banks':banks, 'company_bank_accounts':company_bank_accounts, 'start_date':start_date, 'end_date': end_date}
             if self.kwargs['id']:   
                     context['tender'] = tender 
                     context['edit'] = True
@@ -1016,3 +1016,126 @@ def pdf_download(request, id):
     f.close()
     return response
 
+
+##### News
+
+class CreateNews(LoginRequiredMixin, View):
+    def get(self,*args,**kwargs):
+        try:    
+            form = NewsForm()
+            context = {'form':form,}
+            return render(self.request,'admin/collaborations/create_news.html',context)
+        except Exception as e: 
+            print("execption at create News ", str(e))
+            return redirect("admin:news_list")
+        
+    def post(self, *args, **kwargs):
+        form = NewsForm( self.request.POST) 
+        if form.is_valid:
+            news = form.save(commit=False)
+            news.user = self.request.user
+            news.save()
+        
+            for image in self.request.FILES.getlist('images'):
+                print ("saving ", image.name)
+                imag = NewsImages(news=news, name = image.name, image = image)
+                imag.save()
+            messages.success(self.request, "News Created Successfully!")
+            return redirect("admin:news_list") 
+        else:
+            messages.warning(self.request, "Error! News not Created!")
+
+class EditNews(LoginRequiredMixin, View):
+    def get(self,*args,**kwargs):
+        try:   
+            print("in the try")
+            if self.kwargs['id']:
+                print("in the if method", self.kwargs['id'])
+                news = News.objects.get(id =  self.kwargs['id'])
+                return render(self.request,'admin/collaborations/create_news.html',{'news':news, 'edit':True})
+        except Exception as e: 
+            print("execption at create News ", str(e))
+            messages.warning(self.request,"Error, Could Not Find the News! ")
+            return redirect("admin:index")
+        
+    def post(self, *args, **kwargs):
+        if self.kwargs['id']:
+            form = NewsForm(self.request.POST) 
+            news = News.objects.filter(id = self.kwargs['id']).first()
+            if form.is_valid:
+                news.title = self.request.POST['title']
+                news.title_am = self.request.POST['title_am']
+                news.description = self.request.POST['description']
+                news.description_am = self.request.POST['description_am']
+                news.save()
+
+                if self.request.FILES:
+                    for image in self.request.FILES.getlist('images'):
+                        print ("saving new images", image.name)
+                        imag = NewsImages(news=news, name = image.name, image = image)
+                        imag.save()
+                messages.success(self.request, "News Edited Successfully!")
+                return redirect("admin:news_list") 
+            else:
+                messages.warning(self.request, "Error! News not Edited!")
+
+class AdminNewsList(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        newslist = News.objects.all()
+        return render(self.request, "admin/collaborations/news.html", {'newslist':newslist})
+
+class NewsDetail(LoginRequiredMixin,View):
+    def get(self, *args, **kwargs):         
+        form = TenderForm()
+        if self.kwargs['id']:
+            try:
+                news = News.objects.get(id =self.kwargs['id'] )
+                context = {'form':form, 'news':news }
+                return render(self.request,'admin/collaborations/news_detail.html',context)
+            except Exception as e:
+                print(str(e))
+                messages.warning(self.request,"Could not get the News!")
+                return redirect("admin:news_list")
+
+        print("error at newsDetail for admin")
+        return redirect("admin:news_list")
+
+class DeleteNews(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        if self.kwargs['id'] :
+            try:
+                news = News.objects.get(id = self.kwargs['id']  )
+                news.delete()
+                message = "News Deleted Successfully"
+                messages.success(self.request,message)
+                return redirect("admin:news_list")
+            except Exception as e:
+                print("################", str(e))
+                messages.warning(self.request, "Could not find the News")
+                return redirect("admin:news_list")
+
+
+        else:
+            messages.warning(self.request, "Nothing selected!")
+            return redirect("admin:news_list")
+
+class DeleteNewsImage(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        if self.kwargs['id'] :
+            try:
+                
+                image = NewsImages.objects.get(id = self.kwargs['id']  )
+                news = image.news
+                image.delete()
+                message = "Image Deleted Successfully"
+                messages.success(self.request,message)
+                return redirect(f"/admin/edit_news/{news.id}")
+            except Exception as e:
+                print("################", str(e))
+                messages.warning(self.request, "Could not find the Image")
+                return redirect("admin:news_list")
+
+
+        else:
+            messages.warning(self.request, "Nothing selected!")
+            return redirect("admin:news_list")

@@ -51,3 +51,10 @@ def print_translated(en_data,am_data,lan_code):
         return mark_safe(en_data)
     elif lan_code == 'am':
         return mark_safe(am_data)
+
+@register.simple_tag
+def get_company_name(tender):
+    if tender:
+        return tender.get_company().company_name 
+    else:
+        return "NO Company!"
