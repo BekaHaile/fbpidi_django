@@ -17,6 +17,7 @@ from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,F
                         JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
                         SuperAdminVacancyList,
                         AdminNewsList, CreateNews, EditNews, DeleteNews, NewsDetail,DeleteNewsImage
+                        CreatAnnouncement,ListAnnouncement,AnnouncementDetail
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView
@@ -42,6 +43,11 @@ class CustomAdminSite(admin.AdminSite):
             return update_wrapper(wrapper, view)
 
         my_urls = [ 
+            path('anounce-Detail/<model_name>/<id>',AnnouncementDetail.as_view(),name="anounce_Detail"),
+            path('anounce-List',ListAnnouncement.as_view(),name="anounce_list"),
+            path('anounce-Create',CreatAnnouncement.as_view(),name="anounce_Create"),
+            #path('jobCategoty-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),
+           
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
             path('download/<name>/<id>',Download.as_view(),name="Download"),
             path('close/<id>/<closed>',CloseVacancy.as_view(),name="close"),

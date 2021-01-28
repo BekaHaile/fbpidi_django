@@ -1,11 +1,24 @@
 from django.urls import path,include
-from .views import (PollIndex, PollDetail, 
-                    CustomerTenderList, CustomerTenderDetail,  CreateComment,CreateApplication, VacancyList,VacancyMoreDetail, CategoryBasedSearch, ApplyForTender,  pdf_download )
 
-urlpatterns = [
+from .views import (PollIndex, PollDetail, VacancyMoreDetail,CreateComment,
+                    CustomerTenderList, CustomerTenderDetail, CreateApplication, VacancyList,
+                    CategoryBasedSearch, CreateForumQuestion , ListForumQuestions,ForumQuestionsDetail,
+                    CreateCommentReplay,ListAnnouncement,EditCommentForum,EditForumQuestions,
+                    SearchForum, ApplyForTender,  pdf_download)
+                    
+
+urlpatterns = [ 
     path("polls/", PollIndex.as_view(), name = "polls" ),
     path("poll_detail/<id>/", PollDetail.as_view(), name = "poll_detail"),
-
+    path("edit-comment/<id>/<forum>/<type>/",EditCommentForum.as_view(),name="edit_comment"),
+    path("forum-edit/<id>",EditForumQuestions.as_view(),name="forum_edit"),
+    path("forum-search",SearchForum.as_view(),name="forum_search"),
+    path("forum-form",CreateForumQuestion.as_view(),name="forum_form"),
+    path("announcement-list/",ListAnnouncement.as_view(),name="announcement_list"),
+    path("apply/<model_name>/<id>",CreateApplication.as_view(),name="applications"),
+    path("forum-list",ListForumQuestions.as_view(),name="forum_list"),
+    path("Replay-comment/<id>/<forum>",CreateCommentReplay.as_view(),name="Replay_comment"),
+    path("forum-detail/<id>",ForumQuestionsDetail.as_view(),name="forum_detail"),
     path("tender_list/", CustomerTenderList.as_view(), name = "tender_list"),
     path("customer_tender_detail/<id>/", CustomerTenderDetail.as_view(), name = "customer_tender_detail"),
     path("tender_application/<id>/", ApplyForTender.as_view(), name= "tender_application"),

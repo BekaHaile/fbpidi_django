@@ -233,3 +233,69 @@ class NewsImages(models.Model):
 
     
 
+    
+        
+       
+class TenderApplicant(models.Model):
+    first_name = models.CharField(verbose_name="first_name", max_length=50)
+    last_name = models.CharField(verbose_name="first_name", max_length=50)
+    phone_number = models.CharField(max_length=20,blank=True,null=True)
+    email = models.EmailField(verbose_name="applicant email", max_length=255)
+    company_name = models.CharField(verbose_name="first_name", max_length=50)
+    company_tin_number = models.CharField(verbose_name="first_name", max_length=50)
+   
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} from {self.company_name}"
+    
+        
+
+# This can be created automatically if we use a manytomanyrelation, that's why I commented this table and added a tender_applications
+class TenderApplications(models.Model):
+    applicant = models.ForeignKey(TenderApplicant, on_delete=models.CASCADE)
+    tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (('applicant', 'tender'))
+
+class ForumQuestion(models.Model):
+    title = models.CharField(max_length=500,null=False)
+    description = models.TextField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    attachements = models.FileField(upload_to="Attachements/", null=True,max_length=254,help_text="only pdf files, Max size 10MB")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def countComment(self):
+        return self.forumcomments_set.all().count()
+
+    def comments(self):
+        return self.forumcomments_set.all()
+    
+     
+
+class ForumComments(models.Model):
+    forum_question=models.ForeignKey(ForumQuestion,on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    comment = models.TextField(null=False)
+    attachements = models.FileField(upload_to="Attachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def commentreplay(self):
+        return self.commentreplay_set.all()
+
+
+class CommentReplay(models.Model):
+    comment = models.ForeignKey(ForumComments,on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField(null=False)
+    attachements = models.FileField(upload_to="Attachements/", null=True,max_length=254,help_text="only pdf files, Max size 10MB")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+class Announcement(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    title = models.CharField(max_length=500,null=False)
+    title_am = models.CharField(max_length=500,null=False)
+    containt = models.TextField(null=False)
+    containt_am = models.TextField(null=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
