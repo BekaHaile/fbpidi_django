@@ -95,7 +95,7 @@ msgstr ""
 
 #: .\templates\frontpages\index.html:14
 msgid "Welcome To The Biggest Business Directory"
-msgstr "ወደ ትልቁ የንግድ ማውጫ እንኳን በደህና መጡ"
+msgstr "ወደ ትልቁ የንግድ ማውጫ እንኳን በደህና መጡ!"
 
 #: .\templates\frontpages\index.html:15 .\templates\frontpages\index.html:593
 msgid ""
@@ -371,7 +371,7 @@ msgstr "ምረጫ"
 
 #: .\templates\frontpages\layout.html:224
 msgid "Tenders"
-msgstr ""
+msgstr "ጨረታዎቸ"
 
 #: .\templates\frontpages\layout.html:226
 msgid "Faqs"

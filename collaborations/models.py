@@ -97,7 +97,7 @@ class Faqs(models.Model):
     answers_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
  
- 
+
 class Tender(models.Model):
     TENDER_STATUS = ['Open', 'Pending', 'Closed', 'Suspended']
     user = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.CASCADE )
@@ -209,9 +209,29 @@ class JobApplication(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
+## News and Events
 
+class News(models.Model):
 
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
+    title = models.CharField(max_length=500, null = False)
+    title_am = models.CharField(max_length=500, null = False)
+    description = models.TextField( verbose_name="News Description(English)" )
+    description_am = models.TextField( verbose_name="News Description(Amharic)" )
+    timestamp = models.DateTimeField(auto_now_add=True)
 
+    def get_images(self):
+        return self.newsimages_set.all()
+    
+
+    
+class NewsImages(models.Model):
+    news = models.ForeignKey(News, on_delete = models.CASCADE)
+    name = models.CharField(verbose_name = "Image alternative name",max_length=255)
+    image = models.ImageField(upload_to = "Images/News Images", max_length=254, verbose_name="News Image",help_text="jpg, png, gid", blank=False)  
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    
 
     
         

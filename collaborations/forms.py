@@ -1,11 +1,13 @@
 from django import forms
 from django_summernote.widgets import SummernoteWidget
+from collaborations.models import Faqs,Blog,BlogComment,Vacancy,JobApplication
+# from .models import  PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications, JobCategoty, 
 from .models import  (PollsQuestion, Choices, PollsResult,
                      Tender, TenderApplicant, TenderApplications,
                       JobCategoty,Vacancy,JobApplication,
                       Faqs,Blog,BlogComment,
                       ForumQuestion,ForumComments,CommentReplay,
-                      ForumComments,Announcement
+                      ForumComments,Announcement, News, NewsImages
                       )
 
 from django.forms.widgets import SelectDateWidget
@@ -195,6 +197,18 @@ class JobCategoryForm(forms.ModelForm):
              'categoryName_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Category in Amharic'}),
         }
 
+class NewsForm(forms.ModelForm):
+   
+    class Meta:
+        model = News
+        fields = ('title', 'title_am', 'description', 'description_am')
+        widgets = {
+            'title' : forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'News Title(English).'}),
+            'title_am' : forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'News Title (Amharic).'}),
+            'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Detail description on the news.(English)'}),
+            'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Detail description on the news.(Amharic)'}),
+            
+        } 
 
 class ForumQuestionForm(forms.ModelForm):
     attachements = forms.FileField(required=False)
