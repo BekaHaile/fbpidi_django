@@ -73,16 +73,12 @@
 														{% if user.is_superuser or tender.get_company.company_name == user.get_company_name  %}
 															
 															<a href="{%url 'admin:edit_tender' id=tender.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Tender</a>	
-														{% else %}
-															<a style="pointer-events: none;color: currentColor; cursor: not-allowed; opacity: 0.5; text-decoration: none;" href="{%#" class="dropdown-item"><i class="icon-pencil"></i>Edit Tender</a>
 														{% endif %}
 													
 	
 														{% if perms.collaborations.delete_tender %}
 															{% if user.is_superuser or tender.get_company.company_name == user.get_company_name   %}
 															<a href="{%url 'admin:delete_tender'  id=tender.id %}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this tender?')"><i class="icon-trash"></i>Delete Tender</a>
-															{%else%}
-															<a style="pointer-events: none;color: currentColor; cursor: not-allowed; opacity: 0.5; text-decoration: none;" dis class="dropdown-item" ><i class="icon-trash"></i>Delete Tender</a>
 															
 															{%endif%}
 

@@ -31,10 +31,27 @@
 		
 		<div class="card">
 
+			<div class= "text-right" class="card-header header-elements-inline">	
+				{% if perms.collaborations.delete_choices  %}				
+				<form action="{% url 'admin:delete_choice' id=choice.id %}" method="GET" enctype="multipart/form-data" >
+					{%csrf_token%}
+					<div class="text-right">
+						<button style="padding-left: 2%; margin-right:3%; margin-top: 2%; padding-right: 2%; background-color: maroon;" type="submit"
+						class="btn btn-primary rounded-round col-lg-2" onclick="return confirm ('Are you sure you want to delete this choice?')">Delete Choice </button>
+					</div>
+				</form>
+				{%endif%}
+			</div>
+				
+			
+			
+			
+			
+
 			<div class="card-body">
-				<h3>{{choice.choice_name}}</h3>
+				<h3>title: {{choice.choice_name}}</h3>
 								<div class="item7-card-desc d-flex mb-2 mt-3">                                    
-									<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{choice.timestamp}}</a>
+									<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>Created at: {{choice.timestamp}}</a>
                                    
                                     <a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>Total votes {{choice.count_votes}}</a>
                                     
@@ -81,24 +98,19 @@
 					</fieldset>
 					
 					<div class="text-right">
-						<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-							class="btn btn-primary rounded-round" onclick="return confirm ('Are you sure you want to Edit this choice?')">Edit Choice </button>
+						<button style="padding-left: 2%; padding-right: 2%;" type="submit"
+						class="btn btn-primary rounded-round col-lg-2" onclick="return confirm ('Are you sure you want to Edit this choice?')">Edit Choice </button>
 					</div>
+
+					
 				</form>
-				<br>
-				<form action="{% url 'admin:delete_choice' id=choice.id %}" method="GET" enctype="multipart/form-data" >
-					{%csrf_token%}
-					<div class="text-right">
-						<button style="padding-left: 10%; padding-right: 10%; background-color: maroon;" type="submit"
-							class="btn btn-primary rounded-round" onclick="return confirm ('Are you sure you want to delete this choice?')">Delete Choice </button>
-					</div>
-				</form>
+				
 				<br>
 				<form action="{% url 'admin:admin_polls' %}" method="GET" enctype="multipart/form-data" >
 					{%csrf_token%}
 					<div class="text-right">
-						<button style="padding-left: 10%; padding-right: 10%; background-color: grey;" type="submit"
-							class="btn btn-primary rounded-round">Cancel </button>
+						<button style="padding-left: 2%; padding-right: 2%; background-color: grey;" type="submit"
+							class="btn btn-primary rounded-round col-lg-2">Cancel </button>
 					</div>
 				</form>
 				

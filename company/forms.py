@@ -108,7 +108,7 @@ class CompanyBankAccountForm(forms.ModelForm):
         model = CompanyBankAccount
         fields = ('bank', 'account_number')
         widgets = {
-            'bank':forms.Select(attrs={'class':'hidden'}),
+            'bank':forms.Select(),
             'account_number':forms.TextInput( attrs = {'class': 'form-control', 'placeholder': 'Valid bank account (for the selected bank)'}),
         }
 

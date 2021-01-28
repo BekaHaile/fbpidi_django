@@ -10,6 +10,7 @@ admin_site/migrations
 collaborations/migrations
 company/migrations
 core/migrations
+product/migrations
 accounts/__pycache__
 admin_site/__pycache__
 admin_site/templatetags/__pycache__
@@ -18,3 +19,4 @@ company/__pycache__
 core/__pycache__
 core/templatetags/__pycache__
 fbpims/__pycache__
+product/__pycache__
