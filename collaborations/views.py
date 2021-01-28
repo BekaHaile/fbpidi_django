@@ -20,7 +20,6 @@ from company.models import Company, CompanyBankAccount, Bank, CompanyStaff
 from accounts.models import User, CompanyAdmin, Company
 import os
 
-
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 
@@ -56,7 +55,6 @@ class ListAnnouncement(View):
         context={'Announcements':form}
         return render(self.request, template_name,context)
 
-
 class AnnouncementDetail(View):
     def get(self,*args,**kwargs):
         form = Announcement.objects.get(id=self.kwargs['id'])
@@ -77,8 +75,6 @@ class AnnouncementDetail(View):
             messages.success(self.request, "Edited Announcement Successfully")
             return redirect("admin:anounce_list")
         return render(self.request, template_name,context)
-
-
 
 class CreatAnnouncement(LoginRequiredMixin,View):
     def company_admin(self,*args,**kwarges):
@@ -131,7 +127,6 @@ class EditCommentForum(View):
             comment.save()
             return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
             
-
 class CreateCommentReplay(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
         print("We are here")
@@ -151,8 +146,6 @@ class CreateCommentReplay(LoginRequiredMixin,View):
         print("it didn't worked")
         template_name = "frontpages/forums/forum_detail.html"
         return render(self.request, template_name,context)
-
-
 
 #----- create forum quesion
 class CreateForumQuestion(LoginRequiredMixin,View):
@@ -241,14 +234,6 @@ class ForumQuestionsDetail(View):
             return redirect(reverse("forum_detail",kwargs={'id':question.id}))
         return render(self.request, template_name,context)
 
-
-
-## ------------- Blogs Views
-
-
-import datetime
-import os
-
 ## --- Blogs Views
 class CreatBlog(LoginRequiredMixin,View):
     template_name="admin/pages/blog_form.html"
@@ -277,8 +262,6 @@ class CreatBlog(LoginRequiredMixin,View):
             context={'form':form}
             return render(self.request, "admin/pages/blog_form.html",context)
         return render(self.request, "admin/pages/blog_form.html",context)
-
-
 
 class AdminBlogList(LoginRequiredMixin,View):
     template_name="admin/pages/blog_list.html"
@@ -319,8 +302,6 @@ class BlogView(LoginRequiredMixin,View):
             return redirect("admin:admin_Blogs")
         return render(self.request, "admin/pages/blog_detail.html",context)
 
-
-
 ## --- Faqs views
 
 class CreateFaqs(LoginRequiredMixin,View):
@@ -341,7 +322,6 @@ class CreateFaqs(LoginRequiredMixin,View):
             messages.success(self.request, "New Faqs Added Successfully")
             return redirect("admin:admin_Faqs")
         return render(self.request, "admin/pages/faqs_forms.html",context)
-
 
 class FaqsView(LoginRequiredMixin,View):
     template_name="admin/pages/blog_list.html"
@@ -370,7 +350,6 @@ class FaqsList(LoginRequiredMixin,View):
         template_name = "admin/pages/faqs_list.html"
         return render(self.request, template_name,context)
 
-    
 # -----  vacancy and jobCategory
 class Download(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):
@@ -385,8 +364,6 @@ class Download(LoginRequiredMixin,View):
             message.error(self.request, "File does not exists")
             return redirect("admin:Applicant_info")
         return response
-
-
 
 class CloseVacancy(LoginRequiredMixin,View):
     
@@ -1018,7 +995,6 @@ def pdf_download(request, id):
 
 
 ##### News
-
 class CreateNews(LoginRequiredMixin, View):
     def get(self,*args,**kwargs):
         try:    
@@ -1094,48 +1070,24 @@ class NewsDetail(LoginRequiredMixin,View):
                 return render(self.request,'admin/collaborations/news_detail.html',context)
             except Exception as e:
                 print(str(e))
-                messages.warning(self.request,"Could not get the News!")
                 return redirect("admin:news_list")
-
         print("error at newsDetail for admin")
         return redirect("admin:news_list")
 
-class DeleteNews(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
+
+##### News, Customer
+class CustomerNewsList(View):
+    def get(self, *args, **kwargs):          
+        try:
+                news_list = News.objects.all()
+                return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':news_list,})
+        except Exception as e:
+                return redirect("index")     
+
+class CustomerNewsDetail(View):
+    def get(self, *args, **kwargs):        
         if self.kwargs['id'] :
-            try:
-                news = News.objects.get(id = self.kwargs['id']  )
-                news.delete()
-                message = "News Deleted Successfully"
-                messages.success(self.request,message)
-                return redirect("admin:news_list")
-            except Exception as e:
-                print("################", str(e))
-                messages.warning(self.request, "Could not find the News")
-                return redirect("admin:news_list")
-
-
+            news = News.objects.get(id = self.kwargs['id']  )
+            return render(self.request, "frontpages/news/customer_news_detail.html", {'news':news,})
         else:
-            messages.warning(self.request, "Nothing selected!")
-            return redirect("admin:news_list")
-
-class DeleteNewsImage(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        if self.kwargs['id'] :
-            try:
-                
-                image = NewsImages.objects.get(id = self.kwargs['id']  )
-                news = image.news
-                image.delete()
-                message = "Image Deleted Successfully"
-                messages.success(self.request,message)
-                return redirect(f"/admin/edit_news/{news.id}")
-            except Exception as e:
-                print("################", str(e))
-                messages.warning(self.request, "Could not find the Image")
-                return redirect("admin:news_list")
-
-
-        else:
-            messages.warning(self.request, "Nothing selected!")
-            return redirect("admin:news_list")
+            return redirect("index")

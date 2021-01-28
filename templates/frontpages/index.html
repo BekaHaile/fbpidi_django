@@ -202,7 +202,7 @@
 						<img src="{{product.image.url}}" style="height: 300px;" alt="img" class="cover-image">
 						<div class="item-card2-icons">
 							<a href="{%url 'product_detail' id=product.id %}" class="item-card2-icons-l"><i class="fa fa-cutlery"></i></a>
-							<a href="#" class="item-card2-icons-r"><i class="fa fa fa-heart-o"></i></a>
+							
 						</div>
 						<div class="blog--category">{% print_translated product.category.category_name.category_name product.category.category_name.category_name_am LANGUAGE_CODE%}</div>
 					</div>
@@ -328,63 +328,128 @@
 		</div>
 		<div id="myCarousel2" class="owl-carousel owl-carousel-icons2">
 			<!-- Wrapper for carousel items -->
+		
 			{%for company in companies%}
-			{%if company.company_type == "manufacturer"%}
-			<div class="item">
-				<div class="card mb-0 overflow-hidden">
-					<!-- <div class="arrow-ribbon bg-success">Open</div> -->
-					<div class="item-card7-imgs">
-						<a href="{% url 'bs' %}" class="absolute-link"></a>
-						<img src="{{company.company_logo.url}}" alt="img" class="cover-image">
-					</div>
-					<div class="item-card7-overlaytext">
-						<a href="{% url 'bs' %}" class="text-white">{%print_translated company.company_type company.company_type_am LANGUAGE_CODE%}</a>
-					</div>
-					<div class="card-body">
-						<div class="item-card7-desc">
-							<div class="item-card7-text">
-								<a href="{% url 'bs' %}" class="text-dark">
-									<h4 class="">{%print_translated company.company_name company.company_name_am LANGUAGE_CODE%}</h4>
-								</a>
+				{%if company.company_type == "manufacturer"%}
+					<div class="item">
+						<div class="card mb-0 overflow-hidden">
+							<!-- <div class="arrow-ribbon bg-success">Open</div> -->
+							<div class="item-card7-imgs">
+								<a href="{% url 'bs' %}" class="absolute-link"></a>
+								<img src="{{company.company_logo.url}}" alt="img" class="cover-image">
 							</div>
-							<ul class="item-cards7-ic mb-0">
-								<li><a href="#"><span class=""><i class="icon icon-eye mr-1"></i> 12 Views</span></a>
-								</li>
-								<li><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>
-										{{company.location}}</a></li>
-								<li class="mb-md-0"><a href="#" class="icons"><i
-											class="icon icon-event text-muted mr-1"></i> 1 hour ago</a></li>
-								<li class="mb-0"><a href="#" class="icons"><i
-											class="icon icon-phone text-muted mr-1"></i>{{company.phone_number}}</a>
-								</li>
-							</ul>
-							<!-- <p class="mb-0">{{company.detail|safe|truncatewords:4}}</p> -->
+
+							<div class="item-card7-overlaytext">
+								<a href="{% url 'bs' %}" class="text-white">{%print_translated company.company_type company.company_type_am LANGUAGE_CODE%}</a>
+							</div>
+
+							<div class="card-body">
+								<div class="item-card7-desc">
+									<div class="item-card7-text">
+										<a href="{% url 'bs' %}" class="text-dark">
+											<h4 class=""> {%print_translated company.company_name company.company_name_am LANGUAGE_CODE%}</h4>
+										</a>
+									</div>
+									<ul class="item-cards7-ic mb-0">
+										<li><a href="#"><span class=""><i class="icon icon-eye mr-1"></i> 12 Views</span></a>
+										</li>
+										<li><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>
+												{{company.location}}</a></li>
+										<li class="mb-md-0"><a href="#" class="icons"><i
+													class="icon icon-event text-muted mr-1"></i> 1 hour ago</a></li>
+										<li class="mb-0"><a href="#" class="icons"><i
+													class="icon icon-phone text-muted mr-1"></i>{{company.phone_number}}</a>
+										</li>
+									</ul>
+									<!-- <p class="mb-0">{{company.detail|safe|truncatewords:4}}</p> -->
+								</div>
+							</div>
+							<div class="card-footer">
+								<div class="footerimg d-flex mt-0 mb-0">
+									<div class="d-flex footerimg-l mb-0">
+										<img src="{{company.company_logo.url}}" alt="image" class="avatar brround  mr-2">
+										<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">{{company.location}}<i
+												class="icon icon-check text-success fs-12 ml-1" data-toggle="tooltip"
+												data-placement="top" title="verified"></i></h5>
+									</div>
+									<div class="mt-2 footerimg-r ml-auto">
+										<a href="#" class="text-pink" data-toggle="tooltip" data-placement="top"
+											title="Remove from Wishlist"><i class="fa fa-heart"></i></a>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="card-footer">
-						<div class="footerimg d-flex mt-0 mb-0">
-							<div class="d-flex footerimg-l mb-0">
-								<img src="{{company.company_logo.url}}" alt="image" class="avatar brround  mr-2">
-								<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">{{company.location}}<i
-										class="icon icon-check text-success fs-12 ml-1" data-toggle="tooltip"
-										data-placement="top" title="verified"></i></h5>
-							</div>
-							<div class="mt-2 footerimg-r ml-auto">
-								<a href="#" class="text-pink" data-toggle="tooltip" data-placement="top"
-									title="Remove from Wishlist"><i class="fa fa-heart"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			{%endif%}
+				
+				{%endif%}
 			{%endfor%}
 
 		</div>
 	</div>
 </section>
 <!--/Manufacturers Section-->
+
+
+<!--Manufacturers Section-->
+<section class="sptb bg-patterns bg-white">
+	<div class="container">
+		<div class="section-title center-block text-center">
+			<h2>Latest News</h2>
+			<p>Click the News you want to see in detail.</p>
+		</div>
+		<div id="myCarousel2" class="owl-carousel owl-carousel-icons2">
+			<!-- Wrapper for carousel items -->
+		
+			{%for news in news_list%}
+					
+					<div class="item">
+						<div class="card mb-0 overflow-hidden">
+							<div class="item-card7-imgs">
+								<a href="{% url 'customer_news_detail' id=news.id %}" class="absolute-link"></a>
+								
+								<img  width = "200" height = "250" src="{{news.get_images.0.image.url}}" alt="img" class="cover-image">
+							</div>
+							<div class="card-body">
+								<div class="item-card7-desc">
+									<div class="item-card7-text">
+										<a href="{% url 'customer_news_detail' id=news.id %}" class="text-dark">
+											<h4 class=""> {%print_translated news.title|truncatewords:10 news.title_am|truncatewords:10 LANGUAGE_CODE%}</h4>
+										</a>
+									</div>
+									<ul class="item-cards7-ic mb-0">
+										<li><a href="#"><span class=""><i class="icon icon-eye mr-1"></i> {{news.get_images.count}} Images</span></a>
+										</li>
+										<li><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>
+												{{news.user.get_company.location}}</a></li>
+										<li class="mb-md-0"><a href="#" class="icons"><i
+													class="icon icon-event text-muted mr-1"></i>{{news.timestamp}}</a></li>
+										<li class="mb-0"><a href="#" class="icons"><i
+													class="icon icon-phone text-muted mr-1"></i>{{news.user.get_company.phone_number}}</a>
+										</li>
+									</ul>			
+								</div>
+							</div>
+							<div class="card-footer">
+								<div class="footerimg d-flex mt-0 mb-0">
+									<div class="d-flex footerimg-l mb-0">
+										
+										<img src="{{news.user.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
+										<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">{{news.user.get_company.company_name}}<i
+												class="icon icon-check text-success fs-12 ml-1" data-toggle="tooltip"
+												data-placement="top" title="verified"></i></h5>
+									</div>		
+								</div>
+							</div>
+						</div>
+					</div>
+			{%endfor%}
+
+		</div>
+	</div>
+</section>
+<!--/Manufacturers Section-->
+
+
 
 <!--How It Works-->
 <section class="sptb">

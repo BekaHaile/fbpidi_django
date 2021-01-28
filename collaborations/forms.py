@@ -1,7 +1,5 @@
 from django import forms
 from django_summernote.widgets import SummernoteWidget
-from collaborations.models import Faqs,Blog,BlogComment,Vacancy,JobApplication
-# from .models import  PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications, JobCategoty, 
 from .models import  (PollsQuestion, Choices, PollsResult,
                      Tender, TenderApplicant, TenderApplications,
                       JobCategoty,Vacancy,JobApplication,

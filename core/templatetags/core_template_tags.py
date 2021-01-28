@@ -58,3 +58,19 @@ def get_company_name(tender):
         return tender.get_company().company_name 
     else:
         return "NO Company!"
+
+@register.filter
+def get_user_company(user):
+    if user.is_company_admin:
+        return Company.objects.get(user = user)
+    elif user.is_company_staff:
+        return Company.objects.get(user = user)
+
+
+@register.filter
+def get_user_company_name(user):
+    if user.is_company_admin:
+        return Company.objects.get(user = user).company_name
+    elif user.is_company_staff:
+        return Company.objects.get(user = user).company_name
+
