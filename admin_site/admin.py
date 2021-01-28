@@ -16,7 +16,7 @@ from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,F
                         CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
                         JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
                         SuperAdminVacancyList,
-                        AdminNewsList, CreateNews, EditNews, DeleteNews, NewsDetail,DeleteNewsImage
+                        AdminNewsList, CreateNews, EditNews, DeleteNews, NewsDetail,DeleteNewsImage,
                         CreatAnnouncement,ListAnnouncement,AnnouncementDetail
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
