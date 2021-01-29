@@ -16,8 +16,9 @@ from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,F
                         CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
                         JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
                         SuperAdminVacancyList,
-                        AdminNewsList, CreateNews, EditNews, DeleteNews, NewsDetail,DeleteNewsImage,
-                        CreatAnnouncement,ListAnnouncement,AnnouncementDetail
+                        AdminNewsList, CreateNews, EditNews, NewsDetail,
+                        CreatAnnouncement,ListAnnouncement,AnnouncementDetail,
+                        TenderList, CreateTender, TenderDetail, EditTender,  DeleteTender, ManageBankAccount
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView
@@ -29,9 +30,7 @@ from company.views import (
     CreateFbpidiCompanyProfile,ViewFbpidiCompany, CreateCompanyBankAccount, EditCompanyBankAccount, DeleteCompanyBankAccount
 )
 
-
-
-from collaborations.views import TenderList, CreateTender, TenderDetail, EditTender,  DeleteTender, ManageBankAccount
+ 
 class CustomAdminSite(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
@@ -114,8 +113,6 @@ class CustomAdminSite(admin.AdminSite):
             path('create_news/', CreateNews.as_view(), name = "create_news"),
             path('edit_news/<id>/', EditNews.as_view(), name = "edit_news"),
             path('news_detail/<id>/', NewsDetail.as_view(), name = "news_detail"),
-            path('delete_news/<id>/', DeleteNews.as_view(), name = "delete_news"),
-            path('delete_news_image/<id>/', DeleteNewsImage.as_view(), name="delete_news_image"),
             
             
 
