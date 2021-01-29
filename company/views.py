@@ -224,7 +224,6 @@ class CreateCompanyEvent(LoginRequiredMixin,View):
             else:
                 return redirect("admin:view_company_profile")
 
-
 class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         form = FbpidiCompanyForm()
@@ -241,7 +240,6 @@ class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
             return redirect('admin:index')
         else:
             return render(self.request,"admin/company/company_form_fbpidi.html",{'form':form})
-
 
 class ViewFbpidiCompany(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -288,7 +286,6 @@ class ViewFbpidiCompany(LoginRequiredMixin,View):
 class CreateCompanyBankAccount(LoginRequiredMixin, View):
         def post(self, *ags, **kwargs):
             form  = CompanyBankAccountForm(self.request.POST)
-            
             if form.is_valid:
                     account = form.save(commit=False)
                     company = Company.objects.get(id = self.kwargs['id'])
