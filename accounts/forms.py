@@ -88,12 +88,23 @@ ADMIN_PERMISSION_LIST = [
     'view_tender',
     'change_tender',
     'delete_tender',
+
     'add_companybankaccount',
     'change_companybankaccount',
     'delete_companybankaccount',
     'view_companybankaccount',
     'view_tenderapplicant',
     'view_tenderapplications',
+
+    'add_news', 
+    'view_news', 
+    'change_news', 
+    'delete_news',
+
+    'add_newsimages', 
+    'view_newsimages', 
+    'change_newsimages', 
+    'delete_newsimages', 
     
 ]
 

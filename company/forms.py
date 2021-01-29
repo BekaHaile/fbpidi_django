@@ -102,8 +102,8 @@ class CompanyEventForm(forms.ModelForm):
         }
 
 class CompanyBankAccountForm(forms.ModelForm):
-    bank = forms.ModelChoiceField(queryset=Bank.objects.all().order_by('bank_name'), required=True)
-    
+    bank = forms.ModelChoiceField(empty_label="Choose Bank", queryset=Bank.objects.all(),widget=forms.Select(attrs={'class':'form-control form-control-uniform'}),required=True)
+
     class Meta:
         model = CompanyBankAccount
         fields = ('bank', 'account_number')
