@@ -11,7 +11,8 @@ from accounts.models import User
 from company.models import Company
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
-from collaborations.models import PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategoty, Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages
+
+from collaborations.models import PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategoty, Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages,News, NewsImages
 from django.http import HttpResponse, FileResponse
  
 # 
@@ -114,6 +115,29 @@ class DeleteView(LoginRequiredMixin,View):
             message ="Image Deleted"
             messages.success(self.request,message)
             return redirect("admin:product_detail",id=pdimage.product.id,option='view')
+        elif self.kwargs['model_name'] == 'News':
+            try:
+                news = News.objects.get(id = self.kwargs['id']  )
+                news.delete() 
+                messages.success(self.request,"News Deleted Successfully")
+                return redirect("admin:news_list")
+            except Exception as e:
+                messages.warning(self.request, "Could not find the News")
+                return redirect("admin:news_list")
+           
+        elif self.kwargs['model_name'] == "NewsImage":
+            try:  
+                image = NewsImages.objects.get(id = self.kwargs['id']  )
+                news = image.news
+                image.delete()
+                message = "Image Deleted Successfully!"
+                messages.success(self.request,message)
+                return redirect(f"/admin/edit_news/{news.id}")
+            except Exception as e:
+                messages.warning(self.request, "Could not find the Image")
+                return redirect("admin:news_list")
+
+
 
 class Polls(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):

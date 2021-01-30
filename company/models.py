@@ -82,6 +82,9 @@ class CompanyStaff(models.Model):
     def get_company_name(self):
         return self.company.company_name if self.company.company_name else None
 
+    def get_company(self):
+        return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None
+
 
 
 class CompanySolution(models.Model):

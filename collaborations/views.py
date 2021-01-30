@@ -20,7 +20,6 @@ from company.models import Company, CompanyBankAccount, Bank, CompanyStaff
 from accounts.models import User, CompanyAdmin, Company
 import os
 
-
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 
@@ -36,7 +35,9 @@ from django.http import HttpResponse, FileResponse
 from wsgiref.util import FileWrapper
 
 
-from collaborations.forms import BlogsForm, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm
+
+from collaborations.forms import BlogsForm, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, ApplicantForm
+
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
@@ -58,7 +59,6 @@ class ListAnnouncement(View):
 		template_name="frontpages/announcement/announcement_list.html"
 		context={'Announcements':form}
 		return render(self.request, template_name,context)
-
 
 class AnnouncementDetail(View):
 	def get(self,*args,**kwargs):
@@ -89,6 +89,7 @@ class AnnouncementDetail(View):
 			messages.success(self.request, "Edited Announcement Successfully")
 			return redirect("admin:anounce_list")
 		return render(self.request, template_name,context)
+
 
 class ListAnnouncementAdmin(View):
 	def get(self,*args,**kwargs):
@@ -171,8 +172,6 @@ class CreateCommentReplay(LoginRequiredMixin,View):
 		print("it didn't worked")
 		template_name = "frontpages/forums/forum_detail.html"
 		return render(self.request, template_name,context)
-
-
 
 #----- create forum quesion
 class CreateForumQuestion(LoginRequiredMixin,View):
@@ -367,7 +366,6 @@ class CreateFaqs(LoginRequiredMixin,View):
 			messages.success(self.request, "New Faqs Added Successfully")
 			return redirect("admin:admin_Faqs")
 		return render(self.request, "admin/pages/faqs_forms.html",context)
-
 
 class FaqsView(LoginRequiredMixin,View):
 	template_name="admin/pages/blog_list.html"
@@ -1056,13 +1054,13 @@ class CustomerTenderList(View):
 
 
 class CustomerTenderDetail(View):
-	def get(self, *args, **kwargs):  
-		  
-		if self.kwargs['id'] :
-			try:
-				tender = Tender.objects.get(id = self.kwargs['id']  )
-				
-				return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender,})
+    def get(self, *args, **kwargs):  
+          
+        if self.kwargs['id'] :
+            try:
+                tender = Tender.objects.get(id = self.kwargs['id']  )
+                applicant_form = ApplicantForm
+                return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applicant_form':applicant_form})
 
 			except Exception as e:
 				print("Exception at customerTenderDetail :", str(e))
@@ -1118,7 +1116,6 @@ def pdf_download(request, id):
 
 
 ##### News
-
 class CreateNews(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		try:    

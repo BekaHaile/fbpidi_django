@@ -5,7 +5,8 @@ from .views import (BlogList,BlogDetail,FaqList,
                     CustomerTenderList, CustomerTenderDetail, CreateApplication, VacancyList,
                     CategoryBasedSearch, CreateForumQuestion , ListForumQuestions,ForumQuestionsDetail,
                     CreateCommentReplay,ListAnnouncement,EditCommentForum,EditForumQuestions,
-                    SearchForum,ApplyForTender,pdf_download,SearchBlogTag)
+                    SearchForum,ApplyForTender,pdf_download,SearchBlogTag,CustomerNewsList, CustomerNewsDetail )
+
                     
 
 urlpatterns = [ 
@@ -38,4 +39,11 @@ urlpatterns = [
     path("vacancy-apply/<model_name>/<id>",CreateApplication.as_view(),name="applications"),
     path("vacancy-search/<id>",CategoryBasedSearch.as_view(),name="vacancy_search"),
     path("vacancy-detail/<id>",VacancyMoreDetail.as_view(),name="vacancy_detail"),
+
+    ##News
+    path("customer_news_list/", CustomerNewsList.as_view(), name = "customer_news_list"),
+    path("customer_news_detail/<id>/", CustomerNewsDetail.as_view(), name = "customer_news_detail"),
+    
+    
+        
 ]
