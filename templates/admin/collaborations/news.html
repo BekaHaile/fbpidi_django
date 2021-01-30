@@ -51,9 +51,6 @@
 												<i class="icon-menu9"></i>
 											</a>
 											<div class="dropdown-menu dropdown-menu-right">
-
-												
-													
                                                     <a href="{% url 'admin:news_detail' id=news.id %}" class="dropdown-item"><i class="icon-eye"></i>View News Detail</a>
 
 												{% if user.is_superuser or user.get_company == news.user.get_company %}

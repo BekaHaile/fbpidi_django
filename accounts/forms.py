@@ -105,6 +105,12 @@ ADMIN_PERMISSION_LIST = [
     'view_newsimages', 
     'change_newsimages', 
     'delete_newsimages', 
+
+    'add_companyevent', 
+    'view_companyevent', 
+    'change_companyevent', 
+    'delete_companyevent', 
+    
     
 ]
 

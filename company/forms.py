@@ -2,7 +2,7 @@ from django import forms
 from company.models import Company,CompanySolution,CompanyEvent,CompanyBankAccount,Bank
 from admin_site.models import SubCategory
 
-from company.models import Company,CompanySolution,CompanyEvent
+from company.models import Company,CompanySolution,CompanyEvent, EventParticipants
 
 class CompanyForm(forms.ModelForm):
     # color = forms.CharField(label='Company Theme Color',
@@ -89,16 +89,32 @@ class CompanySolutionForm(forms.ModelForm):
         }
 
 class CompanyEventForm(forms.ModelForm):
+    STATUS_CHOICE = [ ('Upcoming', 'Upcoming'),('Open', 'Open' ),('Closed', 'Closed')]
+    image = forms.FileField(allow_empty_file=True, required=False, widget= forms.FileInput(attrs={'class': 'form-input-styled',}) )
+    status = forms.ChoiceField(choices = STATUS_CHOICE, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
 
     class Meta:
         model=CompanyEvent
-        fields = ('event_name','event_name_am','description','description_am','image',)
+        fields = ('event_name','event_name_am','description','description_am','image','status', 'start_date', 'end_date')
         widgets = {
             'event_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (English)'}),
             'event_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (Amharic)'}),
             'description': forms.Textarea(attrs={'class': 'summernote'}),
             'description_am': forms.Textarea(attrs={'class': 'summernote'}),
-            'image': forms.FileInput(attrs={'class': 'form-input-styled'}),
+            'start_date': forms.DateTimeInput(attrs={'class':"form-control daterange-single"}),
+            'end_date': forms.DateTimeInput(attrs={'class':"form-control daterange-single"}),
+            'image': forms.FileInput(attrs={'class': 'form-input-styled',}),
+
+        }
+
+class EventParticipantForm(forms.ModelForm):
+    notify_in = forms.IntegerField(required=False,)  
+    class Meta:
+        model=EventParticipants
+        fields = ('patricipant_email', 'notify_in')
+        widgets = {
+            'patricipant_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address..'}),
+             'notify_in':forms.NumberInput(attrs={'class': 'form-control', 'max':'10', 'placeholder':"Notify me before -- days" })
         }
 
 class CompanyBankAccountForm(forms.ModelForm):
@@ -120,7 +136,7 @@ class FbpidiCompanyForm(forms.ModelForm):
         model = Company
         fields = (
             # Company Profile
-                'company_name', 'company_name_am', 'email', 'phone_number','city','postal_code',
+                  'company_name', 'company_name_am', 'email', 'phone_number','city','postal_code',
                   'detail', 'detail_am', 'company_logo', 'location', 'company_intro',
                   'established_year','linkedin_link','instagram_link',
                   'facebook_link','twiter_link','google_link','pintrest_link',

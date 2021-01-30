@@ -19,14 +19,11 @@
 
  <!--  Only super users can watch this -->
 
- {% if perms.collaborations.view_pollsquestion %}
-
+ {% if perms.collaborations.view_tender %}
         
-        
-
 		<!--Poll Detail-->
 		<section class="sptb">
-            {% if tender %}
+            
 			<div class="container">
 				<div class="row">
 					<div class="d-block mx-auto col-lg-12 col-md-12">
@@ -287,9 +284,7 @@
 
             </div>
 
-            {% else %}
-                <h2> Poll Not found!</h2>
-            {% endif %}
+          
 		</section>
 		
 		

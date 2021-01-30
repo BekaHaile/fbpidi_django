@@ -8,9 +8,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from company.models import Company,CompanySolution,CompanyEvent,CompanyStaff, Bank, CompanyBankAccount
 from accounts.models import CompanyAdmin
+from accounts.models import User
+import datetime
 
 
-from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm,FbpidiCompanyForm, CompanyBankAccountForm
+from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm,FbpidiCompanyForm, CompanyBankAccountForm, EventParticipantForm
 
 class CreateCompanyProfile(LoginRequiredMixin,View):
     def get(self, *args,**kwargs):
@@ -224,6 +226,34 @@ class CreateCompanyEvent(LoginRequiredMixin,View):
             else:
                 return redirect("admin:view_company_profile")
 
+class EditCompanyEvent(LoginRequiredMixin,View):
+    def post(self,*args,**kwargs):
+        form = CompanyEventForm(self.request.POST,self.request.FILES)
+        event = CompanyEvent.objects.get(id=self.kwargs['id']) 
+        if form.is_valid():
+            form.save(commit=False)
+            event.event_name = self.request.POST['event_name']
+            event.event_name_am = self.request.POST['event_name_am']
+            event.description = self.request.POST['description']
+            event.description_am = self.request.POST['description_am']
+
+            starting_date = datetime.datetime.strptime(self.request.POST['start_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+            print(type(starting_date))
+            ending_date=datetime.datetime.strptime(self.request.POST['end_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+            event.start_date = starting_date
+            event.end_date = ending_date
+
+            event.status = self.request.POST['status']
+            if self.request.FILES:
+                event.image = self.request.FILES['image']
+            event.save() 
+            messages.success(self.request,"Event Edited Successfully")
+            return redirect("admin:view_fbpidi_company") if self.request.user.is_superuser else redirect("admin:view_company_profile")
+            
+        else:
+            messages.warning(self.request,form.errors)
+            return redirect("admin:view_fbpidi_company") if self.request.user.is_superuser else redirect("admin:view_company_profile")
+            
 class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         form = FbpidiCompanyForm()
@@ -244,7 +274,7 @@ class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
 class ViewFbpidiCompany(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         fbpidi = Company.objects.get(company_type="fbpidi")
-        events = CompanyEvent.objects.filter(company=fbpidi)
+        events = CompanyEvent.objects.all()
         event_form = CompanyEventForm
         banks = Bank.objects.all()
         company_bank_accounts = CompanyBankAccount.objects.filter(company=fbpidi)

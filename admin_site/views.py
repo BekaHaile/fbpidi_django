@@ -9,7 +9,7 @@ import os
 # 
 from product import models
 from accounts.models import User
-from company.models import Company
+from company.models import Company,CompanyEvent
 
 
 
@@ -125,15 +125,24 @@ class DeleteView(LoginRequiredMixin,View):
                 image = NewsImages.objects.get(id = self.kwargs['id']  )
                 news = image.news
                 image.delete()
-                message = "Image Deleted Successfully!"
-                messages.success(self.request,message)
+                messages.success(self.request,"Image Deleted Successfully!")
                 return redirect(f"/admin/edit_news/{news.id}")
             except Exception as e:
                 messages.warning(self.request, "Could not find the Image")
                 return redirect("admin:news_list")
+        elif self.kwargs['model_name'] == 'CompanyEvent':
+            try:  
+                
+                event = CompanyEvent.objects.get(id = self.kwargs['id']  )
+                company = event.company
+                event.delete()
+                messages.success(self.request,"Event Deleted Successfully!")
+                return redirect("admin:view_fbpidi_company") if event.company.company_type == "fbpidi" else redirect("admin:view_company_profile")
 
-
-
+            except Exception as e:
+                messages.warning(self.request, "Could not find the Event")
+                return redirect("admin:view_fbpidi_company") if event.company.company_type == "fbpidi" else redirect("admin:view_company_profile")
+                
 class Polls(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         form = PollsForm()

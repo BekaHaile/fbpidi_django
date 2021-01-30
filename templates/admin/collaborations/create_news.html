@@ -84,11 +84,12 @@
                             <div class="col-md-6">
                                 <div class = "row">
                                                 <img style = "display: inline; margin: 5px;" src = "{{image.image.url}}" width ="250" height = "200" alt="{{image.image.name}}"/>
-                                                {% if user.is_superuser or user.get_company == news.user.get_company %}
+                                                {% if user.is_superuser or news.user.get_company == user.get_company%}
 													{% if perms.collaborations.delete_newsimages %}
-                                                <a  href="{%url 'admin:delete' model_name='NewsImage' id=image.id %}"  onclick="return confirm ('Are you sure you want to delete this image?')"><i style = "margin-left:3px; size: 15px;" class="icon-trash"></i></a>    
+                                                        <a  href="{%url 'admin:delete' model_name='NewsImage' id=image.id %}"  onclick="return confirm ('Are you sure you want to delete this image?')"><i style = "margin-left:3px; size: 15px;" class="icon-trash"></i></a>    
                                                     {% endif %}
-                                                {% endif %}
+                                                {%endif%}
+                                               
                                 </div>
                             </div>          
                             {%endfor%}

@@ -4,7 +4,8 @@ from .views import (PollIndex, PollDetail, VacancyMoreDetail,CreateComment,
                     CustomerTenderList, CustomerTenderDetail, CreateApplication, VacancyList,
                     CategoryBasedSearch, CreateForumQuestion , ListForumQuestions,ForumQuestionsDetail,
                     CreateCommentReplay,ListAnnouncement,EditCommentForum,EditForumQuestions,
-                    SearchForum, ApplyForTender,  pdf_download, CustomerNewsList, CustomerNewsDetail )
+                    SearchForum, ApplyForTender,  pdf_download, 
+                    CustomerNewsList, CustomerNewsDetail , CustomerEventList, CustomerEventDetail, EventParticipation)
                     
 
 urlpatterns = [ 
@@ -32,7 +33,11 @@ urlpatterns = [
     ##News
     path("customer_news_list/", CustomerNewsList.as_view(), name = "customer_news_list"),
     path("customer_news_detail/<id>/", CustomerNewsDetail.as_view(), name = "customer_news_detail"),
-    
+    ##Events
+    path("customer_event_list/", CustomerEventList.as_view(), name = "customer_event_list"),
+    path("customer_event_detail/<id>/", CustomerEventDetail.as_view(), name = "customer_event_detail"),
+    path("event_participation/<id>/", EventParticipation.as_view(), name="event_participation"),
+
     
         
 ]
