@@ -22,6 +22,12 @@ class User(AbstractUser):
         elif self.is_company_staff:
             return CompanyStaff.objects.get(user = self).get_company_name()
 
+    def get_company(self):
+        if self.is_company_admin:
+           return Company.objects.get(user = self)
+        elif self.is_company_staff:
+            return Company.objects.get(user = self)
+
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -55,6 +61,9 @@ class CompanyAdmin(models.Model):
     #this method works fine for only the company admin that created the company object (how to )
     def get_company_name(self):
         return Company.objects.get(user = self.user).company_name if Company.objects.get(user = self.user).company_name else None
+
+    def get_company(self):
+        return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None
 
 
 # class CompanyStaff(models.Model):
