@@ -70,6 +70,19 @@
 						</div>
 							
 					</div>
+
+					<div class="form-group row">
+						{%if  form.blogImage %}
+						<label class="col-form-label col-lg-3"> Current image </label>
+						
+						<div data-target="#carousel" data-slide-to="0" class="thumb">
+							<img src="{{form.blogImage.url}}" alt="img">
+						</div>
+
+						{%else%}
+						<label class="col-form-label col-lg-3"> No image in the database*</label>
+						{%endif%}
+					</div>
 					
 					<div class="form-group row">
 				    <label class="col-form-label col-lg-3">Publish </label>
@@ -115,5 +128,7 @@
 		$('#summernote').summernote();
 		$('.summernote').summernote();
 	});
+
+
 </script>
 {%endblock%}

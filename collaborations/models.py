@@ -271,3 +271,10 @@ class Announcement(models.Model):
     containt_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def announcementimages(self):
+        return self.announcementimages_set.all()
+
+class AnnouncementImages(models.Model):
+    announcement = models.ForeignKey(Announcement, on_delete = models.CASCADE)
+    image = models.ImageField(upload_to = "Announcements", max_length=254, verbose_name="Announcement Image",help_text="jpg, png, gid", blank=False)  
+    timestamp = models.DateTimeField(auto_now_add=True)

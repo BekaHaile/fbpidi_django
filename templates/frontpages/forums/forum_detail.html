@@ -7,7 +7,7 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Forum Detail</h1>
+							<h1 class="">Forum </h1>
 							
 						</div>
 					</div>
@@ -27,7 +27,7 @@
 						 	{%csrf_token%}
 							<div class="card-body">
 								<div class="input-group">
-									<input type="text" name="search" class="form-control br-tl-3  br-bl-3" placeholder="Search">
+									<input type="text" name="search" class="form-control br-tl-3  br-bl-3" placeholder="Search" required>
 									<div class="input-group-append ">
 										
 										<button type="submit" class="btn btn-secondary br-tr-3  br-br-3">
@@ -94,7 +94,7 @@
 									{{forum.user}} 
 									
 									{{forum.timestamp}}
-									</div>
+									</div> 
 								
 
 								
@@ -103,9 +103,13 @@
                                     <div class="mb-0">
                                        <p>{{forum.description}}</p>
                                     </div>
+                                    {%if forum.attachements%}
                                     <div class="mb-0">
-                                       <p>{{forum.attachements.urls}}</p>
+                                       <a href="{{forum.attachements.url}}" download="{{forum.attachements.url}}"> 
+                                   		<div class="mb-3"><b>Attachment</b>:{{forum.attachements.name}}</div>
+                                   	</a>
                                     </div>
+                                    {%endif%}
                                 </div>
                              </div>
 
@@ -131,7 +135,15 @@
 		                                           {{comment.comment}}
 		                                        </p>
 		                                        
-                                       <p>{{comment.attachements.urls}}</p>
+
+
+                                       {%if comment.attachements%}
+                                    <div class="mb-0">
+                                       <a href="{{comment.attachements.urls}}" download="{{comment.attachements.urls}}"> 
+                                   		<div class="mb-3"><b>Attachment</b>:{{comment.attachements.name}}</div>
+                                   	</a>
+                                    </div>
+                                    {%endif%}
                                     		</div>
 		                                    </div>
 		                                    {%if user.is_authenticated %}
@@ -206,9 +218,14 @@
 	                                        {{commentreplay.content}}
 	                                    </div>
 
-	                                    <div class="form-group">
-	                                        {{commentreplay.attachements}}
-	                                    </div>
+
+	                                    {%if commentreplay.attachements%}
+                                    <div class="mb-0">
+                                       <a href="{{commentreplay.attachements.url}}" download="{{commentreplay.attachements.url}}"> 
+                                   		<div class="mb-3"><b>Attachment</b>:{{fcommentreplay.attachements.name}}</div>
+                                   	</a>
+                                    </div>
+                                    {%endif%}
 	                                    <div class="text-right">
 											<button style="padding-left: 10%; padding-right: 10%;" type="submit" 
 											href="{%url 'Replay_comment' id=comment.id forum=forum.id%}" 
@@ -255,7 +272,7 @@
 											  <form action="{%url 'edit_comment' forum=forum.id id=replay.id type='CommentReplay' %}" method="POST" enctype="multipart/form-data">
 												{%csrf_token%}
 												<div class="modal-header">
-												  <h5 class="modal-title" id="examplecontactLongTitle">Applicant Form</h5>
+												  <h5 class="modal-title" id="examplecontactLongTitle">Comment</h5>
 												  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 												  <span aria-hidden="true">&times;</span>
 												  </button>
