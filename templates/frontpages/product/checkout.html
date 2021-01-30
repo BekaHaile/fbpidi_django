@@ -1,5 +1,5 @@
 {%extends 'frontpages/layout.html'%}
-
+{%load crispy_forms_tags%}
 {%block content%}
 		<!--Sliders Section-->
 		<section>
@@ -24,67 +24,125 @@
 		<section class="sptb">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-4 col-xl-4 col-md-6 d-block">
+					<div class="col-lg-8 col-xl-8 col-md-8 d-block">
 						<div class="single-page  w-100  p-0">
 							<div class="wrapper wrapper2">
-								<div class="card-body">
-									<h3>Login</h3>
-									<div class="text-center">
-										<div class="btn-list d-flex">
-											<a href="https://www.google.com/gmail/" class="btn btn-google btn-block"><i class="fa fa-google fa-1x mr-2"></i> Google</a>
-											<a href="https://twitter.com/" class="btn btn-twitter"><i class="fa fa-twitter fa-1x"></i></a>
-											<a href="https://www.facebook.com/" class="btn btn-facebook"><i class="fa fa-facebook fa-1x"></i></a>
-										</div>
-									</div>
+								<div class="card-header">
+									<h3>Shipping Information</h3>
 								</div>
-								<hr class="divider">
 								<form id="login" class="card-body" tabindex="500">
-									<div class="mail">
-										<input type="email" name="mail">
-										<label>Mail or Username</label>
-									</div>
-									<div class="passwd">
-										<input type="password" name="password">
-										<label>Password</label>
-									</div>
+									 {%csrf_token%}
+									 <p id="test"></p>
+									 <div class="form-group ">
+										 <div class="row">
+											<div class="col-lg-6 col-md-6">
+												{{form.first_name}}
+											</div>
+											<div class="col-lg-6 col-md-6">
+												{{form.last_name}}
+											</div>
+										 </div>
+										 <br>
+										 <div class="row">
+											<div class="col-lg-6 col-md-6">
+												{{form.email}}
+											</div>
+											<div class="col-lg-6 col-md-6">
+												{{form.phone_no}}
+											</div>
+										 </div>
+										 <br>
+										 <div class="row">
+											<div class="col-lg-6 col-md-6">
+												{{form.city}}
+											</div>
+											<div class="col-lg-6 col-md-6">
+												{{form.company}}
+											</div>
+										 </div>
+										 <br>
+										 <div class="row">
+											<div class="col-lg-6 col-md-6">
+												{{form.street_address}}
+											</div>
+											<div class="col-lg-6 col-md-6">
+												{{form.home_address}}
+											</div>
+										 </div>
+										
+									 </div>
 									<div class="submit">
-										<a class="btn btn-secondary btn-block" href="{% url 'index' %}">Login</a>
+										<div class="row">
+											<div class="col-6">
+												<a type="submit" class="btn btn-primary btn-block" href="{% url 'index' %}" >CONTINUE SHOPPING</a>
+											</div>
+											<div class="col-6">
+												<input type="submit" class="btn btn-secondary btn-block" href="{% url 'checkout' %}" value="COMPLETE ORDER" />
+											</div>
+										</div>
+										
 									</div>
-									<p class="mb-2"><a href="{% url 'forgot' %}" >Forgot Password</a></p>
-									<p class="text-dark mb-0">Don't have account?<a href="{% url 'register' %}" class="text-secondary ml-1">Sign UP</a></p>
 								</form>
 							</div>
 						</div>
 					</div>
-					<div class="col-lg-8 col-xl-8 col-md-6 d-block">
+					<div class="col-lg-4 col-xl-4 col-md-4 d-block">
 						<div class="single-page  w-100  p-0">
 							<div class="wrapper wrapper2">
+								<div class="card-header row">
+									<div class="col-10"><h6 class="card-title pull-left text-dark">Items In Your Cart</h6></div>
+									<div class="col-2"><h6  class="badge badge-primary">4</h6></div>									
+								</div>
 								<div class="card-body">
-									<h3>Login</h3>
-									<div class="text-center">
-										<div class="btn-list d-flex">
-											<a href="https://www.google.com/gmail/" class="btn btn-google btn-block"><i class="fa fa-google fa-1x mr-2"></i> Google</a>
-											<a href="https://twitter.com/" class="btn btn-twitter"><i class="fa fa-twitter fa-1x"></i></a>
-											<a href="https://www.facebook.com/" class="btn btn-facebook"><i class="fa fa-facebook fa-1x"></i></a>
+									<div class="row">
+										<div class="col-6">
+											<h6  class="pull-left text text-primary">Product</h6>
+										</div>
+										<div class="col-6">
+											<h6 class="pull-right text text-primary">Price</h6>
 										</div>
 									</div>
+									{%for product in order.products.all%}
+									<div class="row">
+										<div class="col-6">
+											<h6 class="pull-left text text-dark">{{product.quantity}} X {{product.product.name}}</h6>
+										</div>
+										<div class="col-6">
+											<h6 class="pull-right text text-dark">ETB {{product.get_total_item_price}}</h6>
+										</div>
+									</div>
+										
+									{%endfor%}
+									<hr>
+									<div class="row">
+										<div class="col-6">
+											<h6 class="pull-left text text-primary">Sub Total</h6>
+										</div>
+										<div class="col-6">
+											<h6 class="pull-right text text-dark">ETB {{order.get_total_price}}</h6>
+										</div>
+									</div>
+									<hr>
+									<!-- <div class="row">
+										<div class="col-6">
+											<h6 class="pull-left text text-primary">Shipping</h6>
+										</div>
+										<div class="col-6">
+											<h6 class="pull-right text text-dark">ETB 100</h6>
+										</div>
+									</div>
+									<hr> -->
+									<div class="row">
+										<div class="col-6">
+											<h6 class="pull-left text text-primary">Total</h6>
+										</div>
+										<div class="col-6">
+											<h6 class="pull-right text text-dark">ETB {{order.get_total_price}}</h6>
+										</div>
+									</div>
+										
 								</div>
-								<hr class="divider">
-								<form id="login" class="card-body" tabindex="500">
-									<div class="mail">
-										<input type="email" name="mail">
-										<label>Mail or Username</label>
-									</div>
-									<div class="passwd">
-										<input type="password" name="password">
-										<label>Password</label>
-									</div>
-									<div class="submit">
-										<a class="btn btn-secondary btn-block" href="{% url 'index' %}">Login</a>
-									</div>
-									<p class="mb-2"><a href="{% url 'forgot' %}" >Forgot Password</a></p>
-									<p class="text-dark mb-0">Don't have account?<a href="{% url 'register' %}" class="text-secondary ml-1">Sign UP</a></p>
-								</form>
+								 
 							</div>
 						</div>
 					</div>
@@ -115,4 +173,11 @@
 			</div>
 		</section>
 		<!--/Newsletter-->
+		<script>
+			$(document).ready(function(){
+				$("#id_first_name").val("{{user.first_name|title}}");
+				$("#id_last_name").val("{{user.last_name|title}}");
+				$("#id_email").val("{{user.email}}");
+			});
+		</script>
 {%endblock%}

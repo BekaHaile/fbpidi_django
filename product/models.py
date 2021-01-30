@@ -14,17 +14,18 @@ class Product(models.Model):
     category = models.ForeignKey(SubCategory,on_delete=models.CASCADE, blank=True,null=True, verbose_name="Product Category")
     description = models.TextField(default="",verbose_name="Product Description(English)")
     description_am = models.TextField(default="",verbose_name="Product Description(Amharic)")
-    price = models.FloatField(default=0.0)
     discount = models.FloatField(default=0.0)
     image = models.ImageField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
-    
-    def username(self):
-        return self.user.username
 
+    def price(self):
+        return ProductPrice.objects.filter(product=self).latest('timestamp')
+    
+    def more_images(self):
+        return ProductImage.objects.filter(product=self)
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
@@ -44,7 +45,7 @@ class ProductPrice(models.Model):
     
 
     def __str__(self):
-        return self.price
+        return str(self.price)
 
 class OrderProduct(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
@@ -58,24 +59,7 @@ class OrderProduct(models.Model):
         return "{} of {}".format(self.quantity,self.product.name)
     
     def get_total_item_price(self):
-        return self.product.price * self.quantity
-
-    def get_total_discount_item_price(self):
-        if self.product.discount:
-            return self.product.discount * self.quantity
-    
-    def get_saving_price(self):
-        if self.product.discount:
-            return self.get_total_item_price() - self.get_total_discount_item_price()
-
-    def get_final_price(self):
-        if self.product.discount:
-            return self.get_total_discount_item_price()
-        else:
-            return self.get_total_item_price()
-
-    def get_max_quantity(self):
-        return int(self.quantity)
+        return self.product.price().price * self.quantity
 
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
@@ -84,12 +68,12 @@ class Order(models.Model):
     start_date = models.DateTimeField(auto_now_add=True)
     order_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
-    # shipping_address = models.ForeignKey('ShippingAddress',
-    #                             on_delete=models.SET_NULL, 
-    #                             blank=True, null=True)
-    # payement = models.ForeignKey('Payement',
-    #                             on_delete=models.SET_NULL, 
-    #                             blank=True, null=True)
+    shipping_address = models.ForeignKey('ShippingAddress',
+                                on_delete=models.SET_NULL, 
+                                blank=True, null=True)
+    invoice = models.ForeignKey('InvoiceRecord',
+                                on_delete=models.SET_NULL, 
+                                blank=True, null=True)
     # coupon = models.ForeignKey("Coupon",on_delete=models.SET_NULL, 
     #                             blank=True, null=True)
     being_delivered = models.BooleanField(default=False)
@@ -102,10 +86,38 @@ class Order(models.Model):
     def get_total_price(self):
         total = 0
         for order_product in self.products.all():
-            total += order_product.get_final_price()
-        if self.coupon:
-            total -= self.coupon.amount
+            total += order_product.get_total_item_price()
+        # if self.coupon:
+        #     total -= self.coupon.amount
         return total
+
+
+class ShippingAddress(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    company = models.CharField(max_length=200,default="")
+    city = models.CharField(max_length=200)
+    street_address = models.CharField(max_length=100)
+    home_address = models.CharField(max_length=100)
+    email = models.EmailField(max_length=200)
+    phone_no = models.CharField(max_length=50)
+    delivery_note = models.TextField(null=True)
+    time_stamp = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.city
+
+
+class InvoiceRecord(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
+    code = models.CharField(max_length=200)
+    amount = models.FloatField()
+    paid = models.BooleanField(default=False)
+    time_stamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.invoice_code
 
 class Review(models.Model):
     name = models.CharField(max_length=200)
