@@ -154,7 +154,7 @@ class TenderApplicant(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name} from {self.company_name}"
             
-
+# This can be created automatically if we use a manytomanyrelation, that's why I commented this table and added a tender_applications
 class TenderApplications(models.Model):
     applicant = models.ForeignKey(TenderApplicant, on_delete=models.CASCADE)
     tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
@@ -230,32 +230,8 @@ class NewsImages(models.Model):
     name = models.CharField(verbose_name = "Image alternative name",max_length=255)
     image = models.ImageField(upload_to = "Images/News Images", max_length=254, verbose_name="News Image",help_text="jpg, png, gid", blank=False)  
     timestamp = models.DateTimeField(auto_now_add=True)
-
-    
-
-    
-        
-       
-class TenderApplicant(models.Model):
-    first_name = models.CharField(verbose_name="first_name", max_length=50)
-    last_name = models.CharField(verbose_name="first_name", max_length=50)
-    phone_number = models.CharField(max_length=20,blank=True,null=True)
-    email = models.EmailField(verbose_name="applicant email", max_length=255)
-    company_name = models.CharField(verbose_name="first_name", max_length=50)
-    company_tin_number = models.CharField(verbose_name="first_name", max_length=50)
-   
-    def __str__(self):
-        return f"{self.first_name} {self.last_name} from {self.company_name}"
-    
         
 
-# This can be created automatically if we use a manytomanyrelation, that's why I commented this table and added a tender_applications
-class TenderApplications(models.Model):
-    applicant = models.ForeignKey(TenderApplicant, on_delete=models.CASCADE)
-    tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = (('applicant', 'tender'))
 
 class ForumQuestion(models.Model):
     title = models.CharField(max_length=500,null=False)
