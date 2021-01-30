@@ -7,7 +7,7 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Vacancy List</h1>
+							<h1 class="">Vacancy </h1>
 							<ol class="breadcrumb text-center">
 								{%if message %}
 									{{message}}
@@ -36,8 +36,8 @@
 										<ul class="list-group mb-0">
 											<li class="list-group-item">
 												<a href="{%url 'vacancy_search' id=cat.id%}" class="text-dark">
-													<i class="fa fa-building bg-secondary text-secondary"></i> {{cat}}
-													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">({{cat.countjobs}})</span>
+													 {{cat}}
+													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">{{cat.countjobs}}</span>
 												</a>
 											</li>
 										</ul>

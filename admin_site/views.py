@@ -5,16 +5,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 import os
-
 # 
 from product import models
 from accounts.models import User
 from company.models import Company
 
-
-
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
-from collaborations.models import PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategoty, Blog, Announcement, ForumComments, CommentReplay, News, NewsImages
+
+from collaborations.models import PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategoty, Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages,News, NewsImages
 from django.http import HttpResponse, FileResponse
  
 # 
@@ -39,7 +37,7 @@ class DeleteView(LoginRequiredMixin,View):
             category.delete()
             message = "Category Deleted"
             messages.success(self.request,message)
-            return redirect("admin:p_categories",option='category')
+            return redirect("admin:p_categories",option='category') 
         elif self.kwargs['model_name'] == 'Vacancy':
             vacancy = Vacancy.objects.get(id=self.kwargs['id'])
             vacancy.delete()
@@ -52,6 +50,14 @@ class DeleteView(LoginRequiredMixin,View):
             announcement = ForumComments.objects.get(id=self.kwargs['id'])
             announcement.delete()
             return redirect("forum_list")
+        elif self.kwargs['model_name'] == 'AnnouncementImages':
+            vacancy = AnnouncementImages.objects.get(id=self.kwargs['id'])
+            id =vacancy.announcement.id
+            vacancy.delete()
+            message ="AnnouncementImages Deleted"
+            messages.success(self.request,message)
+            
+            return redirect("admin:anounce_Detail",model_name="Announcement",id=id)
         elif self.kwargs['model_name'] == 'CommentReplay':
             commentreplay = CommentReplay.objects.get(id=self.kwargs['id'])
             commentreplay.delete()
@@ -60,7 +66,6 @@ class DeleteView(LoginRequiredMixin,View):
             announcement = Announcement.objects.get(id=self.kwargs['id'])
             announcement.delete()
             message ="Announcement Deleted"
-            messages.success(self.request,message)
             return redirect("admin:anounce_list")
         elif self.kwargs['model_name'] == 'JobCategoty':
             jobcategory = JobCategoty.objects.get(id=self.kwargs['id'])
