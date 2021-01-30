@@ -9,8 +9,7 @@ from product.views import AddToCartView,CartSummary,DecrementFromCart,CheckoutVi
 # busines-meditation/,tips/,orders
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
-    path("blog-grid-right/",BlogList.as_view(),name="blog_grid_right"),
-    path("blog-detail-right/<id>",BlogDetail.as_view(),name="blog_details"),
+    
     path("product-detail/<id>",ProductDetailView.as_view(),name="product_detail"),
     path("product-by-category/<cat_id>/",ProductByCategoryView.as_view(),name="product_category"),
     path("product-by-main-category/<option>/",ProductByMainCategory.as_view(),name="product_category_main"),
@@ -27,8 +26,8 @@ urlpatterns = [
 
     # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
     # unused urls those will be removed in the futurepath("register/",CustomerSignUpView.as_view(),name="register"),
-    path("faq/",FaqList.as_view(),name="faq"),
-    path("vacancy-list/",TemplateView.as_view(template_name="frontpages/vacancy_list.html"),name="tips"),
+    
+    # path("vacancy-list/",TemplateView.as_view(template_name="frontpages/vacancy_list.html"),name="tips"),
     
     path("accounts/",include("django.contrib.auth.urls")), 
     path("test/",TemplateView.as_view(template_name="frontpages/date_piker.html"),name="Test"),

@@ -7,12 +7,7 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Blog-Grid</h1>
-							<ol class="breadcrumb text-center">
-								<li class="breadcrumb-item"><a href="#">Home</a></li>
-								<li class="breadcrumb-item"><a href="#">Blog</a></li>
-								<li class="breadcrumb-item active text-white" aria-current="page">Blog-Grid</li>
-							</ol>
+							<h1 class="">Blog</h1>
 						</div>
 					</div>
 				</div>
@@ -193,11 +188,11 @@
 						<div class="row">
 						{%for blog in blogs%}
 							
-							<div class="col-xl-6 col-lg-12 col-md-12">
+							<div class="col-xl-12 col-lg-12 col-md-12">
 								<div class="card">
 									<div class="item7-card-img">
 										<a href="{% url 'blog_details' id=blog.id %}"></a>
-										<img src="{{blog.blogImage.url}}" alt="img" class="cover-image">
+										<img src="{{blog.blogImage.url}}" alt="cover images" class="cover-image" width="100px" height="300px">
 										<div class="item7-card-text">
 											
 										</div>
