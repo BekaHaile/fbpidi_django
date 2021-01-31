@@ -17,11 +17,11 @@ from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,F
                         JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
 
                         SuperAdminVacancyList,ListAnnouncementAdmin,
-                        AdminNewsList, CreateNews, EditNews, DeleteNews, NewsDetail,DeleteNewsImage,
-                        CreatAnnouncement,ListAnnouncement,AnnouncementDetail
+                        AdminNewsList, CreateNews, EditNews,  NewsDetail,
+                        CreatAnnouncement,ListAnnouncement,AnnouncementDetail,
 
                         TenderList, CreateTender, TenderDetail, EditTender,  DeleteTender, ManageBankAccount
-r
+
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView
