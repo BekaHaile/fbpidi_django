@@ -107,6 +107,7 @@ class DeleteView(LoginRequiredMixin,View):
             company = Company.objects.get(id=self.kwargs['id'])
             company.delete()
             message ="Company Deleted"
+            
             messages.success(self.request,message)
             return redirect("admin:index")
         elif self.kwargs['model_name'] == 'product_image':
