@@ -786,7 +786,7 @@
 									<div class="mr-sm-3 mb-2 mb-sm-0">
 										<a href="#">
 											{% if event.image %}
-											<img src="{{event.image.url}}" class="rounded" width="44" height="44" alt="">
+											<img src="{{event.image.url}}" class="rounded" width="80" height="80" alt="">
 											{% else %}
 											<img src="{{event.company.get_image}}" class="rounded" width="44" height="44" alt="">
 											{%endif%}
@@ -797,7 +797,9 @@
 										<h6 class="media-title font-weight-semibold">
 											<a href="#">{{event.event_name}}</a>
 										</h6>
-										{{event.description|safe}}
+										Start Date:- <a href="#"><i class="fa fa-calendar-o text-muted mr-2" style = "margin-right: 20px;" ></i> <b>{{event.start_date}}</b></a> <br>
+                                  		End Date:-<a href="#"><i style = "margin-left: 10px;"class="fa fa-calendar-o text-muted mr-2" ></i><b> {{event.end_date}}</b></a>
+                                        
 									</div>
 									
 									<div class="ml-sm-3 mt-2 mt-sm-0">
@@ -1024,9 +1026,7 @@
 											<!-- Date Fields End Here -->
 											
 											<!-- status creation form -->
-											<div class="col-md-6" style="padding-left:0px;">
-												
-													
+											<div class="col-md-6" style="padding-left:0px;">			
 														<div class="col-lg-9" style="width: 100%; padding-left:0px; display: inline-block;">
 															<label style="padding-left: 0px;" class="col-form-label col-lg-8">Status</label>
 																<select required name="status"  class="form-control " >
@@ -1040,17 +1040,14 @@
 																	{%endfor%}
 																</select>
 														</div>
-												
 											</div>
 											<br>
-			
 												<div class="form-group">
 													<div class="row">
 														<div class="col-sm-12">
 															<label>{{event_form.image.label}}</label>
 															{{event_form.image}}
 														</div>
-		
 													</div>
 												</div>
 											</div>

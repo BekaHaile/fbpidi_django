@@ -116,6 +116,10 @@ class EventParticipants(models.Model):
     notifiy_in = models.IntegerField(default=1)
     notified = models.BooleanField(verbose_name="If notification is sent = True", default=False)
 
+    class Meta:
+        unique_together = (('patricipant_email', 'event'))
+        
+
 
 class Bank(models.Model):
     bank_name = models.CharField(verbose_name="bank name", max_length=255,)

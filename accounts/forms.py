@@ -94,7 +94,6 @@ ADMIN_PERMISSION_LIST = [
     'delete_companybankaccount',
     'view_companybankaccount',
     'view_tenderapplicant',
-    'view_tenderapplications',
 
     'add_news', 
     'view_news', 
