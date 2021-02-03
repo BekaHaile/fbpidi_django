@@ -5,6 +5,7 @@ from .views import (BlogList,BlogDetail,FaqList,
                     CustomerTenderList, CustomerTenderDetail, CreateApplication, VacancyList,
                     CategoryBasedSearch, CreateForumQuestion , ListForumQuestions,ForumQuestionsDetail,
                     CreateCommentReplay,ListAnnouncement,EditCommentForum,EditForumQuestions,
+                    ApplicantListDetail,
                     SearchForum,ApplyForTender,pdf_download,SearchBlogTag,CustomerNewsList, CustomerNewsDetail )
 
                     

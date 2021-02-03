@@ -141,6 +141,7 @@ class ApplicantForm(forms.Form):
         widgets = {
             'first_name': forms.TextInput(attrs={"placeholder": "First Name", },),
             'last_name': forms.TextInput(attrs={"placeholder": "Last Name"},),
+            
             'company_name': forms.TextInput(attrs={"placeholder": "Company Name"},),
             'company_tin_number': forms.TextInput(attrs={"placeholder": "Company Tin Number"},),
             'email': forms.TextInput(attrs={"placeholder": "User Email"},),
@@ -173,8 +174,8 @@ class VacancyForm(forms.ModelForm):
             'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'location':forms.TextInput(attrs={'class':'form-control','placeholder':'Location'}),
             'salary':forms.TextInput(attrs={'class':'form-control','type':'number','placeholder':'Salary in Birr'}),
-            'job_title':forms.TextInput(attrs={'class':'form-control','placeholder':'Job Title in English'}),
-            'job_title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Job Title in Amharic'}),
+            'job_title':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Title in English'}),
+            'job_title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Title in Amharic'}),
             'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in English'}),
             'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in Amharic'}),
             'requirement':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirements for the Job in English'}),
@@ -189,11 +190,15 @@ class CreateJobApplicationForm(forms.ModelForm):
     class Meta:
         model = JobApplication
         fields = ('status', 'bio',
-                  'cv', 'documents') 
+                  'cv', 'documents',
+                  'grade','institite','field') 
         
         widgets = {
             
-            'bio':forms.Textarea(attrs={'class':'summernote','placeholder':'Introduce your self and wright why you are appling'}),         
+            'bio':forms.Textarea(attrs={'class':'summernote','placeholder':'Introduce your self and wright why you are appling'}),
+            'institite' : forms.TextInput(attrs={"placeholder": "school you learned in ",'class':'form-control'},),
+            'field' : forms.TextInput(attrs={"placeholder": "The field you learned",'class':'form-control'},),
+            'grade': forms.TextInput(attrs={"placeholder": "Your grade",'class':'form-control'},),
         }
 
 class JobCategoryForm(forms.ModelForm):

@@ -19,40 +19,62 @@
 	<!-- /page length options -->
 
 	<!-- Page length options sub-category-->
-	
 	<div class="card">
 		<div class="card-header header-elements-inline">
-			<h5 class="card-title">Applicants</h5> 
-			{% if vacancyDetail.closed == True %}
-			<a href="{%url 'admin:close' id=vacancy closed=True %}" class="btn btn-secondary"> Open the Vacancy</a>
+			<h5 class="card-title">Applicants of <b>{{jobapplicant.0.vacancy}}</b></h5>
+			<div class="header-elements">
+				<div class="list-icons">
+					{% if vacancyDetail.closed == True %}
+			<a href="{%url 'admin:close' id=vacancy closed=True %}" class="btn bg-teal btn-sm rounded-round"> Open the Vacancy</a>
 			{%else %}
-			<a href="{%url 'admin:close' id=vacancy closed=False %}" class="btn btn-secondary"> Close the Vacancy</a>
+			<a href="{%url 'admin:close' id=vacancy closed=False %}" class="btn bg-teal btn-sm rounded-round"> Close the Vacancy</a>
 			{%endif%}
-		</div>
-				{%for job in jobapplicant %}
-				<div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary"><b>Name</b>:{{job.user}}</h6>
-                                </div>
-                                <div class="card-body">
-									<div class="mb-3"><b>Name</b>:{{job.user}}</div>
-									<div class="mb-3"><b>Phone Number</b>:{{job.user.phone_number}}</div>
-                                    <div class="mb-3"><b>Status</b>:{{job.status}}</div>
-                                    <div class="mb-3"><b>Bio</b>:{{job.bio}}</div> 
-                                    <div class="mb-3"><b>Date</b>:{{job.timestamp}}</div> 
-                                   <a href="{{job.cv.url}}" download="{{job.cv.url}}"> 
-                                   		<div class="mb-3"><b>Cv</b>:{{job.cv}}</div>
-                                   	</a>
 
-                                   	<a href="{{job.documents}}" download="{{job.documents}}"> 
-                                   		<div class="mb-3"><b>Documents</b>:{{job.documents}}</div>
-                                   	</a>
-                                    
-                                </div>
-                            </div>
-						
+				</div>
+			</div>
+		</div>
+
+		<table class="table datatable-show-all">
+			<thead>
+				<tr>
+					<th>status</th>
+					<th>grade</th>
+					<th>timestamp </th>
+					<th>User </th>
+					<th>institite </th>
+					<th>timestamp </th>
+					<th>Action </th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				{%for job in jobapplicant%}
+				<tr> 
+					
+					<td>{{job.status}}</td>
+					
+					<td>{{job.grade}}</td>
+					<td>{{job.timestamp}}</td>
+					<td>
+						{{job.user}}
+					</td>
+					<td>
+						{{job.institite}}
+					</td>
+					<td>
+						{{job.timestamp}}
+					</td>
+					<td>
+						<a href="{%url 'admin:applicant_detail' id=job.id %}" class="btn bg-teal btn-sm rounded-round">Applicant information</a>
+					</td>
+					
+					
+
+				</tr>
 				{%endfor%}
-			
+			</tbody>
+		</table>
 	</div>
+	
 <!-- /content area -->
 {%endblock%}

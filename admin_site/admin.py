@@ -16,12 +16,11 @@ from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,F
                         CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
                         JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
 
-                        SuperAdminVacancyList,ListAnnouncementAdmin,
-                        AdminNewsList, CreateNews, EditNews, DeleteNews, NewsDetail,DeleteNewsImage,
-                        CreatAnnouncement,ListAnnouncement,AnnouncementDetail
+                        SuperAdminVacancyList,ListAnnouncementAdmin,ApplicantListDetail,
+                        AdminNewsList, CreateNews, EditNews, NewsDetail,
+                        CreatAnnouncement,ListAnnouncement,AnnouncementDetail,
 
                         TenderList, CreateTender, TenderDetail, EditTender,  DeleteTender, ManageBankAccount
-r
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView
@@ -63,6 +62,7 @@ class CustomAdminSite(admin.AdminSite):
             path("Vacancy-form/",CreateVacancy.as_view(),name="Job_form"),
             path("Vacancy-list/",AdminVacancyList.as_view(),name="Job_list"),
             path("Vacancy-list-super/",SuperAdminVacancyList.as_view(),name="super_Job_list"),
+            path("Vacancy-applicant-info/<id>",ApplicantListDetail.as_view(),name="applicant_detail"),
             path("Vacancy-detail/<model_name>/<id>",VacancyDetail.as_view(),name="job_detail"),
            
             path("faqs-detail/<model_name>/<id>",FaqsView.as_view(),name="faqs_detail"),

@@ -456,7 +456,7 @@ class ApplicantListDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		applicant=JobApplication.objects.get(id=self.kwargs['id'])
 		context = {'applicant':applicant}
-		template_name = "admin/pages/jobCategory_list.html"
+		template_name = "admin/pages/applicant_detail.html"
 		return render(self.request, template_name,context)
 
 class JobCategoryList(LoginRequiredMixin,View):
@@ -1061,16 +1061,13 @@ class CustomerTenderDetail(View):
                 tender = Tender.objects.get(id = self.kwargs['id']  )
                 applicant_form = ApplicantForm
                 return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applicant_form':applicant_form})
-
-			except Exception as e:
-				print("Exception at customerTenderDetail :", str(e))
-				messages.warning(self.request, "tender not found")
-				return redirect("tender_list") 
-
-		else:
-
-			messages.warning(self.request, "Nothing selected!")
-			return redirect("tender_list")
+            except Exception as e:
+            	print("Exception at customerTenderDetail :", str(e))
+            	messages.warning(self.request, "tender not found")
+            	return redirect("tender_list")
+        else:
+        	messages.warning(self.request, "Nothing selected!")
+        	return redirect("tender_list")
 
 class ApplyForTender(View):
 	def post(self, *args, **kwargs):   
@@ -1117,122 +1114,99 @@ def pdf_download(request, id):
 
 ##### News
 class CreateNews(LoginRequiredMixin, View):
-	def get(self,*args,**kwargs):
-		try:    
-			form = NewsForm()
-			context = {'form':form,}
-			return render(self.request,'admin/collaborations/create_news.html',context)
-		except Exception as e: 
-			print("execption at create News ", str(e))
-			return redirect("admin:news_list")
-		
-	def post(self, *args, **kwargs):
-		form = NewsForm( self.request.POST) 
-		if form.is_valid:
-			news = form.save(commit=False)
-			news.user = self.request.user
-			news.save()
-		
-			for image in self.request.FILES.getlist('images'):
-				print ("saving ", image.name)
-				imag = NewsImages(news=news, name = image.name, image = image)
-				imag.save()
-			messages.success(self.request, "News Created Successfully!")
-			return redirect("admin:news_list") 
-		else:
-			messages.warning(self.request, "Error! News not Created!")
+    def get(self,*args,**kwargs):
+        try:    
+            form = NewsForm()
+            context = {'form':form,}
+            return render(self.request,'admin/collaborations/create_news.html',context)
+        except Exception as e: 
+            print("execption at create News ", str(e))
+            return redirect("admin:news_list")
+        
+    def post(self, *args, **kwargs):
+        form = NewsForm( self.request.POST) 
+        if form.is_valid:
+            news = form.save(commit=False)
+            news.user = self.request.user
+            news.save()
+        
+            for image in self.request.FILES.getlist('images'):
+                print ("saving ", image.name)
+                imag = NewsImages(news=news, name = image.name, image = image)
+                imag.save()
+            messages.success(self.request, "News Created Successfully!")
+            return redirect("admin:news_list") 
+        else:
+            messages.warning(self.request, "Error! News not Created!")
 
 class EditNews(LoginRequiredMixin, View):
-	def get(self,*args,**kwargs):
-		try:   
-			print("in the try")
-			if self.kwargs['id']:
-				print("in the if method", self.kwargs['id'])
-				news = News.objects.get(id =  self.kwargs['id'])
-				return render(self.request,'admin/collaborations/create_news.html',{'news':news, 'edit':True})
-		except Exception as e: 
-			print("execption at create News ", str(e))
-			messages.warning(self.request,"Error, Could Not Find the News! ")
-			return redirect("admin:index")
-		
-	def post(self, *args, **kwargs):
-		if self.kwargs['id']:
-			form = NewsForm(self.request.POST) 
-			news = News.objects.filter(id = self.kwargs['id']).first()
-			if form.is_valid:
-				news.title = self.request.POST['title']
-				news.title_am = self.request.POST['title_am']
-				news.description = self.request.POST['description']
-				news.description_am = self.request.POST['description_am']
-				news.save()
+    def get(self,*args,**kwargs):
+        try:   
+            print("in the try")
+            if self.kwargs['id']:
+                print("in the if method", self.kwargs['id'])
+                news = News.objects.get(id =  self.kwargs['id'])
+                return render(self.request,'admin/collaborations/create_news.html',{'news':news, 'edit':True})
+        except Exception as e: 
+            print("execption at create News ", str(e))
+            messages.warning(self.request,"Error, Could Not Find the News! ")
+            return redirect("admin:index")
+        
+    def post(self, *args, **kwargs):
+        if self.kwargs['id']:
+            form = NewsForm(self.request.POST) 
+            news = News.objects.filter(id = self.kwargs['id']).first()
+            if form.is_valid:
+                news.title = self.request.POST['title']
+                news.title_am = self.request.POST['title_am']
+                news.description = self.request.POST['description']
+                news.description_am = self.request.POST['description_am']
+                news.save()
 
-				if self.request.FILES:
-					for image in self.request.FILES.getlist('images'):
-						print ("saving new images", image.name)
-						imag = NewsImages(news=news, name = image.name, image = image)
-						imag.save()
-				messages.success(self.request, "News Edited Successfully!")
-				return redirect("admin:news_list") 
-			else:
-				messages.warning(self.request, "Error! News not Edited!")
+                if self.request.FILES:
+                    for image in self.request.FILES.getlist('images'):
+                        print ("saving new images", image.name)
+                        imag = NewsImages(news=news, name = image.name, image = image)
+                        imag.save()
+                messages.success(self.request, "News Edited Successfully!")
+                return redirect("admin:news_list") 
+            else:
+                messages.warning(self.request, "Error! News not Edited!")
 
 class AdminNewsList(LoginRequiredMixin, View):
-	def get(self, *args, **kwargs):
-		newslist = News.objects.all()
-		return render(self.request, "admin/collaborations/news.html", {'newslist':newslist})
+    def get(self, *args, **kwargs):
+        newslist = News.objects.all()
+        return render(self.request, "admin/collaborations/news.html", {'newslist':newslist})
 
 class NewsDetail(LoginRequiredMixin,View):
-	def get(self, *args, **kwargs):         
-		form = TenderForm()
-		if self.kwargs['id']:
-			try:
-				news = News.objects.get(id =self.kwargs['id'] )
-				context = {'form':form, 'news':news }
-				return render(self.request,'admin/collaborations/news_detail.html',context)
-			except Exception as e:
-				print(str(e))
-				messages.warning(self.request,"Could not get the News!")
-				return redirect("admin:news_list")
-
-		print("error at newsDetail for admin")
-		return redirect("admin:news_list")
-
-class DeleteNews(LoginRequiredMixin,View):
-	def get(self,*args,**kwargs):
-		if self.kwargs['id'] :
-			try:
-				news = News.objects.get(id = self.kwargs['id']  )
-				news.delete()
-				message = "News Deleted Successfully"
-				messages.success(self.request,message)
-				return redirect("admin:news_list")
-			except Exception as e:
-				print("################", str(e))
-				messages.warning(self.request, "Could not find the News")
-				return redirect("admin:news_list")
+    def get(self, *args, **kwargs):         
+        form = TenderForm()
+        if self.kwargs['id']:
+            try:
+                news = News.objects.get(id =self.kwargs['id'] )
+                context = {'form':form, 'news':news }
+                return render(self.request,'admin/collaborations/news_detail.html',context)
+            except Exception as e:
+                print(str(e))
+                return redirect("admin:news_list")
+        print("error at newsDetail for admin")
+        return redirect("admin:news_list")
 
 
-		else:
-			messages.warning(self.request, "Nothing selected!")
-			return redirect("admin:news_list")
-
-class DeleteNewsImage(LoginRequiredMixin,View):
-	def get(self,*args,**kwargs):
-		if self.kwargs['id'] :
-			try:
-				
-				image = NewsImages.objects.get(id = self.kwargs['id']  )
-				news = image.news
-				image.delete()
-				message = "Image Deleted Successfully"
-				messages.success(self.request,message)
-				return redirect(f"/admin/edit_news/{news.id}")
-			except Exception as e:
-				print("################", str(e))
-				messages.warning(self.request, "Could not find the Image")
-				return redirect("admin:news_list")
+##### News, Customer
+class CustomerNewsList(View):
+    def get(self, *args, **kwargs):          
+        try:
+                news_list = News.objects.all()
+                return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':news_list,})
+        except Exception as e:
+                return redirect("index")
 
 
-		else:
-			messages.warning(self.request, "Nothing selected!")
-			return redirect("admin:news_list")
+class CustomerNewsDetail(View):
+    def get(self, *args, **kwargs):        
+        if self.kwargs['id'] :
+            news = News.objects.get(id = self.kwargs['id']  )
+            return render(self.request, "frontpages/news/customer_news_detail.html", {'news':news,})
+        else:
+            return redirect("index")

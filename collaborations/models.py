@@ -194,6 +194,8 @@ class Vacancy(models.Model):
     description_am = models.TextField(null=False)
     requirement_am = models.TextField(null=False)
     closed = models.BooleanField(null=False,default=False)
+    def __str__(self):
+        return self.job_title
 
     def countApplicant(self):
         return self.jobapplication_set.all().count()
@@ -201,8 +203,11 @@ class Vacancy(models.Model):
 
 class JobApplication(models.Model):
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
+    institite = models.CharField(max_length=500,null=False)
+    grade = models.FloatField()
+    field = models.CharField(max_length=500,null=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    status = models.CharField(max_length=500,null=False) 
+    status = models.CharField(max_length=500,null=False)
     bio = models.TextField(null=False)
     cv = models.FileField(upload_to="cv/", max_length=254,help_text="only pdf files, Max size 10MB")
     documents = models.FileField(upload_to="documents/", max_length=254,help_text="pdf, jpeg files, Max size 10MB")
