@@ -3,9 +3,6 @@ from django.conf import settings
 from admin_site.models import SubCategory
 
 
-    
-
-
 class Company(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
@@ -86,7 +83,6 @@ class CompanyStaff(models.Model):
         return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None
 
 
-
 class CompanySolution(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
     title = models.CharField(max_length=200,verbose_name="Title(English)")
@@ -97,14 +93,32 @@ class CompanySolution(models.Model):
     image = models.ImageField()
     time_stamp = models.DateTimeField(auto_now_add=True)
 
+
 class CompanyEvent(models.Model):
+    EVENT_STATUS = [('Upcoming', 'Upcoming'),('Open', 'Open' ), ('Closed', 'Closed')]
+
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
     event_name = models.CharField(max_length=200,verbose_name="Event Name(English)")
     event_name_am = models.CharField(max_length=200,verbose_name="Event Name(Amharic)")
     description = models.TextField(verbose_name="Description(English)")
     description_am = models.TextField(verbose_name="Description(Amharic)")
-    image = models.ImageField()
+    image = models.ImageField(blank = True, null = True)
     time_stamp = models.DateTimeField(auto_now_add=True)
+    start_date = models.DateTimeField(verbose_name="Event start date")
+    end_date = models.DateTimeField(verbose_name="Event end date")
+    status = models.CharField(max_length=10, verbose_name="Tender status", choices=EVENT_STATUS)
+
+
+class EventParticipants(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    event = models.ForeignKey(CompanyEvent, on_delete=models.CASCADE)
+    patricipant_email = models.EmailField(max_length=200, blank=True)
+    notifiy_in = models.IntegerField(default=1)
+    notified = models.BooleanField(verbose_name="If notification is sent = True", default=False)
+
+    class Meta:
+        unique_together = (('patricipant_email', 'event'))
+        
 
 
 class Bank(models.Model):
@@ -114,6 +128,7 @@ class Bank(models.Model):
 
     def __str__(self):
         return self.bank_name
+
 
 class CompanyBankAccount(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE)

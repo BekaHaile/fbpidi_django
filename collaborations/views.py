@@ -12,11 +12,11 @@ from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogCo
                                      #redirect with context
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
-from .models import PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications
+from .models import PollsQuestion, Choices, PollsResult, Tender, TenderApplicant
 from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
 from django.contrib import messages
 
-from company.models import Company, CompanyBankAccount, Bank, CompanyStaff
+from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
 from accounts.models import User, CompanyAdmin, Company
 import os
 
@@ -28,6 +28,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models import User
+from accounts.email_messages import sendEventNotification
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
 from django.http import HttpResponse, FileResponse
@@ -36,7 +37,7 @@ from wsgiref.util import FileWrapper
 
 
 
-from collaborations.forms import BlogsForm, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, ApplicantForm
+from collaborations.forms import BlogsForm, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -51,6 +52,7 @@ from collaborations.models import ( Blog, BlogComment,Faqs,
                                     Announcement,AnnouncementImages,
                                     )
 
+from company.forms import EventParticipantForm
 
 # --------------- Announcement
 class ListAnnouncement(View):
@@ -728,24 +730,12 @@ class PollDetail(LoginRequiredMixin,View):
         if self.kwargs['id'] and self.request.POST['selected_choice']: 
             try:
                 poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
-
-                # if the creator tries to vote, redirect to poll list
-                # if poll.user == self.request.user:
-                #     messages.warning(self.request, "You can not vote on this poll, since you are the creator of the poll!")
-                #     return redirect("polls") 
-                
-                # # #if the user already voted on this poll, redirect to poll list
-                # if PollsResult.objects.filter(poll=poll, user = self.request.user):
-                #     messages.warning(self.request, "You have already voted for on poll!")
-                #     return redirect("polls") 
-                
                 vote = PollsResult(
                     poll = poll,
                     user = self.request.user,
                     choice = Choices.objects.get(id = self.request.POST['selected_choice']),
                     remark=self.request.POST['remark']
                 )
-
                 vote.save()
                 messages.success(self.request, "Successfully voted!")
                 return redirect("polls") 
@@ -754,13 +744,11 @@ class PollDetail(LoginRequiredMixin,View):
                 messages.warning(self.request, "Poll not found!")
                 return redirect("polls") 
              
-                
         messages.warning(self.request, "Invalid Vote!")        
         return redirect("polls")
         
 
 ########## tender related views
-###
 class CreateTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:    
@@ -780,7 +768,6 @@ class CreateTender(LoginRequiredMixin,View):
         form = TenderForm(self.request.POST)  
         try:                 
             if form.is_valid():
-                print("form is valid")
                 tender = form.save(commit=False)
                 user = None
                 if self.request.user.is_company_admin: 
@@ -817,7 +804,7 @@ class CreateTender(LoginRequiredMixin,View):
             return redirect("admin:tenders")
 
 def check_tender_enddate(request, tenders):
-    now = datetime.datetime.now()
+    # now = datetime.datetime.now()
     for tender in tenders:
         endstr = str(tender.end_date.date)
         if tender.end_date.day < datetime.datetime.now().day and tender.status == "Open":
@@ -826,16 +813,6 @@ def check_tender_enddate(request, tenders):
                     tender.save()
                     sendTenderClosedEmailNotification(request, tender.user, tender)
     return tenders
-
-def sendTenderClosedEmailNotification(request, user, tender):
-    current_site = get_current_site(request)
-    mail_message = f'The tender you created with a title "{tender.title}" has been just automatically closed by the system.\n This happens when the date you entered as an end date for the tender passes and you (the creator) did not update the status'
-    mail_subject = f'Tender closed'
-    to_email = user.email
-    email = EmailMessage(mail_subject, mail_message, to=[tender.user.email])
-    email.content_subtype = "html"
-    email.send()
-    return email
 
 class TenderList(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):          
@@ -860,8 +837,8 @@ class TenderDetail(LoginRequiredMixin,View):
                 context = {'form':form, 'company_bank_accounts':company_bank_accounts, 'tender':tender}
                 return render(self.request,'admin/collaborations/tender_detail.html',context)
             except Exception as e:
-                print(str(e))
-                messages.warning(self.request,"Tender  edit error")
+                print("tender error", str(e))
+                messages.warning(self.request,"Tender edit error")
                 return redirect("admin:tenders")
 
         print("error at tenderDetail for admin")
@@ -922,12 +899,16 @@ class EditTender(LoginRequiredMixin,View):
                 ending_date=datetime.datetime.strptime(self.request.POST['end_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
                 tender.start_date = starting_date
                 tender.end_date = ending_date
-                tender.title = form.cleaned_data.get('title')
-                tender.title_am = form.cleaned_data.get('title_am')
-                tender.description = form.cleaned_data.get('description')
-                tender.description_am = form.cleaned_data.get('description_am')
-                tender.tender_type = form.cleaned_data.get('tender_type')
-                tender.status = form.cleaned_data.get("status")
+                tender.title = self.request.POST['title']
+                tender.title_am = self.request.POST['title_am']
+                tender.description = self.request.POST['description']
+                tender.description_am = self.request.POST['description_am']
+                tender.tender_type = self.request.POST['tender_type']
+                if self.request.POST["tender_type"] == "Free":
+                    tender.document_price = 0
+                else:
+                    tender.document_price = self.request.POST["document_price"]
+                tender.status = self.request.POST["status"]
                 if self.request.FILES:
                     tender.document = self.request.FILES['document'] 
                 tender.save()
@@ -947,6 +928,7 @@ class EditTender(LoginRequiredMixin,View):
                 print(form.errors)
                 messages.warning(self.request, "Error! Tender was not Edited!" )
                 return redirect("admin:tenders")
+
 
 class DeleteTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -973,6 +955,7 @@ class CustomerTenderList(View):
     def get(self, *args, **kwargs):          
         try:
                 tenders = Tender.objects.all()
+                # tenders = check_tender_enddate(self.request, tenders)
                 return render(self.request, "frontpages/tender/customer_tender_list.html", {'tenders':tenders,})
         except Exception as e:
                 messages.warning(self.request, "Error while getting tenders")
@@ -981,11 +964,11 @@ class CustomerTenderList(View):
 
 class CustomerTenderDetail(View):
     def get(self, *args, **kwargs):  
-          
+        
         if self.kwargs['id'] :
             try:
                 tender = Tender.objects.get(id = self.kwargs['id']  )
-                applicant_form = ApplicantForm
+                applicant_form = TenderApplicantForm()
                 return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applicant_form':applicant_form})
 
             except Exception as e:
@@ -1009,23 +992,18 @@ class ApplyForTender(View):
                 email = self.request.POST['email'],
                 phone_number = self.request.POST['phone_number'],
                 company_name = self.request.POST['company_name'],
-                company_tin_number=self.request.POST['company_tin_number']
+                company_tin_number=self.request.POST['company_tin_number'],
+                tender = tender
             )
             applicant.save()
-            application = TenderApplications(tender = tender, applicant=applicant)
-            application.save()
             messages.success(self.request, "Application Successfully Completed")
             print("Created successfully") 
-            # pdf_download(self.request, tender.id)
-            return redirect("/collaborations/tender_list/")
+            return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applied':True})
 
-            # return HttpResponseRedirect(reverse('customer_tender_detail',  kwargs={'id':tender.id} ))
-                                        
-            # return redirect(reverse("/collaborations/tender_list/", kwargs={ 'applied': True }))
-            # return redirect(CustomerTenderDetail, id = tender.id, applied=True)
+            return redirect(f"{tender.document.url}")
+            # return redirect("/collaborations/tender_list/")
 
-            # return HttpResponseRedirect(redirect_to= f"/collaborations/customer_tender_detail/{tender.id}/", kwargs={'applied':True})
-            # HttpResponseRedirect()
+          
         print("Error Occured!")
         messages.warning(self.request,"Error while Applying!")
         return redirect("/collaborations/tender_list/")
@@ -1098,14 +1076,14 @@ class EditNews(LoginRequiredMixin, View):
                         imag = NewsImages(news=news, name = image.name, image = image)
                         imag.save()
                 messages.success(self.request, "News Edited Successfully!")
-                return redirect("admin:news_list") 
+                return redirect(f"/admin/news_detail/{news.id}/") 
             else:
                 messages.warning(self.request, "Error! News not Edited!")
 
 class AdminNewsList(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         newslist = News.objects.all()
-        return render(self.request, "admin/collaborations/news.html", {'newslist':newslist})
+        return render(self.request, "admin/collaborations/admin_news_list.html", {'newslist':newslist})
 
 class NewsDetail(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):         
@@ -1138,3 +1116,53 @@ class CustomerNewsDetail(View):
             return render(self.request, "frontpages/news/customer_news_detail.html", {'news':news,})
         else:
             return redirect("index")
+
+##### Customer Events
+def check_event_participation(request, event_participants):
+    today = datetime.datetime.now().day
+    for participant in event_participants:   
+        start_day = participant.event.start_date.day
+        if start_day > today and start_day - today == participant.notifiy_in:
+            sendEventNotification(request, participant) 
+    return True
+
+
+class CustomerEventList(View):
+    def get(self, *args, **kwargs):          
+        try:
+                events = CompanyEvent.objects.all()
+                event_participants = EventParticipants.objects.filter(notified = False)   
+                check_event_participation(self.request, event_participants)
+                return render(self.request, "frontpages/news/customer_event_list.html", {'events':events,})
+        except Exception as e:
+                return redirect("index")     
+
+class CustomerEventDetail(View):
+    def get(self, *args, **kwargs):        
+        if self.kwargs['id'] :
+            event_participant_form = EventParticipantForm
+            event = CompanyEvent.objects.get(id = self.kwargs['id']  )
+            return render(self.request, "frontpages/news/customer_event_detail.html", {'event':event,'event_participant_form':event_participant_form})
+        else:
+            return redirect("index")
+
+class EventParticipation(LoginRequiredMixin, View):
+    def post(self, *args, **kwargs):   
+        event = CompanyEvent.objects.get(id = self.kwargs['id'])
+        if event:
+            applicant = EventParticipants(user = self.request.user, event = event, notified=False)
+            applicant.patricipant_email = self.request.POST['patricipant_email']
+            
+            if self.request.POST['notify_in']:
+                applicant.notifiy_in = self.request.POST['notify_in']
+            else:
+                applicant.notifiy_in = 1   
+                    
+            applicant.save()
+            messages.success(self.request, "Successfully Completed")
+            print("Created successfully") 
+            return redirect("/collaborations/customer_event_list/")
+
+        print("Error Occured!")
+        messages.warning(self.request,"Error while Applying Event!")
+        return redirect("/collaborations/customer_event_list/")

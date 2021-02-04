@@ -16,7 +16,7 @@
 	
 
 <style>
-	.reveal-if-active {
+.reveal-if-active {
   opacity: 0;
   max-height: 0;
   overflow:hidden;
@@ -29,6 +29,20 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 
   
 }
+.edit-reveal-if-active {
+  opacity: 0;
+  max-height: 0;
+  overflow:hidden;
+  
+}
+input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
+  opacity: 1;
+  max-height: 100px; /* little bit of a magic number :( */
+  overflow: visible;
+
+  
+}
+
 </style>
 {% endblock %}
 {%block pagename%}Tenders Form{%endblock%}
@@ -78,7 +92,7 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 								</div>
 							</div>
 
-
+							<!-- tender type -->
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group ">
@@ -89,14 +103,22 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 											{% if tender.tender_type == "Free"%}
 											<input type="radio" id="Free" name="tender_type" value="Free" checked="true">
 											<label for="Free">Free</label><br>
-											<input type="radio" id="Paid" name="tender_type" value="Paid">
-											<label for="Paid">Paid</label><br>  
+											<input type="radio" id="edit_paid" name="tender_type" value="Paid" >
+											<label for="edit_paid">Paid</label><br>  
+											<div class="edit-reveal-if-active">
+												<label style="margin-right: 10px;">Document Price: </label>
+												<input type="number" required name = "document_price" placeholder="document price" value = "0"/>
+											</div>  
 											{% else %}
 
 											<input type="radio" id="Free" name="tender_type" value="Free" >
 											<label for="Free">Free</label><br>
-											<input type="radio" id="Paid" name="tender_type" value="Paid" checked = "true">
-											<label for="Paid">Paid</label><br>  
+											<input type="radio" id="edit_paid" name="tender_type" value="Paid" checked = "true">
+											<label for="edit_paid">Paid</label><br>  
+											<div class="edit-reveal-if-active">
+												<label style="margin-right: 10px;">Document Price: {{tender.document_price}}</label>
+												<input type="number" required name = "document_price" placeholder="document price" value = "{{tender.document_price}}"/>
+											</div>
 											{%endif%}
 									</div>
 								</div>
@@ -115,12 +137,13 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 									</div>
 								</div>
 							</div>
-
 							<br><br><br>
+							
+							
 							<div class = "row">
 								
 								
-																	
+								<!-- start date edit  -->
 								<div class="col-md-4">
 									<div class="form-group row">
 
@@ -135,6 +158,9 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 											
 									</div>
 								</div>
+
+
+								<!-- end date edit -->
 								<div class="col-md-4">
 									<div class="form-group row">
 										<label class="col-form-label col-lg-3">End Date </label>
@@ -148,6 +174,8 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 									</div>
 								</div>
 
+
+								<!-- status edit -->
 								<div class="col-md-4">
 									<div class="form-group ">
 										<div style="width: 100%;">
@@ -175,6 +203,8 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 										</div>
 									</div>
 								</div>
+
+
 							</div>		
 						</fieldset>
 						<div class="text-right">
@@ -223,18 +253,12 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 													</div>
 												</div>
 											</div>
-											{% if tender.get_bank_accounts.count != 1 %}
+											
 												<div class="text-center">
 													<button style="padding-left: 2%; padding-right: 2%; background-color: #ef5350;" type="submit"
 														class="btn btn-primary col-lg-6" onclick="return confirm ('Are you sure you want to Remove this bank account from this tender?')">Remove bank Account  </button>
 												</div>
-											{% else %}
-												<div class="text-center">
-													<button style="padding-left: 2%; padding-right: 2%; background-color: #ef5350;" 
-														class="btn btn-primary col-lg-6" disabled >Remove bank Account  </button>
-												</div>
-											{%endif%}
-
+											
 									{% else %}
 									<h3>No Related Bank Account For this tender</h3>
 									{% endif %}
@@ -390,6 +414,8 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 											
 									</div>
 								</div>
+
+
 								<div class="col-md-4">
 									<div class="form-group row">
 										<div class="col-lg-9">
@@ -401,8 +427,6 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 											
 									</div>
 								</div>
-
-
 
 								<div class="col-md-4">
 									<div class="form-group ">
@@ -423,14 +447,6 @@ input[type="radio"][id=create_paid]:checked ~ .reveal-if-active{
 										</div>
 									</div>
 								</div>
-
-
-
-
-
-
-
-								
 
 							</div>
 							

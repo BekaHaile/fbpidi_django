@@ -1,8 +1,11 @@
 {%extends 'frontpages/layout.html'%}
 {%load i18n%}
 {%load core_template_tags%}
+
 {%block content%}
 {% get_current_language as LANGUAGE_CODE %}
+
+
 
         <!--Breadcrumb-->
         <!-- Note -->
@@ -45,6 +48,10 @@
 								<div class="item7-card-desc d-flex mb-2 mt-3">
 								<a href="#"><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i>By:- <b> {% get_company_name tender %}</b></a>					
 								<a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>Type:-<b> {{tender.tender_type}}</b></a>
+								{% if tender.tender_type == "Paid" %}
+								<a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>Price:- <b> {{tender.document_price}} Birr</b></a>
+								
+								{% endif %}
 								<a href="#"><i class="icon-users" style="margin-left: 10px;"></i>Total Applications:-<b> {{tender.get_applications.count}}</b></a>
 								
 								</div>
@@ -63,12 +70,14 @@
 
 								{% if tender.tender_type == "Free" %}
 									<div style = "margin-top: 10px;" class = "row">
+										{% if applied == True %}
 									
 											<div class = "choice-btn-group" class="badge badge-secondary" style="margin-right: 20px; margin-left: 15px; ">
 													<span class="badge badge-secondary" style="padding: 10px;">
 															<a id = "download" href="{{tender.document.url}}" download="{{tender.document.url}}" style="color: white;">Download Document</a>							
 													</span>
 											</div>
+										{% endif %}
 
 										
 										<!-- <form action ="{% url 'download' id=tender.id %}" method="GET" enctype="multipart/form-data">
@@ -77,19 +86,19 @@
 										{% if tender.status == "Open"%}
 											{%if tender.get_company.company_name == user.get_company_name %}
 												<h3>Users from tender company can't participate in their own tender!</h3>
+												<div class = "choice-btn-group" class="badge badge-secondary" style="margin-right: 20px; margin-left: 15px; ">
+													<span class="badge badge-secondary" style="padding: 10px;">
+															<a id = "download" href="{{tender.document.url}}" download="{{tender.document.url}}" style="color: white;">Download Document</a>							
+													</span>
+											</div>
 
-											{%else%}
+											{%elif not applied %}
+												
 												<div class = "choice-btn-group" class="badge badge-secondary" style="margin-right: 20px;">
 													<span class="badge badge-secondary" style="padding: 10px;">
 															<a  href="#"  data-toggle="modal" data-target="#participate" style="color: white;">Participate in tender</a>							
 													</span>
 												</div>
-
-												<!-- <div>
-														<a style = "padding:5px; margin-left: 10px;" data-toggle="modal" data-target="#participate" class = "btn btn-secondary btn-sm mt-4" >
-															<i class="fa fa-money" style="margin-right: 5px;" ></i>Participate in tender
-														</a>
-												</div > -->
 											{%endif%}
 
 										{%else%}
@@ -103,68 +112,26 @@
 
 								{%else%}
 								<br>
-								<div>
-									
-									<a style = "margin-top: 10px;" data-toggle="modal" data-target="#buy_document" class = "btn btn-secondary btn-sm mt-4">
-										<i class="fa fa-money" style="margin-right: 5px;" ></i>Buy Document</a>
+								<div style = "display: block;">
+									<label style="margin-left: 10px; padding:5px; background-color:orangered; color: white; display: block;">
+										<h4>This Tender is not Free, You can read the description below and attend the tender in person!</h4> 
+									</label>
 									
 								</div>
+								
+									<!-- <a style = "margin-top: 10px;" data-toggle="modal" data-target="#buy_document" class = "btn btn-secondary btn-sm mt-4">
+										<i class="fa fa-money" style="margin-right: 5px;" ></i>Buy Document</a>
+									 -->
+								
 								{% endif %}
 
-								<h4 style =  "margin-top: 20px;"class  = "text-center">Tender description</h4>
+								<br>
+								<h2 style =  "margin-top: 20px;"class  = "text-center"><b>Tender description</b></h2>
 								<p class="font-13  col-lg-10 col-md-12">{{tender.description|safe}}</p>
 								
+
 								
-							
-								<div class="modal fade" id="buy_document" tabindex="-1" role="dialog"  aria-hidden="true">
-									<div class="modal-dialog" role="document">
-										<div class="modal-content">
-											<!-- Change the gate to post when saving method is completed -->
-												<form action="/collaborations/tender_application/{{tender.id}}/" method="POST" enctype="multipart/form-data">
-												<!-- <form action="{% url tender_application id=tender.id applied=False" method="POST" enctype="multipart/form-data"> -->
-													
-													{%csrf_token%}
-													<div class="modal-header">
-														<h5 class="modal-title" id="examplecontactLongTitle">Payment Form</h5>
-														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-														</button>
-													</div>
-													<div class="modal-body">
-														<div class="form-group">
-															<input type="text" class="form-control" name = "first_name" id="first-name" placeholder="First Name">
-														</div>
-														<div class="form-group">
-															<input type="text" class="form-control" name = "last_name" id="last-name" placeholder="Last Name">
-														</div>
-														<div class="form-group">
-															<input type="text" class="form-control" name = "company_name" id="company_name" placeholder="Company Name">
-														</div>
-														<div class="form-group">
-															<input type="text" class="form-control" name = "company_tin_number" id="company_tin_number" placeholder="Company Tin Number">
-														</div>
-														
-														<div class="form-group">
-															<input type="email" class="form-control" name = "email" id="email" placeholder="Email Address">
-														</div>
-														<div class="form-group">
-															<input type="phone" class="form-control" name = "phone_number" id="phone_number" placeholder="Phone" >
-														</div>
-														
-														<div class="form-group">
-															<input type="text" class="form-control" name = "account_number" id="account_number" placeholder="Payment Method">
-														</div>
-													</div>
-													<div class="modal-footer">
-														<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-														<button type="submit" class="btn btn-success">Buy</button>
-													</div>
-												</form>
-										</div>
-									</div>
-								</div>
-								
-								
+								<!-- Free participant Form -->
 								<div class="modal fade" id="participate" tabindex="-1" role="dialog"  aria-hidden="true">
 									<div class="modal-dialog" role="document">
 										<div class="modal-content">
@@ -176,25 +143,35 @@
 														<span aria-hidden="true">&times;</span>
 														</button>
 													</div>
+
 													
 													<div class="modal-body">
+
 														<div class="form-group">
+															<label>First Name: </label>
+															{{applicant_form.first_name}}
 														</div>
 														<div class="form-group">
-															<input type="text" class="form-control" name = "last_name" id="last-name" placeholder="Last Name">
+															<label>Last Name: </label>
+															{{applicant_form.last_name}}
 														</div>
 														<div class="form-group">
-															<input type="text" class="form-control" name = "company_name" id="company_name" placeholder="Company Name">
+															
+															<label>Company Name: </label>
+															{{applicant_form.company_name}}
 														</div>
 														<div class="form-group">
-															<input type="text" class="form-control" name = "company_tin_number" id="company_tin_number" placeholder="Company Tin Number">
+															<label>Company Tin Number: </label>
+															{{applicant_form.company_tin_number}}
 														</div>
 														<div class="form-group">
-															<input type="email" class="form-control" name = "email" id="email" placeholder="Email Address">
-														</div>
+															<label>Email: </label>
+															{{applicant_form.email}}																			</div>
 														<div class="form-group">
-															<input type="phone" class="form-control" name = "phone_number" id="phone_number" placeholder="Phone">
+															<label>Phone Number: </label>
+															{{applicant_form.phone_number}}	
 														</div>
+
 													</div>
 													<div class="modal-footer">
 														<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
