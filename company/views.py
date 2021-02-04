@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
@@ -7,9 +9,8 @@ from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from company.models import Company,CompanySolution,CompanyEvent,CompanyStaff, Bank, CompanyBankAccount
-from accounts.models import CompanyAdmin
-from accounts.models import User
-import datetime
+from accounts.models import CompanyAdmin,User
+from product.models import Order,OrderProduct
 
 
 from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm,FbpidiCompanyForm, CompanyBankAccountForm, EventParticipantForm

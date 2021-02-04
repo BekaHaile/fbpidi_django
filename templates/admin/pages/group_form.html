@@ -15,19 +15,8 @@
 			<div class="content">
 				<div class="card">
 					<div class="card-body">
-						{%for obj in objs %}
-						<h4>{{obj.name}}</h4>
-						{%for perm in obj.permissions.all%}
-						<li>{{perm.name}}</li>
-						{%endfor%}
-						{%endfor%}
-					</div>
-				</div>
-				
-				<div class="card">
-					<div class="card-body">
 						
-						<form action="{%url 'admin:group_view'%}" method="POST">
+						<form action="{%url 'admin:create_group'%}" method="POST">
 							{%csrf_token%}
 								<input type="text" name="group_name" id="group_name" placeholder="Group Name Here"  class="form-control">
 								<hr>
@@ -64,7 +53,7 @@
 						});
 
 						$.ajax({
-							url:"{%url 'admin:group_view'%}",
+							url:"{%url 'admin:create_group'%}",
 							type : "POST",
 							headers: { "X-CSRFToken": my_token },
 							data : {

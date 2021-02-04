@@ -268,15 +268,21 @@
 						<li class="nav-item">
 							<a href="{%url 'admin:useraudit' %}" class="nav-link"><i class="icon-archive"></i>
 								<span>User Logs</span></a>
+						</li>						 
+						{%else%} 
+						
+						
+						<li class="nav-item">
+							<a href="{{user|my_company_link}}" class="nav-link"><i class="icon-coins"></i><span>My Company</span></a>
 						</li>
+              			  
 
-
-						<li class="nav-item-header">
+						 {%endif%}
+						 <li class="nav-item-header">
 							<div class="text-uppercase font-size-xs line-height-xs">Account</div> <i class="icon-menu"
 								title="Forms"></i>
 						</li>
-						
-						<li class="nav-item nav-item-submenu">
+						 <li class="nav-item nav-item-submenu">
 							<a href="#" class="nav-link"><i class="icon-users"></i> <span>Users</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
 								<li class="nav-item">
@@ -284,32 +290,11 @@
 										<span>User</span></a>
 								</li>
 								<li class="nav-item">
-									<a href="{% url 'admin:group_view'%}" class="nav-link"><i class="icon-users"></i>
+									<a href="{% url 'admin:view_group'%}" class="nav-link"><i class="icon-users"></i>
 										<span>Group</span></a>
 								</li>
-								<!-- <li class="nav-item">
-									<a href="{% url 'admin:roles_list'%}" class="nav-link"><i class="icon-users"></i>
-										<span>Roles</span></a>
-								</li> -->
 							</ul>
 						</li>
-
-						 
-						
-						
-						 
-						{%else%} 
-						
-						<li class="nav-item">
-							<a href="{%url 'admin:users_list' %}" class="nav-link"><i class="icon-users"></i>
-								<span>Users</span></a>
-						</li>
-						<li class="nav-item">
-							<a href="{{user|my_company_link}}" class="nav-link"><i class="icon-coins"></i><span>My Company</span></a>
-						</li>
-              			  
-
- 						{%endif%}
 						<li class="nav-item mb-5">
 							<a href="{% url 'admin:logout' %}?next={%url 'admin:login'%}" class="nav-link"><i class="icon-switch2"></i> <span>Log Out</span></a>
 						</li>

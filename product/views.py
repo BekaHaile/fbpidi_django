@@ -8,12 +8,20 @@ from django.utils import timezone
 
 
 from admin_site.models import Category, SubCategory
-from product.models import Product,ProductImage,ProductPrice,Order,OrderProduct
-from product.forms import SubCategoryForm,ProductCreationForm,CategoryForm
+from product.models import Product,ProductImage,ProductPrice,Order,OrderProduct,InvoiceRecord
+from product.forms import SubCategoryForm,ProductCreationForm,CategoryForm,CheckoutForm
 from accounts.models import User
 from company.models import Company
 
-# Create your views here.
+import random
+import string
+
+def create_ref_code():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits,k=30))
+
+def create_invoice(invoice,user):
+    return '#INV-'.join(random.choices(string.ascii_uppercase + (invoice.join(user.id))))
+
 # This is class/view is crated for displaying all categories and sub categories 
 class CategoryView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -247,6 +255,7 @@ class AddToCartView(LoginRequiredMixin,View):
         
         order_product,created = OrderProduct.objects.get_or_create(
             product=product,
+            to_company=product.company,
             user=self.request.user,
             ordered=False
         )
@@ -310,3 +319,32 @@ class DecrementFromCart(LoginRequiredMixin,View):
         else: 
             messages.warning(self.request,"You do not have order")
             return redirect("index")    
+
+class CheckoutView(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        context = {}
+        order = Order.objects.get(user=self.request.user,ordered=False)
+        context['order'] = order
+        context['form'] = CheckoutForm()
+        return render(self.request,"frontpages/product/checkout.html",context)
+
+    
+    def post(self,*args,**kwargs):
+        form = CheckoutForm(self.request.POST)
+        order = Order.objects.get(user=self.request.user,ordered=False)
+        if form.is_valid():
+            shipping = form.save(commit=False)
+            shipping.user = self.request.user
+            shipping.save()
+            order.shipping_address = shipping
+            invoice = InvoiceRecord.create(
+                user=self.request.user,
+                amount=order.get_total_price()
+            )
+            invoice.code = create_invoice(invoice,self.request.user)
+            invoice.save()
+            order.invoice = invoice
+            order.ordered = True
+            order.save()
+            return redirect("")
+

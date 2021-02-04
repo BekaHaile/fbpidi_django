@@ -32,7 +32,7 @@
 													</a>
 
 												</td>
-												<td class="font-weight-semibold fs-16">ETB{{cart.product.price}}</td>
+												<td class="font-weight-semibold fs-16">ETB {{cart.get_total_item_price}}</td>
 												<td>
 													<a href="#" class="badge badge-danger"><i class="fa fa-trash"></i></a>
 												</td>
@@ -42,7 +42,7 @@
 									</table>
 								</div>
 								<ul class="pagination">
-									 <button class="btn btn-primary m-1">Proceed To Checkout</button>
+									 <a href="{%url 'checkout'%}" class="btn btn-primary m-1">Proceed To Checkout</a>
 									 <button class="btn btn-success m-1">Continue Shopping</button>
 								</ul>
 							</div>
