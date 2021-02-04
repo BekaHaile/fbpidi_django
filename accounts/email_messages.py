@@ -38,3 +38,20 @@ def sendWelcomeEmail(request,user):
     email.content_subtype = "html"
     email.send()
     return email
+    
+def sendEventNotification(request, participant):
+    
+    current_site = get_current_site(request)
+    mail_message = f'The Event titled "{participant.event.event_name}" Will start after {participant.notifiy_in}.'
+    mail_subject = f'Event Notification From IIMP'
+    to_email = participant.patricipant_email
+    email = EmailMessage(mail_subject, mail_message, to=[participant.patricipant_email])
+    email.content_subtype = "html"  
+    try:
+        email.send()
+        print("Email sent to ", participant.patricipant_email)
+    except Exception as e:
+        print("Exception While Sending Email ", str(e))
+    participant.notified = False
+    participant.save()
+    return email

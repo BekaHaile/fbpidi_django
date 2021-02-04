@@ -1,7 +1,7 @@
 from django import forms
 from django_summernote.widgets import SummernoteWidget
 from .models import  (PollsQuestion, Choices, PollsResult,
-                     Tender, TenderApplicant, TenderApplications,
+                     Tender, TenderApplicant, 
                       JobCategoty,Vacancy,JobApplication,
                       Faqs,Blog,BlogComment,
                       ForumQuestion,ForumComments,CommentReplay,
@@ -75,9 +75,9 @@ class CreatePollForm(forms.ModelForm):
         fields = ('title', 'title_am',
                   'description', 'description_am',)
         widgets = {
-            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
+            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Poll Title English'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),
-            'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
+            'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Poll Title Amharic'}),
             'description_am':forms.Textarea(attrs={'class':'summernote'}),          
         }
 
@@ -134,19 +134,14 @@ class TenderEditForm(forms.ModelForm):
             }
 
 
-class ApplicantForm(forms.Form):
-    class Meta:
-        fields = ('first_name', 'last_name',
-                  'company_name', 'company_tin_number','email', 'phone_number')
-        widgets = {
-            'first_name': forms.TextInput(attrs={"placeholder": "First Name", },),
-            'last_name': forms.TextInput(attrs={"placeholder": "Last Name"},),
-            'company_name': forms.TextInput(attrs={"placeholder": "Company Name"},),
-            'company_tin_number': forms.TextInput(attrs={"placeholder": "Company Tin Number"},),
-            'email': forms.TextInput(attrs={"placeholder": "User Email"},),
-            'phone_number': forms.TextInput(attrs={"placeholder": "Phone Number", "data-mask": "+251-99999-9999"},),
-        }
-
+class TenderApplicantForm(forms.Form):
+    first_name= forms.CharField( max_length=30, widget=forms.TextInput(attrs={ "class":"form-control","placeholder": "First Name", },)    )
+    last_name=forms.CharField( max_length=30, widget=forms.TextInput(attrs={ "class":"form-control","placeholder": "Last Name", },)    )
+    company_name= forms.CharField( max_length=30, widget=forms.TextInput(attrs={ "class":"form-control","placeholder": "Company Name", },)    )
+    company_tin_number=forms.CharField( max_length=30, widget=forms.TextInput(attrs={ "class":"form-control","placeholder": "Company tin Number", },)    )
+    email = forms.EmailField(widget=forms.EmailInput(attrs={ "class":"form-control","placeholder": "Email Address", },))   
+    phone_number =  forms.IntegerField(widget=forms.TextInput(attrs={"class":"form-control","placeholder": "Phone Number", "data-mask": "+251-99999-9999"},),)
+            
 '''
 class DateForm(forms.Form):
     date = forms.DateTimeField(

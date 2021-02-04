@@ -11,8 +11,7 @@
 <div class="content">
 
 	{% if edit and perms.collaborations.change_pollsquestion %}
-	    {% if  user.is_superuser or poll.user.get_company_name == user.get_company_name %}
-			
+	    	
 			<div class="card">
 
 				<div class="card-body">
@@ -121,14 +120,6 @@
 						
 				</div>
 			</div>
-		
-
-
-		{% endif %}
-
-
-
-
 		
 	{%else%}
 		
