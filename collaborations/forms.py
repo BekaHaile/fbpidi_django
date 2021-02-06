@@ -5,7 +5,8 @@ from .models import  (PollsQuestion, Choices, PollsResult,
                       JobCategoty,Vacancy,JobApplication,
                       Faqs,Blog,BlogComment,
                       ForumQuestion,ForumComments,CommentReplay,
-                      ForumComments,Announcement, News, NewsImages
+                      ForumComments,Announcement, News, NewsImages,
+                      Research,ResearchProjectCategory
                       )
 
 from django.forms.widgets import SelectDateWidget
@@ -17,6 +18,8 @@ JOB_CHOICES=[('Temporary','Temporary'),
 
 CURRENT_STATUS = [('JUST GRADUATED','JUST GRADUATED'),('WORKING','WORKING'),
                 ('LOOKING FOR JOB','LOOKING FOR JOB')]
+
+RESEARCH_STATUS = [('Complited','Complited'),('Inprogress','Inprogress'),]
 
 class FaqsForm(forms.ModelForm):
     
@@ -263,10 +266,35 @@ class AnnouncementForm(forms.ModelForm):
         'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Announcement in Amharic'}),
         'containt':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in English'}),
         'containt_am':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in Amharic'}),
-
         }
+        
+class ResearchProjectCategoryForm(forms.ModelForm):
+    class Meta:
+        model = ResearchProjectCategory
+        fields = ('cateoryname','detail')
+        widgets = {
+        'cateoryname':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory Of  the Research'}),
+        'detail':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory Of  the Research'}),
+        
+        }
+        
+class ResearchProjectForm(forms.ModelForm):
+    attachements = forms.FileField(required=False)
+    status = forms.ChoiceField(choices = RESEARCH_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
 
+    class Meta:
+        model = Research
+        fields  = ('title','description','detail','status','category')
+        widgets = {
 
+        'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+        'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Research'}),
+        'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
+        'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The hole research'}),
+        }
+        
+
+ 
 
 
 

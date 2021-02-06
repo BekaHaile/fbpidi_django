@@ -23,8 +23,22 @@
 					<!--Left Side Content-->
 					<div class="col-xl-4 col-lg-4 col-md-12">
 						<div class="card">
-						 <form action="{%url 'forum_search' %}" method="POST" enctype="multipart/form-data">
+							<div class="card-body">
+								<div class="col-xl-8 col-lg-8 col-md-8">
+								<a href="{%url 'research_form' %}"><button style="padding-left: 40%; padding-right: 40%;" type="submit" 
+								href="{%url 'forum_form' %}" 
+									class="btn btn-primary rounded-round">
+									<h5>Add new Research </h5>
+								</button>
+								</a>
+							</div>
+							</div>
+						</div>
+
+						 <div class="card">
+						 <form action="{%url 'research_search' %}" method="POST" enctype="multipart/form-data">
 						 	{%csrf_token%}
+						 	
 							<div class="card-body">
 								<div class="input-group">
 									<input type="text" name="search" class="form-control br-tl-3  br-bl-3" placeholder="Search" required>
@@ -38,10 +52,33 @@
 							</div>
 						</form>
 						</div>
-						
+
 						<div class="card">
 							<div class="card-header">
-                                    <h3 class="card-title">Forums you created </h3> 
+								<h3 class="card-title">Categories</h3>
+							</div>
+							{%for cat in category%}
+							<div class="card-body p-0">
+								<div class="list-catergory">
+									<div class="item-list">
+										<ul class="list-group mb-0">
+											<li class="list-group-item">
+												<a href="{%url 'researchcategory_search' id=cat.id%}" class="text-dark">
+													 {{cat}}
+													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">{{cat.countResearch}}</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							{%endfor%}
+							
+						</div>
+						{%if user.is_authenticated %}
+						<div class="card">
+							<div class="card-header">
+                                    <h3 class="card-title">Research you Posted </h3> 
 							</div>
 							<div class="card-body p-0">
 								<div class="list-catergory">
@@ -51,18 +88,17 @@
 											{%for forum in usercreated%}
 											
 											<li class="list-group-item border-bottom-0">
-												<a href="{%url 'forum_detail' id=forum.id %}" class="text-dark">
+												<a href="{%url 'research_detail' id=forum.id %}" class="text-dark">
 													 {{forum.title|safe|truncatewords:20}}
-													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">{{forum.countComment}}</span>
+													
 												</a>
 
-											</li> 
-											
+											</li>
 											<li>
 												<span class="badgetext badge badge-pill badge-light mb-0 mt-1">
-												<a href="{%url 'admin:delete' model_name='ForumQuestion' id=forum.id%}" class = "btn btn-secondary btn-sm mt-4" onclick="return confirm('are you sure you want to delete this')"><i class="icon-trash"></i> </a>
+												<a href="{%url 'admin:delete' model_name='ResearchClient' id=forum.id%}" class = "btn btn-secondary btn-sm mt-4" onclick="return confirm('are you sure you want to delete this')"><i class="icon-trash"></i> </a>
 
-												<a href="{%url 'forum_edit' id=forum.id%}" style = "padding:5px; margin-left: 10px;" class = "btn btn-secondary btn-sm mt-4"  >
+												<a style = "padding:5px; margin-left: 10px;" class = "btn btn-secondary btn-sm mt-4"  >
 												<i class="icon-pencil" style="margin-right: 5px;" ></i> 
 											</a></span>
 											</li>
@@ -75,66 +111,59 @@
 								</div>
 							</div>
                         </div>
-                        
+                        {%endif%}
+
 						
 					</div>
 					<!--/Left Side Content-->
 
                     
 
-					
 
 					<div class="col-xl-8 col-lg-8 col-md-12">
 						<!--Add Lists-->
 						
-
-						<div class="card">
-							<div class="card-body">
-								<div class="col-xl-11 col-lg-12 col-md-12">
-								<a href="{%url 'forum_form' %}"><button style="padding-left: 40%; padding-right: 40%;" type="submit" 
-								href="{%url 'forum_form' %}" 
-									class="btn btn-primary rounded-round">
-									<h5>Start New Forum Question </h5>
-								</button>
-								</a>
-							</div>
-							</div>
-						</div>
 						<div class="row">
-							<!----
-							title = models.CharField(max_length=500,null=False)
-    description = models.TextField(null=False)
-    detail = models.TextField(null=False)
-    status = models.CharField(max_length=100,null=False)
-    accepted = models.CharField(max_length=100,null=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
--->
-							<div class="col-xl-12 col-lg-12 col-md-12">
-								{%for forum in forums%}
-								<div class="card">
-									<div class="card-head">
-										<h3>{{forum.title}}</h3>
-										<div>{{forum.status}}</div>
+							
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">{{research.title}}</h3> 
+								
 									</div>
-									<div class="card-body">
-										<div class="item7-card-desc d-flex mb-2">
-											<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{forum.timestamp}}</a>
-											<div class="ml-auto">
-												<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>{{forum.countComment}} </a>
-											</div>
-										</div>
-
-
-										<h4 class="font-weight-semibold">{{forum.description|safe|truncatewords:30}}</h4>
-
-										<a href="{%url 'forum_detail' id=forum.id %}" class="btn btn-secondary btn-sm">Read More</a>
+									<div class="card-header">
+									User:{{research.user}} 
+									
+									<div>{{research.timestamp}}</div>
+									<br/>
+									<div>
+										<p>status:{{research.status}}</p>
 									</div>
-								</div>
-								{%endfor%}
+									Category:{{research.category}}
+									</div> 
+
+                                <div class="card-body">
+                                    <div class="mb-0">
+                                       Detail:<p>{{research.detail|safe}}</p>
+                                    </div>
+                                    {%if research.attachements%}
+                                    <div class="mb-0">
+                                       <a href="{{research.attachements.url}}" download="{{research.attachements.url}}"> 
+                                   		<div class="mb-3"><b>Attachments</b></div>
+                                   	</a>
+                                    </div>
+                                    {%endif%}
+                                </div>
+                             </div>
+
+
+                                
                             </div>
 
+
+						
                             
 						</div>
+					</div>
 						<div class="d-sm-flex">
 							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>
 							<ul class="pagination mb-lg-0 mb-5 ml-auto">

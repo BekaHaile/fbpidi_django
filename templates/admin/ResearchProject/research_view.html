@@ -1,0 +1,83 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+{% endblock %}
+{%block pagename%}View Research{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+<div class="card-header header-elements-inline">
+			<div class="header-elements">
+				<div class="list-icons">
+					{% if forms.accepted == "PENDING" %}
+			<a href="{%url 'admin:approve' id=forms.id %}" class="btn bg-teal btn-sm rounded-round"> APPROVE</a>
+			{%endif%}
+
+				</div>
+				<div class="list-icons">
+			<a href="{%url 'admin:research_detail'  model_name='Research' id=forms.id%}" class="btn bg-teal btn-sm rounded-round" > EDIT</a>
+
+				</div>
+				<div class="list-icons">
+			<a href="{%url 'admin:delete' model_name='ResearchProject' id=forms.id%}" class="btn bg-teal btn-sm rounded-round" onclick="return confirm('Are you sure you want to Delete this')">DELETE</a>
+			
+
+				</div>
+			</div>
+		</div>
+				<div class="col-xl-12 col-lg-12 col-md-12">
+						<div class="card">
+							<div class="card-head">
+								<div class="col-xl-6 col-lg-6 col-md-6">
+								</div>
+								<div class="col-xl-6 col-lg-6 col-md-6">
+								
+										<h3>Title:</h3> <h4>{{forms.title}}</h4>
+										</div>
+									</div>
+							<div class="card-body">
+								<div>
+										<p>CATEGORY:{{forms.category}}</p>
+									</div>
+									{%if forms.attachements%}
+									<div class="mb-4">
+                                    	<a href="{{forms.attachements.url}}" download="{{forms.attachements.url}}"> 
+                                   			
+                                   			<b>Documents</b>
+                     					</a>
+                                    </div>
+                                    {%endif%}
+								<div>
+									<a href=""><i class="fa fa-calendar-o text-muted mr-2"></i>{{forms.timestamp}}</a>
+									<i class="fa fa-user text-muted mr-2">{{forms.user}}</i>
+									<div>
+										<label class="col-form-label col-lg-3"><h3> Description</h3> </label>
+										<p>{{forms.description}}</p>
+									</div>
+									<div>
+										<label class="col-form-label col-lg-3"><h3> Detail</h3> </label>
+										<p>{{forms.detail}}</p>
+									</div>
+
+									
+									
+								</div>
+								
+							</div>
+						</div>
+
+							
+						</div>
+					</div>
+	
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+	});
+</script>
+{%endblock%}

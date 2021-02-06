@@ -1,0 +1,87 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+<!-- /theme JS files -->
+
+{% endblock %}
+{%block pagename%}ResearchProject List{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	<!-- Page length options main category -->
+	
+	<!-- /page length options -->
+
+	<!-- Page length options sub-category-->
+	
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">ResearchProjects</h5>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a href="{% url 'admin:research_form'%}" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New ResearchProject</a>
+				</div>
+			</div>
+		</div>
+
+		<table class="table datatable-show-all">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>user</th>
+					<th>status </th>
+					<th>accepted </th>
+					<th>description </th>
+					<th class="text-center">Actions</th>
+				</tr>
+			</thead> 
+			<tbody>
+				{%for research in researchs%}
+				<tr>
+					
+					<td>{{research.title|truncatewords:20}}</td>
+					<td>{{research.user|truncatewords:20}}</td>
+					<td>{{research.status}}</td>
+					<td>
+						{{research.accepted}}
+					</td>
+					<td>
+						{{research.description|truncatewords:35}}
+					</td>
+					<td class="text-center">
+						<div class="list-icons">
+							<div class="dropdown">
+								<a href="#" class="list-icons-item" data-toggle="dropdown">
+									<i class="icon-menu9"></i>
+								</a>
+									
+								<div class="dropdown-menu dropdown-menu-right">
+									<a href="{%url 'admin:delete' model_name='Research' id=research.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Research</a>
+									
+									<a href="{%url 'admin:research_view' id=research.id%}" class="dropdown-item"  >
+										<i class="icon-eye"></i>View Research</a>
+
+									<a href="{%url 'admin:research_detail'  model_name='Research' id=research.id%}" class="dropdown-item"  >
+										<i class="icon-pencil"></i>Edit Research</a>
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+	<!-- /page length options -->
+
+
+</div>
+<!-- /content area -->
+{%endblock%}

@@ -287,3 +287,41 @@ class AnnouncementImages(models.Model):
     announcement = models.ForeignKey(Announcement, on_delete = models.CASCADE)
     image = models.ImageField(upload_to = "Announcements", max_length=254, verbose_name="Announcement Image",help_text="jpg, png, gid", blank=False)  
     timestamp = models.DateTimeField(auto_now_add=True)
+
+class ResearchProjectCategory(models.Model):
+    cateoryname = models.CharField(max_length=500,null=False)
+    detail = models.TextField(null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.cateoryname
+
+    def countResearch(self):
+        return self.research_set.all().count()
+
+    def Researchs(self):
+        return self.research_set.all()
+
+class Research(models.Model):
+    title = models.CharField(max_length=500,null=False)
+    description = models.TextField(null=False)
+    detail = models.TextField(null=False)
+    status = models.CharField(max_length=100,null=False)
+    accepted = models.CharField(max_length=100,null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(ResearchProjectCategory, on_delete = models.CASCADE)
+    attachements = models.FileField(upload_to="ResearchAttachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
+
+class Project(models.Model):
+    title = models.CharField(max_length=500,null=False)
+    description = models.TextField(null=False)
+    detail = models.TextField(null=False)
+    status = models.CharField(max_length=100,null=False)
+    accepted = models.CharField(max_length=100,null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(ResearchProjectCategory, on_delete = models.CASCADE)
+    attachements = models.FileField(upload_to="ProjectAttachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
+    

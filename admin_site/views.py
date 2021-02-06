@@ -12,7 +12,9 @@ from company.models import Company
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
-from collaborations.models import PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategoty, Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages,News, NewsImages
+from collaborations.models import (PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategoty, 
+                                    Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages,
+                                    News, NewsImages,Research,ResearchProjectCategory,ForumQuestion)
 from django.http import HttpResponse, FileResponse
  
 # 
@@ -46,18 +48,42 @@ class DeleteView(LoginRequiredMixin,View):
             if self.request.user.is_superuser:
                 return redirect("admin:super_Job_list")
             return redirect("admin:Job_list")
+        elif self.kwargs['model_name'] == 'ForumQuestion':
+            forum = ForumQuestion.objects.get(id=self.kwargs['id'])
+            forum.delete()
+            message ="Forum Deleted"
+            messages.success(self.request,message)
+            return redirect("forum_list")
         elif self.kwargs['model_name'] == 'ForumComments':
             announcement = ForumComments.objects.get(id=self.kwargs['id'])
             announcement.delete()
+            message ="Announcement Deleted"
+            messages.success(self.request,message)
             return redirect("forum_list")
+        elif self.kwargs['model_name'] == 'ResearchProjectCategory':
+            category = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
+            category.delete()
+            message ="Research and project Category Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:researchprojectcategory_list")
         elif self.kwargs['model_name'] == 'AnnouncementImages':
             vacancy = AnnouncementImages.objects.get(id=self.kwargs['id'])
             id =vacancy.announcement.id
             vacancy.delete()
             message ="AnnouncementImages Deleted"
             messages.success(self.request,message)
-            
-            return redirect("admin:anounce_Detail",model_name="Announcement",id=id)
+        elif self.kwargs['model_name'] == 'Research':
+            research = Research.objects.get(id=self.kwargs['id'])
+            research.delete()
+            message ="Research Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:research_list")
+        elif self.kwargs['model_name'] == 'ResearchClient':
+            research = Research.objects.get(id=self.kwargs['id'])
+            research.delete()
+            message ="Research Deleted"
+            messages.success(self.request,message)
+            return redirect("research_list")
         elif self.kwargs['model_name'] == 'CommentReplay':
             commentreplay = CommentReplay.objects.get(id=self.kwargs['id'])
             commentreplay.delete()

@@ -189,6 +189,32 @@
 							{%endif%}
 						</li>
 						<li class="nav-item nav-item-submenu">
+							<a href="#" class="nav-link"><i class="fas fa-love">R&D</i> 
+								<span>Research</span></a>
+								<ul class="nav nav-group-sub" data-submenu-title="Form components">
+									<li class="nav-item">
+									<a href="{%url 'admin:research_list' %}" class="nav-link"><i >R</i>
+										<span>Research</span>
+									</a>
+									</li>
+								</ul>
+								<ul class="nav nav-group-sub" data-submenu-title="Form components">
+									<li class="nav-item">
+									<a href="{%url 'admin:pedning_list' %}" class="nav-link"><i class="icon-clock">P</i>
+										<span>Pending</span>
+									</a>
+									</li>
+								</ul>
+								<ul class="nav nav-group-sub" data-submenu-title="Form components">
+									<li class="nav-item">
+									<a href="{%url 'admin:researchprojectcategory_list' %}" class="nav-link"><i class="fa fa-list-alt"></i>
+										<span>ResearchCategory</span>
+									</a>
+									</li>
+								</ul>
+
+						</li>
+						<li class="nav-item nav-item-submenu">
 							<a href="#" class="nav-link"><i class="icon-collaboration"></i> <span>Collaborations</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
 								
@@ -228,8 +254,8 @@
 
 									<a href="{%url 'admin:super_Job_list' %}" class="nav-link"><i class="icon-eye"></i>
 										<span>Vacancy</span></a>
-              </li>
-            <li class="nav-item">
+              					</li>
+            				<li class="nav-item">
 									<a href="{%url 'admin:tenders' %}" class="nav-link"><i class="fa fa-gavel"></i>
 										<span>Tenders</span></a>
 

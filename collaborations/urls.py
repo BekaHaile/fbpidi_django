@@ -6,11 +6,22 @@ from .views import (BlogList,BlogDetail,FaqList,
                     CategoryBasedSearch, CreateForumQuestion , ListForumQuestions,ForumQuestionsDetail,
                     CreateCommentReplay,ListAnnouncement,EditCommentForum,EditForumQuestions,
                     ApplicantListDetail,
-                    SearchForum,ApplyForTender,pdf_download,SearchBlogTag,CustomerNewsList, CustomerNewsDetail )
+
+                    ListResearch,ResearchDetail,CreateResearch,SearchResearch,ResearchCategorySearch,
+
+                    SearchForum,ApplyForTender,pdf_download,SearchBlogTag,CustomerNewsList, CustomerNewsDetail,
+                    )
 
                     
 
 urlpatterns = [ 
+
+    path("research-list",ListResearch.as_view(),name="research_list"),
+    path('research-search',SearchResearch.as_view(),name='research_search'),
+    path("research-form",CreateResearch.as_view(),name="research_form"),
+    path("research-detail/<id>",ResearchDetail.as_view(),name="research_detail"),
+    path("research-category/<id>",ResearchCategorySearch.as_view(),name="researchcategory_search"),
+
     path("polls/", PollIndex.as_view(), name = "polls" ),
     path("poll-detail/<id>/", PollDetail.as_view(), name = "poll_detail"),
     

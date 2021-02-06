@@ -4,10 +4,10 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
-{%block pagename%}Announcement{%endblock%}
+{%block pagename%}ResearchProjectCategorys{%endblock%}
 {%block content%}
 
-<!-- Content area -->
+<!-- Content area --> 
 <div class="content">
 
 	
@@ -17,57 +17,36 @@
 
 			<form action="" method="POST" enctype="multipart/form-data">
 				<fieldset class="mb-3 ml-3 mr-3">
-					<legend class="text-uppercase font-size-sm font-weight-bold">Create Announcement</legend>
+					<legend class="text-uppercase font-size-sm font-weight-bold">Create researchprojectcategory</legend>
 					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
-					{%if form.errors%}
+					{%if forms.errors%}
 					<div class="alert alert-danger" role="alert">
-					  {{form.errors}}
+					  {{forms.errors}}
 					</div>
 					{% endif %}
+					
 					{%csrf_token%}
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Title (English)  *</label>
+						<label class="col-form-label col-lg-3">Title *</label>
 						<div class="col-lg-9">
-							{{form.title}}
+							{{forms.cateoryname}}
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Title (Amharic) *</label>
+						<label class="col-form-label col-lg-3"> Detail*</label>
 						<div class="col-lg-9">
-							{{form.title_am}}
-						</div>
-					</div> 
-					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Content (English) *</label>
-						<div class="col-lg-9">
-							{{form.containt|safe}}
-						</div>
-						
-					</div>
-
-					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Content (Amharic) *</label>
-						<div class="col-lg-9">
-							{{form.containt_am|safe}}
+							{{forms.detail}}
 						</div>
 					</div>
 
-					<div class="form-group row">
-						 
-						  <label class="col-form-label col-lg-3">Select files:</label>
-						  <div class="col-lg-9">
-						  		<input type="file" id="files" name="images" multiple>
-						  </div>
-						
-					</div>
-					 
-						
+
+					
+					
 				</fieldset>
 
 				<div class="text-right">
 					<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-
-						class="btn btn-primary rounded-round">Submit  </button>
+						class="btn btn-primary rounded-round">Submit </button>
 				</div>
 			</form>
 		</div>
