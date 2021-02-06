@@ -6,7 +6,7 @@ from .models import  (PollsQuestion, Choices, PollsResult,
                       Faqs,Blog,BlogComment,
                       ForumQuestion,ForumComments,CommentReplay,
                       ForumComments,Announcement, News, NewsImages,
-                      Research,ResearchProjectCategory
+                      Research,Project,ResearchProjectCategory
                       )
 
 from django.forms.widgets import SelectDateWidget
@@ -276,9 +276,24 @@ class ResearchProjectCategoryForm(forms.ModelForm):
         'cateoryname':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory Of  the Research'}),
         'detail':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory Of  the Research'}),
         
+        }  
+
+class ProjectForm(forms.ModelForm):
+    attachements = forms.FileField(required=False)
+    status = forms.ChoiceField(choices = RESEARCH_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
+
+    class Meta:
+        model = Project
+        fields  = ('title','description','detail','status','category')
+        widgets = {
+
+        'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+        'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Research'}),
+        'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
+        'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The hole research'}),
         }
-        
-class ResearchProjectForm(forms.ModelForm):
+
+class ResearchForm(forms.ModelForm):
     attachements = forms.FileField(required=False)
     status = forms.ChoiceField(choices = RESEARCH_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
 

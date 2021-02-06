@@ -7,16 +7,27 @@ from .views import (BlogList,BlogDetail,FaqList,
                     CreateCommentReplay,ListAnnouncement,EditCommentForum,EditForumQuestions,
                     ApplicantListDetail,
 
-                    ListResearch,ResearchDetail,CreateResearch,SearchResearch,ResearchCategorySearch,
+                    EditResearch,ListResearch,ResearchDetail,CreateResearch,SearchResearch,
+                    ResearchCategorySearch,
 
-                    SearchForum,ApplyForTender,pdf_download,SearchBlogTag,CustomerNewsList, CustomerNewsDetail,
+                    SearchForum,ApplyForTender,pdf_download,SearchBlogTag,CustomerNewsList,
+                    CustomerNewsDetail,
                     )
 
-                    
+from .ProjectViews import (EditProject,ListProject,ProjectDetail,CreateProject
+                            ,SearchProject,ProjectCategorySearch,)                    
 
 urlpatterns = [ 
 
+    path("project-list",ListProject.as_view(),name="project_list"),
+    path("project-edit/<id>",EditProject.as_view(),name="project_edit"),
+    path('project-search',SearchProject.as_view(),name='project_search'),
+    path("project-form",CreateProject.as_view(),name="project_form"),
+    path("project-detail/<id>",ProjectDetail.as_view(),name="project_detail"),
+    path("project-category/<id>",ProjectCategorySearch.as_view(),name="projectcategory_search"),
+
     path("research-list",ListResearch.as_view(),name="research_list"),
+    path("research-edit/<id>",EditResearch.as_view(),name="research_edit"),
     path('research-search',SearchResearch.as_view(),name='research_search'),
     path("research-form",CreateResearch.as_view(),name="research_form"),
     path("research-detail/<id>",ResearchDetail.as_view(),name="research_detail"),

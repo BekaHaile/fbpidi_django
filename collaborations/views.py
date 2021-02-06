@@ -1,17 +1,17 @@
 
 from django.urls import reverse
 import datetime
+from django.views import View
 
 from django.http import HttpResponse, FileResponse
 from collaborations.models import Blog, BlogComment
 from collaborations.forms import FaqsForm
 from django.shortcuts import render, redirect, reverse
-from django.views import View
+
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
 from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategoty, News, NewsImages
 									 #redirect with context
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views import View
 from .models import PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, TenderApplications
 from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
 from django.contrib import messages
@@ -19,14 +19,12 @@ from django.contrib import messages
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff
 from accounts.models import User, CompanyAdmin, Company
 import os
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 
 from django.http import FileResponse, HttpResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models import User
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
@@ -43,7 +41,7 @@ from django.core.mail import EmailMessage
 from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
 								 VacancyForm,JobCategoryForm,
 								 ForumQuestionForm,CommentForm,CommentReplayForm,
-								 AnnouncementForm,ResearchProjectForm,
+								 AnnouncementForm,ResearchForm,
 								 ResearchProjectCategoryForm
 								 )
 
@@ -129,13 +127,13 @@ class ResearchDetailView(LoginRequiredMixin, View):
 
 class CreateResearchAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
-		form = ResearchProjectForm()
+		form = ResearchForm()
 		template_name = "admin/ResearchProject/research_form.html"
 		context = {'forms':form}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		
-		form = ResearchProjectForm(self.request.POST,self.request.FILES)
+		form = ResearchForm(self.request.POST,self.request.FILES)
 		template_name = "admin/ResearchProject/research_form.html"
 		context = {'forms':form}
 		if form.is_valid():
@@ -168,7 +166,7 @@ class ResearchDetailAdmin(LoginRequiredMixin, View):
 		context = {'forms':form}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
-		form = ResearchProjectForm(self.request.POST)
+		form = ResearchForm(self.request.POST)
 		template_name = "admin/ResearchProject/research_detil.html"
 		context = {'forms':form}
 		if form.is_valid():
@@ -177,6 +175,9 @@ class ResearchDetailAdmin(LoginRequiredMixin, View):
 			research.description = form.cleaned_data.get('description')
 			research.detail = form.cleaned_data.get('detail')
 			research.status = form.cleaned_data.get('status')
+			research.category = form.cleaned_data.get('category')
+			if form.cleaned_data.get("attachements"):
+				research.attachements = form.cleaned_data.get("attachements")
 			research.user = self.request.user
 			research.save()
 			return redirect("admin:research_list")
@@ -189,7 +190,7 @@ class SearchResearch(View):
 		print("============")
 		print(self.request.POST["search"])
 
-		form = Research.objects.filter(title__contains=self.request.POST['search'])
+		form = Research.objects.filter(title__contains=self.requestmedical.POST['search'])
 		if str(self.request.user) != "AnonymousUser":
 			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
 		else:
@@ -240,9 +241,45 @@ class ResearchDetail(View):
 		
 		return render(self.request, template_name,context)
 
+class EditResearch(View):
+
+	def get(self,*args,**kwargs):
+		form = Research.objects.get(id=self.kwargs['id'])
+		if str(self.request.user) != "AnonymousUser":
+			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
+		else:
+			usercreated = ""
+		category = ResearchProjectCategory.objects.all()
+		context = {'form':form,"usercreated":usercreated,"category":category}
+		template_name = "frontpages/research/research_detail_edit.html"
+		return render(self.request, template_name,context)
+	def post(self,*args,**kwargs):
+		form =  ResearchForm(self.request.POST,self.request.FILES)
+		if str(self.request.user) != "AnonymousUser":
+			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
+		else:
+			usercreated = ""
+		category = ResearchProjectCategory.objects.all()
+		context = {'researchs':form,"usercreated":usercreated,"category":category}
+		template_name = "frontpages/research/research_detail_edit.html"
+		context = {'form':form,"usercreated":usercreated,"category":category}
+		if form.is_valid():
+			research = Research.objects.get(id=self.kwargs['id'])
+			research.title = form.cleaned_data.get('title')
+			research.description = form.cleaned_data.get('description')
+			research.detail = form.cleaned_data.get('detail')
+			research.status = form.cleaned_data.get('status')
+			research.category = form.cleaned_data.get('category')
+			if form.cleaned_data.get("attachements"):
+				research.attachements = form.cleaned_data.get("attachements")
+			research.user = self.request.user
+			research.save()
+			return redirect("research_list")
+		return render(self.request, template_name,context)
+
 class CreateResearch(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
-		form = ResearchProjectForm()
+		form = ResearchForm()
 		if str(self.request.user) != "AnonymousUser":
 			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
 		else:
@@ -252,7 +289,7 @@ class CreateResearch(LoginRequiredMixin,View):
 		template_name = "frontpages/research/research_form.html"
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
-		form = ResearchProjectForm(self.request.POST,self.request.FILES)
+		form = ResearchForm(self.request.POST,self.request.FILES)
 		if str(self.request.user) != "AnonymousUser":
 			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
 		else:

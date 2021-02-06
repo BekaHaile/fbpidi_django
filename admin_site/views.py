@@ -14,7 +14,7 @@ from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
 from collaborations.models import (PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategoty, 
                                     Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages,
-                                    News, NewsImages,Research,ResearchProjectCategory,ForumQuestion)
+                                    News, NewsImages,Project,Research,ResearchProjectCategory,ForumQuestion)
 from django.http import HttpResponse, FileResponse
  
 # 
@@ -72,16 +72,26 @@ class DeleteView(LoginRequiredMixin,View):
             vacancy.delete()
             message ="AnnouncementImages Deleted"
             messages.success(self.request,message)
+        elif self.kwargs['model_name'] == 'Project':
+            research = Project.objects.get(id=self.kwargs['id'])
+            research.delete()
+            message ="Project Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:project_list")
         elif self.kwargs['model_name'] == 'Research':
             research = Research.objects.get(id=self.kwargs['id'])
             research.delete()
             message ="Research Deleted"
             messages.success(self.request,message)
-            return redirect("admin:research_list")
+            return redirect("admin:research_list") 
+        elif self.kwargs['model_name'] == 'ProjectClient':
+            research = Project.objects.get(id=self.kwargs['id'])
+            research.delete()
+            messages.success(self.request,message)
+            return redirect("project_list")
         elif self.kwargs['model_name'] == 'ResearchClient':
             research = Research.objects.get(id=self.kwargs['id'])
             research.delete()
-            message ="Research Deleted"
             messages.success(self.request,message)
             return redirect("research_list")
         elif self.kwargs['model_name'] == 'CommentReplay':

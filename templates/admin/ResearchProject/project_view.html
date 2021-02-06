@@ -4,7 +4,7 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
-{%block pagename%}View Research{%endblock%}
+{%block pagename%}View Project{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -13,16 +13,16 @@
 			<div class="header-elements">
 				<div class="list-icons">
 					{% if forms.accepted == "PENDING" %}
-			<a href="{%url 'admin:research_approve' id=forms.id %}" class="btn bg-teal btn-sm rounded-round"> APPROVE</a>
+			<a href="{%url 'admin:project_approve' id=forms.id %}" class="btn bg-teal btn-sm rounded-round"> APPROVE</a>
 			{%endif%}
 
 				</div>
 				<div class="list-icons">
-			<a href="{%url 'admin:research_detail'  model_name='Research' id=forms.id%}" class="btn bg-teal btn-sm rounded-round" > EDIT</a>
+			<a href="{%url 'admin:project_detail'  model_name='Project' id=forms.id%}" class="btn bg-teal btn-sm rounded-round" > EDIT</a>
 
 				</div>
 				<div class="list-icons">
-			<a href="{%url 'admin:delete' model_name='ResearchProject' id=forms.id%}" class="btn bg-teal btn-sm rounded-round" onclick="return confirm('Are you sure you want to Delete this')">DELETE</a>
+			<a href="{%url 'admin:delete' model_name='Project' id=forms.id%}" class="btn bg-teal btn-sm rounded-round" onclick="return confirm('Are you sure you want to Delete this')">DELETE</a>
 			
 
 				</div>
@@ -55,11 +55,11 @@
 									<i class="fa fa-user text-muted mr-2">{{forms.user}}</i>
 									<div>
 										<label class="col-form-label col-lg-3"><h3> Description</h3> </label>
-										<p>{{forms.description}}</p>
+										<p>{{forms.description|safe}}</p>
 									</div>
 									<div>
 										<label class="col-form-label col-lg-3"><h3> Detail</h3> </label>
-										<p>{{forms.detail}}</p>
+										<p>{{forms.detail|safe}}</p>
 									</div>
 
 									

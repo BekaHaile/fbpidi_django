@@ -300,6 +300,9 @@ class ResearchProjectCategory(models.Model):
     def countResearch(self):
         return self.research_set.all().count()
 
+    def countProject(self):
+        return self.project_set.all().count()
+
     def Researchs(self):
         return self.research_set.all()
 

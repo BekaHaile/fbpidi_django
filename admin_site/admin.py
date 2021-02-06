@@ -22,11 +22,15 @@ from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,F
 
                         TenderList, CreateTender, TenderDetail, EditTender,  DeleteTender, ManageBankAccount,
 
-                        ListResearchAdmin,CreateResearchAdmin,ResearchDetailAdmin,ListResearchProjectCategoryAdmin
-                        ,CreateResearchProjectCategoryAdmin,ResearchProjectCategoryDetail,
-                        ListPendingResearchAdmin,ResearchDetailView,ResearchApprove
+                        ListResearchAdmin,CreateResearchAdmin,ResearchDetailAdmin,
+                        ListPendingResearchAdmin,ResearchDetailView,ResearchApprove,
 
-                        
+                        ListResearchProjectCategoryAdmin,CreateResearchProjectCategoryAdmin,ResearchProjectCategoryDetail,
+                        )
+from collaborations.ProjectViews import(
+
+                        ListProjectAdmin,CreateProjectAdmin,ProjectDetailAdmin,
+                        ListPendingProjectAdmin,ProjectDetailView,ProjectApprove,
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView
@@ -50,16 +54,24 @@ class CustomAdminSite(admin.AdminSite):
 
         my_urls = [
             
+            path('project-view/<id>',ProjectDetailView.as_view(),name='project_view'),
+            path('project-approve/<id>',ProjectApprove.as_view(),name="project_approve"),
+            path('pedning-project-list',ListPendingProjectAdmin.as_view(),name="pedning_project_list"),
+            path('project-list',ListProjectAdmin.as_view(),name="project_list"),
+            path('project-form',CreateProjectAdmin.as_view(),name="project_form"),
+            path('project-detail/<model_name>/<id>',ProjectDetailAdmin.as_view(),name="project_detail"),
+
             path('research-view/<id>',ResearchDetailView.as_view(),name='research_view'),
-            path('approve/<id>',ResearchApprove.as_view(),name="approve"),
-            path('pedning-list',ListPendingResearchAdmin.as_view(),name="pedning_list"),
-            path('researchprojectcategorys-detail/<model_name>/<id>',ResearchProjectCategoryDetail.as_view(),name='researchprojectcategory_detail'),
-            path('researchprojectcategorys-form',CreateResearchProjectCategoryAdmin.as_view(),name='researchprojectcategory_form'), 
-            path('researchprojectcategorys-list',ListResearchProjectCategoryAdmin.as_view(),name='researchprojectcategory_list'),
+            path('research-approve/<id>',ResearchApprove.as_view(),name="research_approve"),
+            path('pedning-research-list',ListPendingResearchAdmin.as_view(),name="pedning_research_list"),
             path('research-list',ListResearchAdmin.as_view(),name="research_list"),
             path('research-form',CreateResearchAdmin.as_view(),name="research_form"),
             path('research-detail/<model_name>/<id>',ResearchDetailAdmin.as_view(),name="research_detail"),
 
+            path('researchprojectcategorys-detail/<model_name>/<id>',ResearchProjectCategoryDetail.as_view(),name='researchprojectcategory_detail'),
+            path('researchprojectcategorys-form',CreateResearchProjectCategoryAdmin.as_view(),name='researchprojectcategory_form'), 
+            path('researchprojectcategorys-list',ListResearchProjectCategoryAdmin.as_view(),name='researchprojectcategory_list'),
+            
             path('anounce-Detail/<model_name>/<id>',AnnouncementDetail.as_view(),name="anounce_Detail"),
             path('anounce-List',ListAnnouncementAdmin.as_view(),name="anounce_list"),
             path('anounce-Create',CreatAnnouncement.as_view(),name="anounce_Create"),
