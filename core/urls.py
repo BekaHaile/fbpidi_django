@@ -5,7 +5,7 @@ from core.views import (IndexView,ProfileView,ProductDetailView,ProductByCategor
                     ProductByMainCategory,MnfcCompanyByMainCategory,SupCompanyByMainCategory )
 from collaborations.views import BlogList,BlogDetail,FaqList
 from accounts.views import CustomerSignUpView
-from product.views import AddToCartView,CartSummary,DecrementFromCart
+from product.views import AddToCartView,CartSummary,DecrementFromCart,CheckoutView
 # busines-meditation/,tips/,orders
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
@@ -18,6 +18,7 @@ urlpatterns = [
     path("add-to-cart/<id>/",AddToCartView.as_view(),name="add_to_cart"),
     path("cart_summary/",CartSummary.as_view(),name="cart_summary"),
     path("decrement_cart/<id>/",DecrementFromCart.as_view(),name="decrement_cart"),
+    path("checkout/",CheckoutView.as_view(),name="checkout"),
     path("mydash/",ProfileView.as_view(),name="mydash"),
     path("",include("accounts.urls")),
 

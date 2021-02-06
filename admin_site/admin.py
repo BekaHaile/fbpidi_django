@@ -7,7 +7,7 @@ from django.contrib import messages
 # from accounts.forms import UserCreationForm 
 # views from accounts app
 from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLogView,
-                        UserDetailView,UpdateAdminProfile,CreateUserView,GroupView)
+                        UserDetailView,UpdateAdminProfile,CreateUserView,GroupView,GroupList)
 # views from admin_site app
 from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
@@ -31,13 +31,14 @@ from collaborations.ProjectViews import(
 
                         ListProjectAdmin,CreateProjectAdmin,ProjectDetailAdmin,
                         ListPendingProjectAdmin,ProjectDetailView,ProjectApprove,
+                        
+
                         )
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
-                            ProductDetailView,AddProductImage,CreatePrice,CategoryView
-                            )
+                            ProductDetailView,AddProductImage,CreatePrice,CategoryView)
                             
 from company.views import (
-    CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,
+    CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,EditCompanyEvent,
     CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
     CreateFbpidiCompanyProfile,ViewFbpidiCompany, CreateCompanyBankAccount, EditCompanyBankAccount, DeleteCompanyBankAccount,)
 
@@ -108,7 +109,8 @@ class CustomAdminSite(admin.AdminSite):
             path("user_detail/<option>/<id>/",wrap(UserDetailView.as_view()),name="user_detail"),
             path("update_profile/",wrap(UpdateAdminProfile.as_view()),name="add_profile"),
             path("user_audit/",wrap(UserLogView.as_view()),name="useraudit"),
-            path("manage_group/",wrap(GroupView.as_view()),name="group_view"),
+            path("group_list/",wrap(GroupList.as_view()),name="view_group"),
+            path("manage_group/",wrap(GroupView.as_view()),name="create_group"),
 
             path("categories/<option>/",wrap(CategoryView.as_view()),name="p_categories"),
             path("create_category/<option>",wrap(CreateCategories.as_view()),name="create_category"),
@@ -160,6 +162,7 @@ class CustomAdminSite(admin.AdminSite):
             path("edit_company_profile/<id>/",wrap(ViewCompanyProfile.as_view()),name="edit_company_profile"),
             path("create_company_solution/<company_id>",wrap(CreateCompanySolution.as_view()),name="create_company_solution"),
             path("create_company_event/<company_id>",wrap(CreateCompanyEvent.as_view()),name="create_company_event"),
+            path("edit_company_event/<id>/",wrap(EditCompanyEvent.as_view()),name="edit_company_event"),
             path("create_fbpidi_company/",wrap(CreateFbpidiCompanyProfile.as_view()),name="create_fbpidi_company"),
             path("view_fbpidi_company/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
             path("edit_fbpidi_profile/<id>/",wrap(ViewFbpidiCompany.as_view()),name="edit_fbpidi_profile"),

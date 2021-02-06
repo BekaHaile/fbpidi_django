@@ -1,5 +1,5 @@
 from django import forms
-from product import models
+from product.models import Product, ProductPrice,ShippingAddress,Review
 from admin_site.models import Category,SubCategory
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
@@ -48,7 +48,7 @@ class ProductCreationForm(forms.ModelForm):
         required=True
     )
     class Meta:
-        model = models.Product
+        model = Product
         fields = ('name','name_am','category','description','description_am','image',)
         widgets = {
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Product Name(English)'}),
@@ -61,7 +61,7 @@ class ProductCreationForm(forms.ModelForm):
 
 class ReviewForm(forms.ModelForm):
     class Meta:
-        model = models.Review
+        model = Review
         fields = (
             'rating','name','email','review'
         )
@@ -71,3 +71,21 @@ class ReviewForm(forms.ModelForm):
             'email':forms.TextInput(attrs={'class':'form-control','placeholder':'Your Email'}),
             'review':forms.Textarea(attrs={'class':'form-control','placeholder':'Your Message Here','row':'3'}),
         }
+
+
+class CheckoutForm(forms.ModelForm):
+    class Meta:
+        model=ShippingAddress
+        fields = ('first_name','last_name','company','city','email',
+                  'street_address','home_address','phone_no',)
+        widgets = {
+            'first_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Your First Name',}),
+            'last_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Your Last Name'}),
+            'email':forms.EmailInput(attrs={'class':'form-control','placeholder':'Your Email Address Here'}),
+            'phone_no':forms.TextInput(attrs={'class':'form-control','placeholder':'Phone Number'}),
+            'company':forms.TextInput(attrs={'class':'form-control','placeholder':'Your Company (optional)'}),
+            'city':forms.TextInput(attrs={'class':'form-control','placeholder':'Your City '}),
+            'street_address':forms.TextInput(attrs={'class':'form-control','placeholder':'Street Address'}),
+            'home_address':forms.TextInput(attrs={'class':'form-control','placeholder':'Home Address'}),
+        }
+    

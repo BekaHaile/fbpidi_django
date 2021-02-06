@@ -1,5 +1,7 @@
 {%extends 'admin/base_site.html'%}
+{%load core_template_tags%}
 {% block extrastyle %}
+
 	<!-- Theme JS files -->
 	<script src="/static/admin/global_assets/js/plugins/extensions/rowlink.js"></script>
 	<script src="/static/admin/global_assets/js/plugins/visualization/echarts/echarts.min.js"></script>
@@ -17,6 +19,18 @@
 	<script src="/static/admin/global_assets/js/plugins/notifications/bootbox.min.js"></script>
 	<script src="/static/admin/global_assets/js/demo_pages/components_modals.js"></script>
 
+	<!-- js for date picker calender -->
+	<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/anytime.min.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.date.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.time.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/legacy.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/notifications/jgrowl.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/picker_date.js"></script>
+
+	
 {% endblock %}
 {%block pagename%}Company Profile{%endblock%}
 {%block content%}
@@ -73,6 +87,7 @@
 											<a href="#events" class="nav-link" data-toggle="tab">
 												<i class="icon-calendar3"></i>
 												Events
+												<span class="badge bg-success badge-pill ml-auto">{{events.count}}</span>
 											</a>
 										</li> 
 										<li class="nav-item">
@@ -757,7 +772,7 @@
 						<div class="tab-pane fade" id="events">
 							<div class="card">
 								<div class="card-header header-elements-inline">
-									<h6 class="card-title">Company Events</h6>
+									<h6 class="card-title">Company Events </h6>
 									<div class="header-elements">
 										<div class="list-icons">
 											 <a data-toggle="modal" data-target="#events_form_id" class="btn btn-outline-success btn-sm"><i class="icon-add mr-2"></i> Create New</a>
@@ -770,7 +785,11 @@
 								<div class="media flex-column flex-sm-row">
 									<div class="mr-sm-3 mb-2 mb-sm-0">
 										<a href="#">
-											<img src="{{event.image.url}}" class="rounded" width="44" height="44" alt="">
+											{% if event.image %}
+											<img src="{{event.image.url}}" class="rounded" width="80" height="80" alt="">
+											{% else %}
+											<img src="{{event.company.get_image}}" class="rounded" width="44" height="44" alt="">
+											{%endif%}
 										</a>
 									</div>
 	
@@ -778,15 +797,163 @@
 										<h6 class="media-title font-weight-semibold">
 											<a href="#">{{event.event_name}}</a>
 										</h6>
-										{{event.description|safe}}
+										Start Date:- <a href="#"><i class="fa fa-calendar-o text-muted mr-2" style = "margin-right: 20px;" ></i> <b>{{event.start_date}}</b></a> <br>
+                                  		End Date:-<a href="#"><i style = "margin-left: 10px;"class="fa fa-calendar-o text-muted mr-2" ></i><b> {{event.end_date}}</b></a>
+                                        
 									</div>
-	
+									
 									<div class="ml-sm-3 mt-2 mt-sm-0">
-										<span class="badge bg-blue">New</span>
+										<button class="badge bg-blue" style="border: hidden;">
+											<div class="list-icons">
+												<div class="dropdown">
+													<a href="#" class="list-icons-item" data-toggle="dropdown">
+														<i class="icon-menu9"></i>
+													</a>
+													<div class="dropdown-menu dropdown-menu-right">
+														{% if user.is_superuser or event.company == user.get_company %}
+															{% if perms.company.change_companyevent %}
+																	<a href="#edit{{event.id}}" class="dropdown-item" data-toggle="modal" data-target="#edit{{event.id}}"><i class="icon-pencil"></i>Edit Event</a>	
+															{% endif %}	
+															{% if perms.company.delete_companyevent %}
+																	<a href="{%url 'admin:delete' model_name='CompanyEvent' id=event.id%} " onclick="return confirm ('Are you sure you want to delete this Event?')"class="dropdown-item"><i class="icon-trash"></i>Delete Event</a>
+															{% endif %}
+														{% endif %}
+														
+													</div>
+												</div>
+											</div>
+										</button>
 									</div>
+
+									<!-- Company Event Edit Modal Form  -->
+									<div id="edit{{event.id}}" class="modal fade" tabindex="-1">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">Company Event Edit Form</h5>
+													<button type="button" class="close" data-dismiss="modal">&times;</button>
+												</div>
+												
+												<form action="{%url 'admin:edit_company_event' id=event.id%}" method="POST" enctype="multipart/form-data">
+													{%csrf_token%}
+													<div class="modal-body">
+														<div class="form-group">
+															<div class="row">
+																<div class="col-sm-6">
+																	<label>{{event_form.event_name.label|title}}</label>
+																	<input type="text" name = "event_name" class='form-control' placeholder= "Event Name (English)" value="{{event.event_name}}"/>
+
+																</div>
+					
+																<div class="col-sm-6">
+																	<label>{{event_form.event_name_am.label|title}}</label>
+																	<input type="text" name = "event_name_am" class='form-control' placeholder= "Event Name (Amharic)" value="{{event.event_name_am}}"/>
+																	
+																</div>
+															</div>
+														</div>
+					
+														<div class="form-group">
+															<div class="row">
+																<div class="col-sm-12">
+																	<label>{{event_form.description.label}}</label>
+																	<textarea required name="description" class="summernote" cols="30" rows="10">{{event.description|safe}}</textarea>
+																</div>
+					
+																<div class="col-sm-12">
+																	<label>{{event_form.description_am.label}}</label>
+																	<textarea required name="description_am" cols="30" class = "summernote"  rows="10">{{event.description_am|safe}}</textarea>
+																</div>
+															</div>
+														</div>
+					
+														
+
+													 <!-- Date Fields -->
+														<div class = "row">
+															<div class="col-md-6">
+																<div class="form-group row">
+																	<div class="col-lg-9">
+																		<span class="input-group-prepend" >
+																						<span class="input-group-text"><i class="icon-calendar22">	Start Date </i></span>
+																					</span>
+																			<input type="text" name="start_date" class="form-control daterange-single" value="{% change_end_date event.start_date %}">
+																	</div>
+																		
+																</div>
+															</div>
+															
+															<div class="col-md-6">
+																<div class="form-group row">
+																	<div class="col-lg-9">
+																		<span class="input-group-prepend" >
+																						<span class="input-group-text"><i class="icon-calendar22">	End Date </i></span>
+																					</span>
+																					
+																			<input type="text" name ="end_date" class="form-control daterange-single" value="{% change_end_date event.end_date %}">
+																	</div>
+																		
+																</div>
+															</div>
+														</div>
+													 <!-- Date Fields End Here -->
+														
+													 <!-- status creation form -->
+														<div class="col-md-9" style="padding-left:0px;">
+															
+																
+																	<div class="col-lg-9" style="width: 100%; padding-left:0px; display: inline-block;">
+																		<label style="padding-left: 0px;" class="col-form-label col-lg-8">Current Status: <b>{{event.status}}</b></label>
+																			<select required name="status"  class="form-control " >
+																				{% for status in event_form.STATUS_CHOICE %}
+																					<option  value="{{status.0}}">{{status.0 }}</option>
+																					<div class="list-icons" style="width: 100%; display: inline-block; opacity: 1;" >
+																						<div class="dropdown">
+																							<a href="#" class="list-icons-item" data-toggle="dropdown">	</a>
+																						</div>
+																					</div>
+																				{%endfor%}
+																			</select>
+																	</div>
+															
+														</div>
+														<br>
+
+
+														<div class="form-group">
+															<div class="row">
+																<div class="col-sm-12">
+																	<label>{{event_form.image.label}}: {{event.image.name}}</label>
+																	<input type= "file" name="image" class = "form-input-styled"  placeholder="{{event.image.name}}"  />																</div>
+				
+															</div>
+														</div>
+	
+
+
+													</div>
+
+													
+					
+													<div class="modal-footer">
+														<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+														<button type="submit" class="btn bg-primary">Submit form</button>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+		
+
+
+
+
 								</div>
 							</div>
 							{%endfor%}
+						
+
+					<!-- Company Event Creation Form -->
 							<div id="events_form_id" class="modal fade" tabindex="-1">
 								<div class="modal-dialog">
 									<div class="modal-content">
@@ -809,6 +976,8 @@
 															<label>{{event_form.event_name_am.label|title}}</label>
 															{{event_form.event_name_am}}
 														</div>
+
+
 													</div>
 												</div>
 			
@@ -825,14 +994,60 @@
 														</div>
 													</div>
 												</div>
-			
+
+
+												
+											<!-- Date Fields -->
+												<div class = "row">
+													<div class="col-md-6">
+														<div class="form-group row">
+															<div class="col-lg-9">
+																<span class="input-group-prepend" >
+																				<span class="input-group-text"><i class="icon-calendar22">	Start Date *</i></span>
+																			</span>
+																	<input type="text" name="start_date" class="form-control daterange-single" value="">
+															</div>
+																
+														</div>
+													</div>
+													
+													<div class="col-md-6">
+														<div class="form-group row">
+															<div class="col-lg-9">
+																<span class="input-group-prepend" >
+																				<span class="input-group-text"><i class="icon-calendar22">	End Date *</i></span>
+																			</span>
+																	<input type="text" name ="end_date" class="form-control daterange-single" value="">
+															</div>
+																
+														</div>
+													</div>
+											</div>
+											<!-- Date Fields End Here -->
+											
+											<!-- status creation form -->
+											<div class="col-md-6" style="padding-left:0px;">			
+														<div class="col-lg-9" style="width: 100%; padding-left:0px; display: inline-block;">
+															<label style="padding-left: 0px;" class="col-form-label col-lg-8">Status</label>
+																<select required name="status"  class="form-control " >
+																	{% for status in event_form.STATUS_CHOICE %}
+																		<option  value="{{status.0}}">{{status.0 }}</option>
+																		<div class="list-icons" style="width: 100%; display: inline-block; opacity: 1;" >
+																			<div class="dropdown">
+																				<a href="#" class="list-icons-item" data-toggle="dropdown">	</a>
+																			</div>
+																		</div>
+																	{%endfor%}
+																</select>
+														</div>
+											</div>
+											<br>
 												<div class="form-group">
 													<div class="row">
 														<div class="col-sm-12">
 															<label>{{event_form.image.label}}</label>
 															{{event_form.image}}
 														</div>
-		
 													</div>
 												</div>
 											</div>
@@ -846,6 +1061,8 @@
 								</div>
 							</div>
 
+					<!-- Ednd of Company Event Creation Form -->
+							
 						</div>
 					    <div class="tab-pane fade" id="schedule">
 
@@ -1424,9 +1641,7 @@
 									<table class="table text-nowrap">
 										<thead>
 											<tr>
-												<th colspan="2">Product name</th>
-												<th>Size</th>
-												<th>Colour</th>
+												<th colspan="2">Product Name</th>
 												<th>Article number</th>
 												<th>Units</th>
 												<th>Price</th>
@@ -1440,26 +1655,24 @@
 													<span class="badge bg-secondary badge-pill">24</span>
 												</td>
 											</tr>
-
+											{%for order in orders%}
 											<tr>
 												<td class="pr-0" style="width: 45px;">
 													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/1.jpg" height="60" alt="">
+														<img src="{{order.product.image.url}}" height="60" alt="">
 													</a>
 												</td>
 												<td>
-													<a href="#" class="font-weight-semibold">Fathom Backpack</a>
+													<a href="#" class="font-weight-semibold">{{order.product.name}}</a>
 													<div class="text-muted font-size-sm">
 														<span class="badge badge-mark bg-grey border-grey mr-1"></span>
 														Processing
 													</div>
 												</td>
-												<td>34cm x 29cm</td>
-												<td>Orange</td>
 												<td>
 													<a href="#">1237749</a>
 												</td>
-												<td>1</td>
+												<td>{{order.quantity}}</td>
 												<td>
 													<h6 class="mb-0 font-weight-semibold">&euro; 79.00</h6>
 												</td>
@@ -1478,121 +1691,8 @@
 													</div>
 												</td>
 											</tr>
-
-											<tr>
-												<td class="pr-0">
-													<a href="#">
-													<img src="/static/admin/global_assets/images/demo/products/2.jpg" height="60" alt="">
-													</a>
-												</td>
-												<td>
-													<a href="#" class="font-weight-semibold">Mystery Air Long Sleeve T Shirt</a>
-													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-grey border-grey mr-1"></span>
-														Processing
-													</div>
-												</td>
-												<td>L</td>
-												<td>Process Red</td>
-												<td>
-													<a href="#">345634</a>
-												</td>
-												<td>1</td>
-												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 38.00</h6>
-												</td>
-												<td class="text-center">
-													<div class="list-icons">
-														<div class="list-icons-item dropdown">
-															<a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-															<div class="dropdown-menu dropdown-menu-right">
-																<a href="#" class="dropdown-item"><i class="icon-truck"></i> Track parcel</a>
-																<a href="#" class="dropdown-item"><i class="icon-file-download"></i> Download invoice</a>
-																<a href="#" class="dropdown-item"><i class="icon-wallet"></i> Payment details</a>
-																<div class="dropdown-divider"></div>
-																<a href="#" class="dropdown-item"><i class="icon-warning2"></i> Report problem</a>
-															</div>
-														</div>
-													</div>
-												</td>
-											</tr>
-
-											<tr>
-												<td class="pr-0">
-													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/3.jpg" height="60" alt="">
-													</a>
-												</td>
-												<td>
-													<a href="#" class="font-weight-semibold">Women’s Prospect Backpack</a>
-													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-grey border-grey mr-1"></span>
-														Processing
-													</div>
-												</td>
-												<td>46cm x 28cm</td>
-												<td>Neu Nordic Print</td>
-												<td>
-													<a href="#">5739584</a>
-												</td>
-												<td>1</td>
-												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 60.00</h6>
-												</td>
-												<td class="text-center">
-													<div class="list-icons">
-														<div class="list-icons-item dropdown">
-															<a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-															<div class="dropdown-menu dropdown-menu-right">
-																<a href="#" class="dropdown-item"><i class="icon-truck"></i> Track parcel</a>
-																<a href="#" class="dropdown-item"><i class="icon-file-download"></i> Download invoice</a>
-																<a href="#" class="dropdown-item"><i class="icon-wallet"></i> Payment details</a>
-																<div class="dropdown-divider"></div>
-																<a href="#" class="dropdown-item"><i class="icon-warning2"></i> Report problem</a>
-															</div>
-														</div>
-													</div>
-												</td>
-											</tr>
-
-											<tr>
-												<td class="pr-0">
-													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/4.jpg" height="60" alt="">
-													</a>
-												</td>
-												<td>
-													<a href="#" class="font-weight-semibold">Overlook Short Sleeve T Shirt</a>
-													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-grey border-grey mr-1"></span>
-														Processing
-													</div>
-												</td>
-												<td>M</td>
-												<td>Gray Heather</td>
-												<td>
-													<a href="#">434450</a>
-												</td>
-												<td>1</td>
-												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 35.00</h6>
-												</td>
-												<td class="text-center">
-													<div class="list-icons">
-														<div class="list-icons-item dropdown">
-															<a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-															<div class="dropdown-menu dropdown-menu-right">
-																<a href="#" class="dropdown-item"><i class="icon-truck"></i> Track parcel</a>
-																<a href="#" class="dropdown-item"><i class="icon-file-download"></i> Download invoice</a>
-																<a href="#" class="dropdown-item"><i class="icon-wallet"></i> Payment details</a>
-																<div class="dropdown-divider"></div>
-																<a href="#" class="dropdown-item"><i class="icon-warning2"></i> Report problem</a>
-															</div>
-														</div>
-													</div>
-												</td>
-											</tr>
-
+											{%endfor%}
+										
 											<tr class="table-active">
 												<td colspan="7" class="font-weight-semibold">Shipped orders</td>
 												<td class="text-right">
@@ -1600,27 +1700,26 @@
 												</td>
 											</tr>
 
+											{%for order in orders%}
 											<tr>
-												<td class="pr-0">
+												<td class="pr-0" style="width: 45px;">
 													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/5.jpg" height="60" alt="">
+														<img src="{{order.product.image.url}}" height="60" alt="">
 													</a>
 												</td>
 												<td>
-													<a href="#" class="font-weight-semibold">Infinite Ride Liner</a>
+													<a href="#" class="font-weight-semibold">{{order.product.name}}</a>
 													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-success border-success mr-1"></span>
-														Shipped
+														<span class="badge badge-mark bg-grey border-grey mr-1"></span>
+														Processing
 													</div>
 												</td>
-												<td>43</td>
-												<td>Black</td>
 												<td>
-													<a href="#">34739</a>
+													<a href="#">1237749</a>
 												</td>
-												<td>1</td>
+												<td>{{order.quantity}}</td>
 												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 210.00</h6>
+													<h6 class="mb-0 font-weight-semibold">&euro; 79.00</h6>
 												</td>
 												<td class="text-center">
 													<div class="list-icons">
@@ -1637,196 +1736,9 @@
 													</div>
 												</td>
 											</tr>
+											{%endfor%}
 
-											<tr>
-												<td class="pr-0">
-													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/6.jpg" height="60" alt="">
-													</a>
-												</td>
-												<td>
-													<a href="#" class="font-weight-semibold">Custom Snowboard</a>
-													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-success border-success mr-1"></span>
-														Shipped
-													</div>
-												</td>
-												<td>151</td>
-												<td>Black/Blue</td>
-												<td>
-													<a href="#">5574832</a>
-												</td>
-												<td>1</td>
-												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 600.00</h6>
-												</td>
-												<td class="text-center">
-													<div class="list-icons">
-														<div class="list-icons-item dropdown">
-															<a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-															<div class="dropdown-menu dropdown-menu-right">
-																<a href="#" class="dropdown-item"><i class="icon-truck"></i> Track parcel</a>
-																<a href="#" class="dropdown-item"><i class="icon-file-download"></i> Download invoice</a>
-																<a href="#" class="dropdown-item"><i class="icon-wallet"></i> Payment details</a>
-																<div class="dropdown-divider"></div>
-																<a href="#" class="dropdown-item"><i class="icon-warning2"></i> Report problem</a>
-															</div>
-														</div>
-													</div>
-												</td>
-											</tr>
-
-											<tr>
-												<td class="pr-0">
-													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/7.jpg" height="60" alt="">
-													</a>
-												</td>
-												<td>
-													<a href="#" class="font-weight-semibold">Kids' Day Hiker 20L Backpack</a>
-													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-success border-success mr-1"></span>
-														Shipped
-													</div>
-												</td>
-												<td>24cm x 29cm</td>
-												<td>Figaro Stripe</td>
-												<td>
-													<a href="#">6684902</a>
-												</td>
-												<td>1</td>
-												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 55.00</h6>
-												</td>
-												<td class="text-center">
-													<div class="list-icons">
-														<div class="list-icons-item dropdown">
-															<a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-															<div class="dropdown-menu dropdown-menu-right">
-																<a href="#" class="dropdown-item"><i class="icon-truck"></i> Track parcel</a>
-																<a href="#" class="dropdown-item"><i class="icon-file-download"></i> Download invoice</a>
-																<a href="#" class="dropdown-item"><i class="icon-wallet"></i> Payment details</a>
-																<div class="dropdown-divider"></div>
-																<a href="#" class="dropdown-item"><i class="icon-warning2"></i> Report problem</a>
-															</div>
-														</div>
-													</div>
-												</td>
-											</tr>
-
-											<tr>
-												<td class="pr-0">
-													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/8.jpg" height="60" alt="">
-													</a>
-												</td>
-												<td>
-													<a href="#" class="font-weight-semibold">Lunch Sack</a>
-													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-success border-success mr-1"></span>
-														Shipped
-													</div>
-												</td>
-												<td>24cm x 20cm</td>
-												<td>Junk Food Print</td>
-												<td>
-													<a href="#">5574829</a>
-												</td>
-												<td>1</td>
-												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 20.00</h6>
-												</td>
-												<td class="text-center">
-													<div class="list-icons">
-														<div class="list-icons-item dropdown">
-															<a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-															<div class="dropdown-menu dropdown-menu-right">
-																<a href="#" class="dropdown-item"><i class="icon-truck"></i> Track parcel</a>
-																<a href="#" class="dropdown-item"><i class="icon-file-download"></i> Download invoice</a>
-																<a href="#" class="dropdown-item"><i class="icon-wallet"></i> Payment details</a>
-																<div class="dropdown-divider"></div>
-																<a href="#" class="dropdown-item"><i class="icon-warning2"></i> Report problem</a>
-															</div>
-														</div>
-													</div>
-												</td>
-											</tr>
-
-											<tr>
-												<td class="pr-0">
-													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/9.jpg" height="60" alt="">
-													</a>
-												</td>
-												<td>
-													<a href="#" class="font-weight-semibold">Cambridge Jacket</a>
-													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-success border-success mr-1"></span>
-														Shipped
-													</div>
-												</td>
-												<td>XL</td>
-												<td>Nomad/Railroad</td>
-												<td>
-													<a href="#">475839</a>
-												</td>
-												<td>1</td>
-												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 175.00</h6>
-												</td>
-												<td class="text-center">
-													<div class="list-icons">
-														<div class="list-icons-item dropdown">
-															<a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-															<div class="dropdown-menu dropdown-menu-right">
-																<a href="#" class="dropdown-item"><i class="icon-truck"></i> Track parcel</a>
-																<a href="#" class="dropdown-item"><i class="icon-file-download"></i> Download invoice</a>
-																<a href="#" class="dropdown-item"><i class="icon-wallet"></i> Payment details</a>
-																<div class="dropdown-divider"></div>
-																<a href="#" class="dropdown-item"><i class="icon-warning2"></i> Report problem</a>
-															</div>
-														</div>
-													</div>
-												</td>
-											</tr>
-
-											<tr>
-												<td class="pr-0">
-													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/10.jpg" height="60" alt="">
-													</a>
-												</td>
-												<td>
-													<a href="#" class="font-weight-semibold">Covert Jacket</a>
-													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-success border-success mr-1"></span>
-														Shipped
-													</div>
-												</td>
-												<td>XXL</td>
-												<td>Mocha/Glacier Sierra</td>
-												<td>
-													<a href="#">589439</a>
-												</td>
-												<td>1</td>
-												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 126.00</h6>
-												</td>
-												<td class="text-center">
-													<div class="list-icons">
-														<div class="list-icons-item dropdown">
-															<a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-															<div class="dropdown-menu dropdown-menu-right">
-																<a href="#" class="dropdown-item"><i class="icon-truck"></i> Track parcel</a>
-																<a href="#" class="dropdown-item"><i class="icon-file-download"></i> Download invoice</a>
-																<a href="#" class="dropdown-item"><i class="icon-wallet"></i> Payment details</a>
-																<div class="dropdown-divider"></div>
-																<a href="#" class="dropdown-item"><i class="icon-warning2"></i> Report problem</a>
-															</div>
-														</div>
-													</div>
-												</td>
-											</tr>
+										
 
 											<tr class="table-active">
 												<td colspan="7" class="font-weight-semibold">Cancelled orders</td>
@@ -1835,27 +1747,26 @@
 												</td>
 											</tr>
 
+											{%for order in orders%}
 											<tr>
-												<td class="pr-0">
+												<td class="pr-0" style="width: 45px;">
 													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/11.jpg" height="60" alt="">
+														<img src="{{order.product.image.url}}" height="60" alt="">
 													</a>
 												</td>
 												<td>
-													<a href="#" class="font-weight-semibold">Day Hiker Pinnacle 31L Backpack</a>
+													<a href="#" class="font-weight-semibold">{{order.product.name}}</a>
 													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-danger border-danger mr-1"></span>
-														Cancelled
+														<span class="badge badge-mark bg-grey border-grey mr-1"></span>
+														Processing
 													</div>
 												</td>
-												<td>42cm x 26.5cm</td>
-												<td>Blotto Ripstop</td>
 												<td>
-													<a href="#">5849305</a>
+													<a href="#">1237749</a>
 												</td>
-												<td>1</td>
+												<td>{{order.quantity}}</td>
 												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 130.00</h6>
+													<h6 class="mb-0 font-weight-semibold">&euro; 79.00</h6>
 												</td>
 												<td class="text-center">
 													<div class="list-icons">
@@ -1872,120 +1783,9 @@
 													</div>
 												</td>
 											</tr>
+											{%endfor%}
 
-											<tr>
-												<td class="pr-0">
-													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/12.jpg" height="60" alt="">
-													</a>
-												</td>
-												<td>
-													<a href="#" class="font-weight-semibold">Kids' Gromlet Backpack</a>
-													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-danger border-danger mr-1"></span>
-														Cancelled
-													</div>
-												</td>
-												<td>22cm x 20cm</td>
-												<td>Slime Camo Print</td>
-												<td>
-													<a href="#">4438495</a>
-												</td>
-												<td>1</td>
-												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 35.00</h6>
-												</td>
-												<td class="text-center">
-													<div class="list-icons">
-														<div class="list-icons-item dropdown">
-															<a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-															<div class="dropdown-menu dropdown-menu-right">
-																<a href="#" class="dropdown-item"><i class="icon-truck"></i> Track parcel</a>
-																<a href="#" class="dropdown-item"><i class="icon-file-download"></i> Download invoice</a>
-																<a href="#" class="dropdown-item"><i class="icon-wallet"></i> Payment details</a>
-																<div class="dropdown-divider"></div>
-																<a href="#" class="dropdown-item"><i class="icon-warning2"></i> Report problem</a>
-															</div>
-														</div>
-													</div>
-												</td>
-											</tr>
-
-											<tr>
-												<td class="pr-0">
-													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/13.jpg" height="60" alt="">
-													</a>
-												</td>
-												<td>
-													<a href="#" class="font-weight-semibold">Tinder Backpack</a>
-													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-danger border-danger mr-1"></span>
-														Cancelled
-													</div>
-												</td>
-												<td>42cm x 26cm</td>
-												<td>Dark Tide Twill</td>
-												<td>
-													<a href="#">4759383</a>
-												</td>
-												<td>2</td>
-												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 180.00</h6>
-												</td>
-												<td class="text-center">
-													<div class="list-icons">
-														<div class="list-icons-item dropdown">
-															<a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-															<div class="dropdown-menu dropdown-menu-right">
-																<a href="#" class="dropdown-item"><i class="icon-truck"></i> Track parcel</a>
-																<a href="#" class="dropdown-item"><i class="icon-file-download"></i> Download invoice</a>
-																<a href="#" class="dropdown-item"><i class="icon-wallet"></i> Payment details</a>
-																<div class="dropdown-divider"></div>
-																<a href="#" class="dropdown-item"><i class="icon-warning2"></i> Report problem</a>
-															</div>
-														</div>
-													</div>
-												</td>
-											</tr>
-
-											<tr>
-												<td class="pr-0">
-													<a href="#">
-														<img src="/static/admin/global_assets/images/demo/products/14.jpg" height="60" alt="">
-													</a>
-												</td>
-												<td>
-													<a href="#" class="font-weight-semibold">Almighty Snowboard Boot</a>
-													<div class="text-muted font-size-sm">
-														<span class="badge badge-mark bg-danger border-danger mr-1"></span>
-														Cancelled
-													</div>
-												</td>
-												<td>45</td>
-												<td>Multiweave</td>
-												<td>
-													<a href="#">34432</a>
-												</td>
-												<td>1</td>
-												<td>
-													<h6 class="mb-0 font-weight-semibold">&euro; 370.00</h6>
-												</td>
-												<td class="text-center">
-													<div class="list-icons">
-														<div class="list-icons-item dropdown">
-															<a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a>
-															<div class="dropdown-menu dropdown-menu-right">
-																<a href="#" class="dropdown-item"><i class="icon-truck"></i> Track parcel</a>
-																<a href="#" class="dropdown-item"><i class="icon-file-download"></i> Download invoice</a>
-																<a href="#" class="dropdown-item"><i class="icon-wallet"></i> Payment details</a>
-																<div class="dropdown-divider"></div>
-																<a href="#" class="dropdown-item"><i class="icon-warning2"></i> Report problem</a>
-															</div>
-														</div>
-													</div>
-												</td>
-											</tr>
+											
 										</tbody>
 									</table>
 								</div>
@@ -2001,9 +1801,11 @@
 									<h6 class="card-title">Company Bank Accounts</h6>
 									<div class="header-elements">
 										<div class="list-icons">
+										
 											{% if perms.company.add_companybankaccount%}
 											<a data-toggle="modal" data-target="#bank_form_id" class="btn btn-outline-success btn-sm"><i class="icon-add mr-2"></i> Create New</a>
 											{%endif%}
+
 										</div>
 									</div>
 								</div>
@@ -2026,7 +1828,6 @@
 	
 										<h5>{{bank_account.account_number}}</h5>
 									</div>
-	
 
 									<div class="ml-sm-3 mt-2 mt-sm-0">
 										<button class="badge bg-blue" style="border: hidden;">
@@ -2046,9 +1847,6 @@
 											</div>
 										</button>
 									</div>
-
-
-									
 
 									<div id="edit{{bank_account.id}}" class="modal fade" tabindex="-1">
 										<div class="modal-dialog">
@@ -2094,8 +1892,6 @@
 											</div>
 										</div>
 									</div>
-
-
 
 								</div>
 							</div>

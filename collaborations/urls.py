@@ -11,11 +11,12 @@ from .views import (BlogList,BlogDetail,FaqList,
                     ResearchCategorySearch,
 
                     SearchForum,ApplyForTender,pdf_download,SearchBlogTag,CustomerNewsList,
-                    CustomerNewsDetail,
+                    CustomerNewsDetail,CustomerEventList, CustomerEventDetail, EventParticipation)
                     )
 
 from .ProjectViews import (EditProject,ListProject,ProjectDetail,CreateProject
-                            ,SearchProject,ProjectCategorySearch,)                    
+                            ,SearchProject,ProjectCategorySearch,)  
+                    
 
 urlpatterns = [ 
 
@@ -66,7 +67,11 @@ urlpatterns = [
     ##News
     path("customer_news_list/", CustomerNewsList.as_view(), name = "customer_news_list"),
     path("customer_news_detail/<id>/", CustomerNewsDetail.as_view(), name = "customer_news_detail"),
-    
+    ##Events
+    path("customer_event_list/", CustomerEventList.as_view(), name = "customer_event_list"),
+    path("customer_event_detail/<id>/", CustomerEventDetail.as_view(), name = "customer_event_detail"),
+    path("event_participation/<id>/", EventParticipation.as_view(), name="event_participation"),
+
     
         
 ]

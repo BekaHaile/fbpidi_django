@@ -120,7 +120,7 @@ class Tender(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def get_applications(self):
-        return TenderApplications.objects.filter( tender = self )
+        return TenderApplicant.objects.filter( tender = self )
     
     def get_company(self):
        
@@ -149,22 +149,14 @@ class TenderApplicant(models.Model):
     email = models.EmailField(verbose_name="applicant email", max_length=255)
     company_name = models.CharField(verbose_name="first_name", max_length=50)
     company_tin_number = models.CharField(verbose_name="first_name", max_length=50)
+    tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} from {self.company_name}"
             
-# This can be created automatically if we use a manytomanyrelation, that's why I commented this table and added a tender_applications
-class TenderApplications(models.Model):
-    applicant = models.ForeignKey(TenderApplicant, on_delete=models.CASCADE)
-    tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = (('applicant', 'tender'))
 
 ## Vacancy
-
 class JobCategoty(models.Model):
     categoryName = models.CharField(max_length=500,null=False)
     categoryName_am = models.CharField(max_length=500,null=False)
@@ -227,7 +219,6 @@ class News(models.Model):
 
     def get_images(self):
         return self.newsimages_set.all()
-    
 
     
 class NewsImages(models.Model):
@@ -235,8 +226,9 @@ class NewsImages(models.Model):
     name = models.CharField(verbose_name = "Image alternative name",max_length=255)
     image = models.ImageField(upload_to = "Images/News Images", max_length=254, verbose_name="News Image",help_text="jpg, png, gid", blank=False)  
     timestamp = models.DateTimeField(auto_now_add=True)
-        
 
+
+# This can be created automatically if we use a manytomanyrelation, that's why I commented this table and added a tender_applications
 
 class ForumQuestion(models.Model):
     title = models.CharField(max_length=500,null=False)
@@ -251,8 +243,6 @@ class ForumQuestion(models.Model):
     def comments(self):
         return self.forumcomments_set.all()
     
-     
-
 class ForumComments(models.Model):
     forum_question=models.ForeignKey(ForumQuestion,on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -262,7 +252,6 @@ class ForumComments(models.Model):
 
     def commentreplay(self):
         return self.commentreplay_set.all()
-
 
 class CommentReplay(models.Model):
     comment = models.ForeignKey(ForumComments,on_delete=models.CASCADE)

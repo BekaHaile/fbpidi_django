@@ -109,11 +109,17 @@
 						</div>
 					</div>
 					 
-					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.description.label|title}} *</label>
+					<div class="form-group row"><span class="form-text text-warning">{{form.description.errors}}</span>
+						<label class="col-form-label col-lg-3">{{form..label|title}} *</label>
 						<div class="col-lg-9">
 							{{form.description|safe}}
+							
 						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-form-label ">{{form.description.label|title}}</label>
+							{{form.description|safe}}
+							<span class="form-text text-warning">{{form.detail.errors}}</span>
 					</div>
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3">{{form.description_am.label|title}} *</label>
@@ -121,6 +127,7 @@
 							{{form.description_am|safe}}
 						</div>
 					</div>
+					
 					<div class="form-group row">
 						<label class="col-form-label col-lg-2">{{form.image.label|title}}</label>
 						<div class="col-lg-10">

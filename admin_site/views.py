@@ -8,7 +8,7 @@ import os
 # 
 from product import models
 from accounts.models import User
-from company.models import Company
+from company.models import Company,CompanyEvent
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
@@ -143,6 +143,7 @@ class DeleteView(LoginRequiredMixin,View):
             company = Company.objects.get(id=self.kwargs['id'])
             company.delete()
             message ="Company Deleted"
+
             messages.success(self.request,message)
             return redirect("admin:index")
         elif self.kwargs['model_name'] == 'product_image':
@@ -152,35 +153,33 @@ class DeleteView(LoginRequiredMixin,View):
             messages.success(self.request,message)
             return redirect("admin:product_detail",id=pdimage.product.id,option='view')
         elif self.kwargs['model_name'] == 'News':
-            try:
                 news = News.objects.get(id = self.kwargs['id']  )
                 news.delete() 
                 messages.success(self.request,"News Deleted Successfully")
                 return redirect("admin:news_list")
-            except Exception as e:
-                messages.warning(self.request, "Could not find the News")
-                return redirect("admin:news_list")
-           
-        elif self.kwargs['model_name'] == "NewsImage":
-            try:  
+        elif self.kwargs['model_name'] == "NewsImage":  
                 image = NewsImages.objects.get(id = self.kwargs['id']  )
                 news = image.news
                 image.delete()
-                message = "Image Deleted Successfully!"
-                messages.success(self.request,message)
+                messages.success(self.request,"Image Deleted Successfully!")
                 return redirect(f"/admin/edit_news/{news.id}")
-            except Exception as e:
-                messages.warning(self.request, "Could not find the Image")
-                return redirect("admin:news_list")
+           
+        elif self.kwargs['model_name'] == 'CompanyEvent':     
+                event = CompanyEvent.objects.get(id = self.kwargs['id']  )
+                company = event.company
+                event.delete()
+                messages.success(self.request,"Event Deleted Successfully!")
+                return redirect("admin:view_fbpidi_company") if self.request.user.is_superuser  else redirect("admin:view_company_profile")
 
-
-
+            # except Exception as e:
+            #     messages.warning(self.request, "Could not find the Event")
+            #     return redirect("admin:view_fbpidi_company") if event.company.company_type == "fbpidi" else redirect("admin:view_company_profile")
+                
 class Polls(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         form = PollsForm()
         polls = PollsQuestion.objects.all()
-        context = {'form':form, 'polls':polls}
-        
+        context = {'form':form, 'polls':polls}    
         return render(self.request,'admin/pages/polls.html',context)
     
    
@@ -212,7 +211,7 @@ class CreatePoll(LoginRequiredMixin,View):
                 return redirect("admin:admin_polls")
                 
         except Exception as e:
-            print("44444444444444444444" , str (e))
+           
             return redirect("admin:admin_polls")
 
 
@@ -222,7 +221,6 @@ class DetailPoll(LoginRequiredMixin,View):
         if self.kwargs['id'] :
             try:
                 poll = PollsQuestion.objects.get(id = self.kwargs['id']  )
-                # return render(self.request, "admin/pages/company_detail.html", {'poll':poll,})
                 return render(self.request, "admin/pages/admin_poll_detail.html", {'poll':poll,})
 
             except Exception as e:

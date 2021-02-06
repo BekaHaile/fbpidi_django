@@ -24,6 +24,7 @@
 
 		<!-- Bootstrap Css -->
 		<link href="/static/frontpages/plugins/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+		<script src="/static/frontpages/js/vendors/jquery-3.2.1.min.js"></script>
 
 		<!-- Dashboard Css -->
 		<link href="/static/frontpages/css/style.css" rel="stylesheet" />
@@ -61,8 +62,6 @@
 		<link rel="stylesheet" href="/static/summernote/summernote-bs4.css">
 		<script src="/static/summernote/summernote-bs4.js"></script>
 
-		<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
-		<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 		<style>
 			#lan_btn{
 				border: none;
@@ -119,7 +118,7 @@
 										</li> 
 										<li class="dropdown">
 											<a href="{% url 'mydash' %}" class="text-dark">
-												<i class="fa fa-home mr-1"></i><span>{% trans "My Profile" %}</span>
+												<i class="fa fa-user mr-1"></i><span>{% trans "My Profile" %}</span>
 											</a>
 
 										</li>
@@ -226,6 +225,8 @@
 								<ul class="sub-menu">
 									<li><a href="{% url 'announcement_list' %}">{% trans "Announcement" %}</a></li>
 									<li><a href="{% url 'blog_grid_right' %}">{% trans "Blog" %}</a></li>
+									<li><a href="{% url 'customer_event_list' %}">{% trans "Events" %}</a></li>
+									
 									<li><a href="{% url 'faq' %}">{% trans "Faqs" %}</a></li>
 									<li><a href="{% url 'forum_list' %}">{% trans "Forums" %}</a></li>
 									<li><a href="{% url 'customer_news_list' %}">{% trans "News" %}</a></li>
