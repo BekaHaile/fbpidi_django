@@ -36,7 +36,7 @@ from wsgiref.util import FileWrapper
 
 
 
-from collaborations.forms import BlogsForm, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
+from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -87,7 +87,7 @@ class CreateResearchProjectCategoryAdmin(LoginRequiredMixin, View):
 
 class ResearchProjectCategoryDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
-		form = ResearchProjectCategory.objects.get(id=self.kwarges['id'])
+		form = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
 		template_name = "admin/ResearchProject/ResearchProjectCategory_detail.html"
 		context = {'forms':form}
 		return render(self.request, template_name,context)
@@ -96,8 +96,8 @@ class ResearchProjectCategoryDetail(LoginRequiredMixin,View):
 		emplate_name = "admin/ResearchProject/ResearchProjectCategory_detail.html"
 		context = {'forms':form}
 		if form.is_valid():
-			research = ResearchProjectCategory.objects.get(id=self.kwarges['id'])
-			research.title=form.cleaned_data.get('title')
+			research = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
+			research.cateoryname=form.cleaned_data.get('cateoryname')
 			research.detail=form.cleaned_data.get('detail')
 			research.user = self.request.user 
 			research.save()
@@ -159,7 +159,7 @@ class ResearchApprove(LoginRequiredMixin, View):
 		form.accepted = "APPROVED"
 		form.save()
 		messages.success(self.request, "Changed Status to APPROVED Successfully")
-		return redirect("admin:pedning_list")
+		return redirect("admin:pedning_project_list")
 
 class ResearchDetailAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
@@ -192,7 +192,7 @@ class SearchResearch(View):
 		print("============")
 		print(self.request.POST["search"])
 
-		form = Research.objects.filter(title__contains=self.requestmedical.POST['search'])
+		form = Research.objects.filter(title__contains=self.request.POST['search'])
 		if str(self.request.user) != "AnonymousUser":
 			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
 		else:
@@ -560,12 +560,12 @@ class CreatBlog(LoginRequiredMixin,View):
 			blog = form.save(commit=False)
 			blog.user = self.request.user
 			blog.blogImage = form.cleaned_data.get("blogImage")
-			publish =self.request.POST['publish']
-			print(str(publish))
-			if publish =="on":
-				blog.publish=True 
-			else:
-				blog.publish=False            
+			# publish =self.request.POST['publish']
+			# print(str(publish))
+			# if publish =="on":
+			# 	blog.publish=True 
+			# else:
+			# 	blog.publish=False            
 			blog.save()
 			messages.success(self.request, "Added New Blog Successfully")
 			form = BlogsForm()
@@ -586,10 +586,12 @@ class BlogView(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		blogs = Blog.objects.get(id=self.kwargs['id'])
 		template_name="admin/pages/blog_detail.html"
+		print("^^^^^^^^^^^")
+		print(blogs.publish)
 		context = {'form':blogs}
 		return render(self.request, "admin/pages/blog_detail.html",context)
 	def post(self,*args,**kwargs):
-		form = BlogsForm(self.request.POST,self.request.FILES)
+		form = BlogsEdit(self.request.POST,self.request.FILES)
 		context={'form':form}
 		if form.is_valid():
 			blog = Blog.objects.get(id=self.kwargs['id'])
@@ -1316,11 +1318,10 @@ class CustomerTenderDetail(View):
         	return redirect("tender_list")
 
 class ApplyForTender(View):
-	def post(self, *args, **kwargs):   
- 
-        tender = Tender.objects.get(id = self.kwargs['id'])
-        if tender:
-            applicant = TenderApplicant(
+	def post(self, *args, **kwargs):
+		tender= Tender.objects.get(id = self.kwargs['id'])
+		if tender:
+			applicant = TenderApplicant(
                 first_name = self.request.POST['first_name'], 
                 last_name = self.request.POST['last_name'],
                 email = self.request.POST['email'],
@@ -1329,18 +1330,15 @@ class ApplyForTender(View):
                 company_tin_number=self.request.POST['company_tin_number'],
                 tender = tender
             )
-            applicant.save()
-            messages.success(self.request, "Application Successfully Completed")
-            print("Created successfully") 
-            return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applied':True})
-
-            return redirect(f"{tender.document.url}")
-            # return redirect("/collaborations/tender_list/")
-
-          
-        print("Error Occured!")
-        messages.warning(self.request,"Error while Applying!")
-        return redirect("/collaborations/tender_list/")
+			applicant.save()
+			messages.success(self.request, "Application Successfully Completed")
+			print("Created successfully")
+			return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applied':True})
+			return redirect(f"{tender.document.url}")
+            #return redirect("/collaborations/tender_list/")
+			print("Error Occured!")
+			messages.warning(self.request,"Error while Applying!")
+			return redirect("/collaborations/tender_list/")
 
 def pdf_download(request, id):
 	tender = Tender.objects.get(id = id)

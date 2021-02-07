@@ -47,6 +47,20 @@ class BlogsForm(forms.ModelForm):
 
 
                             }
+class BlogsEdit(forms.ModelForm):
+    
+    class Meta:
+        model = Blog
+        fields = ('title', 'tag', 'content','publish','title_am','tag_am','content_am')
+        widgets = {'content': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in English'}),
+                    'content_am': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in Amharic'}),
+                    'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in English'}),
+                    'tag':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in English'}),
+                    'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in Amharic'}),
+                    'tag_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in Amharic'}),
+
+
+                            }
 
 
 class BlogCommentForm(forms.ModelForm):
@@ -289,6 +303,8 @@ class ProjectForm(forms.ModelForm):
 
 class ResearchForm(forms.ModelForm):
     attachements = forms.FileField(required=False)
+    description = forms.CharField(widget=SummernoteWidget())
+    detail = forms.CharField(widget=SummernoteWidget())
     status = forms.ChoiceField(choices = RESEARCH_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
 
     class Meta:
@@ -298,8 +314,8 @@ class ResearchForm(forms.ModelForm):
 
         'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
         'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Research'}),
-        'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
-        'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The hole research'}),
+        #'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
+        #'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The hole research'}),
         }
         
 

@@ -11,7 +11,7 @@ from .views import (BlogList,BlogDetail,FaqList,
                     ResearchCategorySearch,
 
                     SearchForum,ApplyForTender,pdf_download,SearchBlogTag,CustomerNewsList,
-                    CustomerNewsDetail,CustomerEventList, CustomerEventDetail, EventParticipation)
+                    CustomerNewsDetail,CustomerEventList, CustomerEventDetail, EventParticipation
                     )
 
 from .ProjectViews import (EditProject,ListProject,ProjectDetail,CreateProject

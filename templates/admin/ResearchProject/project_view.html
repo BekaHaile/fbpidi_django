@@ -9,27 +9,32 @@
 
 <!-- Content area -->
 <div class="content">
-<div class="card-header header-elements-inline">
-			<div class="header-elements">
-				<div class="list-icons">
-					{% if forms.accepted == "PENDING" %}
-			<a href="{%url 'admin:project_approve' id=forms.id %}" class="btn bg-teal btn-sm rounded-round"> APPROVE</a>
-			{%endif%}
 
-				</div>
-				<div class="list-icons">
-			<a href="{%url 'admin:project_detail'  model_name='Project' id=forms.id%}" class="btn bg-teal btn-sm rounded-round" > EDIT</a>
-
-				</div>
-				<div class="list-icons">
-			<a href="{%url 'admin:delete' model_name='Project' id=forms.id%}" class="btn bg-teal btn-sm rounded-round" onclick="return confirm('Are you sure you want to Delete this')">DELETE</a>
-			
-
-				</div>
-			</div>
-		</div>
 				<div class="col-xl-12 col-lg-12 col-md-12">
 						<div class="card">
+							<div class="header-elements">
+				<div class="list-icons">
+							<div class="card-header header-elements-inline">
+								<div class="header-elements">
+									<div class="list-icons">
+										{% if forms.accepted == "PENDING" %}
+								<a href="{%url 'admin:project_approve' id=forms.id %}" class="btn bg-teal btn-sm rounded-round"> APPROVE</a>
+								{%endif%}
+
+									</div>
+									<div class="list-icons">
+								<a href="{%url 'admin:project_detail'  model_name='Project' id=forms.id%}" class="btn bg-teal btn-sm rounded-round" > EDIT</a>
+
+									</div>
+									<div class="list-icons">
+								<a href="{%url 'admin:delete' model_name='Project' id=forms.id%}" class="btn bg-teal btn-sm rounded-round" onclick="return confirm('Are you sure you want to Delete this')">DELETE</a>
+								
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 							<div class="card-head">
 								<div class="col-xl-6 col-lg-6 col-md-6">
 								</div>

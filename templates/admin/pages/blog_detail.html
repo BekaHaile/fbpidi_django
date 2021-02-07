@@ -90,10 +90,10 @@
 
 							<div class="col-lg-9">
 								{%if form.publish == True %}
-							<input type="checkbox" name="publish" value=on class="form-check-input" id="exampleCheck1">
+							<input type="checkbox" name="publish" value=True class="form-check-input" id="exampleCheck1">
 								{%endif%}
 								{%if form.publish == False %}
-							<input type="checkbox" name="publish" value=off class="form-check-input" id="exampleCheck1">
+							<input type="checkbox" name="publish" value=False class="form-check-input" id="exampleCheck1">
 								{%endif%}
 						</div>
 							
@@ -104,7 +104,7 @@
 					<div class="form-group row">
 						<label class="col-form-label col-lg-2">Blog Image *</label>
 						<div class="col-lg-10">
-							<div class="uniform-uploader"><input required type="file" name="blogImage" value="{{form.blogImage.url}}" class="form-input-styled" data-fouc=""><span
+							<div class="uniform-uploader"><input type="file" name="blogImage" class="form-input-styled" data-fouc=""><span
 								class="filename" style="user-select: none;">No file selected</span><span
 								class="action btn bg-warning" style="user-select: none;">Choose File</span></div>
 						</div>
