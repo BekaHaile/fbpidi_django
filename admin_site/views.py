@@ -149,6 +149,17 @@ class Polls(LoginRequiredMixin,View):
    
 class CreatePoll(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
+        try:
+                if self.request.user.is_company_admin:
+                    company = Company.objects.get(user = self.request.user)
+                    
+                elif self.request.user.is_company_staff:
+                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
+                    company = Company.objects.get(id = company_staff.company.id)
+        except Exception as e:
+                messages.warning(self.request, "Currently, You are not related with any registered Company.")
+                print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
+                return redirect("admin:create_company_profile")
 
         form = CreatePollForm()
         context = {'form':form}
@@ -188,7 +199,7 @@ class DetailPoll(LoginRequiredMixin,View):
                 return render(self.request, "admin/pages/admin_poll_detail.html", {'poll':poll,})
 
             except Exception as e:
-                print("eeeeeeeeeeeeeeeee", str(e))
+                print("exception while showing poll Detail", str(e))
                 messages.warning(self.request, "Poll not found")
                 return redirect("admin:admin_polls") 
 
@@ -219,7 +230,6 @@ class AddChoice(LoginRequiredMixin,View):
 
             poll.choices.add(choice)
             poll.save()
-            print(poll.choices.all())
             
             messages.success(self.request,"Choice Successfully Created!")
             return redirect("admin:admin_polls")

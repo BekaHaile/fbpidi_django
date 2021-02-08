@@ -32,7 +32,7 @@ SECRET_KEY = 'u#@!ig3kcz)ocq=2791oii#ay4&$$6lxvj5!$cb2wkfhi5nt(q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.113','127.0.0.1',]
 
 
 # Application definition
@@ -56,8 +56,9 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_summernote',
     'useraudit',
-    
-    
+    'rest_framework',
+    'rest_framework.authtoken',
+ 
 
 ]
 
@@ -208,6 +209,20 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 EMAIL_USE_LOCALTIME = True
 
+#### For the RestFramework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+
+}
+
+
+
+
 
 ##### social-auth for postgres
 JSONField = True
@@ -221,6 +236,8 @@ AUTHENTICATION_BACKENDS = (
 
     'django.contrib.auth.backends.ModelBackend',
 )
+
+
 
 SOCIAL_AUTH_FACEBOOK_KEY = '2860739290914734'  #APP ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '5afc8b24a3cdb7d93dcccf3fa06f49b6' #APP SECRET

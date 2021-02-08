@@ -29,6 +29,9 @@ class PollsQuestion(models.Model):
             return self.user.company_set.first().get_image()
         else:
             return None
+    
+    class Meta:
+        ordering = ['-timestamp',] 
 
 
 class Choices (models.Model):
@@ -44,6 +47,10 @@ class Choices (models.Model):
     def count_votes(self):
         return self.pollsresult_set.count()
 
+    class Meta:
+        ordering = ['-timestamp',] 
+
+
 
 class PollsResult(models.Model):    
     poll = models.ForeignKey(PollsQuestion, on_delete=models.CASCADE)
@@ -54,6 +61,9 @@ class PollsResult(models.Model):
 
     def __str__(self):
         return f"{self.poll.title}'s Result "
+    
+    def get_company(self):
+        return user.get_company()
     
     class Meta:
         unique_together = (('user', 'poll'))
@@ -141,6 +151,9 @@ class Tender(models.Model):
             return unrelated_bank_accounts
         return None  
 
+    class Meta:
+        ordering = ['-timestamp',] 
+
 
 class TenderApplicant(models.Model):
     first_name = models.CharField(verbose_name="first_name", max_length=50)
@@ -155,6 +168,8 @@ class TenderApplicant(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name} from {self.company_name}"
             
+    class Meta:
+        ordering = ['-timestamp',] 
 
 
 ## Vacancy
@@ -205,16 +220,22 @@ class JobApplication(models.Model):
 ## News and Events
 
 class News(models.Model):
+    NEWS_CATAGORY = [ ('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),  
+    ('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological')]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
     title = models.CharField(max_length=500, null = False)
     title_am = models.CharField(max_length=500, null = False)
     description = models.TextField( verbose_name="News Description(English)" )
     description_am = models.TextField( verbose_name="News Description(Amharic)" )
+    catagory = models.TextField(verbose_name="News Catagory, the choices are ", choices=NEWS_CATAGORY)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def get_images(self):
         return self.newsimages_set.all()
+
+    class Meta:
+        ordering = ['-timestamp',] 
 
     
 class NewsImages(models.Model):
@@ -222,6 +243,9 @@ class NewsImages(models.Model):
     name = models.CharField(verbose_name = "Image alternative name",max_length=255)
     image = models.ImageField(upload_to = "Images/News Images", max_length=254, verbose_name="News Image",help_text="jpg, png, gid", blank=False)  
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp',] 
 
 
 # This can be created automatically if we use a manytomanyrelation, that's why I commented this table and added a tender_applications

@@ -38,12 +38,13 @@
     
                                 <div class= "text-right" class="card-header header-elements-inline">					
                                     <div class="header-elements">
-                                        {% if perms.collaborations.change_tender and tender.get_company.company_name == user.get_company_name  %}
-                                            
-                                            <div class="list-icons">
-                                                <a href="{%url 'admin:edit_tender' id=tender.id %}"   style = "margin-left: 40px; " class = "btn bg-teal btn-sm rounded-round"><i class="icon-pencil mr-2"></i>Edit this Tender</a>
-                                            </div>
-                                        {% endif %}
+                                            {% if perms.collaborations.change_tender and tender.user == user%}
+                                                
+                                                <div class="list-icons">
+                                                    <a href="{%url 'admin:edit_tender' id=tender.id %}"   style = "margin-left: 40px; " class = "btn bg-teal btn-sm rounded-round"><i class="icon-pencil mr-2"></i>Edit this Tender</a>
+                                                </div>
+                                            {% endif %}
+                                       
                                     </div>
                                 </div>
 								<a href="#" class="text-body"><h2 class="font-weight-semibold text-capitalize">Title: {{tender.title}}</h2></a>
@@ -87,14 +88,16 @@
 
                         <div class="card">
                             <div class="card-header">
+                                
                                 <h2>Related Bank Accounts</h2>
                             </div>
                             <div class="card-body">    
                                     <div class="media-body">
-                                       
-                                        {%for bank_account in tender.get_bank_accounts%}
-                                            <p><b>{{bank_account.get_bank_name}}'s Account </b><br>{{bank_account.account_number}}</p>
-                                        {%endfor%}
+                                        
+                                            {%for bank_account in tender.get_bank_accounts%}
+                                                <p><b>{{bank_account.get_bank_name}}'s Account </b><br>{{bank_account.account_number}}</p>
+                                            {%endfor%}
+
                                     </div>
                                 
                             </div>           
@@ -103,7 +106,7 @@
                         
                         
                         
-
+                        {% if user == tender.user %}
                          <div class="card">
                             <div class="card-header header-elements-inline">
                                 <h5 class="card-title">Tender Application Information </h5>
@@ -136,6 +139,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        {% endif %}
 
 
 

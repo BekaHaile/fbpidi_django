@@ -37,7 +37,7 @@ from company.views import (
 class CustomAdminSite(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
-
+      
         def wrap(view, cacheable=False):
             def wrapper(*args, **kwargs):
                 return self.admin_view(view, cacheable)(*args, **kwargs)
@@ -45,33 +45,33 @@ class CustomAdminSite(admin.AdminSite):
             return update_wrapper(wrapper, view)
 
         my_urls = [ 
-            path('anounce-Detail/<model_name>/<id>',AnnouncementDetail.as_view(),name="anounce_Detail"),
-            path('anounce-List',ListAnnouncementAdmin.as_view(),name="anounce_list"),
-            path('anounce-Create',CreatAnnouncement.as_view(),name="anounce_Create"),
+            path('anounce-Detail/<model_name>/<id>',wrap(AnnouncementDetail.as_view()),name="anounce_Detail"),
+            path('anounce-List', wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),
+            path('anounce-Create',wrap(CreatAnnouncement.as_view()),name="anounce_Create"),
             #path('jobCategoty-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),
            
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
             path('download/<name>/<id>',Download.as_view(),name="Download"),
-            path('close/<id>/<closed>',CloseVacancy.as_view(),name="close"),
-            path('applicant-info/<id>',Applicantinfo.as_view(),name="Applicant_info"),
-            path('applicant-list',ApplicantList.as_view(),name="Applicant_list"),
+            path('close/<id>/<closed>',wrap(CloseVacancy.as_view()),name="close"),
+            path('applicant-info/<id>',wrap(Applicantinfo.as_view()),name="Applicant_info"),
+            path('applicant-list',wrap(ApplicantList.as_view()),name="Applicant_list"),
             
-            path('jobCategoty-form',JobcategoryFormView.as_view(),name="JobCategoty_form"),
-            path('jobCategoty-list',JobCategoryList.as_view(),name="admin_jobcategoty"),
-            path('jobCategoty-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),
+            path('jobCategoty-form',wrap(JobcategoryFormView.as_view()),name="JobCategoty_form"),
+            path('jobCategoty-list',wrap(JobCategoryList.as_view()),name="admin_jobcategoty"),
+            path('jobCategoty-detail/<model_name>/<id>',wrap(JobCategoryDetail.as_view()),name='Category_form'),
            
-            path("Vacancy-form/",CreateVacancy.as_view(),name="Job_form"),
-            path("Vacancy-list/",AdminVacancyList.as_view(),name="Job_list"),
-            path("Vacancy-list-super/",SuperAdminVacancyList.as_view(),name="super_Job_list"),
-            path("Vacancy-detail/<model_name>/<id>",VacancyDetail.as_view(),name="job_detail"),
+            path("Vacancy-form/",wrap(CreateVacancy.as_view()),name="Job_form"),
+            path("Vacancy-list/",wrap(AdminVacancyList.as_view()),name="Job_list"),
+            path("Vacancy-list-super/",wrap(SuperAdminVacancyList.as_view()),name="super_Job_list"),
+            path("Vacancy-detail/<model_name>/<id>",wrap(VacancyDetail.as_view()),name="job_detail"),
            
-            path("faqs-detail/<model_name>/<id>",FaqsView.as_view(),name="faqs_detail"),
-            path("faq-form/",CreateFaqs.as_view(),name="admin_Faqsform"),
-            path("faq-list/",FaqsList.as_view(),name="admin_Faqs"),
+            path("faqs-detail/<model_name>/<id>",wrap(FaqsView.as_view()),name="faqs_detail"),
+            path("faq-form/",wrap(CreateFaqs.as_view()),name="admin_Faqsform"),
+            path("faq-list/",wrap(FaqsList.as_view()),name="admin_Faqs"),
             
-            path("blog-list/",AdminBlogList.as_view(),name="admin_Blogs"),
-            path("blog-detail/<model_name>/<id>/",BlogView.as_view(),name="blog_detail"),
-            path("blog-create/",CreatBlog.as_view(),name="create_blog"),
+            path("blog-list/",wrap(AdminBlogList.as_view()),name="admin_Blogs"),
+            path("blog-detail/<model_name>/<id>/",wrap(BlogView.as_view()),name="blog_detail"),
+            path("blog-create/",wrap(CreatBlog.as_view()),name="create_blog"),
             
             path("signup/",CompanyAdminSignUpView.as_view(),name="signup"),
             path("create_user/",wrap(CreateUserView.as_view()),name="create_user"),
@@ -103,19 +103,21 @@ class CustomAdminSite(admin.AdminSite):
             path("detail_poll/<id>/", wrap(DetailPoll.as_view()), name = "detail_poll"),
 
             # paths for tenders
-            path("tenders/", TenderList.as_view(), name = "tenders"),
-            path("create_tender/", CreateTender.as_view(), name = "create_tender"),
+            path("tenders/", wrap(TenderList.as_view()), name = "tenders"),
+            path("create_tender/", wrap(CreateTender.as_view()), name = "create_tender"),
             path("tender_detail/<id>/", wrap(TenderDetail.as_view()), name = "tender_detail"),
-            path("edit_tender/<id>/", EditTender.as_view(), name = "edit_tender"),
-            path("delete_tender/<id>/", DeleteTender.as_view(), name = "delete_tender"),
-            path("manage_bank_account/<option>/<id>/",ManageBankAccount.as_view(), name = "manage_bank_account"),
+            path("edit_tender/<id>/", wrap(EditTender.as_view()), name = "edit_tender"),
+            
+            path("delete_tender/<id>/", wrap(DeleteTender.as_view()), name = "delete_tender"),
+            path("manage_bank_account/<option>/<id>/",wrap(ManageBankAccount.as_view()), name = "manage_bank_account"),
             
 
             # paths for news and events
-            path('news_list/', AdminNewsList.as_view(), name = "news_list"),
-            path('create_news/', CreateNews.as_view(), name = "create_news"),
-            path('edit_news/<id>/', EditNews.as_view(), name = "edit_news"),
-            path('news_detail/<id>/', NewsDetail.as_view(), name = "news_detail"),
+            path('news_list/', wrap(AdminNewsList.as_view()), name = "news_list"),
+            path('create_news/', wrap(CreateNews.as_view()), name = "create_news"),
+            
+            path('edit_news/<id>/', wrap(EditNews.as_view()), name = "edit_news"),
+            path('news_detail/<id>/', wrap(NewsDetail.as_view()), name = "news_detail"),
             
             
 

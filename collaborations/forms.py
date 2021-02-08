@@ -201,15 +201,19 @@ class JobCategoryForm(forms.ModelForm):
         }
 
 class NewsForm(forms.ModelForm):
-   
+    NEWS_CATAGORY = [ ('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),  
+    ('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological')]
+    catagory = forms.ChoiceField(choices = NEWS_CATAGORY, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
+
     class Meta:
         model = News
-        fields = ('title', 'title_am', 'description', 'description_am')
+        fields = ('title', 'title_am', 'description', 'description_am', 'catagory')
         widgets = {
             'title' : forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'News Title(English).'}),
             'title_am' : forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'News Title (Amharic).'}),
             'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Detail description on the news.(English)'}),
             'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Detail description on the news.(Amharic)'}),
+            
             
         } 
 

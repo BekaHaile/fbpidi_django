@@ -109,6 +109,8 @@ ADMIN_PERMISSION_LIST = [
     'view_companyevent', 
     'change_companyevent', 
     'delete_companyevent', 
+
+    
     
     
 ]

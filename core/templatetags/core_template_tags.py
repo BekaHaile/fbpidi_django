@@ -53,14 +53,6 @@ def print_translated(en_data,am_data,lan_code):
     elif lan_code == 'am':
         return mark_safe(am_data)
 
-
-@register.filter
-def change_start_date(start_date):
-        start_date =str(start_date)
-        start_date =start_date[:19]
-        start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
-        return start_date
-
 @register.simple_tag
 def change_end_date(end_date):
             end_date =str(end_date)

@@ -390,67 +390,6 @@
 <!--/Manufacturers Section-->
 
 
-<!--Manufacturers Section-->
-<section class="sptb bg-patterns bg-white">
-	<div class="container">
-		<div class="section-title center-block text-center">
-			<h2>Latest News</h2>
-			<p>Click the News you want to see in detail.</p>
-		</div>
-		<div id="myCarousel2" class="owl-carousel owl-carousel-icons2">
-			<!-- Wrapper for carousel items -->
-		
-			{%for news in news_list%}
-					
-					<div class="item">
-						<div class="card mb-0 overflow-hidden">
-							<div class="item-card7-imgs">
-								<a href="{% url 'customer_news_detail' id=news.id %}" class="absolute-link"></a>
-								
-								<img  width = "200" height = "250" src="{{news.get_images.0.image.url}}" alt="img" class="cover-image">
-							</div>
-							<div class="card-body">
-								<div class="item-card7-desc">
-									<div class="item-card7-text">
-										<a href="{% url 'customer_news_detail' id=news.id %}" class="text-dark">
-											<h4 class=""> {%print_translated news.title|truncatewords:10 news.title_am|truncatewords:10 LANGUAGE_CODE%}</h4>
-										</a>
-									</div>
-									<ul class="item-cards7-ic mb-0">
-										<li><a href="#"><span class=""><i class="icon icon-eye mr-1"></i> {{news.get_images.count}} Images</span></a>
-										</li>
-										<li><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>
-												{{news.user.get_company.location}}</a></li>
-										<li class="mb-md-0"><a href="#" class="icons"><i
-													class="icon icon-event text-muted mr-1"></i>{{news.timestamp}}</a></li>
-										<li class="mb-0"><a href="#" class="icons"><i
-													class="icon icon-phone text-muted mr-1"></i>{{news.user.get_company.phone_number}}</a>
-										</li>
-									</ul>			
-								</div>
-							</div>
-							<div class="card-footer">
-								<div class="footerimg d-flex mt-0 mb-0">
-									<div class="d-flex footerimg-l mb-0">
-										
-										<img src="{{news.user.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
-										<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">{{news.user.get_company.company_name}}<i
-												class="icon icon-check text-success fs-12 ml-1" data-toggle="tooltip"
-												data-placement="top" title="verified"></i></h5>
-									</div>		
-								</div>
-							</div>
-						</div>
-					</div>
-			{%endfor%}
-
-		</div>
-	</div>
-</section>
-<!--/Manufacturers Section-->
-
-
-
 <!--How It Works-->
 <section class="sptb">
 	<div class="container">
@@ -754,7 +693,8 @@
 	<div class="container">
 		<div class="section-title center-block text-center">
 			<h2>{% trans "Latest News" %}</h2>
-			<p>{% trans "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula" %}</p>
+			<p>{% trans "In Ethiopian Food, Beverage and Pharmaceutical Industry." %}</p>
+			
 		</div>
 		<div>
 			<div class="items-gallery">
@@ -762,128 +702,66 @@
 					<div class="items-blog-tab-heading row mb-0">
 						<div class="col-12">
 							<ul class="nav items-blog-tab-menu">
-								<li class=""><a href="#tab-1" class="active show" data-toggle="tab">{% trans "All" %}</a></li>
-								<li><a href="#tab-2" data-toggle="tab" class="">{% trans "Manufacturing" %}</a></li>
-								<li><a href="#tab-3" data-toggle="tab" class="">{% trans "Sales" %}</a></li>
-								<li><a href="#tab-4" data-toggle="tab" class="">{% trans "Suppliers" %}</a></li>
-								<li><a href="#tab-5" data-toggle="tab" class="">{% trans "Import & Export" %}</a></li>
+								<li class=""><a href="#catagoryFood" class="active show" data-toggle="tab">{% trans "All" %}</a></li>
+								{% for catagory in NEWS_CATAGORY %}
+								
+								<li><a href="#catagory{{catagory.0}}" data-toggle="tab" class=""> {{catagory.0}}</a></li>
+								{% endfor %}
+								
 							</ul>
 						</div>
 					</div>
 					<div class="tab-content">
-						<div class="tab-pane active" id="tab-1">
+						{% for catagory in NEWS_CATAGORY %}
+						<div class="tab-pane active" id="#catagory{{catagory.0}}">
+							<p>{{catagory.0}}</p>
 							<div class="row">
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-xl-0">
-										<div class="item-card8-img  br-tr-4 br-tl-4">
-											<img src="/static/frontpages/images/products/products/f2.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="mb-0">{% trans "Restaurants" %}</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">18 November 2019.</p>
-												<h4 class="font-weight-semibold">Food &amp; Bar Restaurant</h4>
-												<p class="mb-0">{% trans "Lorem ipsum dolor sit amet, quis nostrum exercitationem ullam corporis suscipit laboriosam" %}</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/female/19.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-														Elizabeth<i class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
+								{%for news in news_list%}
+									{% if news.catagory == catagory.0 %}
+									<div class="col-xl-4 col-lg-4 col-md-12">
+
+											<div class="card mb-xl-0">
+												<div class="item-card8-img  br-tr-4 br-tl-4">
+													<!-- <img src="/static/frontpages/images/products/products/f2.jpg" alt="img" -->
+													<a href=" {% url 'customer_news_detail' id=news.id %}"><img src="{{news.get_images.0.image.url}}" width="300px" height="250px" alt="img"
+													
+														class="cover-image">
+													</a>
 												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
+												<div class="item-card8-overlaytext">
+													<h6 class="mb-0">{% print_translated news.user.get_company.company_type news.user.get_company.company_type_am LANGUAGE_CODE %}</h6>
+												</div>
+												<div class="card-body">
+													<div class="item-card8-desc">
+														<p class="text-muted mb-2">{{news.timestamp}}</p>
+														<h4 class="font-weight-semibold" >{% print_translated news.title news.title_am LANGUAGE_CODE %}</h4>
+														<p class="mb-0" class="text-muted mb-2">{% print_translated news.description|truncatewords:10 news.description_am|truncatewords:10 LANGUAGE_CODE %}</p>
+													</div>
+												</div>
+												<div class="card-footer">
+													<div class="footerimg d-flex mt-0 mb-0">
+														<div class="d-flex footerimg-l mb-0">
+															<a href="#" ><img src="{{news.user.get_company.get_image}}" alt="image"
+																class="avatar brround  mr-2">
+															</a>
+															<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
+																{% print_translated news.user.get_company.company_name news.user.get_company.company_name_am LANGUAGE_CODE%} {{news.catagory}}<i class="icon icon-check text-success fs-12 ml-1"
+																	data-toggle="tooltip" data-placement="top" title=""
+																	data-original-title="verified"></i></h5>
+														</div>
+														
+													</div>
 												</div>
 											</div>
-										</div>
+										
 									</div>
-								</div>
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-xl-0">
-										<div class="item-card8-img  br-tr-4 br-tl-4">
-											<img src="/static/frontpages/images/products/products/h2.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-primary mb-0">{% trans "Real State" %}</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">22 November 2019.</p>
-												<h4 class="font-weight-semibold">RealEstate Company</h4>
-												<p class="mb-0">{% trans "Lorem ipsum dolor sit amet, quis nostrum exercitationem ullam corporis suscipit laboriosam" %}</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/female/1.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">Jodie
-														Melton<i class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-lg-0">
-										<div class="item-card8-img  br-tr-4 br-tl-4">
-											<img src="/static/frontpages/images/products/products/j1.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-info mb-0">{% trans "Beauty Spa" %}</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">16 Oct 2019.</p>
-												<h4 class="font-weight-semibold">Modern Beauty & Spa</h4>
-												<p class="mb-0">{% trans "Lorem ipsum dolor sit amet, quis nostrum exercitationem ullam corporis suscipit laboriosam" %}</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/male/19.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-														Rogelio Brown<i class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
+									{% endif %}
+								{%endfor%}
+								
 							</div>
 						</div>
-						<div class="tab-pane" id="tab-2">
+						{% endfor %}
+						<!-- <div class="tab-pane" id="tab-2">
 							<div class="row">
 								<div class="col-xl-4 col-lg-4 col-md-12">
 									<div class="card mb-xl-0">
@@ -1345,7 +1223,10 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
+					
+					
+					
 					</div>
 				</div>
 			</div>

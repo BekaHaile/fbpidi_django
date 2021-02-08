@@ -108,6 +108,9 @@ class CompanyEvent(models.Model):
     end_date = models.DateTimeField(verbose_name="Event end date")
     status = models.CharField(max_length=10, verbose_name="Tender status", choices=EVENT_STATUS)
 
+    class Meta:
+        ordering = ['-time_stamp',] 
+
 
 class EventParticipants(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -115,10 +118,13 @@ class EventParticipants(models.Model):
     patricipant_email = models.EmailField(max_length=200, blank=True)
     notifiy_in = models.IntegerField(default=1)
     notified = models.BooleanField(verbose_name="If notification is sent = True", default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = (('patricipant_email', 'event'))
+        ordering = ['-timestamp']
         
+    
 
 
 class Bank(models.Model):

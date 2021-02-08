@@ -2,12 +2,25 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractUser
 )
-from django.contrib.auth.models import Permission, Group
-
+from django.contrib.auth.models import User, Permission, Group
 from django.conf import settings
 from django.db.models.signals import post_save
 from company.models import Company, CompanyStaff
 
+#imports for authToken (the authentication for the rest api part), to generate tokens automatically
+# from django.conf import settings
+#from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token 
+
+# the method for generating tokens while users are created (not used for already created users)
+@receiver(post_save, sender = settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance = None, created = False, **kwargs):
+    if created:
+        Token.objects.create(user = instance)
+        
+
+    
 class User(AbstractUser):
     phone_number = models.CharField(max_length=20,blank=True,null=True)
     is_customer = models.BooleanField(default=False)  # if user is customer
@@ -17,16 +30,19 @@ class User(AbstractUser):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def get_company_name(self):
-        if self.is_company_admin:
+        if self.is_company_admin or self.is_superuser:
            return CompanyAdmin.objects.get(user = self).get_company_name()
         elif self.is_company_staff:
             return CompanyStaff.objects.get(user = self).get_company_name()
 
     def get_company(self):
+        
         if self.is_company_admin:
            return Company.objects.get(user = self)
         elif self.is_company_staff:
             return Company.objects.get(user = self)
+        elif self.is_superuser:
+            return Company.objects.get(company_name="FBPIDI")
 
 
 class Customer(models.Model):
@@ -42,6 +58,7 @@ class Customer(models.Model):
     bio = models.TextField()
     profile_image = models.ImageField(default="")
     time_stamp = models.DateTimeField(auto_now_add=True)
+    
 
     def __str__(self):
         return self.user.username

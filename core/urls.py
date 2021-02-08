@@ -6,6 +6,7 @@ from core.views import (IndexView,ProfileView,ProductDetailView,ProductByCategor
 from collaborations.views import BlogList,BlogDetail,FaqList
 from accounts.views import CustomerSignUpView
 from product.views import AddToCartView,CartSummary,DecrementFromCart
+
 # busines-meditation/,tips/,orders
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
@@ -19,8 +20,7 @@ urlpatterns = [
     path("cart_summary/",CartSummary.as_view(),name="cart_summary"),
     path("decrement_cart/<id>/",DecrementFromCart.as_view(),name="decrement_cart"),
     path("mydash/",ProfileView.as_view(),name="mydash"),
-    path("",include("accounts.urls")),
-
+    path("", include("accounts.urls")),
 
 
     # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
@@ -29,6 +29,8 @@ urlpatterns = [
     # path("vacancy-list/",TemplateView.as_view(template_name="frontpages/vacancy_list.html"),name="tips"),
     
     path("accounts/",include("django.contrib.auth.urls")), 
+    path("api-accounts/", include("accounts.api.api_urls")), # api login, logout ...
+
     path("test/",TemplateView.as_view(template_name="frontpages/date_piker.html"),name="Test"),
     path("setting/",TemplateView.as_view(template_name="frontpages/settings.html"),name="setting"),
     # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),

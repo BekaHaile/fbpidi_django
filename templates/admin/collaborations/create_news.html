@@ -155,6 +155,25 @@
 								</div>
                             </div>
 
+                            <div class="form-group ">
+                                <div style="width: 100%;">
+                                    <div class="col-lg-9" style="width: 95%; display: inline-block;">
+                                        <label class="col-form-label col-lg-8">News Catagory  *</label>
+                                        <select required name="catagory"  class="form-control form-control-uniform" >
+                                            {% for catagory in form.NEWS_CATAGORY %}
+                                                <option  value="{{catagory.0}}">{{ catagory.0 }}</option>
+                                                <div class="list-icons" style="width: 3%; display: inline-block;" >
+                                                    <div class="dropdown">
+                                                        <a href="#" class="list-icons-item" data-toggle="dropdown">	</a>
+                                                    </div>
+                                                </div>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
                             <!-- <div class="form-group row">
                                 <label class="col-form-label col-lg-2">Select Images</label>
                                 <div class="col-lg-10">
