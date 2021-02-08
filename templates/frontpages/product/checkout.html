@@ -1,0 +1,183 @@
+{%extends 'frontpages/layout.html'%}
+{%load crispy_forms_tags%}
+{%block content%}
+		<!--Sliders Section-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white">
+							<h1 class="">Checkout Page</h1>
+							<ol class="breadcrumb text-center">
+								<li class="breadcrumb-item"><a href="{%url 'index'%}">Home</a></li>
+								<li class="breadcrumb-item"><a href="#">Pages</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">Checkout</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Sliders Section-->
+
+		<!--Login-Section-->
+		<section class="sptb">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8 col-xl-8 col-md-8 d-block">
+						<div class="single-page  w-100  p-0">
+							<div class="wrapper wrapper2">
+								<div class="card-header">
+									<h3>Shipping Information</h3>
+								</div>
+								<form id="login" class="card-body" tabindex="500">
+									 {%csrf_token%}
+									 <p id="test"></p>
+									 <div class="form-group ">
+										 <div class="row">
+											<div class="col-lg-6 col-md-6">
+												{{form.first_name}}
+											</div>
+											<div class="col-lg-6 col-md-6">
+												{{form.last_name}}
+											</div>
+										 </div>
+										 <br>
+										 <div class="row">
+											<div class="col-lg-6 col-md-6">
+												{{form.email}}
+											</div>
+											<div class="col-lg-6 col-md-6">
+												{{form.phone_no}}
+											</div>
+										 </div>
+										 <br>
+										 <div class="row">
+											<div class="col-lg-6 col-md-6">
+												{{form.city}}
+											</div>
+											<div class="col-lg-6 col-md-6">
+												{{form.company}}
+											</div>
+										 </div>
+										 <br>
+										 <div class="row">
+											<div class="col-lg-6 col-md-6">
+												{{form.street_address}}
+											</div>
+											<div class="col-lg-6 col-md-6">
+												{{form.home_address}}
+											</div>
+										 </div>
+										
+									 </div>
+									<div class="submit">
+										<div class="row">
+											<div class="col-6">
+												<a type="submit" class="btn btn-primary btn-block" href="{% url 'index' %}" >CONTINUE SHOPPING</a>
+											</div>
+											<div class="col-6">
+												<input type="submit" class="btn btn-secondary btn-block" href="{% url 'checkout' %}" value="COMPLETE ORDER" />
+											</div>
+										</div>
+										
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-xl-4 col-md-4 d-block">
+						<div class="single-page  w-100  p-0">
+							<div class="wrapper wrapper2">
+								<div class="card-header row">
+									<div class="col-10"><h6 class="card-title pull-left text-dark">Items In Your Cart</h6></div>
+									<div class="col-2"><h6  class="badge badge-primary">4</h6></div>									
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-6">
+											<h6  class="pull-left text text-primary">Product</h6>
+										</div>
+										<div class="col-6">
+											<h6 class="pull-right text text-primary">Price</h6>
+										</div>
+									</div>
+									{%for product in order.products.all%}
+									<div class="row">
+										<div class="col-6">
+											<h6 class="pull-left text text-dark">{{product.quantity}} X {{product.product.name}}</h6>
+										</div>
+										<div class="col-6">
+											<h6 class="pull-right text text-dark">ETB {{product.get_total_item_price}}</h6>
+										</div>
+									</div>
+										
+									{%endfor%}
+									<hr>
+									<div class="row">
+										<div class="col-6">
+											<h6 class="pull-left text text-primary">Sub Total</h6>
+										</div>
+										<div class="col-6">
+											<h6 class="pull-right text text-dark">ETB {{order.get_total_price}}</h6>
+										</div>
+									</div>
+									<hr>
+									<!-- <div class="row">
+										<div class="col-6">
+											<h6 class="pull-left text text-primary">Shipping</h6>
+										</div>
+										<div class="col-6">
+											<h6 class="pull-right text text-dark">ETB 100</h6>
+										</div>
+									</div>
+									<hr> -->
+									<div class="row">
+										<div class="col-6">
+											<h6 class="pull-left text text-primary">Total</h6>
+										</div>
+										<div class="col-6">
+											<h6 class="pull-right text text-dark">ETB {{order.get_total_price}}</h6>
+										</div>
+									</div>
+										
+								</div>
+								 
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Login-Section-->
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Subscribe To Our Newsletter</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+						<div class="input-group sub-input mt-0">
+							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Newsletter-->
+		<script>
+			$(document).ready(function(){
+				$("#id_first_name").val("{{user.first_name|title}}");
+				$("#id_last_name").val("{{user.last_name|title}}");
+				$("#id_email").val("{{user.email}}");
+			});
+		</script>
+{%endblock%}

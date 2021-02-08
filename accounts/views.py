@@ -220,9 +220,8 @@ class GroupList(LoginRequiredMixin,View):
 
 class GroupView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        obj = Group.objects.all()
         permissions = Permission.objects.all()
-        return render(self.request,"admin/pages/group_form.html",{'permisions':permissions,'objs':obj})
+        return render(self.request,"admin/pages/group_form.html",{'permisions':permissions})
 
     def post(self,*args,**kwargs):
         permission_list = []
