@@ -91,6 +91,14 @@
 											</div>
 
 											<div class="form-group">
+												<label class="form-label">Experinace (in years) *</label>
+												<div class="input-group">
+													{{job.experinace}}
+													
+												</div>
+											</div>
+
+											<div class="form-group">
 												<label class="form-label">Introduce your self *</label>
 												<div class="input-group">
 													{{job.bio}}
@@ -167,6 +175,14 @@
 		$('#summernote').summernote();
 		$('.summernote').summernote();
 	});
+
+	function isNumber(kkk)
+  {
+    
+     $("#"+kkk).val($("#"+kkk).val().replace(/[^\d.]/g, ''));  
+  }
+
+
 </script>
 
 {%endblock%}

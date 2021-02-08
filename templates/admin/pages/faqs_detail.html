@@ -22,7 +22,7 @@
 					{{form.errors}}
 					{%csrf_token%}
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Questions (English) *</label>
+						<label class="col-form-label col-lg-3">Faq Questions (English) *</label>
 						<div class="col-lg-9">
 							<input requierd type="text" name="questions" class="form-control" value="{{faq.questions}} " id="">
 						 
@@ -30,14 +30,14 @@
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Questions (Amharic) *</label>
+						<label class="col-form-label col-lg-3">Faq Questions (Amharic) *</label>
 							<div class="col-lg-9">
 							<input requierd type="text" name="questions_am" class="form-control" value="{{faq.questions_am}}" id="">
 						</div>
 							
 					</div> 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Answer (English)*</label>
+						<label class="col-form-label col-lg-3">Faq Answer (English)*</label>
 						
 							<div class="col-lg-9">
 							<textarea requierd class="summernote" name="answers" >{{faq.answers}}</textarea>
@@ -46,7 +46,7 @@
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Answer (Amharic)*</label>
+						<label class="col-form-label col-lg-3">Faq Answer (Amharic)*</label>
 						
 							<div class="col-lg-9">
 								<textarea requierd class="summernote" name="answers_am" >{{faq.answers_am}}</textarea>

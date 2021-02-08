@@ -4,9 +4,9 @@ from .views import (BlogList,BlogDetail,FaqList,
                     PollIndex, PollDetail, VacancyMoreDetail,CreateBlogComment, SearchBlog,
                     CustomerTenderList, CustomerTenderDetail, CreateApplication, VacancyList,
                     CategoryBasedSearch, CreateForumQuestion , ListForumQuestions,ForumQuestionsDetail,
-                    CreateCommentReplay,ListAnnouncement,EditCommentForum,EditForumQuestions,
+                    CreateCommentReplay,EditCommentForum,EditForumQuestions,
                     ApplicantListDetail,
-
+                    AnnouncementDetail,ListAnnouncement,
                     EditResearch,ListResearch,ResearchDetail,CreateResearch,SearchResearch,
                     ResearchCategorySearch,
 
@@ -14,7 +14,7 @@ from .views import (BlogList,BlogDetail,FaqList,
                     CustomerNewsDetail,CustomerEventList, CustomerEventDetail, EventParticipation
                     )
 
-from .ProjectViews import (EditProject,ListProject,ProjectDetail,CreateProject
+from .Views.projects import (EditProject,ListProject,ProjectDetail,CreateProject
                             ,SearchProject,ProjectCategorySearch,)  
                     
 
@@ -46,6 +46,8 @@ urlpatterns = [
     path("forum-detail/<id>",ForumQuestionsDetail.as_view(),name="forum_detail"),
 
     path("announcement-list/",ListAnnouncement.as_view(),name="announcement_list"),
+    path("announcement-detail/<id>/",AnnouncementDetail.as_view(),name="announcement_detail"),
+    
     path("customer-tender_detail/<id>/", CustomerTenderDetail.as_view(), name = "customer_tender_detail"),
     path("tender-application/<id>/", ApplyForTender.as_view(), name= "tender_application"),
     path("download/<id>/", pdf_download, name = "download"),

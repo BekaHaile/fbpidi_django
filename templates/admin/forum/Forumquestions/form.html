@@ -4,10 +4,10 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
-{%block pagename%}Edit Job Cateory{%endblock%}
+{%block pagename%}Create Forum Question{%endblock%}
 {%block content%}
 
-<!-- Content area -->
+<!-- Content area --> 
 <div class="content">
 
 	
@@ -17,35 +17,42 @@
 
 			<form action="" method="POST" enctype="multipart/form-data">
 				<fieldset class="mb-3 ml-3 mr-3">
-					<legend class="text-uppercase font-size-sm font-weight-bold">Edit Job Category</legend>
+					<legend class="text-uppercase font-size-sm font-weight-bold">Forum Question</legend>
 					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
-					{%if form.errors%}
+					{%if forms.errors%}
 					<div class="alert alert-danger" role="alert">
-					  {{form.errors}}
+					  {{forms.errors}}
 					</div>
 					{% endif %}
+					
 					{%csrf_token%}
 
+
+				
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Job Cateory (English)*</label>
-						
-							
-							<div class="col-lg-9">
-							<input requierd type="text" name="categoryName" class="form-control" value="{{form.categoryName}}">
-							</div>
+						<label class="col-form-label col-lg-3">Forum Title *</label>
+						<div class="col-lg-9">
+							{{forms.title}}
+						</div>
 					</div>
 
 					<div class="form-group row">
-				    <label class="col-form-label col-lg-3" >Job Cateory (Amharic)* </label>
-						<div class="col-lg-9" name="categoryName_am" value="True">
-							
-							<input requierd type="text" name="categoryName_am" class="form-control" value="{{form.categoryName_am}}">
-				  		</div>
-				  	</div>
-				  		
+						<label class="col-form-label col-lg-3">Forum Description *</label>
+						<div class="col-lg-9">
+							{{forms.description}}
+						</div>
+					</div>
+
+					<div class="form-group row">
+							<label class="col-form-label col-lg-4">Any attachemnt you want to use </label>
+							<div class="col-lg-10">
+									{{forms.attachements}}
+								
+							</div>
+					</div>
 					
 
-						
+					
 				</fieldset>
 
 				<div class="text-right">

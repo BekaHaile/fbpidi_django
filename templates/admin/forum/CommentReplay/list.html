@@ -1,4 +1,4 @@
-{%extends 'admin/base_site.html'%}
+               {%extends 'admin/base_site.html'%}
 {% block extrastyle %}
 
 <!-- Theme JS files -->
@@ -8,7 +8,7 @@
 <!-- /theme JS files -->
 
 {% endblock %}
-{%block pagename%}Research & Project Category List{%endblock%}
+{%block pagename%}Comment Replay List{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -22,33 +22,42 @@
 	
 	<div class="card">
 		<div class="card-header header-elements-inline">
-			<h5 class="card-title">Research & Project Category</h5>
+			<h5 class="card-title">Comment Replay</h5>
 			<div class="header-elements">
-				<div class="list-icons">
-					{% if perms.collaborations.add_researchprojectcategory %} 
-					<a href="{% url 'admin:researchprojectcategory_form'%}" class="btn bg-teal btn-sm rounded-round"><i
-							class="icon-add mr-2"></i>Add New Research Project Category</a>
-							{% endif%}
-				</div>
 			</div>
 		</div>
 
 		<table class="table datatable-show-all">
 			<thead>
+
 				<tr>
-					<th>Cateoryname</th>
-					<th>Detail</th>
-					<th>TimeStamp</th>
+					<th>comment</th>
+					<th>Comment Replay</th>
+					<th>user</th>
+					<th>attachements</th>
+					<th>timestamp</th>
 					
 					<th class="text-center">Actions</th>
+
 				</tr>
 			</thead> 
 			<tbody>
 				{%for researchprojectcategory in researchprojectcategorys%}
 				<tr>
 					
-					<td>{{researchprojectcategory.cateoryname|truncatewords:20}}</td>
-					<td>{{researchprojectcategory.detail|truncatewords:20}}</td>
+					<td>{{researchprojectcategory.comment|safe|truncatewords:20}}</td>
+					<td>{{researchprojectcategory.content|truncatewords:20}}</td>
+					<td>{{researchprojectcategory.user}}</td>
+					<td>
+						{%if researchprojectcategory.attachements%}
+						 <a href="{{researchprojectcategory.attachements.url}}" download="{{researchprojectcategory.attachements.url}}"> 
+						 <b>Attachment</b>
+						 </a>
+						 {%else%}
+						 <b>No Attachment</b>
+						 {%endif%}
+                                   		
+                    </td>
 					<td>{{researchprojectcategory.timestamp}}</td>
 					
 					<td class="text-center">
@@ -60,11 +69,11 @@
 									
 								<div class="dropdown-menu dropdown-menu-right">
 									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
-									<a href="{%url 'admin:delete' model_name='ResearchProjectCategory' id=researchprojectcategory.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Category</a>
+									<a href="{%url 'admin:delete' model_name='CommentReplayAdmin' id=researchprojectcategory.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Comment Replay</a>
 									{%endif%}
 									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
-									<a href="{%url 'admin:researchprojectcategory_detail' model_name='ResearchProjectCategory' id=researchprojectcategory.id%}" class="dropdown-item"  >
-										<i class="icon-pencil"></i>Edit Category</a>
+									<a href="{%url 'admin:comment_replay_detail' model_name='CommentReplay' id=researchprojectcategory.id%}" class="dropdown-item"  >
+										<i class="icon-pencil"></i>Edit Comment Replay</a>
 										{%endif%}
 								</div>
 							</div>

@@ -25,8 +25,9 @@
 			<h5 class="card-title">Projects</h5>
 			<div class="header-elements">
 				<div class="list-icons">
+					{% if perms.collaborations.add_project %} 
 					<a href="{% url 'admin:project_form'%}" class="btn bg-teal btn-sm rounded-round"><i
-							class="icon-add mr-2"></i>Add New Project</a>
+							class="icon-add mr-2"></i>Add New Project</a>{%endif%}
 				</div>
 			</div>
 		</div>
@@ -63,13 +64,17 @@
 								</a>
 									
 								<div class="dropdown-menu dropdown-menu-right">
-									<a href="{%url 'admin:delete' model_name='Project' id=research.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Project</a>
+									{% if user.is_superuser or user.get_company == research.user.get_company %}
+									<a href="{%url 'admin:delete' model_name='Project' id=research.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Project</a>{%endif%}
 									
+									{% if user.is_superuser or user.get_company == research.user.get_company %}
 									<a href="{%url 'admin:project_view' id=research.id%}" class="dropdown-item"  >
-										<i class="icon-eye"></i>View Project</a>
+										<i class="icon-eye"></i>View Project</a>{%endif%}
 
+
+									{% if user.is_superuser or user.get_company == research.user.get_company %}
 									<a href="{%url 'admin:project_detail'  model_name='Project' id=research.id%}" class="dropdown-item"  >
-										<i class="icon-pencil"></i>Edit Project</a>
+										<i class="icon-pencil"></i>Edit Project</a>{%endif%}
 								</div>
 							</div>
 						</div>

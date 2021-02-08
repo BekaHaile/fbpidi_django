@@ -7,8 +7,7 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Announcement List</h1>
-							
+							<h1 class="">Announcement</h1>
 						</div>
 					</div>
 				</div>
@@ -22,7 +21,6 @@
 				<div class="row">
 					<!--Left Side Content-->
 					<div class="col-xl-4 col-lg-4 col-md-12">
-						
 						<div class="card">
 							<div class="card-header">
                                     <h3 class="card-title">Announcement By companys </h3> 
@@ -43,19 +41,14 @@
 								</div>
 							</div>
                         </div>
-						
 					</div>
+						
 					<!--/Left Side Content-->
 
-                    
-
-
+					<!--Add Lists-->
 					<div class="col-xl-8 col-lg-8 col-md-12">
-						<!--Add Lists-->
-												
 						<div class="row">
-						
-							{%for post in Announcements%}
+						 
 							<div class="card">
 							<div class="card-body">
 								<div class="item-det mb-4">
@@ -111,34 +104,22 @@
                                     </div>
                                     <div class="media-body">
 										<p class="font-13  mb-2 mt-2">
-                                           {{post.containt|safe|truncatewords:20}}
+                                           {{post.containt|safe}}
                                         </p>
-                                        <a href="{% url 'announcement_detail' id=post.id %}" class="btn btn-secondary btn-sm">Read More</a>
 
 
 								</div>
 							</div>
-						</div>
-						{%endfor%}
+						</div> 
 						<!------------------------------------------------------>
 						
 							<!----------------------------------------->
 
 
 						</div>
-						<div class="d-sm-flex">
-							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>
-							<ul class="pagination mb-lg-0 mb-5 ml-auto">
-								<li class="page-item page-prev disabled">
-									<a class="page-link" href="#" tabindex="-1">Prev</a>
-								</li>
-								<li class="page-item active"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
-								<li class="page-item page-next">
-									<a class="page-link" href="#">Next</a>
-								</li>
-							</ul>
+
+						
+							
 						</div>
 					</div>
 					<!--/Add Lists-->
@@ -170,16 +151,70 @@
 		</section>
 		<!--/Newsletter-->
 
-
-		<!-- Home Video Modal -->
-		<div class="modal fade" id="homeVideo" tabindex="-1" role="dialog">
-			<div class="modal-dialog modal-lg" role="document">
+		<!-- Message Modal -->
+		<div class="modal fade" id="Comment" tabindex="-1" role="dialog"  aria-hidden="true">
+			<div class="modal-dialog" role="document">
 				<div class="modal-content">
-					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="pauseVid()"><i class="fa fa-times" aria-hidden="true"></i></button>
-					<div class="embed-responsive embed-responsive-16by9">
-						<video id="gossVideo" class="embed-responsive-item" controls="controls">
-							<source src="/static/frontpages/video/300052515.mp4" type="video/mp4">
-						</video>
+					<div class="modal-header">
+						<h5 class="modal-title">Leave a Comment</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<input type="text" class="form-control" id="commet-name" placeholder="Your Name">
+						</div>
+						<div class="form-group">
+							<input type="email" class="form-control" id="commet-email" placeholder="Email Address">
+						</div>
+						<div class="form-group mb-0">
+							<textarea class="form-control" name="example-textarea-input" rows="6" placeholder="Message"></textarea>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+						<button type="button" class="btn btn-success">Send</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Report Modal -->
+		<div class="modal fade" id="report" tabindex="-1" role="dialog"  aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="examplereportLongTitle">Report Abuse</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<input type="text" class="form-control" id="report-name" placeholder="Enter url">
+						</div>
+						<div class="form-group">
+							<select name="country" id="select-countries" class="form-control custom-select select2-no-search">
+								<option value="1" selected>Categories</option>
+								<option value="2">Spam</option>
+								<option value="3">Identity Theft</option>
+								<option value="4">Online Shopping Fraud</option>
+								<option value="5">Service Providers</option>
+								<option value="6">Phishing</option>
+								<option value="7">Spyware</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="email" class="form-control" id="report-email" placeholder="Email Address">
+						</div>
+						<div class="form-group mb-0">
+							<textarea class="form-control" name="example-textarea-input" rows="6" placeholder="Message"></textarea>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+						<button type="button" class="btn btn-success">Submit</button>
 					</div>
 				</div>
 			</div>

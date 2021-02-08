@@ -189,8 +189,8 @@
 							{%endif%}
 						</li>
 						<li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link"><i class="fas fa-heart"></i> 
-								<span>Project</span></a>
+							<a href="#" class="nav-link"><i>R&D</i> 
+								<span>Project & Research</span></a>
 								<ul class="nav nav-group-sub" data-submenu-title="Form components">
 									<li class="nav-item">
 									<a href="{%url 'admin:project_list' %}" class="nav-link"><i >R</i>
@@ -198,25 +198,6 @@
 									</a>
 									</li>
 								</ul>
-								<ul class="nav nav-group-sub" data-submenu-title="Form components">
-									<li class="nav-item">
-									<a href="{%url 'admin:pedning_project_list' %}" class="nav-link"><i class="icon-clock">P</i>
-										<span>Pending</span>
-									</a>
-									</li>
-								</ul>
-								<ul class="nav nav-group-sub" data-submenu-title="Form components">
-									<li class="nav-item">
-									<a href="{%url 'admin:researchprojectcategory_list' %}" class="nav-link"><i class="fa fa-list-alt"></i>
-										<span>ResearchCategory</span>
-									</a>
-									</li>
-								</ul>
-
-						</li>
-						<li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link"><i class="fas fa-love">R&D</i> 
-								<span>Research</span></a>
 								<ul class="nav nav-group-sub" data-submenu-title="Form components">
 									<li class="nav-item">
 									<a href="{%url 'admin:research_list' %}" class="nav-link"><i >R</i>
@@ -227,19 +208,55 @@
 								<ul class="nav nav-group-sub" data-submenu-title="Form components">
 									<li class="nav-item">
 									<a href="{%url 'admin:pedning_research_list' %}" class="nav-link"><i class="icon-clock">P</i>
-										<span>Pending</span>
+										<span>Pending Research</span>
+									</a>
+									</li>
+								</ul>
+								<ul class="nav nav-group-sub" data-submenu-title="Form components">
+									<li class="nav-item">
+									<a href="{%url 'admin:pedning_project_list' %}" class="nav-link"><i class="icon-clock">P</i>
+										<span>Pending Project</span>
 									</a>
 									</li>
 								</ul>
 								<ul class="nav nav-group-sub" data-submenu-title="Form components">
 									<li class="nav-item">
 									<a href="{%url 'admin:researchprojectcategory_list' %}" class="nav-link"><i class="fa fa-list-alt"></i>
-										<span>ResearchCategory</span>
+										<span>Research & Project Category</span>
 									</a>
 									</li>
 								</ul>
 
+						</li> 
+
+						{% if user.is_superuser %}
+						<li class="nav-item nav-item-submenu">
+							<a href="" class="nav-link"><i class="icon-heart"></i> <span>Forums</span></a>
+							<ul class="nav nav-group-sub" data-submenu-title="Form components">
+								
+								<li class="nav-item">
+									<a href="{%url 'admin:forum_list'%}" class="nav-link">
+										<i class="fas fa-flask"></i>
+										<span>Forum Questions</span>
+									</a>
+								</li>
+
+								<li class="nav-item">
+									<a href="{%url 'admin:forum_comment_list'%}" class="nav-link">
+										<i class="fas fa-align-left-o"></i>
+										<span>Forum Comments</span>
+									</a>
+								</li>
+
+								<li class="nav-item">
+									<a href="{%url 'admin:comment_replay_list'%}" class="nav-link">
+										<i class="fa fa-newspaper-o"></i>
+										<span>Comment Replays</span>
+									</a>
+								</li>
+							</ul>
 						</li>
+						{%endif%}
 						<li class="nav-item nav-item-submenu">
 							<a href="#" class="nav-link"><i class="icon-collaboration"></i> <span>Collaborations</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
@@ -269,7 +286,7 @@
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="{%url 'admin:admin_jobcategoty' %}" class="nav-link"><i class="fa fa-list-alt"></i>
+									<a href="{%url 'admin:admin_JobCategory' %}" class="nav-link"><i class="fa fa-list-alt"></i>
 										<span>Job category</span></a>
 								</li>
 								<li class="nav-item">
@@ -278,7 +295,7 @@
 								</li>
 								<li class="nav-item">
 
-									<a href="{%url 'admin:super_Job_list' %}" class="nav-link"><i class="icon-eye"></i>
+									<a href="{%url 'admin:Job_list' %}" class="nav-link"><i class="icon-eye"></i>
 										<span>Vacancy</span></a>
               					</li>
             				<li class="nav-item">
@@ -459,5 +476,11 @@
 </body>
 
 <!-- /layout_fixed_sidebar_custom.html , Fri, 28 Dec 2018 10:49:58 GMT -->
-
+<script >
+	function isNumber(kkk)
+  {
+    
+     $("#"+kkk).val($("#"+kkk).val().replace(/[^\d.]/g, ''));  
+  }
+</script>
 </html>

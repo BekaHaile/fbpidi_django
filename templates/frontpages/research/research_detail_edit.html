@@ -138,7 +138,7 @@
 									</div>
 									<div class="card-body">
 										<div class="form-group">
-											<label class="form-label text-dark">Title *</label>
+											<label class="form-label text-dark">Research Title *</label>
 											
 											<div class="col-lg-12">
 												
@@ -148,7 +148,7 @@
 										</div>
 
 									<div class="form-group">
-										<label class="col-form-label "> Status *</label>
+										<label class="col-form-label ">Research Status *</label>
 										<div class="col-lg-12">
 										<select required name="status" class="form-control form-control-uniform" data-fouc>
 											<option value="{{form.status}}">{{form.status}}</option> 
@@ -164,7 +164,7 @@
 								</div>
 
 										<div class="form-group row">
-										<label class="col-form-label text-dark">Category Name *</label>
+										<label class="col-form-label text-dark">Research Category Name *</label>
 										<div class="col-lg-12">
 											<select required name="category" class="form-control form-control-uniform" data-fouc>
 												<option value="{{form.category.id}}">{{form.category}}</option>
@@ -180,7 +180,7 @@
 									</div>
 																					
 										<div class="form-group">
-											<label class="form-label text-dark">Description *</label>
+											<label class="form-label text-dark">Research Description *</label>
 
 											<div class="col-lg-12">
 												
@@ -191,7 +191,7 @@
 										</div>
 
 										<div class="form-group">
-											<label class="form-label text-dark">Detail *</label>
+											<label class="form-label text-dark">Research Detail *</label>
 
 											<div class="col-lg-12">
 											<textarea required class="summernote" name="detail" >
@@ -213,9 +213,9 @@
 										</div>
 										<div class="form-group">
 											{%if form.attachements%}
-											<label class="form-label">Change your attchment (if you have one)</label>
+											<label class="form-label">Change your attachment (if you have one)</label>
 											{%else%}
-											<label class="form-label">Upload your attchment (if you have one)</label>
+											<label class="form-label">Upload your attachment (if you have one)</label>
 											{%endif%}
 											<div class="col-lg-12">
 													{{form.attachements}}

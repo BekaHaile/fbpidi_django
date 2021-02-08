@@ -9,7 +9,7 @@ from django.db.models.signals import post_save
 from company.models import Company, CompanyStaff
 
 class User(AbstractUser):
-    phone_number = models.CharField(max_length=20,blank=True,null=True)
+    phone_number = models.CharField(max_length=20,blank=True,null=True) 
     is_customer = models.BooleanField(default=False)  # if user is customer
     is_company_admin = models.BooleanField(default=False)  # if user is company admin
     is_company_staff = models.BooleanField(default=False) # if user is company staff

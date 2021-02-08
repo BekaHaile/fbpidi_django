@@ -28,7 +28,7 @@
 					{% endif %}
 					{%csrf_token%}
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Title *</label>
+						<label class="col-form-label col-lg-3">Project Title *</label>
 						<div class="col-lg-9">
 							<input type="text" name="title" class="form-control" value="{{forms.title}} " id="">
 						 
@@ -37,7 +37,7 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3"> Status *</label>
+						<label class="col-form-label col-lg-3">Project Status *</label>
 						<div class="col-lg-9">
 						<select required name="status" class="form-control form-control-uniform" data-fouc>
 							<option value="{{forms.status}}">{{forms.status}}</option>
@@ -54,7 +54,7 @@
 					</div>
 
 					<div class="form-group row">
-							<label class="col-form-label col-lg-3">Category Name *</label>
+							<label class="col-form-label col-lg-3">Project Category Name *</label>
 							<div class="col-lg-9">
 								<select required name="category" class="form-control form-control-uniform" data-fouc>
 									<option value="{{forms.category.id}}">{{forms.category}}</option>
@@ -70,7 +70,7 @@
 						</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3"> Description*</label>
+						<label class="col-form-label col-lg-3">Project Description*</label>
 						<div class="col-lg-9">
 								<textarea  required class="summernote" name="description" >{{forms.description}}</textarea>
 						</div>
@@ -78,7 +78,7 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3"> detail *</label>
+						<label class="col-form-label col-lg-3">Project Detail *</label>
 						<div class="col-lg-9">
 								<textarea required class="summernote" name="detail" >{{forms.detail}}</textarea>
 						</div>

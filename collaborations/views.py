@@ -9,7 +9,7 @@ from collaborations.forms import FaqsForm
 from django.shortcuts import render, redirect, reverse
 
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
-from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategoty, News, NewsImages
+from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategory, News, NewsImages
 									 #redirect with context
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
@@ -48,7 +48,7 @@ from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
 								 )
 
 from collaborations.models import ( Blog, BlogComment,Faqs,
-									Vacancy,JobApplication, JobCategoty,
+									Vacancy,JobApplication, JobCategory,
 									ForumQuestion, ForumComments, CommentReplay,
 									Announcement,AnnouncementImages,
 									Research,
@@ -116,7 +116,7 @@ class ListResearchAdmin(LoginRequiredMixin ,View):
 class ListPendingResearchAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.filter(accepted="PENDING")
-		template_name = "admin/ResearchProject/research_list.html"
+		template_name = "admin/ResearchProject/pending_list.html"
 		context = {'researchs':form}
 		return render(self.request, template_name,context)
 
@@ -318,6 +318,15 @@ class CreateResearch(LoginRequiredMixin,View):
 from company.forms import EventParticipantForm
 
 # --------------- Announcement
+
+
+class AnnouncementDetail(View):
+	def get(self,*args,**kwargs):
+		form = Announcement.objects.get(id=self.kwargs['id'])
+		template_name="frontpages/announcement/announcement_detail.html"
+		context={'post':form}
+		return render(self.request, template_name,context)
+
 class ListAnnouncement(View):
 	def get(self,*args,**kwargs):
 		form = Announcement.objects.all()
@@ -325,7 +334,14 @@ class ListAnnouncement(View):
 		context={'Announcements':form}
 		return render(self.request, template_name,context)
 
-class AnnouncementDetail(View):
+class ListAnnouncementAdmin(LoginRequiredMixin,View):
+	def get(self,*args,**kwargs):
+		form = Announcement.objects.all()
+		template_name="admin/announcement/announcement_list.html"
+		context={'Announcements':form}
+		return render(self.request, template_name,context)
+
+class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = Announcement.objects.get(id=self.kwargs['id'])
 		template_name="admin/announcement/announcement_detail.html"
@@ -356,14 +372,8 @@ class AnnouncementDetail(View):
 		return render(self.request, template_name,context)
 
 
-class ListAnnouncementAdmin(View):
-	def get(self,*args,**kwargs):
-		form = Announcement.objects.all()
-		template_name="admin/announcement/announcement_list.html"
-		context={'Announcements':form}
-		return render(self.request, template_name,context)
 
-class CreatAnnouncement(LoginRequiredMixin,View):
+class CreatAnnouncementAdmin(LoginRequiredMixin,View):
 	def company_admin(self,*args,**kwarges):
 		force = Company.objects.get(user=self.request.user)
 		print("----------------"+str(force))
@@ -536,6 +546,9 @@ class ForumQuestionsDetail(View):
 			forum = form.save(commit=False)
 			question = ForumQuestion.objects.get(id=self.kwargs['id'])
 			forum.forum_question = question
+			print(form.cleaned_data.get('attachements'))
+			if form.cleaned_data.get('attachements'):
+				forum.attachements = form.cleaned_data.get('attachements')
 			forum.user = self.request.user
 			forum.save()
 			return redirect(reverse("forum_detail",kwargs={'id':question.id}))
@@ -576,10 +589,20 @@ class CreatBlog(LoginRequiredMixin,View):
 class AdminBlogList(LoginRequiredMixin,View):
 	template_name="admin/pages/blog_list.html"
 	def get(self,*args,**kwargs):
-		blogs = Blog.objects.all()
-		template_name="admin/pages/blog_list.html"
-		context={'blogs':blogs}
-		return render(self.request, template_name,context)
+		if self.request.user.is_superuser:
+			blogs = Blog.objects.all()
+			template_name="admin/pages/blog_list.html"
+			context={'blogs':blogs}
+			return render(self.request, template_name,context)
+		else:
+			blogs = Blog.objects.all()
+			filterdblogs = []
+			for blog in blogs:
+				if self.request.user.get_company == blog.user.get_company:
+					filterdblogs.append(blog)
+			template_name="admin/pages/blog_list.html"
+			context={'blogs':filterdblogs}
+			return render(self.request, template_name,context)
 		
 class BlogView(LoginRequiredMixin,View):
 	template_name="admin/pages/blog_list.html"
@@ -729,8 +752,8 @@ class ApplicantListDetail(LoginRequiredMixin,View):
 class JobCategoryList(LoginRequiredMixin,View):
 	
 	def get(self,*args,**kwargs):
-		jobCategoty=JobCategoty.objects.all()
-		context = {'forms':jobCategoty}
+		jobCategory=JobCategory.objects.all()
+		context = {'forms':jobCategory}
 		template_name = "admin/pages/jobCategory_list.html"
 		return render(self.request, template_name,context)
 
@@ -743,6 +766,7 @@ class JobcategoryFormView(LoginRequiredMixin,View):
 		form = JobCategoryForm(self.request.POST)
 		if form.is_valid():
 			catagory = form.save(commit=False)
+			catagory.user = self.request.user
 			catagory.save()
 			messages.success(self.request, "New Job category Added Successfully")
 			form = JobCategoryForm()
@@ -751,21 +775,21 @@ class JobcategoryFormView(LoginRequiredMixin,View):
 
 class JobCategoryDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
-		form = JobCategoty.objects.get(id=self.kwargs['id'])
+		form = JobCategory.objects.get(id=self.kwargs['id'])
 		#print(str(self.kwargs['id'])+"-----------------"+str(form.categoryName))
 		context = {'form':form}
 		return render(self.request,"admin/pages/jobCategory_detail.html",context)
 	def post(self,*args,**kwarges):
 		form = JobCategoryForm(self.request.POST)
 		if form.is_valid():
-			category = JobCategoty.objects.get(id=self.kwargs['id'])
+			category = JobCategory.objects.get(id=self.kwargs['id'])
 			category.categoryName_am=self.request.POST['categoryName_am']
 			category.categoryName = self.request.POST['categoryName']
 			category.save()
 			messages.success(self.request, "Job category Edited Successfully")
-			form = JobCategoty()
+			form = JobCategory()
 			context = {'form':form}
-			return redirect("admin:admin_jobcategoty")
+			return redirect("admin:admin_JobCategory")
 		return render(self.request,"admin/pages/jobCategory_list.html",context)
 
 class VacancyDetail(LoginRequiredMixin,View):
@@ -775,7 +799,7 @@ class VacancyDetail(LoginRequiredMixin,View):
 		return force
 	def get(self,*args,**kwargs):
 		form = Vacancy.objects.get(id=self.kwargs['id'])
-		jobcategory = JobCategoty.objects.all()
+		jobcategory = JobCategory.objects.all()
 		start=str(form.starting_date)
 		start=start[:19]
 		end=str(form.ending_date)
@@ -811,7 +835,7 @@ class VacancyDetail(LoginRequiredMixin,View):
 			vacancy.save()
 			
 			messages.success(self.request, "Vacancy Edited Successfully")
-			form = JobCategoty()
+			form = JobCategory()
 			context = {'form':form}
 			return redirect("admin:Job_list")
 		return render(self.request,"admin/pages/job_detail.html",context)
@@ -827,10 +851,16 @@ class SuperAdminVacancyList(LoginRequiredMixin,View):
 class AdminVacancyList(LoginRequiredMixin,View):
 	
 	def get(self,*args,**kwargs):
-		vacancy=Vacancy.objects.filter(user=self.request.user)
-		context = {'vacancy':vacancy}
-		template_name = "admin/pages/job_list.html"
-		return render(self.request, template_name,context)
+		if self.request.user.is_superuser:
+			vacancy = Vacancy.objects.all()
+			template_name="admin/pages/job_list.html"
+			context={'vacancy':vacancy}
+			return render(self.request, template_name,context)
+		else:
+			vacancy=Vacancy.objects.filter(user=self.request.user)
+			context = {'vacancy':vacancy}
+			template_name = "admin/pages/job_list.html"
+			return render(self.request, template_name,context)
 
 ## show form
 class CreateVacancy(LoginRequiredMixin, View):
@@ -849,7 +879,7 @@ class CreateVacancy(LoginRequiredMixin, View):
 		context = {'vacancy':form}
 		template = "admin/pages/job_form.html"
 		if form.is_valid():
-			category = JobCategoty.objects.get(id=self.request.POST['category'],)
+			category = JobCategory.objects.get(id=self.request.POST['category'],)
 			print("======")
 			print(self.request.POST['starting_date'])
 			print("======")
@@ -888,7 +918,7 @@ class CreateApplication(LoginRequiredMixin,View):
 				return redirect("vacancy")
 				
 		job = CreateJobApplicationForm()
-		jobcategory = JobCategoty.objects.all()
+		jobcategory = JobCategory.objects.all()
 		template_name="frontpages/job_apply.html"
 		context={'job':job,'vacancy':vacancy,'category':jobcategory}
 		return render(self.request, template_name,context) 
@@ -905,8 +935,8 @@ class CreateApplication(LoginRequiredMixin,View):
 class CategoryBasedSearch(View):
 	def get(self,*args,**kwargs):
 		vacancy = Vacancy.objects.filter(category=self.kwargs['id'],closed=False) 
-		cateory = JobCategoty.objects.get(id=self.kwargs['id'])
-		jobcategory = JobCategoty.objects.all()
+		cateory = JobCategory.objects.get(id=self.kwargs['id'])
+		jobcategory = JobCategory.objects.all()
 		template_name="frontpages/vacancy_list.html"
 		context = {'vacancys':vacancy,'category':jobcategory,'message':'Vacancies on '+str(cateory)}
 		return render(self.request, template_name,context)
@@ -914,7 +944,7 @@ class CategoryBasedSearch(View):
 class VacancyList(View):
 	def get(self,*args,**kwargs): 
 		vacancy = Vacancy.objects.filter(closed=False)
-		jobcategory = JobCategoty.objects.all()
+		jobcategory = JobCategory.objects.all()
 		template_name="frontpages/vacancy_list.html" 
 		context = {'vacancys':vacancy,'category':jobcategory,'message':'All Vacancys '}
 		return render(self.request, template_name,context)
@@ -922,7 +952,7 @@ class VacancyList(View):
 class VacancyMoreDetail(View):
 	def get(self,*args,**kwargs):
 		vac = Vacancy.objects.get(id=self.kwargs['id'],closed=False)
-		jobcategory = JobCategoty.objects.all()
+		jobcategory = JobCategory.objects.all()
 		template_name="frontpages/vacancy_detail.html"
 		context = {'vacancy':vac,'category':jobcategory,'message':'Vacancy Detail'}
 		return render(self.request, template_name,context)
@@ -933,19 +963,31 @@ class BlogList(View):
 	def get_tags(self,*args,**kwargs):
 		blog = Blog.objects.filter(publish=True) 
 		stringlist = []
+		truestring = []
 		for b in blog:
 			splited = b.tag.split(" ");
 			for split in splited:
 				stringlist.append(split)
-		print("000000000000")
+
+		#print("000000000000")
 		taglist = set(stringlist)
 		taglist = list(taglist)
-		return taglist
+
+		for string in taglist:
+			if string == '':
+				#print("Wow")
+				#print(string)
+				continue
+			truestring.append(string)
+		return truestring
 
 	def get(self,*args,**kwargs):
 		blog = Blog.objects.filter(publish=True) 
 		template_name="frontpages/blog-grid-right.html"
-		context={'blogs':blog,'tags':self.get_tags()}
+		tags=self.get_tags()
+		context={'blogs':blog,'tags':tags}
+		#print("Render 0")
+		#print(tags)
 		return render(self.request, template_name,context)
 
 class CreateBlogComment(LoginRequiredMixin,View):
@@ -964,14 +1006,23 @@ class SearchBlog(View):
 	def get_tags(self,*args,**kwargs):
 		blog = Blog.objects.filter(publish=True) 
 		stringlist = []
+		truestring = []
 		for b in blog:
 			splited = b.tag.split(" ");
 			for split in splited:
 				stringlist.append(split)
-		print("000000000000")
+
+		#print("000000000000")
 		taglist = set(stringlist)
 		taglist = list(taglist)
-		return taglist
+
+		for string in taglist:
+			if string == '':
+				#print("Wow")
+				#print(string)
+				continue
+			truestring.append(string)
+		return truestring
 
 	def get(self,*args,**kwargs):
 		return redirect(reverse("blog_grid_right"))
@@ -989,14 +1040,23 @@ class SearchBlogTag(View):
 	def get_tags(self,*args,**kwargs):
 		blog = Blog.objects.filter(publish=True) 
 		stringlist = []
+		truestring = []
 		for b in blog:
 			splited = b.tag.split(" ");
 			for split in splited:
 				stringlist.append(split)
-		print("000000000000")
+
+		#print("000000000000")
 		taglist = set(stringlist)
 		taglist = list(taglist)
-		return taglist
+
+		for string in taglist:
+			if string == '':
+				#print("Wow")
+				#print(string)
+				continue
+			truestring.append(string)
+		return truestring
 
 
 	def get(self,*args,**kwargs):
@@ -1010,14 +1070,23 @@ class BlogDetail(View):
 	def get_tags(self,*args,**kwargs):
 		blog = Blog.objects.filter(publish=True) 
 		stringlist = []
+		truestring = []
 		for b in blog:
 			splited = b.tag.split(" ");
 			for split in splited:
 				stringlist.append(split)
-		print("000000000000")
+
+		#print("000000000000")
 		taglist = set(stringlist)
 		taglist = list(taglist)
-		return taglist
+
+		for string in taglist:
+			if string == '':
+				#print("Wow")
+				#print(string)
+				continue
+			truestring.append(string)
+		return truestring
 
 	def get(self,*args,**kwargs):
 		blog = Blog.objects.get(id=self.kwargs['id'])

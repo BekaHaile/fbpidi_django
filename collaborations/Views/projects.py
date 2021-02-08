@@ -25,7 +25,7 @@ class ListProjectAdmin(LoginRequiredMixin ,View):
 class ListPendingProjectAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = Project.objects.filter(accepted="PENDING")
-		template_name = "admin/ResearchProject/project_list.html"
+		template_name = "admin/ResearchProject/pending_list.html"
 		context = {'researchs':form}
 		return render(self.request, template_name,context)
 

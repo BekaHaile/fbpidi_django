@@ -2,7 +2,7 @@ from django import forms
 from django_summernote.widgets import SummernoteWidget
 from .models import  (PollsQuestion, Choices, PollsResult,
                      Tender, TenderApplicant, 
-                      JobCategoty,Vacancy,JobApplication,
+                      JobCategory,Vacancy,JobApplication,
                       Faqs,Blog,BlogComment,
                       ForumQuestion,ForumComments,CommentReplay,
                       ForumComments,Announcement, News, NewsImages,
@@ -189,8 +189,8 @@ class VacancyForm(forms.ModelForm):
             'job_title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Title in Amharic'}),
             'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in English'}),
             'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in Amharic'}),
-            'requirement':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirements for the Job in English'}),
-            'requirement_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirements for the Job in Amharic'})
+            'requirement':forms.TextInput(attrs={'class':'summernote','placeholder':'Requirements for the Job in English'}),
+            'requirement_am':forms.TextInput(attrs={'class':'summernote','placeholder':'Requirements for the Job in Amharic'})
                       
         }
 
@@ -201,20 +201,20 @@ class CreateJobApplicationForm(forms.ModelForm):
     class Meta:
         model = JobApplication
         fields = ('status', 'bio',
-                  'cv', 'documents',
+                  'cv', 'documents','experinace',
                   'grade','institite','field') 
         
         widgets = {
-            
+            'experinace':forms.TextInput(attrs={"placeholder": "2",'class':'form-control','onkeyup':'isNumber("experinace")','id':'experinace'},),
             'bio':forms.Textarea(attrs={'class':'summernote','placeholder':'Introduce your self and wright why you are appling'}),
             'institite' : forms.TextInput(attrs={"placeholder": "school you learned in ",'class':'form-control'},),
             'field' : forms.TextInput(attrs={"placeholder": "The field you learned",'class':'form-control'},),
-            'grade': forms.TextInput(attrs={"placeholder": "Your grade",'class':'form-control'},),
+            'grade': forms.TextInput(attrs={"placeholder": "Your grade",'class':'form-control','onkeyup':'isNumber("grade")','id':'grade'},),
         }
 
 class JobCategoryForm(forms.ModelForm):
     class Meta:
-        model = JobCategoty
+        model = JobCategory
         fields = ('categoryName','categoryName_am')
         widgets ={
             'categoryName':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory in English'}),
@@ -288,6 +288,8 @@ class ResearchProjectCategoryForm(forms.ModelForm):
 
 class ProjectForm(forms.ModelForm):
     attachements = forms.FileField(required=False)
+    # description = forms.CharField(widget=SummernoteWidget())
+    # detail = forms.CharField(widget=SummernoteWidget())
     status = forms.ChoiceField(choices = RESEARCH_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
 
     class Meta:
@@ -303,8 +305,8 @@ class ProjectForm(forms.ModelForm):
 
 class ResearchForm(forms.ModelForm):
     attachements = forms.FileField(required=False)
-    description = forms.CharField(widget=SummernoteWidget())
-    detail = forms.CharField(widget=SummernoteWidget())
+    # description = forms.CharField(widget=SummernoteWidget())
+    # detail = forms.CharField(widget=SummernoteWidget())
     status = forms.ChoiceField(choices = RESEARCH_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
 
     class Meta:
@@ -314,8 +316,8 @@ class ResearchForm(forms.ModelForm):
 
         'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
         'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Research'}),
-        #'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
-        #'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The hole research'}),
+        'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
+        'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The hole research'}),
         }
         
 

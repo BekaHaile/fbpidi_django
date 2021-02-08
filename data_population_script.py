@@ -3,7 +3,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE','fbpims.settings')
 import django
 django.setup()
 from fbpims.settings import AUTH_USER_MODEL
-from django.contrib.auth.models import User
+from accounts.models import User
 import time
 import datetime
 
@@ -40,4 +40,10 @@ def change_notify():
 if __name__ == '__main__':
     print("Data population started ... ")
     # add_banks()
-    change_notify()
+    # change_notify()
+
+    b=User.objects.get(id=3)
+    print(b.user_permissions.all().count())
+    for i in b.user_permissions.all():
+        if "add_faq" == i.codename:
+            print("-----");
