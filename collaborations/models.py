@@ -351,6 +351,7 @@ class AnnouncementImages(models.Model):
 
 class ResearchProjectCategory(models.Model):
     cateoryname = models.CharField(max_length=500,null=False)
+    cateoryname_am = models.CharField(max_length=500,null=False)
     detail = models.TextField(null=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)

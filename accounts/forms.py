@@ -141,21 +141,6 @@ ADMIN_PERMISSION_LIST = [
     'change_jobcategoty', 
     'delete_jobcategoty', 
 
-    'add_forumquestion', 
-    'view_forumquestion', 
-    'change_forumquestion', 
-    'delete_forumquestion', 
-
-    'add_forumcomments', 
-    'view_forumcomments', 
-    'change_forumcomments', 
-    'delete_forumcomments', 
-
-    'add_commentreplay', 
-    'view_commentreplay', 
-    'change_commentreplay', 
-    'delete_commentreplay', 
-
     'add_announcement', 
     'view_announcement', 
     'change_announcement', 
