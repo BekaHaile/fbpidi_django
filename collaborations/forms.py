@@ -279,10 +279,11 @@ class AnnouncementForm(forms.ModelForm):
 class ResearchProjectCategoryForm(forms.ModelForm):
     class Meta:
         model = ResearchProjectCategory
-        fields = ('cateoryname','detail')
+        fields = ('cateoryname','cateoryname_am','detail')
         widgets = {
-        'cateoryname':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory Of  the Research'}),
-        'detail':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory Of  the Research'}),
+        'cateoryname':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Cateory in English'}),
+        'cateoryname_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Cateory in Amharic'}),
+        'detail':forms.Textarea(attrs={'class':'form-control','placeholder':'detail description of the category'}),
         
         }  
 
@@ -298,9 +299,9 @@ class ProjectForm(forms.ModelForm):
         widgets = {
 
         'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-        'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Research'}),
+        'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Project'}),
         'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
-        'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The hole research'}),
+        'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The whole Project'}),
         }
 
 class ResearchForm(forms.ModelForm):
@@ -317,7 +318,7 @@ class ResearchForm(forms.ModelForm):
         'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
         'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Research'}),
         'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
-        'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The hole research'}),
+        'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The whole research'}),
         }
         
 

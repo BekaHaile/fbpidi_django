@@ -63,19 +63,19 @@ from collaborations.models import ( Blog, BlogComment,Faqs,
 class ListResearchProjectCategoryAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = ResearchProjectCategory.objects.all()
-		template_name = "admin/ResearchProject/ResearchProjectCategory_list.html"
+		template_name = "admin/researchproject/research_project_category_list.html"
 		context = {'researchprojectcategorys':form}
 		return render(self.request, template_name,context)
 
 class CreateResearchProjectCategoryAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = ResearchProjectCategoryForm()
-		template_name = "admin/ResearchProject/ResearchProjectCategory_form.html"
+		template_name = "admin/researchproject/research_project_category_form.html"
 		context = {'forms':form}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = ResearchProjectCategoryForm(self.request.POST)
-		template_name = "admin/ResearchProject/ResearchProjectCategory_form.html"
+		template_name = "admin/researchproject/research_project_category_form.html"
 		context = {'forms':form}
 		if form.is_valid():
 			research = ResearchProjectCategory()
@@ -88,12 +88,12 @@ class CreateResearchProjectCategoryAdmin(LoginRequiredMixin, View):
 class ResearchProjectCategoryDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
-		template_name = "admin/ResearchProject/ResearchProjectCategory_detail.html"
+		template_name = "admin/researchproject/research_project_category_detail.html"
 		context = {'forms':form}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = ResearchProjectCategoryForm(self.request.POST)
-		emplate_name = "admin/ResearchProject/ResearchProjectCategory_detail.html"
+		emplate_name = "admin/researchproject/research_project_category_detail.html"
 		context = {'forms':form}
 		if form.is_valid():
 			research = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
@@ -109,34 +109,34 @@ class ResearchProjectCategoryDetail(LoginRequiredMixin,View):
 class ListResearchAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.all()
-		template_name = "admin/ResearchProject/research_list.html"
+		template_name = "admin/researchproject/research_list.html"
 		context = {'researchs':form}
 		return render(self.request, template_name,context)
 
 class ListPendingResearchAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.filter(accepted="PENDING")
-		template_name = "admin/ResearchProject/pending_list.html"
+		template_name = "admin/researchproject/pending_list.html"
 		context = {'researchs':form}
 		return render(self.request, template_name,context)
 
 class ResearchDetailView(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
-		template_name = "admin/ResearchProject/research_view.html"
+		template_name = "admin/researchproject/research_view.html"
 		context = {'forms':form}
 		return render(self.request, template_name,context)
 
 class CreateResearchAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = ResearchForm()
-		template_name = "admin/ResearchProject/research_form.html"
+		template_name = "admin/researchproject/research_form.html"
 		context = {'forms':form}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		
 		form = ResearchForm(self.request.POST,self.request.FILES)
-		template_name = "admin/ResearchProject/research_form.html"
+		template_name = "admin/researchproject/research_form.html"
 		context = {'forms':form}
 		if form.is_valid():
 			research = Research()
@@ -164,12 +164,12 @@ class ResearchApprove(LoginRequiredMixin, View):
 class ResearchDetailAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
-		template_name = "admin/ResearchProject/research_detil.html"
+		template_name = "admin/researchproject/research_detil.html"
 		context = {'forms':form}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = ResearchForm(self.request.POST)
-		template_name = "admin/ResearchProject/research_detil.html"
+		template_name = "admin/researchproject/research_detil.html"
 		context = {'forms':form}
 		if form.is_valid():
 			research = Research.objects.get(id=self.kwargs['id'])

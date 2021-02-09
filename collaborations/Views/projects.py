@@ -18,34 +18,34 @@ from collaborations.models import ( Research, Project,
 class ListProjectAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = Project.objects.all()
-		template_name = "admin/ResearchProject/project_list.html"
+		template_name = "admin/researchproject/project_list.html"
 		context = {'researchs':form}
 		return render(self.request, template_name,context)
 
 class ListPendingProjectAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = Project.objects.filter(accepted="PENDING")
-		template_name = "admin/ResearchProject/pending_list.html"
+		template_name = "admin/researchproject/pending_list.html"
 		context = {'researchs':form}
 		return render(self.request, template_name,context)
 
 class ProjectDetailView(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Project.objects.get(id=self.kwargs['id'])
-		template_name = "admin/ResearchProject/project_view.html"
+		template_name = "admin/researchproject/project_view.html"
 		context = {'forms':form}
 		return render(self.request, template_name,context)
 
 class CreateProjectAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = ProjectForm()
-		template_name = "admin/ResearchProject/project_form.html"
+		template_name = "admin/researchproject/project_form.html"
 		context = {'forms':form}
 		print("________________Fork________________________")
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):		
 		form = ProjectForm(self.request.POST,self.request.FILES)
-		template_name = "admin/ResearchProject/project_form.html"
+		template_name = "admin/researchproject/project_form.html"
 		context = {'forms':form}
 		if form.is_valid():
 			project = Project()
@@ -73,13 +73,13 @@ class ProjectApprove(LoginRequiredMixin, View):
 class ProjectDetailAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Project.objects.get(id=self.kwargs['id'])
-		template_name = "admin/ResearchProject/project_detil.html"
+		template_name = "admin/researchproject/project_detil.html"
 		category = ResearchProjectCategory.objects.all()
 		context = {'forms':form,"category":category}		
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = ProjectForm(self.request.POST,self.request.FILES)
-		template_name = "admin/ResearchProject/project_detil.html"
+		template_name = "admin/researchproject/project_detil.html"
 		context = {'forms':form}
 		if form.is_valid():
 			project = Project.objects.get(id=self.kwargs['id'])

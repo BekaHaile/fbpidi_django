@@ -4,54 +4,55 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
-{%block pagename%}Edit Research Project Category{%endblock%}
+{%block pagename%}Research Project Categorys{%endblock%}
 {%block content%}
 
-<!-- Content area -->
+<!-- Content area --> 
 <div class="content">
 
-	 
+	
 	<div class="card">
-
+ 
 		<div class="card-body">
 
 			<form action="" method="POST" enctype="multipart/form-data">
 				<fieldset class="mb-3 ml-3 mr-3">
-					<legend class="text-uppercase font-size-sm font-weight-bold">Edit Research & Project Category</legend>
+					<legend class="text-uppercase font-size-sm font-weight-bold">Research Project Category</legend>
 					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
-					{{form.errors}}
-					{%csrf_token%}
-					{%if form.errors%}
+					{%if forms.errors%}
 					<div class="alert alert-danger" role="alert">
-					  {{form.errors}}
+					  {{forms.errors}}
 					</div>
 					{% endif %}
+					
 					{%csrf_token%}
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Research & Project Title *</label>
+						<label class="col-form-label col-lg-3">Research & Project Title (English)*</label>
 						<div class="col-lg-9">
-							<input type="text" name="cateoryname" class="form-control" value="{{forms.cateoryname}} " id="">
-						 
-							
+							{{forms.cateoryname}}
 						</div>
 					</div>
-
-
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Research & Project Detail *</label>
+						<label class="col-form-label col-lg-3">Research & Project Title (Amharic) *</label>
 						<div class="col-lg-9">
-								<input type="text" name="detail" class="form-control" value="{{forms.detail}} " id="">
+							{{forms.cateoryname_am}}
 						</div>
-							
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Research & Project Detail*</label>
+						<div class="col-lg-9">
+							{{forms.detail}}
+						</div>
 					</div>
 
 
-						
+					
+					
 				</fieldset>
 
 				<div class="text-right">
 					<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-						class="btn btn-primary rounded-round" onclick="return confirm('are you sure you Done with editing')">Submit </button>
+						class="btn btn-primary rounded-round">Submit </button>
 				</div>
 			</form>
 		</div>
