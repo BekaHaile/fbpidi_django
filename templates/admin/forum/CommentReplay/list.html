@@ -1,0 +1,92 @@
+               {%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+<!-- /theme JS files -->
+
+{% endblock %}
+{%block pagename%}Comment Replay List{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	<!-- Page length options main category -->
+	
+	<!-- /page length options -->
+
+	<!-- Page length options sub-category-->
+	
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">Comment Replay</h5>
+			<div class="header-elements">
+			</div>
+		</div>
+
+		<table class="table datatable-show-all">
+			<thead>
+
+				<tr>
+					<th>comment</th>
+					<th>Comment Replay</th>
+					<th>user</th>
+					<th>attachements</th>
+					<th>timestamp</th>
+					
+					<th class="text-center">Actions</th>
+
+				</tr>
+			</thead> 
+			<tbody>
+				{%for researchprojectcategory in researchprojectcategorys%}
+				<tr>
+					
+					<td>{{researchprojectcategory.comment|safe|truncatewords:20}}</td>
+					<td>{{researchprojectcategory.content|truncatewords:20}}</td>
+					<td>{{researchprojectcategory.user}}</td>
+					<td>
+						{%if researchprojectcategory.attachements%}
+						 <a href="{{researchprojectcategory.attachements.url}}" download="{{researchprojectcategory.attachements.url}}"> 
+						 <b>Attachment</b>
+						 </a>
+						 {%else%}
+						 <b>No Attachment</b>
+						 {%endif%}
+                                   		
+                    </td>
+					<td>{{researchprojectcategory.timestamp}}</td>
+					
+					<td class="text-center">
+						<div class="list-icons">
+							<div class="dropdown">
+								<a href="#" class="list-icons-item" data-toggle="dropdown">
+									<i class="icon-menu9"></i>
+								</a>
+									
+								<div class="dropdown-menu dropdown-menu-right">
+									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
+									<a href="{%url 'admin:delete' model_name='CommentReplayAdmin' id=researchprojectcategory.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Comment Replay</a>
+									{%endif%}
+									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
+									<a href="{%url 'admin:comment_replay_detail' model_name='CommentReplay' id=researchprojectcategory.id%}" class="dropdown-item"  >
+										<i class="icon-pencil"></i>Edit Comment Replay</a>
+										{%endif%}
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+	<!-- /page length options -->
+
+
+</div>
+<!-- /content area -->
+{%endblock%}

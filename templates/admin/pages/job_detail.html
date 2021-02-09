@@ -33,7 +33,7 @@
 					{{form.errors}}
 					{%csrf_token%}
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Job Title *</label>
+						<label class="col-form-label col-lg-3">Vacancy Title (English)*</label>
 						<div class="col-lg-9">
 							<input type="text" name="job_title" class="form-control" value="{{form.job_title}} " required="True">
 						 
@@ -41,21 +41,21 @@
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Job Title Amharic *</label>
+						<label class="col-form-label col-lg-3">Vacancy Title (Amharic)*</label>
 							<div class="col-lg-9">
 							<input type="text" name="job_title_am" class="form-control" value="{{form.job_title_am}}" id=""  required="True">
 						</div>
 							
 					</div> 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Description *</label>
+						<label class="col-form-label col-lg-3">Vacancy Description (English)*</label>
 						
 							<div class="col-lg-9">
 							<textarea type="text" name="description" class="summernote"  id="">{{form.description|safe}}</textarea> 
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Description Amharic *</label>
+						<label class="col-form-label col-lg-3">Vacancy Description (Amharic)*</label>
 						
 							<div class="col-lg-9">
 							<textarea type="text" name="description_am" class="summernote"  id="">{{form.description_am|safe}}</textarea>
@@ -63,7 +63,7 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3"> Requirement *</label>
+						<label class="col-form-label col-lg-3">Vacancy Requirement (English)*</label>
 						<div class="col-lg-9">
 								<textarea class="summernote" name="requirement" value="">{{form.requirement|safe}}</textarea>
 						</div>
@@ -71,7 +71,7 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3"> Requirement Amharic *</label>
+						<label class="col-form-label col-lg-3">Vacancy Requirement (Amharic)*</label>
 						<div class="col-lg-9">
 								<textarea  value="" class="summernote" name="requirement_am" >{{form.requirement_am|safe}}</textarea>
 						</div>
@@ -136,12 +136,13 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Starting Date  *</label>
+						<label class="col-form-label col-lg-3">Start Date  *</label>
 						<div class="col-lg-9">
 							<span class="input-group-prepend">
 											<span class="input-group-text"><i class="icon-calendar22"></i></span>
-										</span>
-								<input type="text" name="starting_date" class="form-control daterange-single" value="{{form.starting_date}}">
+										
+								<input type="text" name ="ending_date" class="form-control daterange-single" value="{{form.stating_date}}">
+							</span>
 						</div>
 							
 					</div>
@@ -151,11 +152,14 @@
 						<div class="col-lg-9">
 							<span class="input-group-prepend">
 											<span class="input-group-text"><i class="icon-calendar22"></i></span>
-										</span>
+										
 								<input type="text" name ="ending_date" class="form-control daterange-single" value="{{form.ending_date}}">
+							</span>
 						</div>
 							
 					</div>
+
+
 					
 
 				</fieldset>

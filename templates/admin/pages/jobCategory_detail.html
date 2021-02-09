@@ -4,7 +4,7 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
-{%block pagename%}Edit JobCateory{%endblock%}
+{%block pagename%}Edit Job Cateory{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -27,7 +27,7 @@
 					{%csrf_token%}
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Cateory (English)*</label>
+						<label class="col-form-label col-lg-3">Job Cateory (English)*</label>
 						
 							
 							<div class="col-lg-9">
@@ -36,7 +36,7 @@
 					</div>
 
 					<div class="form-group row">
-				    <label class="col-form-label col-lg-3" >Cateory (Amharic)* </label>
+				    <label class="col-form-label col-lg-3" >Job Cateory (Amharic)* </label>
 						<div class="col-lg-9" name="categoryName_am" value="True">
 							
 							<input requierd type="text" name="categoryName_am" class="form-control" value="{{form.categoryName_am}}">

@@ -1,0 +1,84 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+{% endblock %}
+{%block pagename%}Research{%endblock%}
+{%block content%}
+
+<!-- Content area --> 
+<div class="content">
+
+	
+	<div class="card">
+ 
+		<div class="card-body">
+
+			<form action="" method="POST" enctype="multipart/form-data">
+				<fieldset class="mb-3 ml-3 mr-3">
+					<legend class="text-uppercase font-size-sm font-weight-bold">Create Research</legend>
+					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
+					{%if forms.errors%}
+					<div class="alert alert-danger" role="alert">
+					  {{forms.errors}}
+					</div>
+					{% endif %}
+					
+					{%csrf_token%}
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Research Title *</label>
+						<div class="col-lg-9">
+							{{forms.title}}
+						</div>  
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Research Status*</label>
+						<div class="col-lg-9">
+							{{forms.status}}
+						</div>  
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Research Category*</label>
+						<div class="col-lg-9">
+							{{forms.category}}
+						</div>  
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Research Description*</label>
+						<div class="col-lg-9"> 
+							{{forms.description}}
+						</div>
+					</div> 
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Research Detail*</label>
+						<div class="col-lg-9">
+							{{forms.detail}}
+						</div>
+					</div>
+					<div class="form-group">
+							<label class="form-label">Upload your attchment (if you have one)</label>
+							<div class="col-lg-10">
+									{{forms.attachements}}
+								
+							</div>
+					</div>
+					
+				</fieldset>
+
+				<div class="text-right">
+					<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+						class="btn btn-primary rounded-round">Submit </button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+	});
+</script>
+{%endblock%}

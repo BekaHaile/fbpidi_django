@@ -1,4 +1,4 @@
-from django import forms
+from django import forms 
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
 from django.contrib.auth import get_user_model
@@ -110,11 +110,96 @@ ADMIN_PERMISSION_LIST = [
     'change_companyevent', 
     'delete_companyevent', 
 
+    'add_companyevent', 
+    'view_companyevent', 
+    'change_companyevent', 
+    'delete_companyevent', 
+
     
-    
+    'add_blog', 
+    'view_blog', 
+    'change_blog', 
+    'delete_blog', 
+
+    'add_blogcomment', 
+    'view_blogcomment', 
+    'change_blogcomment', 
+    'delete_blogcomment',
+
+    'add_jobapplication', 
+    'view_jobapplication', 
+    'change_jobapplication', 
+    'delete_jobapplication', 
+
+    'add_vacancy', 
+    'view_vacancy', 
+    'change_vacancy', 
+    'delete_vacancy', 
+
+    'add_jobcategoty', 
+    'view_jobcategoty', 
+    'change_jobcategoty', 
+    'delete_jobcategoty', 
+
+    'add_forumquestion', 
+    'view_forumquestion', 
+    'change_forumquestion', 
+    'delete_forumquestion', 
+
+    'add_forumcomments', 
+    'view_forumcomments', 
+    'change_forumcomments', 
+    'delete_forumcomments', 
+
+    'add_commentreplay', 
+    'view_commentreplay', 
+    'change_commentreplay', 
+    'delete_commentreplay', 
+
+    'add_announcement', 
+    'view_announcement', 
+    'change_announcement', 
+    'delete_announcement', 
+
+    'add_announcementimages', 
+    'view_announcementimages', 
+    'change_announcementimages', 
+    'delete_announcementimages', 
+
+    'add_researchprojectcategory', 
+    'view_researchprojectcategory', 
+    'change_researchprojectcategory', 
+    'delete_researchprojectcategory', 
+
+    'add_research', 
+    'view_research', 
+    'change_research', 
+    'delete_research', 
+
+    'add_project', 
+    'view_project', 
+    'change_project', 
+    'delete_project', 
     
 ]
 
+
+'''
+Blog
+BlogComment
+Faqs
+JobCategoty
+Vacancy
+JobApplication
+ForumQuestion-
+ForumComments
+CommentReplay
+Announcement-
+AnnouncementImages-
+ResearchProjectCategory
+Research
+Project
+'''
 
 class CompanyAdminCreationForm(AbstractUserCreationForm):
     """ A form is prepared for admin users to regster. Includes all the required

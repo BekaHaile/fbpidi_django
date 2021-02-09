@@ -3,7 +3,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE','fbpims.settings')
 import django
 django.setup()
 from fbpims.settings import AUTH_USER_MODEL
-from django.contrib.auth.models import User
+from accounts.models import User
 import time
 import datetime
 
@@ -28,4 +28,3 @@ if __name__ == '__main__':
     # print("Data population started ... ")
     # add_banks()
     set_token_for_existing_users()
-    

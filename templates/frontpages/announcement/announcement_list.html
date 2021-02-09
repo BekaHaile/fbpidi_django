@@ -59,7 +59,8 @@
 							<div class="card">
 							<div class="card-body">
 								<div class="item-det mb-4">
-									<a href="#" class="text-dark"><h3>{{post.company}}</h3></a>
+									<h4>{{post.title}}</h4>
+									<a href="#" class="text-dark">Announcement from <h5>{{post.company}}</h5></a>
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
 											<li class="mr-5"><i class="icon icon-calendar text-muted mr-1"></i> {{post.timestamp}} </li>
@@ -104,19 +105,17 @@
 									</div>
 								</div>
 							</div>
-							<div class="card-body">
 								<div class="d-sm-flex mt-0 p-5 sub-review-section border border-bottom-0 br-bl-0 br-br-0">
                                     <div class="d-flex mr-3">
                                         <a href="#">{{post.sender.profile_image}} </a>
                                     </div>
                                     <div class="media-body">
-										<h4>{{post.title}}</h4>
 										<p class="font-13  mb-2 mt-2">
-                                           {{post.containt|safe}}
+                                           {{post.containt|safe|truncatewords:20}}
                                         </p>
+                                        <a href="{% url 'announcement_detail' id=post.id %}" class="btn btn-secondary btn-sm">Read More</a>
 
 
-									</div>
 								</div>
 							</div>
 						</div>
