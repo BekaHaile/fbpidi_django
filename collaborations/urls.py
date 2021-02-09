@@ -12,6 +12,7 @@ from .views import (BlogList,BlogDetail,FaqList,
 urlpatterns = [ 
     path("polls/", PollIndex.as_view(), name = "polls" ),
     path("poll_detail/<id>/", PollDetail.as_view(), name = "poll_detail"),
+    
     path("edit-comment/<id>/<forum>/<type>/",EditCommentForum.as_view(),name="edit_comment"),
     path("forum-edit/<id>",EditForumQuestions.as_view(),name="forum_edit"),
     path("forum-search",SearchForum.as_view(),name="forum_search"),

@@ -792,7 +792,6 @@ class PollDetail(LoginRequiredMixin,View):
                 return render(self.request, "frontpages/poll_detail.html", context)
 
             except Exception as e:
-                print ("444444444444444444444444" ,str(e))
                 messages.warning(self.request, "Poll not found")
                 return redirect("polls") 
 

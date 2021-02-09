@@ -23,13 +23,13 @@ class PollsQuestion(models.Model):
     def count_choices(self):
         return self.choices.count()
     
+    def get_company(self):
+        return self.user.get_company()
+    
     def get_image(self):
         #gets the company by using the user, and in the company model there is a method called get_image() which returns image url
-        if self.user.company_set.first():
-            return self.user.company_set.first().get_image()
-        else:
-            return None
-    
+        return self.get_company().get_image()
+
     class Meta:
         ordering = ['-timestamp',] 
 
@@ -49,7 +49,6 @@ class Choices (models.Model):
 
     class Meta:
         ordering = ['-timestamp',] 
-
 
 
 class PollsResult(models.Model):    
@@ -232,8 +231,14 @@ class News(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def get_images(self):
-        return self.newsimages_set.all()
+        return self.newsimages_set.all() if self.newsimages_set.exists() else None
 
+    def get_single_image(self):
+        return  self.newsimages_set.first().image.url 
+
+    def get_company(self):
+        return self.user.get_company()
+        
     class Meta:
         ordering = ['-timestamp',] 
 

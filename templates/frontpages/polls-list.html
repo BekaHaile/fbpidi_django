@@ -102,15 +102,22 @@
 														<div class="card-body h-100">
 															<div class="item-card9">
 																<a href="/collaborations/poll_detail/{{poll.id}}/" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated poll.title poll.title_am LANGUAGE_CODE %}</h4></a>
-																<p >{% print_translated poll.description|truncatewords:12|safe poll.description_am|truncatewords:12|safe LANGUAGE_CODE %}</p>
+																
+																{% if poll.count_choices > 1 %}
+																		{{poll.count_choices}} Choices
+																{% else %}
+																		{{poll.count_choices}} Choice
+																{%endif%}
 
+																{% if poll.count_choices > 0 %}
 																<p class="mr-0" style="display: block;"><i class="fa fa-hand-stop-o text-muted mr-2"></i>
-																	{% if poll.count > 1 %}
+																	{% if poll.count_votes > 1 %}
 																		{{poll.count_votes}} Votes
 																	{% else %}
 																		{{poll.count_votes}} Vote
 																	{%endif%}
 																</p>
+																{% endif %}
 															</div>
 														</div>
 														<div class="card-footer pt-2 pb-2">

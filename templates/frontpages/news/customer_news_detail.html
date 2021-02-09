@@ -22,8 +22,8 @@
 				</div><!-- /header-text -->
 				<div class="details-absolute">
 					<div class="d-sm-flex container">
-						<div><a href="#" class="text-white d-inline-block mr-4 "><i class="icon icon-location-pin text-white mr-2"></i>{{news.user.get_company.location}}</a></div>
-						<div class="ml-auto"><a href="#" class="text-white d-inline-block mt-2 mt-sm-0 fs-18"><i class="icon icon-phone text-white mr-2 fs-14"></i>{{news.user.get_company.phone_number}}</a></div>
+						<div><a href="#" class="text-white d-inline-block mr-4 "><i class="icon icon-location-pin text-white mr-2"></i>{{news.get_company.location}}</a></div>
+						<div class="ml-auto"><a href="#" class="text-white d-inline-block mt-2 mt-sm-0 fs-18"><i class="icon icon-phone text-white mr-2 fs-14"></i>{{news.get_company.phone_number}}</a></div>
 					</div>
 				</div>
 			</div>
@@ -57,7 +57,7 @@
 									<a href="#" class="text-dark"><h3>{%print_translated news.title news.title_am LANGUAGE_CODE%}</h3></a>
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
-											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">By: </i><b>{% print_translated news.user.get_company.company_name news.user.get_company.company_name_am LANGUAGE_CODE %}</b></a></li>
+											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">By: </i><b>{% print_translated news.get_company.company_name news.get_company.company_name_am LANGUAGE_CODE %}</b></a></li>
                                             <li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>{{news.timestamp}}</b> </a></li>                                       
                                         </ul>
 									</div>
@@ -125,7 +125,7 @@
 						</div>
 						<!--/Business Overview-->
 
-						<h3 class="mt-5 mb-4 fs-20">Other News from {% print_translated news.user.get_company.company_name news.user.get_company.company_name_am LANGUAGE_CODE %} </h3>
+						<h3 class="mt-5 mb-4 fs-20">Other News from {% print_translated news.get_company.company_name news.get_company.company_name_am LANGUAGE_CODE %} </h3>
 
 						<!--Related Posts-->
 						<div id="myCarousel5" class="owl-carousel owl-carousel-icons3">
@@ -438,11 +438,11 @@
 							<div class="card-body item-user">
 								<div class="profile-details">
 									<div class="profile-pic mb-0 mx-5">
-										<img src="{{news.user.get_company.get_image}}" class="brround w-150 h-150" alt="user">
+										<img src="{{news.get_company.get_image}}" class="brround w-150 h-150" alt="user">
 									</div>
 								</div>
 								<div class="text-center mt-2">
-									<a href="{% url 'userprofile' %}" class="text-dark text-center"><h4 class="mt-0 mb-0 font-weight-semibold">{% print_translated news.user.get_company.company_name news.user.get_company.company_name_am LANGUAGE_CODE %} </h4></a>
+									<a href="{% url 'userprofile' %}" class="text-dark text-center"><h4 class="mt-0 mb-0 font-weight-semibold">{% print_translated news.get_company.company_name news.get_company.company_name_am LANGUAGE_CODE %} </h4></a>
 									
 								</div>
 							</div>
@@ -461,9 +461,9 @@
 									<div class="card-body item-user">
 										<h4 class="mb-4">Company Contact Info</h4>
 										<div>
-											<h6><span class="font-weight-semibold"><i class="fa fa-map mr-3 mb-2"></i></span><a href="#" class="text-body"> {{news.user.get_company.location}}</a></h6>
+											<h6><span class="font-weight-semibold"><i class="fa fa-map mr-3 mb-2"></i></span><a href="#" class="text-body"> {{news.get_company.location}}</a></h6>
 											<h6><span class="font-weight-semibold"><i class="fa fa-envelope mr-3 mb-2"></i></span><a href="#" class="text-body"> {{news.user.email}}</a></h6>
-											<h6><span class="font-weight-semibold"><i class="fa fa-phone mr-3 mb-2"></i></span><a href="#" class="text-secondary"> {{news.user.get_company.phone_number}}</a></h6>
+											<h6><span class="font-weight-semibold"><i class="fa fa-phone mr-3 mb-2"></i></span><a href="#" class="text-secondary"> {{news.get_company.phone_number}}</a></h6>
 											<h6><span class="font-weight-semibold"><i class="fa fa-link mr-3 "></i></span><a href="#" class="text-secondary">https://spruko.com/</a></h6>
 										</div>
 									</div>

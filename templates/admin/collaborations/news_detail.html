@@ -33,7 +33,7 @@
 
                                 <div class= "text-right" class="card-header header-elements-inline">					
                                     <div class="header-elements">
-                                        {% if user.is_superuser or user.get_company == news.user.get_company %}
+                                        {% if user.is_superuser or user.get_company == news.get_company %}
 											{% if perms.collaborations.change_news %}
                                                 <div class="list-icons">
                                                     <a href="{%url 'admin:edit_news' id=news.id %}"   style = "margin-left: 40px; " class = "btn bg-teal btn-sm rounded-round"><i class="icon-pencil mr-2"></i>Edit this News</a>
@@ -54,7 +54,7 @@
                                 <div class="item7-card-desc d-flex mb-2 mt-3">
                  
 									<h6><i class="fa fa-calendar-o text-muted mr-2"></i><b>Created at :</b><a href="#" ><b> {{news.timestamp}}</b></a></h6>
-                                    <h6><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i><b>By</b> <a href="#"><b>{{news.user.get_company_name}}</b></a></h6>
+                                    <h6><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i><b>By</b> <a href="#"><b>{{news.get_company.company_name}}</b></a></h6>
                                                                         
                                 </div>
                                 

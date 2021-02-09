@@ -46,16 +46,16 @@ from company.views import (
 from collaborations.views import PollIndex
 from accounts.api.api_views import CompanyAdminSignUpView, CustomerSignUpView
 from rest_framework.authtoken.views import obtain_auth_token
-from collaborations.api.api_views import PollApiView, ChoicesView, ChoicesApiView, PollsApi
+# from collaborations.api.api_views import PollApiView, ChoicesView, ChoicesApiView, PollsApi
 
 urlpatterns = [ 
      
     path("companyadminsignup/", CompanyAdminSignUpView.as_view(), name = "api_companyadmin_signup" ),
     path("login/", obtain_auth_token, name = "api_login"),
-    path("polls/", PollApiView.as_view(), name = "api_admin_polls"),
-    path("polls/<int:pk>/", PollsApi.as_view(), name = "polls_api"),
-    path("choices/<id>/", ChoicesApiView.as_view(), name = "api_admin_choices" ),
-    # path("choices/", ChoicesApiView.as_view(), name = "api_admin_choices" ),
+    # path("polls/", PollApiView.as_view(), name = "api_admin_polls"),
+    # path("polls/<int:pk>/", PollsApi.as_view(), name = "polls_api"),
+    # path("choices/<id>/", ChoicesApiView.as_view(), name = "api_admin_choices" ),
+    # # path("choices/", ChoicesApiView.as_view(), name = "api_admin_choices" ),
 
 #             
      

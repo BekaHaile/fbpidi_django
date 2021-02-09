@@ -30,10 +30,10 @@ urlpatterns = [
     # admin page urls
     path("admin/",admin_site.urls),
     path("api-admin/", include('admin_site.api.api_urls') ),
-    #  page urls
+    
     # frontpage urls 
     path("",include("core.urls")),
-    #path("api", include("core.api.urls")),
+    path("client/", include("core.api.api_urls")), #urls for the mobile view
     
     path('activate/<uidb64>/<token>/',activate, name='activate'),
     # third party app urls
@@ -42,7 +42,6 @@ urlpatterns = [
     re_path(r'^i18n/', include('django.conf.urls.i18n')),
 
     path("collaborations/", include('collaborations.urls')),
-    path("api-collaborations/", include('collaborations.api.api_urls')),
     
     
 

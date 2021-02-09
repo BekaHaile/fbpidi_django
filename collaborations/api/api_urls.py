@@ -1,10 +1,13 @@
 from django.urls import path,include
 from collaborations.views import PollIndex
-from collaborations.api.api_views import PollApiView
+from collaborations.api.api_views import PollListApiView, PollDetailApiView, NewsListApiView, NewsDetailApiView
 
 urlpatterns = [ 
     
-    path("polls/", PollApiView.as_view(), name = "api_customer_polls" ),
+    path("polls/", PollListApiView.as_view(), name = "client_polls" ),
+    path("poll_detail/<id>/", PollDetailApiView.as_view(), name = "client_poll_detail" ),
+    path('news/', NewsListApiView.as_view(), name = "client_news"),
+    path('news_detail/<id>/', NewsDetailApiView.as_view(), name = 'client_news_detail')
     # path("poll_detail/<id>/", PollDetail.as_view(), name = "poll_detail"),
     # path("edit-comment/<id>/<forum>/<type>/",EditCommentForum.as_view(),name="edit_comment"),
     # path("forum-edit/<id>",EditForumQuestions.as_view(),name="forum_edit"),
