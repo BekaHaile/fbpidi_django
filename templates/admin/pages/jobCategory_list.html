@@ -25,8 +25,10 @@
 			<h5 class="card-title">Job Cateory</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					<a href="{% url 'admin:JobCategoty_form'%}" class="btn bg-teal btn-sm rounded-round"><i
+					{% if perms.collaborations.add_jobcategoty %} 
+					<a href="{% url 'admin:JobCategory_form'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Job cateory</a>
+							{%endif%}
 				</div>
 			</div>
 		</div>
@@ -34,6 +36,8 @@
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
+					<th>User</th>
+					<th>timestamp</th>
 					<th>categoryName</th>
 					<th>categoryName Amharic</th>
 					<th class="text-center">Actions</th>
@@ -43,7 +47,8 @@
 
 				{%for form in forms%}
 				<tr>
-					
+					<td>{{form.user}}</td>
+					<td>{{form.timestamp}}</td>
 					<td>{{form.categoryName}}</td>
 					<td>{{form.categoryName_am}}</td>
 					<td class="text-center">
@@ -54,9 +59,13 @@
 								</a>
 									
 								<div class="dropdown-menu dropdown-menu-right">
-									<a href="{%url 'admin:delete' model_name='JobCategoty' id=form.id%}" class="dropdown-item" onclick="return confirm('are you sure you want to delete this')"><i class="icon-trash"></i>Delete JobCategory</a>
-									<a href="{%url 'admin:Category_form'  model_name='JobCategoty' id=form.id%}" class="dropdown-item" >
+									{% if user.is_superuser or user.get_company == form.user.get_company %}
+									<a href="{%url 'admin:delete' model_name='JobCategory' id=form.id%}" class="dropdown-item" onclick="return confirm('Warning:\n If You delete this the Vacanies under this will be deleted')"><i class="icon-trash"></i>Delete JobCategory</a>
+									{%endif%}
+									{% if user.is_superuser or user.get_company == form.user.get_company %}
+									<a href="{%url 'admin:Category_form'  model_name='JobCategory' id=form.id%}" class="dropdown-item" >
 										<i class="icon-pencil"></i>Edit JobCategory</a>
+										{%endif%}
 									
 									
 								</div>

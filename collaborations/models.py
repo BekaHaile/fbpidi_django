@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import Permission, Group
 
 from django.conf import settings
+import datetime
 from company.models import Company,CompanyBankAccount
 
 
@@ -71,6 +72,8 @@ class Blog(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     publish = models.BooleanField(null=False,default=False)
 
+    class Meta:
+        ordering = ['-timestamp',]
             
     def countComment(self):
         return self.blogcomment_set.all().count()
@@ -85,6 +88,9 @@ class BlogComment(models.Model):
     content = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-timestamp',]
+
 
     def __str__(self):
         return self.title
@@ -96,6 +102,9 @@ class Faqs(models.Model):
     answers = models.TextField(null=False)  
     answers_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp',]
  
 
 class Tender(models.Model):
@@ -156,11 +165,13 @@ class TenderApplicant(models.Model):
         return f"{self.first_name} {self.last_name} from {self.company_name}"
             
 
-
 ## Vacancy
-class JobCategoty(models.Model):
+class JobCategory(models.Model):
     categoryName = models.CharField(max_length=500,null=False)
     categoryName_am = models.CharField(max_length=500,null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
 
     def countjobs(self):
         return self.vacancy_set.filter(closed=False).count()
@@ -175,7 +186,7 @@ class Vacancy(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     location = models.CharField(max_length=10000,null=False)
     salary = models.IntegerField(null=True,default=0)
-    category = models.ForeignKey(JobCategoty, on_delete=models.CASCADE)
+    category = models.ForeignKey(JobCategory, on_delete=models.CASCADE)
     employement_type = models.CharField(max_length=10000,null=False)
     starting_date = models.DateTimeField()
     ending_date = models.DateTimeField()
@@ -188,18 +199,31 @@ class Vacancy(models.Model):
     requirement_am = models.TextField(null=False)
     closed = models.BooleanField(null=False,default=False)
 
+    class Meta:
+        ordering = ['-timestamp',]
+
+    def __str__(self):
+        return self.job_title
+
     def countApplicant(self):
         return self.jobapplication_set.all().count()
 
 
 class JobApplication(models.Model):
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
+    institite = models.CharField(max_length=500,null=False)
+    grade = models.FloatField()
+    field = models.CharField(max_length=500,null=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    status = models.CharField(max_length=500,null=False) 
+    status = models.CharField(max_length=500,null=False)
     bio = models.TextField(null=False)
+    experinace = models.IntegerField(null=False)
     cv = models.FileField(upload_to="cv/", max_length=254,help_text="only pdf files, Max size 10MB")
     documents = models.FileField(upload_to="documents/", max_length=254,help_text="pdf, jpeg files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp',]
 
 
 ## News and Events
@@ -213,6 +237,9 @@ class News(models.Model):
     description_am = models.TextField( verbose_name="News Description(Amharic)" )
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-timestamp',]
+
     def get_images(self):
         return self.newsimages_set.all()
 
@@ -223,6 +250,9 @@ class NewsImages(models.Model):
     image = models.ImageField(upload_to = "Images/News Images", max_length=254, verbose_name="News Image",help_text="jpg, png, gid", blank=False)  
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-timestamp',]
+
 
 # This can be created automatically if we use a manytomanyrelation, that's why I commented this table and added a tender_applications
 
@@ -232,6 +262,12 @@ class ForumQuestion(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     attachements = models.FileField(upload_to="Attachements/", null=True,max_length=254,help_text="only pdf files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['-timestamp',]
 
     def countComment(self):
         return self.forumcomments_set.all().count()
@@ -246,6 +282,12 @@ class ForumComments(models.Model):
     attachements = models.FileField(upload_to="Attachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.comment
+
+    class Meta:
+        ordering = ['-timestamp',]
+
     def commentreplay(self):
         return self.commentreplay_set.all()
 
@@ -256,6 +298,12 @@ class CommentReplay(models.Model):
     attachements = models.FileField(upload_to="Attachements/", null=True,max_length=254,help_text="only pdf files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.content
+
+    class Meta:
+        ordering = ['-timestamp',]
+
 class Announcement(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -265,6 +313,9 @@ class Announcement(models.Model):
     containt_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-timestamp',]
+
     def announcementimages(self):
         return self.announcementimages_set.all()
 
@@ -272,3 +323,56 @@ class AnnouncementImages(models.Model):
     announcement = models.ForeignKey(Announcement, on_delete = models.CASCADE)
     image = models.ImageField(upload_to = "Announcements", max_length=254, verbose_name="Announcement Image",help_text="jpg, png, gid", blank=False)  
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp',]
+
+class ResearchProjectCategory(models.Model):
+    cateoryname = models.CharField(max_length=500,null=False)
+    detail = models.TextField(null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp',]
+
+    def __str__(self):
+        return self.cateoryname
+
+    def countResearch(self):
+        return self.research_set.all().count()
+
+    def countProject(self):
+        return self.project_set.all().count()
+
+    def Researchs(self):
+        return self.research_set.all()
+
+class Research(models.Model):
+    title = models.CharField(max_length=500,null=False)
+    description = models.TextField(null=False)
+    detail = models.TextField(null=False)
+    status = models.CharField(max_length=100,null=False)
+    accepted = models.CharField(max_length=100,null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(ResearchProjectCategory, on_delete = models.CASCADE)
+    attachements = models.FileField(upload_to="ResearchAttachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
+
+    class Meta:
+        ordering = ['-timestamp',]
+
+class Project(models.Model):
+    title = models.CharField(max_length=500,null=False)
+    description = models.TextField(null=False)
+    detail = models.TextField(null=False)
+    status = models.CharField(max_length=100,null=False)
+    accepted = models.CharField(max_length=100,null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(ResearchProjectCategory, on_delete = models.CASCADE)
+    attachements = models.FileField(upload_to="ProjectAttachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
+
+    class Meta:
+        ordering = ['-timestamp',]
+    

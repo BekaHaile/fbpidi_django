@@ -30,14 +30,14 @@
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Title (Amharic) *</label>
+						<label class="col-form-label col-lg-3">Blog Title (Amharic) *</label>
 							<div class="col-lg-9">
 							<input type="text"required name="title_am" class="form-control" value="{{form.title_am}}" id="">
 						</div>
 							
 					</div> 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Tag (English) *</label>
+						<label class="col-form-label col-lg-3">Blog Tag (English) *</label>
 						
 							<div class="col-lg-9">
 							<input type="text" required name="tag" class="form-control" value="{{form.tag}} " id="">
@@ -46,7 +46,7 @@
 						</div>
 					</div>
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Tag (Amharic) *</label>
+						<label class="col-form-label col-lg-3">Blog Tag (Amharic) *</label>
 						
 							<div class="col-lg-9">
 							<input type="text" required name="tag_am" class="form-control" value="{{form.tag_am}} " id="">
@@ -56,7 +56,7 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3"> Content (English)*</label>
+						<label class="col-form-label col-lg-3">Blog Content (English)*</label>
 						<div class="col-lg-9">
 								<textarea  required class="summernote" name="content" >{{form.content}}</textarea>
 						</div>
@@ -64,7 +64,7 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3"> Content (Amharic) *</label>
+						<label class="col-form-label col-lg-3">Blog Content (Amharic) *</label>
 						<div class="col-lg-9">
 								<textarea required class="summernote" name="content_am" >{{form.content_am}}</textarea>
 						</div>
@@ -73,11 +73,30 @@
 
 					<div class="form-group row">
 						{%if  form.blogImage %}
-						<label class="col-form-label col-lg-3"> Current image </label>
+						<label class="col-form-label col-lg-3">Blog Current image </label>
 						
 						<div data-target="#carousel" data-slide-to="0" class="thumb">
-							<img src="{{form.blogImage.url}}" alt="img">
+							<img style="max-height:450px; max-width:450px; overflow: hidden" src="{{form.blogImage.url}}" alt="img">
 						</div>
+
+						<div class="card">
+                        <div class="card-img-actions m-1">
+                            <img class="card-img img-fluid" src="{{form.blogImage.url}}" width ="250" height = "200" alt="">
+                            <div class="card-img-actions-overlay card-img">
+                                
+                                <a style="max-height:80px; max-width:80px; overflow: hidden" href="{{form.blogImage.url}}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round" data-popup="lightbox" rel="group">
+                                    <i class="icon-eye"></i>
+                                </a>
+                                {% if user.is_superuser or form.user.get_company == user.get_company%}
+													{% if perms.collaborations.delete_blog %}
+                                <a href="{%url 'admin:delete' model_name='blog' id=1%}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2" onclick="return confirm ('Are you sure you want to delete this image?')">
+                                    <i class="icon-trash"></i>
+                                </a>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
 
 						{%else%}
 						<label class="col-form-label col-lg-3"> No image in the database*</label>
@@ -90,10 +109,12 @@
 
 							<div class="col-lg-9">
 								{%if form.publish == True %}
-							<input type="checkbox" name="publish" value=on class="form-check-input" id="exampleCheck1">
+								
+							<input type="checkbox" name="publish" class="form-check-input" id="exampleCheck1" checked>
 								{%endif%}
 								{%if form.publish == False %}
-							<input type="checkbox" name="publish" value=off class="form-check-input" id="exampleCheck1">
+								
+							<input type="checkbox" name="publish" value=OFF class="form-check-input" id="exampleCheck1">
 								{%endif%}
 						</div>
 							
@@ -104,7 +125,7 @@
 					<div class="form-group row">
 						<label class="col-form-label col-lg-2">Blog Image *</label>
 						<div class="col-lg-10">
-							<div class="uniform-uploader"><input required type="file" name="blogImage" value="{{form.blogImage.url}}" class="form-input-styled" data-fouc=""><span
+							<div class="uniform-uploader"><input type="file" name="blogImage" class="form-input-styled" data-fouc=""><span
 								class="filename" style="user-select: none;">No file selected</span><span
 								class="action btn bg-warning" style="user-select: none;">Choose File</span></div>
 						</div>

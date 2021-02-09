@@ -2,10 +2,11 @@ from django import forms
 from django_summernote.widgets import SummernoteWidget
 from .models import  (PollsQuestion, Choices, PollsResult,
                      Tender, TenderApplicant, 
-                      JobCategoty,Vacancy,JobApplication,
+                      JobCategory,Vacancy,JobApplication,
                       Faqs,Blog,BlogComment,
                       ForumQuestion,ForumComments,CommentReplay,
-                      ForumComments,Announcement, News, NewsImages
+                      ForumComments,Announcement, News, NewsImages,
+                      Research,Project,ResearchProjectCategory
                       )
 
 from django.forms.widgets import SelectDateWidget
@@ -17,6 +18,8 @@ JOB_CHOICES=[('Temporary','Temporary'),
 
 CURRENT_STATUS = [('JUST GRADUATED','JUST GRADUATED'),('WORKING','WORKING'),
                 ('LOOKING FOR JOB','LOOKING FOR JOB')]
+
+RESEARCH_STATUS = [('Complited','Complited'),('Inprogress','Inprogress'),]
 
 class FaqsForm(forms.ModelForm):
     
@@ -35,6 +38,20 @@ class BlogsForm(forms.ModelForm):
     class Meta:
         model = Blog
         fields = ('title', 'tag', 'content','publish','blogImage','title_am','tag_am','content_am')
+        widgets = {'content': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in English'}),
+                    'content_am': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in Amharic'}),
+                    'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in English'}),
+                    'tag':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in English'}),
+                    'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in Amharic'}),
+                    'tag_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in Amharic'}),
+
+
+                            }
+class BlogsEdit(forms.ModelForm):
+    
+    class Meta:
+        model = Blog
+        fields = ('title', 'tag', 'content','publish','title_am','tag_am','content_am')
         widgets = {'content': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in English'}),
                     'content_am': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in Amharic'}),
                     'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in English'}),
@@ -168,12 +185,12 @@ class VacancyForm(forms.ModelForm):
             'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'location':forms.TextInput(attrs={'class':'form-control','placeholder':'Location'}),
             'salary':forms.TextInput(attrs={'class':'form-control','type':'number','placeholder':'Salary in Birr'}),
-            'job_title':forms.TextInput(attrs={'class':'form-control','placeholder':'Job Title in English'}),
-            'job_title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Job Title in Amharic'}),
+            'job_title':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Title in English'}),
+            'job_title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Title in Amharic'}),
             'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in English'}),
             'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in Amharic'}),
-            'requirement':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirements for the Job in English'}),
-            'requirement_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Requirements for the Job in Amharic'})
+            'requirement':forms.TextInput(attrs={'class':'summernote','placeholder':'Requirements for the Job in English'}),
+            'requirement_am':forms.TextInput(attrs={'class':'summernote','placeholder':'Requirements for the Job in Amharic'})
                       
         }
 
@@ -184,16 +201,20 @@ class CreateJobApplicationForm(forms.ModelForm):
     class Meta:
         model = JobApplication
         fields = ('status', 'bio',
-                  'cv', 'documents') 
+                  'cv', 'documents','experinace',
+                  'grade','institite','field') 
         
         widgets = {
-            
-            'bio':forms.Textarea(attrs={'class':'summernote','placeholder':'Introduce your self and wright why you are appling'}),         
+            'experinace':forms.TextInput(attrs={"placeholder": "2",'class':'form-control','onkeyup':'isNumber("experinace")','id':'experinace'},),
+            'bio':forms.Textarea(attrs={'class':'summernote','placeholder':'Introduce your self and wright why you are appling'}),
+            'institite' : forms.TextInput(attrs={"placeholder": "school you learned in ",'class':'form-control'},),
+            'field' : forms.TextInput(attrs={"placeholder": "The field you learned",'class':'form-control'},),
+            'grade': forms.TextInput(attrs={"placeholder": "Your grade",'class':'form-control','onkeyup':'isNumber("grade")','id':'grade'},),
         }
 
 class JobCategoryForm(forms.ModelForm):
     class Meta:
-        model = JobCategoty
+        model = JobCategory
         fields = ('categoryName','categoryName_am')
         widgets ={
             'categoryName':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory in English'}),
@@ -253,10 +274,54 @@ class AnnouncementForm(forms.ModelForm):
         'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Announcement in Amharic'}),
         'containt':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in English'}),
         'containt_am':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in Amharic'}),
+        }
+        
+class ResearchProjectCategoryForm(forms.ModelForm):
+    class Meta:
+        model = ResearchProjectCategory
+        fields = ('cateoryname','detail')
+        widgets = {
+        'cateoryname':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory Of  the Research'}),
+        'detail':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory Of  the Research'}),
+        
+        }  
 
+class ProjectForm(forms.ModelForm):
+    attachements = forms.FileField(required=False)
+    # description = forms.CharField(widget=SummernoteWidget())
+    # detail = forms.CharField(widget=SummernoteWidget())
+    status = forms.ChoiceField(choices = RESEARCH_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
+
+    class Meta:
+        model = Project
+        fields  = ('title','description','detail','status','category')
+        widgets = {
+
+        'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+        'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Research'}),
+        'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
+        'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The hole research'}),
         }
 
+class ResearchForm(forms.ModelForm):
+    attachements = forms.FileField(required=False)
+    # description = forms.CharField(widget=SummernoteWidget())
+    # detail = forms.CharField(widget=SummernoteWidget())
+    status = forms.ChoiceField(choices = RESEARCH_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
 
+    class Meta:
+        model = Research
+        fields  = ('title','description','detail','status','category')
+        widgets = {
+
+        'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+        'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Research'}),
+        'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
+        'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The hole research'}),
+        }
+        
+
+ 
 
 
 

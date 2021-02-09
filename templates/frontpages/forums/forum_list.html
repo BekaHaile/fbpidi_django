@@ -7,7 +7,7 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Forum </h1>
+							<h1 class="">Research </h1>
 							
 						</div>
 					</div>
@@ -38,6 +38,7 @@
 							</div>
 						</form>
 						</div>
+						
 						<div class="card">
 							<div class="card-header">
                                     <h3 class="card-title">Forums you created </h3> 
@@ -74,6 +75,7 @@
 								</div>
 							</div>
                         </div>
+                        
 						
 					</div>
 					<!--/Left Side Content-->
@@ -99,20 +101,31 @@
 							</div>
 						</div>
 						<div class="row">
-							
+							<!----
+							title = models.CharField(max_length=500,null=False)
+    description = models.TextField(null=False)
+    detail = models.TextField(null=False)
+    status = models.CharField(max_length=100,null=False)
+    accepted = models.CharField(max_length=100,null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+-->
 							<div class="col-xl-12 col-lg-12 col-md-12">
 								{%for forum in forums%}
 								<div class="card">
+									<div class="card-head">
+										<h3>{{forum.title}}</h3>
+										<div>{{forum.status}}</div>
+									</div>
 									<div class="card-body">
 										<div class="item7-card-desc d-flex mb-2">
 											<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{forum.timestamp}}</a>
 											<div class="ml-auto">
-												<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>{{forum.countComment}}</a>
+												<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>{{forum.countComment}} </a>
 											</div>
 										</div>
 
 
-										<h4 class="font-weight-semibold">{{forum.description|safe|truncatewords:35}}</h4>
+										<h4 class="font-weight-semibold">{{forum.description|safe|truncatewords:30}}</h4>
 
 										<a href="{%url 'forum_detail' id=forum.id %}" class="btn btn-secondary btn-sm">Read More</a>
 									</div>
