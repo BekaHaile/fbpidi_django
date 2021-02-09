@@ -55,7 +55,7 @@ from company.views import (
 class CustomAdminSite(admin.AdminSite):
     def get_urls(self):
         urls = super().get_urls()
-
+      
         def wrap(view, cacheable=False):
             def wrapper(*args, **kwargs):
                 return self.admin_view(view, cacheable)(*args, **kwargs)
@@ -98,10 +98,12 @@ class CustomAdminSite(admin.AdminSite):
            
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
             path('download/<name>/<id>',wrap(Download.as_view()),name="Download"),
+
             path('close/<id>/<closed>',wrap(CloseVacancy.as_view()),name="close"),
             path('applicant-info/<id>',wrap(Applicantinfo.as_view()),name="Applicant_info"),
             path('applicant-list',wrap(ApplicantList.as_view()),name="Applicant_list"),
             
+
             path('JobCategory-form',wrap(JobcategoryFormView.as_view()),name="JobCategory_form"),
             path('JobCategory-list',wrap(JobCategoryList.as_view()),name="admin_JobCategory"),
             path('JobCategory-detail/<model_name>/<id>',wrap(JobCategoryDetail.as_view()),name='Category_form'),

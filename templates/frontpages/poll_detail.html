@@ -115,7 +115,7 @@
                             </div>
 
                             <!--/Choices-->
-                            {% if user.is_superuser == False and   not user == poll.user and not has_voted == True %}
+                            {% if poll.count_choices > 0 and user.is_superuser == False and   not user == poll.user and not has_voted == True %}
                                 <div class="form-group row">
                                     <label for = "remark" class="col-form-label col-lg-3"><h3>Any Remarks?</h3> </label><br><br>
                                     <textarea id="remark" name="remark" rows="4" cols="50"></textarea>
@@ -123,7 +123,7 @@
                                 
                             {% endif %}
                             
-                            {% if user.is_superuser == False and not user == poll.user and not has_voted == True %}
+                            {% if  poll.count_choices > 0 and user.is_superuser == False and not user == poll.user and not has_voted == True %}
                                 <div class="text-right">
                                     <button style="padding-left: 10%; padding-right: 10%;" type="submit"
                                         class="btn btn-primary rounded-round">Submit Vote </button>

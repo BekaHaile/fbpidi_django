@@ -21,7 +21,7 @@
 						<div class="header-elements">
 							{%if perms.collaborations.add_tender%}
 							<div class="list-icons">
-								<a href="{%url 'admin:create_tender' %}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
+								<a href="{%url 'admin:create_tender' %}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New Tender</a>
 							</div>
 							{%endif%}
 							
@@ -37,7 +37,10 @@
                                 <th>Start Date</th>
                                 <th>End Date</th>
 								<th>Status</th>
+								<th>No of Applicants</th>
+								
 								<th class="text-center">Actions</th>
+								
 							</tr>
 						</thead>
 						
@@ -51,6 +54,8 @@
 								<td>{{tender.start_date}}</td>
 								<td>{{tender.end_date}}</td>
 								<td>{{tender.status}}</td>
+								<td>{{tender.get_applications.count}}</td>
+								
 								
 								<td class="text-center">
 									<div class="list-icons">
@@ -58,31 +63,22 @@
 											<a href="#" class="list-icons-item" data-toggle="dropdown">
 												<i class="icon-menu9"></i>
 											</a>
-											<div class="dropdown-menu dropdown-menu-right">							
-												
-													{% if perms.collaborations.view_tender %}
-													<a href="{%url 'admin:tender_detail' id=tender.id%}"  class="dropdown-item"><i class="icon-eye"></i>View tender Detail</a>
-													{% endif %}
-
-													{% if perms.collaborations.change_tender %}
-
-														{% if user.is_superuser or tender.get_company.company_name == user.get_company_name  %}															
-															<a href="{%url 'admin:edit_tender' id=tender.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Tender</a>	
-														{% endif %}
+											<div class="dropdown-menu dropdown-menu-right">	
+												{% if user == tender.user  %}											
 													
-
-														{% if perms.collaborations.delete_tender %}
-															{% if user.is_superuser or tender.get_company.company_name == user.get_company_name   %}
-															<a href="{%url 'admin:delete_tender'  id=tender.id %}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this tender?')"><i class="icon-trash"></i>Delete Tender</a>
-															
-															{%endif%}
-														{%endif%}				
-													{% endif %}
+													<a href="{%url 'admin:tender_detail' id=tender.id%}"  class="dropdown-item"><i class="icon-eye"></i>View tender Detail</a>
+													<a href="{%url 'admin:edit_tender' id=tender.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Tender</a>	
+													<a href="{%url 'admin:delete_tender'  id=tender.id %}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this tender?')"><i class="icon-trash"></i>Delete Tender</a>
+												{% else %}
+												<a href="#"  class="dropdown-item">You Are Not Authorized to Perform Any Action On this Tender.</a>
+												
+												{%endif%}	
 
 											</div>
 										</div>
 									</div>
 								</td>
+								
 							</tr>
 							{%endfor%}
 						</tbody>

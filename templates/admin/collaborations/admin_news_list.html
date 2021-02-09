@@ -19,11 +19,12 @@
 					<div class="card-header header-elements-inline">
 						<h5 class="card-title">News</h5>
 						<div class="header-elements">
-							{% if perms.collaborations.add_news %}
 							<div class="list-icons">
+								
 								<a href="{% url 'admin:create_news' %}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
+								
 							</div>
-							{% endif %}
+							
 						</div>
 					</div>
 					<table class="table datatable-show-all">

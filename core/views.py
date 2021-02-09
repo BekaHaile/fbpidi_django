@@ -15,7 +15,7 @@ from product.forms import ReviewForm
 #
 from collaborations.models import News, NewsImages
 
-# truncatewords:10
+
 class IndexView(View):
     def get(self,*args,**kwargs):
     
@@ -23,8 +23,10 @@ class IndexView(View):
         category = Category.objects.all()
         sub_category = SubCategory.objects.all()
         company = Company.objects.all()
+        #make it filter the latest 4 or 5
         news_list = News.objects.all()
-        context = {'products':products,'categories':category,'sub_categories':sub_category,'companies':company, 'news_list':news_list}
+        
+        context = {'products':products,'categories':category,'sub_categories':sub_category,'companies':company, 'news_list':news_list, 'NEWS_CATAGORY':News.NEWS_CATAGORY }
         return render(self.request,"frontpages/index.html",context)
 
 class ProductByCategoryView(View):

@@ -317,11 +317,15 @@ class CreateResearch(LoginRequiredMixin,View):
 		return render(self.request, template_name,context)
 from company.forms import EventParticipantForm
 
+
+
+
 # --------------- Announcement
 
 
 class AnnouncementDetail(View):
-	def get(self,*args,**kwargs):
+
+  def get(self,*args,**kwargs):
 		form = Announcement.objects.get(id=self.kwargs['id'])
 		template_name="frontpages/announcement/announcement_detail.html"
 		context={'post':form}
@@ -358,8 +362,6 @@ class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 			post.containt = form.cleaned_data.get('containt')
 			post.containt_am = form.cleaned_data.get('containt_am')
 			post.save()
-			print("----- | ----")
-			print(self.request.FILES.getlist('images'))
 			for images in self.request.FILES.getlist('images'):
 				print("image name:"+str(images.name))
 				announcementimages= AnnouncementImages()
@@ -375,8 +377,18 @@ class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 
 class CreatAnnouncementAdmin(LoginRequiredMixin,View):
 	def company_admin(self,*args,**kwarges):
+    try:
+                if self.request.user.is_company_admin:
+                    company = Company.objects.get(user = self.request.user)
+                    
+                elif self.request.user.is_company_staff:
+                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
+                    company = Company.objects.get(id = company_staff.company.id)
+        except Exception as e:
+                messages.warning(self.request, "Currently, You are not related with any registered Company.")
+                print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
+                return redirect("admin:create_company_profile")
 		force = Company.objects.get(user=self.request.user)
-		print("----------------"+str(force))
 		return force
 	
 	def get(self,*args,**kwargs):
@@ -408,14 +420,11 @@ class CreatAnnouncementAdmin(LoginRequiredMixin,View):
 			messages.success(self.request, "Added New Announcement Successfully")
 			return redirect("admin:anounce_Create")
 		return render(self.request, template_name,context)
-
 #---------------- forum and comment on forum
 
 
 class EditCommentForum(View):
 	def post(self,*args,**kwargs):
-		print("============") 
-		print(self.request.POST["content"])
 		if(self.kwargs['type']=="ForumComments"):
 			comment = ForumComments.objects.get(id=self.kwargs['id'])
 			comment.comment =  self.request.POST["content"]
@@ -450,28 +459,40 @@ class CreateCommentReplay(LoginRequiredMixin,View):
 
 #----- create forum quesion
 class CreateForumQuestion(LoginRequiredMixin,View):
-	def get(self,*args,**kwargs):
-		forum = ForumQuestionForm()
-		template_name="frontpages/forums/forums_form.html" 
-		userCreated = ForumQuestion.objects.filter(user=self.request.user)
-		context = {'form':forum,'usercreated':userCreated}
-		return render(self.request,template_name,context)
-	def post(self,*args,**kwargs):
-		form = ForumQuestionForm(self.request.POST,self.request.FILES)
-		userCreated = ForumQuestion.objects.filter(user=self.request.user)
-		context = {'form':form,'usercreated':userCreated}
-		template_name="frontpages/forums/forums_form.html" 
-		if form.is_valid():
-			forum = ForumQuestion()
-			forum = form.save(commit=False)
-			forum.user = self.request.user
-			forum.attachements = form.cleaned_data.get("attachements")
-			print("one")
-			forum.save()
-			forum = ForumQuestionForm()
-			context={'form':forum}
-			return redirect("forum_list")
-		return render(self.request, template_name,context)
+    def get(self,*args,**kwargs):
+        forum = ForumQuestionForm()
+        try:
+                if self.request.user.is_company_admin:
+                    company = Company.objects.get(user = self.request.user)
+                    
+                elif self.request.user.is_company_staff:
+                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
+                    company = Company.objects.get(id = company_staff.company.id)
+        except Exception as e:
+                messages.warning(self.request, "Currently, You are not related with any registered Company.")
+                print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
+                return redirect("admin:create_company_profile")
+
+        template_name="frontpages/forums/forums_form.html" 
+        userCreated = ForumQuestion.objects.filter(user=self.request.user)
+        context = {'form':forum,'usercreated':userCreated}
+        return render(self.request,template_name,context)
+    def post(self,*args,**kwargs):
+        form = ForumQuestionForm(self.request.POST,self.request.FILES)
+        userCreated = ForumQuestion.objects.filter(user=self.request.user)
+        context = {'form':forum,'usercreated':userCreated}
+        template_name="frontpages/forums/forums_form.html" 
+        if form.is_valid():
+            forum = ForumQuestion()
+            forum = form.save(commit=False)
+            forum.user = self.request.user
+            forum.attachements = form.cleaned_data.get("attachements")
+            print("one")
+            forum.save()
+            forum = ForumQuestionForm()
+            context={'form':forum}
+            return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
+        return render(self.request, template_name,context)
 
 class ListForumQuestions(View):
 	def get(self,*args,**kwargs):
@@ -559,12 +580,24 @@ class ForumQuestionsDetail(View):
 
 ## --- Blogs Views
 class CreatBlog(LoginRequiredMixin,View):
-	template_name="admin/pages/blog_form.html"
 	def get(self,*args,**kwargs):
-		form = BlogsForm()
-		template_name="admin/pages/blog_form.html"
-		context={'form':form}
-		return render(self.request, template_name,context)
+	   
+      form = BlogsForm()
+      try:
+                if self.request.user.is_company_admin:
+                    company = Company.objects.get(user = self.request.user)
+                    
+                elif self.request.user.is_company_staff:
+                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
+                    company = Company.objects.get(id = company_staff.company.id)
+      except Exception as e:
+                messages.warning(self.request, "Currently, You are not related with any registered Company.")
+                print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
+                return redirect("admin:create_company_profile")
+      form = BlogsForm()
+      template_name="admin/pages/blog_form.html"
+      context={'form':form}
+      return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = BlogsForm(self.request.POST,self.request.FILES)
 		context={'form':form}
@@ -640,10 +673,22 @@ class BlogView(LoginRequiredMixin,View):
 ## --- Faqs views
 
 class CreateFaqs(LoginRequiredMixin,View):
-	def get(self,*args,**kwargs):
-		form = FaqsForm()
-		context = {'form':form}
-		return render(self.request,"admin/pages/faqs_forms.html",context)
+  def get(self,*args,**kwargs):
+        try:
+                if self.request.user.is_company_admin:
+                    company = Company.objects.get(user = self.request.user)
+                    
+                elif self.request.user.is_company_staff:
+                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
+                    company = Company.objects.get(id = company_staff.company.id)
+        except Exception as e:
+                messages.warning(self.request, "Currently, You are not related with any registered Company.")
+                print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
+                return redirect("admin:create_company_profile")
+
+        form = FaqsForm()
+        context = {'form':form}
+        return render(self.request,"admin/pages/faqs_forms.html",context)
 
 	def post(self,*args,**kwargs):
 		form = FaqsForm(self.request.POST)
@@ -759,7 +804,19 @@ class JobCategoryList(LoginRequiredMixin,View):
 
 class JobcategoryFormView(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
-		form = JobCategoryForm()
+    try:
+                if self.request.user.is_company_admin:
+                    company = Company.objects.get(user = self.request.user)
+                    
+                elif self.request.user.is_company_staff:
+                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
+                    company = Company.objects.get(id = company_staff.company.id)
+    except Exception as e:
+                messages.warning(self.request, "Currently, You are not related with any registered Company.")
+                print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
+                return redirect("admin:create_company_profile")
+        
+    form = JobCategoryForm()
 		context = {'form':form}
 		return render(self.request,"admin/pages/jobCategory_form.html",context)
 	def post(self,*args,**kwargs):
@@ -773,10 +830,10 @@ class JobcategoryFormView(LoginRequiredMixin,View):
 			context = {'form':form}
 		return render(self.request,"admin/pages/jobCategory_form.html",context)
 
+
 class JobCategoryDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = JobCategory.objects.get(id=self.kwargs['id'])
-		#print(str(self.kwargs['id'])+"-----------------"+str(form.categoryName))
 		context = {'form':form}
 		return render(self.request,"admin/pages/jobCategory_detail.html",context)
 	def post(self,*args,**kwarges):
@@ -866,11 +923,22 @@ class AdminVacancyList(LoginRequiredMixin,View):
 class CreateVacancy(LoginRequiredMixin, View):
 	def company_admin(self,*args,**kwarges):
 		force = Company.objects.get(user=self.request.user)
-		print("----------------"+str(force))
 		return force
-
-	def get(self,*args,**kwargs):        
-		vacancy = VacancyForm() 
+	
+  def get(self,*args,**kwargs):        
+    try:
+                if self.request.user.is_company_admin:
+                    company = Company.objects.get(user = self.request.user)
+                    
+                elif self.request.user.is_company_staff:
+                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
+                    company = Company.objects.get(id = company_staff.company.id)
+    except Exception as e:
+                messages.warning(self.request, "Currently, You are not related with any registered Company.")
+                print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
+                return redirect("admin:create_company_profile")
+       
+    vacancy = VacancyForm() 
 		context = {'vacancy':vacancy}
 		return render(self.request,"admin/pages/job_form.html",context)
 
@@ -906,14 +974,8 @@ class CreateApplication(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		vacancy=Vacancy.objects.get(id=self.kwargs['id'] ,closed=False)
 		applicants=JobApplication.objects.filter(vacancy=vacancy.id)
-		print("----------")
-		for applicant in applicants:
-			print(applicant.user)
-		print("----------")
-		print(self.request.user)
 		for applicant in applicants:
 			if(applicant.user == self.request.user):
-				print("---vacancy---")
 				messages.warning(self.request, "You can't apply to the same vacancy Twice")
 				return redirect("vacancy")
 				
@@ -969,14 +1031,11 @@ class BlogList(View):
 			for split in splited:
 				stringlist.append(split)
 
-		#print("000000000000")
 		taglist = set(stringlist)
 		taglist = list(taglist)
 
 		for string in taglist:
 			if string == '':
-				#print("Wow")
-				#print(string)
 				continue
 			truestring.append(string)
 		return truestring
@@ -986,8 +1045,6 @@ class BlogList(View):
 		template_name="frontpages/blog-grid-right.html"
 		tags=self.get_tags()
 		context={'blogs':blog,'tags':tags}
-		#print("Render 0")
-		#print(tags)
 		return render(self.request, template_name,context)
 
 class CreateBlogComment(LoginRequiredMixin,View):
@@ -1012,14 +1069,11 @@ class SearchBlog(View):
 			for split in splited:
 				stringlist.append(split)
 
-		#print("000000000000")
 		taglist = set(stringlist)
 		taglist = list(taglist)
 
 		for string in taglist:
 			if string == '':
-				#print("Wow")
-				#print(string)
 				continue
 			truestring.append(string)
 		return truestring
@@ -1028,8 +1082,6 @@ class SearchBlog(View):
 		return redirect(reverse("blog_grid_right"))
 
 	def post(self,*args,**kwargs):
-		print("============")
-		print(self.request.POST["search"])
 		blog = Blog.objects.filter(title__contains=self.request.POST['search'])
 		template_name = "frontpages/blog-grid-right.html"
 		print(blog)
@@ -1046,14 +1098,11 @@ class SearchBlogTag(View):
 			for split in splited:
 				stringlist.append(split)
 
-		#print("000000000000")
 		taglist = set(stringlist)
 		taglist = list(taglist)
 
 		for string in taglist:
 			if string == '':
-				#print("Wow")
-				#print(string)
 				continue
 			truestring.append(string)
 		return truestring
@@ -1075,15 +1124,11 @@ class BlogDetail(View):
 			splited = b.tag.split(" ");
 			for split in splited:
 				stringlist.append(split)
-
-		#print("000000000000")
 		taglist = set(stringlist)
 		taglist = list(taglist)
 
 		for string in taglist:
 			if string == '':
-				#print("Wow")
-				#print(string)
 				continue
 			truestring.append(string)
 		return truestring
@@ -1126,7 +1171,6 @@ class PollDetail(LoginRequiredMixin,View):
                 return render(self.request, "frontpages/poll_detail.html", context)
 
             except Exception as e:
-                print ("444444444444444444444444" ,str(e))
                 messages.warning(self.request, "Poll not found")
                 return redirect("polls") 
 
@@ -1162,8 +1206,15 @@ class CreateTender(LoginRequiredMixin,View):
         try:    
             form = TenderForm()
             try:
-                company = Company.objects.get(user = self.request.user)
+                if self.request.user.is_company_admin:
+                    company = Company.objects.get(user = self.request.user)
+                    
+                elif self.request.user.is_company_staff:
+                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
+                    company = Company.objects.get(id = company_staff.company.id)
             except Exception as e:
+                messages.warning(self.request, "Currently, You are not related with any registered Company.")
+                print("Exception while trying to find the company of an company admin or company staff user in createTender ", str(e))
                 return redirect("admin:create_company_profile")
             company_bank_accounts = company.get_bank_accounts()
             context = {'form':form, 'company_bank_accounts':company_bank_accounts}
@@ -1178,11 +1229,6 @@ class CreateTender(LoginRequiredMixin,View):
             if form.is_valid():
                 tender = form.save(commit=False)
                 user = None
-                if self.request.user.is_company_admin: 
-                    user = CompanyAdmin.objects.get(user=self.request.user) 
-
-                # elif self.request.user.is_staff:
-                #     user = CompanyStaff.objects.get(user.self.request.user)
                 tender.user = self.request.user
                 if  self.request.FILES['document']:
                     tender.document = self.request.FILES['document']
@@ -1223,15 +1269,26 @@ def check_tender_enddate(request, tenders):
     return tenders
 
 class TenderList(LoginRequiredMixin,View):
-	def get(self, *args, **kwargs):          
-		try:    
-				tenders = Tender.objects.all()
-				tenders = check_tender_enddate(self.request, tenders)       
-				return render(self.request, "admin/collaborations/tenders.html", {'tenders':tenders,})
-		except Exception as e:
-				messages.warning(self.request, "Error while getting tenders",)
-				print(str(e))
-				return redirect("admin:index") 
+    def get(self, *args, **kwargs):
+                  
+        try:    
+            if self.request.user.is_superuser:
+                tenders = Tender.objects.all()
+                tenders = check_tender_enddate(self.request, tenders)       
+                return render(self.request, "admin/collaborations/tenders.html", {'tenders':tenders,})
+
+            else:
+                tenders = Tender.objects.filter(user = self.request.user)
+                if not tenders:
+                    messages.warning(self.request, "You have no tenders to control!!")
+                    return render(self.request, "admin/collaborations/tenders.html")
+
+                tenders = check_tender_enddate(self.request, tenders)       
+                return render(self.request, "admin/collaborations/tenders.html", {'tenders':tenders,})
+        except Exception as e:
+                messages.warning(self.request, "Error while getting tenders",)
+                print(str(e))
+                return redirect("admin:index") 
 
 
 class TenderDetail(LoginRequiredMixin,View):
@@ -1421,16 +1478,26 @@ def pdf_download(request, id):
 
 
 ##### News
+
 class CreateNews(LoginRequiredMixin, View):
     def get(self,*args,**kwargs):
-        try:    
-            form = NewsForm()
-            context = {'form':form,}
-            return render(self.request,'admin/collaborations/create_news.html',context)
-        except Exception as e: 
-            print("execption at create News ", str(e))
-            return redirect("admin:news_list")
-        
+        try:
+                if self.request.user.is_company_admin:
+                    company = Company.objects.get(user = self.request.user)
+                    
+                elif self.request.user.is_company_staff:
+                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
+                    company = Company.objects.get(id = company_staff.company.id)
+        except Exception as e:
+                messages.warning(self.request, "Currently, You are not related with any registered Company.")
+                print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
+                return redirect("admin:create_company_profile")
+
+        form = NewsForm()    
+        context = {'form':form,}
+        return render(self.request,'admin/collaborations/create_news.html',context)
+        return redirect("admin:news_list")
+    
     def post(self, *args, **kwargs):
         form = NewsForm( self.request.POST) 
         if form.is_valid:
@@ -1506,7 +1573,8 @@ class CustomerNewsList(View):
     def get(self, *args, **kwargs):          
         try:
                 news_list = News.objects.all()
-                return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':news_list,})
+
+                return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':news_list,'NEWS_CATAGORY':News.NEWS_CATAGORY})
         except Exception as e:
                 return redirect("index")
 

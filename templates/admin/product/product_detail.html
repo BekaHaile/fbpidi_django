@@ -47,6 +47,7 @@
 							<form action="{% url 'admin:add_product_image'%}" method="post" enctype="multipart/form-data">{%csrf_token%}
 								<div class="media align-items-center align-items-lg-start text-center text-lg-left flex-column flex-lg-row">
 									<div class="mr-lg-3 mb-3 mb-lg-0">
+										
 										<a href="{{product.image.url}}" data-popup="lightbox">
 											<img src="{{product.image.url}}" width="200" alt="">
 										</a>
