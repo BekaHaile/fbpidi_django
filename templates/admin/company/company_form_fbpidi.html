@@ -200,5 +200,12 @@
 	$(document).ready(function () {
 		$(".summernote").summernote();
 	});
+	<script >
+	function isNumber(kkk)
+  {
+    
+     $("#"+kkk).val($("#"+kkk).val().replace(/[^\d.]/g, ''));  
+  }
+</script>
 </script>
 {%endblock%}

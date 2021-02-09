@@ -22,7 +22,7 @@ def create_auth_token(sender, instance = None, created = False, **kwargs):
 
     
 class User(AbstractUser):
-    phone_number = models.CharField(max_length=20,blank=True,null=True)
+    phone_number = models.CharField(max_length=20,blank=True,null=True) 
     is_customer = models.BooleanField(default=False)  # if user is customer
     is_company_admin = models.BooleanField(default=False)  # if user is company admin
     is_company_staff = models.BooleanField(default=False) # if user is company staff

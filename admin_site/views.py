@@ -12,12 +12,12 @@ from company.models import Company,CompanyEvent
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
-from collaborations.models import PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategoty, Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages,News, NewsImages
+from collaborations.models import (PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategory, 
+                                    Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages,
+                                    News, NewsImages,Project,Research,ResearchProjectCategory,ForumQuestion)
 from django.http import HttpResponse, FileResponse
  
 # 
-
-
 # INDEX VIEW
 class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -46,33 +46,85 @@ class DeleteView(LoginRequiredMixin,View):
             if self.request.user.is_superuser:
                 return redirect("admin:super_Job_list")
             return redirect("admin:Job_list")
+        elif self.kwargs['model_name'] == 'ForumQuestion':
+            forum = ForumQuestion.objects.get(id=self.kwargs['id'])
+            forum.delete()
+            message ="Forum Deleted"
+            messages.success(self.request,message)
+            return redirect("forum_list")
+        elif self.kwargs['model_name'] == 'ForumQuestionAdmin':
+            forum = ForumQuestion.objects.get(id=self.kwargs['id'])
+            forum.delete()
+            message ="Forum Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:forum_list")
         elif self.kwargs['model_name'] == 'ForumComments':
             announcement = ForumComments.objects.get(id=self.kwargs['id'])
             announcement.delete()
             return redirect("forum_list")
+        elif self.kwargs['model_name'] == 'ForumCommentsAdmin':
+            announcement = ForumComments.objects.get(id=self.kwargs['id'])
+            announcement.delete()
+            message ="Forum Comment Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:forum_comment_list")
+
+        elif self.kwargs['model_name'] == 'ResearchProjectCategory':
+            category = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
+            category.delete()
+            message ="Research and project Category Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:researchprojectcategory_list")
         elif self.kwargs['model_name'] == 'AnnouncementImages':
             vacancy = AnnouncementImages.objects.get(id=self.kwargs['id'])
             id =vacancy.announcement.id
             vacancy.delete()
             message ="AnnouncementImages Deleted"
             messages.success(self.request,message)
-            
-            return redirect("admin:anounce_Detail",model_name="Announcement",id=id)
+            return redirect(f"/admin/anounce-Detail/Announcement/{id}")
+        elif self.kwargs['model_name'] == 'Project':
+            research = Project.objects.get(id=self.kwargs['id'])
+            research.delete()
+            message ="Project Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:project_list")
+        elif self.kwargs['model_name'] == 'Research':
+            research = Research.objects.get(id=self.kwargs['id'])
+            research.delete()
+            message ="Research Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:research_list") 
+        elif self.kwargs['model_name'] == 'ProjectClient':
+            research = Project.objects.get(id=self.kwargs['id'])
+            research.delete()
+            messages.success(self.request,message)
+            return redirect("project_list")
+        elif self.kwargs['model_name'] == 'ResearchClient':
+            research = Research.objects.get(id=self.kwargs['id'])
+            research.delete()
+            messages.success(self.request,message)
+            return redirect("research_list")
         elif self.kwargs['model_name'] == 'CommentReplay':
             commentreplay = CommentReplay.objects.get(id=self.kwargs['id'])
             commentreplay.delete()
             return redirect("forum_list")
+        elif self.kwargs['model_name'] == 'CommentReplayAdmin':
+            commentreplay = CommentReplay.objects.get(id=self.kwargs['id'])
+            commentreplay.delete()
+            message ="comment Replay Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:comment_replay_detail")
         elif self.kwargs['model_name'] == 'Announcement':
             announcement = Announcement.objects.get(id=self.kwargs['id'])
             announcement.delete()
             message ="Announcement Deleted"
             return redirect("admin:anounce_list")
-        elif self.kwargs['model_name'] == 'JobCategoty':
-            jobcategory = JobCategoty.objects.get(id=self.kwargs['id'])
+        elif self.kwargs['model_name'] == 'JobCategory':
+            jobcategory = JobCategory.objects.get(id=self.kwargs['id'])
             jobcategory.delete()
             message ="Job category Deleted"
             messages.success(self.request,message)
-            return redirect("admin:admin_jobcategoty")
+            return redirect("admin:admin_JobCategory")
         elif self.kwargs['model_name'] == 'Blog':
             Blog1 = Blog.objects.get(id=self.kwargs['id'])
             Blog1.delete()

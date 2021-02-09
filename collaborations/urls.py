@@ -1,15 +1,39 @@
 from django.urls import path,include
 
 from .views import (BlogList,BlogDetail,FaqList,
-                    PollIndex, PollDetail, VacancyMoreDetail,CreateComment,
+                    PollIndex, PollDetail, VacancyMoreDetail,CreateBlogComment, SearchBlog,
                     CustomerTenderList, CustomerTenderDetail, CreateApplication, VacancyList,
                     CategoryBasedSearch, CreateForumQuestion , ListForumQuestions,ForumQuestionsDetail,
-                    CreateCommentReplay,ListAnnouncement,EditCommentForum,EditForumQuestions,
-                    SearchForum, ApplyForTender,  pdf_download, 
-                    CustomerNewsList, CustomerNewsDetail , CustomerEventList, CustomerEventDetail, EventParticipation)
+                    CreateCommentReplay,EditCommentForum,EditForumQuestions,
+                    ApplicantListDetail,
+                    AnnouncementDetail,ListAnnouncement,
+                    EditResearch,ListResearch,ResearchDetail,CreateResearch,SearchResearch,
+                    ResearchCategorySearch,
+
+                    SearchForum,ApplyForTender,pdf_download,SearchBlogTag,CustomerNewsList,
+                    CustomerNewsDetail,CustomerEventList, CustomerEventDetail, EventParticipation
+                    )
+
+from .Views.projects import (EditProject,ListProject,ProjectDetail,CreateProject
+                            ,SearchProject,ProjectCategorySearch,)  
                     
 
 urlpatterns = [ 
+
+    path("project-list",ListProject.as_view(),name="project_list"),
+    path("project-edit/<id>",EditProject.as_view(),name="project_edit"),
+    path('project-search',SearchProject.as_view(),name='project_search'),
+    path("project-form",CreateProject.as_view(),name="project_form"),
+    path("project-detail/<id>",ProjectDetail.as_view(),name="project_detail"),
+    path("project-category/<id>",ProjectCategorySearch.as_view(),name="projectcategory_search"),
+
+    path("research-list",ListResearch.as_view(),name="research_list"),
+    path("research-edit/<id>",EditResearch.as_view(),name="research_edit"),
+    path('research-search',SearchResearch.as_view(),name='research_search'),
+    path("research-form",CreateResearch.as_view(),name="research_form"),
+    path("research-detail/<id>",ResearchDetail.as_view(),name="research_detail"),
+    path("research-category/<id>",ResearchCategorySearch.as_view(),name="researchcategory_search"),
+
     path("polls/", PollIndex.as_view(), name = "polls" ),
     path("poll_detail/<id>/", PollDetail.as_view(), name = "poll_detail"),
     
@@ -17,22 +41,28 @@ urlpatterns = [
     path("forum-edit/<id>",EditForumQuestions.as_view(),name="forum_edit"),
     path("forum-search",SearchForum.as_view(),name="forum_search"),
     path("forum-form",CreateForumQuestion.as_view(),name="forum_form"),
-    path("announcement-list/",ListAnnouncement.as_view(),name="announcement_list"),
-    path("apply/<model_name>/<id>",CreateApplication.as_view(),name="applications"),
     path("forum-list",ListForumQuestions.as_view(),name="forum_list"),
     path("Replay-comment/<id>/<forum>",CreateCommentReplay.as_view(),name="Replay_comment"),
     path("forum-detail/<id>",ForumQuestionsDetail.as_view(),name="forum_detail"),
-    path("tender_list/", CustomerTenderList.as_view(), name = "tender_list"),
-    path("customer_tender_detail/<id>/", CustomerTenderDetail.as_view(), name = "customer_tender_detail"),
-    path("tender_application/<id>/", ApplyForTender.as_view(), name= "tender_application"),
+
+    path("announcement-list/",ListAnnouncement.as_view(),name="announcement_list"),
+    path("announcement-detail/<id>/",AnnouncementDetail.as_view(),name="announcement_detail"),
+    
+    path("customer-tender_detail/<id>/", CustomerTenderDetail.as_view(), name = "customer_tender_detail"),
+    path("tender-application/<id>/", ApplyForTender.as_view(), name= "tender_application"),
     path("download/<id>/", pdf_download, name = "download"),
+    path("tender-list/", CustomerTenderList.as_view(), name = "tender_list"),
 
     path("faq/",FaqList.as_view(),name="faq"),
+    
+    path("search-tag/<name>",SearchBlogTag.as_view(),name="search_blogtag"),
     path("blog-list/",BlogList.as_view(),name="blog_grid_right"),
+    path("blog-search/",SearchBlog.as_view(),name="blog_search"),
     path("blog-details/<id>",BlogDetail.as_view(),name="blog_details"),
-    path("blog-comment/<id>",CreateComment.as_view(),name="Comment"),
+    path("blog-comment/<id>",CreateBlogComment.as_view(),name="Comment"),
 
     path("vacancy-list/",VacancyList.as_view(),name="vacancy"),
+    path("vacancy-apply/<model_name>/<id>",CreateApplication.as_view(),name="applications"),
     path("vacancy-search/<id>",CategoryBasedSearch.as_view(),name="vacancy_search"),
     path("vacancy-detail/<id>",VacancyMoreDetail.as_view(),name="vacancy_detail"),
 
