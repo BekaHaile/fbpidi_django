@@ -29,7 +29,7 @@ from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,F
 
                         SuperAdminVacancyList,ListAnnouncementAdmin,
                         AdminNewsList, CreateNews, EditNews,  NewsDetail,
-                        CreatAnnouncement,ListAnnouncement,AnnouncementDetail,
+                        CreatAnnouncementAdmin,ListAnnouncement,AnnouncementDetail,
 
                         TenderList, CreateTender, TenderDetail, EditTender,  DeleteTender, ManageBankAccount
 
