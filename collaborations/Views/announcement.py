@@ -109,25 +109,15 @@ class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 
 
 
-class CreatAnnouncementAdmin(LoginRequiredMixin,View):
+class CreatAnnouncementAdmin(LoginRequiredMixin,View): 
 	def company_admin(self,*args,**kwarges):
-		try:
-			if self.request.user.is_company_admin:
-				company = Company.objects.get(user = self.request.user)
-			elif self.request.user.is_company_staff:
-				company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-				company = Company.objects.get(id = company_staff.company.id)
-		except Exception as e:
-			messages.warning(self.request, "Currently, You are not related with any registered Company.")
-			print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
-			return redirect("admin:create_company_profile")
-			force = Company.objects.get(user=self.request.user)
-			return force
+		force = Company.objects.get(user=self.request.user)
+		return force
 	
 	def get(self,*args,**kwargs):
 		announcement = AnnouncementForm()
 		template_name="admin/announcement/announcement_form.html"
-		context={'announcement':announcement}
+		context={'form':announcement}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		announcement = AnnouncementForm(self.request.POST,self.request.FILES)
@@ -138,7 +128,7 @@ class CreatAnnouncementAdmin(LoginRequiredMixin,View):
 			post = Announcement()
 			post = announcement.save(commit=False)
 			post.user = self.request.user  
-			post.company = self.company_admin()                 
+			post.company = self.company_admin()         
 			post.save()
 			for images in self.request.FILES.getlist('images'):
 				print("image name:"+str(images.name))

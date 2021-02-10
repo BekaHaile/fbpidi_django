@@ -67,16 +67,6 @@ class FaqList(View):
 
 class CreateFaqs(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
-		try:
-			if self.request.user.is_company_admin:
-				company = Company.objects.get(user = self.request.user)
-			elif self.request.user.is_company_staff:
-				company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-				company = Company.objects.get(id = company_staff.company.id)
-		except Exception as e:
-			messages.warning(self.request, "Currently, You are not related with any registered Company.")
-			print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
-			return redirect("admin:create_company_profile")
 		form = FaqsForm()
 		context = {'form':form}
 		return render(self.request,"admin/pages/faqs_forms.html",context)

@@ -45,7 +45,7 @@ from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
 								 ForumQuestionForm,CommentForm,CommentReplayForm,
 								 AnnouncementForm,ResearchForm,
 								 ResearchProjectCategoryForm
-								 )
+								 ) 
 
 from collaborations.models import ( Blog, BlogComment,Faqs,
 									Vacancy,JobApplication, JobCategory,
