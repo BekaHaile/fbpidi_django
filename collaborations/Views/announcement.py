@@ -62,7 +62,7 @@ class AnnouncementDetail(View):
 	def get(self,*args,**kwargs):
 		announcement = Announcement.objects.get(id=self.kwargs['id'])
 		template_name="frontpages/announcement/announcement_detail.html"
-		context={'announcement':announcement}
+		context={'post':announcement}
 		return render(self.request, template_name,context)
 
 class ListAnnouncement(View):
