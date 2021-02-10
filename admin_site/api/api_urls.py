@@ -23,20 +23,24 @@ from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoic
 #                         EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
 
 
-from collaborations.views import (CreatBlog,AdminBlogList,BlogView, CreateFaqs,FaqsView,FaqsList,
-                        CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
-                        JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
+from collaborations.views import ( 
+                        # CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
+                        # JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
 
-                        SuperAdminVacancyList,ListAnnouncementAdmin,
+                        # SuperAdminVacancyList,
                         AdminNewsList, CreateNews, EditNews,  NewsDetail,
-                        CreatAnnouncement,ListAnnouncement,AnnouncementDetail,
 
                         TenderList, CreateTender, TenderDetail, EditTender,  DeleteTender, ManageBankAccount
 
                         )
+from collaborations.Views.blog import(
+                        CreatBlog,AdminBlogList,BlogView, )
+
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView
                             )
+
+from collaborations.Views.announcement import (AnnouncementDetail,ListAnnouncement,)  
                             
 from company.views import (
     CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,EditCompanyEvent,
