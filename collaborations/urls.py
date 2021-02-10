@@ -35,7 +35,7 @@ urlpatterns = [
     path("research-category/<id>",ResearchCategorySearch.as_view(),name="researchcategory_search"),
 
     path("polls/", PollIndex.as_view(), name = "polls" ),
-    path("poll-detail/<id>/", PollDetail.as_view(), name = "poll_detail"),
+    path("poll_detail/<id>/", PollDetail.as_view(), name = "poll_detail"),
     
     path("edit-comment/<id>/<forum>/<type>/",EditCommentForum.as_view(),name="edit_comment"),
     path("forum-edit/<id>",EditForumQuestions.as_view(),name="forum_edit"),

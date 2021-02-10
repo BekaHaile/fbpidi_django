@@ -106,8 +106,8 @@
 															<a href="/collaborations/customer_news_detail/{{news.id}}/"></a>
 															{% if news.get_images.0.image.url %}
 															<img src="{{news.get_images.0.image.url}}" alt="img" class="cover-image">
-															{% elif news.user.get_company.get_image %}
-															<img src="{{news.user.get_company.get_image}}"  alt="img" class="cover-image">
+															{% elif news.get_company.get_image %}
+															<img src="{{news.get_company.get_image}}"  alt="img" class="cover-image">
 															{% else %}
 															
 															<img src="/static/frontpages/images/products/products/v1.jpg"  alt="img" class="cover-image">
@@ -132,10 +132,14 @@
 																<div class="item-card9-cost">
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
 																		<b>By: &nbsp</b>
-																		<img src="{{news.user.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.user.get_company.phone_number}}"><i class="fa fa-phone"></i></a>
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.get_company.company_name}}">
+																			<img src="{{news.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
+																		
+																		</a>
 
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.user.get_company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.get_company.phone_number}}"><i class="fa fa-phone"></i></a>
+
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.get_company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
 																		<a class="" href="/collaborations/customer_news_detail/{{news.id}}/" ><b class="btn btn-secondary btn-sm mt-1">News Detail</b></a>
 																		
 																		<br>
