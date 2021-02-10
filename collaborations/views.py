@@ -64,7 +64,6 @@ from collaborations.models import ( Blog, BlogComment,Faqs,
 # --------------- Announcement
 
 
-
 #---------------- forum and comment on forum
 
 

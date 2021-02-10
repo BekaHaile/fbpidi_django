@@ -714,7 +714,7 @@
 					<div class="tab-content">
 						{% for catagory in NEWS_CATAGORY %}
 						<div class="tab-pane active" id="#catagory{{catagory.0}}">
-							<p>{{catagory.0}}</p>
+							
 							<div class="row">
 								{%for news in news_list%}
 									{% if news.catagory == catagory.0 %}
@@ -729,7 +729,7 @@
 													</a>
 												</div>
 												<div class="item-card8-overlaytext">
-													<h6 class="mb-0">{% print_translated news.user.get_company.company_type news.user.get_company.company_type_am LANGUAGE_CODE %}</h6>
+													<h6 class="mb-0">{% print_translated news.get_company.company_type news.get_company.company_type_am LANGUAGE_CODE %}</h6>
 												</div>
 												<div class="card-body">
 													<div class="item-card8-desc">
@@ -741,11 +741,11 @@
 												<div class="card-footer">
 													<div class="footerimg d-flex mt-0 mb-0">
 														<div class="d-flex footerimg-l mb-0">
-															<a href="#" ><img src="{{news.user.get_company.get_image}}" alt="image"
+															<a href="#" ><img src="{{news.get_company.get_image}}" alt="image"
 																class="avatar brround  mr-2">
 															</a>
 															<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-																{% print_translated news.user.get_company.company_name news.user.get_company.company_name_am LANGUAGE_CODE%} {{news.catagory}}<i class="icon icon-check text-success fs-12 ml-1"
+																{% print_translated news.get_company.company_name news.get_company.company_name_am LANGUAGE_CODE%} {{news.catagory}}<i class="icon icon-check text-success fs-12 ml-1"
 																	data-toggle="tooltip" data-placement="top" title=""
 																	data-original-title="verified"></i></h5>
 														</div>
