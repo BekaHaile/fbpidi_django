@@ -72,16 +72,13 @@
 													</label>
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">Distance</span>
+														<span class="selectgroup-button">Upcoming Events</span>
 													</label>
 													<label class="selectgroup-item mb-0">
 														<input type="radio" name="value" value="Latest" class="selectgroup-input">
-														<span class="selectgroup-button">Latest</span>
+														<span class="selectgroup-button">Open Events</span>
 													</label>
-													<label class="selectgroup-item mb-0">
-														<input type="radio" name="value" value="Rating" class="selectgroup-input">
-														<span class="selectgroup-button">Rating</span>
-													</label>
+													
 												</div>
 											</div>
 										</div>
@@ -108,8 +105,13 @@
 															<div class="item-card9">
 																<a href="/collaborations/customer_event_detail/{{event.id}}/" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated event.event_name|truncatewords:5|safe event.event_name_am|truncatewords:5|safe LANGUAGE_CODE %}</h4></a>
 																
-																<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> {% print_translated event.description|truncatewords:7|safe event.description_am|truncatewords:7|safe LANGUAGE_CODE %}
-																	</p>
+																	{% if event.status == 'Open' %}
+																	<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >Open</div>
+																	{%elif event.status == 'Pending' %}
+																	<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >Pending</div>
+																	{%else  %}
+																	<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >Closed</div>
+																	{% endif %}
 																	<small>{% change_end_date event.start_date %} </small> - 
 																	<small>{% change_end_date event.end_date %}</small>
 															</div>

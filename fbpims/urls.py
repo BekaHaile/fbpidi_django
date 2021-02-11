@@ -29,7 +29,6 @@ from collaborations.views import BlogList
 urlpatterns = [
     # admin page urls
     path("admin/",admin_site.urls),
-    path("api-admin/", include('admin_site.api.api_urls') ),
     
     # frontpage urls 
     path("",include("core.urls")),

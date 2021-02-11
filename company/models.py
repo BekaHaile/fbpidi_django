@@ -67,6 +67,8 @@ class Company(models.Model):
     def get_bank_accounts(self):
         return self.companybankaccount_set.all() if self.companybankaccount_set.all().count() > 0 else None
 
+    def get_product_catagory_type(self):
+        return self.product_category.category_name.category_type
 
 class CompanyStaff(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
@@ -111,6 +113,9 @@ class CompanyEvent(models.Model):
     class Meta:
         ordering = ['-time_stamp',] 
 
+    def get_image(self):
+        return self.image.url if self.image else self.company.get_image()
+
 
 class EventParticipants(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -124,8 +129,6 @@ class EventParticipants(models.Model):
         unique_together = (('patricipant_email', 'event'))
         ordering = ['-timestamp']
         
-    
-
 
 class Bank(models.Model):
     bank_name = models.CharField(verbose_name="bank name", max_length=255,)

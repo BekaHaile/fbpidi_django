@@ -18,6 +18,7 @@ from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationFo
 from django.contrib import messages
 
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
+from company.forms import EventParticipantForm
 from accounts.models import User, CompanyAdmin, Company
 import os
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -27,7 +28,7 @@ from django.core.mail import EmailMessage
 from django.http import FileResponse, HttpResponse
 
 from accounts.models import User
-from accounts.email_messages import sendEventNotification
+from accounts.email_messages import sendEventNotification, sendEventClosedNotification
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
 from django.http import HttpResponse, FileResponse
@@ -454,7 +455,7 @@ class CreateForumQuestion(LoginRequiredMixin,View):
                     
                 elif self.request.user.is_company_staff:
                     company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-                    company = Company.objects.get(id = company_staff.company.id)
+                    company = company_staff.company
         except Exception as e:
                 messages.warning(self.request, "Currently, You are not related with any registered Company.")
                 print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
@@ -566,7 +567,7 @@ class ForumQuestionsDetail(View):
 
 
 ## --- Blogs Views
-class CreatBlog(LoginRequiredMixin,View):
+class CreateBlog(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):	   
             form = BlogsForm()
             try:
@@ -575,7 +576,7 @@ class CreatBlog(LoginRequiredMixin,View):
                             
                 elif self.request.user.is_company_staff:
                         company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-                        company = Company.objects.get(id = company_staff.company.id)
+                        company = company_staff.company
             except Exception as e:
                         messages.warning(self.request, "Currently, You are not related with any registered Company.")
                         print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
@@ -667,7 +668,7 @@ class CreateFaqs(LoginRequiredMixin,View):
                     
                 elif self.request.user.is_company_staff:
                     company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-                    company = Company.objects.get(id = company_staff.company.id)
+                    company = company_staff.company
         except Exception as e:
                 messages.warning(self.request, "Currently, You are not related with any registered Company.")
                 print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
@@ -797,7 +798,7 @@ class JobcategoryFormView(LoginRequiredMixin,View):
                         
                     elif self.request.user.is_company_staff:
                         company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-                        company = Company.objects.get(id = company_staff.company.id)
+                        company = company_staff.company
             except Exception as e:
                     messages.warning(self.request, "Currently, You are not related with any registered Company.")
                     print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
@@ -919,7 +920,7 @@ class CreateVacancy(LoginRequiredMixin, View):
                     
                 elif self.request.user.is_company_staff:
                     company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-                    company = Company.objects.get(id = company_staff.company.id)
+                    company = company_staff.company
             except Exception as e:
                         messages.warning(self.request, "Currently, You are not related with any registered Company.")
                         print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
@@ -1199,7 +1200,7 @@ class CreateTender(LoginRequiredMixin,View):
                     
                 elif self.request.user.is_company_staff:
                     company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-                    company = Company.objects.get(id = company_staff.company.id)
+                    company = company_staff.company
             except Exception as e:
                 messages.warning(self.request, "Currently, You are not related with any registered Company.")
                 print("Exception while trying to find the company of an company admin or company staff user in createTender ", str(e))
@@ -1246,15 +1247,16 @@ class CreateTender(LoginRequiredMixin,View):
             return redirect("admin:tenders")
 
 def check_tender_enddate(request, tenders):
-    # now = datetime.datetime.now()
+    now = datetime.datetime.now()
     for tender in tenders:
         endstr = str(tender.end_date.date)
-        if tender.end_date.day < datetime.datetime.now().day and tender.status == "Open":
-            # if tender.end_date.time() <= datetime.datetime.now().time():
+        #need real comparison
+        if tender.end_date.day < datetime.datetime.now().day and tender.end_date.month <= now.month:
+                    sendTenderClosedEmailNotification(request, tender.user, tender)
                     tender.status = "Closed"
                     tender.save()
-                    sendTenderClosedEmailNotification(request, tender.user, tender)
-    return tenders
+                    
+    return True
 
 class TenderList(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):
@@ -1262,7 +1264,8 @@ class TenderList(LoginRequiredMixin,View):
         try:    
             if self.request.user.is_superuser:
                 tenders = Tender.objects.all()
-                tenders = check_tender_enddate(self.request, tenders)       
+                #?? make this thing work in background
+                result = check_tender_enddate(self.request, tenders.filter(status="Open"))       
                 return render(self.request, "admin/collaborations/tenders.html", {'tenders':tenders,})
 
             else:
@@ -1408,7 +1411,6 @@ class CustomerTenderList(View):
     def get(self, *args, **kwargs):          
         try:
                 tenders = Tender.objects.all()
-                # tenders = check_tender_enddate(self.request, tenders)
                 return render(self.request, "frontpages/tender/customer_tender_list.html", {'tenders':tenders,})
         except Exception as e:
                 messages.warning(self.request, "Error while getting tenders")
@@ -1475,7 +1477,7 @@ class CreateNews(LoginRequiredMixin, View):
                     
                 elif self.request.user.is_company_staff:
                     company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-                    company = Company.objects.get(id = company_staff.company.id)
+                    company = company_staff.company
         except Exception as e:
                 messages.warning(self.request, "Currently, You are not related with any registered Company.")
                 print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
@@ -1584,16 +1586,32 @@ def check_event_participation(request, event_participants):
             sendEventNotification(request, participant) 
     return True
 
+def check_event_enddate(request, open_events):
+    now = datetime.datetime.now()
+    for event in open_events:
+        endstr = str(event.end_date.date)
+        #need real comparison
+        
+        if event.end_date.day < datetime.datetime.now().day and event.end_date.month < now.month:
+                    sendEventClosedNotification(request, event)
+                    event.status = "Closed"
+                    event.save()
+                    
+    return True
 
 class CustomerEventList(View):
-    def get(self, *args, **kwargs):          
-        try:
-                events = CompanyEvent.objects.all()
-                event_participants = EventParticipants.objects.filter(notified = False)   
-                check_event_participation(self.request, event_participants)
-                return render(self.request, "frontpages/news/customer_event_list.html", {'events':events,})
-        except Exception as e:
-                return redirect("index")     
+	def get(self, *agrs, **kwargs):
+		try:
+			events = CompanyEvent.objects.all()
+			#??? make it background
+			upcoming_events = CompanyEvent.objects.filter(status="Upcoming")
+			#?? event_participants = EventParticipants.objects.filter(notified = False, event = **upcoming_events)
+			event_participants = EventParticipants.objects.filter(notified = False)
+			check_event_participation(self.request, event_participants)
+			return render(self.request, "frontpages/news/customer_event_list.html", {'events':events,})
+		except Exception as e:
+			return redirect("index")
+
 
 class CustomerEventDetail(View):
     def get(self, *args, **kwargs):        
@@ -1603,6 +1621,7 @@ class CustomerEventDetail(View):
             return render(self.request, "frontpages/news/customer_event_detail.html", {'event':event,'event_participant_form':event_participant_form})
         else:
             return redirect("index")
+
 
 class EventParticipation(LoginRequiredMixin, View):
     def post(self, *args, **kwargs):   
