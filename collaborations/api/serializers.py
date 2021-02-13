@@ -1,8 +1,13 @@
 from rest_framework import serializers
 # from collaborations.models import  PollsQuestion, PollsResult, Choices, News, NewsImage, 
 from accounts.api.serializers import UserSerializer
-from collaborations.models import PollsQuestion, PollsResult, Choices, News, NewsImages
+from collaborations.models import (PollsQuestion, PollsResult, Choices, News, NewsImages, Blog, BlogComment,
+                                    Announcement, AnnouncementImages, Tender, TenderApplicant, Faqs, JobApplication, 
+                                    JobCategory, Project, Research, ResearchProjectCategory, Vacancy, ForumQuestion,
+                                    ForumComments, CommentReplay)
 from company.models import Company, CompanyEvent
+from company.api.serializers import CompanyFullSerializer, CompanyInfoSerializer, CompanyDataSerializer
+
 
 class ChoiceSerializer(serializers.ModelSerializer):
     no_of_votes = serializers.SerializerMethodField('count_no_of_votes')
@@ -93,3 +98,51 @@ class EventListSerializer(serializers.ModelSerializer):
 
 class EventDetailSerializer(serializers.ModelSerializer):
     pass
+
+
+class BlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = "__all__"
+
+class BlogCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BlogComment
+        fields = "__all__"
+
+
+class AnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Announcement
+        fields = "__all__"
+
+
+class AnnouncementDetailSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    images = serializers.SerializerMethodField('get_images')
+    class Meta:
+        model = Announcement
+        fields = "__all__"
+    
+    def get_images(self, announcement):
+        images = []
+        for announcement_image in announcement.announcementimages():
+            images.append(announcement_image.image.url)
+        return images        
+
+
+class TenderSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    company_info = serializers.SerializerMethodField('get_company_info')
+    class Meta:
+        model = Tender
+        fields = "__all__"
+    def get_company_info(self, tender):
+        company = tender.get_company()
+        return CompanyDataSerializer(company).data
+
+
+class TenderApplicantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TenderApplicant
+        fields = "__all__"

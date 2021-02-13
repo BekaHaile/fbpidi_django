@@ -67,7 +67,7 @@ class Company(models.Model):
     def get_bank_accounts(self):
         return self.companybankaccount_set.all() if self.companybankaccount_set.all().count() > 0 else None
 
-    def get_product_catagory_type(self):
+    def get_product_category_type(self):
         return self.product_category.category_name.category_type
 
 class CompanyStaff(models.Model):

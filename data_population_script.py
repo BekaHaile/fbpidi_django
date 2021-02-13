@@ -13,9 +13,6 @@ from product.models import *
 from product.api.serializer import *
 
 
-
-
-
 def set_token_for_existing_users():
 
     for user in User.objects.all():
@@ -29,9 +26,8 @@ def add_banks():
         b.save()
 
 if __name__ == '__main__':
+      
     # print("Data population started ... ")
-    # add_banks()
-    # set_token_for_existing_users()
-    print(ProducteFullSerializer( Product.objects.first()).data)
+    add_banks()
+    set_token_for_existing_users()
     
-   

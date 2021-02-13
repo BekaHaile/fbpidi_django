@@ -1016,7 +1016,7 @@ class BlogList(View):
 		stringlist = []
 		truestring = []
 		for b in blog:
-			splited = b.tag.split(" ");
+			splited = b.tag.split(" ")
 			for split in splited:
 				stringlist.append(split)
 
@@ -1110,7 +1110,7 @@ class BlogDetail(View):
 		stringlist = []
 		truestring = []
 		for b in blog:
-			splited = b.tag.split(" ");
+			splited = b.tag.split(" ")
 			for split in splited:
 				stringlist.append(split)
 		taglist = set(stringlist)

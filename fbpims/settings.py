@@ -32,7 +32,7 @@ SECRET_KEY = 'u#@!ig3kcz)ocq=2791oii#ay4&$$6lxvj5!$cb2wkfhi5nt(q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.113','127.0.0.1','127.0.0.2']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','127.0.0.2']
 
 
 # Application definition
@@ -211,15 +211,15 @@ EMAIL_USE_LOCALTIME = True
 
 #### For the RestFramework
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ]
 
-# }
+}
 
 
 

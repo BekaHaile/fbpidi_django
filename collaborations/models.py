@@ -140,8 +140,8 @@ class Tender(models.Model):
     def get_applications(self):
         return TenderApplicant.objects.filter( tender = self )
     
+    
     def get_company(self):
-       
         return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None
     
     def get_bank_accounts(self):
