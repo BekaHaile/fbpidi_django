@@ -12,7 +12,7 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLo
 from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
 
-from collaborations.views import (CreatBlog,AdminBlogList,BlogView, 
+from collaborations.views import (CreateBlog,AdminBlogList,BlogView, 
 
                         CreateFaqs,FaqsView,FaqsList,
 
@@ -120,7 +120,7 @@ class CustomAdminSite(admin.AdminSite):
             
             path("blog-list/",wrap(AdminBlogList.as_view()),name="admin_Blogs"),
             path("blog-detail/<model_name>/<id>/",wrap(BlogView.as_view()),name="blog_detail"),
-            path("blog-create/",wrap(CreatBlog.as_view()),name="create_blog"),
+            path("blog-create/",wrap(CreateBlog.as_view()),name="create_blog"),
             
             path("signup/",CompanyAdminSignUpView.as_view(),name="signup"),
             path("create_user/",wrap(CreateUserView.as_view()),name="create_user"),

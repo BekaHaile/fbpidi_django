@@ -55,3 +55,18 @@ def sendEventNotification(request, participant):
     participant.notified = False
     participant.save()
     return email
+
+def sendEventClosedNotification(request, event):
+    current_site = get_current_site(request)
+    mail_message = f"IIMP system has changed the status of the Event titled '{event.event_name}'. This occurs when the creator of the event didn't change the stutus ."
+    mail_subject = f'Event Notification From IIMP'
+    to_email = event.company.user.email
+    email = EmailMessage(mail_subject, mail_message, to=[event.company.user.email])
+    email.content_subtype = "html"  
+    try:
+        email.send()
+        print("Email sent to ", event.company.user.email)
+    except Exception as e:
+        print("Exception While Sending Email ", str(e))
+    
+    return email

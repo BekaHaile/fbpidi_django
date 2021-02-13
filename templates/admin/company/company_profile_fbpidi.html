@@ -1,4 +1,5 @@
 {%extends 'admin/base_site.html'%}
+{%load core_template_tags%}
 {% block extrastyle %}
 	<!-- Theme JS files -->
 	<script src="/static/admin/global_assets/js/plugins/extensions/rowlink.js"></script>
@@ -529,13 +530,11 @@
 	
 									<div class="media-body">
 										<h6 class="media-title font-weight-semibold">
-											Title: <a href="#"> <b>{{event.event_name}}</b></a>
+											<a href="#">{{event.event_name}}</a>
 										</h6>
-										<h6 class="media-title font-weight-semibold">
-											Host Company: <a href="#"><b>{{event.company.company_name}}</b></a>
-										</h6>
-																						
-										
+										Start Date:- <a href="#"><i class="fa fa-calendar-o text-muted mr-2" style = "margin-right: 20px;" ></i> <b>{{event.start_date}}</b></a> <br>
+                                  		End Date:-<a href="#"><i style = "margin-left: 10px;"class="fa fa-calendar-o text-muted mr-2" ></i><b> {{event.end_date}}</b></a>
+                                        
 									</div>
 									
 									<div class="ml-sm-3 mt-2 mt-sm-0">
@@ -547,7 +546,7 @@
 													</a>
 
 													<div class="dropdown-menu dropdown-menu-right">	
-														{% if perms.company.change_companyevent%}			
+														{% if perms.company.change_companyevent %}
 																	<a href="#edit{{event.id}}" class="dropdown-item" data-toggle="modal" data-target="#edit{{event.id}}"><i class="icon-pencil"></i>Edit Event</a>	
 														{% endif %}
 														{% if perms.company.delete_companyevent %}	
@@ -612,7 +611,7 @@
 																		<span class="input-group-prepend" >
 																						<span class="input-group-text"><i class="icon-calendar22">	Start Date </i></span>
 																					</span>
-																			<input type="text" name="start_date" class="form-control daterange-single" value="">
+																			<input type="text" name="start_date" class="form-control daterange-single" value="{% change_end_date event.start_date %}">
 																	</div>
 																		
 																</div>
@@ -625,7 +624,7 @@
 																						<span class="input-group-text"><i class="icon-calendar22">	End Date </i></span>
 																					</span>
 																					
-																			<input type="text" name ="end_date" class="form-control daterange-single" value="">
+																			<input type="text" name ="end_date" class="form-control daterange-single" value="{% change_end_date event.end_date %}">
 																	</div>
 																		
 																</div>

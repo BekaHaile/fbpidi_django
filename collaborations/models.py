@@ -265,6 +265,7 @@ class News(models.Model):
 
     def get_company(self):
         return self.user.get_company()
+    
         
     class Meta:
         ordering = ['-timestamp',] 
