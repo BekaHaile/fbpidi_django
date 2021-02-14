@@ -27,6 +27,9 @@ class Product(models.Model):
     def more_images(self):
         return ProductImage.objects.filter(product=self)
 
+    def get_category(self):
+        return self.category.category_name.category_type
+        
 class ProductImage(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     image = models.ImageField()

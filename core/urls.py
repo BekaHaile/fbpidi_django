@@ -10,7 +10,7 @@ from product.views import AddToCartView,CartSummary,DecrementFromCart,CheckoutVi
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
     
-    path("product-detail/<id>",ProductDetailView.as_view(),name="product_detail"),
+    path("product-detail/<id>", ProductDetailView.as_view(),name="product_detail"),
     path("product-by-category/<cat_id>/",ProductByCategoryView.as_view(),name="product_category"),
     path("product-by-main-category/<option>/",ProductByMainCategory.as_view(),name="product_category_main"),
     path("man_comp-by-main-category/<option>/",MnfcCompanyByMainCategory.as_view(),name="manufac_category_main"),

@@ -2,14 +2,18 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','fbpims.settings')
 import django
 django.setup()
-from fbpims.settings import AUTH_USER_MODEL
 from accounts.models import User
-import time
-import datetime
 
-from company.models import Bank, EventParticipants, CompanyEvent
+from company.models import Bank, EventParticipants, CompanyEvent, Company
 from accounts.models import User
 from rest_framework.authtoken.models import Token
+from company.api.serializers import *
+from admin_site.api.serializers import *
+from product.models import *
+from product.api.serializer import *
+
+
+
 
 
 def set_token_for_existing_users():
@@ -27,4 +31,7 @@ def add_banks():
 if __name__ == '__main__':
     # print("Data population started ... ")
     # add_banks()
-    set_token_for_existing_users()
+    # set_token_for_existing_users()
+    print(ProducteFullSerializer( Product.objects.first()).data)
+    
+   

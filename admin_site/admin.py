@@ -14,10 +14,6 @@ from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoic
 
 from collaborations.views import (
 
-                        
-
-                        
-
                         CreateNews, EditNews, NewsDetail,AdminNewsList,
 
                         TenderList, CreateTender, TenderDetail, 

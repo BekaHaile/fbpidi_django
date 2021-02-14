@@ -2,7 +2,7 @@ from rest_framework import serializers
 # from collaborations.models import  PollsQuestion, PollsResult, Choices, News, NewsImage, 
 from accounts.api.serializers import UserSerializer
 from collaborations.models import PollsQuestion, PollsResult, Choices, News, NewsImages
-    
+from company.models import Company, CompanyEvent
 
 class ChoiceSerializer(serializers.ModelSerializer):
     no_of_votes = serializers.SerializerMethodField('count_no_of_votes')
@@ -73,10 +73,23 @@ class NewsDetailSerializer(serializers.ModelSerializer):
         images = []
         for news_image in news.newsimages_set.all():
             images.append(news_image.image.url)
-        print(images)
+        
         return images
         
     def get_company_info(self, news):
         company = news.get_company()
         return {'company_name':company.company_name, 'image':company.get_image(), 'phone_number':company.phone_number, 'location': company.location}
 
+class EventListSerializer(serializers.ModelSerializer):
+    image = serializers.CharField(source='get_image')  
+    company_info = serializers.SerializerMethodField('get_company_info') 
+   
+    class Meta:
+        model = CompanyEvent
+        fields = "__all__"
+    def get_company_info(self, event):
+        company = event.company
+        return {'company_name':company.company_name, 'image':company.get_image(), 'phone_number':company.phone_number, 'location': company.location}
+
+class EventDetailSerializer(serializers.ModelSerializer):
+    pass

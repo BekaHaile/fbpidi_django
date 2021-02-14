@@ -2,6 +2,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+
 CAT_LIST = (
     ('','Select Main Category'),
     ("Food",'Food'),
