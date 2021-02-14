@@ -25,9 +25,7 @@ from .Views.research import (EditResearch,ListResearch,ResearchDetail,CreateRese
 urlpatterns = [ 
 
     path("project-list",ListProject.as_view(),name="project_list"),
-    path("project-edit/<id>",EditProject.as_view(),name="project_edit"),
     path('project-search',SearchProject.as_view(),name='project_search'),
-    path("project-form",CreateProject.as_view(),name="project_form"),
     path("project-detail/<id>",ProjectDetail.as_view(),name="project_detail"),
     path("project-category/<id>",ProjectCategorySearch.as_view(),name="projectcategory_search"),
 

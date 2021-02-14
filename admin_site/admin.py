@@ -41,7 +41,8 @@ from collaborations.Views.announcement import(
 
 from collaborations.Views.blog import(
                         AdminBlogList,BlogView,
-                        CreatBlog,ListBlogCommentAdmin,BlogCommentDetailAdmin)
+                        CreatBlog,ListBlogCommentAdmin,BlogCommentDetailAdmin,
+                        CropImage)
 
 from collaborations.Views.research import(
 
@@ -131,6 +132,7 @@ class CustomAdminSite(admin.AdminSite):
             path("faq-list/",wrap(FaqsList.as_view()),name="admin_Faqs"),
             
             path("blog-list/",wrap(AdminBlogList.as_view()),name="admin_Blogs"),
+            path("blog-image-crop/",wrap(CropImage),name="blog_image_crop"),
             path("blog-detail/<model_name>/<id>/",wrap(BlogView.as_view()),name="blog_detail"),
             path("blog-create/",wrap(CreatBlog.as_view()),name="create_blog"),
             path("blogComment-list/",wrap(ListBlogCommentAdmin.as_view()),name="blogComment_list"),            

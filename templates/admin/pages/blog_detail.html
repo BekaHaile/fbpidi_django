@@ -3,6 +3,18 @@
 {% block extrastyle %}
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+<!-- 
+<script  src="/static/admin/cropperjs/js/bootstrap.min.js" ></script>
+<script src="/static/admin/cropperjs/js/cropper.min.js"></script> -->
+
+<!-- <script  src="/static/admin/cropperjs/js/bootstrap.min.js" ></script>
+<script src="/static/admin/cropperjs/js/cropper.min.js"></script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.0/cropper.min.css" rel="stylesheet"/> -->
+
+<link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
+<script type="modeule" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
+
 {% endblock %}
 {%block pagename%}Edit Blog{%endblock%}
 {%block content%}
@@ -78,7 +90,7 @@
 
 						<div class="card">
                         <div class="card-img-actions m-1">
-                            <img class="card-img img-fluid" src="{{form.blogImage.url}}" width ="250" height = "200" alt="">
+                            <img class="card-img img-fluid" src="{{form.blogImage.url}}" width ="250" height = "200" alt="" >
                             <div class="card-img-actions-overlay card-img">
                                 
                                 <a style="max-height:80px; max-width:80px; overflow: hidden" href="{{form.blogImage.url}}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round" data-popup="lightbox" rel="group">
@@ -89,6 +101,7 @@
                         </div>
                     </div>
 
+                    	 <img class="card-img img-fluid" src="{{form.blogImage.url}}" width ="250" height = "200" id="image">
 						{%else%}
 						<label class="col-form-label col-lg-3"> No image in the database*</label>
 						{%endif%}
@@ -142,5 +155,21 @@
 	});
 
 
+	var image = document.getElementById('image');
+	// image.addEventListener('change',()=>{
+		cropper = new cropper(image,{
+		aspectRatio: 1/1,
+		crop(event){
+			console.log('x: '+ event.detail.x)
+			// console.log(event.detail.x);
+			// console.log(event.detail.y);
+			// console.log(event.detail.z);
+			// console.log(event.detail.rotate);
+			// console.log(event.detail.scaleX);
+			// console.log(event.detail.scaleY);
+		}})
+	// })
+// Get the Cropper.js instance after init
+var cropper = $image.data('cropper');
 </script>
 {%endblock%}
