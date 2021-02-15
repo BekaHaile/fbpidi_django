@@ -226,6 +226,8 @@ class CreateProductView(LoginRequiredMixin,View):
             product.save()
             messages.success(self.request,"Product Created Successfully!")
             return redirect("admin:index")
+        else:
+            return render(self.request,'admin/product/product_form.html',{'form':form})
 
 class CreatePrice(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):

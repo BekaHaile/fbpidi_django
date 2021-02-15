@@ -1,0 +1,42 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags%}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+{% endblock %}
+{%block pagename%}Product Form {%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+	<!-- Starting step -->
+	<div class="card">
+		<div class="card-header bg-white header-elements-inline">
+			<h6 class="card-title">Create Product</span></h6>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a class="list-icons-item" data-action="collapse"></a>
+					<a class="list-icons-item" data-action="reload"></a>
+					<a class="list-icons-item" data-action="remove"></a>
+				</div>
+			</div>
+		</div>
+
+		<form id="companyform" action="{%url 'admin:create_product'%}"
+			method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
+			<h6>Product INformation</h6>
+			 {{form|crispy}}
+			<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
+		</form>
+	</div>
+	<!-- /starting step -->
+
+</div>
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$(".summernote").summernote();
+	});
+</script>
+{%endblock%}
