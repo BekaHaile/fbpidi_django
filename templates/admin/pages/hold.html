@@ -1,0 +1,344 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+<!-----Croper------->
+<!-----
+<script src="/static/admin/jquery/dist/jquery.js"></script>
+--->
+ <!-- jQuery is required -->
+<!-- Cropper.js is required -->
+<script  src="/static/admin/cropperjs/js/bootstrap.min.js" ></script>
+<script src="/static/admin/cropperjs/js/cropper.min.js"></script>
+
+
+<!------------>
+
+{% endblock %}
+
+ 
+{%block pagename%}Blog{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+ <script>
+  	console.log("this is that");
+    $(function () {
+    	
+      /* SCRIPT TO OPEN THE MODAL WITH THE PREVIEW */
+      $("#blogImage").change(function () {
+      	console.log("fake1-");
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            $("#image").attr("src", e.target.result);
+            $("#modalCrop").modal("show");
+          }
+          reader.readAsDataURL(this.files[0]);
+        
+        
+      });
+
+      /* SCRIPTS TO HANDLE THE CROPPER BOX */
+      var $image = $("#image");
+      var cropBoxData;
+      var canvasData;
+      $("#modalCrop").on("shown.bs.modal", function () {
+        $image.cropper({
+          viewMode: 1,
+          aspectRatio: 1/1,
+          minCropBoxWidth: 200,
+          minCropBoxHeight: 200,
+          ready: function () {
+            $image.cropper("setCanvasData", canvasData);
+            $image.cropper("setCropBoxData", cropBoxData);
+          }
+        });
+      }).on("hidden.bs.modal", function () {
+        cropBoxData = $image.cropper("getCropBoxData");
+        canvasData = $image.cropper("getCanvasData");
+        $image.cropper("destroy");
+      });
+
+      $(".js-zoom-in").click(function () {
+        $image.cropper("zoom", 0.1);
+      });
+
+      $(".js-zoom-out").click(function () {
+        $image.cropper("zoom", -0.1);
+      });
+
+      /* SCRIPT TO COLLECT THE DATA AND POST TO THE SERVER */
+      $(".js-crop-and-upload").click(function () {
+        var cropData = $image.cropper("getData");
+        $("#id_x").val(cropData["x"]);
+        $("#id_y").val(cropData["y"]);
+        $("#id_height").val(cropData["height"]);
+        $("#id_width").val(cropData["width"]);
+        $("#formUpload").submit();
+      });
+
+    });
+  </script>
+
+	
+	<div class="card">
+ 
+		<div class="card-body">
+
+			<form action="" method="POST" enctype="multipart/form-data" id ="formUpload">
+				<fieldset class="mb-3 ml-3 mr-3">
+					<legend class="text-uppercase font-size-sm font-weight-bold">Create Blog</legend>
+					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
+					{%if form.errors%}
+					<div class="alert alert-danger" role="alert">
+					  {{form.errors}}
+					</div>
+					{% endif %}
+					{%csrf_token%}
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Blog Title (English)  *</label>
+						<div class="col-lg-9">
+							{{form.title}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Blog Title (Amharic) *</label>
+						<div class="col-lg-9">
+							{{form.title_am}}
+						</div>
+					</div> 
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Blog Tag (English)*</label>
+						<div class="col-lg-9">
+							{{form.tag}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Blog Tag (Amharic) *</label>
+						<div class="col-lg-9">
+							{{form.tag_am}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Blog Content (English) *</label>
+						<div class="col-lg-9">
+							{{form.content|safe}}
+						</div>
+						
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Blog rContent (Amharic) *</label>
+						<div class="col-lg-9">
+							{{form.content_am}}
+						</div>
+					</div>
+
+					<div class="form-group row">
+				    <label class="col-form-label col-lg-3" >Publish  </label>
+						<div class="col-lg-9" name="publish" value="True">
+							{{form.publish}}
+							<!--
+				    <select class="form-control">
+				      <option>True</option>
+				      <option>false</option>
+				    </select> -->
+				  		</div>
+				  	</div>
+				  		
+				  		
+
+					<a data-toggle="modal" data-target="#modalCrop" class="btn btn-outline-success btn-sm"><i class="icon-add mr-2"></i> modalCrop</a>
+
+							
+						
+				</fieldset>
+
+				<div class="text-right">
+					<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+						class="btn btn-primary rounded-round">Submit </button>
+				</div>
+			</form>
+			<form method="post" enctype="multipart/form-data" id="formUpload">
+			<div class="form-group row">
+						<label class="col-form-label col-lg-2">Blog Image *</label>
+						<div class="col-lg-10">
+							{{form.blogImage}}
+						</div>
+
+					</div>
+			</form>
+					
+		</div>
+	</div>
+
+
+	  <div class="modal fade" id="modalCrop">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">Crop the photo</h4>
+        </div>
+        <div class="modal-body">
+          <img src="" id="image" style="max-width: 100%;">
+        </div>
+        <div class="modal-footer">
+          <div class="btn-group pull-left" role="group">
+            <button type="button" class="btn btn-default js-zoom-in">
+              <span class="glyphicon glyphicon-zoom-in"></span>
+            </button>
+            <button type="button" class="btn btn-default js-zoom-out">
+              <span class="glyphicon glyphicon-zoom-out"></span>
+            </button>
+          </div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Nevermind</button>
+          <button type="button" class="btn btn-primary js-crop-and-upload">Crop and upload</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+	});
+</script>
+{%endblock%}
+
+
+
+
+
+
+
+
+
+----------------------------------
+
+ <script>
+  	console.log("this is that");
+    $(function () {
+    	
+      /* SCRIPT TO OPEN THE MODAL WITH THE PREVIEW */
+      $("#blogImage").change(function () {
+      	if (this.files && this.files[0]) {
+      	console.log("fake1-");
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            $("#image").attr("src", e.target.result);
+            $("#modalCrop").modal("show");
+          }
+          reader.readAsDataURL(this.files[0]);
+        }
+        
+      });
+
+      /* SCRIPTS TO HANDLE THE CROPPER BOX */
+      var $image = $("#image");
+      var cropBoxData;
+      var canvasData;
+      $("#modalCrop").on("shown.bs.modal", function () {
+        $image.cropper({
+          viewMode: 1,
+          aspectRatio: 1/1,
+          minCropBoxWidth: 200,
+          minCropBoxHeight: 200,
+          ready: function () {
+            $image.cropper("setCanvasData", canvasData);
+            $image.cropper("setCropBoxData", cropBoxData);
+          }
+        });
+      }).on("hidden.bs.modal", function () {
+        cropBoxData = $image.cropper("getCropBoxData");
+        canvasData = $image.cropper("getCanvasData");
+        $image.cropper("destroy");
+      });
+
+      $(".js-zoom-in").click(function () {
+        $image.cropper("zoom", 0.1);
+      });
+
+      $(".js-zoom-out").click(function () {
+        $image.cropper("zoom", -0.1);
+      });
+
+      /* SCRIPT TO COLLECT THE DATA AND POST TO THE SERVER */
+      $("#js-crop-and-upload").click(function () {
+        var cropData = $image.cropper("getData");
+        $("x").val(cropData["x"]);
+        console.log("Maybe");
+        console.log(event.detail.x);
+        $("y").val(cropData["y"]);
+        $("height").val(cropData["height"]);
+        $("width").val(cropData["width"]);
+        $("#formUpload").submit();
+      });
+
+    });
+
+    // detail
+    	var image = document.getElementById('image');
+	// image.addEventListener('change',()=>{
+		cropper = new cropper(image,{
+		aspectRatio: 1/1,
+		crop(event){
+			console.log('x: '+ event.detail.x)
+			// console.log(event.detail.x);
+			// console.log(event.detail.y);
+			// console.log(event.detail.z);
+			// console.log(event.detail.rotate);
+			// console.log(event.detail.scaleX);
+			// console.log(event.detail.scaleY);
+		}})
+	// })
+// Get the Cropper.js instance after init
+var cropper = $image.data('cropper');
+	// --------------------------form
+
+	
+console.log("hello");
+const alertBox = document.getElementById('alert-box');
+const imagesBox = document.getElementById('image-box');
+const imageForm = document.getElementById('image-form');
+
+// const confirmBtn = document.getElementById('confirm-btn')
+const input = document.getElementById('blogImage');
+
+const csrf = document.getElementsByName('csrfmiiddlewaretoken');
+
+var $image = $('#image');
+input.addEventListener('change',()=>{
+	console.log('changed');
+	const img_data = input.files[0];
+	console.log(img_data);
+	var url = URL.createObjectURL(img_data)
+	imagesBox.innerHTML= '<img src="{url}" id="image" width="500px"';
+})
+$image.cropper({
+	aspectRatio: 1/1,
+	crop: function(event){
+		console.log(event.detail.x);
+		console.log(event.detail.y);
+		console.log(event.detail.z);
+		console.log(event.detail.rotate);
+		console.log(event.detail.scaleX);
+		console.log(event.detail.scaleY);
+	}
+});
+// Get the Cropper.js instance after init
+var cropper = $image.data('cropper');
+
+
+
+  </script>
+
+----------------------------------
+

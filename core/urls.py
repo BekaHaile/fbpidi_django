@@ -3,7 +3,6 @@ from django.views.generic import TemplateView
 
 from core.views import (IndexView,ProfileView,ProductDetailView,ProductByCategoryView,
                     ProductByMainCategory,MnfcCompanyByMainCategory,SupCompanyByMainCategory )
-from collaborations.views import BlogList,BlogDetail,FaqList
 from accounts.views import CustomerSignUpView
 
 from product.views import AddToCartView,CartSummary,DecrementFromCart,CheckoutView

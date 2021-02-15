@@ -12,30 +12,39 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLo
 from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
 
-from collaborations.views import (CreateBlog,AdminBlogList,BlogView, 
-
-                        CreateFaqs,FaqsView,FaqsList,
-
-                        CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
-                        JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
-                        SuperAdminVacancyList,ApplicantListDetail,
-
-                        ListAnnouncementAdmin,CreatAnnouncementAdmin,
-                        AnnouncementDetailAdmin,
+from collaborations.views import (
 
                         CreateNews, EditNews, NewsDetail,AdminNewsList,
 
                         TenderList, CreateTender, TenderDetail, 
                         EditTender,  DeleteTender, ManageBankAccount,
-
-                        ListResearchAdmin,CreateResearchAdmin,ResearchDetailAdmin,
-                        ListPendingResearchAdmin,ResearchDetailView,ResearchApprove,
-                        ListResearchProjectCategoryAdmin,CreateResearchProjectCategoryAdmin,ResearchProjectCategoryDetail,
                         )
+from collaborations.Views.faq import(CreateFaqs,FaqsView,FaqsList,)
+
+from collaborations.Views.vacancy import(CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
+                        JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
+                        SuperAdminVacancyList,ApplicantListDetail,)
 from collaborations.Views.projects import(
 
                         ListProjectAdmin,CreateProjectAdmin,ProjectDetailAdmin,
                         ListPendingProjectAdmin,ProjectDetailView,ProjectApprove,
+                        
+
+                        )
+from collaborations.Views.announcement import(
+                        ListAnnouncementAdmin,CreatAnnouncementAdmin,
+                        AnnouncementDetailAdmin,)
+
+from collaborations.Views.blog import(
+                        AdminBlogList,BlogView,
+                        CreatBlog,ListBlogCommentAdmin,BlogCommentDetailAdmin,
+                        CropImage)
+
+from collaborations.Views.research import(
+
+                        ListResearchAdmin,CreateResearchAdmin,ResearchDetailAdmin,
+                        ListPendingResearchAdmin,ResearchDetailView,ResearchApprove,
+                        ListResearchProjectCategoryAdmin,CreateResearchProjectCategoryAdmin,ResearchProjectCategoryDetail,
                         
 
                         )
@@ -119,10 +128,13 @@ class CustomAdminSite(admin.AdminSite):
             path("faq-list/",wrap(FaqsList.as_view()),name="admin_Faqs"),
             
             path("blog-list/",wrap(AdminBlogList.as_view()),name="admin_Blogs"),
+            path("blog-image-crop/",wrap(CropImage),name="blog_image_crop"),
             path("blog-detail/<model_name>/<id>/",wrap(BlogView.as_view()),name="blog_detail"),
-            path("blog-create/",wrap(CreateBlog.as_view()),name="create_blog"),
+            path("blog-create/",wrap(CreatBlog.as_view()),name="create_blog"),
+            path("blogComment-list/",wrap(ListBlogCommentAdmin.as_view()),name="blogComment_list"),            
+            path("blogComment-detail/<model_name>/<id>/",wrap(BlogCommentDetailAdmin.as_view()),name="blogComment_detail"),
             
-            path("signup/",CompanyAdminSignUpView.as_view(),name="signup"),
+            path("signup/",CompanyAdminSignUpView.as_view(),name="signup"), 
             path("create_user/",wrap(CreateUserView.as_view()),name="create_user"),
             path("users_list/",wrap(UserListView.as_view()),name="users_list"),
             path("roles_list/",wrap(RolesView.as_view()),name="roles_list"),
