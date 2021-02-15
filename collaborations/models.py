@@ -74,12 +74,15 @@ class Blog(models.Model):
     title_am = models.CharField(max_length=10000,null=False)
     tag = models.CharField(max_length=500,null=False)
     tag_am = models.CharField(max_length=500,null=False)
-    blogImage = models.ImageField(null=True)
+    blogImage = models.ImageField(null=True,upload_to='Blogimage')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(null=False)
     content_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     publish = models.BooleanField(null=False,default=False)
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         ordering = ['-timestamp',]
@@ -265,6 +268,7 @@ class News(models.Model):
 
     def get_company(self):
         return self.user.get_company()
+    
         
     class Meta:
         ordering = ['-timestamp',] 

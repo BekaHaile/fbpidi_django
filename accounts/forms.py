@@ -136,10 +136,10 @@ ADMIN_PERMISSION_LIST = [
     'change_vacancy', 
     'delete_vacancy', 
 
-    'add_jobcategoty', 
-    'view_jobcategoty', 
-    'change_jobcategoty', 
-    'delete_jobcategoty', 
+    'add_jobcategory', 
+    'view_jobcategory', 
+    'change_jobcategory', 
+    'delete_jobcategory', 
 
     'add_announcement', 
     'view_announcement', 

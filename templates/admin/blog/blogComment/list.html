@@ -1,0 +1,81 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %} 
+
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+<!-- /theme JS files -->
+
+{% endblock %}
+{%block pagename%}Blog Comments List{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	<!-- Page length options main category -->
+	
+	<!-- /page length options -->
+
+	<!-- Page length options sub-category-->
+	
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">Blog Comments</h5>
+			<div class="header-elements">
+				
+			</div>
+		</div>
+
+		<table class="table datatable-show-all">
+			<thead>
+				<tr>
+					<th>Blog</th>
+					<th>User</th>
+					<th>Content</th>
+					<th>Timestamp</th>
+					
+					<th class="text-center">Actions</th>
+				</tr>
+			</thead> 
+			<tbody>
+				{%for blogcomment in blogcomments%}
+				<tr>
+					
+					<td>{{blogcomment.blog|safe|truncatewords:20}}</td>
+					<td>{{blogcomment.sender|safe|truncatewords:20}}</td>
+					<td>{{blogcomment.content}}</td>
+					
+					<td>{{blogcomment.timestamp}}</td>
+					
+					<td class="text-center">
+						<div class="list-icons">
+							<div class="dropdown">
+								<a href="#" class="list-icons-item" data-toggle="dropdown">
+									<i class="icon-menu9"></i>
+								</a>
+									
+								<div class="dropdown-menu dropdown-menu-right">
+									{% if user.is_superuser or user.get_company == blogcomment.sender.get_company %}
+									<a href="{%url 'admin:delete' model_name='BlogCommentsAdmin' id=blogcomment.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Comment</a>
+									{%endif%}
+									{% if user.is_superuser or user.get_company == blogcomment.sender.get_company %}
+									<a href="{%url 'admin:blogComment_detail' model_name='blogComment' id=blogcomment.id%}" class="dropdown-item"  >
+										<i class="icon-pencil"></i>Edit Comment</a>
+										{%endif%}
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+	<!-- /page length options -->
+
+
+</div>
+<!-- /content area -->
+{%endblock%}

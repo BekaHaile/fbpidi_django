@@ -11,6 +11,7 @@ from .models import  (PollsQuestion, Choices, PollsResult,
 
 from django.forms.widgets import SelectDateWidget
 
+from PIL import Image
 
 JOB_CHOICES=[('Temporary','Temporary'),
             ('Permanent','Permanent'),
@@ -33,20 +34,40 @@ class FaqsForm(forms.ModelForm):
                     'questions':forms.TextInput(attrs={'class':'form-control','placeholder':'The Frequently asked Question '}),
                     'questions_am':forms.TextInput(attrs={'class':'form-control','placeholder':'The Frequently asked Question in Amharic'})}
 
-class BlogsForm(forms.ModelForm):
-    
+class BlogsForm(forms.ModelForm):  
+
     class Meta:
         model = Blog
-        fields = ('title', 'tag', 'content','publish','blogImage','title_am','tag_am','content_am')
-        widgets = {'content': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in English'}),
+        fields = ('blogImage','title', 'tag', 'content','publish','title_am','tag_am','content_am')
+        widgets = {
+                    'blogImage': forms.FileInput(attrs={'id': 'blogImage' ,'accept': 'image/*'}),
+                    'content': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in English'}),
                     'content_am': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in Amharic'}),
                     'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in English'}),
                     'tag':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in English'}),
                     'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in Amharic'}),
                     'tag_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in Amharic'}),
-
-
+                    
                             }
+
+    def save(self,user,x,y,w,h):
+        print("must be working -- 1")
+        blog = super(BlogsForm, self).save(commit=False)
+        print("must be working -- 2")
+        # x = self..get('x')
+        # y = self.cleaned_data.get('y')
+        # w = self.cleaned_data.get('width')
+        # h = self.cleaned_data.get('height')
+
+        image = Image.open(blog.blogImage)
+        cropped_image = image.crop((x, y, w+x, h+y))
+        resized_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
+        
+        x = resized_image.save(blog.blogImage.path)
+        blog.blogImage = x
+        print(resized_image)
+        blog.user = user
+        return blog
 class BlogsEdit(forms.ModelForm):
     
     class Meta:
