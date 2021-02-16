@@ -85,12 +85,12 @@
 
 					<div class="form-group row">
 						{%if  form.blogImage %}
-						<label class="col-form-label col-lg-3">Blog Current image </label>
+						<label class="col-form-label col-lg-3">Blog image Currently</label>
 						
 
-						<div class="card">
+					<div class="card">
                         <div class="card-img-actions m-1">
-                            <img class="card-img img-fluid" src="{{form.blogImage.url}}" width ="250" height = "200" alt="" >
+                            <img class="card-img img-fluid" src="{{form.blogImage.url}}" width ="250" height = "200" id="blogEditShow" alt="" >
                             <div class="card-img-actions-overlay card-img">
                                 
                                 <a style="max-height:80px; max-width:80px; overflow: hidden" href="{{form.blogImage.url}}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round" data-popup="lightbox" rel="group">
@@ -101,7 +101,6 @@
                         </div>
                     </div>
 
-                    	 <img class="card-img img-fluid" src="{{form.blogImage.url}}" width ="250" height = "200" id="image">
 						{%else%}
 						<label class="col-form-label col-lg-3"> No image in the database*</label>
 						{%endif%}
@@ -113,11 +112,10 @@
 
 							<div class="col-lg-9">
 								{%if form.publish == True %}
-								
 							<input type="checkbox" name="publish" class="form-check-input" id="exampleCheck1" checked>
 								{%endif%}
+
 								{%if form.publish == False %}
-								
 							<input type="checkbox" name="publish" value=OFF class="form-check-input" id="exampleCheck1">
 								{%endif%}
 						</div>
@@ -129,9 +127,11 @@
 					<div class="form-group row">
 						<label class="col-form-label col-lg-2">Blog Image *</label>
 						<div class="col-lg-10">
-							<div class="uniform-uploader"><input type="file" name="blogImage" class="form-input-styled" data-fouc=""><span
-								class="filename" style="user-select: none;">No file selected</span><span
-								class="action btn bg-warning" style="user-select: none;">Choose File</span></div>
+							<div class="uniform-uploader">
+								<input type="file" name="blogImage" class="form-input-styled" id="BlogImage" data-fouc="">
+								<span class="filename" style="user-select: none;"></span>
+								<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+							</div>
 						</div>
 					</div>
 
@@ -157,19 +157,24 @@
 
 	var image = document.getElementById('image');
 	// image.addEventListener('change',()=>{
-		cropper = new cropper(image,{
-		aspectRatio: 1/1,
-		crop(event){
-			console.log('x: '+ event.detail.x)
-			// console.log(event.detail.x);
-			// console.log(event.detail.y);
-			// console.log(event.detail.z);
-			// console.log(event.detail.rotate);
-			// console.log(event.detail.scaleX);
-			// console.log(event.detail.scaleY);
-		}})
+	
+
+
+	var blogimagesource = document.getElementById('BlogImage')
+	var blogimageshow = document.getElementById('blogEditShow')
+	$("#BlogImage").change(function () {
+		console.log("log1")
+		if (this.files && this.files[0]) {
+			
+			// blogimageshow.src = this.files[0]
+			var reader = new FileReader();
+			reader.onload = function (e) {
+            $("#blogEditShow").attr("src", e.target.result);
+	          }
+	          reader.readAsDataURL(this.files[0]);
+			}
+		})
 	// })
 // Get the Cropper.js instance after init
-var cropper = $image.data('cropper');
 </script>
 {%endblock%}

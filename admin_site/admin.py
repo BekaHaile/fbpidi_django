@@ -37,8 +37,7 @@ from collaborations.Views.announcement import(
 
 from collaborations.Views.blog import(
                         AdminBlogList,BlogView,
-                        CreatBlog,ListBlogCommentAdmin,BlogCommentDetailAdmin,
-                        CropImage)
+                        CreatBlog,ListBlogCommentAdmin,BlogCommentDetailAdmin)
 
 from collaborations.Views.research import(
 
@@ -102,7 +101,7 @@ class CustomAdminSite(admin.AdminSite):
             
             path('anounce-Detail/<model_name>/<id>',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
             path('anounce-List',wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),
-            path('anounce-Create',wrap(CreatAnnouncementAdmin.as_view()),name="anounce_Create"),
+            path('anounce-form',wrap(CreatAnnouncementAdmin.as_view()),name="anounce_Create"),
             #path('JobCategory-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),
            
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
@@ -128,9 +127,8 @@ class CustomAdminSite(admin.AdminSite):
             path("faq-list/",wrap(FaqsList.as_view()),name="admin_Faqs"),
             
             path("blog-list/",wrap(AdminBlogList.as_view()),name="admin_Blogs"),
-            path("blog-image-crop/",wrap(CropImage),name="blog_image_crop"),
             path("blog-detail/<model_name>/<id>/",wrap(BlogView.as_view()),name="blog_detail"),
-            path("blog-create/",wrap(CreatBlog.as_view()),name="create_blog"),
+            path("blog-form/",wrap(CreatBlog.as_view()),name="create_blog"),
             path("blogComment-list/",wrap(ListBlogCommentAdmin.as_view()),name="blogComment_list"),            
             path("blogComment-detail/<model_name>/<id>/",wrap(BlogCommentDetailAdmin.as_view()),name="blogComment_detail"),
             
