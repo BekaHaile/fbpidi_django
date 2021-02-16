@@ -146,7 +146,6 @@ class SearchProject(View):
 	def get(self,*args,**kwargs):
 		return redirect(reverse("project_list"))
 	def post(self,*args,**kwargs):
-		print("============")
 		print(self.request.POST["search"])
 
 		form = Project.objects.filter(title__contains=self.request.POST['search'])

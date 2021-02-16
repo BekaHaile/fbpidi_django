@@ -1,6 +1,6 @@
 from rest_framework.authtoken.views import obtain_auth_token
 from django.urls import path, include
-from .api_views import CustomerSignUpView
+from accounts.api.api_views import CustomerSignUpView
 
 
 urlpatterns = [

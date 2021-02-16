@@ -62,7 +62,6 @@ from collaborations.forms import (BlogsForm,BlogsEdit,BlogCommentForm)
 # --------------------------------------------
 from django.conf import settings
 from django.core.files.storage import default_storage, FileSystemStorage
-import os, cv2,json,base64,requests
 from django.core import files
 
 TEMP_PROFILE_IMAGE_NAME = "temp_profile.png"

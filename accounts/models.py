@@ -20,7 +20,6 @@ def create_auth_token(sender, instance = None, created = False, **kwargs):
         Token.objects.create(user = instance)
         
 
-    
 class User(AbstractUser):
     phone_number = models.CharField(max_length=20,blank=True,null=True) 
     is_customer = models.BooleanField(default=False)  # if user is customer
@@ -65,6 +64,7 @@ class Customer(models.Model):
 
     def get_year(self):
         return self.time_stamp.year
+
 
 class CompanyAdmin(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)

@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name','last_name', 'email', 'password', 
-                    'password2', 'phone_number', 'profile_image')
+                    'password2', 'phone_number', 'profile_image',)
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -126,11 +126,12 @@ class CompanyAdminSerializer(serializers.ModelSerializer):
         return companyadmin
 
 
-class CustomerSerializer(serializers.ModelSerializer):
+class CustomerCreationSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False) 
     class Meta:
         model = Customer
         fields = ('user',)
+        
 
     @transaction.atomic
     def save(self, user):
@@ -145,3 +146,12 @@ class CustomerSerializer(serializers.ModelSerializer):
         customer = Customer.objects.create(user = user)
         customer.save()
         return customer
+
+
+class CustomerDetailSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=False, read_only=True)
+    profile_image = serializers.ImageField(required=False, )
+    class Meta:
+        model = Customer
+        fields = "__all__"
+

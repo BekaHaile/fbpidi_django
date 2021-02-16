@@ -32,7 +32,7 @@ SECRET_KEY = 'u#@!ig3kcz)ocq=2791oii#ay4&$$6lxvj5!$cb2wkfhi5nt(q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.113','127.0.0.1','127.0.0.2']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','127.0.0.2']
 
 
 # Application definition
@@ -51,7 +51,11 @@ INSTALLED_APPS = [
     'collaborations',
     'company',
     'product',
+
     'social_django',
+    'rest_framework_social_oauth2', 
+    'oauth2_provider',#for rest_framework social_oauth
+    
     'colorfield',
     'crispy_forms',
     'django_summernote',
@@ -59,7 +63,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
  
-
 ]
 
 
@@ -92,6 +95,7 @@ TEMPLATES = [
 
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+
             ],
         },
     },
@@ -213,15 +217,20 @@ EMAIL_USE_LOCALTIME = True
 
 #### For the RestFramework
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ]
+REST_FRAMEWORK = {
 
-# }
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+
+    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ]
+
+}
 
 
 
@@ -234,8 +243,12 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.facebook.FacebookOAuth2',
+    
+    'social_core.backends.facebook.FacebookAppOAuth2', #api
+    'social_core.backends.facebook.FacebookOAuth2', #with browser
 
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+    
     'django.contrib.auth.backends.ModelBackend',
 )
 
