@@ -27,13 +27,14 @@ from product.api.serializer import (ProducteFullSerializer, ProductInfoSerialize
         
 from product.forms import CheckoutForm
 
-
+from django.utils import timezone
 import random
 import string
 
 class ApiCartSummary(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    
     def response(self, request, message = ""):
         try:
                 order = Order.objects.get(user=request.user,ordered=False)
@@ -42,11 +43,10 @@ class ApiCartSummary(APIView):
                 for product_order in order.products.all():
                     count += product_order.quantity
 
-                return { 'data' : {     'total_orders':count,
-                                        'orders':OrderSerializer( order).data, 
-                                        'products': ProductInfoSerializer( products, many = True).data
+                return { 'data' : {'message': message,'total_orders':count,'orders':OrderSerializer( order).data, 
+                                    'products': ProductInfoSerializer( products, many = True).data
                                         }, 
-                        'message': message, 'error':False,
+                         'error':False,
                         'status': status.HTTP_200_OK
                 }
         except ObjectDoesNotExist:
@@ -135,7 +135,7 @@ def create_ref_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits,k=30))
 
 def create_invoice(invoice,user):
-    return '#INV-'.join(random.choices(string.ascii_uppercase + (invoice.join(user.id))))
+    return '#INV-'.join(random.choices(string.ascii_uppercase + (str(invoice.id).join(str(user.id)))))
 
 class ApiCheckout(APIView):
     authentication_classes = ([TokenAuthentication])
@@ -152,8 +152,12 @@ class ApiCheckout(APIView):
         if ShippingAddressSerializer(data = request.data).is_valid(raise_exception=True):
             serializer = ShippingAddressSerializer(data = request.data)
             shipping = serializer.create(validated_data = request.data, user = request.user)
+        try:
+            order = Order.objects.get(user=request.user,ordered=False)
+        except Exception:
+            return Response({'error':True, 'message': "Order object not Found!"})
 
-        order = Order.objects.get(user=request.user,ordered=False)
+        
         order.shipping_address = shipping
         invoice = InvoiceRecord(
             user=request.user,
@@ -161,15 +165,12 @@ class ApiCheckout(APIView):
             
         )
         #12345 join create_invoice(invoice,request.user)
-        invoice.code = "jjslfjlsjd;lfj"
+        invoice.code = create_invoice(invoice,request.user)
         invoice.save()
         order.invoice = invoice
         order.ordered = True
         order.save()
-        return Response(data = {'error':False,
-                        'message':"Successfull"},
-                        status= status.HTTP_200_OK
-                        )
+        return Response(data = {'error':False,'invoice_code':order.invoice.code, 'message':"Successfull"})
 
 
 

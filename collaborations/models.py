@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import Permission, Group
-
 from django.conf import settings
 import datetime
 from company.models import Company,CompanyBankAccount
+from PIL import Image
 
 
 class PollsQuestion(models.Model):
@@ -221,27 +221,36 @@ class Vacancy(models.Model):
 
     def countApplicant(self):
         return self.jobapplication_set.all().count()
+    
+    def get_category_name(self):
+        return self.category.categoryName
+
+    def get_company(self):
+        return self.company
 
 
 class JobApplication(models.Model):
+    CURRENT_STATUS = [('JUST GRADUATED','JUST GRADUATED'),('WORKING','WORKING'),
+                ('LOOKING FOR JOB','LOOKING FOR JOB')]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
-    institite = models.CharField(max_length=500,null=False)
+    institiute = models.CharField(max_length=500,null=False)
     grade = models.FloatField()
     field = models.CharField(max_length=500,null=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     status = models.CharField(max_length=500,null=False)
     bio = models.TextField(null=False)
-    experinace = models.IntegerField(null=False)
+    experiance = models.IntegerField(null=False)
     cv = models.FileField(upload_to="cv/", max_length=254,help_text="only pdf files, Max size 10MB")
     documents = models.FileField(upload_to="documents/", max_length=254,help_text="pdf, jpeg files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-timestamp',]
-
+        unique_together = (('vacancy','user'))
+    
 
 ## News and Events
-
 class News(models.Model):
     NEWS_CATAGORY = [ ('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),  
     ('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological')]
@@ -283,7 +292,6 @@ class NewsImages(models.Model):
 
 
 # This can be created automatically if we use a manytomanyrelation, that's why I commented this table and added a tender_applications
-
 class ForumQuestion(models.Model):
     title = models.CharField(max_length=500,null=False)
     description = models.TextField()
@@ -303,6 +311,7 @@ class ForumQuestion(models.Model):
     def comments(self):
         return self.forumcomments_set.all()
     
+
 class ForumComments(models.Model):
     forum_question=models.ForeignKey(ForumQuestion,on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -316,8 +325,13 @@ class ForumComments(models.Model):
     class Meta:
         ordering = ['-timestamp',]
 
+    def count_comment_replays(self):
+        return self.commentreplay_set.all().count()
+    
+
     def commentreplay(self):
         return self.commentreplay_set.all()
+
 
 class CommentReplay(models.Model):
     comment = models.ForeignKey(ForumComments,on_delete=models.CASCADE)
@@ -331,6 +345,7 @@ class CommentReplay(models.Model):
 
     class Meta:
         ordering = ['-timestamp',]
+    
 
 class Announcement(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -347,6 +362,7 @@ class Announcement(models.Model):
     def announcementimages(self):
         return self.announcementimages_set.all()
 
+
 class AnnouncementImages(models.Model):
     announcement = models.ForeignKey(Announcement, on_delete = models.CASCADE)
     image = models.ImageField(upload_to = "Announcements", max_length=254, verbose_name="Announcement Image",help_text="jpg, png, gid", blank=False)  
@@ -354,6 +370,7 @@ class AnnouncementImages(models.Model):
 
     class Meta:
         ordering = ['-timestamp',]
+
 
 class ResearchProjectCategory(models.Model):
     cateoryname = models.CharField(max_length=500,null=False)
@@ -377,6 +394,7 @@ class ResearchProjectCategory(models.Model):
     def Researchs(self):
         return self.research_set.all()
 
+
 class Research(models.Model):
     title = models.CharField(max_length=500,null=False)
     description = models.TextField(null=False)
@@ -390,6 +408,10 @@ class Research(models.Model):
 
     class Meta:
         ordering = ['-timestamp',]
+    
+    def get_category_name(self):
+        return self.category.cateoryname
+
 
 class Project(models.Model):
     title = models.CharField(max_length=500,null=False)
@@ -404,4 +426,7 @@ class Project(models.Model):
 
     class Meta:
         ordering = ['-timestamp',]
+    
+    def get_category_name(self):
+        return self.category.cateoryname
     

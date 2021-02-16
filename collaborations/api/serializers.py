@@ -61,10 +61,12 @@ class NewsListSerializer(serializers.ModelSerializer):
         company = news.get_company()
         return {'company_name':company.company_name, 'image':company.get_image(), 'phone_number':company.phone_number, 'location': company.location}
 
+
 class NewsImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsImages
         fields = '__all__'
+
 
 class NewsDetailSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField('get_images')
@@ -85,6 +87,7 @@ class NewsDetailSerializer(serializers.ModelSerializer):
         company = news.get_company()
         return {'company_name':company.company_name, 'image':company.get_image(), 'phone_number':company.phone_number, 'location': company.location}
 
+
 class EventListSerializer(serializers.ModelSerializer):
     image = serializers.CharField(source='get_image')  
     company_info = serializers.SerializerMethodField('get_company_info') 
@@ -96,6 +99,7 @@ class EventListSerializer(serializers.ModelSerializer):
         company = event.company
         return {'company_name':company.company_name, 'image':company.get_image(), 'phone_number':company.phone_number, 'location': company.location}
 
+
 class EventDetailSerializer(serializers.ModelSerializer):
     pass
 
@@ -104,6 +108,7 @@ class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
         fields = "__all__"
+
 
 class BlogCommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -146,3 +151,87 @@ class TenderApplicantSerializer(serializers.ModelSerializer):
     class Meta:
         model = TenderApplicant
         fields = "__all__"
+
+
+#sends only categoryName since it is only visible for customers
+class JobCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobCategory
+        fields = ("id", "categoryName", "categoryName_am")
+
+
+class VacancyListSerializer(serializers.ModelSerializer):
+    company_info = serializers.SerializerMethodField('get_company_info')
+    category_name = serializers.CharField(source='get_category_name')
+    class Meta:
+        model = Vacancy
+        fields = ('id', 'location', 'salary', 'category_name', 'category', 'employement_type', 'starting_date', 'ending_date',
+                    'timestamp', 'job_title', 'job_title_am', 'closed', 'company_info' )
+    def get_company_info(self, vacancy):
+        return CompanyDataSerializer( vacancy.get_company()).data
+ 
+
+class VacancyDetailSerializer(serializers.ModelSerializer):
+    company_info = serializers.SerializerMethodField('get_company_info')
+    category_name = serializers.CharField(source='get_category_name')
+    class Meta:
+        model = Vacancy
+        fields ="__all__"
+
+    def get_company_info(self, vacancy):
+        return CompanyDataSerializer( vacancy.get_company()).data
+ 
+
+class ResearchSerializer(serializers.ModelSerializer):
+        category_name = serializers.CharField(source = 'get_category_name')
+        class Meta:
+            model = Research
+            fields = "__all__"
+
+class ProjectSerializer(serializers.ModelSerializer):
+        category_name = serializers.CharField(source = 'get_category_name')
+        class Meta:
+            model = Project
+            fields = "__all__"
+
+
+class ResearchProjectCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResearchProjectCategory
+        fields = "__all__"
+
+class CommentReplaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommentReplay
+        fields = "__all__"
+
+
+class ForumCommentSerializer(serializers.ModelSerializer):
+    no_or_replays = serializers.IntegerField(source='count_comment_replays',read_only=True)
+    replays = CommentReplaySerializer(source = 'commentreplay', many = True, read_only = True)
+    class Meta:
+        model =  ForumComments
+        fields = "__all__"
+
+
+
+class ForumQuestionSerializer(serializers.ModelSerializer):
+    no_of_comments = serializers.IntegerField(source='countComment', read_only=True)    
+    class Meta:
+        model = ForumQuestion
+        fields = "__all__"
+
+class ForumDetailSerializer(serializers.ModelSerializer):
+    no_of_comments = serializers.IntegerField(source='countComment',read_only=True)
+    comments_list = ForumCommentSerializer(source= 'comments', many = True, read_only = True)
+    class Meta:
+        model = ForumQuestion
+        fields = "__all__"
+
+
+class FaqSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Faqs
+        fields = "__all__"
+
+

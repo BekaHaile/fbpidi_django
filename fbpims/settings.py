@@ -51,7 +51,11 @@ INSTALLED_APPS = [
     'collaborations',
     'company',
     'product',
+
     'social_django',
+    'rest_framework_social_oauth2', 
+    'oauth2_provider',#for rest_framework social_oauth
+    
     'colorfield',
     'crispy_forms',
     'django_summernote',
@@ -92,6 +96,7 @@ TEMPLATES = [
 
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+
             ],
         },
     },
@@ -187,7 +192,7 @@ LOGOUT_REDIRECT_URL = 'login'
 AUTH_USER_MODEL = 'accounts.User'
 
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/media/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media/uploads/')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
@@ -232,7 +237,11 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.facebook.FacebookOAuth2',
+    
+    'social_core.backends.facebook.FacebookAppOAuth2', #api
+    'social_core.backends.facebook.FacebookOAuth2', #with browser
+
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
 
     'django.contrib.auth.backends.ModelBackend',
 )

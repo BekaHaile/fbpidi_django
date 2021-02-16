@@ -43,7 +43,7 @@ urlpatterns = [
     path("forum-form",CreateForumQuestion.as_view(),name="forum_form"),
     path("forum-list",ListForumQuestions.as_view(),name="forum_list"),
     path("Replay-comment/<id>/<forum>",CreateCommentReplay.as_view(),name="Replay_comment"),
-    path("forum-detail/<id>",ForumQuestionsDetail.as_view(),name="forum_detail"),
+    path("forum-detail/<id>/",ForumQuestionsDetail.as_view(),name="forum_detail"),
 
     path("announcement-list/",ListAnnouncement.as_view(),name="announcement_list"),
     path("announcement-detail/<id>/",AnnouncementDetail.as_view(),name="announcement_detail"),

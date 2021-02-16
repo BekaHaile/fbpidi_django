@@ -1,19 +1,12 @@
 
 from django.urls import reverse
-import datetime
 from django.views import View
-
-from django.http import HttpResponse, FileResponse
-from collaborations.models import Blog, BlogComment
-from collaborations.forms import FaqsForm
 from django.shortcuts import render, redirect, reverse
 
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
-from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategory, News, NewsImages
-									 #redirect with context
-from django.http import HttpResponse, HttpResponseRedirect
+									 #redirect with context 
 from django.views import View
-from .models import PollsQuestion, Choices, PollsResult, Tender, TenderApplicant
+ 
 from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
 from django.contrib import messages
 
@@ -25,38 +18,22 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 
-from django.http import FileResponse, HttpResponse
-
-from accounts.models import User
+from django.http import FileResponse, HttpResponse, HttpResponseRedirect
 from accounts.email_messages import sendEventNotification, sendEventClosedNotification
-
-from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
-from django.http import HttpResponse, FileResponse
 						 
 from wsgiref.util import FileWrapper
-
-
-
-from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
+from collaborations.forms import BlogsForm, BlogCommentForm, FaqsForm, VacancyForm, JobCategoryForm
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
-								 VacancyForm,JobCategoryForm,
-								 ForumQuestionForm,CommentForm,CommentReplayForm,
-								 AnnouncementForm,ResearchForm,
-								 ResearchProjectCategoryForm
-								 )
+from collaborations.forms import (BlogsForm, BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm,ForumQuestionForm,CommentForm,CommentReplayForm, 
+								AnnouncementForm,ResearchForm,ResearchProjectCategoryForm, TenderApplicantForm, PollsForm, CreatePollForm, CreateChoiceForm, NewsForm)
 
-from collaborations.models import ( Blog, BlogComment,Faqs,
-									Vacancy,JobApplication, JobCategory,
-									ForumQuestion, ForumComments, CommentReplay,
-									Announcement,AnnouncementImages,
-									Research,
-									ResearchProjectCategory
-									
-									)
+from collaborations.models import ( PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, Blog, BlogComment,Faqs, Vacancy,JobApplication, 
+									JobCategory,ForumQuestion, Faqs, Vacancy, JobApplication, JobCategory, News, NewsImages, ForumComments, 
+									CommentReplay,Announcement,AnnouncementImages,Research,ResearchProjectCategory)
 
+import datetime
 
 ##------------------ ResearchProjects
 
@@ -219,6 +196,8 @@ class ListResearch(View):
 		template_name = "frontpages/research/research_list.html"
 		
 		return render(self.request, template_name,context)
+
+
 class ResearchCategorySearch(View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.filter(accepted="APPROVED",category=self.kwargs['id'])
@@ -230,6 +209,7 @@ class ResearchCategorySearch(View):
 		context = {'researchs':form,"usercreated":usercreated,"category":category}
 		template_name = "frontpages/research/research_list.html"
 		return render(self.request, template_name,context)
+
 
 class ResearchDetail(View):
 	def get(self,*args,**kwargs):
@@ -318,17 +298,14 @@ class CreateResearch(LoginRequiredMixin,View):
 		return render(self.request, template_name,context)
 
 
-
-
 # --------------- Announcement
-
-
 class AnnouncementDetail(View):
   def get(self,*args,**kwargs):
       form = Announcement.objects.get(id=self.kwargs['id'])
       template_name="frontpages/announcement/announcement_detail.html"
       context={'post':form}
       return render(self.request, template_name,context)
+
 
 class ListAnnouncement(View):
 	def get(self,*args,**kwargs):
@@ -337,12 +314,14 @@ class ListAnnouncement(View):
 		context={'Announcements':form}
 		return render(self.request, template_name,context)
 
+
 class ListAnnouncementAdmin(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = Announcement.objects.all()
 		template_name="admin/announcement/announcement_list.html"
 		context={'Announcements':form}
 		return render(self.request, template_name,context)
+
 
 class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
@@ -427,7 +406,6 @@ class EditCommentForum(View):
 
 class CreateCommentReplay(LoginRequiredMixin,View):
 	def post(self,*args,**kwargs):
-		print("We are here")
 		comment = CommentReplayForm(self.request.POST,self.request.FILES)
 		forum = ForumQuestion.objects.get(id=self.kwargs['forum'])
 		main = ForumComments.objects.get(id=self.kwargs['id'])
@@ -449,44 +427,28 @@ class CreateCommentReplay(LoginRequiredMixin,View):
 class CreateForumQuestion(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         forum = ForumQuestionForm()
-        try:
-                if self.request.user.is_company_admin:
-                    company = Company.objects.get(user = self.request.user)
-                    
-                elif self.request.user.is_company_staff:
-                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-                    company = company_staff.company
-        except Exception as e:
-                messages.warning(self.request, "Currently, You are not related with any registered Company.")
-                print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
-                return redirect("admin:create_company_profile")
-
         template_name="frontpages/forums/forums_form.html" 
         userCreated = ForumQuestion.objects.filter(user=self.request.user)
         context = {'form':forum,'usercreated':userCreated}
         return render(self.request,template_name,context)
+   
     def post(self,*args,**kwargs):
         form = ForumQuestionForm(self.request.POST,self.request.FILES)
         userCreated = ForumQuestion.objects.filter(user=self.request.user)
-        context = {'form':forum,'usercreated':userCreated}
+        context = {}
         template_name="frontpages/forums/forums_form.html" 
         if form.is_valid():
             forum = ForumQuestion()
             forum = form.save(commit=False)
             forum.user = self.request.user
-            forum.attachements = form.cleaned_data.get("attachements")
-            print("one")
+            forum.attachements = self.request.FILES["attachements"]
             forum.save()
-            forum = ForumQuestionForm()
-            context={'form':forum}
-            return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
+            return redirect(f"forum-detail/{forum.id}/")
         return render(self.request, template_name,context)
 
 class ListForumQuestions(View):
 	def get(self,*args,**kwargs):
 		forum = ForumQuestion.objects.all()
-		print("-------"+str(self.request.user))
-		print(str(forum))
 		if str(self.request.user) != "AnonymousUser":
 			userCreated = ForumQuestion.objects.filter(user=self.request.user)
 		else:
@@ -494,6 +456,7 @@ class ListForumQuestions(View):
 		template_name = "frontpages/forums/forum_list.html"
 		context = {'forums':forum,'usercreated':userCreated}
 		return render(self.request, template_name,context)
+
 
 class EditForumQuestions(View):
 	def get(self,*args,**kwargs):
@@ -519,6 +482,7 @@ class EditForumQuestions(View):
 			return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
 		return render(self.request, template_name,context)
 
+
 class SearchForum(View):
 	def get(self,*args,**kwargs):
 		return redirect(reverse("forum_list"))
@@ -533,6 +497,7 @@ class SearchForum(View):
 			userCreated = ""
 		context = {'forums':forum,'usercreated':userCreated}
 		return render(self.request, template_name,context)
+
 
 class ForumQuestionsDetail(View):
 	def get(self,*args,**kwargs):
@@ -563,7 +528,6 @@ class ForumQuestionsDetail(View):
 			return redirect(reverse("forum_detail",kwargs={'id':question.id}))
 		return render(self.request, template_name,context)
 ## ------------- Blogs Views
-
 
 
 ## --- Blogs Views
@@ -690,6 +654,7 @@ class CreateFaqs(LoginRequiredMixin,View):
                 return redirect("admin:admin_Faqs")
             return render(self.request, "admin/pages/faqs_forms.html",context)
 
+
 class FaqsView(LoginRequiredMixin,View):
 	template_name="admin/pages/blog_list.html"
 	def get(self,*args,**kwargs):
@@ -708,6 +673,7 @@ class FaqsView(LoginRequiredMixin,View):
 			faq.save()
 		messages.success(self.request, "Edited Faqs Successfully")
 		return redirect("admin:admin_Faqs") 
+
 
 class FaqsList(LoginRequiredMixin,View):
 	template_name = "admin/pages/faqs_forms.html"
@@ -735,7 +701,6 @@ class Download(LoginRequiredMixin,View):
 
 
 class CloseVacancy(LoginRequiredMixin,View):
-	
 	def get(self,*args,**kwargs):
 		vacancy=Vacancy.objects.get(id=self.kwargs['id'])
 		status = self.kwargs['closed']
@@ -757,6 +722,7 @@ class CloseVacancy(LoginRequiredMixin,View):
 		
 		return redirect("admin:Job_list")
 
+
 class ApplicantList(LoginRequiredMixin,View):
 	
 	def get(self,*args,**kwargs):
@@ -766,7 +732,6 @@ class ApplicantList(LoginRequiredMixin,View):
 		return render(self.request, template_name,context)
 
 class Applicantinfo(LoginRequiredMixin,View):
-	
 	def get(self,*args,**kwargs):
 		jobapplicant=JobApplication.objects.filter(vacancy=self.kwargs['id']) 
 		vacancyDetail = Vacancy.objects.get(id=self.kwargs['id'])
