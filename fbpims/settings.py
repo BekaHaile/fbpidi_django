@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
  
-
 ]
 
 
@@ -219,8 +218,13 @@ EMAIL_USE_LOCALTIME = True
 #### For the RestFramework
 
 REST_FRAMEWORK = {
+
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+
     ],
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.IsAuthenticated',
@@ -244,7 +248,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2', #with browser
 
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
-
+    
     'django.contrib.auth.backends.ModelBackend',
 )
 

@@ -42,8 +42,6 @@ urlpatterns = [
     path('api_auth/', include('rest_framework_social_oauth2.urls')),
     
     
-    
-
 ]  
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
