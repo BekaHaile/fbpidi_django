@@ -66,58 +66,7 @@ from django.core import files
 
 TEMP_PROFILE_IMAGE_NAME = "temp_profile.png"
 
-class CropImage(LoginRequiredMixin):
-	def save_temp_profile(imageString, user):
-		INCORRECT_PADDING_EXCEPTION = "incorrect padding"
-		try:
-			if not os.path.exists(settings.TEMP):
-				os.mkdir(settings.TEMP)
-			if not os.path.exists(f"{setting.TEMP}/{user.pk}"):
-				os.mkdir(f"{setting.TEMP}/{user.pk}")
-			url = os.path.join(f"{setting.TEMP}/{user.pk}",TEMP_PROFILE_IMAGE_NAME)
-			storage = FileSystemStorage(Location=url)
-			image = base64.b64decode(imageString)
-			with storage.open('','wb+') as destination:
-				destination.write(image)
-				destination.close()
-			return url
-		except Expectation as e:
-			if str(e) == INCORRECT_PADDING_EXCEPTION:
-				imageString +='='* ((4-len(imageString) % 4) % 4)
-				return save_temp_profile(imageString, user)
-		return None
 
-	def post(request, *args, **kwargs):
-		payload = {}
-		user = self.request.user
-		if self.request.POST and user.is_authenticated:
-			try:
-				imageString = self.request.POST.get('image')
-				url = save_temp_profile(imageString, user)
-
-				img = cv2.imread(url)
-				cropX = int(float(str(request.POST.get("cropX"))))
-				cropY = int(float(str(request.POST.get("cropY"))))
-				cropWidth = int(float(str(request.POST.get("cropWidth"))))
-				cropHeight = int(float(str(request.POST.get("cropHeight"))))
-
-				if cropX < 0:
-					cropX = 0
-				if cropY < 0:
-					cropY = 0
-				crop_img = img[cropY:cropY + cropHeight,cropX:cropX + cropWidth ]
-
-				cv2.imwrite(url, crop_img)
-				##
-
-				payload['result'] = "success"
-				payload['cropped_profile_image'] = user.profile_image.url
-
-				os.remove(url)
-			except Expectation as e:
-				payload['result'] = "Error"
-				payload['exception'] = str(e)
-		return HttpResponse(json.dumps(payload), content_type="application/json")
 
 
 class ListBlogCommentAdmin(LoginRequiredMixin ,View):
@@ -146,25 +95,6 @@ class BlogCommentDetailAdmin(LoginRequiredMixin,View):
 		return render(self.request, template_name,context)
 
 class CreatBlog(LoginRequiredMixin,View):
-	def save_temp_profile(imageString, user):
-		INCORRECT_PADDING_EXCEPTION = "incorrect padding"
-		try:
-			if not os.path.exists(settings.TEMP):
-				os.mkdir(settings.TEMP)
-			if not os.path.exists(f"{setting.TEMP}/{user.pk}"):
-				os.mkdir(f"{setting.TEMP}/{user.pk}")
-			url = os.path.join(f"{setting.TEMP}/{user.pk}",TEMP_PROFILE_IMAGE_NAME)
-			storage = FileSystemStorage(Location=url)
-			image = base64.b64decode(imageString)
-			with storage.open('','wb+') as destination:
-				destination.write(image)
-				destination.close()
-			return url
-		except Expectation as e:
-			if str(e) == INCORRECT_PADDING_EXCEPTION:
-				imageString +='='* ((4-len(imageString) % 4) % 4)
-				return save_temp_profile(imageString, user)
-		return None
 	def get(self,*args,**kwargs):
 		form = BlogsForm()
 		template_name="admin/pages/blog_form.html"
@@ -172,106 +102,19 @@ class CreatBlog(LoginRequiredMixin,View):
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = BlogsForm(self.request.POST,self.request.FILES)
-		print("pork is good and bad - 1")
-		print(self.request.POST['x'])
-		print("pork is good and bad - 2")
-		print(self.request.POST.get('y'))
-		print("pork is good and bad - 3")
-		print(self.request.POST.get('width'))
-		print("pork is good and bad - 4")
-		print(self.request.POST.get('height'))
+		
 		context={'form':form}
 		if form.is_valid():
-
+			# the data we need for cropping
 			x = self.request.POST.get('x')
-			x = float(x)
-
 			y = self.request.POST.get('y')
-			
-			y = float(y)
 			w = self.request.POST.get('width')
-			
-			w = float(w)
 			h = self.request.POST.get('height')
-			
-			h = float(h)
-			blog = Blog()
+
+			# Where the cropping is done
 			blog = form.save(self.request.user,x,y,w,h)
-			blog.save()
-			# print(blog.blogImage)
-			# blog.user = self.request.user
-
-
-			"""
-			title = models.CharField(max_length=10000,null=False)
-		    title_am = models.CharField(max_length=10000,null=False)
-		    tag = models.CharField(max_length=500,null=False)
-		    tag_am = models.CharField(max_length=500,null=False)
-		    blogImage = models.ImageField(null=True,upload_to='Blogimage')
-		    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-		    content = models.TextField(null=False)
-		    content_am = models.TextField(null=False)
-		    timestamp = models.DateTimeField(auto_now_add=True)
-		    publish = models.BooleanField(null=False,default=False)
-			# """
-			# blog.title = form.cleaned_data.get('title')
-			# blog.title_am = form.cleaned_data.get('title_am')
-			# blog.tag = form.cleaned_data.get('tag')
-			# blog.tag_am = form.cleaned_data.get('tag_am')
-			# blog.content = form.cleaned_data.get('content')
-			# blog.content_am = form.cleaned_data.get('content_am')
-			# blog.publish = form.cleaned_data.get('publish')
-
-			# blog.save()
-			# #url = save_temp_profile(imageString, user)
-			# #blog.blogImage = form.cleaned_data.get("blogImage")
-			# print("----")
-			# # print(form.x)
-			# # publish =self.request.POST['publish']
-			# # print(str(publish))
-			# # if publish =="on":
-			# # 	blog.publish=True 
-			# # else:
-			# # 	blog.publish=False            
-			# print("must be working")
-			# x = self.request.POST.get('x')
-			
-			# x = float(x)
-			# print("x "+str(x))
-			# y = self.request.POST.get('y')
-			
-			# y = float(y)
-			# w = self.request.POST.get('width')
-			
-			# w = float(w)
-			# h = self.request.POST.get('height')
-			
-			# h = float(h)
-
-
-			# print(blog.blogImage.name)
-			# ("------f-f-o-o----")
-			# #----------------------------------------------
-			# image = Image.open(blog.blogImage)
-			# print(image)
-			# cropped_image = image.crop((x, y, w+x, h+y))
-			# print(cropped_image)
-			# #blog.blogImage = cropped_image
-			# #----------------------------------------------
-			# rgb_im = cropped_image.convert('RGB')
-			# rgb_im.save('audacious.jpg')
-			# blob = BytesIO()
-			# rgb_im.save(blob) 
-			# fork = "cropped-" + str(blog.blogImage.name)
-			# blog.blogImage.save(fork, File(rgb_im),save=False)
-			# #blog.blogImage.save(blog.blogImage.name, File(cropped_image))
-			# # resized_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
-			# # resized_image.save(blog.blogImage.path)
-			
 			messages.success(self.request, "Added New Blog Successfully")
-			form = BlogsForm()
-			context={'form':form}
-			return render(self.request, "admin/pages/blog_form.html",context)
+			return redirect("admin:admin_Blogs")
 		return render(self.request, "admin/pages/blog_form.html",context)
 
 class AdminBlogList(LoginRequiredMixin,View):
