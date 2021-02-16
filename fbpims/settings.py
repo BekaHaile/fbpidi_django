@@ -189,7 +189,7 @@ LOGOUT_REDIRECT_URL = 'login'
 AUTH_USER_MODEL = 'accounts.User'
 
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/media/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media/uploads/')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
