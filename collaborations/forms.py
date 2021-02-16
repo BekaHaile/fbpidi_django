@@ -222,13 +222,13 @@ class CreateJobApplicationForm(forms.ModelForm):
     class Meta:
         model = JobApplication
         fields = ('status', 'bio',
-                  'cv', 'documents','experinace',
-                  'grade','institite','field') 
+                  'cv', 'documents','experiance',
+                  'grade','institiute','field') 
         
         widgets = {
-            'experinace':forms.TextInput(attrs={"placeholder": "2",'class':'form-control','onkeyup':'isNumber("experinace")','id':'experinace'},),
+            'experiance':forms.TextInput(attrs={"placeholder": "2",'class':'form-control','onkeyup':'isNumber("experiance")','id':'experiance'},),
             'bio':forms.Textarea(attrs={'class':'summernote','placeholder':'Introduce your self and wright why you are appling'}),
-            'institite' : forms.TextInput(attrs={"placeholder": "school you learned in ",'class':'form-control'},),
+            'institiute' : forms.TextInput(attrs={"placeholder": "school you learned in ",'class':'form-control'},),
             'field' : forms.TextInput(attrs={"placeholder": "The field you learned",'class':'form-control'},),
             'grade': forms.TextInput(attrs={"placeholder": "Your grade",'class':'form-control','onkeyup':'isNumber("grade")','id':'grade'},),
         }

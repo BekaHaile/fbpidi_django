@@ -45,13 +45,13 @@ urlpatterns = [
     path("forum-form",CreateForumQuestion.as_view(),name="forum_form"),
     path("forum-list",ListForumQuestions.as_view(),name="forum_list"),
     path("Replay-comment/<id>/<forum>",CreateCommentReplay.as_view(),name="Replay_comment"),
-    path("forum-detail/<id>",ForumQuestionsDetail.as_view(),name="forum_detail"),
+    path("forum-detail/<id>/",ForumQuestionsDetail.as_view(),name="forum_detail"),
 
     path("announcement-list/",ListAnnouncement.as_view(),name="announcement_list"),
     path("announcement-detail/<id>/",AnnouncementDetail.as_view(),name="announcement_detail"),
     
-    path("customer-tender_detail/<id>/", CustomerTenderDetail.as_view(), name = "customer_tender_detail"),
-    path("tender-application/<id>/", ApplyForTender.as_view(), name= "tender_application"),
+    path("customer_tender_detail/<id>/", CustomerTenderDetail.as_view(), name = "customer_tender_detail"),
+    path("tender_application/<id>/", ApplyForTender.as_view(), name= "tender_application"),
     path("download/<id>/", pdf_download, name = "download"),
     path("tender-list/", CustomerTenderList.as_view(), name = "tender_list"),
 
