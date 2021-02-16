@@ -1,29 +1,31 @@
 from django.urls import path,include
 
-from .views import (BlogList,BlogDetail,FaqList,
-                    PollIndex, PollDetail, VacancyMoreDetail,CreateBlogComment, SearchBlog,
-                    CustomerTenderList, CustomerTenderDetail, CreateApplication, VacancyList,
-                    CategoryBasedSearch, CreateForumQuestion , ListForumQuestions,ForumQuestionsDetail,
-                    CreateCommentReplay,EditCommentForum,EditForumQuestions,
-                    ApplicantListDetail,
-                    AnnouncementDetail,ListAnnouncement,
-                    EditResearch,ListResearch,ResearchDetail,CreateResearch,SearchResearch,
-                    ResearchCategorySearch,
+from .views import (PollIndex, PollDetail,
+                    CustomerTenderList, CustomerTenderDetail,
 
-                    SearchForum,ApplyForTender,pdf_download,SearchBlogTag,CustomerNewsList,
+                    ApplyForTender,pdf_download,CustomerNewsList,
                     CustomerNewsDetail,CustomerEventList, CustomerEventDetail, EventParticipation
                     )
+from .Views.forums import (CreateForumQuestion , ListForumQuestions,
+                        ForumQuestionsDetail,SearchForum,
+                    CreateCommentReplay,EditCommentForum,EditForumQuestions,)
+from .Views.blog import (SearchBlogTag,CreateBlogComment, SearchBlog,BlogList,BlogDetail,)
+from .Views.vacancy import (VacancyMoreDetail, CreateApplication, VacancyList,
+                    CategoryBasedSearch,)
+from .Views.announcement import (AnnouncementDetail,ListAnnouncement,)  
 
 from .Views.projects import (EditProject,ListProject,ProjectDetail,CreateProject
                             ,SearchProject,ProjectCategorySearch,)  
+from .Views.faq import FaqList
+
+from .Views.research import (EditResearch,ListResearch,ResearchDetail,CreateResearch,SearchResearch,
+                    ResearchCategorySearch,)  
                     
 
 urlpatterns = [ 
 
     path("project-list",ListProject.as_view(),name="project_list"),
-    path("project-edit/<id>",EditProject.as_view(),name="project_edit"),
     path('project-search',SearchProject.as_view(),name='project_search'),
-    path("project-form",CreateProject.as_view(),name="project_form"),
     path("project-detail/<id>",ProjectDetail.as_view(),name="project_detail"),
     path("project-category/<id>",ProjectCategorySearch.as_view(),name="projectcategory_search"),
 

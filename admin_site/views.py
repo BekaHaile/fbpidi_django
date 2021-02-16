@@ -12,7 +12,7 @@ from company.models import Company,CompanyEvent
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
-from collaborations.models import (PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategory, 
+from collaborations.models import (BlogComment,PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategory, 
                                     Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages,
                                     News, NewsImages,Project,Research,ResearchProjectCategory,ForumQuestion)
 from django.http import HttpResponse, FileResponse
@@ -75,10 +75,16 @@ class DeleteView(LoginRequiredMixin,View):
             message ="Research and project Category Deleted"
             messages.success(self.request,message)
             return redirect("admin:researchprojectcategory_list")
+        elif self.kwargs['model_name'] == 'BlogCommentsAdmin':
+            blogcomments = BlogComment.objects.get(id=self.kwargs['id'])
+            blogcomments.delete()
+            message = "BlogComment Deleted"
+            messages.success(self.request,message)
+            return redirect("admin:blogComment_list")
         elif self.kwargs['model_name'] == 'AnnouncementImages':
-            vacancy = AnnouncementImages.objects.get(id=self.kwargs['id'])
-            id =vacancy.announcement.id
-            vacancy.delete()
+            announcementimages = AnnouncementImages.objects.get(id=self.kwargs['id'])
+            id =announcementimages.announcement.id
+            announcementimages.delete()
             message ="AnnouncementImages Deleted"
             messages.success(self.request,message)
             return redirect(f"/admin/anounce-Detail/Announcement/{id}")

@@ -1,12 +1,58 @@
 
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views import View
 from django.urls import reverse
-from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponse
+import datetime
+from django.views import View
 
+from django.http import HttpResponse, FileResponse
+from collaborations.models import Blog, BlogComment
+from collaborations.forms import FaqsForm
 from django.shortcuts import render, redirect, reverse
 
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
+from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategory, News, NewsImages
+									 #redirect with context
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views import View
+from django.contrib import messages
+
+from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
+from accounts.models import User, CompanyAdmin, Company
+import os
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
+
+from django.http import FileResponse, HttpResponse
+
+from accounts.models import User
+from accounts.email_messages import sendEventNotification
+
+from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
+from django.http import HttpResponse, FileResponse
+						 
+from wsgiref.util import FileWrapper
+
+
+
+from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
+
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
+from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
+								 VacancyForm,JobCategoryForm,
+								 ForumQuestionForm,CommentForm,CommentReplayForm,
+								 AnnouncementForm,ResearchForm,
+								 ResearchProjectCategoryForm
+								 )
+
+from collaborations.models import ( Blog, BlogComment,Faqs,
+									Vacancy,JobApplication, JobCategory,
+									ForumQuestion, ForumComments, CommentReplay,
+									Announcement,AnnouncementImages,
+									Research,
+									ResearchProjectCategory
+									
+									)
 from collaborations.forms import (ProjectForm,)
 
 from collaborations.models import ( Research, Project,

@@ -175,6 +175,8 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR,"locale"),
 )
 
+DATA_UPLAOD_MAX_MEMORY_SIZE = 10485864
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
