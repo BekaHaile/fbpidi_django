@@ -51,23 +51,36 @@ class BlogsForm(forms.ModelForm):
                             }
 
     def save(self,user,x,y,w,h):
-        print("must be working -- 1")
+        ## change 'BlogsForm' with the one you want to use
         blog = super(BlogsForm, self).save(commit=False)
-        print("must be working -- 2")
-        # x = self..get('x')
-        # y = self.cleaned_data.get('y')
-        # w = self.cleaned_data.get('width')
-        # h = self.cleaned_data.get('height')
+        ## if there are values that need to be set
 
+        blog.user = user
+        blog.save()
+
+        ## if the image is not cropped 
+        if (x == '' or y == '' or w == '' or h == ''):
+            # just resize and save
+            # change blog.blogImage with the image you want to resize 
+            image = Image.open(blog.blogImage)
+            resized_image = image.resize((200, 200), Image.ANTIALIAS)
+            resized_image.save(blog.blogImage.path)
+            return blog
+
+        x = float(x)
+        y = float(y)
+        w = float(w)
+        h = float(h)
+        # open the imaes about to be cropped
+        # change blog.blogImage with the image you want to resize 
         image = Image.open(blog.blogImage)
         cropped_image = image.crop((x, y, w+x, h+y))
         resized_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
-        
-        x = resized_image.save(blog.blogImage.path)
-        blog.blogImage = x
-        print(resized_image)
-        blog.user = user
+
+        ## replace the image with the cropped one
+        resized_image.save(blog.blogImage.path)
         return blog
+
 class BlogsEdit(forms.ModelForm):
     
     class Meta:
@@ -79,8 +92,6 @@ class BlogsEdit(forms.ModelForm):
                     'tag':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in English'}),
                     'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in Amharic'}),
                     'tag_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in Amharic'}),
-
-
                             }
 
 
@@ -103,7 +114,6 @@ class PollsForm(forms.ModelForm):
             'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in English'}),
             'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title in Amharic'}),
             'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in Amharic'}),
-            
         }
 
 
@@ -149,8 +159,7 @@ class TenderForm(forms.ModelForm):
                 'description':forms.Textarea(attrs={'class':'summernote','placeholder':'description of the Tender'}),
                 'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
                 'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'description of the Tender in amharic'}),
-            
-            }
+                }
 
 class TenderEditForm(forms.ModelForm):
     # user, bank_account, document
@@ -222,13 +231,13 @@ class CreateJobApplicationForm(forms.ModelForm):
     class Meta:
         model = JobApplication
         fields = ('status', 'bio',
-                  'cv', 'documents','experinace',
-                  'grade','institite','field') 
+                  'cv', 'documents','experiance',
+                  'grade','institiute','field') 
         
         widgets = {
-            'experinace':forms.TextInput(attrs={"placeholder": "2",'class':'form-control','onkeyup':'isNumber("experinace")','id':'experinace'},),
+            'experiance':forms.TextInput(attrs={"placeholder": "2",'class':'form-control','onkeyup':'isNumber("experiance")','id':'experiance'},),
             'bio':forms.Textarea(attrs={'class':'summernote','placeholder':'Introduce your self and wright why you are appling'}),
-            'institite' : forms.TextInput(attrs={"placeholder": "school you learned in ",'class':'form-control'},),
+            'institiute' : forms.TextInput(attrs={"placeholder": "school you learned in ",'class':'form-control'},),
             'field' : forms.TextInput(attrs={"placeholder": "The field you learned",'class':'form-control'},),
             'grade': forms.TextInput(attrs={"placeholder": "Your grade",'class':'form-control','onkeyup':'isNumber("grade")','id':'grade'},),
         }
@@ -286,7 +295,7 @@ class CommentReplayForm(forms.ModelForm):
         model = CommentReplay
         fields = ('content',)
         widgets = {
-            'content':forms.Textarea(attrs={'class':'form-control','placeholder':'Your Comment on the Forum'}),
+            'content':forms.Textarea(attrs={'class':'form-control','placeholder':'Give your replay on the Forum comment'}),
         }
 
 class AnnouncementForm(forms.ModelForm):

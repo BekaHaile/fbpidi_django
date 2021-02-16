@@ -39,9 +39,9 @@ urlpatterns = [
     re_path(r'^i18n/', include('django.conf.urls.i18n')),
 
     path("collaborations/", include('collaborations.urls')),
+    path('api_auth/', include('rest_framework_social_oauth2.urls')),
     
     
-
 ]  
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

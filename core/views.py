@@ -23,7 +23,7 @@ class IndexView(View):
         category = Category.objects.all()
         sub_category = SubCategory.objects.all()
         company = Company.objects.all()
-        #make it filter the latest 4 or 5
+        #??make it filter the latest 4 or 5
         news_list = News.objects.all()
 
         
@@ -142,6 +142,7 @@ class ProfileView(LoginRequiredMixin, View):
     def post(self,*args,**kwargs):
         user_detail = Customer.objects.get(user=self.request.user)
         user = User.objects.get(id=self.request.user.id)
+
         
         if self.request.POST['first_name'] != None:
             user.first_name = self.request.POST['first_name']
@@ -151,6 +152,8 @@ class ProfileView(LoginRequiredMixin, View):
             user.phone_number = self.request.POST['phone_number']
         if self.request.FILES.get('profile_image') != None:
             user.profile_image = self.request.FILES.get('profile_image')
+            #12345 two profile images for a single customer user
+            user_detail.profile_image = self.request.FILES.get('profile_image')
         user.save()
         if self.request.POST['address'] != None:
             user_detail.address = self.request.POST['address']

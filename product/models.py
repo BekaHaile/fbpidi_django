@@ -29,7 +29,8 @@ class Product(models.Model):
 
     def get_category(self):
         return self.category.category_name.category_type
-        
+
+
 class ProductImage(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     image = models.ImageField()
@@ -37,6 +38,7 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return self.product.name
+
 
 class ProductPrice(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=False)
@@ -49,6 +51,7 @@ class ProductPrice(models.Model):
 
     def __str__(self):
         return str(self.price)
+
 
 class OrderProduct(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
@@ -63,6 +66,7 @@ class OrderProduct(models.Model):
     
     def get_total_item_price(self):
         return self.product.price().price * self.quantity
+
 
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)

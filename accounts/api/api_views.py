@@ -7,7 +7,7 @@ from accounts.models import User,Company,CompanyAdmin,Customer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer, CompanyAdminSerializer, CustomerSerializer
+from .serializers import UserSerializer, CompanyAdminSerializer, CustomerCreationSerializer
 from rest_framework.authtoken.models import Token
 
 class CompanyAdminSignUpView(APIView):
@@ -39,13 +39,13 @@ class CustomerSignUpView(APIView):
             user_serializer = UserSerializer (data = request.data)
             if user_serializer.is_valid():
                 #before saving the user object check if the company_admin data is valid
-                customer_serializer = CustomerSerializer(data = request.data)
+                customer_serializer = CustomerCreationSerializer(data = request.data)
             
                 if customer_serializer.is_valid():
                         user = user_serializer.create(validated_data = request.data) 
                         customer = customer_serializer.save(user = user)    
                         data['response'] = "Successfully registered a new Customer user."
-                        data['customer']  = CustomerSerializer(customer).data
+                        data['customer']  = CustomerCreationSerializer(customer).data
                         data['token'] = Token.objects.get(user = user).key
                    
                 else:

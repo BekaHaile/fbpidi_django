@@ -1,19 +1,12 @@
 
 from django.urls import reverse
-import datetime
 from django.views import View
-
-from django.http import HttpResponse, FileResponse
-from collaborations.models import Blog, BlogComment
-from collaborations.forms import FaqsForm
 from django.shortcuts import render, redirect, reverse
 
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
-from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategory, News, NewsImages
-									 #redirect with context
-from django.http import HttpResponse, HttpResponseRedirect
+									 #redirect with context 
 from django.views import View
-from .models import PollsQuestion, Choices, PollsResult, Tender, TenderApplicant
+ 
 from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
 from django.contrib import messages
 
@@ -25,63 +18,22 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 
-from django.http import FileResponse, HttpResponse
-
-from accounts.models import User
+from django.http import FileResponse, HttpResponse, HttpResponseRedirect
 from accounts.email_messages import sendEventNotification, sendEventClosedNotification
-
-from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
-from django.http import HttpResponse, FileResponse
 						 
 from wsgiref.util import FileWrapper
-
-
-
-from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
+from collaborations.forms import BlogsForm, BlogCommentForm, FaqsForm, VacancyForm, JobCategoryForm
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
-								 VacancyForm,JobCategoryForm,
-								 ForumQuestionForm,CommentForm,CommentReplayForm,
-								 AnnouncementForm,ResearchForm,
-								 ResearchProjectCategoryForm
-								 ) 
+from collaborations.forms import (BlogsForm, BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm,ForumQuestionForm,CommentForm,CommentReplayForm, 
+								AnnouncementForm,ResearchForm,ResearchProjectCategoryForm, TenderApplicantForm, PollsForm, CreatePollForm, CreateChoiceForm, NewsForm)
 
-from collaborations.models import ( Blog, BlogComment,Faqs,
-									Vacancy,JobApplication, JobCategory,
-									ForumQuestion, ForumComments, CommentReplay,
-									Announcement,AnnouncementImages,
-									Research,
-									ResearchProjectCategory
-									
-									)
+from collaborations.models import ( PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, Blog, BlogComment,Faqs, Vacancy,JobApplication, 
+									JobCategory,ForumQuestion, Faqs, Vacancy, JobApplication, JobCategory, News, NewsImages, ForumComments, 
+									CommentReplay,Announcement,AnnouncementImages,Research,ResearchProjectCategory)
 
-
-##------------------ ResearchProjects
-
-
-
-# --------------- Announcement
-
-
-#---------------- forum and comment on forum
-
-
-## ------------- Blogs Views
-
-
-
-## --- Blogs Views
-
-
-## --- Faqs views
-
-
-
-	
-# -----  vacancy and jobCategory
-
+import datetime
 
 
 

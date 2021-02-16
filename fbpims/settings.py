@@ -51,7 +51,11 @@ INSTALLED_APPS = [
     'collaborations',
     'company',
     'product',
+
     'social_django',
+    'rest_framework_social_oauth2', 
+    'oauth2_provider',#for rest_framework social_oauth
+    
     'colorfield',
     'crispy_forms',
     'django_summernote',
@@ -59,7 +63,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
  
-
 ]
 
 
@@ -92,6 +95,7 @@ TEMPLATES = [
 
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+
             ],
         },
     },
@@ -189,7 +193,7 @@ LOGOUT_REDIRECT_URL = 'login'
 AUTH_USER_MODEL = 'accounts.User'
 
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/media/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media/uploads/')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
@@ -213,15 +217,20 @@ EMAIL_USE_LOCALTIME = True
 
 #### For the RestFramework
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ]
+REST_FRAMEWORK = {
 
-# }
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+
+    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ]
+
+}
 
 
 
@@ -234,8 +243,12 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.facebook.FacebookOAuth2',
+    
+    'social_core.backends.facebook.FacebookAppOAuth2', #api
+    'social_core.backends.facebook.FacebookOAuth2', #with browser
 
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+    
     'django.contrib.auth.backends.ModelBackend',
 )
 
