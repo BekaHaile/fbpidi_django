@@ -261,6 +261,18 @@ class CreateVacancy(LoginRequiredMixin, View):
 			vacancy.user=self.request.user
 			vacancy.company=self.company_admin()
 			vacancy.category=category
+			da1 = self.request.POST['starting_date']
+			da2 = self.request.POST['ending_date']
+			if (da2<da1):
+				print(da1," is greater than ",da2)
+				context = {'vacancy':form}
+				template = "admin/pages/job_form.html"
+				messages.warning(self.request, "End Date is Before Start Date")
+				return render(self.request,template,context)
+			else:
+				print(da1," is less than ",da2)
+			print(" ---------- print is good for all ------------ ")
+			
 			starting_date=datetime.datetime.strptime(self.request.POST['starting_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
 			ending_date=datetime.datetime.strptime(self.request.POST['ending_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
 			vacancy.starting_date = starting_date

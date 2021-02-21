@@ -61,7 +61,7 @@ from collaborations.models import ( Faqs, )
 class FaqList(View):
 	def get(self,*args,**kwargs):
 		template_name="frontpages/faq.html"
-		faq = Faqs.objects.all()
+		faq = Faqs.objects.filter(status="APPROVED")
 		context = {'faqs':faq}
 		return render(self.request, template_name,context)
 
@@ -76,6 +76,11 @@ class CreateFaqs(LoginRequiredMixin,View):
 		context = {"form":form}
 		if form.is_valid():
 			faqs = form.save(commit=False)
+			if self.request.user.is_company_admin:
+				faqs.status = "PENDDING"
+			if self.request.user.is_superuser:
+				faqs.status = "APPROVED"
+			faqs.user = self.request.user
 			faqs.save()
 			form = FaqsForm()
 			context = {'form':form}
@@ -103,9 +108,35 @@ class FaqsView(LoginRequiredMixin,View):
 		return redirect("admin:admin_Faqs") 
 
 class FaqsList(LoginRequiredMixin,View):
-	template_name = "admin/pages/faqs_forms.html"
 	def get(self,*args,**kwargs):
-		faqs=Faqs.objects.all()
+		if self.request.user.is_superuser:
+			faqs=Faqs.objects.all()
+			pending = Faqs.objects.filter(status="PENDDING").count()
+			
+		if self.request.user.is_company_admin:
+			faqs=Faqs.objects.filter(user=self.request.user)
+			pending = ""
+		context = {'faqs':faqs,'pending':pending}
+		template_name = "admin/pages/faqs_list.html"
+		return render(self.request, template_name,context)
+
+class FaqPendingList(LoginRequiredMixin,View):
+	def get(self,*args,**kwargs):
+		faqs=Faqs.objects.filter(status="PENDDING")
 		context = {'faqs':faqs}
 		template_name = "admin/pages/faqs_list.html"
+		return render(self.request, template_name,context)
+
+class FaqApprove(LoginRequiredMixin, View):
+	def get(self,*args,**kwargs):
+		faq = Faqs.objects.get(id=self.kwargs['id'])
+		faq.status = "APPROVED"
+		faq.save()
+		messages.success(self.request, "Changed Status to APPROVED Successfully")
+		return redirect("admin:admin_Faqs")
+class FaqsDetail(LoginRequiredMixin,View):
+	def get(self,*args,**kwargs):
+		faq = Faqs.objects.get(id=self.kwargs['id'])
+		context = {'forms':faq}
+		template_name = "admin/pages/faqs_view.html"
 		return render(self.request, template_name,context)
