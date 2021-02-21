@@ -35,13 +35,7 @@ if __name__ == '__main__':
     # add_banks()
     # set_token_for_existing_users()
     
-    b = NewsImages.objects.first()
-    print(b.image.url)
-    print(b.image.path)
-    # image = Image.open(b.image)
-    # cropped_image = image.crop((200.0,20.0,300.0, 100.0 ))
-    # rs_image = cropped_image.resize((200,200), Image.ANTIALIAS)
-    rs_image.save(b.image.path)
-    print(b.image.url)
-    
+    for u in User.objects.all():
+        u.email = "script_email@gmail.com"
+        u.save()
     

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import Permission, Group
+
 from django.conf import settings
 import datetime
 from company.models import Company,CompanyBankAccount
@@ -74,15 +75,12 @@ class Blog(models.Model):
     title_am = models.CharField(max_length=10000,null=False)
     tag = models.CharField(max_length=500,null=False)
     tag_am = models.CharField(max_length=500,null=False)
-    blogImage = models.ImageField(null=True,upload_to='Blogimage')
+    blogImage = models.ImageField(null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(null=False)
     content_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     publish = models.BooleanField(null=False,default=False)
-
-    def __str__(self):
-        return self.title
 
     class Meta:
         ordering = ['-timestamp',]

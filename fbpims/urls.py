@@ -19,11 +19,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include,re_path
 
+
 from admin_site.admin import admin_site
 
 from accounts.views import activate
-
-
 
 urlpatterns = [
     # admin page urls
@@ -39,7 +38,8 @@ urlpatterns = [
     re_path(r'^i18n/', include('django.conf.urls.i18n')),
 
     path("collaborations/", include('collaborations.urls')),
-    path('api_auth/', include('rest_framework_social_oauth2.urls')),
+    path('api/auth/oauth/', include('rest_framework_social_oauth2.urls')), ###
+    
     
     
 ]  
