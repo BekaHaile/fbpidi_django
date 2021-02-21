@@ -19,7 +19,8 @@ from collaborations.views import (
                         TenderList, CreateTender, TenderDetail, 
                         EditTender,  DeleteTender, ManageBankAccount,
                         )
-from collaborations.Views.faq import(CreateFaqs,FaqsView,FaqsList,)
+from collaborations.Views.faq import(CreateFaqs,FaqsView,FaqsList,FaqPendingList,FaqApprove,
+                                    FaqsDetail)
 
 from collaborations.Views.vacancy import(CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
                         JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
@@ -122,9 +123,13 @@ class CustomAdminSite(admin.AdminSite):
             path("Vacancy-applicant-info/<id>",wrap(ApplicantListDetail.as_view()),name="applicant_detail"),
             path("Vacancy-detail/<model_name>/<id>",wrap(VacancyDetail.as_view()),name="job_detail"),
            
-            path("faqs-detail/<model_name>/<id>",wrap(FaqsView.as_view()),name="faqs_detail"),
+            path("faq-detail/<model_name>/<id>",wrap(FaqsView.as_view()),name="faqs_detail"),
             path("faq-form/",wrap(CreateFaqs.as_view()),name="admin_Faqsform"),
-            path("faq-list/",wrap(FaqsList.as_view()),name="admin_Faqs"),
+            path("faq-list/",wrap(FaqsList.as_view()),name="admin_Faqs"), 
+            path("faq-pendding-list/",wrap(FaqPendingList.as_view()),name="admin_pendding_Faqs"),
+            path("faq-approve/<id>",wrap(FaqApprove.as_view()),name="approve_Faqs"),
+            path("faq-view/<model_name>/<id>",wrap(FaqsDetail.as_view()),name="view_Faqs"),
+
             
             path("blog-list/",wrap(AdminBlogList.as_view()),name="admin_Blogs"),
             path("blog-detail/<model_name>/<id>/",wrap(BlogView.as_view()),name="blog_detail"),

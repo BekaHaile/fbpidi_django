@@ -115,6 +115,10 @@ ADMIN_PERMISSION_LIST = [
     'change_companyevent', 
     'delete_companyevent', 
 
+    'add_faqs', 
+    'view_faqs', 
+    'change_faqs', 
+    'delete_faqs',
     
     'add_blog', 
     'view_blog', 

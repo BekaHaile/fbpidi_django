@@ -64,8 +64,9 @@ from collaborations.models import ( Research, Project,
 class ListProjectAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = Project.objects.all()
+		pending = Project.objects.filter(status="PENDING").count()
 		template_name = "admin/researchproject/project_list.html"
-		context = {'researchs':form}
+		context = {'researchs':form,'pending':pending}
 		return render(self.request, template_name,context)
 
 class ListPendingProjectAdmin(LoginRequiredMixin ,View):

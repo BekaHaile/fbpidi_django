@@ -9,6 +9,7 @@ import os
 from product import models
 from accounts.models import User
 from company.models import Company,CompanyEvent
+from admin_site.models import Category
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
@@ -33,7 +34,7 @@ class DeleteView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         message = ""
         if self.kwargs['model_name'] == 'category':
-            category = models.Category.objects.get(id=self.kwargs['id']) 
+            category = Category.objects.get(id=self.kwargs['id']) 
             category.delete()
             message = "Category Deleted"
             messages.success(self.request,message)

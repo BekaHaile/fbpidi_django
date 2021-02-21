@@ -1,7 +1,12 @@
 {%extends 'frontpages/layout.html'%}
 
+{%load i18n%}
+{%load core_template_tags%} 
+
 {%block content%}
-		<!--Breadcrumb-->
+
+{% get_current_language as LANGUAGE_CODE %}
+		<!--Breadcrumb--> 
 		<section>
 			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
 				<div class="header-text mb-0">
@@ -46,7 +51,7 @@
 								<div class="product-tags clearfix">
 									{%for tag in tags%}
 									<ul class="list-unstyled mb-0">
-										<li><a href="{%url 'search_blogtag' name=tag%}">{{tag}}</a></li>
+										<li><a href="{%url 'search_blogtag' name=tag%}">{% print_translated tag.title|safe tag.title_am|safe LANGUAGE_CODE%}</a></li>
 										
 									</ul>
 									{%endfor%}
@@ -62,6 +67,7 @@
 					<div class="col-xl-8 col-lg-8 col-md-12">
 						<div class="card">
 							<div class="card-body">
+								{% print_translated blog.title|safe blog.title_am|safe LANGUAGE_CODE%}
 										<h4>{{blog.title}}</h4>
 									</div>
 							<div class="card-body">
@@ -77,7 +83,8 @@
 										<a href="#" class="mr-0"><i class="fa fa-comment-o text-muted mr-2"></i>{{blog.countComment}}</a>
 									</div>
 								</div>
-								<p>{{blog.content|safe}}</p>
+								<p>{% print_translated blog.content|safe blog.content_am|safe LANGUAGE_CODE%}</p>
+								
 							</div>
 						</div>
 

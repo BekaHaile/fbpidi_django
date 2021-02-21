@@ -108,8 +108,9 @@ class ResearchProjectCategoryDetail(LoginRequiredMixin,View):
 class ListResearchAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.all()
+		pending = Research.objects.filter(status="PENDING").count()
 		template_name = "admin/researchproject/research_list.html"
-		context = {'researchs':form}
+		context = {'researchs':form,"pending":pending}
 		return render(self.request, template_name,context)
 
 class ListPendingResearchAdmin(LoginRequiredMixin ,View):

@@ -25,6 +25,12 @@
 			<h5 class="card-title">Research</h5>
 			<div class="header-elements">
 				<div class="list-icons">
+					{% if user.is_superuser %} 
+					<a href="{% url 'admin:pedning_research_list'%}" class="badge-danger btn-sm rounded-round">{{pending}} in Pendding </a>
+							{%endif%}
+				</div>
+				
+				<div class="list-icons">
 					{% if perms.collaborations.add_research %} 
 					<a href="{% url 'admin:research_form'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Research</a>
