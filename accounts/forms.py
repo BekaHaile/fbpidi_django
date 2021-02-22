@@ -166,6 +166,10 @@ ADMIN_PERMISSION_LIST = [
     'change_project', 
     'delete_project', 
     
+    'add_document',
+    'view_document', 
+    'change_document',
+    'delete_document',
 ]
 
 

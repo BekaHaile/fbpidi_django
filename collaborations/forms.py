@@ -6,7 +6,8 @@ from .models import  (PollsQuestion, Choices, PollsResult,
                       Faqs,Blog,BlogComment,
                       ForumQuestion,ForumComments,CommentReplay,
                       ForumComments,Announcement, News, NewsImages,
-                      Research,Project,ResearchProjectCategory
+                      Research,Project,ResearchProjectCategory,
+                      Document
                       )
 
 from django.forms.widgets import SelectDateWidget
@@ -80,6 +81,7 @@ class BlogsForm(forms.ModelForm):
         ## replace the image with the cropped one
         resized_image.save(blog.blogImage.path)
         return blog
+
 
 class BlogsEdit(forms.ModelForm):
     
@@ -355,11 +357,21 @@ class ResearchForm(forms.ModelForm):
         'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The whole research'}),
         }
         
+class DocumentForm(forms.ModelForm):
+        document = forms.FileField( required=False )
+        category = forms.ChoiceField( required = True,choices=Document.DOC_CATEGORY,  widget = forms.Select(attrs={'type':'dropdown', 'class':'form-control'}))
 
+        class Meta:
+            model = Document
+            fields = ('title', 'category', 'document')
+            widgets = {
+                'title': forms.TextInput( attrs={'class': 'form-control form-control-uniform'}),
+                'category': forms.Select( attrs={'type':'dropdown', 'class':'form-control'}),
+                'document' : forms.FileInput( attrs={'class':'form-input-styled'})
+            }
  
 
-
-
+		
 
 
 

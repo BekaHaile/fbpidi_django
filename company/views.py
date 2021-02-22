@@ -233,8 +233,8 @@ class EditCompanyEvent(LoginRequiredMixin,View):
         event = CompanyEvent.objects.get(id=self.kwargs['id']) 
         if form.is_valid():
             form.save(commit=False)
-            event.event_name = self.request.POST['event_name']
-            event.event_name_am = self.request.POST['event_name_am']
+            event.title = self.request.POST['title']
+            event.title_am = self.request.POST['title_am']
             event.description = self.request.POST['description']
             event.description_am = self.request.POST['description_am']
 

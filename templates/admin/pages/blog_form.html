@@ -154,12 +154,10 @@
 	var modalCropEdit = document.getElementById('image')
 	var force = document.getElementById('force')
 	$("#blogImage").change(function () {
-		console.log("log1")
+	
 		if (this.files && this.files[0]) {
-			console.log("log2")
 			var reader = new FileReader();
 			reader.onload = function (e) {
-
 			$("#image").attr("src", e.target.result);
             $("#modalCrop").modal("show");
 				}

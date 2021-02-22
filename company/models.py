@@ -100,8 +100,8 @@ class CompanyEvent(models.Model):
     EVENT_STATUS = [('Upcoming', 'Upcoming'),('Open', 'Open' ), ('Closed', 'Closed')]
 
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
-    event_name = models.CharField(max_length=200,verbose_name="Event Name(English)")
-    event_name_am = models.CharField(max_length=200,verbose_name="Event Name(Amharic)")
+    title = models.CharField(max_length=200,verbose_name="Event Name(English)")
+    title_am = models.CharField(max_length=200,verbose_name="Event Name(Amharic)")
     description = models.TextField(verbose_name="Description(English)")
     description_am = models.TextField(verbose_name="Description(Amharic)")
     image = models.ImageField(blank = True, null = True)
@@ -109,6 +109,9 @@ class CompanyEvent(models.Model):
     start_date = models.DateTimeField(verbose_name="Event start date")
     end_date = models.DateTimeField(verbose_name="Event end date")
     status = models.CharField(max_length=10, verbose_name="Tender status", choices=EVENT_STATUS)
+
+    def model_name():
+        return "Events"
 
     class Meta:
         ordering = ['-time_stamp',] 

@@ -27,103 +27,12 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()#####
         return user
 
-ADMIN_PERMISSION_LIST = [
-    'add_logentry',
-    'view_logentry',
-    'view_permission',
-    'view_group',
-    'view_contenttype',
-    'view_session',
-    'view_category',
-    'add_product',
-    'change_product',
-    'delete_product',
-    'view_product',
-    'view_subcategory',
-    'add_productprice',
-    'change_productprice',
-    'delete_productprice',
-    'view_productprice',
-    'add_user',
-    'change_user',
-    'delete_user',
-    'view_user',
-    'add_companyadmin',
-    'change_companyadmin',
-    'delete_companyadmin',
-    'view_companyadmin',
-    'change_company',
-    'delete_company',
-    'view_company',
-    'add_companystaff',
-    'change_companystaff',
-    'delete_companystaff',
-    'view_companystaff',
-    'view_failedloginlog',
-    'view_loginlog',
-    'view_loginattempt',
-    'view_userdeactivation', 
-
-    'add_pollsquestion',
-    'view_pollsquestion',
-    'change_pollsquestion',
-    'delete_pollsquestion',
-    'add_choices',
-    'view_choices',
-    'change_choices',
-    'delete_choices',
-    
-    'view_bank',
-    'add_tender',
-    'view_tender',
-    'change_tender',
-    'delete_tender',
-
-    'add_companybankaccount',
-    'change_companybankaccount',
-    'delete_companybankaccount',
-    'view_companybankaccount',
-    'view_tenderapplicant',
-
-    'add_news', 
-    'view_news', 
-    'change_news', 
-    'delete_news',
-
-    'add_newsimages', 
-    'view_newsimages', 
-    'change_newsimages', 
-    'delete_newsimages', 
-
-    'add_companyevent', 
-    'view_companyevent', 
-    'change_companyevent', 
-    'delete_companyevent', 
-]
-
 
 class CompanyAdminSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False) 
     class Meta:
         model = CompanyAdmin
         fields = ('user','is_suplier', 'is_manufacturer' )
-
-    @transaction.atomic
-    def save(self, user):
-        user = user
-        user.is_company_admin = True
-        user.is_staff = True
-        user.is_superuser = False
-        perm_list = []
-        for code_name in ADMIN_PERMISSION_LIST:
-            
-            perm_list.append(Permission.objects.get(codename=code_name))
-        user.user_permissions.set(perm_list) 
-        user.save()
-        
-        companyadmin = CompanyAdmin(user = user, is_suplier=self.validated_data['is_suplier'], is_manufacturer=self.validated_data['is_manufacturer'],)
-        companyadmin.save()
-        return companyadmin
 
 
 class CustomerCreationSerializer(serializers.ModelSerializer):
