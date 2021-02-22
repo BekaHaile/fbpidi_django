@@ -66,8 +66,22 @@
 									</div>
 									<br>
 									
-									
-									<a href="{% url 'admin:edit_document' id=document.id %}" ><i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file fa-5x"></i></a>
+									<a href="{% url 'admin:edit_document' id=document.id %}" >
+										{% if '.jpg' in document.document.name  or '.png' in document.document.name %}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-image fa-4x"></i>
+										{% elif '.mp4' in document.document.name or '.avi' in document.document.name %}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-play-circle fa-4x"></i>
+										{% elif '.mp3' in document.document.name or '.3gpp' in document.document.name or '.acc' in document.document.name %}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-music fa-4x"></i>
+										{% elif '.docx' in document.document.name or '.doc' in document.document.name %}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-word-o fa-4x"></i>
+										{% elif '.pdf' in document.document.name %}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-pdf-o fa-4x"></i>
+										{% else %}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file fa-4x"></i>
+										{% endif %}
+										
+									</a>
 									<br>
 									<p style = "margin-top: 10px;  margin-bottom: 30px; padding-right: 30px;"><b>{{document.title}}</b></p>
 								</div>
