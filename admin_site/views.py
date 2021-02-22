@@ -14,7 +14,7 @@ from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
 from collaborations.models import (BlogComment,PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategory, 
                                     Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages,
-                                    News, NewsImages,Project,Research,ResearchProjectCategory,ForumQuestion)
+                                    News, NewsImages,Project,Research,ResearchProjectCategory,ForumQuestion, Document)
 from django.http import HttpResponse, FileResponse
  
 # 
@@ -192,7 +192,13 @@ class DeleteView(LoginRequiredMixin,View):
                 event.delete()
                 messages.success(self.request,"Event Deleted Successfully!")
                 return redirect("admin:view_fbpidi_company") if self.request.user.is_superuser  else redirect("admin:view_company_profile")
-
+        elif self.kwargs['model_name'] == "Document":
+                document = Document.objects.get(id= self.kwargs['id'])
+                category =document.category
+                document.delete()
+                messages.success(self.request, "Document Deleted Successfully!")
+                return render(self.request, f"admin/document/list_document_by_category.html", {'documents':Document.objects.filter(category = category), 'categories': Document.DOC_CATEGORY})
+        
             # except Exception as e:
             #     messages.warning(self.request, "Could not find the Event")
             #     return redirect("admin:view_fbpidi_company") if event.company.company_type == "fbpidi" else redirect("admin:view_company_profile")

@@ -668,7 +668,6 @@ class EditDocument(LoginRequiredMixin, View):
         return render(self.request, f"admin/document/list_document_by_category.html", {'documents':Document.objects.filter(category = document.category), 'categories': Document.DOC_CATEGORY})
         
        
-
 class DocumentListing(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         if self.kwargs['option'] != 'all':
