@@ -63,7 +63,8 @@ class BlogsForm(forms.ModelForm):
             # just resize and save
             # change blog.blogImage with the image you want to resize 
             image = Image.open(blog.blogImage)
-            resized_image = image.resize((200, 200), Image.ANTIALIAS)
+            
+            resized_image = image.resize((w1, h1), Image.ANTIALIAS)
             resized_image.save(blog.blogImage.path)
             return blog
 
@@ -75,10 +76,10 @@ class BlogsForm(forms.ModelForm):
         # change blog.blogImage with the image you want to resize 
         image = Image.open(blog.blogImage)
         cropped_image = image.crop((x, y, w+x, h+y))
-        resized_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
+        #resized_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
 
         ## replace the image with the cropped one
-        resized_image.save(blog.blogImage.path)
+        cropped_image.save(blog.blogImage.path)
         return blog
 
 class BlogsEdit(forms.ModelForm):
@@ -214,13 +215,13 @@ class VacancyForm(forms.ModelForm):
             #'employement_type':forms.Select(attrs={'class':'form-control form-control-uniform','choices':JOB_CHOICES}),
             'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'location':forms.TextInput(attrs={'class':'form-control','placeholder':'Location'}),
-            'salary':forms.TextInput(attrs={'class':'form-control','type':'number','placeholder':'Salary in Birr'}),
+            'salary':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("salary")','id':'salary','type':'number','placeholder':'Salary in Birr'}),
             'job_title':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Title in English'}),
             'job_title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Title in Amharic'}),
             'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in English'}),
             'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in Amharic'}),
-            'requirement':forms.TextInput(attrs={'class':'summernote','placeholder':'Requirements for the Job in English'}),
-            'requirement_am':forms.TextInput(attrs={'class':'summernote','placeholder':'Requirements for the Job in Amharic'})
+            'requirement':forms.Textarea(attrs={'class':'summernote','placeholder':'Requirements for the Job in English'}),
+            'requirement_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Requirements for the Job in Amharic'})
                       
         }
 

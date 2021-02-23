@@ -98,7 +98,7 @@ class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 			announcementpost.save()
 			for images in self.request.FILES.getlist('images'):
 				print("image name:"+str(images.name))
-				announcementimages= AnnouncementImages()
+				announcementimages= AnnouncementImagesanouncement()
 				announcementimages.announcement = post
 				announcementimages.image = images
 				announcementimages.save()

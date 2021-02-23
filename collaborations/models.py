@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import Permission, Group
+
 from django.conf import settings
 import datetime
 from company.models import Company,CompanyBankAccount
@@ -74,15 +75,12 @@ class Blog(models.Model):
     title_am = models.CharField(max_length=10000,null=False)
     tag = models.CharField(max_length=500,null=False)
     tag_am = models.CharField(max_length=500,null=False)
-    blogImage = models.ImageField(null=True,upload_to='Blogimage')
+    blogImage = models.ImageField(null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(null=False)
     content_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     publish = models.BooleanField(null=False,default=False)
-
-    def __str__(self):
-        return self.title
 
     class Meta:
         ordering = ['-timestamp',]
@@ -114,9 +112,13 @@ class Faqs(models.Model):
     answers = models.TextField(null=False)  
     answers_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=100,null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['-timestamp',]
+
+
  
 
 class Tender(models.Model):
@@ -359,12 +361,13 @@ class Announcement(models.Model):
     containt_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+
+
     class Meta:
         ordering = ['-timestamp',]
 
     def announcementimages(self):
         return self.announcementimages_set.all()
-
 
 class AnnouncementImages(models.Model):
     announcement = models.ForeignKey(Announcement, on_delete = models.CASCADE)
@@ -374,6 +377,15 @@ class AnnouncementImages(models.Model):
     class Meta:
         ordering = ['-timestamp',]
 
+    def save(self):           
+
+        super(AnnouncementImages, self).save()
+
+        print(" --- --- here we go again --- --- ")
+        im = Image.open(self.image)  
+        size = (300, 300)
+        im = im.resize(size, Image.ANTIALIAS)
+        im.save(self.image.path)
 
 class ResearchProjectCategory(models.Model):
     cateoryname = models.CharField(max_length=500,null=False)
