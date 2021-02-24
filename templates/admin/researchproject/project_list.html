@@ -25,6 +25,11 @@
 			<h5 class="card-title">Projects</h5>
 			<div class="header-elements">
 				<div class="list-icons">
+					{% if user.is_superuser %} 
+					<a href="{% url 'admin:pedning_project_list'%}" class="badge-danger btn-sm rounded-round">{{pending}} in Pendding </a>
+							{%endif%}
+				</div>
+				<div class="list-icons">
 					{% if perms.collaborations.add_project %} 
 					<a href="{% url 'admin:project_form'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Project</a>{%endif%}

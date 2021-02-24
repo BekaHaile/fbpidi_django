@@ -1,6 +1,11 @@
 {%extends 'frontpages/layout.html'%}
 
+{%load i18n%}
+{%load core_template_tags%} 
+
 {%block content%}
+
+{% get_current_language as LANGUAGE_CODE %}
 		<!--Breadcrumb-->
 		<section>
 			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
@@ -59,7 +64,8 @@
 							<div class="card">
 							<div class="card-body">
 								<div class="item-det mb-4">
-									<h4>{{post.title}}</h4>
+									
+									<h4>{% print_translated post.title post.title_am LANGUAGE_CODE%}</h4>
 									<a href="#" class="text-dark">Announcement from <h5>{{post.company}}</h5></a>
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
@@ -82,7 +88,7 @@
                                     </div>
                                     <div class="media-body">
 										<p class="font-13  mb-2 mt-2">
-                                           {{post.containt|safe|truncatewords:20}}
+											{% print_translated post.containt|safe post.containt_am|safe LANGUAGE_CODE%}
                                         </p>
                                         <a href="{% url 'announcement_detail' id=post.id %}" class="btn btn-secondary btn-sm">Read More</a>
 

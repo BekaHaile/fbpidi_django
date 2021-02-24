@@ -9,6 +9,7 @@ import os
 from product import models
 from accounts.models import User
 from company.models import Company,CompanyEvent
+from admin_site.models import Category
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
@@ -34,7 +35,7 @@ class DeleteView(LoginRequiredMixin,View):
         message = ""
         try:
             if self.kwargs['model_name'] == 'category':
-                category = models.Category.objects.get(id=self.kwargs['id']) 
+                category = Category.objects.get(id=self.kwargs['id']) 
                 category.delete()
                 message = "Category Deleted"
                 messages.success(self.request,message)
@@ -167,6 +168,103 @@ class DeleteView(LoginRequiredMixin,View):
                 company.delete()
                 message ="Company Deleted"
 
+            elif self.kwargs['model_name'] == 'ResearchProjectCategory':
+                category = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
+                category.delete()
+                message ="Research and project Category Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:researchprojectcategory_list")
+            elif self.kwargs['model_name'] == 'BlogCommentsAdmin':
+                blogcomments = BlogComment.objects.get(id=self.kwargs['id'])
+                blogcomments.delete()
+                message = "BlogComment Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:blogComment_list")
+            elif self.kwargs['model_name'] == 'AnnouncementImages':
+                announcementimages = AnnouncementImages.objects.get(id=self.kwargs['id'])
+                id =announcementimages.announcement.id
+                announcementimages.delete()
+                message ="AnnouncementImages Deleted"
+                messages.success(self.request,message)
+                return redirect(f"/admin/anounce-Detail/Announcement/{id}")
+            elif self.kwargs['model_name'] == 'Project':
+                research = Project.objects.get(id=self.kwargs['id'])
+                research.delete()
+                message ="Project Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:project_list")
+            elif self.kwargs['model_name'] == 'Research':
+                research = Research.objects.get(id=self.kwargs['id'])
+                research.delete()
+                message ="Research Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:research_list") 
+            elif self.kwargs['model_name'] == 'ProjectClient':
+                research = Project.objects.get(id=self.kwargs['id'])
+                research.delete()
+                messages.success(self.request,message)
+                return redirect("project_list")
+            elif self.kwargs['model_name'] == 'ResearchClient':
+                research = Research.objects.get(id=self.kwargs['id'])
+                research.delete()
+                messages.success(self.request,message)
+                return redirect("research_list")
+            elif self.kwargs['model_name'] == 'CommentReplay':
+                commentreplay = CommentReplay.objects.get(id=self.kwargs['id'])
+                commentreplay.delete()
+                return redirect("forum_list")
+            elif self.kwargs['model_name'] == 'CommentReplayAdmin':
+                commentreplay = CommentReplay.objects.get(id=self.kwargs['id'])
+                commentreplay.delete()
+                message ="comment Replay Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:comment_replay_detail")
+            elif self.kwargs['model_name'] == 'Announcement':
+                announcement = Announcement.objects.get(id=self.kwargs['id'])
+                announcement.delete()
+                message ="Announcement Deleted"
+                return redirect("admin:anounce_list")
+            elif self.kwargs['model_name'] == 'JobCategory':
+                jobcategory = JobCategory.objects.get(id=self.kwargs['id'])
+                jobcategory.delete()
+                message ="Job category Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:admin_JobCategory")
+            elif self.kwargs['model_name'] == 'Blog':
+                Blog1 = Blog.objects.get(id=self.kwargs['id'])
+                Blog1.delete()
+                message ="Blog Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:admin_Blogs")
+            elif self.kwargs['model_name'] == 'Faqs':
+                faqs = Faqs.objects.get(id=self.kwargs['id'])
+                faqs.delete()
+                message ="Faqs Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:admin_Faqs") 
+            elif self.kwargs['model_name'] == 'sub_category':
+                sub_category = models.SubCategory.objects.get(id=self.kwargs['id'])
+                sub_category.delete()
+                message ="Sub-Category Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:p_categories",option='sub_category')
+            elif self.kwargs['model_name'] == 'user_account':
+                user = User.objects.get(id=self.kwargs['id'])
+                user.delete()
+                message ="User Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:users_list")
+            elif self.kwargs['model_name'] == 'product':
+                product = models.Product.objects.get(id=self.kwargs['id'])
+                product.delete()
+                message ="Product Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:index")
+            elif self.kwargs['model_name'] == 'company':
+                company = Company.objects.get(id=self.kwargs['id'])
+                company.delete()
+                message ="Company Deleted"
+
                 messages.success(self.request,message)
                 return redirect("admin:index")
             elif self.kwargs['model_name'] == 'product_image':
@@ -199,7 +297,7 @@ class DeleteView(LoginRequiredMixin,View):
                     document.delete()
                     messages.success(self.request, "Document Deleted Successfully!")
                     return render(self.request, f"admin/document/list_document_by_category.html", {'documents':Document.objects.filter(category = category), 'categories': Document.DOC_CATEGORY})
-            
+                
         
         except Exception as e:
                 messages.warning(self.request, "Could not find the Item!")

@@ -25,21 +25,27 @@
 			<h5 class="card-title">Faqs</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					{% if perms.collaborations.add_faqs %} 
-					<a href="{% url 'admin:admin_Faqsform'%}" class="btn bg-teal btn-sm rounded-round"><i
-							class="icon-add mr-2"></i>Add New Faq</a>
+					{% if user.is_superuser %} 
+					<a href="{% url 'admin:admin_pendding_Faqs'%}" class="badge-danger btn-sm rounded-round">{{pending}} in Pendding </a>
 							{%endif%}
 				</div>
+				<div class="list-icons">
+					{% if perms.collaborations.add_faqs %} 
+					<a href="{% url 'admin:admin_Faqsform'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New Faq</a>
+							{%endif%}
+				</div>
+				
 			</div>
 		</div>
 
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
-					<th>questions_am</th>
-					<th>questions</th>
-					<th>answers_am </th>
-					<th>answers</th>
+					<th>Status</th>
+					<th>Questions_am</th>
+					<th>Questions</th>
+					<th>Answers_am </th>
+					<th>Answers</th>
 				
 					<th class="text-center">Actions</th>
 				</tr>
@@ -47,8 +53,9 @@
 			<tbody>
 				{%for faq in faqs%}
 				<tr>
-					
+					<td>{{faq.status}}</td>
 					<td>{{faq.questions_am|safe|truncatewords:20}}</td>
+
         			<td>{{faq.questions|safe|truncatewords:20}}</td>
         			<td>{{faq.answers_am|safe|truncatewords:20}}</td>
         			<td>{{faq.answers|safe|truncatewords:20}}</td>
@@ -68,7 +75,10 @@
 									<a href="{%url 'admin:faqs_detail'  model_name='Faqs' id=faq.id%}" class="dropdown-item"  >
 										<i class="icon-pencil"></i>Edit Faq</a>
 										{%endif%}
-									
+									{% if user.is_superuser or user.get_company == faq.user.get_company %}
+									<a href="{%url 'admin:view_Faqs'  model_name='Faqs' id=faq.id%}" class="dropdown-item"  >
+										<i class="icon-eye"></i>View Faq</a>
+										{%endif%}
 									
 								</div>
 							</div>
