@@ -4,37 +4,52 @@
 {%block content%}
 {% get_current_language as LANGUAGE_CODE %}
 
+
 		<!--Sliders Section-->
 		<div>
 			<div class="cover-image sptb-1 bg-background" data-image-src="/static/frontpages/images/banners/banner1.jpg">
 				<div class="header-text1 mb-0">
 					<div class="container">
 						<div class="row">
-							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
-								<div class="text-center text-white ">
-									<h1 class=""><span class="font-weight-bold">{{news_list.count}}</span> Latest News </h1>
-								</div>
-								<div class="search-background px-4 py-3 mt-4">
-									<div class="form row row-sm">
-										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
-											<input type="text" class="form-control input-lg border-white" id="text" placeholder="Search News">
-										</div>
-										<div class="form-group col-xl-4 col-lg-4 select2-lg  col-md-12 mb-0 border-white">
-											<select class="form-control select2-show-search w-100" data-placeholder="Select">
-												<optgroup label="Categories">
-													<option>Select</option>
-													{% for catagory in NEWS_CATAGORY %}
-													<option value="{{catagory.0}}">{{catagory.0}}</option>
-													{% endfor %}
-												</optgroup>
-											</select>
-										</div>
-										<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
-											<a href="#" class="btn btn-lg btn-block btn-secondary">Search</a>
-										</div>
+								<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
+									<div class="text-center text-white ">
+										<h1 class=""><span class="font-weight-bold"></span> {{message}} </h1>
 									</div>
+									<form action = "/collaborations/customer_news_list/" method = "GET" >
+											<div class="search-background px-4 py-3 mt-4">
+												<div class="form row row-sm">
+													<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
+														{% if searched_name %}
+														<input type="text" name = "by_title" class="form-control input-lg border-white"  placeholder="{{searched_name}}">
+														{%else%}
+														<input type="text" name = "by_title" class="form-control input-lg border-white"  placeholder="Search News">
+														{%endif%}
+													</div>
+													<div class="form-group col-xl-4 col-lg-4 select2-lg  col-md-12 mb-0 border-white">
+														<select  name = 'by_category'  class="form-control select2-show-search w-100" data-placeholder="Select">
+															<optgroup label="Categories">
+																
+
+																{% if searched_category %}
+																<option>{{searched_category}}</option>
+																{% endif %}
+															
+																<option>All</option>
+																
+																{% for catagory in NEWS_CATAGORY %}
+																<option name = '{{category.0}}' value="{{catagory.0}}">{{catagory.0}}</option>
+																{% endfor %}
+															</optgroup>
+														</select>
+													</div>
+													<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
+														<button type="submit"  class="btn btn-lg btn-block btn-secondary">Search</button>
+													</div>
+												</div>
+											</div>
+									</form>
 								</div>
-							</div>
+							
 						</div>
 					</div>
 				</div><!-- /header-text -->
@@ -58,7 +73,7 @@
 		<!--/Breadcrumb-->
 
 		<!--Add listing-->
-		<section class="sptb">
+		
 			<div class="container">
 				<div class="row">
 					<div class="col-xl-9 col-lg-9 col-md-12">
@@ -109,10 +124,8 @@
 															{% elif news.get_company.get_image %}
 															<img src="{{news.get_company.get_image}}"  alt="img" class="cover-image">
 															{% else %}
-															
 															<img src="/static/frontpages/images/products/products/v1.jpg"  alt="img" class="cover-image">
 															{% endif %}
-														
 														</div>
 														
 														<div class="item-cardreview-absolute bg-secondary">{{ news.catagory }}</div>
@@ -579,19 +592,26 @@
 					</div>
 
 					<!--Right Side Content-->
+					
 					<div class="col-xl-3 col-lg-3 col-md-12">
+						<form action = "/collaborations/customer_news_list/" method = "GET" >
+					
 						<div class="card">
 							<div class="card-body">
 								<div class="input-group">
-									<input type="text" class="form-control br-tl-3 br-bl-3" placeholder="Search">
-									<div class="input-group-append ">
-										<button type="button" class="btn btn-secondary br-tr-3 br-br-3">
-											Search
-										</button>
-									</div>
+										<input type="text" id = "by_title" name = "by_title" class="form-control br-tl-3 br-bl-3" placeholder="Search">
+										<div class="input-group-append ">
+											<button type="submit" class="btn btn-secondary br-tr-3 br-br-3">
+												Search
+											</button>
+										</div>
 								</div>
 							</div>
 						</div>
+						</form>
+
+
+						<form action = "/collaborations/customer_news_list/" method = "GET">
 						<div class="card mb-0">
 							<div class="card-header">
 								<h3 class="card-title">Categories</h3>
@@ -599,11 +619,11 @@
 							<div class="card-body">
 								<div class="" id="container">
 									<div class="filter-product-checkboxs">
-										{% for catagory in NEWS_CATAGORY %}
+										{% for category in NEWS_CATAGORY %}
 										<label class="custom-control custom-checkbox mb-3">
-											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
+											<input type="checkbox" class="custom-control-input" name="by_category"   value="{{category.0}}">
 											<span class="custom-control-label">
-												<a href="#" class="text-dark">{{catagory.0}}</a>
+												<a  class="text-dark">{{category.0}}</a>
 											</span>
 										</label>
 										{% endfor %}
@@ -611,7 +631,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="card-header border-top">
+							<!-- <div class="card-header border-top">
 								<h3 class="card-title">Posted By</h3>
 							</div>
 							<div class="card-body">
@@ -619,27 +639,22 @@
 									<label class="custom-control custom-checkbox mb-2">
 										<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
 										<span class="custom-control-label">
-											Dealer
+											Manufacturer
 										</span>
 									</label>
 									<label class="custom-control custom-checkbox mb-2">
 										<input type="checkbox" class="custom-control-input" name="checkbox2" value="option2">
 										<span class="custom-control-label">
-											Individual
-										</span>
-									</label>
-									<label class="custom-control custom-checkbox mb-0">
-										<input type="checkbox" class="custom-control-input" name="checkbox2" value="option2">
-										<span class="custom-control-label">
-											Reseller
+											Supplier
 										</span>
 									</label>
 								</div>
-							</div>
+							</div> -->
 							<div class="card-footer">
-								<a href="#" class="btn btn-primary btn-block">Apply Filter</a>
+								<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">Apply Filter</a>
 							</div>
 						</div>
+						</form>
 					</div>
 					<!--/Right Side Content-->
 				</div>
@@ -713,5 +728,45 @@
 				</div>
 			</div>
 		</div>
+		
+	
 
-		{%endblock%} 
+		<section class="sptb">
+			
+			
+		{%endblock%}
+
+		<!-- <script type = "text/javascript">
+			function by_cat(){
+				var selected = "";
+				var chks = document.getElementsByName("by_category");
+				for (i =1; i< chks.length; i++){
+					if (chks[i].checked){
+						selected += chks[i].value+",";
+					}
+				}
+				console.log(selected)
+				$.ajax(
+					{
+						type: 'GET',
+						url: "{% url 'ajax' %}",
+						data: {"by_category": selected},
+						success: function (response) {
+							console.log("Success")
+							respo = response['respo']
+							respo.forEach(element => {
+								console.log(element)
+							});
+						},
+						error: function (response) {
+							console.log("Error")
+							console.log(response)
+						}
+					})	
+			}
+			</script> -->
+		
+
+
+
+		

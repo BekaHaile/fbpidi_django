@@ -25,6 +25,7 @@ def sendEmailVerification(request,user):
     email.send()
     return email
 
+
 def sendWelcomeEmail(request,user):
     current_site = get_current_site(request)
     mail_subject = 'Your Account has been Activated'
@@ -38,11 +39,12 @@ def sendWelcomeEmail(request,user):
     email.content_subtype = "html"
     email.send()
     return email
-    
+
+
 def sendEventNotification(request, participant):
     
     current_site = get_current_site(request)
-    mail_message = f'The Event titled "{participant.event.event_name}" Will start after {participant.notifiy_in}.'
+    mail_message = f'The Event titled "{participant.event.title}" Will start after {participant.notifiy_in}.'
     mail_subject = f'Event Notification From IIMP'
     to_email = participant.patricipant_email
     email = EmailMessage(mail_subject, mail_message, to=[participant.patricipant_email])
@@ -56,9 +58,10 @@ def sendEventNotification(request, participant):
     participant.save()
     return email
 
+
 def sendEventClosedNotification(request, event):
     current_site = get_current_site(request)
-    mail_message = f"IIMP system has changed the status of the Event titled '{event.event_name}'. This occurs when the creator of the event didn't change the stutus ."
+    mail_message = f"IIMP system has changed the status of the Event titled '{event.title}'. This occurs when the creator of the event didn't change the stutus ."
     mail_subject = f'Event Notification From IIMP'
     to_email = event.company.user.email
     email = EmailMessage(mail_subject, mail_message, to=[event.company.user.email])

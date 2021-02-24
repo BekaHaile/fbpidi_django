@@ -125,303 +125,47 @@
 						</div>
 						<!--/Business Overview-->
 
-						<h3 class="mt-5 mb-4 fs-20">Other News from {% print_translated news.get_company.company_name news.get_company.company_name_am LANGUAGE_CODE %} </h3>
+						<h3 class="mt-5 mb-4 fs-20">Other Related News  </h3>
 
 						<!--Related Posts-->
 						<div id="myCarousel5" class="owl-carousel owl-carousel-icons3">
 							<!-- Wrapper for carousel items -->
+							{% for news in related_news %}
+							<div class="item">
+								<div class="card">
+									<div class="item-card7-imgs">
+										<a href="/collaborations/customer_news_detail/{{news.id}}/"></a>
+										<img src="{{news.get_images.0.image.url}}" alt="img" class="cover-image">
+									</div>
+									<form action="/collaborations/customer_news_list/" method="GET"> 
+									<div class="item-card7-overlaytext">
+										
+										<input type="hidden" name="by_category" value = "{{news.catagory}}" width="0" height="0"/>
+										<h4><button  type = "submit"  style="border: none; background-color: #ff8819; color:white;" class="font-weight-semibold" class="text-dark">{{news.catagory}}</button> </h4>
+										
+										
+									</div>
+									</form>
+									
+									<div class="card-body">
+										<div class="item-card7-desc">
+											<a  class="text-dark"><h4 class="font-weight-semibold">{{news.title}} </h4></a>
+										</div>
+										<div class="item-card7-text">
+											<ul class="icon-card mb-0 mt-2">
+												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>{{news.get_company.location}}</a></li>
+												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{news.timestamp}}</a></li>
+												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{% print_translated news.get_company.company_name news.get_company.company_name_am LANGUAGE_CODE %} </a></li>
+												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> {{news.get_company.phone_number}}</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+								
+							{% endfor %}
 
-							<div class="item">
-								<div class="card">
-									<div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">Negotiable</span></div>
-									<div class="item-card7-imgs">
-										<a href="{% url 'bs' %}"></a>
-										<img src="/static/frontpages/images/products/products/ed1.jpg" alt="img" class="cover-image">
-									</div>
-									<div class="item-card7-overlaytext">
-										<a href="{% url 'bs' %}" class="text-white"> Education</a>
-									</div>
-									<div class="item-card7-icons">
-										<a href="#" class="item-card7-icons-l"> <i class="fa fa-pencil"></i></a>
-										<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-									</div>
-									<div class="card-body">
-										<div class="rating-stars mb-1 mt-0 d-flex">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-											</div> <a class="text-white" href="#">4 reviews</a>
-										</div>
-										<div class="item-card7-desc">
-											<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Record Writing <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
-										</div>
-										<div class="item-card7-text">
-											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  USA</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 2 hours ago</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Clara Pixley</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 785 485 965</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="card">
-									<div class="ribbon ribbon-top-left text-secondary"><span class="bg-secondary">featured</span></div>
-									<div class="item-card7-imgs">
-										<a href="{% url 'bs' %}"></a>
-										<img src="/static/frontpages/images/products/products/ed2.jpg" alt="img" class="cover-image">
-									</div>
-									<div class="item-card7-overlaytext">
-										<a href="{% url 'bs' %}" class="text-white">Education </a>
-									</div>
-									<div class="item-card7-icons">
-										<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-										<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-									</div>
-									<div class="card-body">
-										<div class="rating-stars mb-1 mt-0 d-flex">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="5">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-											</div> <a class="text-white" href="#">14 reviews</a>
-										</div>
-										<div class="item-card7-desc">
-											<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Pg University <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
-										</div>
-										<div class="item-card7-text">
-											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  Los Angles</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 5 hours ago</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Sally Peake</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 567 987 608</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="card">
-									<div class="item-card7-imgs">
-										<a href="{% url 'bs' %}"></a>
-										<img src="/static/frontpages/images/products/products/ed3.jpg" alt="img" class="cover-image">
-									</div>
-									<div class="item-card7-overlaytext">
-										<a href="{% url 'bs' %}" class="text-white">Education</a>
-									</div>
-									<div class="item-card7-icons">
-										<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-										<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-									</div>
-									<div class="card-body">
-										<div class="rating-stars mb-1 mt-0 d-flex">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-											</div> <a class="text-white" href="#">25 reviews</a>
-										</div>
-										<div class="item-card7-desc">
-											<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Ug University</h4></a>
-										</div>
-										<div class="item-card7-text">
-											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  Los Angles</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 4 hours ago</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Julio Gutirrez</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 758 458 758</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="card">
-									<div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">Collection</span></div>
-									<div class="item-card7-imgs">
-										<a href="{% url 'bs' %}"></a>
-										<img src="/static/frontpages/images/products/products/ed4.jpg" alt="img" class="cover-image">
-									</div>
-									<div class="item-card7-overlaytext">
-										<a href="{% url 'bs' %}" class="text-white"> Coaching</a>
-									</div>
-									<div class="item-card7-icons">
-										<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-										<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-									</div>
-									<div class="card-body">
-										<div class="rating-stars mb-1 mt-0 d-flex">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-											</div> <a class="text-white" href="#">4 reviews</a>
-										</div>
-										<div class="item-card7-desc">
-											<a href="r{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Best Institutions <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
-										</div>
-										<div class="item-card7-text">
-											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  Spain</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 12 hours ago</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Clara Pixley</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 745 854 857</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="card">
-									<div class="item-card7-imgs">
-										<a href="{% url 'bs' %}"></a>
-										<img src="/static/frontpages/images/products/products/ed1.jpg" alt="img" class="cover-image">
-									</div>
-									<div class="item-card7-overlaytext">
-										<a href="{% url 'bs' %}" class="text-white"> Training</a>
-									</div>
-									<div class="item-card7-icons">
-										<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-										<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-									</div>
-									<div class="card-body">
-										<div class="rating-stars mb-1 mt-0 d-flex">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="5">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-											</div> <a class="text-white" href="#">No reviews</a>
-										</div>
-										<div class="item-card7-desc">
-											<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Care Brohzm</h4></a>
-										</div>
-										<div class="item-card7-text">
-											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  China</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 1 Day ago</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Nicol Bretz</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 485 965 854</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="card">
-									<div class="item-card7-imgs">
-										<a href="{% url 'bs' %}"></a>
-										<img src="/static/frontpages/images/products/products/ed2.jpg" alt="img" class="cover-image">
-									</div>
-									<div class="item-card7-overlaytext">
-										<a href="{% url 'bs' %}" class="text-white"> Education</a>
-									</div>
-									<div class="item-card7-icons">
-										<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-										<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-									</div>
-									<div class="card-body">
-										<div class="rating-stars mb-1 mt-0 d-flex">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-											</div> <a class="text-white" href="#">34 reviews</a>
-										</div>
-										<div class="item-card7-desc">
-											<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Digital Marketing Training <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
-										</div>
-										<div class="item-card7-text">
-											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  Canada</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 2 days ago</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Sally Peake</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i>859 654 857</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
+						
 						</div>
 						<!--/Related Posts-->
 
@@ -473,7 +217,7 @@
 									<div class="">
 										<a href="#" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> Chat</a>
 										<a href="#" class="btn btn-secondary mt-1 mb-1" data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> Contact Me</a>
-										<a href="#" class="btn btn-light mt-1 mb-1"><i class="fa fa-eye"></i>All Listings</a>
+										<a href="/collaborations/customer_news_list/" class="btn btn-light mt-1 mb-1"><i class="fa fa-eye"></i>All Listings</a>
 									</div>
 								</div>
 							</div>
@@ -484,33 +228,24 @@
 							<div class="card-header">
 								<h3 class="card-title">Search Listings</h3>
 							</div>
+							<form action = "/collaborations/customer_news_list/" method="GET">
 							<div class="card-body">
 								<div class="form-group">
-									<input type="text" class="form-control keywords-input" id="search-text" placeholder="What are you looking for?">
+									<input type="text" name = "by_title" class="form-control keywords-input" id="search-text" placeholder="Search news by title or content.">
 								</div>
 								<div class="form-group">
-									<select name="country" id="select-countries" class="form-control custom-select select2-show-search">
-										<option value="1" selected>Select Category</option>
-										<option value="2">RealEstate</option>
-										<option value="3">Restaurant</option>
-										<option value="4">Beauty</option>
-										<option value="5">Jobs</option>
-										<option value="6">Services</option>
-										<option value="7">AutoMobile</option>
-										<option value="8">Education</option>
-										<option value="9">Electronics</option>
-										<option value="10">Pets & Animals</option>
-										<option value="11">Computer</option>
-										<option value="12">Mobile</option>
-										<option value="13">Events</option>
-										<option value="14">Travel</option>
-										<option value="15">Clothing</option>
+									<select name="by_category" id="select-countries" class="form-control custom-select select2-show-search">
+										<option value="All" selected>All</option>	
+										{% for category in NEWS_CATEGORY %}
+										<option value="{{category.0}}">{{category.0}}</option>
+										{% endfor %}
 									</select>
 								</div>
 								<div >
-									<a href="#" class="btn  btn-block btn-secondary">Search</a>
+									<button type = "submit"  class="btn  btn-block btn-secondary">Search</button>
 								</div>
 							</div>
+							</form>
 						</div>
 						
 					</div>

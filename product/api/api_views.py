@@ -43,12 +43,10 @@ class ApiCartSummary(APIView):
                 for product_order in order.products.all():
                     count += product_order.quantity
 
-                return { 'data' : {'message': message,'total_orders':count,'orders':OrderSerializer( order).data, 
+                return { 'error':False, 'data' : {'message': message,'total_orders':count,'orders':OrderSerializer( order).data, 
                                     'products': ProductInfoSerializer( products, many = True).data
                                         }, 
-                         'error':False,
-                        'status': status.HTTP_200_OK
-                }
+                        }
         except ObjectDoesNotExist:
                 return{'error':True, 'message':"You Do Not have active order"}
 

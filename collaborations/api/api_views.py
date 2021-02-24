@@ -22,7 +22,7 @@ from collaborations.api.serializers import (PollListSerializer, PollDetailSerial
                                             EventListSerializer, BlogSerializer, BlogCommentSerializer, AnnouncementSerializer, AnnouncementDetailSerializer, 
                                             TenderSerializer,TenderApplicantSerializer, VacancyListSerializer,VacancyDetailSerializer, JobCategorySerializer,
                                             ResearchProjectCategorySerializer, ProjectSerializer, ResearchSerializer, 
-                                            ForumQuestionSerializer, ForumDetailSerializer, ForumCommentSerializer, CommentReplay, FaqSerializer
+                                            ForumQuestionSerializer, ForumDetailSerializer, ForumCommentSerializer, CommentReplay, FaqSerializer, JobApplicationSerializer
                                             )
 from django.contrib.auth.mixins import LoginRequiredMixin
 import datetime
@@ -39,7 +39,10 @@ class PollDetailApiView( APIView):
 
     def get(self, request, id = None):
         user = request.user
-        poll = PollsQuestion.objects.get(id = id)
+        try:
+            poll = get_object_or_404(PollsQuestion, id = id)
+        except Http404:
+            return Response(data = {'error':True, 'message':"Poll object not Found!"})
         data = {'data': PollDetailSerializer(poll).data}
         if user == poll.user:
             data['error'] = True
@@ -75,9 +78,9 @@ class NewsListApiView(APIView):
     def get(self, request):
         data = {}
         try:
+            data['error'] = False
             data['news_list'] = NewsDetailSerializer( News.objects.all(), many = True).data
             data['news_category'] = News.NEWS_CATAGORY
-            data['error'] = False
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
             data['error'] = True
@@ -87,14 +90,18 @@ class NewsListApiView(APIView):
 
 class NewsDetailApiView(generics.RetrieveAPIView):
     def get(self, request, id = None):
-        news = News.objects.get(id = id)
-        return Response( NewsDetailSerializer(news).data)
+        try:
+            news = get_object_or_404( News, id = id)
+            return Response( data  = {'error' : False, 'news':NewsDetailSerializer(news).data} )
+        except Http404:
+            return Response(data = {"error":True, 'message':"News Object not Found!"})
+
 
 
 class EventListApiView(APIView):
     def get(self, request):
         try:
-            data = {'event_list': EventListSerializer(CompanyEvent.objects.all(), many = True).data, 'error': False}
+            data = { 'error': False,'event_list': EventListSerializer(CompanyEvent.objects.all(), many = True).data,}
             return Response( data, status=status.HTTP_200_OK )
         except Exception as e:
             data= {'error' :True, 'message':f"Exception Occured: {str(e)}"}
@@ -103,9 +110,11 @@ class EventListApiView(APIView):
 
 class EventDetailApiView(APIView):
     def get(self, request, id = None):
-        event = CompanyEvent.objects.get(id = id)
-        return Response( EventListSerializer(event).data)
-
+        try:
+            event = get_object_or_404( CompanyEvent, id = id)
+            return Response( data = {'error':False, 'event':EventListSerializer(event).data})
+        except Http404:
+            return Response(data = {'error':True, 'Message': 'Event Not Found!'})
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
@@ -122,14 +131,18 @@ def EventNotifyApiView(request, id = None):
                         participant.notified= False
                         participant.notifiy_in = notify_in
                         try:
-                            participant.save()
+                            participant.save()   # if the email has been previously registered, it will through an unique exception
                         except Exception as e:
                             return Response(data={'error':True, 'message':'You aleard have registered for a notification.'}, status = status.HTTP_205_RESET_CONTENT)
-                        return Response(data={'error':False}, status=status.HTTP_201_CREATED)     
+                            
+                        return Response(data={'error':False}, status=status.HTTP_201_CREATED)  
+                    
+                    else:
+                        return  Response(data={'error':True, 'message':'Invalid Date to notify'}, status = status.HTTP_205_RESET_CONTENT)
                 else:
-                    return Response(data={'error':True, 'message':'Invalid Date to notify'}, status = status.HTTP_205_RESET_CONTENT)
+                    return Response(data={'error':True, 'message':'Invalid month to notify'}, status = status.HTTP_205_RESET_CONTENT)
 
-            return Response(data={'error':True, 'message':'Invalid Date to notify'}, status = status.HTTP_205_RESET_CONTENT)
+            return Response(data={'error':True, 'message':'Email and number of days to notify are required!'}, status = status.HTTP_205_RESET_CONTENT)
 
             
 def get_blog_tags():
@@ -153,16 +166,16 @@ def get_blog_tags():
 class ApiBlogList(APIView):
     def get(self, request):
         blog = Blog.objects.filter(publish = True)
-        return Response( data = {'blogs':BlogSerializer(blog, many = True).data, 'tags':get_blog_tags()})
+        return Response( data = {'error':False, 'blogs':BlogSerializer(blog, many = True).data, 'tags':get_blog_tags()})
 
 
 class ApiBlogDetail(APIView):
     def get(self, request):
-        blog = Blog.objects.get(id = request.data['id'])
-        return Response(data = {'count_comment': blog.countComment(), 'blog':BlogSerializer(blog).data,
-                                'comments': BlogCommentSerializer(blog.comments(), many = True ).data 
-                               })
-
+        try:    
+            blog = get_object_or_404( Blog, id = request.data['id'])
+            return Response(data = {'error':False, 'count_comment': blog.countComment(), 'blog':BlogSerializer(blog).data,'comments': BlogCommentSerializer(blog.comments(), many = True ).data })
+        except Http404:
+            return Response(data = {'error':True, 'message': 'Blog Not Found!'})
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
@@ -252,7 +265,7 @@ class ApiVacancyApplication(APIView):
                 return Response(data = {'error':True, 'message': "You can't apply to the same vacancy Twice"})
             jobcategory = JobCategory.objects.all()
         except Http404:
-            return Response(data = {'error': True , 'message':'Vacancy object does not exist!'})
+            return Response(data = {'error': True , 'message':'Vacancy Not Found!'})
         
         return Response( data = {'error':False, 'vacancy': vacancy.id, 'current_status':JobApplication.CURRENT_STATUS,
                                                 'jobcategory': JobCategorySerializer(jobcategory, many = True).data})
@@ -263,18 +276,16 @@ class ApiVacancyApplication(APIView):
             if JobApplication.objects.filter(vacancy=vacancy, user=request.user).exists():
                 return Response(data = {'error':True, 'message': "You can't apply to the same vacancy Twice"})
         except Http404:
-            return Response(data = {'error': True , 'message':'Vacancy object does not exist!'})
+            return Response(data = {'error': True , 'message':'Vacancy Not Found!'})
         form = CreateJobApplicationForm(request.POST,request.FILES)
         if form.is_valid():
             job =  form.save(commit=False)
             job.user = request.user
             job.vacancy =  Vacancy.objects.get(id =request.data['id'])
             job.save()
-            return Response(data = {'error':False})
-        if serializer.is_valid():
-            return Response(data ={'error':False})  
+            return Response(data = {'error':False, 'application': JobApplicationSerializer(job).data })
         else:
-            return Response(data ={'error':True})
+            return Response(data ={'error':True, 'message': form.errors}, )
 
 
 def get_user_created_projects(request):   
@@ -440,15 +451,21 @@ def ApiCreateForumQuestion(request):
 def ApiCommentAction(request): 
         #create or edit depending on request.data['option']
         form = CommentForm(request.POST, request.FILES)
+        
         if form.is_valid:
             comment =ForumComments
             if request.data['option'] == 'create':
+                try:
+                    forum_question = get_object_or_404(ForumQuestion, id = request.data['forum_id'])
+                except Http404:
+                    return Response(data = {'error':True, 'message':'Forum Not Found!'})
+
                 comment = form.save(commit =False) #sets title and description
                 comment.user = request.user
-                comment.forum_question = ForumQuestion.objects.get(id = request.data['forum_id'])
+                comment.forum_question = forum_question
                 if request.FILES:
-                    comment.attachements = request.FILES['attachements']
-            else:#if option = 'edit'
+                    comment.attachements = request.FILES['attachements']  # saving is done at last (works for both create and edit)
+            else:#if option = 'edit' or delete
                 try:
                     comment = get_object_or_404(ForumComments, id = request.data['id'])
                 except Http404:
@@ -468,6 +485,7 @@ def ApiCommentAction(request):
             return Response(data= {'error':False, 'forum': ForumDetailSerializer(comment.forum_question).data})
         else:
             return Response(data = {'error':True, 'messsage':"Invalid Inputs"})
+
 
 
 @api_view(['POST'])

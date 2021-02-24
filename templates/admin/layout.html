@@ -235,7 +235,7 @@
 								</li>
 
 								<li class="nav-item">
-									<a href="{%url 'admin:comment_replay_list'%}" class="nav-link">
+									<a href="{%url 'admin:comment_replay_list' %}" class="nav-link">
 										<i >f</i>
 										<span>Comment Replays</span>
 									</a>
@@ -293,6 +293,9 @@
 							</ul>
 						</li>
 						 
+						<li class="nav-item ">
+							<a href = "{% url 'admin:list_document_by_category'  option='all' %}" class="nav-link"><i class="fa fa-folder "></i><span>Documents</span></a>
+						</li>
 						{%if user.is_superuser%}
 						<li class="nav-item nav-item-submenu">
 							<a href="#" class="nav-link"><i class="icon-office"></i> <span>Companies</span></a>

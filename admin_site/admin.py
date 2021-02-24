@@ -12,12 +12,11 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLo
 from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
 
-from collaborations.views import (
-
-                        CreateNews, EditNews, NewsDetail,AdminNewsList,
+from collaborations.views import (CreateNews, EditNews, NewsDetail,AdminNewsList,
 
                         TenderList, CreateTender, TenderDetail, 
                         EditTender,  DeleteTender, ManageBankAccount,
+                        CreateDocument, DocumentListing, EditDocument
                         )
 from collaborations.Views.faq import(CreateFaqs,FaqsView,FaqsList,FaqPendingList,FaqApprove,
                                     FaqsDetail)
@@ -50,7 +49,7 @@ from collaborations.Views.research import(
                         )
 from collaborations.Views.forums import(ListForumQuestionAdmin,CreateForumQuestionAdmin,ForumQuestionDetail,
                                           ListForumCommentAdmin,ForumCommentsDetail,
-                                          ListCommentReplayAdmin,CommentReplayDetail)
+                                          ListCommentReplayAdmin,CommentReplayDetail, )
 
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView)
@@ -201,10 +200,15 @@ class CustomAdminSite(admin.AdminSite):
             path("create_fbpidi_company/",wrap(CreateFbpidiCompanyProfile.as_view()),name="create_fbpidi_company"),
             path("view_fbpidi_company/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
             path("edit_fbpidi_profile/<id>/",wrap(ViewFbpidiCompany.as_view()),name="edit_fbpidi_profile"),
-            path("create_company_bank_account/<id>/", CreateCompanyBankAccount.as_view(), name = "create_company_bank_account"),
-            path("edit_company_bank_account/<id>/", EditCompanyBankAccount.as_view(), name = "edit_company_bank_account"),
-            path("delete_company_bank_account/<id>/", DeleteCompanyBankAccount.as_view(), name = "delete_company_bank_account"),
+            path("create_company_bank_account/<id>/", wrap(CreateCompanyBankAccount.as_view()), name = "create_company_bank_account"),
+            path("edit_company_bank_account/<id>/", wrap( EditCompanyBankAccount.as_view()), name = "edit_company_bank_account"),
+            path("delete_company_bank_account/<id>/", wrap(DeleteCompanyBankAccount.as_view()), name = "delete_company_bank_account"),
 
+            ### Document
+             path('create_document/', wrap(CreateDocument.as_view()), name='create_document'),
+             path('edit_document/<id>/', wrap(EditDocument.as_view()), name='edit_document'),
+             path('list_document_by_category/<option>/', wrap(DocumentListing.as_view()), name = "list_document_by_category"),
+        
         ]
         return my_urls + urls
 
