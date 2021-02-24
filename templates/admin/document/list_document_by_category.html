@@ -1,4 +1,5 @@
 {%extends 'admin/base_site.html'%}
+{% load core_template_tags %}
 {% block extrastyle %}
 
 	<!-- Theme JS files -->
@@ -6,7 +7,6 @@
 	<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
 	<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
 	<!-- /theme JS files -->
- 
 {% endblock %}
 {%block pagename%}Document List{%endblock%}
 {%block content%}
@@ -67,18 +67,23 @@
 									<br>
 									
 									<a href="{% url 'admin:edit_document' id=document.id %}" >
-										{% if '.jpg' in document.document.name  or '.png' in document.document.name %}
-										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-image fa-4x"></i>
-										{% elif '.mp4' in document.document.name or '.avi' in document.document.name %}
-										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-play-circle fa-4x"></i>
-										{% elif '.mp3' in document.document.name or '.3gpp' in document.document.name or '.acc' in document.document.name %}
-										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-music fa-4x"></i>
-										{% elif '.docx' in document.document.name or '.doc' in document.document.name %}
-										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-word-o fa-4x"></i>
-										{% elif '.pdf' in document.document.name %}
-										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-pdf-o fa-4x"></i>
+										{% file_type document.document.url as file_type%}
+										{% if file_type  == 'image' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-image fa-4x"></i>
+										{% elif file_type  == 'video' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-play-circle fa-4x"></i>
+										{% elif file_type == 'audio' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-music fa-4x"></i>
+										{% elif file_type == 'word' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-word-o fa-4x"></i>
+										{% elif file_type == 'pdf'  %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-pdf-o fa-4x"></i>
+										{% elif file_type == 'excel'%}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-excel-o fa-4x"></i>
+										{% elif file_type == 'exe' %}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "icon-cogs fa-4x"></i>
 										{% else %}
-										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file fa-4x"></i>
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file fa-4x"></i>
 										{% endif %}
 										
 									</a>
