@@ -1,5 +1,4 @@
 from rest_framework import serializers
-# from collaborations.models import  PollsQuestion, PollsResult, Choices, News, NewsImage, 
 from accounts.api.serializers import UserSerializer
 from collaborations.models import (PollsQuestion, PollsResult, Choices, News, NewsImages, Blog, BlogComment,
                                     Announcement, AnnouncementImages, Tender, TenderApplicant, Faqs, JobApplication, 
@@ -100,10 +99,6 @@ class EventListSerializer(serializers.ModelSerializer):
         return {'company_name':company.company_name, 'image':company.get_image(), 'phone_number':company.phone_number, 'location': company.location}
 
 
-class EventDetailSerializer(serializers.ModelSerializer):
-    pass
-
-
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
@@ -188,6 +183,7 @@ class ResearchSerializer(serializers.ModelSerializer):
             model = Research
             fields = "__all__"
 
+
 class ProjectSerializer(serializers.ModelSerializer):
         category_name = serializers.CharField(source = 'get_category_name')
         class Meta:
@@ -199,6 +195,7 @@ class ResearchProjectCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ResearchProjectCategory
         fields = "__all__"
+
 
 class CommentReplaySerializer(serializers.ModelSerializer):
     class Meta:
@@ -214,12 +211,12 @@ class ForumCommentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
 class ForumQuestionSerializer(serializers.ModelSerializer):
     no_of_comments = serializers.IntegerField(source='countComment', read_only=True)    
     class Meta:
         model = ForumQuestion
         fields = "__all__"
+
 
 class ForumDetailSerializer(serializers.ModelSerializer):
     no_of_comments = serializers.IntegerField(source='countComment',read_only=True)
@@ -234,4 +231,9 @@ class FaqSerializer(serializers.ModelSerializer):
         model = Faqs
         fields = "__all__"
 
+
+class JobApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobApplication
+        fields = '__all__'
 
