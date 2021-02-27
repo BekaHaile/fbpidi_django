@@ -30,6 +30,8 @@ urlpatterns = [
     path("cart_summary/",ApiCartSummary.as_view(),name="api_cart_summary"),
     path("decrement_cart/",ApiDecrementFromCart.as_view(),name="api_decrement_cart"),
     path("checkout/",ApiCheckout.as_view(),name="api_checkout"),
+
+    #user profile
     path("mydash/",ApiProfileView.as_view(),name="api_mydash"),
     # path("", include("accounts.urls")),
 

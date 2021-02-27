@@ -13,7 +13,7 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class="mb-2"><span class="font-weight-semibold">{%print_translated event.event_name event.event_name_am LANGUAGE_CODE%}</span></h1>	
+									<h1 class="mb-2"><span class="font-weight-semibold">{%print_translated event.title event.title_am LANGUAGE_CODE%}</span></h1>	
 								</div>
 							</div>
 						</div>
@@ -54,7 +54,7 @@
 						<div class="card overflow-hidden">
 							<div class="card-body">
 								<div class="item-det mb-4">
-									<a href="#" class="text-dark"><h3>{%print_translated event.event_name event.event_name_am LANGUAGE_CODE%}</h3></a>
+									<a href="#" class="text-dark"><h3>{%print_translated event.title event.title_am LANGUAGE_CODE%}</h3></a>
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
 											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">By: </i><b>{% print_translated event.company.company_name event.company.company_name_am LANGUAGE_CODE %}</b></a></li>
@@ -70,9 +70,9 @@
 									<div id="carousel" class="carousel slide" data-ride="carousel">
 										<div class="carousel-inner">
 											{% if event.image %}
-                                            <div class="carousel-item active"><img height = "100" src="{{event.image.url}}" alt="{{event.event_name}}"> </div>  
+                                            <div class="carousel-item active"><img height = "100" src="{{event.image.url}}" alt="{{event.title}}"> </div>  
 											{% else %}
-											<div class="carousel-item active"><img height = "100" src="{{event.company.get_image}}" alt="{{event.event_name}}"> </div>  
+											<div class="carousel-item active"><img height = "100" src="{{event.company.get_image}}" alt="{{event.title}}"> </div>  
 											{% endif %}
 										</div>
                                     </div>

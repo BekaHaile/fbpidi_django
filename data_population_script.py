@@ -29,19 +29,22 @@ def add_banks():
         b.save()
 
 
-if __name__ == '__main__':
-      
+if __name__ == '__main__':    
+    file_name = "one.two.three.four"
+    doc = Document.objects.first()
+    name, extension = os.path.splitext(doc.document.url)
+    print("name = ", name, " ext = ", extension)
+
+    # print(file_name)
+    # for i in file_name[-1:]:
+
+    #     print(i,"\n")
+    #     # if i == '.':
+    #     index  = file_name.index(i,) 
+    #     print("index = ", index, file_name[index:-1])
     # print("Data population started ... ")
     # add_banks()
     # set_token_for_existing_users()
     
-    b = NewsImages.objects.first()
-    print(b.image.url)
-    print(b.image.path)
-    # image = Image.open(b.image)
-    # cropped_image = image.crop((200.0,20.0,300.0, 100.0 ))
-    # rs_image = cropped_image.resize((200,200), Image.ANTIALIAS)
-    rs_image.save(b.image.path)
-    print(b.image.url)
-    
+            
     

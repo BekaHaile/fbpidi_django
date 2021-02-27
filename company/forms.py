@@ -95,10 +95,10 @@ class CompanyEventForm(forms.ModelForm):
 
     class Meta:
         model=CompanyEvent
-        fields = ('event_name','event_name_am','description','description_am','image','status', 'start_date', 'end_date')
+        fields = ('title','title_am','description','description_am','image','status', 'start_date', 'end_date')
         widgets = {
-            'event_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (English)'}),
-            'event_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (Amharic)'}),
+            'title':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (English)'}),
+            'title_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (Amharic)'}),
             'description': forms.Textarea(attrs={'class': 'summernote'}),
             'description_am': forms.Textarea(attrs={'class': 'summernote'}),
             'start_date': forms.DateTimeInput(attrs={'class':"form-control daterange-single"}),

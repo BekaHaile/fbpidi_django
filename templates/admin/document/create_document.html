@@ -1,0 +1,126 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/anytime.min.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.date.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.time.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/legacy.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/notifications/jgrowl.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/picker_date.js"></script>
+	
+{% endblock %}
+{%block pagename%}Document Form{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+		
+	{% if edit  %}        
+    <div class="card">
+        <div class="card-body">
+            <form action="{%url 'admin:edit_document' id=document.id %}" method="POST" class="wizard-form steps-enable-all" enctype="multipart/form-data">
+                <fieldset class="mb-3 ml-3 mr-3">
+                    <legend class="text-uppercase font-size-sm font-weight-bold">Edit Document</legend>
+                    {{form.errors}}
+                    {%csrf_token%}
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-3">Document Title(English) *</label>
+                        <div class="col-lg-9">
+                            <input type="text" name = 'title' class="form-control" value="{{document.title}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-3">Document category *</label>
+                        <div class="col-lg-9">
+                            {{form.category}}
+                        </div>
+                    </div>
+
+                    
+                    <div class="form-group row">
+                        <label for="images">Document File * </label>
+                        <div class="col-lg-9">
+                            <input type="file"  id="File" name="document" ><br>
+                            <b>Current Docment : </b><a href="{{document.document.url}}" target="blank" >{{document.document.name}}</a> 
+                            
+                        </div>
+                    </div>
+                    
+
+                </fieldset>
+                {% if perms.collaborations.change_document %}
+                    {% if user.is_superuser or user.get_company == document.user.get_company %}
+                        <div class="text-right">
+                            <button style="padding-left: 10%; padding-right: 10%;" type="submit"
+                                class="btn btn-primary rounded-round">Edit</button>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+	
+	{%else%}
+		
+			<div class="card">
+				<div class="card-body">
+					<form action="{%url 'admin:create_document'%}" method="POST" class="wizard-form steps-enable-all" enctype="multipart/form-data">
+						<fieldset class="mb-3 ml-3 mr-3">
+							<legend class="text-uppercase font-size-sm font-weight-bold">Create new Document</legend>
+							<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
+							{{form.errors}}
+							{%csrf_token%}
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">Document Title(English) *</label>
+								<div class="col-lg-9">
+									{{form.title}}
+								</div>
+							</div>
+		
+							<div class="form-group row">
+								<label class="col-form-label col-lg-3">Document category *</label>
+								<div class="col-lg-9">
+									{{form.category}}
+								</div>
+							</div>
+
+                            
+                            <div class="form-group row">
+                                <label for="images">Document File * </label>
+                                <div class="col-lg-9">
+                                    <input type="file" required id="File" name="document" ><br><br>
+                                    </div>
+                            </div>
+							
+
+						</fieldset>
+
+						<div class="text-right">
+							<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+								class="btn btn-primary rounded-round">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		
+		
+		
+	{%endif%}
+</div>
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+	});
+</script>
+{%endblock%}

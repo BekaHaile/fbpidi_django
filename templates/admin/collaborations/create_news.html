@@ -86,7 +86,7 @@
                             <img class="card-img img-fluid" src="{{image.image.url}}" width ="250" height = "200" alt="">
                             <div class="card-img-actions-overlay card-img">
                                 
-                                <a href="{{image.image.url}}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round" data-popup="lightbox" rel="group">
+                                <a href="{{image.image.url}}" target="blank" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round" data-popup="lightbox" rel="group">
                                     <i class="icon-eye"></i>
                                 </a>
                                 {% if user.is_superuser or news.get_company == user.get_company%}

@@ -797,7 +797,7 @@
 	
 									<div class="media-body">
 										<h6 class="media-title font-weight-semibold">
-											<a href="#">{{event.event_name}}</a>
+											<a href="#">{{event.title}}</a>
 										</h6>
 										Start Date:- <a href="#"><i class="fa fa-calendar-o text-muted mr-2" style = "margin-right: 20px;" ></i> <b>{{event.start_date}}</b></a> <br>
                                   		End Date:-<a href="#"><i style = "margin-left: 10px;"class="fa fa-calendar-o text-muted mr-2" ></i><b> {{event.end_date}}</b></a>
@@ -842,14 +842,14 @@
 														<div class="form-group">
 															<div class="row">
 																<div class="col-sm-6">
-																	<label>{{event_form.event_name.label|title}}</label>
-																	<input type="text" name = "event_name" class='form-control' placeholder= "Event Name (English)" value="{{event.event_name}}"/>
+																	<label>{{event_form.title.label|title}}</label>
+																	<input type="text" name = "title" class='form-control' placeholder= "Event Name (English)" value="{{event.title}}"/>
 
 																</div>
 					
 																<div class="col-sm-6">
-																	<label>{{event_form.event_name_am.label|title}}</label>
-																	<input type="text" name = "event_name_am" class='form-control' placeholder= "Event Name (Amharic)" value="{{event.event_name_am}}"/>
+																	<label>{{event_form.title_am.label|title}}</label>
+																	<input type="text" name = "title_am" class='form-control' placeholder= "Event Name (Amharic)" value="{{event.title_am}}"/>
 																	
 																</div>
 															</div>
@@ -970,13 +970,13 @@
 												<div class="form-group">
 													<div class="row">
 														<div class="col-sm-6">
-															<label>{{event_form.event_name.label|title}}</label>
-															{{event_form.event_name}}
+															<label>{{event_form.title.label|title}}</label>
+															{{event_form.title}}
 														</div>
 			
 														<div class="col-sm-6">
-															<label>{{event_form.event_name_am.label|title}}</label>
-															{{event_form.event_name_am}}
+															<label>{{event_form.title_am.label|title}}</label>
+															{{event_form.title_am}}
 														</div>
 
 

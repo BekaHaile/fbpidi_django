@@ -12,19 +12,20 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class=""><span class="font-weight-bold">{{events.count}}</span> New Events</h1>
+									<h1 class=""><span class="font-weight-bold"></span>{{message}}</h1>
 								</div>
-								<div class="search-background px-4 py-3 mt-4">
-									<div class="form row row-sm">
-										<div class="form-group  col-xl-10 col-lg-9 col-md-12 mb-0">
-											<input type="text" class="form-control input-lg border-white" id="text" placeholder="Search Event">
-										</div>
-										
-										<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
-											<a href="#" class="btn btn-lg btn-block btn-secondary">Search</a>
+								<form action="{% url 'customer_event_list'  %}" metho = "GET">
+									<div class="search-background px-4 py-3 mt-4">
+										<div class="form row row-sm">
+											<div class="form-group  col-xl-10 col-lg-9 col-md-12 mb-0">
+												<input type="text" name = 'by_title' class="form-control input-lg border-white" id="text" placeholder="Search Event">
+											</div>
+											<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
+												<button href="#" type = "submit" class="btn btn-lg btn-block btn-secondary">Search</button>
+											</div>
 										</div>
 									</div>
-								</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -103,7 +104,7 @@
 													<div class="card border-0 mb-0">
 														<div class="card-body h-100">
 															<div class="item-card9">
-																<a href="/collaborations/customer_event_detail/{{event.id}}/" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated event.event_name|truncatewords:5|safe event.event_name_am|truncatewords:5|safe LANGUAGE_CODE %}</h4></a>
+																<a href="/collaborations/customer_event_detail/{{event.id}}/" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated event.title|truncatewords:5|safe event.title_am|truncatewords:5|safe LANGUAGE_CODE %}</h4></a>
 																
 																	{% if event.status == 'Open' %}
 																	<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >Open</div>
@@ -167,18 +168,24 @@
 
 					<!--Right Side Content-->
 					<div class="col-xl-3 col-lg-3 col-md-12">
-						<div class="card">
-							<div class="card-body">
-								<div class="input-group">
-									<input type="text" class="form-control br-tl-3 br-bl-3" placeholder="Search">
-									<div class="input-group-append ">
-										<button type="button" class="btn btn-secondary br-tr-3 br-br-3">
-											Search
-										</button>
+						<form action="{% url 'customer_event_list'  %}" metho = "GET">
+					
+							<div class="card">
+
+								<div class="card-body">
+									<div class="input-group">
+										
+											<input type="text" name = "by_title" class="form-control br-tl-3 br-bl-3" placeholder="Search">
+											<div class="input-group-append ">
+												<button type="submit" class="btn btn-secondary br-tr-3 br-br-3">
+													Search
+												</button>
+											</div>
+										
 									</div>
 								</div>
 							</div>
-						</div>
+						</form>
 							<div class="card-header border-top">
 								<h3 class="card-title">Posted By</h3>
 							</div>
@@ -281,5 +288,5 @@
 				</div>
 			</div>
 		</div>
-
+		
 		{%endblock%} 

@@ -1,3 +1,7 @@
+
+from django.shortcuts import get_object_or_404
+from django.http import Http404
+
 from rest_framework.views import APIView
 from rest_framework import status, generics, authentication, permissions
 from rest_framework.decorators import permission_classes, authentication_classes 
@@ -45,9 +49,12 @@ class ApiProductByCategoryView(APIView):
 
 class ApiProductDetailView(APIView):
     def get(self, request):
-        return Response( 
-            data = ProducteFullSerializer( Product.objects.get(id = request.data['id']) ).data,
-            status = status.HTTP_200_OK)
+        try:
+            product = get_object_or_404(Product, id = request.data['id'])
+            return Response( data = {'error':False, 'product':ProducteFullSerializer(product ).data},)
+        except Http404:
+            return Response(data = {'error': True, 'message':'Product Not Found!'})
+        
 
 
 #product-by-main-category/ request.data['category']
@@ -59,7 +66,7 @@ class ApiProductByMainCategory(APIView):
             products=Product.objects.all()
         else:
             products = Product.objects.filter(category__category_name__category_type = category)
-        return Response( data = { 'count':len(products), 
+        return Response( data = { 'error':False, 'count':len(products), 
                                 'products': ProductInfoSerializer(products, many = True).data},
                                  status = status.HTTP_200_OK
                         )
@@ -73,27 +80,29 @@ class ApiCompanyByMainCategoryList(APIView):
         if product_category != "all": # if it is "Beverage" or "Food" or "Pharmaceuticals"
             companies = companies.filter(product_category__category_name__category_type = product_category)
         return Response(
-            data = {'count' : companies.count(), 'companies': CompanyInfoSerializer(companies, many =True).data},
+            data = {'error':False, 'count' : companies.count(), 'companies': CompanyInfoSerializer(companies, many =True).data},
             status= status.HTTP_200_OK)
 
 
 class ApiCompanyDetailView(APIView):
     @permission_classes((IsAuthenticated))
     def get(self, request):
-        return Response(
-        data= CompanyFullSerializer( Company.objects.get(id = request.data['id']) ).data,
-        status= status.HTTP_200_OK
-        )
-
-
+        try:
+            company = get_object_or_404(Company, id = request.data['id'])
+            return Response(data= CompanyFullSerializer( company ).data)
+        except Http404:
+            return Response(data = {"error":True, "message": "Company Not Found!"})
+        
 
 class ApiProfileView(APIView):
     # authentication_classes  = ([TokenAuthentication])
     permission_classes = ([IsAuthenticated])
     def get(self, request):
-        user_detail = Customer.objects.get(user=request.user)
-        return Response ( data={'error':False, 'user_detail': CustomerDetailSerializer(user_detail).data}, status=status.HTTP_200_OK )
-       
+        try:
+            user_detail = get_object_or_404(Customer, user = request.user)
+            return Response ( data={'error':False, 'user_detail': CustomerDetailSerializer(user_detail).data}, status=status.HTTP_200_OK )
+        except Http404:
+            return Response(data = {"error": True, 'message':"Customer Not Found!"})
     def post(self, request ):
         user_detail = Customer.objects.get(user=request.user)
         user = User.objects.get(id=request.user.id)
@@ -104,6 +113,9 @@ class ApiProfileView(APIView):
             user.last_name = request.data['last_name']
         if request.data['phone_number'] != None:
             user.phone_number = request.data['phone_number']
+        if request.data['email'] != None:
+            user.email = request.data['email']
+            
         if self.request.FILES.get('profile_image') != None:
             user.profile_image = request.FILES.get('profile_image')
             user_detail.profile_image = request.FILES.get('profile_image')
@@ -127,7 +139,7 @@ class ApiProfileView(APIView):
         if request.data['bio'] != None:
             user_detail.bio = request.data['bio']
         user_detail.save()
-        return Response({'data':'success'})
+        return Response(data  ={'error':False, 'user': CustomerDetailSerializer(user_detail).data})
 
 
     

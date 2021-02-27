@@ -80,9 +80,7 @@
 										{% endif %}
 
 										
-										<!-- <form action ="{% url 'download' id=tender.id %}" method="GET" enctype="multipart/form-data">
-												<input type="submit" value = "Download">
-										</form> -->
+										
 										{% if tender.status == "Open"%}
 											{%if tender.get_company.company_name == user.get_company_name %}
 												<h3>Users from tender company can't participate in their own tender!</h3>

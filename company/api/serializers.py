@@ -23,6 +23,7 @@ class CompanyInfoSerializer(serializers.ModelSerializer):
                     'established_year','certification','city','postal_code','product_category_name','product_category','color',
                     'facebook_link','twiter_link','google_link',)
 
+
 class CompanyDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = Company

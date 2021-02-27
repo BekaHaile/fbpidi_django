@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import Permission, Group
+
 from django.conf import settings
 import datetime
 from company.models import Company,CompanyBankAccount
@@ -14,6 +15,9 @@ class PollsQuestion(models.Model):
     description_am = models.TextField(verbose_name="Poll Description(Amharic)")
     timestamp = models.DateTimeField(auto_now_add=True)
     choices = models.ManyToManyField('Choices',related_name='choices',default="")
+
+    def model_name():
+        return "Polls"
     
     def __str__(self):
         return self.title
@@ -42,6 +46,9 @@ class Choices (models.Model):
     description_am = models.TextField( verbose_name="Choice Description(Amharic)" )
     timestamp = models.DateTimeField(auto_now_add=True)
    
+    def model_name():
+        return "Poll Choices"
+
     def __str__(self):
         return self.choice_name
 
@@ -74,15 +81,12 @@ class Blog(models.Model):
     title_am = models.CharField(max_length=10000,null=False)
     tag = models.CharField(max_length=500,null=False)
     tag_am = models.CharField(max_length=500,null=False)
-    blogImage = models.ImageField(null=True,upload_to='Blogimage')
+    blogImage = models.ImageField(null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(null=False)
     content_am = models.TextField(null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     publish = models.BooleanField(null=False,default=False)
-
-    def __str__(self):
-        return self.title
 
     class Meta:
         ordering = ['-timestamp',]
@@ -144,6 +148,9 @@ class Tender(models.Model):
     end_date = models.DateTimeField(verbose_name="Tender end date")
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def model_name():
+        return "Tenders"
+
     def get_applications(self):
         return TenderApplicant.objects.filter( tender = self )
     
@@ -179,6 +186,9 @@ class TenderApplicant(models.Model):
     company_tin_number = models.CharField(verbose_name="first_name", max_length=50)
     tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def model_name():
+        return "Tender Applicants"
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} from {self.company_name}"
@@ -270,6 +280,9 @@ class News(models.Model):
     catagory = models.TextField(verbose_name="News Catagory, the choices are ", choices=NEWS_CATAGORY)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def model_name():
+        return "News"
+
     class Meta:
         ordering = ['-timestamp',]
 
@@ -293,8 +306,10 @@ class NewsImages(models.Model):
     image = models.ImageField(upload_to = "Images/News Images", max_length=254, verbose_name="News Image",help_text="jpg, png, gid", blank=False)  
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
+    def model_name():
+        return "News Images" 
 
+    class Meta:
         ordering = ['-timestamp',]
 
 
@@ -447,3 +462,25 @@ class Project(models.Model):
     def get_category_name(self):
         return self.category.cateoryname
     
+
+class Document_Category(models.Model):
+    
+    title = models.CharField(max_length=250, verbose_name="category title", help_text="category name for documents.")
+    description = models.CharField(max_length = 250, verbose_name = "category description", help_text="some detail information about the category")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, blank=True, null=True) # if it is null then the category is created by the system
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+class Document(models.Model):
+    DOC_CATEGORY = [ ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'),]
+    
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=250, verbose_name="document title")
+    document = models.FileField(upload_to="Documents/", blank="False")
+    category = models.CharField( max_length = 250, choices=DOC_CATEGORY)
+    timestamp = models.DateTimeField(verbose_name="upload time", auto_now_add=True)
+
+
+
+
+
+

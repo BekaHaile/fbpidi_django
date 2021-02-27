@@ -7,6 +7,7 @@ from product.models import Product
 from admin_site.models import Category,SubCategory
 from accounts.models import User
 import datetime
+import os
 register = template.Library()
 
 
@@ -60,14 +61,28 @@ def change_end_date(end_date):
             end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
             return end_date 
 
-@register.simple_tag
-def get_company_name(tender):
-    if tender:
-        return tender.get_company().company_name 
-    else:
-        return "NO Company!"
+image_formats = ['jpg',]
 
-@register.simple_tag
-def mukera(user):
-    return user.username
+@register.simple_tag()
+def file_type( file_url):
+    name, file_extension = os.path.splitext(file_url) 
+    if file_extension == '.jpg' or file_extension == '.png' or file_extension == '.gif' or file_extension == '.tiff':
+        return "image"
+    elif  file_extension == '.mp4' or file_extension == '.avi' or file_extension == '.mov' or file_extension == '.wmv':
+        return "video"
+    elif  file_extension == '.mp3' or file_extension == '.wav' or file_extension == '.aac' or file_extension == '.wma' or file_extension == '3gpp':
+        return "audio"
+    elif file_extension == '.pdf':
+        return "pdf"
+    elif file_extension == '.docx' or file_extension == '.doc' :
+        return "word"
+    elif file_extension == '.xlsx':
+        return "excel"
+    elif file_extension == '.exe':
+        return "exe"
+    else:
+        return ""
+    
+
+
 
