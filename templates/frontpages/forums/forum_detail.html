@@ -106,7 +106,7 @@
                                     {%if forum.attachements%}
                                     <div class="mb-0">
                                        <a href="{{forum.attachements.url}}" download="{{forum.attachements.url}}"> 
-                                   		<div class="mb-3"><b>Attachment-1</b>:{{forum.attachements}}</div>
+                                   		<div class="mb-3"><b>Attachment</b>:{{forum.attachements}}</div>
                                    	</a>
                                     </div>
                                     {%endif%}
@@ -131,6 +131,9 @@
 													<span class="fs-14 ml-2"> </span>
 												</h5>
 												{{comment.timestamp}}
+												<div class="panel-heading1">
+																	<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#comment{{comment.id}}" aria-expanded="false"></a>
+															</div>
 												<p class="font-13  mb-2 mt-2"> 
 		                                           {{comment.comment}}
 		                                        </p>
@@ -140,23 +143,12 @@
                                        {%if comment.attachements%} 
                                     <div class="mb-0">
                                        <a href="{{comment.attachements.urls}}" download="{{comment.attachements.urls}}"> 
-                                   		<div class="mb-3"><b>Attachment-o</b>:{{comment.attachements.name}}</div>
+                                   		<div class="mb-3"><b>Attachment/b>:{{comment.attachements.name}}</div>
                                    	</a>
                                     </div>
                                     {%endif%}
                                     		</div>
 		                                    </div>
-		                                    {%if user.is_authenticated %}
-												<div class="col-xl-2 col-lg-2 col-md-2">
-													<div class="panel-group1" id="accordion2">
-														<div class="panel panel-default mb-4 border p-0">
-															<div class="panel-heading1">
-																	<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#comment{{comment.id}}" aria-expanded="false"></a>
-															</div>
-														</div>
-													</div>
-												</div>
-												{%endif%}
 									
 									<!---------------->
 									{% if request.user == comment.user%}
@@ -220,7 +212,7 @@
 
                                     <div class="mb-0">
 
-                                   		<b>Attachment-p</b>
+                                   		<b>Attachment</b>
                                    			<div class="form-group">
 	                                        {{commentreplay.attachements}}
 	                                    

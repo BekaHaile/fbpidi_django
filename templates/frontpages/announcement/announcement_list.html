@@ -12,7 +12,8 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Announcement List</h1>
+							
+							<h1 class="">{% trans "Announcement List" %}</h1>
 							
 						</div>
 					</div>
@@ -30,7 +31,7 @@
 						
 						<div class="card">
 							<div class="card-header">
-                                    <h3 class="card-title">Announcement By companys </h3> 
+                                    <h3 class="card-title">{% trans "Announcement By companys" %} </h3> 
 							</div>
 							<div class="card-body p-0">
 								<div class="list-catergory">
@@ -66,7 +67,7 @@
 								<div class="item-det mb-4">
 									
 									<h4>{% print_translated post.title post.title_am LANGUAGE_CODE%}</h4>
-									<a href="#" class="text-dark">Announcement from <h5>{{post.company}}</h5></a>
+									<a href="#" class="text-dark">{% trans "Announcement from" %} <h5>{{post.company}}</h5></a>
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
 											<li class="mr-5"><i class="icon icon-calendar text-muted mr-1"></i> {{post.timestamp}} </li>
@@ -90,7 +91,7 @@
 										<p class="font-13  mb-2 mt-2">
 											{% print_translated post.containt|safe post.containt_am|safe LANGUAGE_CODE%}
                                         </p>
-                                        <a href="{% url 'announcement_detail' id=post.id %}" class="btn btn-secondary btn-sm">Read More</a>
+                                        <a href="{% url 'announcement_detail' id=post.id %}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
 
 
 								</div>
