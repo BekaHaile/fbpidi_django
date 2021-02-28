@@ -104,7 +104,8 @@
 													<div class="card border-0 mb-0">
 														<div class="card-body h-100">
 															<div class="item-card9">
-																<a href="/collaborations/customer_event_detail/{{event.id}}/" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated event.title|truncatewords:5|safe event.title_am|truncatewords:5|safe LANGUAGE_CODE %}</h4></a>
+																<a href="/collaborations/customer_event_detail/{{event.id}}/" class="text-dark">
+																	<h4 class="font-weight-semibold mt-1 mb-1">{% print_translated event.title|truncatewords:5|safe event.title_am|truncatewords:5|safe LANGUAGE_CODE %}</h4></a>
 																
 																	{% if event.status == 'Open' %}
 																	<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >Open</div>
