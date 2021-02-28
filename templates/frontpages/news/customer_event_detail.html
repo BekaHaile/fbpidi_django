@@ -59,7 +59,7 @@
 										<ul class="d-flex mb-0">
 											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">By: </i><b>{% print_translated event.company.company_name event.company.company_name_am LANGUAGE_CODE %}</b></a></li>
                                             <li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>Start date: {{event.start_date}}</b> </a></li>                                       
-										    <li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>{{event.end_date}}</b> </a></li>                                       
+										    <li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>End date: {{event.end_date}}</b> </a></li>
 										
 										</ul>
 									</div>
@@ -108,13 +108,11 @@
 								{%endif%}
 								
 							</div>
-                        </div>
-                        
-						<div class="card">
+
 							<div class="card-header">
 								<h3 class="card-title">Event Description</h3>
 							</div>
-							<div class="card-body">
+							<div class="card-body pt-0">
 								<div class="mb-0">
 									<p>{% print_translated event.description event.description_am LANGUAGE_CODE %}</p>
 								</div>	

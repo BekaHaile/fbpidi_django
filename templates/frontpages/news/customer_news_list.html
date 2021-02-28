@@ -133,11 +133,12 @@
 													<div class="card border-0 mb-0">
 														<div class="card-body h-100">
 															<div class="item-card9">
-																<a href="/collaborations/customer_news_detail/{{news.id}}/" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated news.title news.title_am LANGUAGE_CODE %}</h4></a>
-																<p >{{news.description|truncatewords:12|safe}}</p>
+																<a href="/collaborations/customer_news_detail/{{news.id}}/" class="text-dark" style="margin-bottom: 3px;">
+																	<h4 class="font-weight-semibold mt-1 mb-1">{% print_translated news.title news.title_am LANGUAGE_CODE %}</h4>
+																</a>
+																<!--<p >{{news.description|truncatewords:12|safe}}</p>-->
 
-																
-																<!-- <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Posted at : </span> {{news.timestamp}} </p> -->
+																 <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Posted at : </span> {{news.timestamp}} </p>
 															</div>
 														</div>
 														<div class="card-footer pt-2 pb-2">
@@ -164,7 +165,7 @@
 																	<!-- <a href="/collaborations/customer_news_detail/{{news.id}}/" class="btn btn-secondary btn-sm mt-4">
 																		View Detail
 																	</a> -->
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.timestamp}}</small></div> 
+																	<!--<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.timestamp}}</small></div> -->
 																		
 																</div>
 															</div>
@@ -731,7 +732,7 @@
 		
 	
 
-		<section class="sptb">
+		<!--<section class="sptb">-->
 			
 			
 		{%endblock%}
