@@ -76,8 +76,7 @@ urlpatterns = [
     path("customer_event_detail/<id>/", CustomerEventDetail.as_view(), name = "customer_event_detail"),
     path("event_participation/<id>/", EventParticipation.as_view(), name="event_participation"),
 
-    ###Document
-   
+  
 
     
         

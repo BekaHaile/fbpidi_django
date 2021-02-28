@@ -32,12 +32,13 @@ SECRET_KEY = 'u#@!ig3kcz)ocq=2791oii#ay4&$$6lxvj5!$cb2wkfhi5nt(q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','127.0.0.2']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','127.0.0.2','192.168.1.113']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'admin_site.apps.CustomAdminAppConfig',
     # 'django.contrib.admin',
     'django.contrib.auth',
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     'collaborations',
     'company',
     'product',
+    'chat',
 
     'social_django',
     'rest_framework_social_oauth2', 
@@ -62,6 +64,8 @@ INSTALLED_APPS = [
     'useraudit',
     'rest_framework',
     'rest_framework.authtoken',
+
+    
  
 ]
 
@@ -105,7 +109,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'fbpims.wsgi.application'
 
+ASGI_APPLICATION = 'fbpims.asgi.application'
 
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("localhost", 6379)],
+#         },
+#     },
+# }
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 

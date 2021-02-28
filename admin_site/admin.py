@@ -193,6 +193,8 @@ class CustomAdminSite(admin.AdminSite):
             path("company_detail/<id>/",wrap(CompaniesDetailView.as_view()),name="company_detail"),
             path("create_company_profile_al/",wrap(CreateCompanyProfileAfterSignUp.as_view()) ,name='complete_company_profile'),
             path("view_company_profile/",wrap(ViewCompanyProfile.as_view()) ,name='view_company_profile'),
+            path("view_company_profile/<active_tab>/",wrap(ViewCompanyProfile.as_view()) ,name='view_company_profile_active_tab'),
+            
             path("edit_company_profile/<id>/",wrap(ViewCompanyProfile.as_view()),name="edit_company_profile"),
             path("create_company_solution/<company_id>",wrap(CreateCompanySolution.as_view()),name="create_company_solution"),
             path("create_company_event/<company_id>",wrap(CreateCompanyEvent.as_view()),name="create_company_event"),

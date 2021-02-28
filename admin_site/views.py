@@ -10,6 +10,7 @@ from product import models
 from accounts.models import User
 from company.models import Company,CompanyEvent
 from admin_site.models import Category
+from chat.models import ChatGroup, ChatMessage
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
@@ -17,17 +18,25 @@ from collaborations.models import (BlogComment,PollsQuestion, PollsResult, Choic
                                     Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages,
                                     News, NewsImages,Project,Research,ResearchProjectCategory,ForumQuestion, Document)
 from django.http import HttpResponse, FileResponse
- 
+from django.db.models import Q
 # 
 # INDEX VIEW
 class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
-            context = dict()
+            user = self.request.user
+            # filter messages where the user is a reciever i.e. (~Q(sender = user)) participant of the message i.e. Q(chat_group) and read = false (the chat group is neccessary since it's name contains
+            # the two participants
+            unread_message = ChatMessage.unread_messages(self.request.user)           
+            for m in unread_message:
+                print(m.sender, " ", m.content, ' \n')
+
+            context = {'unread_messages': unread_message, "unread_messages_count": unread_message.count()}
+
             return render(self.request,"admin/index.html",context)
         except Exception as e:
             print ("index error",str(e))
-            return render(self.request,"admin/index.html",context)
+            return render(self.request,"admin/index.html",)
 
 
 class DeleteView(LoginRequiredMixin,View):
@@ -302,7 +311,8 @@ class DeleteView(LoginRequiredMixin,View):
         except Exception as e:
                 messages.warning(self.request, "Could not find the Item!")
                 return redirect("admin:index") 
-                
+
+
 class Polls(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         form = PollsForm()
@@ -371,6 +381,7 @@ class DetailPoll(LoginRequiredMixin,View):
             messages.warning(self.request, "Nothing selected!")
             return redirect("admin:admin_polls")
 
+
 class AddChoice(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
@@ -436,7 +447,8 @@ class EditPoll(LoginRequiredMixin,View):
         poll.save()
         messages.success(self.request,"Poll has been Edited Successfully!")
         return redirect("admin:admin_polls")
-       
+
+
 class EditChoice(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):        
         choiceform = CreateChoiceForm()
@@ -474,6 +486,7 @@ class EditChoice(LoginRequiredMixin,View):
         choice.save()
         messages.success(self.request,"Choice has been Edited Successfully!")
         return redirect("admin:admin_polls")
+    
        
 class DeletePoll(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):

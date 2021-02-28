@@ -1,5 +1,6 @@
 {%extends 'admin/base_site.html'%}
 {%load core_template_tags%}
+{% load admin_template_tags %}
 {% block extrastyle %}
 
 	<!-- Theme JS files -->
@@ -71,7 +72,12 @@
 									<ul class="nav nav-sidebar mb-2">
 										<li class="nav-item-header">Navigation</li>
 										<li class="nav-item">
+
+											{% if active_tab == 'inbox' %}
+											<a href="#profile" class="nav-link" data-toggle="tab">
+											{% else %}
 											<a href="#profile" class="nav-link active" data-toggle="tab">
+											{%endif%}	
 												<i class="icon-user"></i>
 												 Company Profile
 											</a>
@@ -98,10 +104,19 @@
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#inbox" class="nav-link" data-toggle="tab">
-												<i class="icon-envelop2"></i>
-												Inbox
-												<span class="badge bg-danger badge-pill ml-auto">29</span>
+											{% if active_tab == 'inbox' %}
+												<a href="#inbox" class="nav-link active" data-toggle="tab">
+											{% else %}
+												<a href="#inbox" class="nav-link" data-toggle="tab">
+											{% endif %}
+											<i class="icon-envelop2"></i>	
+											Inbox
+											{% if unread_messages_count == 0 %}
+											<span class="badge bg-danger badge-pill ml-auto">No new Message</span>
+											{% else %}
+											<span class="badge bg-danger badge-pill ml-auto">{{unread_messages_count}}</span>
+											{% endif %}
+												
 											</a>
 										</li>
 										<li class="nav-item">
@@ -185,8 +200,13 @@
 
 
 					<!-- Right content -->
+					<!-- company profile info -->
 					<div style="min-height: calc(130vh + 110px); max-height: calc(120vh + 160px);overflow-y: scroll;" class="tab-content w-100 overflow-auto">
+					{% if active_tab == "inbox" %}
+						<div class="tab-pane fade  show" id="profile">
+					{% else %}
 						<div class="tab-pane fade active show" id="profile">
+					{% endif %}
 
 							<!-- Sales stats -->
 							<div class="card">
@@ -1111,16 +1131,18 @@
 
 				    	</div>
 
-					    <div class="tab-pane fade" id="inbox">
-
+						{% if active_tab == 'inbox' %}
+					    <div class="tab-pane fade active show" id="inbox">
+						{% else %}
+						<div class="tab-pane fade " id="inbox">
+						{% endif %}
 							<!-- My inbox -->
+							{% recieved_grouped_messages user as recieved_messages %}
+						
+
 							<div class="card">
 								<div class="card-header bg-transparent header-elements-inline">
 									<h6 class="card-title">My inbox</h6>
-
-									<div class="header-elements">
-										<span class="badge bg-blue">25 new today</span>
-				                	</div>
 								</div>
 
 								<!-- Action toolbar -->
@@ -1183,8 +1205,26 @@
 								<!-- Table -->
 								<div class="table-responsive">
 									<table class="table table-inbox">
+
+										
+										<!-- each message obj has a format of {'message': Latest ChatMessage instance from a sender, 'count':}  -->
 										<tbody data-link="row" class="rowlink">
+											
+										
+											{% for message in recieved_messages %}
+											{% if message.message.sender.profile_image%}
+											{{message.message.sender.profile_image.url}}
+											{% endif %}
+											{{message.message.sender.username}}
+											{{message.message.content}}
+											{{message.message.timestamp}}
+											<br>
+										
+											{% if message.message.read == 'False' %}
+											<tr class="read">
+											{% else %}
 											<tr class="unread">
+											{% endif %}
 												<td class="table-inbox-checkbox rowlink-skip">
 													<input type="checkbox" class="form-input-styled" data-fouc>
 												</td>
@@ -1194,24 +1234,31 @@
 													</a>
 												</td>
 												<td class="table-inbox-image">
+													{% if message.message.sender.profile_image %}
+													<img src="{{message.message.sender.profile_image.url}}" class="rounded-circle" width="32" height="32" alt="">
+													
+													{% else %}
 													<img src="/static/admin/global_assets/images/brands/spotify.png" class="rounded-circle" width="32" height="32" alt="">
+													{% endif %}
 												</td>
 												<td class="table-inbox-name">
 													<a href="mail_read.html">
-														<div class="letter-icon-title text-default">Spotify</div>
+														<div class="letter-icon-title text-default">{{message.message.sender.username}}</div>
 													</a>
 												</td>
 												<td class="table-inbox-message">
-													<div class="table-inbox-subject">On Tower-hill, as you go down &nbsp;-&nbsp;</div>
-													<span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span>
+													<div class="table-inbox-subject">{{message.message.content}} &nbsp;-&nbsp;</div>
+													<!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
 												</td>
 												<td class="table-inbox-attachment">
 													<i class="icon-attachment text-muted"></i>
 												</td>
 												<td class="table-inbox-time">
-													11:09 pm
+													{{message.message.timestamp}}
 												</td>
 											</tr>
+											{% endfor%}
+											
 
 											<tr class="unread">
 												<td class="table-inbox-checkbox rowlink-skip">
