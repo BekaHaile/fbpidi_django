@@ -32,7 +32,7 @@ SECRET_KEY = 'u#@!ig3kcz)ocq=2791oii#ay4&$$6lxvj5!$cb2wkfhi5nt(q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.2',]
+ALLOWED_HOSTS = ['127.0.0.2','127.0.0.1','localhost',]
 
 
 # Application definition
@@ -251,7 +251,8 @@ AUTHENTICATION_BACKENDS = (
 
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
     
-    'django.contrib.auth.backends.ModelBackend',
+    # 'django.contrib.auth.backends.ModelBackend',
+    'accounts.backends.FbpidiAuthBackend',
 )
 
 for key in ['GOOGLE_OAUTH2_KEY',
