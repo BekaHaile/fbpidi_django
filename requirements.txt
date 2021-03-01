@@ -49,7 +49,6 @@ six==1.15.0
 social-auth-app-django==4.0.0
 social-auth-core==4.0.3
 sqlparse==0.4.1
-Twisted @ file:///C:/Projects/Django_projects/Melfantech/fbpidi_local/fbpidi/Twisted-20.3.0-cp38-cp38-win_amd64.whl
 txaio==21.2.1
 urllib3==1.26.2
 zope.interface==5.2.0
