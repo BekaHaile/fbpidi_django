@@ -104,17 +104,13 @@
 													<div class="card border-0 mb-0">
 														<div class="card-body h-100">
 															<div class="item-card9">
-																<a href="/collaborations/customer_event_detail/{{event.id}}/" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated event.title|truncatewords:5|safe event.title_am|truncatewords:5|safe LANGUAGE_CODE %}</h4></a>
-																
-																	{% if event.status == 'Open' %}
-																	<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >Open</div>
-																	{%elif event.status == 'Pending' %}
-																	<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >Pending</div>
-																	{%else  %}
-																	<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >Closed</div>
-																	{% endif %}
-																	<small>{% change_end_date event.start_date %} </small> - 
-																	<small>{% change_end_date event.end_date %}</small>
+																<a href="/collaborations/customer_event_detail/{{event.id}}/" class="text-dark">
+																	<h4 class="font-weight-semibold mt-1 mb-1">{% print_translated event.title|safe event.title_am|safe LANGUAGE_CODE %}</h4>
+																</a>
+
+																<small>{% change_end_date event.start_date %} </small> -
+																<small>{% change_end_date event.end_date %}</small>
+
 															</div>
 														</div>
 														<div class="card-footer pt-2 pb-2">
@@ -134,8 +130,18 @@
 													
 																	</div>
 																</div>
+
 																<div class="ml-auto mt-3 mt-sm-0">
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{event.time_stamp}}</small></div> 
+
+																	<!--{% if event.status == 'Open' %}-->
+																	<!--<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >Open</div>-->
+																	<!--{%elif event.status == 'Pending' %}-->
+																	<!--<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >Pending</div>-->
+																	<!--{%else  %}-->
+																	<!--<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >Closed</div>-->
+																	<!--{% endif %}-->
+
+																	<div class="text-dark font-weight-normal mb-0 mt-1 item-card2-desc"><small > <b>  At:</b> {{event.time_stamp}}</small></div>
 																	
 																</div>
 															</div>

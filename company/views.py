@@ -31,7 +31,6 @@ class CreateCompanyProfile(LoginRequiredMixin,View):
         form = CompanyForm(self.request.POST,self.request.FILES)
         
         if form.is_valid():
-            print(form.cleaned_data.get("color"))
             company = form.save(commit=False)
             comp_admin = CompanyAdmin.objects.get(user=self.request.user)
             if comp_admin.is_suplier:
@@ -45,7 +44,6 @@ class CreateCompanyProfile(LoginRequiredMixin,View):
             company.save()
             messages.success(self.request,"Company Profile Created")
             return redirect("admin:index")
-        print(form.errors)
         return render(self.request,"admin/company/company_form_create.html",{'form':form})
 
 

@@ -1,12 +1,22 @@
 from django import forms 
 from django.contrib.auth.models import Group, Permission
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
+from django.contrib.auth.forms import (ReadOnlyPasswordHashField, UserCreationForm,
+                                    AuthenticationForm,UsernameField)
 from django.contrib.auth import get_user_model
 from django.db import transaction
+from django.utils.translation import gettext as _
 from django_summernote.widgets import SummernoteWidget
 
 from accounts.models import Company, CompanyAdmin, Customer
 from company.models import CompanyStaff
+
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(label='Email / Username',widget=forms.TextInput(
+        attrs={'placeholder':'Email / Username'}
+    ))
+    
+
 
 class AbstractUserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput(
@@ -35,146 +45,7 @@ class AbstractUserCreationForm(forms.ModelForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Passwords don't match")
         return password2
-
-
-ADMIN_PERMISSION_LIST = [
-    'add_logentry',
-    'view_logentry',
-    'view_permission',
-    'view_group',
-    'view_contenttype',
-    'view_session',
-    'view_category',
-    'add_product',
-    'change_product',
-    'delete_product',
-    'view_product',
-    'view_subcategory',
-    'add_productprice',
-    'change_productprice',
-    'delete_productprice',
-    'view_productprice',
-    'add_user',
-    'change_user',
-    'delete_user',
-    'view_user',
-    'add_companyadmin',
-    'change_companyadmin',
-    'delete_companyadmin',
-    'view_companyadmin',
-    'change_company',
-    'delete_company',
-    'view_company',
-    'add_companystaff',
-    'change_companystaff',
-    'delete_companystaff',
-    'view_companystaff',
-    'view_failedloginlog',
-    'view_loginlog',
-    'view_loginattempt',
-    'view_userdeactivation', 
-
-    'add_pollsquestion',
-    'view_pollsquestion',
-    'change_pollsquestion',
-    'delete_pollsquestion',
-    'add_choices',
-    'view_choices',
-    'change_choices',
-    'delete_choices',
-    
-    'view_bank',
-    'add_tender',
-    'view_tender',
-    'change_tender',
-    'delete_tender',
-
-    'add_companybankaccount',
-    'change_companybankaccount',
-    'delete_companybankaccount',
-    'view_companybankaccount',
-    'view_tenderapplicant',
-
-    'add_news', 
-    'view_news', 
-    'change_news', 
-    'delete_news',
-
-    'add_newsimages', 
-    'view_newsimages', 
-    'change_newsimages', 
-    'delete_newsimages', 
-
-    'add_companyevent', 
-    'view_companyevent', 
-    'change_companyevent', 
-    'delete_companyevent', 
-
-    'add_companyevent', 
-    'view_companyevent', 
-    'change_companyevent', 
-    'delete_companyevent', 
-
-    'add_faqs', 
-    'view_faqs', 
-    'change_faqs', 
-    'delete_faqs',
-    
-    'add_blog', 
-    'view_blog', 
-    'change_blog', 
-    'delete_blog', 
-
-    'add_blogcomment', 
-    'view_blogcomment', 
-    'change_blogcomment', 
-    'delete_blogcomment',
-
-    'add_jobapplication', 
-    'view_jobapplication', 
-    'change_jobapplication', 
-    'delete_jobapplication', 
-
-    'add_vacancy', 
-    'view_vacancy', 
-    'change_vacancy', 
-    'delete_vacancy', 
-
-    'add_jobcategory', 
-    'view_jobcategory', 
-    'change_jobcategory', 
-    'delete_jobcategory', 
-
-    'add_announcement', 
-    'view_announcement', 
-    'change_announcement', 
-    'delete_announcement', 
-
-    'add_announcementimages', 
-    'view_announcementimages', 
-    'change_announcementimages', 
-    'delete_announcementimages', 
-
-    'add_researchprojectcategory', 
-    'view_researchprojectcategory', 
-    'change_researchprojectcategory', 
-    'delete_researchprojectcategory', 
-
-    'add_research', 
-    'view_research', 
-    'change_research', 
-    'delete_research', 
-
-    'add_project', 
-    'view_project', 
-    'change_project', 
-    'delete_project', 
-    
-    'add_document',
-    'view_document', 
-    'change_document',
-    'delete_document',
-]
+ 
 
 
 '''
@@ -198,13 +69,7 @@ class CompanyAdminCreationForm(AbstractUserCreationForm):
     """ A form is prepared for admin users to regster. Includes all the required
         fields, plus a repeated password.
     """
-    usertype = forms.ChoiceField(required=True,
-                                 widget=forms.RadioSelect(
-                                     attrs={'type': 'radio'}),
-                                 choices=(('suplier', 'Supplier'),
-                                          ('manufacture', 'Manufacturer'))
-                                 )
-
+    
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
@@ -213,18 +78,17 @@ class CompanyAdminCreationForm(AbstractUserCreationForm):
         user.is_superuser = False
         user.set_password(self.cleaned_data.get("password1"))
         user.save()
-        perm_list = []
-        for code_name in ADMIN_PERMISSION_LIST:
-            
-            perm_list.append(Permission.objects.get(codename=code_name))
-        user.user_permissions.set(perm_list)
+        admin_permisstion_list = Permission.objects.all().exclude(
+            codename__in=['add_logentry','change_logentry','delete_logentry','view_logentry',
+                          'add_permission','change_permission','delete_permission','view_permission',
+                          'add_group','change_group','delete_group','view_group',
+                          'add_contenttype','change_contenttype','delete_contenttype','view_contenttype',
+                          'add_session','change_session','delete_session','view_session'] 
+            )
         
+        user.user_permissions.set(admin_permisstion_list)
+        user.save()
         comp_admin = CompanyAdmin.objects.create(user=user)
-        if self.cleaned_data.get("usertype") == "suplier":
-            comp_admin.is_suplier = True
-        elif self.cleaned_data.get("usertype") == "manufacture":
-            comp_admin.is_manufacturer = True
-        comp_admin.save()
         return user
 
 
