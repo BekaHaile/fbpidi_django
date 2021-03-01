@@ -19,7 +19,7 @@ class ChatConsumer(WebsocketConsumer):
         
 
     def fectch_messages(self, data):
-        self.previous_messages = ChatMessageSerializer( ChatMessage.last_10_messages(self.group_name), many = True).data
+        self.previous_messages = ChatMessageSerializer( ChatMessage.last_n_messages(self.group_name), many = True).data
         print("previous messages ", self.previous_messages)
         self.send_message(self.previous_messages)
         

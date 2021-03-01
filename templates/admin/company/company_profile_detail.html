@@ -1212,21 +1212,18 @@
 											
 										
 											{% for message in recieved_messages %}
-											{% if message.message.sender.profile_image%}
-											{{message.message.sender.profile_image.url}}
-											{% endif %}
-											{{message.message.sender.username}}
-											{{message.message.content}}
-											{{message.message.timestamp}}
-											<br>
-										
+											
 											{% if message.message.read == 'False' %}
-											<tr class="read">
+											<tr class="read"> 
 											{% else %}
-											<tr class="unread">
+											<tr  class="unread"> 
 											{% endif %}
+									
+											
 												<td class="table-inbox-checkbox rowlink-skip">
+													<a href="/chat/{{message.message.chat_group}}/" target="blank">R </a>
 													<input type="checkbox" class="form-input-styled" data-fouc>
+													
 												</td>
 												<td class="table-inbox-star rowlink-skip">
 													<a href="#">
@@ -1242,11 +1239,12 @@
 													{% endif %}
 												</td>
 												<td class="table-inbox-name">
-													<a href="mail_read.html">
+													<a href="/chat/{{message.message.chat_group}}/" target="blank">
 														<div class="letter-icon-title text-default">{{message.message.sender.username}}</div>
 													</a>
 												</td>
 												<td class="table-inbox-message">
+												
 													<div class="table-inbox-subject">{{message.message.content}} &nbsp;-&nbsp;</div>
 													<!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
 												</td>
@@ -1256,12 +1254,14 @@
 												<td class="table-inbox-time">
 													{{message.message.timestamp}}
 												</td>
+											
 											</tr>
 											{% endfor%}
 											
 
 											<tr class="unread">
 												<td class="table-inbox-checkbox rowlink-skip">
+													
 													<input type="checkbox" class="form-input-styled" data-fouc>
 												</td>
 												<td class="table-inbox-star rowlink-skip">

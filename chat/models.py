@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 from django.db.models import Q
+from datetime import datetime
 
 class ChatGroup(models.Model):
     """
@@ -22,7 +23,22 @@ class ChatMessage(models.Model):
     sender = models.ForeignKey(User, on_delete= models.CASCADE)
     read = models.BooleanField(default=False)
     content = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField()
+
+    def save(self):
+        print("################################################################")
+        print(self.chat_group," ",datetime.now())
+        str_date_time = datetime.strftime(datetime.now() , "%y/%m/%d %H:%M:%S")
+        parsed_str_date_time = datetime.strptime(str_date_time, '%y/%m/%d %H:%M:%S') 
+        
+        print("incoming date ", datetime.now(), "\n str ", str_date_time, "\n parsed ", parsed_str_date_time)
+        self.timestamp = parsed_str_date_time
+        super(ChatMessage, self).save()
+        print("selfffffffffffffffffffffffff ", self.timestamp)
+        
+        
+        
+
 
 
     def __str__(self):
@@ -56,8 +72,14 @@ class ChatMessage(models.Model):
         return  ChatMessage.objects.filter(q).count()
 
     #returns latest 10 chat messages for sender and receiver
-    def last_10_messages(chat_group):
-        return ChatMessage.objects.filter(chat_group__group_name = chat_group)[:10]
+    def last_n_messages(chat_group, n = 10):
+        """
+        filters latest n messages, then it will reverse the order to make
+        the latest message at the bottom, just like telegram,
+        (n is by default 10)
+        """
+        latest_10 = ChatMessage.objects.filter(chat_group__group_name = chat_group).order_by('-timestamp')[:n]
+        return latest_10[::-1]
 
 
 def get_grouped_message( list_of_messages):

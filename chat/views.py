@@ -8,5 +8,8 @@ def index(request):
 
 @login_required
 def room(request, group_name):
-    u = User.objects.get(username=group_name.split('_')[1])
-    return render(request, 'frontpages/chat/chat.html', {'name': group_name})
+    
+    if request.user.is_customer:
+        return render(request, 'frontpages/chat/chat.html', {'name': group_name})
+    else:         
+        return render(request, 'admin/chat/chat_layout.html', {'name': group_name})
