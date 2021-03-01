@@ -1,13 +1,15 @@
 {%extends 'frontpages/layout.html'%}
-
+{%load i18n%}
+{%load core_template_tags%} 
 {%block content%}
+{% get_current_language as LANGUAGE_CODE %}
 		<!--Breadcrumb-->
 		<section>
 			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Research </h1>
+							<h1 class="">{% trans "Research" %} </h1>
 							
 						</div>
 					</div>
@@ -29,7 +31,7 @@
 								<a href="{%url 'research_form' %}"><button style="padding-left: 40%; padding-right: 40%;" type="submit" 
 								href="{%url 'forum_form' %}" 
 									class="btn btn-primary rounded-round">
-									<h5>Add new Research </h5>
+									<h5>{% trans "Add new Research" %} </h5>
 								</button>
 								</a>
 							</div>
@@ -46,7 +48,7 @@
 									<div class="input-group-append ">
 										
 										<button type="submit" class="btn btn-secondary br-tr-3  br-br-3">
-											Search
+											{% trans "Search" %}
 										</button></a>
 									</div>
 								</div>
@@ -55,7 +57,7 @@
 						</div>
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">Categories</h3>
+								<h3 class="card-title">{% trans "Categories" %}</h3>
 							</div>
 							{%for cat in category%}
 							<div class="card-body p-0">
@@ -78,7 +80,7 @@
 						{%if user.is_authenticated %}
 						<div class="card">
 									<div class="card-header">
-		                                    <h3 class="card-title">Research you Posted </h3> 
+		                                    <h3 class="card-title">{% trans "Research you Posted" %} </h3> 
 									</div>
 									<div class="card-body p-0">
 										<div class="list-catergory">
@@ -151,7 +153,7 @@
 									</div>
 										<h4 class="font-weight-semibold">{{research.description|safe|truncatewords:35}}</h4>
 										
-										<a href="{%url 'research_detail' id=research.id %}" class="btn btn-secondary btn-sm">Read More</a>
+										<a href="{%url 'research_detail' id=research.id %}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
 									</div>
 								</div>
 								{%endfor%}

@@ -1,11 +1,9 @@
 {%extends 'frontpages/layout.html'%}
-
 {%load i18n%}
 {%load core_template_tags%} 
-
 {%block content%}
-
 {% get_current_language as LANGUAGE_CODE %}
+
 		<!--Breadcrumb-->
 		<section>
 			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
@@ -71,15 +69,16 @@
 							<div class="col-xl-12 col-lg-12 col-md-12">
 								<div class="card">
 									<div class="card-body">
-										<h4>{{blog.title}}</h4>
+										<h4>{% print_translated blog.title|safe blog.title_am|safe LANGUAGE_CODE%}</h4>
 									</div>
+
 									<div class="item7-card-img">
 										<a href="{% url 'blog_details' id=blog.id %}"></a>
 										<img src="{{blog.blogImage.url}}" alt="cover images" class="cover-image" width="100px" height="300px">
 										<div class="item7-card-text">
 											
 										</div>
-									</div>
+									</div> 
 									<div class="card-body">
 										<div class="item7-card-desc d-flex mb-2">
 											<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{blog.timestamp}}</a>
@@ -88,8 +87,11 @@
 											</div>
 										</div>
 
-
-										<h4 class="font-weight-semibold">{{blog.content|safe|truncatewords:30}}</h4>
+										
+										<h4 class="font-weight-semibold">
+											
+											{% print_translated blog.content|safe|truncatewords:30 blog.content_am|safe|truncatewords:30 LANGUAGE_CODE%}
+										</h4>
 
 										<a href="{% url 'blog_details' id=blog.id %}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a> 
 									</div>

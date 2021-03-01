@@ -9,11 +9,11 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Poll-Details</h1>
+							<h1 class="">{% trans "Poll-Details" %}</h1>
 							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="">Home</a></li>
-								<li class="breadcrumb-item"><a href="/collaborations/polls/">Polls</a></li>
-								<li class="breadcrumb-item active text-white" aria-current="page">Poll-Details</li>
+								<li class="breadcrumb-item"><a href="">{% trans "Home" %}</a></li>
+								<li class="breadcrumb-item"><a href="/collaborations/polls/">{% trans "Polls" %}</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Poll-Details" %}</li>
 							</ol>
 						</div>
 					</div>
@@ -35,25 +35,25 @@
 
                                                                     
 									<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{poll.timestamp}}</a>
-                                    <a href="#"><i class="fa fa-user text-muted mr-2" ></i>By {{poll.user}}</a>
-                                    <a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>Total votes {{poll.count_votes}}</a>
+                                    <a href="#"><i class="fa fa-user text-muted mr-2" ></i>{% trans "Search" %}{% trans "By" %} {{poll.user}}</a>
+                                    <a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>{% trans "Total votes" %} {{poll.count_votes}}</a>
                                     
                                 </div>
 
                                 {% if user == poll.user  %}
-                                        <h3 style="color: lightsalmon;"> You can not vote on this poll, since you are the creator of the poll.</h3>
+                                        <h3 style="color: lightsalmon;"> {% trans "You can not vote on this poll, since you are the creator of the poll" %}.</h3>
 
                                     {% elif user.is_superuser == True %}
-                                        <h3 style="color: lightsalmon;"> Super users cannot Vote.</h3>
+                                        <h3 style="color: lightsalmon;"> {% trans "Super users cannot Vote" %}.</h3>
                                                     
                                     {% elif has_voted == True %}
-                                        <h3 style="color: lightsalmon;"> You already have voted for this poll.</h3>
+                                        <h3 style="color: lightsalmon;"> {% trans "You already have voted for this poll" %}.</h3>
 
                                     {% else %} 
                                     
                                 {% endif %}
 
-                                <h4>Poll description</h4>
+                                <h4>{% trans "Poll description" %}</h4>
 								<p>{{poll.description|safe}}</p>
 							</div>
 						</div>
@@ -64,9 +64,9 @@
                             <div class="card">
                                 <div class="card-header">
                                     {% if poll.count_choices > 1 %}
-                                        <h3 class="card-title">{{poll.choices.all.count}} Choices</h3>
+                                        <h3 class="card-title">{{poll.choices.all.count}} {% trans "Choices" %}</h3>
                                     {% else %}
-                                        <h3 class="card-title">{{poll.choices.all.count}} Choice</h3>
+                                        <h3 class="card-title">{{poll.choices.all.count}} {% trans "Choice" %}</h3>
                                     
                                     {% endif %}
                                 </div>
@@ -82,9 +82,9 @@
                                                     </h5>
                                                     <small>
                                                         {% if choice.count_votes > 1 %}
-                                                        <span class="fs-14 ml-2"> {{choice.count_votes}} Votes  <i class="fa fa-star text-yellow"></i></span>
+                                                        <span class="fs-14 ml-2"> {{choice.count_votes}} {% trans "Votes" %}  <i class="fa fa-star text-yellow"></i></span>
                                                         {% else  %}
-                                                        <span class="fs-14 ml-2"> {{choice.count_votes}} Vote  <i class="fa fa-star text-yellow"></i></span>
+                                                        <span class="fs-14 ml-2"> {{choice.count_votes}} {% trans "Vote" %}  <i class="fa fa-star text-yellow"></i></span>
                                                         {% endif %}
                                                     </small><br>
                                                     <p class="font-13  mb-2 mt-2">
@@ -97,7 +97,7 @@
                                                     {% if user.is_superuser == False and not user == poll.user and not has_voted == True %}
                                                     <div class = "choice-btn-group" class="badge badge-secondary">
                                                         <span class="badge badge-secondary">
-                                                            <label for = "{{choice.pk}}"><span style="font-size: medium;">Vote</span></label>
+                                                            <label for = "{{choice.pk}}"><span style="font-size: medium;">{% trans "Vote" %}</span></label>
                                                             <input id = "{{choice.pk}}" type="radio" name="selected_choice" value="{{choice.pk}}" /> 
                                                             
                                                         </span>
@@ -117,7 +117,7 @@
                             <!--/Choices-->
                             {% if poll.count_choices > 0 and user.is_superuser == False and   not user == poll.user and not has_voted == True %}
                                 <div class="form-group row">
-                                    <label for = "remark" class="col-form-label col-lg-3"><h3>Any Remarks?</h3> </label><br><br>
+                                    <label for = "remark" class="col-form-label col-lg-3"><h3>{% trans "Any Remarks" %}?</h3> </label><br><br>
                                     <textarea id="remark" name="remark" rows="4" cols="50"></textarea>
                                 </div>
                                 
@@ -126,7 +126,7 @@
                             {% if  poll.count_choices > 0 and user.is_superuser == False and not user == poll.user and not has_voted == True %}
                                 <div class="text-right">
                                     <button style="padding-left: 10%; padding-right: 10%;" type="submit"
-                                        class="btn btn-primary rounded-round">Submit Vote </button>
+                                        class="btn btn-primary rounded-round">{% trans "Submit Vote" %} </button>
                                 </div>
                              
                             {% endif %}

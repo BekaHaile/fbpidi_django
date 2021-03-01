@@ -42,6 +42,7 @@
 							</div>
 						</form>
 						</div>
+						
 						<div class="card">
 							<div class="card-header">
 								<h3 class="card-title">{% trans "Tags" %}</h3>
@@ -50,8 +51,8 @@
 							<div class="card-body">
 								<div class="product-tags clearfix">
 									{%for tag in tags%}
-									<ul class="list-unstyled mb-0">
-										<li><a href="{%url 'search_blogtag' name=tag%}">{% print_translated tag.title|safe tag.title_am|safe LANGUAGE_CODE%}</a></li>
+									<ul class="list-unstyled mb-0">  
+										<li><a href="{%url 'search_blogtag' name=tag%}">{{ tag.title }}</a></li>
 										
 									</ul>
 									{%endfor%}
@@ -67,8 +68,8 @@
 					<div class="col-xl-8 col-lg-8 col-md-12">
 						<div class="card">
 							<div class="card-body">
-								{% print_translated blog.title|safe blog.title_am|safe LANGUAGE_CODE%}
-										<h4>{{blog.title}}</h4>
+								
+										<h4>{% print_translated blog.title|safe blog.title_am|safe LANGUAGE_CODE%}</h4>
 									</div>
 							<div class="card-body">
 								

@@ -127,6 +127,13 @@ class FaqPendingList(LoginRequiredMixin,View):
 		template_name = "admin/pages/faqs_list.html"
 		return render(self.request, template_name,context)
 
+class FaqApprovdList(LoginRequiredMixin,View):
+	def get(self,*args,**kwargs):
+		faqs=Faqs.objects.filter(status="APPROVED")
+		context = {'faqs':faqs}
+		template_name = "admin/pages/faqs_list.html"
+		return render(self.request, template_name,context)
+
 class FaqApprove(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		faq = Faqs.objects.get(id=self.kwargs['id'])

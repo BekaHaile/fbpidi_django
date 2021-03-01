@@ -118,9 +118,11 @@
                             </div>
 
                             <div class="col-xl-12 col-lg-12 col-md-12">
+                            	<div class="card"> 
+                            		<div class="card-body">
                             	{% for comment in forum.comments%}
-								<div class="card"> 
-									<div class="card-body">
+								
+									
 										<div class="d-sm-flex mt-0 p-5 sub-review-section border border-bottom-0 br-bl-0 br-br-0">
 		                                    <div class="d-flex mr-3">
 		                                        <a href="#">{{comment.user.profile_image}} </a>
@@ -131,9 +133,22 @@
 													<span class="fs-14 ml-2"> </span>
 												</h5>
 												{{comment.timestamp}}
-												<div class="panel-heading1">
-																	<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#comment{{comment.id}}" aria-expanded="false"></a>
-															</div>
+														<div align="left">
+														<a href="#" data-toggle="modal" data-target="#replymodal{{comment.id}}" id="{{comment.id}}"><i class="fa fa-reply-all"></i>Repaly</a>  
+														 
+														{% if request.user == comment.user%}
+														 
+															<a style = "padding:5px; margin-left: 10px;" data-toggle="modal" data-target="#comment{{comment.id}}" id="{{comment.id}}" class = "btn btn-secondary btn-sm mt-4"  >
+																<i class="icon-pencil" style="margin-right: 5px;" ></i>Edit 
+															</a>
+														 
+														
+													 
+															<a style = "padding:5px; margin-left: 10px;" href="{%url 'admin:delete' model_name='ForumComments' id=comment.id%}" class = "btn btn-secondary btn-sm mt-4" onclick="return confirm('Are you sure you want to DELETE this')"><i class="icon-trash"></i>Delete </a>
+														 
+														{%endif%}
+													</div>
+															
 												<p class="font-13  mb-2 mt-2"> 
 		                                           {{comment.comment}}
 		                                        </p>
@@ -143,25 +158,15 @@
                                        {%if comment.attachements%} 
                                     <div class="mb-0">
                                        <a href="{{comment.attachements.urls}}" download="{{comment.attachements.urls}}"> 
-                                   		<div class="mb-3"><b>Attachment/b>:{{comment.attachements.name}}</div>
-                                   	</a>
+                                   		<div class="mb-3"><b>Attachment</b>:{{comment.attachements.name}}</div>
+                                   		</a>
                                     </div>
                                     {%endif%}
                                     		</div>
 		                                    </div>
 									
 									<!---------------->
-									{% if request.user == comment.user%}
-									<div>
-										<a style = "padding:5px; margin-left: 10px;" data-toggle="modal" data-target="#comment{{comment.id}}" id="{{comment.id}}" class = "btn btn-secondary btn-sm mt-4"  >
-											<i class="icon-pencil" style="margin-right: 5px;" ></i>Edit 
-										</a>
-									</div>
 									
-									<div>
-										<a style = "padding:5px; margin-left: 10px;" href="{%url 'admin:delete' model_name='ForumComments' id=comment.id%}" class = "btn btn-secondary btn-sm mt-4" onclick="return confirm('Are you sure you want to DELETE this')"><i class="icon-trash"></i>Delete </a>
-									</div>
-									{%endif%}
 
 									<!---------------->
 									<div class="modal fade" id="comment{{comment.id}}" tabindex="-1" role="dialog"  aria-hidden="true">
@@ -176,7 +181,6 @@
 												  </button>
 												</div>
 												<div class="modal-body">
-												  
 												  <div class="form-group">
 													<input class="form-control" name="content"  value="{{comment.comment}}"> 
 												  </div>
@@ -190,9 +194,31 @@
 									  </div>
 
 									  <!------------->
-									
+									<div class="modal fade" id="replymodal{{comment.id}}" tabindex="-1" role="dialog"  aria-hidden="true">
+										<div class="modal-dialog" role="document">
+										  <div class="modal-content">
+											  <form action="{%url 'edit_comment' forum=forum.id id=comment.id type='ForumComments' %}" method="POST" enctype="multipart/form-data">
+												{%csrf_token%}
+												<div class="modal-header">
+												  <h5 class="modal-title" id="examplecontactLongTitle">Comment</h5>
+												  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												  <span aria-hidden="true">&times;</span>
+												  </button>
+												</div>
+												<div class="modal-body">
+												  <div class="form-group">
+													<input class="form-control" name="content"  > 
+												  </div>
+												</div>
+												<div class="modal-footer">
+												  <button type="submit" class="btn btn-success">Submit</button>
+												</div>
+											  </form>
+										  </div>
+										</div>
+									  </div>
  
-							<div class="container">
+<!-- 							<div class="container">
 							<form action="{%url 'Replay_comment' id=comment.id forum=forum.id%}" method="POST" enctype="multipart/form-data">
 								<div class="panel-group1" id="accordion2">
 									<div class="panel panel-default mb-4 border p-0">
@@ -228,7 +254,7 @@
 								</div>
 							</div>
 							</form>
-							</div>
+							</div> -->
 								</div>
 								
 							<div class="card-body p-0">
@@ -296,10 +322,11 @@
 										
 									</div>
 								</div>
-							</div>
 							
-							</div>
+							 
 						{%endfor%}
+						</div>
+							</div>
                             </div>
                             {%if user.is_authenticated %}
 

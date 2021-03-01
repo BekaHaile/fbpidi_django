@@ -31,6 +31,11 @@
 				</div>
 				<div class="list-icons">
 					{% if perms.collaborations.add_faqs %} 
+					<a href="{% url 'admin:admin_approved_Faqs'%}" class="badge-success btn-sm rounded-round">Approved </a>
+							 
+				</div>
+				<div class="list-icons">
+					
 					<a href="{% url 'admin:admin_Faqsform'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New Faq</a>
 							{%endif%}
 				</div>
