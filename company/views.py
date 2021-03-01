@@ -7,13 +7,16 @@ from django.contrib import messages
 from django.views import View
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 
 from company.models import Company,CompanySolution,CompanyEvent,CompanyStaff, Bank, CompanyBankAccount
 from accounts.models import CompanyAdmin,User
 from product.models import Order,OrderProduct
 
 
+
 from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm,FbpidiCompanyForm, CompanyBankAccountForm, EventParticipantForm
+from chat.models import ChatGroup, ChatMessage
 
 class CreateCompanyProfile(LoginRequiredMixin,View):
     def get(self, *args,**kwargs):
@@ -43,6 +46,7 @@ class CreateCompanyProfile(LoginRequiredMixin,View):
             return redirect("admin:index")
         return render(self.request,"admin/company/company_form_create.html",{'form':form})
 
+
 class CreateCompanyProfileAfterSignUp(LoginRequiredMixin,View):
     def get(self, *args,**kwargs):
         form = CompanyForm()
@@ -70,6 +74,7 @@ class CreateCompanyProfileAfterSignUp(LoginRequiredMixin,View):
             return redirect("admin:index")
         return render(self.request,"admin/company/company_form_signup.html",{'form':form})
 
+
 class ViewCompanyProfile(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         company = None
@@ -85,12 +90,17 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
             events = CompanyEvent.objects.filter(company=company)
             event_form = CompanyEventForm
             banks = Bank.objects.all()
+            chat_messages = ChatMessage.get_recieved_messages(self.request.user) #filter recieved messages related with the user
+            unread_messages_count  = ChatMessage.unread_messages(  self.request.user).count()
             company_bank_accounts = CompanyBankAccount.objects.filter(company=company)
             account_form = CompanyBankAccountForm()
 
-            context = {'company':company,'staff_users':staff_users,'solution_form':sol_form,
-                        'solutions':solutions,'event_form':event_form,'events':events, 
+            context = {'company':company,'staff_users':staff_users,'solution_form':sol_form,'solutions':solutions,
+                        'event_form':event_form,'events':events, 'chat_messages': chat_messages, 'unread_messages_count':unread_messages_count,
                         'banks':banks, 'company_bank_accounts': company_bank_accounts, 'account_form':account_form}
+            if "active_tab" in self.kwargs:#to activate a specific tab while opening the company profile, first used for message (inbox tab)
+                context ['active_tab'] = self.kwargs['active_tab']
+                   
             return render(self.request,'admin/company/company_profile_detail.html',context)
         except ObjectDoesNotExist:
             return redirect("admin:create_company_profile")
@@ -383,4 +393,56 @@ class DeleteCompanyBankAccount(LoginRequiredMixin, View):
         else:
             messages.warning(self.request, "Nothing selected!")
             return redirect(redirect_url)
+
+
+
+############## newly added, delete this commet after everything has worked right
+
+class MnfcCompanyByMainCategory(View):
+    def get(self,*args,**kwargs):
+        companies = Company.objects.filter(company_type="manufacturer")
+        company_list = []
+        context = {}
+        if self.kwargs['option'] == "Beverage":
+            for company in companies:
+                if company.product_category.category_name.category_type == "Beverage":
+                    company_list.append(company)
+        elif self.kwargs['option'] == "Food":
+            for company in companies:
+                if company.product_category.category_name.category_type == "Food":
+                    company_list.append(company)
+        elif self.kwargs['option'] == "Pharmaceuticals":
+            for company in companies:
+                if company.product_category.category_name.category_type == "Pharmaceuticals":
+                    company_list.append(company)
+        elif self.kwargs['option'] == "all":
+            for company in companies:
+                company_list.append(company)
+        context['companies'] = company_list
+        context['count'] = len(company_list)
+        return render(self.request,"frontpages/company/company_list.html",context)
+
+class SupCompanyByMainCategory(View):
+    def get(self,*args,**kwargs):
+        companies = Company.objects.filter(company_type="supplier")
+        company_list = []
+        context = {}
+        if self.kwargs['option'] == "Beverage":
+            for company in companies:
+                if company.product_category.category_name.category_type == "Beverage":
+                    company_list.append(company)
+        elif self.kwargs['option'] == "Food":
+            for company in companies:
+                if company.product_category.category_name.category_type == "Food":
+                    company_list.append(company)
+        elif self.kwargs['option'] == "Pharmaceuticals":
+            for company in companies:
+                if company.product_category.category_name.category_type == "Pharmaceuticals":
+                    company_list.append(company)
+        elif self.kwargs['option'] == "all":
+            for company in companies:
+                company_list.append(company)
+        context['companies'] = company_list
+        context['count'] = len(company_list)
+        return render(self.request,"frontpages/company/company_list.html",context)
 

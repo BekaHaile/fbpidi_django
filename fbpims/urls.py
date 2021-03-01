@@ -23,22 +23,39 @@ from django.urls import path,include,re_path
 from admin_site.admin import admin_site
 
 from accounts.views import activate
+from core.views import IndexView, ProfileView
 
 urlpatterns = [
-    # admin page urls
-    path("admin/",admin_site.urls),
     
-    # frontpage urls 
-    path("",include("core.urls")),
-    path("client/", include("core.api.api_urls")), #urls for the mobile view
-    
+   
     path('activate/<uidb64>/<token>/',activate, name='activate'),
     # third party app urls
     path('summernote/', include('django_summernote.urls')),
     re_path(r'^i18n/', include('django.conf.urls.i18n')),
 
+
+
+    ### web urls
+    path("", include('core.urls') ), #has index url and other non-app related templates
+    path("mydash/",ProfileView.as_view(),name="mydash"),
+
+    
+    path("admin/",admin_site.urls),# admin page urls
+    path("accounts/",include("accounts.urls")), 
+    path("chat/", include('chat.urls')),
     path("collaborations/", include('collaborations.urls')),
-    path('api/auth/oauth/', include('rest_framework_social_oauth2.urls')), ###
+    path('company/', include('company.urls')),
+    path('product/', include('product.urls')),
+    
+    
+    ### api urls
+    path('api/auth/oauth/', include('rest_framework_social_oauth2.urls')), ### for social auth
+    path("api/", include("core.api.api_urls")), #urls for the mobile view
+    path("api/accounts/", include("accounts.api.api_urls") ),# api login, logout ...
+    path("api/collaborations/", include("collaborations.api.api_urls")),
+    path('api/company/', include('company.api.api_urls')),
+    path('api/product/', include('product.api.api_urls')),
+    
     
     
     

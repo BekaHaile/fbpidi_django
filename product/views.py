@@ -350,3 +350,56 @@ class CheckoutView(LoginRequiredMixin,View):
             order.save()
             return redirect("")
 
+################### newly added , delete this comment
+class ProductByCategoryView(View):
+    def get(self,*args,**kwargs):
+        products = Product.objects.filter(category=self.kwargs['cat_id'])
+        context = {'products':products,'count':products.count()}
+        return render(self.request,"frontpages/product/product_category.html",context)
+
+
+class ProductByMainCategory(View):
+    def get(self,*args,**kwargs):
+        products = Product.objects.all()
+        product_list = []
+        context = {}
+        if self.kwargs['option'] == "Beverage":
+            for product in products:
+                if product.category.category_name.category_type == "Beverage":
+                    product_list.append(product)
+        elif self.kwargs['option'] == "Food":
+            for product in products:
+                if product.category.category_name.category_type == "Food":
+                    product_list.append(product)
+        elif self.kwargs['option'] == "Pharmaceuticals":
+            for product in products:
+                if product.category.category_name.category_type == "Pharmaceuticals":
+                    product_list.append(product)
+        elif self.kwargs['option'] == "all":
+            for product in products:
+                product_list.append(product)
+        context['products'] = product_list
+        context['count'] = len(product_list)
+        return render(self.request,"frontpages/product/product_category.html",context)
+
+class ProductDetailView(View):
+    def get(self,*args,**kwargs):
+        try:
+            form = ReviewForm()
+            product = Product.objects.get(id=self.kwargs['id'])
+            reviews = Review.objects.filter(product=product)
+            images = ProductImage.objects.filter(product=product)
+            context = {'product':product,'images':images,'form':form,'reviews':reviews}
+            return render(self.request,'frontpages/product/product_detail.html',context)
+        except ObjectDoesNotExist:
+            return redirect("index")
+    
+    def post(self, *args,**kwargs):
+        form = ReviewForm(self.request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = Product.objects.get(id=self.kwargs['id'])
+            review.save()
+            return redirect('product_detail',id=self.kwargs['id'])
+        else:
+            return redirect("product_detail",id=self.kwargs['id'])

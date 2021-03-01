@@ -170,6 +170,52 @@ class ApiCheckout(APIView):
         order.save()
         return Response(data = {'error':False,'invoice_code':order.invoice.code, 'message':"Successfull"})
 
+######### newly added from core.api.api_views
+class ApiProductByCategoryView(APIView):
+     def get(self, request):
+         products = Product.objects.filter(category = request.data['category_id'])
+         return Response(
+             data ={'count': products.count(),
+                 'products': ProductInfoSerializer(products, many = True).data
+               },
+            status = status.HTTP_200_OK
+         )
+
+
+class ApiProductDetailView(APIView):
+    def get(self, request):
+        try:
+            product = get_object_or_404(Product, id = request.data['id'])
+            return Response( data = {'error':False, 'product':ProducteFullSerializer(product ).data},)
+        except Http404:
+            return Response(data = {'error': True, 'message':'Product Not Found!'})
+
+
+class ApiProductByMainCategory(APIView):
+    def get(self, request):
+        category= request.query_params['category']
+        products = []
+        if category == "all":
+            products=Product.objects.all()
+        else:
+            products = Product.objects.filter(category__category_name__category_type = category)
+        return Response( data = { 'error':False, 'count':len(products), 
+                                'products': ProductInfoSerializer(products, many = True).data},
+                                 status = status.HTTP_200_OK
+                        )
+
+#client/comp-by-main-category/
+class ApiCompanyByMainCategoryList(APIView):   
+    #  request.data['company_type'] should be = manufacturer or supplier, request[product_category = "Beverage", "Food", "Pharmaceuticals", "all"]
+    def get(self,request): 
+        product_category = request.query_params['product_category']
+        companies = Company.objects.filter(company_type= request.query_params['company_type']) #all companies with 
+        if product_category != "all": # if it is "Beverage" or "Food" or "Pharmaceuticals"
+            companies = companies.filter(product_category__category_name__category_type = product_category)
+        return Response(
+            data = {'error':False, 'count' : companies.count(), 'companies': CompanyInfoSerializer(companies, many =True).data},
+            status= status.HTTP_200_OK)
+
 
 
 
