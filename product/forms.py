@@ -54,8 +54,8 @@ class ProductCreationForm(forms.ModelForm):
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Product Name(English)'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Product Name(Amharic)'}),
             # 'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-            'description':forms.Textarea(attrs={'class':'summernote'}),
-            'description_am':forms.Textarea(attrs={'class':'summernote'}),
+            'description':forms.Textarea(attrs={'class':'summernote','required':'False'}),
+            'description_am':forms.Textarea(attrs={'class':'summernote','required':'False'}),
             'image':forms.FileInput(attrs={'class':"form-control form-input-styled"})
         } 
 

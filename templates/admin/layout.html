@@ -116,8 +116,10 @@
 					<div class="card-body">
 						<div class="media">
 							<div class="mr-3">
-								<a href="#"><img src="/static/admin/global_assets/images/demo/users/face11.jpg"
-										width="38" height="38" class="rounded-circle" alt=""></a>
+								<a href="#">{%if user.profile_image != ""%}
+									<!-- /static/admin/global_assets/images/demo/users/face11.jpg -->
+									<img src="{{user.profile_image.url}}" class="rounded-circle mr-2" height="34" alt="">
+									{%endif%}</a>
 							</div>
 
 							<div class="media-body">

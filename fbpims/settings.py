@@ -270,7 +270,8 @@ AUTHENTICATION_BACKENDS = (
 
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
     
-    'django.contrib.auth.backends.ModelBackend',
+    # 'django.contrib.auth.backends.ModelBackend',
+    'accounts.backends.FbpidiAuthBackend',
 )
 
 for key in ['GOOGLE_OAUTH2_KEY',
