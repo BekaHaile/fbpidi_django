@@ -7,7 +7,9 @@ from product.models import Product
 from admin_site.models import Category,SubCategory
 from accounts.models import User
 import datetime
+from chat.models import ChatMessage, ChatGroup
 import os
+
 register = template.Library()
 
 
@@ -62,6 +64,11 @@ def change_end_date(end_date):
             return end_date 
 
 image_formats = ['jpg',]
+
+@register.simple_tag
+def count_unread_messages(user):
+    return ChatMessage.count_unread_message(user)
+
 
 @register.simple_tag()
 def file_type( file_url):

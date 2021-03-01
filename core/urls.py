@@ -1,26 +1,27 @@
 from django.urls import path,include
 from django.views.generic import TemplateView
 
-from core.views import (IndexView,ProfileView,ProductDetailView,ProductByCategoryView,
-                    ProductByMainCategory,MnfcCompanyByMainCategory,SupCompanyByMainCategory )
+from core.views import (IndexView,ProfileView)
 from accounts.views import CustomerSignUpView
 
-from product.views import AddToCartView,CartSummary,DecrementFromCart,CheckoutView
+# from product.views import AddToCartView,CartSummary,DecrementFromCart,CheckoutView
 # busines-meditation/,tips/,orders
 urlpatterns = [
     path("",IndexView.as_view(),name='index'),
     
-    path("product-detail/<id>", ProductDetailView.as_view(),name="product_detail"),
-    path("product-by-category/<cat_id>/",ProductByCategoryView.as_view(),name="product_category"),
-    path("product-by-main-category/<option>/",ProductByMainCategory.as_view(),name="product_category_main"),
-    path("man_comp-by-main-category/<option>/",MnfcCompanyByMainCategory.as_view(),name="manufac_category_main"),
-    path("sup_comp-by-main-category/<option>/",SupCompanyByMainCategory.as_view(),name="suplier_category_main"),
-    path("add-to-cart/<id>/",AddToCartView.as_view(),name="add_to_cart"),
-    path("cart_summary/",CartSummary.as_view(),name="cart_summary"),
-    path("decrement_cart/<id>/",DecrementFromCart.as_view(),name="decrement_cart"),
-    path("checkout/",CheckoutView.as_view(),name="checkout"),
-    path("mydash/",ProfileView.as_view(),name="mydash"),
-    path("", include("accounts.urls")),
+    # path("product-detail/<id>", ProductDetailView.as_view(),name="product_detail"),
+    # path("product-by-category/<cat_id>/",ProductByCategoryView.as_view(),name="product_category"),
+    # path("product-by-main-category/<option>/",ProductByMainCategory.as_view(),name="product_category_main"),
+    
+    # path("man_comp-by-main-category/<option>/",MnfcCompanyByMainCategory.as_view(),name="manufac_category_main"),
+    # path("sup_comp-by-main-category/<option>/",SupCompanyByMainCategory.as_view(),name="suplier_category_main"),
+    
+    # path("add-to-cart/<id>/",AddToCartView.as_view(),name="add_to_cart"),
+    # path("cart_summary/",CartSummary.as_view(),name="cart_summary"),
+    # path("decrement_cart/<id>/",DecrementFromCart.as_view(),name="decrement_cart"),
+    # path("checkout/",CheckoutView.as_view(),name="checkout"),
+    # path("mydash/",ProfileView.as_view(),name="mydash"),
+  
 
 
     # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
@@ -28,12 +29,13 @@ urlpatterns = [
     
     # path("vacancy-list/",TemplateView.as_view(template_name="frontpages/vacancy_list.html"),name="tips"),
     
-    path("accounts/",include("django.contrib.auth.urls")), 
+    # path("accounts/",include("django.contrib.auth.urls")), 
+    # path("chat/", include('chat.urls')),
     
     path("test/",TemplateView.as_view(template_name="frontpages/date_piker.html"),name="Test"),
     path("setting/",TemplateView.as_view(template_name="frontpages/settings.html"),name="setting"),
     # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
-    path("mydash/",ProfileView.as_view(),name="mydash"), 
+
     path("forum/",TemplateView.as_view(template_name="frontpages/forums/forms.html"),name="forum"),
     path("Job-detail/",TemplateView.as_view(template_name="admin/pages/job_detail.html"),name="Job_detail"),
     #path("Job-form/",TemplateView.as_view(template_name="admin/pages/job_form.html"),name="Job_form"),
