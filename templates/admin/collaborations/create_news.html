@@ -59,10 +59,14 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="images">Add New Images : </label>
+                        <label class="col-form-label col-lg-3">Add New Images:</label>
                         <div class="col-lg-9">
-                            <input type="file" id="images" name="images" multiple><br><br>
+                            <div class="uniform-uploader">
+                                <input type="file" id="images" name="images" class="form-input-styled" data-fouc="" multiple/>
+                                <span class="filename" style="user-select: none;">No file selected</span>
+                                <span class="action btn bg-warning" style="user-select: none;">Choose File</span>
                             </div>
+                        </div>
                     </div>
         
                    		
@@ -155,55 +159,38 @@
 								</div>
                             </div>
 
-                            <div class="form-group ">
-                                <div style="width: 100%;">
-                                    <div class="col-lg-9" style="width: 95%; display: inline-block;">
-                                        <label class="col-form-label col-lg-8">News Catagory  *</label>
-                                        <select required name="catagory"  class="form-control form-control-uniform" >
-                                            {% for catagory in form.NEWS_CATAGORY %}
-                                                <option  value="{{catagory.0}}">{{ catagory.0 }}</option>
-                                                <div class="list-icons" style="width: 3%; display: inline-block;" >
-                                                    <div class="dropdown">
-                                                        <a href="#" class="list-icons-item" data-toggle="dropdown">	</a>
-                                                    </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-lg-3">News Category *</label>
+                                <div class="col-lg-9">
+                                    <select required name="catagory"  class="form-control form-control-uniform" >
+                                        {% for catagory in form.NEWS_CATAGORY %}
+                                            <option  value="{{catagory.0}}">{{ catagory.0 }}</option>
+                                            <div class="list-icons" style="width: 3%; display: inline-block;" >
+                                                <div class="dropdown">
+                                                    <a href="#" class="list-icons-item" data-toggle="dropdown">	</a>
                                                 </div>
-                                            {%endfor%}
-                                        </select>
-                                    </div>
+                                            </div>
+                                        {%endfor%}
+                                    </select>
                                 </div>
                             </div>
 
-
-                            <!-- <div class="form-group row">
-                                <label class="col-form-label col-lg-2">Select Images</label>
-                                <div class="col-lg-10">
-                                    <div>
-                                        <span class="filename" style="user-select: none;"><input type="file" id="images" class="form-control form-input-styled"  name="images" multiple /></span>
-                                        <span class="action btn bg-warning" style="user-select: none;">Choose File
-                                    </span>
-                                    </div>
-                                    
-                                </div>
-                            </div> -->
-
                             <div class="form-group row">
-                                <label class="col-form-label col-lg-2"><b>Select Images:</b></label>
-                                <div class="col-lg-8">                                
-                               <div class="row">
-                                        <input  style = "display: inline; margin: 0px;"  type="file" id="images" class="form-control form-input-styled"  name="images" multiple/> 
-                                    </span>
+                                <label class="col-form-label col-lg-3">Select Images:</label>
+                                <div class="col-lg-9">
+                                    <div class="uniform-uploader">
+                                        <input type="file" id="images" name="images" class="form-input-styled" data-fouc="" multiple/>
+                                        <span class="filename" style="user-select: none;">No file selected</span>
+                                        <span class="action btn bg-warning" style="user-select: none;">Choose File</span>
                                     </div>
                                 </div>
-                                <span class="action btn bg-warning" style = "display: inline" >Choose File
-                                </span>      
                             </div>
                             
 
 						</fieldset>
 
 						<div class="text-right">
-							<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-								class="btn btn-primary rounded-round">Create News </button>
+							<button style="padding-left: 10%; padding-right: 10%;" type="submit" class="btn btn-primary rounded-round">Create News </button>
 						</div>
 					</form>
 				</div>
