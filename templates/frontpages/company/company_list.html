@@ -117,7 +117,7 @@
 																<a href="{% url 'bs_2' %}">{%print_translated company.company_type company.company_type_am LANGUAGE_CODE%}</a>
 															</div>
 															<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.company_name company.company_name_am LANGUAGE_CODE%}<i class="ion-checkmark-circled text-success ml-1"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Verified"></i></h4></a>
-															<p class="">{%print_translated company.detail company.detail_am LANGUAGE_CODE %}</p>
+															<p class="">{%print_translated company.detail|truncatechars:20 company.detail_am|truncatechars:20 LANGUAGE_CODE %}</p>
 															<div class="item-card2-desc mt-3">
 																<div class="item-card2-desc-cost row">
 																	<div class="col-md-6">

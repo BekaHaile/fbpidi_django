@@ -245,7 +245,10 @@
     {%comment%}    {% if has_permission %} {%endcomment%}
         <li class="nav-item dropdown dropdown-user">
             <a href="#" class="navbar-nav-link d-flex align-items-center dropdown-toggle" data-toggle="dropdown">
-                <img src="/static/admin/global_assets/images/demo/users/face11.jpg" class="rounded-circle mr-2" height="34" alt="">
+                {%if user.profile_image != ""%}
+                <!-- /static/admin/global_assets/images/demo/users/face11.jpg -->
+                <img src="{{user.profile_image.url}}" class="rounded-circle mr-2" height="34" alt="">
+                {%endif%}
                 <span>{% firstof user.get_short_name user.get_username %}</span>
             </a>
 
