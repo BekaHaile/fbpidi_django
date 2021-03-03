@@ -13,7 +13,11 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class="mb-2"><span class="font-weight-semibold">{%print_translated event.title event.title_am LANGUAGE_CODE%}</span></h1>	
+									<h1 class="mb-2">
+										<span class="font-weight-semibold">
+											Event Detail
+										</span>
+									</h1>
 								</div>
 							</div>
 						</div>
@@ -21,9 +25,20 @@
 				</div><!-- /header-text -->
 				<div class="details-absolute">
 					<div class="d-sm-flex container">
-                        <div><h4 class="text-white d-inline-block mr-4 " class="text-white d-inline-block mt-2 mt-sm-0 fs-18" >Company Contact:</h4></div>
-						<div><a href="#" class="text-white d-inline-block mr-4 "><i class="icon icon-location-pin text-white mr-2"></i>{{event.company.location}}</a></div>
-						<div class="ml-auto"><a href="#" class="text-white d-inline-block mt-2 mt-sm-0 fs-18"><i class="icon icon-phone text-white mr-2 fs-14"></i>{{event.company.phone_number}}</a></div>
+                        <div><h4 class="text-white d-inline-block mr-4 mt-2 fs-18" >Company Contact:</h4></div>
+
+						<div>
+							<a href="#" class="text-white d-inline-block mr-4 ">
+								<i class="icon icon-location-pin text-white mr-2"></i>{{event.company.location}}
+							</a>
+						</div>
+
+						<div class="ml-auto">
+							<a href="#" class="text-white d-inline-block mt-2 mt-sm-0 fs-18">
+								<i class="icon icon-phone text-white mr-2 fs-14"></i>{{event.company.phone_number}}
+							</a>
+						</div>
+
 					</div>
 				</div>
 			</div>
