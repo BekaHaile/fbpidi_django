@@ -184,8 +184,13 @@
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="{% url 'admin:user_detail' option='my_profile' id=user.id %}" class="dropdown-item"><i class="icon-user-plus"></i> My profile</a>
                <a href="{{user|my_company_link}}" class="dropdown-item"><i class="icon-coins"></i> My Company</a>
-                <a href="/admin/view_company_profile/inbox/" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span id = "unread_messages" class="badge badge-pill bg-blue ml-auto">{{unread_messages_count}}</span></a>
-                <div class="dropdown-divider"></div>
+                {% if user.is_superuser %}
+                <a href="{% url 'admin:view_fbpidi_company' %}" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span id = "unread_messages" class="badge badge-pill bg-blue ml-auto">{{unread_messages_count}}</span></a>
+              
+                {%else%}
+               <a href="{% url 'admin:view_company_profile_active_tab' active_tab='inbox' %}" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span id = "unread_messages" class="badge badge-pill bg-blue ml-auto">{{unread_messages_count}}</span></a>
+               {%endif%}
+               <div class="dropdown-divider"></div>
                 <a href="{% url 'admin:password_change' %}" class="dropdown-item"><i class="icon-cog5"></i>Change Password</a>
                  <a href="{% url 'admin:logout' %}?next={%url 'admin:login'%}" class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
             </div>
@@ -310,76 +315,7 @@
 
     }
             
-        //  if message is from another user
-    //     if (message_obj.sender_name != username)
-    //     {  
-    //         li_item.className = "media";
-    //         img_div.className = "mr-3";
-
-    //         image_anchor.appendChild(image_item);
-    //         img_div.appendChild(image_anchor);
-
-    //         chat_div.appendChild(chat_area);
-    //         chat_div.appendChild(time_area);
-
-    //         li_item.appendChild(img_div);
-    //         li_item.appendChild(chat_div);
-            
-
-    //         document.querySelector('#main-chat-ul').appendChild(li_item);
-    //         scroll_down();
-    //     }
-
-
-    //     else{
-    //         li_item.className = "media media-chat-item-reverse";
-    //         img_div.className = "ml-3";
-
-    //         chat_div.appendChild(chat_area);
-    //         chat_div.appendChild(time_area);
-
-    //         image_anchor.appendChild(image_item);
-    //         img_div.appendChild(image_anchor);
-
-    //         chat_div.appendChild(chat_area);
-    //         chat_div.appendChild(time_area); 
-
-    //         li_item.appendChild(chat_div);
-    //         li_item.appendChild(img_div);
-           
-            
-    //         document.querySelector('#main-chat-ul').appendChild(li_item);
-    //         scroll_down();
-           
-    //     }
-
-    // }
      
-    // document.querySelector('#chat-message-input').focus();
-    
-    // document.querySelector('#chat-message-input').onkeyup = function(e) {
-    //     if (e.keyCode === 13) {  // enter, return
-    //         document.querySelector('#chat-message-submit').click();
-    //     }
-    // };
-
-    // document.querySelector('#chat-message-submit').onclick = function(e) {
-    //     const messageInputDom = document.querySelector('#chat-message-input');
-    //     const message = messageInputDom.value;
-    //    if (message == "" || message == null){
-    //        window.alert("No message to Send!");
-    //    }
-    //    else{
-    //                 chatSocket.send(JSON.stringify({
-    //                 'message': message,
-    //                 'command':'new_message',
-    //                 'from':username
-    //             }));
-    //             messageInputDom.value = '';
-    //         }
-    // };
-
-
 </script>
 
 

@@ -150,6 +150,7 @@
 										</div>
 									</div>
 										<h4 class="font-weight-semibold">{{research.description|safe|truncatewords:35}}</h4>
+										<a class="mr-2" href="/chat/with/{{research.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with research creator"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 										
 										<a href="{%url 'research_detail' id=research.id %}" class="btn btn-secondary btn-sm">Read More</a>
 									</div>

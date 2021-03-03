@@ -61,7 +61,7 @@
 											<li>
 												<span class="badgetext badge badge-pill badge-light mb-0 mt-1">
 												<a href="{%url 'admin:delete' model_name='ForumQuestion' id=forum.id%}" class = "btn btn-secondary btn-sm mt-4" onclick="return confirm('are you sure you want to delete this')"><i class="icon-trash"></i> </a>
-
+											
 												<a href="{%url 'forum_edit' id=forum.id%}" style = "padding:5px; margin-left: 10px;" class = "btn btn-secondary btn-sm mt-4"  >
 												<i class="icon-pencil" style="margin-right: 5px;" ></i> 
 											</a></span>
@@ -126,7 +126,9 @@
 
 
 										<h4 class="font-weight-semibold">{{forum.description|safe|truncatewords:30}}</h4>
-
+										{% if forum.user != user %}
+										<a class="mr2" href="/chat/with/{{forum.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with forum creator"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+										{% endif %}
 										<a href="{%url 'forum_detail' id=forum.id %}" class="btn btn-secondary btn-sm">Read More</a>
 									</div>
 								</div>

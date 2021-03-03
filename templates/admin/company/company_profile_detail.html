@@ -116,6 +116,7 @@
 												<a href="#inbox" class="nav-link" data-toggle="tab">
 											{% endif %}
 											<i class="icon-envelop2"></i>	
+											{% count_unread_messages user as unread_messages_count%}
 											Inbox
 											{% if unread_messages_count == 0 %}
 											<span class="badge bg-success badge-pill ml-auto">No new Message</span>

@@ -94,7 +94,9 @@
 														<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>{{blog.countComment}}</a>
 													</div>
 												</div>
-
+												{% if user !=  blog.user %}
+												<a class="mr2" style="margin-right: 10px; margin-left: 5px;" href="/chat/with/{{blog.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with blogger"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+												{% endif %}
 												<a href="{% url 'blog_details' id=blog.id %}" class="btn btn-secondary btn-sm mt-4">Read More</a>
 											</div>
 										</div>

@@ -1,7 +1,8 @@
  
-{%extends 'admin/base_site.html'%}
+{%extends 'frontpages/layout.html'%}
 {%load i18n%}
 {%load core_template_tags%}
+{% load admin_template_tags%}
 
 {% block extrastyle %}
 <!-- Theme JS files -->
@@ -125,9 +126,9 @@
                                                 <ul class="media-list media-chat-scrollable mb-3">
                                                     {% for message_obj in recieved_grouped_messages %} 
                                                 
-                                                        <li class="media content-divider justify-content-center text-muted mx-0">
+                                                        <!-- <li class="media content-divider justify-content-center text-muted mx-0">
                                                             <span class="px-2">Saturday, Feb 12</span>
-                                                        </li>
+                                                        </li> -->
                         
                                                         <li class="media">
                                                             <div class="mr-3"><a href="{{message_obj.sender_image}}"><img src="{{message_obj.sender_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
@@ -218,7 +219,10 @@
 		</section>
 		<!--/Add Listings-->
 
-       
+        <script src="/static/admin/global_assets/js/demo_pages/reconnecting-websocket.js"></script>
+        <script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
+	    <script src="/static/admin/global_assets/js/plugins/ui/perfect_scrollbar.min.js"></script> 
+
         <script >
   
             const group_name = JSON.parse(document.getElementById('g_name').textContent);
@@ -245,9 +249,10 @@
             chatSocket.onmessage = function(e) { 
                 const data = JSON.parse(e.data);
                 var messages = data['message']
+
                 for (i in messages){
                     if (messages[i].sender_name != username){
-                      document.getElementById("main-card-title").innerHTML = "Your Chats with : <b>"+messages[i].sender_name+"<b>"
+                      document.getElementById("main-card-title").innerHTML = "Your latest chats"
                         break;
                     }
                 }

@@ -88,21 +88,35 @@ class ChatConsumer(WebsocketConsumer):
            
         }))
 
+
 class CheckUnreadMessages(WebsocketConsumer):
+    '''
+    This class communicates with frontpages/layout.html  script at the bottom
+    '''
     def connect(self):
-        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$)))(((((",self.scope['user'] )
+        # print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ tring to fetch unread messages for ",self.scope['user'] )
+        
         self.user = self.scope['user']
         self.accept()
+        
+            
+        
+        
 
     def receive(self, text_data):
         data = json.loads(text_data)
         command = data['command']
-        unread_messages = get_unread_grouped_messages(self.user)
-        self.send_message(unread_messages)
+        if not self.user.is_authenticated:
+            self.send(text_data = json.dumps({'unread_messages':'AnonymousUser'}))
+        else:
+            unread_messages = get_unread_grouped_messages(self.user)
+            self.send_message(unread_messages)
     
     def send_message(self, message):
         num = ChatMessage.count_unread_message(self.user)
         self.send(text_data = json.dumps({'num':num, 'unread_messages':message}))    
 
 
-        
+    def disconnect(self, close_code):
+        # Leave room group
+        print("Closed connection because anonymus user", close_code )

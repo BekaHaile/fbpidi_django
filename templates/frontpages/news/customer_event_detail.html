@@ -482,9 +482,10 @@
 							
 								<div class="card-footer">
 									<div class="">
-										<a href="#" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> Chat</a>
-										<a href="#" class="btn btn-secondary mt-1 mb-1" data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> Contact Me</a>
-										<a href="#" class="btn btn-light mt-1 mb-1"><i class="fa fa-eye"></i>All Listings</a>
+										
+										<a href="{% url 'chat_with' reciever_name=event.get_company_admin.username%}" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> Chat</a>
+										<!-- <a href="#" class="btn btn-secondary mt-1 mb-1" data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> Contact Me</a> -->
+										<!-- <a href="#" class="btn btn-light mt-1 mb-1"><i class="fa fa-eye"></i>All Listings</a> -->
 									</div>
 								</div>
 							</div>
