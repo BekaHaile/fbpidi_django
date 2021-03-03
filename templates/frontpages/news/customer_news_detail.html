@@ -13,8 +13,16 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class="mb-2"><span class="font-weight-semibold">{%print_translated news.title news.title_am LANGUAGE_CODE%}</span></h1>
-									
+									<h1 class="mb-2">
+										<span class="font-weight-semibold">
+											News Detail
+										</span>
+									</h1>
+									<ol class="breadcrumb" style="display: inline-flex;">
+										<li class="breadcrumb-item"><a href="">Home</a></li>
+										<li class="breadcrumb-item"><a href="/collaborations/customer_news_list/">News</a></li>
+										<li class="breadcrumb-item active text-white" aria-current="page">News Details</li>
+									</ol>
 								</div>
 							</div>
 						</div>
@@ -22,8 +30,18 @@
 				</div><!-- /header-text -->
 				<div class="details-absolute">
 					<div class="d-sm-flex container">
-						<div><a href="#" class="text-white d-inline-block mr-4 "><i class="icon icon-location-pin text-white mr-2"></i>{{news.get_company.location}}</a></div>
-						<div class="ml-auto"><a href="#" class="text-white d-inline-block mt-2 mt-sm-0 fs-18"><i class="icon icon-phone text-white mr-2 fs-14"></i>{{news.get_company.phone_number}}</a></div>
+						<div>
+							<a href="#" class="text-white d-inline-block mr-4 ">
+								<i class="icon icon-location-pin text-white mr-2"></i>{{news.get_company.location}}
+							</a>
+						</div>
+
+						<div class="ml-auto">
+							<a href="#" class="text-white d-inline-block mt-2 mt-sm-0 fs-18">
+								<i class="icon icon-phone text-white mr-2 fs-14"></i>{{news.get_company.phone_number}}
+							</a>
+						</div>
+
 					</div>
 				</div>
 			</div>
