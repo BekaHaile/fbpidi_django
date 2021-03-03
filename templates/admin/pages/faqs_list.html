@@ -59,10 +59,10 @@
 				{%for faq in faqs%}
 				<tr>
 					<td>{{faq.status}}</td>
-					<td>{{faq.questions_am|safe|truncatewords:20}}</td>
-        			<td>{{faq.questions|safe|truncatewords:20}}</td>
-        			<td>{{faq.answers_am|safe|truncatewords:20}}</td>
-        			<td>{{faq.answers|safe|truncatewords:20}}</td>
+					<td>{{faq.questions_am|safe|truncatechars_html:20}}</td>
+        			<td>{{faq.questions|safe|truncatechars_html:20}}</td>
+        			<td>{{faq.answers_am|safe|truncatechars_html:20}}</td>
+        			<td>{{faq.answers|safe|truncatechars_html:20}}</td>
 					
 					<td class="text-center">
 						<div class="list-icons">

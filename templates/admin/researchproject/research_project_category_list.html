@@ -49,10 +49,10 @@
 				{%for researchprojectcategory in researchprojectcategorys%}
 				<tr>
 					
-					<td>{{researchprojectcategory.cateoryname|truncatewords:20}}</td>
-					<td>{{researchprojectcategory.cateoryname_am|truncatewords:20}}</td>
+					<td>{{researchprojectcategory.cateoryname|truncatechars_html:20}}</td>
+					<td>{{researchprojectcategory.cateoryname_am|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.user}}</td>
-					<td>{{researchprojectcategory.detail|truncatewords:20}}</td>
+					<td>{{researchprojectcategory.detail|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.timestamp}}</td>
 					
 					<td class="text-center">

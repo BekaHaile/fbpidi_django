@@ -51,7 +51,7 @@
 											
 											<li class="list-group-item border-bottom-0">
 												<a href="{%url 'forum_detail' id=forum.id %}" class="text-dark">
-													 {{forum.title|safe|truncatewords:20}}
+													 {{forum.title|safe|truncatechars_html:20}}
 													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">{{forum.countComment}}</span>
 												</a>
 

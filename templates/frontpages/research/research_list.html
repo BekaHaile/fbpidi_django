@@ -91,7 +91,7 @@
 													
 													<li class="list-group-item border-bottom-0">
 														<a href="{%url 'research_detail' id=forum.id %}" class="text-dark">
-															 {{forum.title|safe|truncatewords:20}}
+															 {{forum.title|safe|truncatechars_html:20}}
 															
 														</a>
 
@@ -151,7 +151,7 @@
 											
 										</div>
 									</div>
-										<h4 class="font-weight-semibold">{{research.description|safe|truncatewords:35}}</h4>
+										<h4 class="font-weight-semibold">{{research.description|safe|truncatechars_html:35}}</h4>
 										
 										<a href="{%url 'research_detail' id=research.id %}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
 									</div>

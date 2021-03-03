@@ -136,7 +136,7 @@
 																<a href="/collaborations/customer_news_detail/{{news.id}}/" class="text-dark" style="margin-bottom: 3px;">
 																	<h4 class="font-weight-semibold mt-1 mb-1">{% print_translated news.title news.title_am LANGUAGE_CODE %}</h4>
 																</a>
-																<!--<p >{{news.description|truncatewords:12|safe}}</p>-->
+																<!--<p >{{news.description|truncatechars_html:12|safe}}</p>-->
 
 																 <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Posted at : </span> {{news.timestamp}} </p>
 															</div>

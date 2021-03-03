@@ -36,7 +36,7 @@ from collaborations.Views.announcement import(
                         AnnouncementDetailAdmin,)
 
 from collaborations.Views.blog import(
-                        AdminBlogList,BlogView,
+                        AdminBlogList,BlogView,AdminBlogComments,
                         CreatBlog,ListBlogCommentAdmin,BlogCommentDetailAdmin)
 
 from collaborations.Views.research import(
@@ -134,7 +134,8 @@ class CustomAdminSite(admin.AdminSite):
             path("blog-list/",wrap(AdminBlogList.as_view()),name="admin_Blogs"),
             path("blog-detail/<model_name>/<id>/",wrap(BlogView.as_view()),name="blog_detail"),
             path("blog-form/",wrap(CreatBlog.as_view()),name="create_blog"),
-            path("blogComment-list/",wrap(ListBlogCommentAdmin.as_view()),name="blogComment_list"),            
+            path("blogComment-list/",wrap(ListBlogCommentAdmin.as_view()),name="blogComment_list"),
+            path("blogComment-list/<id>",wrap(AdminBlogComments.as_view()),name="blogComment_list_id"), 
             path("blogComment-detail/<model_name>/<id>/",wrap(BlogCommentDetailAdmin.as_view()),name="blogComment_detail"),
             
             path("signup/",CompanyAdminSignUpView.as_view(),name="signup"), 

@@ -91,7 +91,7 @@
 											
 											<li class="list-group-item border-bottom-0">
 												<a href="{%url 'research_detail' id=forum.id %}" class="text-dark">
-													 {{forum.title|safe|truncatewords:20}}
+													 {{forum.title|safe|truncatechars_html:20}}
 													
 												</a>
 

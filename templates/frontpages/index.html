@@ -229,7 +229,7 @@
 									<p class="pb-0 pt-0 mb-2 mt-2"><i class="fa fa-clock-o mr-2"></i>10am - 9pm<a> <span
 												class="badge badge-success ml-2 fs-13">Open Now</span></a></p>
 								</div>
-								<!-- <p class="">{{product.description|truncatewords:4}}</p> -->
+								<!-- <p class="">{{product.description|truncatechars_html:4}}</p> -->
 							</div>
 						</div>
 					</div>
@@ -365,7 +365,7 @@
 													class="icon icon-phone text-muted mr-1"></i>{{company.phone_number}}</a>
 										</li>
 									</ul>
-									<!-- <p class="mb-0">{{company.detail|safe|truncatewords:4}}</p> -->
+									<!-- <p class="mb-0">{{company.detail|safe|truncatechars_html:4}}</p> -->
 								</div>
 							</div>
 							<div class="card-footer">
@@ -562,7 +562,7 @@
 											<!--class="icon icon-phone text-muted mr-1"></i>{{company.phone_number}}</a>-->
 								<!--</li>-->
 							<!--</ul>-->
-							<!--&lt;!&ndash; <p class="mb-0">{{company.detail|safe|truncatewords:4}}</p> &ndash;&gt;-->
+							<!--&lt;!&ndash; <p class="mb-0">{{company.detail|safe|truncatechars_html:4}}</p> &ndash;&gt;-->
 						<!--</div>-->
 					<!--</div>-->
 					<!--<div class="card-footer">-->
@@ -739,7 +739,7 @@
 													<div class="item-card8-desc">
 														<p class="text-muted mb-2">{{news.timestamp}}</p>
 														<h4 class="font-weight-semibold" >{% print_translated news.title news.title_am LANGUAGE_CODE %}</h4>
-														<p class="mb-0" class="text-muted mb-2">{% print_translated news.description|truncatewords:10 news.description_am|truncatewords:10 LANGUAGE_CODE %}</p>
+														<p class="mb-0" class="text-muted mb-2">{% print_translated news.description|truncatechars_html:10 news.description_am|truncatechars_html:10 LANGUAGE_CODE %}</p>
 													</div>
 												</div>
 												<div class="card-footer">

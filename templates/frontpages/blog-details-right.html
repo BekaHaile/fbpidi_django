@@ -51,13 +51,11 @@
 							<div class="card-body">
 								<div class="product-tags clearfix">
 									{%for tag in tags%}
-<<<<<<< HEAD
-									<ul class="list-unstyled mb-0">  
-										<li><a href="{%url 'search_blogtag' name=tag%}">{{ tag.title }}</a></li>
-=======
+
+
 									<ul class="list-unstyled mb-0">
 										<li><a href="{%url 'search_blogtag' name=tag%}">{{tag.title|safe}}</a></li>
->>>>>>> 9ccc8b7f377664a7f04b55a6a4f25f49436170a9
+
 										
 									</ul>
 									{%endfor%}

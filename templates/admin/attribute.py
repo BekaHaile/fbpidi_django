@@ -1,7 +1,10 @@
-	Company Address Attributes
+from django.db import models
+from django.conf import settings
+from admin_site.models import SubCategory as subcategory
+
+class CompanyAddressAttributes(models.Model):
 
 	region = models.CharField(max_length=2000, verbose_name="Rigion")
-
 	city_town = models.CharField(max_length=2000, verbose_name="City Town")
 	subcity_zone = models.CharField(max_length=2000, verbose_name="Subcity zone")
 	woreda = models.CharField(max_length=2000, verbose_name="Woreda")
@@ -17,24 +20,22 @@
 	googlelink = models.CharField(verbose_name="Google", max_length=255)
 
 
----------------------------------------
-Investment Company Attributes data dictionary
-
+class InvestmentCompanyAttributesDatadictionary(models.Model):
 
 	company	= models.ForeignKey(Company, on_delete=models.CASCADE)
 	owner_share	= models.IntegerField(default=0)
 	bank_share	= models.IntegerField(default=0)
 	capital_in_dollary	= models.IntegerField(default=0)
-	investment_license	= models.CharField(max_length=2000, verbose_name="investment license")
+	investment_license	= models.CharField(max_length=2000, verbose_name="Investment License")
 	issued_date	= models.DateTimeField(null=False)
 	sector	= models.CharField(max_length=2000, verbose_name="Sector")
-	product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
+	product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE) # the forenkey must change
 	project_type = models.CharField(verbose_name="Project Classification", max_length=2000)
 	site_location_name = models.CharField(verbose_name="Site location street name", max_length=2000)
 	distance_f_strt	= models.IntegerField(default=1)
 	land_acquisition = models.CharField(verbose_name="Land Acquisition", max_length=2000)
-	land_usage	= models.ForeignKey(Land Usaeg ID, on_delete=models.CASCADE)
-	state_of_project	=  models.ForeignKey(Project State ID, on_delete=models.CASCADE)
+	land_usage	= models.ForeignKey(LandUsage, on_delete=models.CASCADE)
+	state_of_project	=  models.ForeignKey(ProjectState, on_delete=models.CASCADE)
 	remaining_work	= models.TextField(verbose_name="Remaining Work To be done")
 	major_problems	= models.TextField(verbose_name="Major Problems")
 	operational_time =  models.DateTimeField(null=False)
@@ -43,8 +44,8 @@ Investment Company Attributes data dictionary
 	water_suply	= models.IntegerField(default=1)
 	product_quantity = models.TextField(verbose_name="Product Quantity")
 	cond_provided_for_wy = models.TextField(verbose_name="Special Conditions Provided for women and youth")
-	job_plan_recruited	= models.ForeignKey(Product, on_delete=models.CASCADE)
- 	education_stat	= models.ForeignKey(Product, on_delete=models.CASCADE)
+	job_plan_recruited	= models.ForeignKey(JobOpportunities, on_delete=models.CASCADE)
+ 	education_stat	= models.ForeignKey(EducationalStatus, on_delete=models.CASCADE)
 	target_market =	models.CharField(verbose_name="Market Destination", max_length=2000)
 	env_impac_ass_doc =	models.FileField(upload_to = "impact/", max_length=254, verbose_name="Environmental Impact assessment document",help_text="pdf, Max size 3MB", blank=True)
 	capital_utilization	= models.IntegerField(default=0)
@@ -52,9 +53,8 @@ Investment Company Attributes data dictionary
 	automation	= models.CharField(verbose_name="Automation", max_length=2000)
 	mode_of_project	= models.CharField(verbose_name="Mode of Project", max_length=2000)
 	facility_design	= models.CharField(verbose_name="Facility design", max_length=2000)
-
----------------------------------------
-Company Profile Form Attributes
+ 
+class Company(models.Model):
 
 	name = models.CharField(verbose_name="name", max_length=2000)
 	logo = models.FileField(upload_to = "Logo/", max_length=254, verbose_name="Logo of the company",help_text="pdf, Max size 3MB", blank=True)
@@ -62,12 +62,12 @@ Company Profile Form Attributes
 	ownership = models.CharField(verbose_name="Owned by", max_length=2000)
 	established_yr	= models.IntegerField(default=0)
 	address	= models.ForeignKey(address, on_delete=models.CASCADE) # address
-	contact_person	= models.ForeignKey(contact_person, on_delete=models.CASCADE) # contact person
-	investment_capital	= models.ForeignKey(Product, on_delete=models.CASCADE) # investment Capital
+	contact_person	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # contact person
+	investment_capital	= models.ForeignKey(InvestmentCapital, on_delete=models.CASCADE) # investment Capital
 	category	= models.ForeignKey(category, on_delete=models.CASCADE) # category
-	total_employees	= models.ForeignKey(total_employees, on_delete=models.CASCADE)
-	created_jobs	= models.ForeignKey(created_jobs, on_delete=models.CASCADE)
-	employee_status	= models.ForeignKey(employee_status, on_delete=models.CASCADE)
+	total_employees	= models.IntegerField(default=0)
+	created_jobs	= models.ForeignKey(JobOpportunities, on_delete=models.CASCADE)
+	employee_status	= models.ForeignKey(Employees, on_delete=models.CASCADE)
 	expansion_plan	= models.TextField(verbose_name="Expansion Plan")
 	certificate	= models.FileField(upload_to = "certificate/", max_length=254, verbose_name="certificate",help_text="pdf, Max size 3MB", blank=True)
 	trade_license	= models.FileField(upload_to = "Trade_License/", max_length=254, verbose_name="your Trade License",help_text="pdf, Max size 3MB", blank=True)
@@ -75,7 +75,7 @@ Company Profile Form Attributes
 	orgn_strct	= models.FileField(upload_to = "Organizational_Structure/", max_length=254, verbose_name="Organizational Structure",help_text="pdf, Max size 3MB", blank=True)
 	femele_hign_posn	= models.IntegerField(default=0)
 	female_med_posn	= models.IntegerField(default=0)
-	src_amnt_inputs	= models.ForeignKey(src_amnt_inputs, on_delete=models.CASCADE)
+	src_amnt_inputs	= models.ForeignKey(SourceAmountIputs, on_delete=models.CASCADE)
 	laboratory	= models.CharField(verbose_name="Laboratory", max_length=2000)
 	lab_test_analysis	= models.TextField(verbose_name="Laboratory test analysis")
 	lab_equipment	= models.TextField(verbose_name="Laboratory equipment")
@@ -84,12 +84,12 @@ Company Profile Form Attributes
 	conducted_research	= models.TextField(verbose_name="Conducted research and development")
 	new_product_developed	= models.CharField(verbose_name="New Product_Developed", max_length=2000) # under question
 	management_tools = models.CharField(verbose_name="Management Tools", max_length=2000)
-	market_destination	= models.ForeignKey(market_destination, on_delete=models.CASCADE)
-	target_market	= models.ForeignKey(target_market, on_delete=models.CASCADE)
+	market_destination	= models.ForeignKey(MarketTarget, on_delete=models.CASCADE)
+	target_market	= models.ForeignKey(MarketDestination, on_delete=models.CASCADE)
 	electric_power = models.BooleanField(null=False,default=False)
 	water_supply = models.BooleanField(null=False,default=False)
 	telecom	models.BooleanField(null=False,default=False)
-	power_consumption	= models.ForeignKey(power_consumption, on_delete=models.CASCADE)
+	power_consumption	= models.ForeignKey(PowerConsumption, on_delete=models.CASCADE)
 	marketing_department = models.BooleanField(null=False,default=False)
  	e_commerce	= models.BooleanField(null=False,default=False)
 	active_database =	models.BooleanField(null=False,default=False)
@@ -115,81 +115,90 @@ Company Profile Form Attributes
 	last_updated_date	= models.DateTimeField(auto_now_add=True)
 	expired	= models.BooleanField(null=False,default=False)
 
+class InvestmentCapital(models.Model):
 
----------------------------------------
-
-InvestmentCapitalData	
-
-machinery_cost	= models.IntegerField(null=False)
-building_cost	= models.IntegerField(null=False)
-working_capital	= models.IntegerField(null=False)
+	machinery_cost	= models.IntegerField(null=False)
+	building_cost	= models.IntegerField(null=False)
+	working_capital	= models.IntegerField(null=False)
  
-Source and amount of inputs			
+class SourceAmountIputs(models.Model):		
  
- 	import_company	= models.IntegerField(null=False)
-  	govt_suplied	= models.IntegerField(null=False)
-   	purchase_from_farmer	= models.IntegerField(null=False)
- 	purchase_from_union	= models.IntegerField(null=False)
+	import_company	= models.IntegerField(null=False)
+	govt_suplied	= models.IntegerField(null=False)
+	purchase_from_farmer	= models.IntegerField(null=False)
+	purchase_from_union	= models.IntegerField(null=False)
 
 
 
-Employees		
+class Employees(models.Model):
 
-employment_type	= models.CharField(verbose_name=" The Employee Type ", max_length=2000)	
-male	= models.IntegerField(null=False)	
-female	= models.IntegerField(null=False)	
-
-
-JobOpportunitiesCreated	
-
-JobType = [ ('Permanent','Permanent'),('Temporary','Temporary'),
-Year	= models.IntegerField(null=False)	
-job_type	catagory = models.TextField(verbose_name="News Catagory, the choices are ", choices=JobType)
-male	= models.IntegerField(null=False)	
-female	= models.IntegerField(null=False)	
-amount_of_ob	= models.IntegerField(null=False)	
-company	= models.ForeignKey(Company, on_delete=models.CASCADE)
+	TYPE = [('Permanent','Permanent'),('Temporary','Temporary'),('Foreign','Foreign')]
+	employment_type	= models.CharField(verbose_name=" The Employee Type ", max_length=2000,choices=TYPE)	
+	male	= models.IntegerField(null=False)	
+	female	= models.IntegerField(null=False)	
 
 
-EducationalStatus		
+class JobOpportunities(models.Model):
+
+	JobType = [ ('Permanent','Permanent'),('Temporary','Temporary'),]
+	Year	= models.IntegerField(null=False)	
+	catagory = models.TextField(verbose_name="News Catagory, the choices are ", choices=JobType)
+	male	= models.IntegerField(null=False)	
+	female	= models.IntegerField(null=False)	
+	amount_of_job	= models.IntegerField(null=False)	
+	company	= models.ForeignKey(Company, on_delete=models.CASCADE)
+
+
+class EducationalStatus(models.Model):		
 	
-Education_type	= models.CharField(verbose_name="Education Type ", max_length=2000)		
-male	= models.IntegerField(null=False)		
-female	= models.IntegerField(null=False)		
-company	= models.ForeignKey(Company, on_delete=models.CASCADE)
+	Education_type	= models.CharField(verbose_name="Education Type ", max_length=2000)		
+	male	= models.IntegerField(null=False)		
+	female	= models.IntegerField(null=False)		
+	company	= models.ForeignKey(Company, on_delete=models.CASCADE)
 		
 
-MarketTargetAndDestination	
+class MarketTarget(models.Model):
 	
-domestic = models.IntegerField(null=False)	
-export	= models.IntegerField(null=False)	
-Further processing factors 	= models.IntegerField(null=False)	
-Final consumers	= models.IntegerField(null=False)	
-Restaurant_and_hotels = models.IntegerField(null=False)	
-Institutions = models.IntegerField(null=False)	
-EPSA = models.IntegerField(null=False)	
-Hospitals	= models.IntegerField(null=False)	
-Agents	= models.IntegerField(null=False)	
-Wholesaler_Distributor	= models.IntegerField(null=False)	
-Retailer = models.IntegerField(null=False)	
-Other = models.IntegerField(null=False)	
-
-			
+	domestic = models.IntegerField(null=False)	
+	export	= models.IntegerField(null=False)	
+	Further processing factors 	= models.IntegerField(null=False)	
+	Final consumers	= models.IntegerField(null=False)	
+	Restaurant_and_hotels = models.IntegerField(null=False)	
+	Institutions = models.IntegerField(null=False)	
+	EPSA = models.IntegerField(null=False)	
+	Hospitals	= models.IntegerField(null=False)	
+	Agents	= models.IntegerField(null=False)	
+	Wholesaler_Distributor	= models.IntegerField(null=False)	
+	Retailer = models.IntegerField(null=False)	
+	Other = models.IntegerField(null=False)	
 
 
+class MarketDestination(models.Model):
+	
+	domestic = models.IntegerField(null=False)	
+	export	= models.IntegerField(null=False)	
+	Further processing factors 	= models.IntegerField(null=False)	
+	Final consumers	= models.IntegerField(null=False)	
+	Restaurant_and_hotels = models.IntegerField(null=False)	
+	Institutions = models.IntegerField(null=False)	
+	EPSA = models.IntegerField(null=False)	
+	Hospitals	= models.IntegerField(null=False)	
+	Agents	= models.IntegerField(null=False)	
+	Wholesaler_Distributor	= models.IntegerField(null=False)	
+	Retailer = models.IntegerField(null=False)	
+	Other = models.IntegerField(null=False)	
 
-
-
-Product Attributes					
+class Product(models.Model): 					
 
 	name	= models.CharField(verbose_name="Name of the Product ", max_length=2000)		
-	category	= models.ForeignKey(Company, on_delete=models.CASCADE)
+	category	= models.ForeignKey(subcategory, on_delete=models.CASCADE)
 	description	= models.CharField(verbose_name="Description Of the product ", max_length=2000)		
-	image	= models.ForeignKey(ProductImage, on_delete=models.CASCADE)
+	image	= models.ForeignKey(Image, on_delete=models.CASCADE)
 	quantity	= models.CharField(verbose_name="Quantity", max_length=2000)		
 	uom	= models.CharField(verbose_name="Unit of Measurement", max_length=2000)		 
-	price	= models.ForeignKey(Price, on_delete=models.CASCADE)
+	price	= models.ForeignKey(Price, on_delete=models.CASCADE) ## the foreignKey doesn't exist
 	company	= models.ForeignKey(Company, on_delete=models.CASCADE) 
+	
 	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
 	created_date	= models.DateTimeField()		
 	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -197,134 +206,110 @@ Product Attributes
 	expired	= models.BooleanField(null=False,default=False)		
 
 
-ProductionCapacityOfASpecificProduct			
+class ProductionCapacityOfASpecificProduct(models.Model):	 		
 
-	product	= models.ForeignKey(product, on_delete=models.CASCADE) 
+	product	= models.ForeignKey(Product, on_delete=models.CASCADE) 
 	install_prdn_capacity	= models.IntegerField(null=False)		
-	atn_prdn_capacity	= models.IntegerField(null=False)		
-	actual_prdn_capacity	= models.IntegerField(null=False)		
+	atn_prdn_capacity = models.IntegerField(null=False)		
+	actual_prdn_capacity = models.IntegerField(null=False)		
 	production_plan	= models.IntegerField(null=False)		
 	extraction_rate	= models.IntegerField(null=False)		
+	
 	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	created_date	= models.DateTimeField()	
 	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	last_updated_date	= models.DateTimeField(auto_now_add=True)			
 	expired	= models.BooleanField(null=False,default=False)			
 
+class ProductImage(models.Model):	
+
+	product	= models.ForeignKey(Product, on_delete=models.CASCADE)
+	image = models.ImageField(null=False,upload_to = "ProductImage/") ## 
+	image_alt	= models.CharField(verbose_name="image_alt", max_length=2000)	
+
+	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	created_date	= models.DateTimeField()	
+	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	last_updated_date	= models.DateTimeField(auto_now_add=True)			
+	expired	= models.BooleanField(null=False,default=False)		
 
 
-ProductImage	
+class ProductTypePharmaceuticalProducts(models.Model):
 
-product	= models.ForeignKey(Product, on_delete=models.CASCADE)
-image = models.ImageField(null=False,upload_to = "ProductImage/") ## 
-image_alt	= models.CharField(verbose_name="image_alt", max_length=2000)		
-created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-created_date	= models.DateTimeField()	
-last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-last_updated_date	= models.DateTimeField(auto_now_add=True)			
-expired	= models.BooleanField(null=False,default=False)		
+	product	= models.ForeignKey(Product, on_delete=models.CASCADE)	
+	brand_name	= models.CharField(verbose_name="Name of the brand", max_length=2000)		
+	dosage_form	= models.CharField(verbose_name="Dosage Form", max_length=2000)		
+	dose_and_packaging	= models.CharField(verbose_name="Dose and Packaging", max_length=2000)		
+	therapeutic_group	= models.CharField(verbose_name="Therapeutic Group", max_length=2000)		
 
+class AnnualInputNeedsProduct(models.Model):				
 
-Product Type for Pharmaceutical products			
+	product	= models.ForeignKey(Product, on_delete=models.CASCADE)
+	is_active_input	= models.BooleanField(null=False,default=False)		
+	amount	= models.IntegerField(null=False)			
+	local_input	= models.IntegerField(null=False)			
+	import_input	= models.IntegerField(null=False)			
+	
+	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	created_date	= models.DateTimeField()	
+	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	last_updated_date	= models.DateTimeField(auto_now_add=True)			
+	expired	= models.BooleanField(null=False,default=False)	
 
-	product	object	
-	brand_name	Varchar	
-	dosage_form	Varchar	
-	dose_and_packaging	Varchar	
-	therapeutic_group	Varchar	
+class ProductionAndSalesPerformance(models.Model):
 
-Annual Input Needs for a product				
+ 	product	= models.ForeignKey(Product, on_delete=models.CASCADE)
+ 	activity_year	= models.IntegerField(null=False)			 
+ 	production_amount	= models.IntegerField(null=False)			
+ 	sales_amount	= models.IntegerField(null=False)			
+ 	sales_value	= models.IntegerField(null=False)			
+	
+	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	created_date	= models.DateTimeField()	
+	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	last_updated_date	= models.DateTimeField(auto_now_add=True)			
+	expired	= models.BooleanField(null=False,default=False)			
 
-	product	Foreign Key	
-	is_active_input	boolean	
-	amount	number	
-	local_input	number	
-	import_input	number	
-	created_by	Foreign Key	
-	created_date	DateTime	
-	last_updated_by	Foreign 
-	last_updated_date	DateTime	
-	expired	Boolean	
+class PackagingType(models.Model):				 
+	Pakaing_cateory=  [('primary','primary'),('secondary','secondary'),('teritiary','teritiary')]
+ 	product	= models.ForeignKey(Product, on_delete=models.CASCADE)
+ 	packaging	= models.CharField(verbose_name="packaging", max_length=2000)	 
+ 	category	= models.CharField(verbose_name="Therapeutic Group", max_length=200, choices=Pakaing_cateory)	 
+ 	local_input	= models.IntegerField(null=False)			
+ 	import_input	= models.IntegerField(null=False)			
+ 	wastage	= models.IntegerField(null=False)	
 
+	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	created_date	= models.DateTimeField()	
+	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	last_updated_date	= models.DateTimeField(auto_now_add=True)			
+	expired	= models.BooleanField(null=False,default=False)		
 
-Annual Input Needs for a product		
+class ProjectState(models.Model):
 
- 	product	Foreign Key	 
- 	is_active_input	boolean	 
- 	amount	number	
- 	local_input	number	
- 	import_input	number	
- 	created_by	Foreign Key	 
- 	created_date	DateTime	
- 	last_updated_by	Foreign Key	 
- 	last_updated_date	DateTime	
- 	expired	Boolean	
+	percentageoconstructionperformance = models.CharField(verbose_name="percentage of construction performance", max_length=2000)	
+	machineryPurchasePerformance = models.CharField(verbose_name="machinery Purchase Performance", max_length=2000)	
+	factoryBuildingPerformance = models.CharField(verbose_name="factory Building Performance", max_length=2000)	
+	machineryInstallation = models.CharField(verbose_name="machinery Installation", max_length=2000)	
+	commissioningWork = models.CharField(verbose_name="commissioning Work", max_length=2000)	
+	rawMaterialPreparation = models.CharField(verbose_name="raw Material Preparation", max_length=2000)	
+	hrEmploymentTraining = models.CharField(verbose_name="HR Employment Training", max_length=2000)	
+	testProduct = models.CharField(verbose_name="Test Product", max_length=2000)	
+	certification = models.CharField(verbose_name="certification", max_length=2000)	
 
-Product input demand and supply of last 3 year. 	
+	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	created_date	= models.DateTimeField()	
+	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	last_updated_date	= models.DateTimeField(auto_now_add=True)			
+	expired	= models.BooleanField(null=False,default=False)	
 
- 	product	Foreign Key	 
- 	input	varchar	
- 	activity_year	number	 
- 	demand	number	
- 	supply	number	
- 	created_by	Foreign Key	 
- 	created_date	DateTime	
- 	last_updated_by	Foreign Key	 
- 	last_updated_date	DateTime	
- 	expired	Boolean	
+class PowerConsumption(models.Model): 
+	InstalledCapacity = models.CharField(verbose_name="Installed Capacity", max_length=2000)	
+	Current Supplying = models.CharField(verbose_name="Current Supplying", max_length=2000)	
 
-Production and Sales Performance of last 3 year. 	 
-
- 	product	Foreign Key	 
- 	activity_year	Number	 
- 	production_amount	Number	
- 	sales_amount	Number	
- 	sales_value	Number	
- 	created_by	Foreign Key	 
- 	created_date	DateTime	
- 	last_updated_by	Foreign Key 
- 	last_updated_date	DateTime	
- 	expired	Boolean	
-
-
-Product Packaging Type				 
-
- 	product	Foreign  
- 	packaging	varchar	
- 	category	varchar	 
- 	local_input	Number	
- 	import_input	Number	
- 	wastage	Number	
- 	created_by	Foreign Key	 
- 	created_date	DateTime	
- 	last_updated_by	Foreign Key 
- 	last_updated_date	DateTime	
- 	expired	Boolean	
-
-
-
-Project State
-
-Percentage of civil and foundation construction performance
-Machinery Purchase Performance
-Factory building construction performance
-Machinery Installation Performance (Percentage)
-Commissioning Work
-Raw Material Preparation
-HR Employment and Training ---------------------------
-H. Test product --------------------------------
-I. certification
-
-
-Power Consumption kwh per day
-
-Installed Capacity
-Current Supplying
-
-Land Usage M square
-
-Total Land Size
-Production Building
-Office building
-warehouse
-Other
+class LandUsage(models.Model):
+	total_land_size = models.CharField(verbose_name="Total land size", max_length=2000)	 
+	production_building = models.CharField(verbose_name="production building", max_length=2000)	 
+	Office_building = models.CharField(verbose_name="production building", max_length=2000)	 
+	warehouse = models.CharField(verbose_name="Ware house", max_length=2000)	 
+	Other = models.CharField(verbose_name="production building", max_length=2000)	 

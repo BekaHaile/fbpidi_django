@@ -32,6 +32,7 @@
 			<thead>
 				<tr>
 					<th>Blog</th>
+					<th>Blog-author</th>
 					<th>User</th>
 					<th>Content</th>
 					<th>Timestamp</th>
@@ -43,8 +44,9 @@
 				{%for blogcomment in blogcomments%}
 				<tr>
 					
-					<td>{{blogcomment.blog|safe|truncatewords:20}}</td>
-					<td>{{blogcomment.sender|safe|truncatewords:20}}</td>
+					<td>{{blogcomment.blog|safe|truncatechars_html:20}}</td>
+					<td>{{blogcomment.blog.user}}</td>
+					<td>{{blogcomment.sender|safe|truncatechars_html:20}}</td>
 					<td>{{blogcomment.content}}</td>
 					
 					<td>{{blogcomment.timestamp}}</td>

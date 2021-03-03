@@ -103,7 +103,7 @@
 											
 										</div>
 									</div>
-										<h4 class="font-weight-semibold">{{research.description|safe|truncatewords:35}}</h4>
+										<h4 class="font-weight-semibold">{{research.description|safe|truncatechars_html:35}}</h4>
 										
 										<a href="{%url 'project_detail' id=research.id %}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
 									</div>
