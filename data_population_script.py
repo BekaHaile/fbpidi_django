@@ -33,21 +33,9 @@ def add_banks():
         b.save()
 
 
-
 if __name__ == '__main__':    
    
-    m = ChatMessage.objects.first()
-    t = m.timestamp
-    print("t", t,"\n")
-    p = datetime.strftime(t, "%y/%m/%d %H:%M:%S")
-    print("\n first p", p, " ",type(p))
-    pp= datetime.strptime(p, '%y/%m/%d %H:%M:%S')
-
-    print("\n second p", pp, " ",type(pp))    
-    now = datetime.now()
-    
-    if pp> now:
-        print("greate")
-    else:
-        print("lesser")
+    d = ChatGroup.objects.all()
+    e = CompanyEvent.objects.first()
+    print(e.company.get_compnay_admin().username)
 

@@ -5,24 +5,26 @@ from .models import ChatGroup, ChatMessage
 from .serializer import ChatMessageSerializer
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from django.db.models import Q
 from accounts.models import User
+from chat.views import get_unread_grouped_messages
+from chat.models import ChatMessage
 
 class ChatConsumer(WebsocketConsumer):
-    
     def new_message(self, data):
         sender = User.objects.get(username = data['from'])
         chat_group = ChatGroup.objects.get(group_name=self.group_name)
         new_message = ChatMessage(chat_group=chat_group, sender = sender, content = data['message'])
+        if chat_group.count_connected_users() > 1: # if number of connected users is greater than 1, means the reciever is online. So, read = True 
+            new_message.read = True
         new_message.save()
         result =[ChatMessageSerializer(new_message).data]
         self.send_chat_message(  result, "new_message")
-        
 
     def fectch_messages(self, data):
         self.previous_messages = ChatMessageSerializer( ChatMessage.last_n_messages(self.group_name), many = True).data
-        print("previous messages ", self.previous_messages)
         self.send_message(self.previous_messages)
-        
+
     commands = {
             'fetch_messages': fectch_messages, 
             'new_message' : new_message
@@ -36,34 +38,29 @@ class ChatConsumer(WebsocketConsumer):
         try:
             group = get_object_or_404(ChatGroup, group_name = requested_group)
             self.group_name = group.group_name
-        except Http404:
-            group = ChatGroup(group_name=requested_group)
-            group.save()
-            self.group_name = group.group_name
-
-        # Join room group
-        async_to_sync(self.channel_layer.group_add)(
-            self.group_name,
-            self.channel_name
-        )        
-
-        self.accept()
+            # Join room group
+            async_to_sync(self.channel_layer.group_add)(
+                self.group_name ,
+                self.channel_name
+            )      
+            group.connect_user(self.scope['user'])
+            self.accept() 
+        except Exception as e:
+            print("############# Exception at consumers.connect ", str(e))
         
-        print("Channel name is ", self.channel_name)
-        
-
     def disconnect(self, close_code):
         # Leave room group
+        group = get_object_or_404(ChatGroup, group_name = self.group_name)    
         async_to_sync(self.channel_layer.group_discard)(
             self.group_name,
             self.channel_name
         )
+        group.disconnect_user(self.scope['user'])
 
     # Receive message from WebSocket, then decide what to do depending on incoming command
     def receive(self, text_data):
         data = json.loads(text_data)
         command = data['command']
-        print("from receive method command is ", command)
         self.commands[command](self, data)
         
     #accepts message and sends it
@@ -90,3 +87,22 @@ class ChatConsumer(WebsocketConsumer):
             'message': message,
            
         }))
+
+class CheckUnreadMessages(WebsocketConsumer):
+    def connect(self):
+        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$)))(((((",self.scope['user'] )
+        self.user = self.scope['user']
+        self.accept()
+
+    def receive(self, text_data):
+        data = json.loads(text_data)
+        command = data['command']
+        unread_messages = get_unread_grouped_messages(self.user)
+        self.send_message(unread_messages)
+    
+    def send_message(self, message):
+        num = ChatMessage.count_unread_message(self.user)
+        self.send(text_data = json.dumps({'num':num, 'unread_messages':message}))    
+
+
+        

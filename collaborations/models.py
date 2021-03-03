@@ -398,7 +398,7 @@ class AnnouncementImages(models.Model):
 
         super(AnnouncementImages, self).save()
 
-        print(" --- --- here we go again --- --- ")
+        
         im = Image.open(self.image)  
         size = (300, 300)
         im = im.resize(size, Image.ANTIALIAS)

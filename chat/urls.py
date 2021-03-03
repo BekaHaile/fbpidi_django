@@ -3,5 +3,6 @@ from .views import index, room
 
 urlpatterns = [
     path('', index, name = "chat"),
-    path('<str:group_name>/', room, name = "chat_room"),
+    path('<str:requested_group_name>/', room, name = "chat_room"),
+    
 ]

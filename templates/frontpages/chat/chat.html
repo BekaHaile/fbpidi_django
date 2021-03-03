@@ -1,4 +1,13 @@
+
 {%extends 'admin/base_site.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+
+/////////
+
 {% block extrastyle %}
 <!-- Theme JS files -->
 <script src="/static/admin/global_assets/js/demo_pages/chat_layouts.js"></script>
@@ -8,6 +17,12 @@
 {% endblock %}
 {%block pagename%}Chat - Layout{%endblock%}
 {%block content%} 
+<style>
+    .smaller_time{
+        display: block;
+        color: grey;
+    }
+</style>
 
 	
 			<!-- Content area -->
@@ -31,78 +46,18 @@
 					<div class="card-body">
 						<ul id = "main-chat-ul" class="media-list media-chat media-chat-scrollable mb-3">
 						
-                            <li class="media content-divider justify-content-center text-muted mx-0">
+                            <!-- <li class="media content-divider justify-content-center text-muted mx-0">
 								<span id = "date-span" class="px-2">Monday, Feb 10</span>
-							</li>
+							</li> -->
 
-							<li id = "message-li-item" class="media">
-								<div class="mr-3">
-									<a href="/static/admin/global_assets/images/demo/images/3.png">
-										<img src="/static/admin/global_assets/images/demo/users/face11.jpg" class="rounded-circle" width="40" height="40" alt="">
-									</a>
-								</div>
-
-								<div class="media-body">
-									<div class="media-chat-item">Crud .</div>
-									<div class="font-size-sm text-muted mt-2">Tue, 10:28 am <a href="#"><i class="icon-pin-alt ml-2 text-muted"></i></a></div>
-								</div>
-							</li>
-
-							<li class="media media-chat-item-reverse">
-								<div class="media-body">
-									<div class="media-chat-item">Thus </div>
-									<div class="font-size-sm text-muted mt-2">Tue, 8:12 am <a href="#"><i class="icon-pin-alt ml-2 text-muted"></i></a></div>
-								</div>
-
-								<div class="ml-3">
-									<a href="/static/admin/global_assets/images/demo/images/3.png">
-										<img src="/static/admin/global_assets/images/demo/users/face1.jpg" class="rounded-circle" width="40" height="40" alt="">
-									</a>
-								</div>
-							</li>
-
+							
                                 <!-- Today -->
-							<li class="media content-divider justify-content-center text-muted mx-0">
+							<!-- <li class="media content-divider justify-content-center text-muted mx-0">
 								<span class="text-muted px-2">Today</span>
-							</li>
+							</li> -->
 
-							<li class="media media-chat-item-reverse">
-								<div class="media-body">
-									<div class="media-chat-item">Satisfactorily strenuously while sleazily dear frustratingly insect menially some shook far sardonic badger telepathic much jeepers immature much hey.</div>
-									<div class="font-size-sm text-muted mt-2">2 hours ago <a href="#"><i class="icon-pin-alt ml-2 text-muted"></i></a></div>
-								</div>
+							
 
-								<div class="ml-3">
-									<a href="/static/admin/global_assets/images/demo/images/3.png">
-										<img src="/static/admin/global_assets/images/demo/users/face1.jpg" class="rounded-circle" width="40" height="40" alt="">
-									</a>
-								</div>
-							</li>
-
-							<li class="media">
-								<div class="mr-3">
-									<a href="/static/admin/global_assets/images/demo/images/3.png">
-										<img src="/static/admin/global_assets/images/demo/users/face11.jpg" class="rounded-circle" width="40" height="40" alt="">
-									</a>
-								</div>
-
-								<div class="media-body">
-									<div class="media-chat-item">Grunted smirked and grew less but rewound much despite and impressive via alongside out and gosh easy manatee dear ineffective yikes.</div>
-									<div class="font-size-sm text-muted mt-2">13 minutes ago <a href="#"><i class="icon-pin-alt ml-2 text-muted"></i></a></div>
-								</div>
-							</li>
-
-							<li class="media media-chat-item-reverse">
-								<div class="media-body">
-									<div class="media-chat-item"><i class="icon-menu"></i></div>
-								</div>
-
-								<div class="ml-3">
-									<a href="/static/admin/global_assets/images/demo/images/3.png">
-										<img src="/static/admin/global_assets/images/demo/users/face1.jpg" class="rounded-circle" width="40" height="40" alt="">
-									</a>
-								</div>
-							</li>
 						</ul>
 
                     	<textarea id =  "chat-message-input" name="enter-message" class="form-control mb-3" rows="3" cols="1" placeholder="message..."></textarea>
@@ -217,9 +172,8 @@
 {{ name|json_script:"g_name" }}
 
             <script>
-  
+                // g_name comsed from name variable sent from chat.views.py
                 const group_name = JSON.parse(document.getElementById('g_name').textContent);
-                // const username = JSON.parse(document.getElementById("username").value);
                 var username = document.getElementById("username").value
                 const chatSocket = new WebSocket(
                     'ws://'
@@ -229,16 +183,13 @@
                     + '/'
                 );
                 
-
-
                 chatSocket.onmessage = function(e) { 
                     const data = JSON.parse(e.data);
                     var messages = data['message']
 
                     for (i in messages){
-                        console.log(username, " ", messages[i].sender_name+" "+messages[i].sender_image)
                         if (messages[i].sender_name != username){
-                            console.log("setting the name",document.getElementById("main-card-title").innerHTML = "Your Chats with : <b>"+messages[i].sender_name+"<b>")     
+                          document.getElementById("main-card-title").innerHTML = "Your Chats with : <b>"+messages[i].sender_name+"<b>"
                             break;
 
                         }
@@ -258,9 +209,28 @@
 				// 				</div>
 				// 			</li>
 
+                var css = 'h1 { background: red; }',
+    head = document.head || document.getElementsByTagName('head')[0],
+    style = document.createElement('style');
+
+head.appendChild(style);
+
+style.type = 'text/css';
+if (style.styleSheet){
+  // This is required for IE8 and below.
+  style.styleSheet.cssText = css;
+} else {
+  style.appendChild(document.createTextNode(css));
+}
 
 
-                function append_message(message_obj){
+                function append_message(message_obj)
+                {
+                    checked_days = new Array();
+                    // if ( ! message_obj.timestamp in checked_days){
+
+
+                    // }
                     var br = document.createElement('br')
                     var li_item = document.createElement('li');
                         var img_div = document.createElement('div');
@@ -275,14 +245,16 @@
                     image_anchor.href = message_obj.sender_image;
                     image_item.src = message_obj.sender_image;
                     image_item.className = "rounded-circle"
-                    image_item.width = "40";
-                    image_item.height = "40";
+                    image_item.width = "60";
+                    image_item.height = "60";
+                   
 
                     chat_div.className = "media-body"
                         chat_area.textContent = message_obj.content;
                         chat_area.className = "media-chat-item";
-                        time_area.textContent = message_obj.timestamp;
-                        time_area.className = "font-size-sm text-muted mt-2";
+                        time_area.textContent = message_obj.time;
+                        time_area.className = "smaller_time";
+
                         
                     //  if message is from another user
                     if (message_obj.sender_name != username)
@@ -304,22 +276,6 @@
 
                     }
 
-                    
-                // <li class="media media-chat-item-reverse">
-                //          
-
-				// 				<div class="media-body">
-				// 					<div class="media-chat-item">Thus superb the tapir the wallaby blank frog execrably much since dalmatian by in hot. Uninspiringly arose mounted stared one curt safe</div>
-				// 					<div class="font-size-sm text-muted mt-2">Tue, 8:12 am <a href="#"><i class="icon-pin-alt ml-2 text-muted"></i></a></div>
-				// 				</div>
-                //               <div class="ml-3">
-				// 					<a href="/static/admin/global_assets/images/demo/images/3.png">
-				// 						<img src="/static/admin/global_assets/images/demo/users/face1.jpg" class="rounded-circle" width="40" height="40" alt="">
-				// 					</a>
-				// 				</div>
-
-				// 				
-				// 			</li>
                     else{
                         li_item.className = "media media-chat-item-reverse";
                         img_div.className = "ml-3";
@@ -332,7 +288,7 @@
 
                         chat_div.appendChild(chat_area);
                         chat_div.appendChild(time_area); 
-
+                        
                         li_item.appendChild(chat_div);
                         li_item.appendChild(img_div);
                        
@@ -341,8 +297,8 @@
                        
                     }
 
-                     
-
+                   
+                    
 
                     document.querySelector('#chat-log').value += ( message_obj['content'] + '\n' );
                     
