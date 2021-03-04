@@ -51,12 +51,12 @@
 				{%for vacancy in vacancy%}
 				<tr>
 					
-					<td>{{vacancy.company|safe|truncatewords:10}}</td>
-					<td>{{vacancy.location|safe|truncatewords:10}}</td>
+					<td>{{vacancy.company|safe|truncatechars_html:10}}</td>
+					<td>{{vacancy.location|safe|truncatechars_html:10}}</td>
 					<td>{{vacancy.salary|safe}}</td>
 
 					<td>{{vacancy.starting_date|safe}}</td>
-					<td>{{vacancy.job_title|safe|truncatewords:10}}</td>
+					<td>{{vacancy.job_title|safe|truncatechars_html:10}}</td>
 					<td>{{vacancy.closed}}</td>
 					<th><a href="{% url 'admin:Applicant_info' id=vacancy.id %}" >
 						<i class="icon-eye"></i> {{vacancy.countApplicant}}</a> 

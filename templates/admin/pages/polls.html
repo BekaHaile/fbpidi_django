@@ -45,7 +45,7 @@
 							{%for poll in polls%}
 							<tr>
 								<td>{{poll.title}}</td>
-								<td><div class="summernote">{{poll.description|safe|truncatewords:5}}</div></td>
+								<td><div class="summernote">{{poll.description|safe|truncatechars_html:5}}</div></td>
                                 <td>{{poll.count_choices}}</td>
                                 <td>{{poll.count_votes}}</td>
                                 <td>{{poll.user.username}}</td>

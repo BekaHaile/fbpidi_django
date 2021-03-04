@@ -1,5 +1,8 @@
 {%extends 'frontpages/layout.html'%}
-{%load crispy_forms_tags %}
+{%load i18n%}
+{%load core_template_tags%} 
+
+{% get_current_language as LANGUAGE_CODE %}
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 
@@ -11,7 +14,7 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Research </h1>
+							<h1 class="">{% trans "Research" %} </h1>
 							
 						</div>
 					</div>
@@ -32,7 +35,7 @@
 								<a href="{%url 'research_form' %}"><button style="padding-left: 40%; padding-right: 40%;" type="submit" 
 								href="{%url 'forum_form' %}" 
 									class="btn btn-primary rounded-round">
-									<h5>Add new Research </h5>
+									<h5>{% trans "Add new Research" %} </h5>
 								</button>
 								</a>
 							</div>
@@ -49,7 +52,7 @@
 									<div class="input-group-append ">
 										
 										<button type="submit" class="btn btn-secondary br-tr-3  br-br-3">
-											Search
+											{% trans "Search" %}
 										</button></a>
 									</div>
 								</div>
@@ -58,7 +61,7 @@
 						</div>
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">Categories</h3>
+								<h3 class="card-title">{% trans "Categories" %}</h3>
 							</div>
 							{%for cat in category%}
 							<div class="card-body p-0">
@@ -80,7 +83,7 @@
 						{%if user.is_authenticated %}
 						<div class="card">
 							<div class="card-header">
-                                    <h3 class="card-title">Research you Posted </h3> 
+                                    <h3 class="card-title">{% trans "Research you Posted" %} </h3> 
 							</div>
 							<div class="card-body p-0">
 								<div class="list-catergory">
@@ -91,7 +94,7 @@
 											
 											<li class="list-group-item border-bottom-0">
 												<a href="{%url 'research_detail' id=forum.id %}" class="text-dark">
-													 {{forum.title|safe|truncatewords:20}}
+													 {{forum.title|safe|truncatechars_html:20}}
 													
 												</a>
 
@@ -134,19 +137,18 @@
 									</div>
 									{% endif %}
 									<div class="card-header ">
-										<h3 class="card-title">Add a Research</h3>
+										<h3 class="card-title">{% trans "Add a Research" %}</h3>
 									</div>
 									<div class="card-body">
 										<div class="form-group">
-											<label class="form-label text-dark">Research Title *</label>
+											<label class="form-label text-dark">{% trans "Research Title" %} *</label>
 											
-											<div class="col-lg-12">
-												{{form.title}}
+											<div class="col-lg-12"> {{form.title}}
 											</div>
 										</div>
 
 										<div class="form-group">
-											<label class="form-label text-dark">Research Status *</label>
+											<label class="form-label text-dark">{% trans "Research Status" %} *</label>
 
 											<div class="col-lg-12">
 												{{form.status}}
@@ -154,7 +156,7 @@
 										</div>
 
 										<div class="form-group">
-											<label class="form-label text-dark">Research Category *</label>
+											<label class="form-label text-dark">{% trans "Research Category" %} *</label>
 
 											<div class="col-lg-12">
 												{{form.category}}
@@ -162,7 +164,7 @@
 										</div>
 																					
 										<div class="form-group">
-											<label class="form-label text-dark">Research Description *</label>
+											<label class="form-label text-dark">{% trans "Research Description" %} *</label>
 
 											<div class="col-lg-12">
 												{{form.description}}
@@ -170,7 +172,7 @@
 										</div>
 
 										<div class="form-group">
-											<label class="form-label text-dark">Research Detail *</label>
+											<label class="form-label text-dark">{% trans "Research Detail" %} *</label>
 
 											<div class="col-lg-12">
 												{{form.detail}}
@@ -178,7 +180,7 @@
 										</div>
 
 										<div class="form-group">
-											<label class="form-label">Upload your attchment (if you have one)</label>
+											<label class="form-label">{% trans "Upload your attchment (if you have one)" %}</label>
 											<div class="col-lg-12">
 													{{form.attachements}}
 												
@@ -189,7 +191,7 @@
 
 									<div class="text-right">
 										<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-											class="btn btn-primary rounded-round">Submit </button>
+											class="btn btn-primary rounded-round">{% trans "Submit" %} </button>
 									</div>
 								</form>
                             </div>
