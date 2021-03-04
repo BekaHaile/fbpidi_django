@@ -691,7 +691,6 @@
 	</div>
 </section>
 <!--/Getting Started Section-->
-
 <!--Latest News-->
 <section class="sptb">
 	<div class="container">
@@ -712,45 +711,6 @@
 						<div class="item7-card-desc d-flex mb-2">
 							<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{news.timestamp}}</a>
 
-											<div class="card mb-xl-0">
-												<div class="item-card8-img  br-tr-4 br-tl-4">
-													<!-- <img src="/static/frontpages/images/products/products/f2.jpg" alt="img" -->
-													<a href=" {% url 'customer_news_detail' id=news.id %}"><img src="{{news.get_images.0.image.url}}" width="300px" height="250px" alt="img"
-													
-														class="cover-image">
-													</a>
-												</div>
-												<div class="item-card8-overlaytext">
-													<h6 class="mb-0">{% print_translated news.get_company.company_type news.get_company.company_type_am LANGUAGE_CODE %}</h6>
-												</div>
-												<div class="card-body">
-													<div class="item-card8-desc">
-														<p class="text-muted mb-2">{{news.timestamp}}</p>
-														<h4 class="font-weight-semibold" >{% print_translated news.title news.title_am LANGUAGE_CODE %}</h4>
-														<p class="mb-0" class="text-muted mb-2">{% print_translated news.description|truncatechars_html:10 news.description_am|truncatechars_html:10 LANGUAGE_CODE %}</p>
-													</div>
-												</div>
-												<div class="card-footer">
-													<div class="footerimg d-flex mt-0 mb-0">
-														<div class="d-flex footerimg-l mb-0">
-															<a href="#" ><img src="{{news.get_company.get_image}}" alt="image"
-																class="avatar brround  mr-2">
-															</a>
-															<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-																{% print_translated news.get_company.company_name news.get_company.company_name_am LANGUAGE_CODE%} {{news.catagory}}<i class="icon icon-check text-success fs-12 ml-1"
-																	data-toggle="tooltip" data-placement="top" title=""
-																	data-original-title="verified"></i></h5>
-														</div>
-														
-													</div>
-												</div>
-											</div>
-										
-									</div>
-									{% endif %}
-								{%endfor%}
-								
-							</div>
 						</div>
 						<a href="{% url 'customer_news_detail' id=news.id %}" class="text-dark"><h4 class="font-weight-semibold">
 							{% print_translated news.title|truncatewords:18 news.title_am|truncatewords:18 LANGUAGE_CODE %}</h4></a>
@@ -775,7 +735,6 @@
 	</div>
 </section>
 <!--/Latest News-->
-
 <!--Sub Categories-->
 <section class="sptb bg-white">
 	<div class="container">
