@@ -34,7 +34,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','127.0.0.2','192.168.1.113']
 
-
 # Application definition
 
 INSTALLED_APPS = [
