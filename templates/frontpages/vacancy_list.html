@@ -89,7 +89,11 @@
                                     <div class="mb-3">
                                     <b>{% trans "Employee Type" %}</b>:{{vacancy.employement_type}}</div>
                                     <div class="mb-4">
-                                    	<b>{% trans "Campany" %}</b>:{{vacancy.company}} 
+
+                                    	<b>Campany</b>:{{vacancy.company}} 
+										<a class="mr-2" style = " margin-left: 10px; margin-right: 10px;" href="/chat/with/{{vacancy.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+										
+	
                                     </div>
                                     
 								</div>

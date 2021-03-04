@@ -35,7 +35,6 @@ class CustomerSignUpView(APIView):
             return Response(data=data)
 
 
-
 ###### for the api social auth, from https://github.com/coriolinus/oauth2-article/blob/master/views.py
 from django.conf import settings
 from rest_framework import serializers

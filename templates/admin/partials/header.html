@@ -130,38 +130,6 @@
                             <div class="ml-3 align-self-center"><span class="badge badge-mark border-danger"></span></div>
                         </li>
 
-                        <li class="media">
-                            <div class="mr-3">
-                                <img src="/static/admin/global_assets/images/demo/users/face17.jpg" width="36" height="36" class="rounded-circle" alt="">
-                            </div>
-                            <div class="media-body">
-                                <a href="#" class="media-title font-weight-semibold">Hanna Walden</a>
-                                <span class="d-block text-muted font-size-sm">Project manager</span>
-                            </div>
-                            <div class="ml-3 align-self-center"><span class="badge badge-mark border-success"></span></div>
-                        </li>
-
-                        <li class="media">
-                            <div class="mr-3">
-                                <img src="/static/admin/global_assets/images/demo/users/face19.jpg" width="36" height="36" class="rounded-circle" alt="">
-                            </div>
-                            <div class="media-body">
-                                <a href="#" class="media-title font-weight-semibold">Dori Laperriere</a>
-                                <span class="d-block text-muted font-size-sm">Business developer</span>
-                            </div>
-                            <div class="ml-3 align-self-center"><span class="badge badge-mark border-warning-300"></span></div>
-                        </li>
-
-                        <li class="media">
-                            <div class="mr-3">
-                                <img src="/static/admin/global_assets/images/demo/users/face16.jpg" width="36" height="36" class="rounded-circle" alt="">
-                            </div>
-                            <div class="media-body">
-                                <a href="#" class="media-title font-weight-semibold">Vanessa Aurelius</a>
-                                <span class="d-block text-muted font-size-sm">UX expert</span>
-                            </div>
-                            <div class="ml-3 align-self-center"><span class="badge badge-mark border-grey-400"></span></div>
-                        </li>
                     </ul>
                 </div>
 
@@ -170,17 +138,16 @@
                     <a href="#" class="text-grey"><i class="icon-gear"></i></a>
                 </div>
             </div>
-        </li>
-        
-        {% get_grouped_unread_messages user as grouped_unread_messages %}
 
+        </li>
+      
        
         <li class="nav-item dropdown">
             <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
             
                 <i class="icon-bubbles4"></i>
                 <span class="d-md-none ml-2">Messages</span>
-                <span class="badge badge-pill bg-warning-400 ml-auto ml-md-0">{% count_unread_messages user %}</span>
+                <span id = "unread_messages_list" class="badge badge-pill bg-warning-400 ml-auto ml-md-0">{% count_unread_messages user %}</span>
                
             </a>
             
@@ -191,47 +158,9 @@
                     <a href="#" class="text-default"><i class="icon-compose"></i></a>
                 </div>
                 <div class="dropdown-content-body dropdown-scrollable">
-                    <ul class="media-list">
+                    <ul id = "list_of_senders" class="media-list">
                         
-                        {% get_grouped_unread_messages user as grouped_unread_messages %}
-
-        
-                            {% for sender_info in grouped_unread_messages %}
-
-                            
-                               
-                                <li class="media">
-                                    <div class="mr-3 position-relative">
-                                        {%if sender_info.image %}
-                                        <a href="/chat/{{sender_info.chat_group}}/" target="blank"><img  src="{{sender_info.image}}" width="36" height="36" class="rounded-circle" alt=""></a>
-                                        {% else %}
-                                        <img src="/static/admin/global_assets/images/demo/users/face10.jpg" width="36" height="36" class="rounded-circle" alt="">
-                                        {%endif%}
-
-                                    </div>
-
-                                    <div class="media-body">
-                                        <div class="media-title">
-                                            <a href="/chat/{{sender_info.chat_group}}/"  target="new_window">
-                                                <span class="font-weight-semibold">{{sender_info.username}}</span>
-                                            </a>
-                                            <span class="badge bg-danger badge-pill ml-auto">{{sender_info.count}}</span>
-                                        </div>
-                                        <span class="text-muted float-right font-size-sm">{{sender_info.timestamp}}</span>
-
-                                        <span class="text-muted">{{sender_info.content}}</span>
-
-                                    </div>
-                                </li>
-                               
-
-                            {% endfor %}
-                       
-                        
-
-                        
-
-                      
+                              
                     </ul>
                 </div>
                
@@ -255,8 +184,13 @@
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="{% url 'admin:user_detail' option='my_profile' id=user.id %}" class="dropdown-item"><i class="icon-user-plus"></i> My profile</a>
                <a href="{{user|my_company_link}}" class="dropdown-item"><i class="icon-coins"></i> My Company</a>
-                <a href="/admin/view_company_profile/inbox/" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span class="badge badge-pill bg-blue ml-auto">{{unread_messages_count}}</span></a>
-                <div class="dropdown-divider"></div>
+                {% if user.is_superuser %}
+                <a href="{% url 'admin:view_fbpidi_company' %}" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span id = "unread_messages" class="badge badge-pill bg-blue ml-auto">{{unread_messages_count}}</span></a>
+              
+                {%else%}
+               <a href="{% url 'admin:view_company_profile_active_tab' active_tab='inbox' %}" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span id = "unread_messages" class="badge badge-pill bg-blue ml-auto">{{unread_messages_count}}</span></a>
+               {%endif%}
+               <div class="dropdown-divider"></div>
                 <a href="{% url 'admin:password_change' %}" class="dropdown-item"><i class="icon-cog5"></i>Change Password</a>
                  <a href="{% url 'admin:logout' %}?next={%url 'admin:login'%}" class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
             </div>
@@ -265,3 +199,125 @@
         {%endblock%}
     </ul>
 </div>
+
+<script src="/static/admin/global_assets/js/demo_pages/chat_layouts.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/reconnecting-websocket.js"></script>
+
+<script>
+    // const group_name = JSON.parse(document.getElementById('g_name').textContent);
+    // var username = document.getElementById("username").value
+            const unread_socket = new ReconnectingWebSocket(
+                'ws://'
+                + window.location.host
+                + '/ws/unread_messages/'
+            );
+            var status = ""
+            function check_unread_messages(){
+             
+                     unread_socket.send(JSON.stringify({
+                                'command':'fetch_unread_messages',
+                            }));
+             
+                 
+            }
+
+            unread_socket.onopen = function(e){
+                        console.log("on open called!")
+                        check_unread_messages(); 
+                        status = "ok"
+                    }
+
+            unread_socket.onmessage = function(e) { 
+                console.log("on message!")
+                const data = JSON.parse(e.data);
+                var unread_messages = data['unread_messages'];
+                var number_of_unread_messages = data['num'];
+                document.getElementById("unread_messages_list").innerText = number_of_unread_messages;
+                console.log(unread_messages)
+                document.getElementById('list_of_senders').innerHTML = "";
+                unread_messages.forEach(append_unread_messages);
+                var check_unread_messages_periodically = setInterval(check_unread_messages, 2000 );
+
+            };
+ 
+            unread_socket.onclose = function(e) {
+                status = "";
+                var el = document.createElement('div');
+                el.setAttribute("style", "padding:1%; width: 30%; height:5%; position:absolute; font-size:13px; top:40%; left:40%; background-color: rgb(228, 228, 228); color:black;");
+                el.innerHTML = "Lost connection with FBPIDI system! \n Trying to Reconnect...";
+                document.body.appendChild(el);
+
+                setTimeout( function(){ el.parentNode.removeChild(el);}, 5000);
+      
+                console.log('Chat socket closed unexpectedly, from room.html');
+                
+    };
+
+   
+
+    function append_unread_messages(message_obj){
+        
+        var li_item = document.createElement('li');
+        li_item.id = message_obj.content;
+            var img_div = document.createElement('div');
+                var image_anchor = document.createElement('a');
+                    var image_item = document.createElement('img');
+
+            var chat_div = document.createElement('div');
+                var second_div = document.createElement('div');
+                    var name_anch = document.createElement('a');
+                    var count_area = document.createElement('p');
+            
+                var time_area = document.createElement('small');
+                var chat_area = document.createElement('p');
+              
+    //    ######################## setting values
+                image_item.src = message_obj.sender_image;
+                image_item.className = "rounded-circle"
+                image_item.width = "36";
+                image_item.height = "36";
+
+            image_anchor.href = message_obj.sender_image;
+            image_anchor.appendChild(image_item);
+
+        img_div.className = "mr-3 position-relative";
+        img_div.appendChild(image_anchor)
+
+
+            name_anch.href = "/chat/"+message_obj.chat_group+"/";
+            name_anch.target = "blank";
+            name_anch.textContent = message_obj.sender_name;
+            count_area.className = "badge bg-danger badge-pill ml-auto";
+            count_area.textContent = message_obj.count;
+
+        second_div.className = "media-title";
+        second_div.appendChild(name_anch) 
+        second_div.appendChild(count_area)
+
+      
+        chat_area.textContent = message_obj.content;
+        chat_area.className = "text-muted float-right font-size-sm";
+        time_area.textContent = message_obj.time;
+        time_area.className = "text-muted";
+
+        chat_div.className = "media-body";
+        chat_div.appendChild(second_div);
+        chat_div.appendChild(time_area);
+        chat_div.appendChild(chat_area);
+
+        li_item.className = "media";
+        li_item.appendChild(img_div);
+        li_item.appendChild(chat_div)
+
+        
+        ul_item =document.getElementById('list_of_senders')
+        ul_item.appendChild(li_item);
+
+    }
+            
+     
+</script>
+
+
+
+
