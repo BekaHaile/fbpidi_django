@@ -10,7 +10,7 @@
 				<div class="header-text1 mb-0">
 					<div class="container">
 						<div class="row">
-							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
+							<div class="col-xkll-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
 									<h1 class=""><span class="font-weight-bold"></span>{{message}} </h1>
 								</div>
@@ -139,7 +139,11 @@
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.get_company.phone_number}}"><i class="fa fa-phone"></i></a>
 
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.get_company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
-																		<a class="" href="/collaborations/customer_tender_detail/{{tender.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Tender Detail" %}</b></a>
+
+																		<a class="mr-2" href="/chat/with/{{tender.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+										
+																		<a class="" href="/collaborations/customer_tender_detail/{{tender.id}}/" ><b class="btn btn-secondary btn-sm mt-1">Tender Detail</b></a>
+
 																		
 																		<br>
 																		

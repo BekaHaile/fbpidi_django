@@ -255,7 +255,6 @@ class ManageBankAccount(LoginRequiredMixin,View):
 			else:
 				tender.bank_account.add( CompanyBankAccount.objects.get(id = self.request.POST['relate_bank_account']) )
 			tender.save()
-			print(tender.bank_account.all())
 			return redirect(f"/admin/edit_tender/{self.kwargs['id']} ")
 		messages.warning(self.request, "Error while Managing Bank Account!")
 		return redirect("admin:tenders")
@@ -388,10 +387,8 @@ class ApplyForTender(View):
             )
 			applicant.save()
 			messages.success(self.request, "Application Successfully Completed")
-			print("Created successfully")
 			return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applied':True})
-			return redirect(f"{tender.document.url}")
-            #return redirect("/collaborations/tender_list/")
+		else:
 			print("Error Occured!")
 			messages.warning(self.request,"Error while Applying!")
 			return redirect("/collaborations/tender_list/")
@@ -438,9 +435,7 @@ class CreateNews(LoginRequiredMixin, View):
 class EditNews(LoginRequiredMixin, View):
     def get(self,*args,**kwargs):
         try:   
-            print("in the try")
             if self.kwargs['id']:
-                print("in the if method", self.kwargs['id'])
                 news = News.objects.get(id =  self.kwargs['id'])
                 return render(self.request,'admin/collaborations/create_news.html',{'news':news, 'edit':True})
         except Exception as e: 
@@ -494,7 +489,6 @@ class NewsDetail(LoginRequiredMixin,View):
 def Ajax(request):
     if request.is_ajax and request.method == "GET":
         selected_categories = request.GET["by_category"].split(",")
-        print(selected_categories)
         news= News.objects.filter(catagory = selected_categories[0] )
         return JsonResponse ({'respo': NewsListSerializer(news, many = True).data})
     else:
@@ -541,11 +535,8 @@ class CustomerNewsDetail(View):
 def check_event_participation(request, event_participants):
     today = datetime.datetime.now()
     today = today.strftime('%Y-%m-%d %H:%M:%S')
-    print("################## today = ", today, " ", type(today))
-
-    print("############# event participants count = ", event_participants.count())
+   
     for participant in event_participants:  
-        print("################ event start_date = ", participant.event.start_date, " ", type(participant.event.start_date) ) 
         start_day = participant.event.start_date
         start_day = start_day.strftime('%Y-%m-%d %H:%M:%S')
         # if start_day > today and start_day - today == participant.notifiy_in:
@@ -555,8 +546,6 @@ def check_event_participation(request, event_participants):
 
 def check_event_enddate(request, open_events):
     now = datetime.datetime.now() 
-    print("################## now = ", now, " ", type(now))
-
     for event in open_events:
         endstr = str(event.end_date.date)
         #need real comparison
