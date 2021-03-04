@@ -21,7 +21,7 @@
 												<input type="text" name = 'by_title' class="form-control input-lg border-white" id="text" placeholder="Search Event">
 											</div>
 											<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
-												<button href="#" type = "submit" class="btn btn-lg btn-block btn-secondary">Search</button>
+												<button href="#" type = "submit" class="btn btn-lg btn-block btn-secondary">{% trans "Search" %}</button>
 											</div>
 										</div>
 									</div>
@@ -38,10 +38,10 @@
 		<div class="bg-white border-bottom">
 			<div class="container">
 				<div class="page-header">
-					<h4 class="page-title">Events list</h4>
+					<h4 class="page-title">{% trans "Events list" %}</h4>
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">Home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Events</li>
+						<li class="breadcrumb-item"><a href="#">{% trans "Home" %}</a></li>
+						<li class="breadcrumb-item active" aria-current="page">{% trans "Events" %}</li>
 					</ol>
 				</div>
 			</div>
@@ -65,19 +65,19 @@
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
 											</ul>
 											<div class="d-sm-flex">
-												<label class="mr-2 mt-2 mb-sm-1 sort-label">Sort By:</label>
+												<label class="mr-2 mt-2 mb-sm-1 sort-label">{% trans "Sort By" %}:</label>
 												<div class="selectgroup">
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="All" class="selectgroup-input" checked="">
-														<span class="selectgroup-button d-md-flex">All <i class="fa fa-sort ml-2 mt-1"></i></span>
+														<span class="selectgroup-button d-md-flex">{% trans "All" %} <i class="fa fa-sort ml-2 mt-1"></i></span>
 													</label>
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">Upcoming Events</span>
+														<span class="selectgroup-button">{% trans "Upcoming Events" %}</span>
 													</label>
 													<label class="selectgroup-item mb-0">
 														<input type="radio" name="value" value="Latest" class="selectgroup-input">
-														<span class="selectgroup-button">Open Events</span>
+														<span class="selectgroup-button">{% trans "Open Events" %}</span>
 													</label>
 													
 												</div>
@@ -128,7 +128,7 @@
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{event.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
 																		<a class="" href="/chat/with/{{event.get_company_admin.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 																		<a class="" href="/collaborations/customer_event_detail/{{event.id}}/" ><b class="btn btn-secondary btn-sm mt-1">Event Detail</b></a>
-													
+							
 																	</div>
 																</div>
 
@@ -185,7 +185,7 @@
 											<input type="text" name = "by_title" class="form-control br-tl-3 br-bl-3" placeholder="Search">
 											<div class="input-group-append ">
 												<button type="submit" class="btn btn-secondary br-tr-3 br-br-3">
-													Search
+													{% trans "Search" %}
 												</button>
 											</div>
 										
@@ -194,32 +194,32 @@
 							</div>
 						</form>
 							<div class="card-header border-top">
-								<h3 class="card-title">Posted By</h3>
+								<h3 class="card-title">{% trans "Posted By" %}</h3>
 							</div>
 							<div class="card-body">
 								<div class="filter-product-checkboxs">
 									<label class="custom-control custom-checkbox mb-2">
 										<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
 										<span class="custom-control-label">
-											Dealer
+											{% trans "Dealer" %}
 										</span>
 									</label>
 									<label class="custom-control custom-checkbox mb-2">
 										<input type="checkbox" class="custom-control-input" name="checkbox2" value="option2">
 										<span class="custom-control-label">
-											Individual
+											{% trans "Individual" %}
 										</span>
 									</label>
 									<label class="custom-control custom-checkbox mb-0">
 										<input type="checkbox" class="custom-control-input" name="checkbox2" value="option2">
 										<span class="custom-control-label">
-											Reseller
+											{% trans "Reseller" %}
 										</span>
 									</label>
 								</div>
 							</div>
 							<div class="card-footer">
-								<a href="#" class="btn btn-primary btn-block">Apply Filter</a>
+								<a href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>
 							</div>
 						</div>
 					</div>

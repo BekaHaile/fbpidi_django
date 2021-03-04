@@ -76,6 +76,13 @@ class ListBlogCommentAdmin(LoginRequiredMixin ,View):
 		context = {'blogcomments':form}
 		return render(self.request, template_name,context)
 
+class AdminBlogComments(LoginRequiredMixin,View):
+	def get(self,*args,**kwargs):
+		blogs = BlogComment.objects.filter(blog=self.kwargs['id'])
+		template_name="admin/blog/blogComment/list.html"
+		context={'blogcomments':blogs}
+		return render(self.request, template_name,context)
+
 class BlogCommentDetailAdmin(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = BlogComment.objects.get(id=self.kwargs['id'])
@@ -134,6 +141,8 @@ class AdminBlogList(LoginRequiredMixin,View):
 			template_name="admin/pages/blog_list.html"
 			context={'blogs':filterdblogs}
 			return render(self.request, template_name,context)
+
+
 		
 class BlogView(LoginRequiredMixin,View):
 	template_name="admin/pages/blog_list.html"

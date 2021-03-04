@@ -45,8 +45,8 @@
 				{%for researchprojectcategory in researchprojectcategorys%}
 				<tr>
 					
-					<td>{{researchprojectcategory.comment|safe|truncatewords:20}}</td>
-					<td>{{researchprojectcategory.content|truncatewords:20}}</td>
+					<td>{{researchprojectcategory.comment|safe|truncatechars_html:20}}</td>
+					<td>{{researchprojectcategory.content|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.user}}</td>
 					<td>
 						{%if researchprojectcategory.attachements%}

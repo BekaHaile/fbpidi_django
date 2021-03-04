@@ -1,10 +1,7 @@
 {%extends 'frontpages/layout.html'%}
-
 {%load i18n%}
 {%load core_template_tags%} 
- 
 {%block content%}
-
 {% get_current_language as LANGUAGE_CODE %}
 		<!--Breadcrumb-->
 		<section>
@@ -12,11 +9,11 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Vacancy </h1>
+							<h1 class="">{% trans "Vacancy" %}  </h1>
 							<ol class="breadcrumb text-center">
 								{%if message %}
 									{{message}}
-								{%endif%}
+								{%endif%} 
 							</ol>
 						</div>
 					</div>
@@ -32,7 +29,7 @@
 					<div class="col-xl-3 col-lg-12 col-md-12">
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">Categories</h3>
+								<h3 class="card-title">{% trans "Categories" %} </h3>
 							</div>
 							{%for cat in category%}
 							<div class="card-body p-0">
@@ -66,42 +63,42 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
-                                       <b>cateory</b>: <code>{{vacancy.category|safe}}</code>
+                                       <b>{% trans "Cateory" %} </b>: <code>{{vacancy.category|safe}}</code>
                                     </div>
                                     <div class="mb-3">
                                     <b>Employee Type</b>:{{vacancy.employement_type}}</div>
                                     <div class="mb-4">
-                                    	<b>Campany</b>:{{vacancy.company}} 
+                                    	<b>{% trans "Campany" %} </b>:{{vacancy.company}} 
                                     </div>
                                     <div class='mb-4'>
-                                    	<b>Location</b>:{{vacancy.location}}
+                                    	<b>{% trans "Location" %} </b>:{{vacancy.location}}
                                     </div>
                                     <div class='mb-4'>
-                                    	<b>Salary</b>:{{vacancy.salary}}
+                                    	<b>{% trans "Salary" %} </b>:{{vacancy.salary}}
                                     </div>
 
                                     <div class='mb-4'>
                                     	
-                                    	<b>requirement</b>:
+                                    	<b>{% trans "Requirement" %} </b>:
                                     	{% print_translated vacancy.requirement|safe vacancy.requirement_am|safe LANGUAGE_CODE%}
                                     </div>
                                     <div class='mb-4'>
                                     	
-                                    	<b>starting_date</b>:{{vacancy.starting_date}}
+                                    	<b>{% trans "Starting date" %} </b>:{{vacancy.starting_date}}
                                     </div>
                                     <div class='mb-4'>
                                     	
-                                    	<b>ending_date</b>:{{vacancy.ending_date}}
+                                    	<b>{% trans "Ending date" %} </b>:{{vacancy.ending_date}}
                                     </div>
                                     <div class='mb-4'>
                                     	
-                                    	<b>description</b>:
+                                    	<b>{% trans "Description" %} </b>:
                                     	{% print_translated vacancy.description|safe vacancy.description_am|safe LANGUAGE_CODE%}
                                     </div>
                                     
                                 </div>
                                 <div class="card-footer">
-								<a href="{%url 'applications'  model_name='Vacancy' id=vacancy.id%}" class="btn btn-secondary">Apply</a>
+								<a href="{%url 'applications'  model_name='Vacancy' id=vacancy.id%}" class="btn btn-secondary">{% trans "Apply" %} </a>
 							</div>
                             </div>
 
