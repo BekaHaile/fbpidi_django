@@ -10,4 +10,5 @@ urlpatterns = [
     path("complete-auth/",CompleteLoginView.as_view(),name="complete_login"),
     path('social-auth', include('social_django.urls', namespace='social_auth')),
     path("",include("django.contrib.auth.urls")),
+    
 ]

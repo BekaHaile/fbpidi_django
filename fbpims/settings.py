@@ -246,8 +246,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
 
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+        # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        # 'rest_framework_social_oauth2.authentication.SocialAuthentication',
 
     ],
     # 'DEFAULT_PERMISSION_CLASSES': [
@@ -277,12 +277,6 @@ AUTHENTICATION_BACKENDS = (
     'accounts.backends.FbpidiAuthBackend',
 )
 
-for key in ['GOOGLE_OAUTH2_KEY',
-            'GOOGLE_OAUTH2_SECRET',
-            'FACEBOOK_KEY',
-            'FACEBOOK_SECRET']:
-    exec("SOCIAL_AUTH_{key} = os.environ.get('{key}', '')".format(key=key))
-
 ##### Facebook
 SOCIAL_AUTH_FACEBOOK_KEY = '2860739290914734'  #APP ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '5afc8b24a3cdb7d93dcccf3fa06f49b6' #APP SECRET
@@ -295,17 +289,17 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'email']
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
-SOCIAL_AUTH_PIPELINE = (
-                'social_core.pipeline.social_auth.social_details',
-                'social_core.pipeline.social_auth.social_uid',
-                'social_core.pipeline.social_auth.auth_allowed',
-                'social_core.pipeline.social_auth.social_user',
-                'social_core.pipeline.user.get_username',
-                'social_core.pipeline.social_auth.associate_by_email',
-                'social_core.pipeline.user.create_user',
-                'social_core.pipeline.social_auth.associate_user',
-                'social_core.pipeline.social_auth.load_extra_data',
-                'social_core.pipeline.user.user_details', )
+# SOCIAL_AUTH_PIPELINE = (
+#                 'social_core.pipeline.social_auth.social_details',
+#                 'social_core.pipeline.social_auth.social_uid',
+#                 'social_core.pipeline.social_auth.auth_allowed',
+#                 'social_core.pipeline.social_auth.social_user',
+#                 'social_core.pipeline.user.get_username',
+#                 'social_core.pipeline.social_auth.associate_by_email',
+#                 'social_core.pipeline.user.create_user',
+#                 'social_core.pipeline.social_auth.associate_user',
+#                 'social_core.pipeline.social_auth.load_extra_data',
+#                 'social_core.pipeline.user.user_details', )
 
 
 ##### Google

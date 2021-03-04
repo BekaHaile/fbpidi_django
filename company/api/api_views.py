@@ -27,7 +27,7 @@ from accounts.api.serializers import CustomerCreationSerializer, CustomerDetailS
 
 #client/comp-by-main-category/
 class ApiCompanyByMainCategoryList(APIView):   
-    #  request.data['company_type'] should be = manufacturer or supplier, request[product_category = "Beverage", "Food", "Pharmaceuticals", "all"]
+    #  request.query_params['company_type'] should be = manufacturer or supplier, request[product_category = "Beverage", "Food", "Pharmaceuticals", "all"]
     def get(self,request): 
         product_category = request.query_params['product_category']
         companies = Company.objects.filter(company_type= request.query_params['company_type']) #all companies with 
@@ -42,7 +42,7 @@ class ApiCompanyDetailView(APIView):
     @permission_classes((IsAuthenticated))
     def get(self, request):
         try:
-            company = get_object_or_404(Company, id = request.data['id'])
+            company = get_object_or_404(Company, id = request.query_params['id'])
             return Response(data= CompanyFullSerializer( company ).data)
         except Http404:
             return Response(data = {"error":True, "message": "Company Not Found!"})
