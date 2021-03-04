@@ -19,8 +19,8 @@ from collaborations.views import (CreateNews, EditNews, NewsDetail,AdminNewsList
                         EditTender,  DeleteTender, ManageBankAccount,
                         CreateDocument, DocumentListing, EditDocument
                         )
-from collaborations.Views.faq import(CreateFaqs,FaqsView,FaqsList,FaqPendingList,FaqApprove,
-                                    FaqsDetail)
+from collaborations.Views.faq import(CreateFaqs,FaqsView,FaqsList,FaqPendingList,FaqApprovdList,
+                                    FaqApprove,FaqsDetail)
 
 from collaborations.Views.vacancy import(CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
                         JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
@@ -37,7 +37,7 @@ from collaborations.Views.announcement import(
                         AnnouncementDetailAdmin,)
 
 from collaborations.Views.blog import(
-                        AdminBlogList,BlogView,
+                        AdminBlogList,BlogView,AdminBlogComments,
                         CreatBlog,ListBlogCommentAdmin,BlogCommentDetailAdmin)
 
 from collaborations.Views.research import(
@@ -100,7 +100,7 @@ class CustomAdminSite(admin.AdminSite):
 
             path('researchprojectcategorys-detail/<model_name>/<id>',wrap(ResearchProjectCategoryDetail.as_view()),name='researchprojectcategory_detail'),
             path('researchprojectcategorys-form',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
-            path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_list'),
+            path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
             
             path('anounce-Detail/<model_name>/<id>',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
             path('anounce-List',wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),
@@ -127,7 +127,8 @@ class CustomAdminSite(admin.AdminSite):
            
             path("faq-detail/<model_name>/<id>",wrap(FaqsView.as_view()),name="faqs_detail"),
             path("faq-form/",wrap(CreateFaqs.as_view()),name="admin_Faqsform"),
-            path("faq-list/",wrap(FaqsList.as_view()),name="admin_Faqs"), 
+            path("faq-list/",wrap(FaqsList.as_view()),name="admin_Faqs"),  
+            path("faq-pendding-list/",wrap(FaqApprovdList.as_view()),name="admin_approved_Faqs"),
             path("faq-pendding-list/",wrap(FaqPendingList.as_view()),name="admin_pendding_Faqs"),
             path("faq-approve/<id>",wrap(FaqApprove.as_view()),name="approve_Faqs"),
             path("faq-view/<model_name>/<id>",wrap(FaqsDetail.as_view()),name="view_Faqs"),
@@ -136,7 +137,8 @@ class CustomAdminSite(admin.AdminSite):
             path("blog-list/",wrap(AdminBlogList.as_view()),name="admin_Blogs"),
             path("blog-detail/<model_name>/<id>/",wrap(BlogView.as_view()),name="blog_detail"),
             path("blog-form/",wrap(CreatBlog.as_view()),name="create_blog"),
-            path("blogComment-list/",wrap(ListBlogCommentAdmin.as_view()),name="blogComment_list"),            
+            path("blogComment-list/",wrap(ListBlogCommentAdmin.as_view()),name="blogComment_list"),
+            path("blogComment-list/<id>",wrap(AdminBlogComments.as_view()),name="blogComment_list_id"), 
             path("blogComment-detail/<model_name>/<id>/",wrap(BlogCommentDetailAdmin.as_view()),name="blogComment_detail"),
             
             path("signup/",CompanyAdminSignUpView.as_view(),name="signup"), 

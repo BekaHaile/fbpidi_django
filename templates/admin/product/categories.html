@@ -43,7 +43,7 @@
 							<tr>
 								<td>{{cat.category_name}}</td>
 								<td>{{cat.category_type}}</td>
-								<td><div class="summernote">{{cat.description|safe|truncatewords:5}}</div></td>
+								<td><div class="summernote">{{cat.description|safe|truncatechars_html:5}}</div></td>
 								<td>{{cat.user.username}}</td>
 								<td><span class="badge badge-success">{{cat.timestamp}}</span></td>
 								<td class="text-center">
@@ -102,7 +102,7 @@
 							<tr>
 								<td>{{cat.category_name}}</td>
 								<td>{{cat.sub_category_name}}</td>
-								<td><div class="summernote">{{cat.description|safe|truncatewords:5}}</div></td>
+								<td><div class="summernote">{{cat.description|safe|truncatechars_html:5}}</div></td>
 								<td>{{cat.user.username}}</td>
 								<td><span class="badge badge-success">{{cat.timestamp}}</span></td>
 								<td class="text-center">

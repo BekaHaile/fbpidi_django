@@ -1,10 +1,7 @@
 {%extends 'frontpages/layout.html'%}
- 
- {%load i18n%}
+{%load i18n%}
 {%load core_template_tags%} 
-
 {%block content%}
-
 {% get_current_language as LANGUAGE_CODE %}
 		<!--Breadcrumb-->
 		<section>
@@ -12,9 +9,9 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Vacancy </h1>
+							<h1 class="">{% trans "Vacancy" %} </h1>
 							<ol class="breadcrumb text-center">
-								{%if message %}
+								{%if message %} 
 									{{message}}
 								{%endif%}
 							</ol>
@@ -51,7 +48,7 @@
 					<div class="col-xl-3 col-lg-12 col-md-12">
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">Categories</h3>
+								<h3 class="card-title">{% trans "Categories" %}</h3>
 							</div>
 							{%for cat in category%}
 							<div class="card-body p-0">
@@ -87,19 +84,19 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
-                                       <b>cateory</b>: <code>{{vacancy.category|safe}}</code>
+                                       <b>{% trans "cateory" %}</b>: <code>{{vacancy.category|safe}}</code>
                                     </div>
                                     <div class="mb-3">
-                                    <b>Employee Type</b>:{{vacancy.employement_type}}</div>
+                                    <b>{% trans "Employee Type" %}</b>:{{vacancy.employement_type}}</div>
                                     <div class="mb-4">
-                                    	<b>Campany</b>:{{vacancy.company}} 
+                                    	<b>{% trans "Campany" %}</b>:{{vacancy.company}} 
                                     </div>
                                     
 								</div>
 								
                                 <div class="card-footer">
-								<a href="{%url 'vacancy_detail' id=vacancy.id%}" class="btn btn-secondary">View job details</a>
-								<a href="{%url 'applications'  model_name='Vacancy' id=vacancy.id%}" class="btn btn-secondary">Apply</a>
+								<a href="{%url 'vacancy_detail' id=vacancy.id%}" class="btn btn-secondary">{% trans "View job details" %}</a>
+								<a href="{%url 'applications'  model_name='Vacancy' id=vacancy.id%}" class="btn btn-secondary">{% trans "Apply" %}</a>
 							</div>
                             </div>
 

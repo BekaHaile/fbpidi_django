@@ -1,7 +1,6 @@
 {%extends 'frontpages/layout.html'%}
 {%load i18n%}
 {%load core_template_tags%}
-
 {%block content%}
 {% get_current_language as LANGUAGE_CODE %}
 
@@ -16,11 +15,10 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Tender-Details</h1>
+							<h1 class="">{% trans "Tender-Details" %}</h1>
 							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="">Home</a></li>
-								<li class="breadcrumb-item"><a href="/collaborations/tender_list/">Tender</a></li>
-								<li class="breadcrumb-item active text-white" aria-current="page">Tender List</li>
+								<li class="breadcrumb-item"><a href="">{% trans "Home" %}</a></li>
+								<li class="breadcrumb-item"><a href="/collaborations/tender_list/">{% trans "Tender" %}</a></li> 
 							</ol>
 						</div>
 					</div>
@@ -37,19 +35,19 @@
 					<div class="d-block mx-auto col-lg-10 col-md-12">
 						<div class="card">
 							    <div class="card-body">
-								    <a class =  "text-center" href="#" ><h2 class="font-weight-semibold text-capitalize">Title: {% print_translated tender.title tender.title_am LANGUAGE_CODE%}</h2></a>
+								    <a class =  "text-center" href="#" ><h2 class="font-weight-semibold text-capitalize">{% trans "Title" %}: {% print_translated tender.title tender.title_am LANGUAGE_CODE%}</h2></a>
 							    <div class="item7-card-desc d-flex mb-2 mt-3">
                                 
-                                    <br><a href="#"><i class="fa fa-calendar-o text-muted mr-2" style = "margin-right: 20px;" ></i>Start Date:- <b>{{tender.start_date}}</b></a><p style="margin-left: 10px;"> To </p>
-                                    <a href="#"><i style = "margin-left: 10px;"class="fa fa-calendar-o text-muted mr-2" ></i>End Date:-<b> {{tender.end_date}}</b></a>
+                                    <br><a href="#"><i class="fa fa-calendar-o text-muted mr-2" style = "margin-right: 20px;" ></i>{% trans "Start Date" %}:- <b>{{tender.start_date}}</b></a><p style="margin-left: 10px;"> To </p>
+                                    <a href="#"><i style = "margin-left: 10px;"class="fa fa-calendar-o text-muted mr-2" ></i>{% trans "End Date" %}:-<b> {{tender.end_date}}</b></a>
                                                   
 								</div>
 
 								<div class="item7-card-desc d-flex mb-2 mt-3">
-								<a href="#"><i class="fa fa-user text-muted mr-2"  ></i>By:- <b> {{tender.get_company.company_name }}</b></a>					
-								<a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>Type:-<b> {{tender.tender_type}}</b></a>
+								<a href="#"><i class="fa fa-user text-muted mr-2"  ></i>{% trans "By" %}:- <b> {{tender.get_company.company_name }}</b></a>					
+								<a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>{% trans "Type" %}:-<b> {{tender.tender_type}}</b></a>
 								{% if tender.tender_type == "Paid" %}
-								<a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>Price:- <b> {{tender.document_price}} Birr</b></a>
+								<a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>{% trans "Price" %}:- <b> {{tender.document_price}} Birr</b></a>
 								
 								{% endif %}
 								<a href="#"><i class="icon-users" style="margin-left: 10px;"></i>Total Applications:-<b> {{tender.get_applications.count}}</b></a>
@@ -57,13 +55,13 @@
 								</div>
 
                                 {% if tender.status == 'Open' %}
-								<div  style="background-color: #66bb6a;; color:white; width: fit-content; padding: 5px; " >Open</div>
+								<div  style="background-color: #66bb6a;; color:white; width: fit-content; padding: 5px; " >{% trans "Open" %}</div>
 								{%elif tender.status == 'Pending' %}
-								<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >Pending</div>
+								<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >{% trans "Pending" %}</div>
 								{%elif tender.status == 'Closed' %}
-								<div style="background-color: #ef5350; color:white; width: fit-content; padding: 5px;" >Closed</div>
+								<div style="background-color: #ef5350; color:white; width: fit-content; padding: 5px;" >{% trans "Closed" %}</div>
 								{%else%} 
-								<div style="background-color: blue; color:white; width: fit-content; padding: 5px;" >Suspended</div>
+								<div style="background-color: blue; color:white; width: fit-content; padding: 5px;" >{% trans "Suspended" %}</div>
 								{%endif%}
 								<br>
 								
@@ -74,7 +72,7 @@
 									
 											<div class = "choice-btn-group" class="badge badge-secondary" style="margin-right: 20px; margin-left: 15px; ">
 													<span class="badge badge-secondary" style="padding: 10px;">
-															<a id = "download" href="{{tender.document.url}}" download="{{tender.document.url}}" style="color: white;">Download Document</a>							
+															<a id = "download" href="{{tender.document.url}}" download="{{tender.document.url}}" style="color: white;">{% trans "Download Document" %}</a>							
 													</span>
 											</div>
 										{% endif %}
@@ -83,10 +81,10 @@
 										
 										{% if tender.status == "Open"%}
 											{%if tender.get_company.company_name == user.get_company_name %}
-												<h3>Users from tender company can't participate in their own tender!</h3>
+												<h3>{% trans "Users from tender company can't participate in their own tender!" %}</h3>
 												<div class = "choice-btn-group" class="badge badge-secondary" style="margin-right: 20px; margin-left: 15px; ">
 													<span class="badge badge-secondary" style="padding: 10px;">
-															<a id = "download" href="{{tender.document.url}}" download="{{tender.document.url}}" style="color: white;">Download Document</a>							
+															<a id = "download" href="{{tender.document.url}}" download="{{tender.document.url}}" style="color: white;">{% trans "Download Document" %}</a>							
 													</span>
 											</div>
 
@@ -94,7 +92,7 @@
 												
 												<div class = "choice-btn-group" class="badge badge-secondary" style="margin-right: 20px;">
 													<span class="badge badge-secondary" style="padding: 10px;">
-															<a  href="#"  data-toggle="modal" data-target="#participate" style="color: white;">Participate in tender</a>							
+															<a  href="#"  data-toggle="modal" data-target="#participate" style="color: white;">{% trans "Participate in tender" %}</a>							
 													</span>
 												</div>
 											{%endif%}
@@ -112,7 +110,7 @@
 								<br>
 								<div style = "display: block;">
 									<label style="margin-left: 10px; padding:5px; background-color:orangered; color: white; display: block;">
-										<h4>This Tender is not Free, You can read the description below and attend the tender in person!</h4> 
+										<h4>{% trans "This Tender is not Free, You can read the description below and attend the tender in person!" %}</h4> 
 									</label>
 									
 								</div>
@@ -124,7 +122,7 @@
 								{% endif %}
 
 								<br>
-								<h2 style =  "margin-top: 20px;"class  = "text-center"><b>Tender description</b></h2>
+								<h2 style =  "margin-top: 20px;"class  = "text-center"><b>{% trans "Tender description" %}</b></h2>
 								<p class="font-13  col-lg-10 col-md-12">{{tender.description|safe}}</p>
 								
 
@@ -136,7 +134,7 @@
 												<form action="/collaborations/tender_application/{{tender.id}}/" method="POST" enctype="multipart/form-data">
 													{%csrf_token%}
 													<div class="modal-header">
-														<h5 class="modal-title" id="examplecontactLongTitle">Applicant Form</h5>
+														<h5 class="modal-title" id="examplecontactLongTitle">{% trans "Applicant Form" %}</h5>
 														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 														<span aria-hidden="true">&times;</span>
 														</button>
@@ -146,34 +144,34 @@
 													<div class="modal-body">
 
 														<div class="form-group">
-															<label>First Name: </label>
+															<label>{% trans "First Name" %}: </label>
 															{{applicant_form.first_name}}
 														</div>
 														<div class="form-group">
-															<label>Last Name: </label>
+															<label>{% trans "Last Name" %}: </label>
 															{{applicant_form.last_name}}
 														</div>
 														<div class="form-group">
 															
-															<label>Company Name: </label>
+															<label>{% trans "Company Name" %}: </label>
 															{{applicant_form.company_name}}
 														</div>
 														<div class="form-group">
-															<label>Company Tin Number: </label>
+															<label>{% trans "Company Tin Number" %}: </label>
 															{{applicant_form.company_tin_number}}
 														</div>
 														<div class="form-group">
-															<label>Email: </label>
+															<label>{% trans "Email" %}: </label>
 															{{applicant_form.email}}																			</div>
 														<div class="form-group">
-															<label>Phone Number: </label>
+															<label>{% trans "Phone Number" %}: </label>
 															{{applicant_form.phone_number}}	
 														</div>
 
 													</div>
 													<div class="modal-footer">
-														<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-														<button type="submit" class="btn btn-success">Submit</button>
+														<button type="button" class="btn btn-danger" data-dismiss="modal">{% trans "Cancel" %}</button>
+														<button type="submit" class="btn btn-success">{% trans "Submit" %}</button>
 													</div>
 												</form>
 										</div>
@@ -191,7 +189,7 @@
             </div>
 
             {% else %}
-                <h2> Tender Not found!</h2>
+                <h2> {% trans "Search" %}Tender Not found!</h2>
             {% endif %}
 		</section>
 		<!--/Add listing-->

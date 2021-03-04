@@ -15,11 +15,11 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Poll-Details</h1>
+							<h1 class="">{% trans "Poll-Details" %}</h1>
 							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="">Home</a></li>
-								<li class="breadcrumb-item"><a href="/collaborations/polls/">Polls</a></li>
-								<li class="breadcrumb-item active text-white" aria-current="page">Poll-Details</li>
+								<li class="breadcrumb-item"><a href="">{% trans "Home" %}</a></li>
+								<li class="breadcrumb-item"><a href="/collaborations/polls/">{% trans "Polls" %}</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Poll-Details" %}</li>
 							</ol>
 						</div>
 					</div>
@@ -111,7 +111,7 @@
                                 <!--/Choices-->
                                 {% if poll.count_choices > 0 and user.is_superuser == False and   not user == poll.user and not has_voted == True %}
                                 <div class="form-group row">
-                                    <label for = "remark" class="col-form-label col-lg-3"><h3>Any Remarks?</h3> </label><br><br>
+                                    <label for = "remark" class="col-form-label col-lg-3"><h3>{% trans "Any Remarks" %}?</h3> </label><br><br>
                                     <textarea id="remark" name="remark" rows="4" cols="50"></textarea>
                                 </div>
 

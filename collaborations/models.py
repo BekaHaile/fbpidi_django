@@ -88,6 +88,9 @@ class Blog(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     publish = models.BooleanField(null=False,default=False)
 
+    def __str__(self):
+        return self.title
+
     class Meta:
         ordering = ['-timestamp',]
             

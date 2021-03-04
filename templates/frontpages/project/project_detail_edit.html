@@ -1,5 +1,7 @@
 {%extends 'frontpages/layout.html'%}
-{%load crispy_forms_tags %}
+{%load i18n%}
+{%load core_template_tags%}  
+{% get_current_language as LANGUAGE_CODE %}
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 
@@ -92,7 +94,7 @@
 											
 											<li class="list-group-item border-bottom-0">
 												<a href="{%url 'project_detail' id=forum.id %}" class="text-dark">
-													 {{forum.title|safe|truncatewords:20}}
+													 {{forum.title|safe|truncatechars_html:20}}
 													
 												</a>
 

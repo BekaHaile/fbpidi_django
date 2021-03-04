@@ -12,7 +12,7 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Announcement</h1>
+							<h1 class="">{% trans "Announcement" %}</h1>
 						</div>
 					</div>
 				</div>
@@ -28,7 +28,7 @@
 					<div class="col-xl-4 col-lg-4 col-md-12">
 						<div class="card">
 							<div class="card-header">
-                                    <h3 class="card-title">Announcement By companys </h3> 
+                                    <h3 class="card-title">{% trans "Announcement By companys" %} </h3> 
 							</div>
 							<div class="card-body p-0">
 								<div class="list-catergory">
@@ -59,7 +59,7 @@
 								<div class="item-det mb-4">
 									
 									<h4>{% print_translated post.title post.title_am LANGUAGE_CODE%}</h4>
-									<a href="#" class="text-dark">Announcement from <h5>{{post.company}}</h5></a>
+									<a href="#" class="text-dark">{% trans "Announcement from " %}<h5>{{post.company}}</h5></a>
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
 											<li class="mr-5"><i class="icon icon-calendar text-muted mr-1"></i> {{post.timestamp}} </li>
@@ -138,72 +138,7 @@
 		</section>
 		<!--/Newsletter-->
 
-		<!-- Message Modal -->
-		<div class="modal fade" id="Comment" tabindex="-1" role="dialog"  aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Leave a Comment</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						  <span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<div class="form-group">
-							<input type="text" class="form-control" id="commet-name" placeholder="Your Name">
-						</div>
-						<div class="form-group">
-							<input type="email" class="form-control" id="commet-email" placeholder="Email Address">
-						</div>
-						<div class="form-group mb-0">
-							<textarea class="form-control" name="example-textarea-input" rows="6" placeholder="Message"></textarea>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-success">Send</button>
-					</div>
-				</div>
-			</div>
-		</div>
+		
 
-		<!-- Report Modal -->
-		<div class="modal fade" id="report" tabindex="-1" role="dialog"  aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="examplereportLongTitle">Report Abuse</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						  <span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<div class="form-group">
-							<input type="text" class="form-control" id="report-name" placeholder="Enter url">
-						</div>
-						<div class="form-group">
-							<select name="country" id="select-countries" class="form-control custom-select select2-no-search">
-								<option value="1" selected>Categories</option>
-								<option value="2">Spam</option>
-								<option value="3">Identity Theft</option>
-								<option value="4">Online Shopping Fraud</option>
-								<option value="5">Service Providers</option>
-								<option value="6">Phishing</option>
-								<option value="7">Spyware</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<input type="email" class="form-control" id="report-email" placeholder="Email Address">
-						</div>
-						<div class="form-group mb-0">
-							<textarea class="form-control" name="example-textarea-input" rows="6" placeholder="Message"></textarea>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-success">Submit</button>
-					</div>
-				</div>
-			</div>
-		</div>
+		
 		{%endblock%}
