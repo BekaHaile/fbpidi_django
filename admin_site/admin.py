@@ -206,7 +206,9 @@ class CustomAdminSite(admin.AdminSite):
             path("create_company_event/<company_id>",wrap(CreateCompanyEvent.as_view()),name="create_company_event"),
             path("edit_company_event/<id>/",wrap(EditCompanyEvent.as_view()),name="edit_company_event"),
             path("create_fbpidi_company/",wrap(CreateFbpidiCompanyProfile.as_view()),name="create_fbpidi_company"),
+            path("view_fbpidi_company/<str:active_tab/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company_active_tab"),
             path("view_fbpidi_company/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
+            
             path("edit_fbpidi_profile/<id>/",wrap(ViewFbpidiCompany.as_view()),name="edit_fbpidi_profile"),
             path("create_company_bank_account/<id>/", wrap(CreateCompanyBankAccount.as_view()), name = "create_company_bank_account"),
             path("edit_company_bank_account/<id>/", wrap( EditCompanyBankAccount.as_view()), name = "edit_company_bank_account"),

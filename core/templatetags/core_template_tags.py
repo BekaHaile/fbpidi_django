@@ -9,6 +9,7 @@ from accounts.models import User
 import datetime
 from chat.models import ChatMessage, ChatGroup
 import os
+from chat import views as chat_views
 
 register = template.Library()
 
@@ -89,7 +90,23 @@ def file_type( file_url):
         return "exe"
     else:
         return ""
-    
+
+# count all unread messages
+@register.simple_tag
+def count_unread_messages(user):
+    return ChatMessage.count_unread_message(user)
+
+
+@register.simple_tag
+def recieved_grouped_messages(user, max_num_group = None, exceluded = None):
+        return chat_views.get_recieved_grouped_messages(user, max_num_group, exceluded)
+
+
+@register.simple_tag
+def get_grouped_unread_messages(user):  
+    return chat_views.get_unread_grouped_messages(user)
+
+
 
 
 

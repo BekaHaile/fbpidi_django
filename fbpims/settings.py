@@ -119,6 +119,7 @@ ASGI_APPLICATION = 'fbpims.asgi.application'
 #         },
 #     },
 # }
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',

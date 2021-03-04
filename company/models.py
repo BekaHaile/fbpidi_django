@@ -63,6 +63,8 @@ class Company(models.Model):
     def get_image(self): 
         return self.company_logo.url if self.company_logo.url else None
         
+    def get_compnay_admin(self):
+        return self.user
 
     def get_bank_accounts(self):
         return self.companybankaccount_set.all() if self.companybankaccount_set.all().count() > 0 else None
@@ -118,7 +120,9 @@ class CompanyEvent(models.Model):
 
     def get_image(self):
         return self.image.url if self.image else self.company.get_image()
-
+    
+    def get_company_admin(self):
+        return self.company.get_compnay_admin()
 
 class EventParticipants(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

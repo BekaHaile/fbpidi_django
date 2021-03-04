@@ -31,12 +31,10 @@
 									<h3>Login</h3>
 									<div class="text-center">
 										<div class="btn-list d-flex">
-											<a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-google btn-block"><i class="fa fa-google fa-1x"></i> Google</a>
-											<a href="#" class="btn btn-twitter"><i class="fa fa-twitter fa-1x"></i></a>
-											<a href="{% url 'social:begin' 'github' %}" class="btn btn-github"><i class="fa fa-github fa-1x"></i></a>
-											
-											
-											<a href="{% url 'social:begin' 'facebook' %}" class="btn btn-facebook"><i class="fa fa-facebook fa-1x"></i></a>
+											<a href="/accounts/social-authlogin/google-oauth2/" class="btn btn-google btn-block"><i class="fa fa-google fa-1x"></i> Google</a>
+											<!-- <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-google btn-block"><i class="fa fa-google fa-1x"></i> Google</a> -->
+											<a href="/accounts/social-authlogin/github/" class="btn btn-github"><i class="fa fa-github fa-1x"></i></a>
+											<a href="/accounts/social-authlogin/facebook/" class="btn btn-facebook"><i class="fa fa-facebook fa-1x"></i></a>
 											
 										</div>
 									</div>

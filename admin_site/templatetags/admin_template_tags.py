@@ -4,8 +4,11 @@ from django.utils.safestring import mark_safe
 
 from company.models import Company,CompanyStaff
 from product.models import Product
-from chat.models import  ChatMessage, ChatGroup, get_recieved_grouped_messages, get_unread_grouped_messages
+from chat.models import  ChatMessage, ChatGroup
+from chat import views
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
+from django.http import Http404
 
 register = template.Library()
 
@@ -47,45 +50,14 @@ def count_unread_messages(user):
 
 
 @register.simple_tag
-def unread_grouped_messages(user):
-    return get_unread_grouped_messages(user)
+def recieved_grouped_messages(user, max_num_group=None, exceluded = None):
+        return views.get_recieved_grouped_messages(user, max_num_group, exceluded)
 
 
 @register.simple_tag
-def recieved_grouped_messages(user):
-    print("from admin template ",get_recieved_grouped_messages(user))
-    return get_recieved_grouped_messages(user)
-
-
-#### to be deleted
+def get_grouped_unread_messages(user): 
+    return views.get_unread_grouped_messages(user)
 @register.simple_tag
-def get_grouped_unread_messages(user):
-    q = Q( Q(chat_group__group_name__contains = user.username) & Q( read = False) & ~Q(sender = user))
-    un = ChatMessage.objects.filter(q).order_by('-timestamp')
-    sender_names = []
-    grouped = []
-    for message in un:
-        if not message.sender.username in sender_names:
-            grouped.append(append_sender_info(un, message))
-            sender_names.append(message.sender.username)
-    
-    return grouped
-
-            
-def append_sender_info(unread_messages, message):   
-        sender = message.sender
-        new = {}
-        new['username'] = message.sender.username
-        if message.sender.profile_image:
-            new['image'] = message.sender.profile_image.url
-        else:
-            new['image'] = None 
-        new['count'] = unread_messages.filter(sender__username = message.sender.username).count()
-        new['chat_group'] = message.chat_group
-        new['content'] = message.content
-        new['timestamp'] = message.timestamp
-        return new
-
-    
-    
-        
+def get_all_messages_grouped(user, max_num_group=None, exceluded = None):
+    return views.get_all_grouped_message(user, max_num_group, exceluded)
+  

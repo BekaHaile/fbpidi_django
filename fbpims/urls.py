@@ -25,6 +25,8 @@ from admin_site.admin import admin_site
 from accounts.views import activate
 from core.views import IndexView, ProfileView
 
+from django.views.generic import TemplateView
+
 urlpatterns = [
     
    
@@ -42,11 +44,12 @@ urlpatterns = [
     
     path("admin/",admin_site.urls),# admin page urls
     path("accounts/",include("accounts.urls")), 
+    path('chat/l/', TemplateView.as_view(template_name = "admin/chat/chat_layout.html")),
+    
     path("chat/", include('chat.urls')),
     path("collaborations/", include('collaborations.urls')),
     path('company/', include('company.urls')),
     path('product/', include('product.urls')),
-    
     
     ### api urls
     path('api/auth/oauth/', include('rest_framework_social_oauth2.urls')), ### for social auth

@@ -1,22 +1,17 @@
-
 {%extends 'admin/base_site.html'%}
-{%load i18n%}
-{%load core_template_tags%}
-{% get_current_language as LANGUAGE_CODE %}
-
-
-
-/////////
-
+{% load admin_template_tags%}
 {% block extrastyle %}
 <!-- Theme JS files -->
 <script src="/static/admin/global_assets/js/demo_pages/chat_layouts.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/reconnecting-websocket.js"></script>
+
 <!-- /theme JS files -->
 
 
 {% endblock %}
 {%block pagename%}Chat - Layout{%endblock%}
 {%block content%} 
+
 <style>
     .smaller_time{
         display: block;
@@ -24,15 +19,20 @@
     }
 </style>
 
-	
+           
 			<!-- Content area -->
 			<div class="content">
 
+                
 				<!-- Main chats -->
 				<div class="card">
 
 					<div class="card-header header-elements-inline">
-						<h5 id =  "main-card-title" class="card-title"></h5>
+                      
+						<h5 id =  "main-card-title" class="card-title">
+                           
+                        </h5>
+                        <span id = "online-item"></span>
 						<div class="header-elements">
 							<div class="list-icons">
 		                		<a class="list-icons-item" data-action="collapse"></a>
@@ -46,28 +46,22 @@
 					<div class="card-body">
 						<ul id = "main-chat-ul" class="media-list media-chat media-chat-scrollable mb-3">
 						
-                            <!-- <li class="media content-divider justify-content-center text-muted mx-0">
+                            <li class="media content-divider justify-content-center text-muted mx-0">
 								<span id = "date-span" class="px-2">Monday, Feb 10</span>
-							</li> -->
+                               
 
-							
-                                <!-- Today -->
-							<!-- <li class="media content-divider justify-content-center text-muted mx-0">
-								<span class="text-muted px-2">Today</span>
-							</li> -->
-
-							
+							</li>
 
 						</ul>
 
                     	<textarea id =  "chat-message-input" name="enter-message" class="form-control mb-3" rows="3" cols="1" placeholder="message..."></textarea>
 
                     	<div class="d-flex align-items-center">
-                    		<div class="list-icons list-icons-extended">
+                    		<!-- <div class="list-icons list-icons-extended">
                                 <a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send photo"><i class="icon-file-picture"></i></a>
                             	<a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send video"><i class="icon-file-video"></i></a>
                                 <a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send file"><i class="icon-file-plus"></i></a>
-                    		</div>
+                    		</div> -->
 
                     		<button type="button"  id = "chat-message-submit" class="btn bg-teal-400 btn-labeled btn-labeled-right ml-auto"><b><i class="icon-paperplane"></i></b> Send</button>
                     	</div>
@@ -80,7 +74,7 @@
 				<!-- Line of other chats -->
 				<div class="card">
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">Line Other Chats</h5>
+						<h5 class="card-title">Other Chats</h5>
 						<div class="header-elements">
 							<div class="list-icons">
 		                		<a class="list-icons-item" data-action="collapse"></a>
@@ -90,90 +84,45 @@
 	                	</div>
 					</div>
 
-					<div class="card-body">
-						<ul class="media-list media-chat-scrollable mb-3">
-						
+                    <div class="card-body">
+                        {% recieved_grouped_messages user 5 name as recieved_grouped_messages %}
+                        <ul class="media-list media-chat-scrollable mb-3">
+                            {% for message_obj in recieved_grouped_messages %} 
+                        
+                                <!-- <li class="media content-divider justify-content-center text-muted mx-0">
+                                    <span class="px-2">Saturday, Feb 12</span>
+                                </li> -->
 
-							<li class="media">
-								<div class="mr-3"><img src="/static/admin/global_assets/images/demo/users/face3.jpg" class="rounded-circle" width="40" height="40" alt=""></div>
-								<div class="media-body">
-									<div class="media-title d-flex flex-nowrap">
-										<a href="#" class="font-weight-semibold mr-3">Margo Baker</a>
-										<span class="font-size-sm text-muted text-nowrap ml-auto">12:16 pm <a href="#"><i class="icon-pin-alt font-size-base text-muted ml-2"></i></a></span>
-									</div>
-									Goldfish indisputable vexed hello on held some gosh :-)
-								</div>
-							</li>
-
-					
-							<li class="media content-divider justify-content-center text-muted mx-0">
-								<span class="text-muted px-2">Yesterday</span>
-							</li>
-
-							<li class="media">
-								<div class="mr-3"><img src="/static/admin/global_assets/images/demo/users/face10.jpg" class="rounded-circle" width="40" height="40" alt=""></div>
-								<div class="media-body">
-									<div class="media-title d-flex flex-nowrap">
-										<a href="#" class="font-weight-semibold mr-3">Will Grace</a>
-										<span class="font-size-sm text-muted text-nowrap ml-auto">7:50 am <a href="#"><i class="icon-pin-alt font-size-base text-muted ml-2"></i></a></span>
-									</div>
-									Less a hello hey less saw vexedly pleasantly this much flamingo alas returned frighteningly some beneath jeez oh that overpaid oh within forlorn suddenly
-								</div>
-							</li>
-
-						
-
-						
-							<li class="media content-divider justify-content-center text-muted mx-0">
-								<span class="text-muted px-2">Today</span>
-							</li>
-
-							<li class="media">
-								<div class="mr-3"><img src="/static/admin/global_assets/images/demo/users/face10.jpg" class="rounded-circle" width="40" height="40" alt=""></div>
-								<div class="media-body">
-									<div class="media-title d-flex flex-nowrap">
-										<a href="#" class="font-weight-semibold mr-3">Will Grace</a>
-										<span class="font-size-sm text-muted text-nowrap ml-auto">2:29 am <a href="#"><i class="icon-pin-alt font-size-base text-muted ml-2"></i></a></span>
-									</div>	
-									Besides lax yikes and a much deservedly much that constructively flexibly darn a one and and whooped without the and darn contemplated jokingly some ordered oh domestic possessive far
-								</div>
-							</li>
-
-							<li class="media">
-								<div class="mr-3"><img src="/static/admin/global_assets/images/demo/users/face3.jpg" class="rounded-circle" width="40" height="40" alt=""></div>
-								<div class="media-body">
-									<div class="media-title d-flex flex-nowrap">
-										<a href="#" class="font-weight-semibold mr-3">Margo Baker</a>
-										<span class="font-size-sm text-muted text-nowrap ml-auto">8:20 am <a href="#"><i class="icon-pin-alt font-size-base text-muted ml-2"></i></a></span>
-									</div>	
-									So because one badger a over more impotent pending frustratingly gosh when
-								</div>
-							</li>
-
-					
-					</div>
+                                <li class="media">
+                                    <div class="mr-3"><a href="{{message_obj.sender_image}}"><img src="{{message_obj.sender_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
+                                    <div class="media-body">
+                                        <div class="media-title d-flex flex-nowrap">
+                                            <a href="/chat/{{message_obj.chat_group}}/" class="font-weight-semibold mr-3">{{message_obj.sender_name}}</a>
+                                            <span class="font-size-sm text-muted text-nowrap ml-auto">{{message_obj.time}} <a href="#"><i class="icon-pin-alt font-size-base text-muted ml-2"></i></a></span>
+                                        </div>
+                                        {{message_obj.content}}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                    
+                            
+                    
+                    </div>
 				</div>
 				<!-- /line content divider -->
 
 			</div>
 			<!-- /content area -->
 
-<textarea id="chat-log" cols="100" rows="20"></textarea><br>
-<!-- <input id="chat-message-input" type="text" size="100"><br> -->
-<!-- <input id="chat-message-submit" type="button" value="Send"> -->
-<!-- 
-<input type = "text" id = "group_name" value = ""> -->
 <input type = "hidden" id = "username" value = "{{user.username}}">
 
 
 <!-- the variable name is sent from views.py  -->
 {{ name|json_script:"g_name" }}
-
             <script>
-                // g_name comsed from name variable sent from chat.views.py
                 const group_name = JSON.parse(document.getElementById('g_name').textContent);
                 var username = document.getElementById("username").value
-                const chatSocket = new WebSocket(
+                const chatSocket = new ReconnectingWebSocket(
                     'ws://'
                     + window.location.host
                     + '/ws/chat/'
@@ -181,54 +130,51 @@
                     + '/'
                 );
                 
+           
+                chatSocket.onopen = function(e){
+                    console.log("on open called!", group_name)
+                    document.getElementById("chat-message-input").disabled = false;
+                    document.getElementById("chat-message-input").value = "";
+                    document.getElementById("chat-message-submit").disabled = false;
+                    chatSocket.send(JSON.stringify({
+                        'command':'fetch_messages',
+                    }));
+                }
+
                 chatSocket.onmessage = function(e) { 
                     const data = JSON.parse(e.data);
                     var messages = data['message']
-
-                    for (i in messages){
+                    if (messages == 'Force Disconnect'){
+                        console.log('FBPIDI closed connection forcefully, due to some exception')
+                        window.location.pathname = '/'
+                    }
+                    else{
+                        for (i in messages){
                         if (messages[i].sender_name != username){
-                          document.getElementById("main-card-title").innerHTML = "Your Chats with : <b>"+messages[i].sender_name+"<b>"
+                            document.getElementById("main-card-title").innerHTML = "Your Chats with : <b>"+messages[i].sender_name+"<b>"  
                             break;
-
                         }
                     }
-                    messages.forEach(append_message);
+                    messages.forEach(append_message);}
                 };
-                // <li class="media">
-				// 				<div class="mr-3">
-				// 					<a href="/static/admin/global_assets/images/demo/images/3.png">
-				// 						<img src="/static/admin/global_assets/images/demo/users/face11.jpg" class="rounded-circle" width="40" height="40" alt="">
-				// 					</a>
-				// 				</div>
+             
+                chatSocket.onclose = function(e) {
+                   
+                    document.getElementById("chat-message-input").value = "Connection Lost, Cannot write message!"
+                    document.getElementById("chat-message-input").disabled = true;
+                    document.getElementById("chat-message-submit").disabled = true;
 
-				// 				<div class="media-body">
-				// 					<div class="media-chat-item">Crud more jeez gent equivalent unsafely far one hesitant so therefore.</div>
-				// 					<div class="font-size-sm text-muted mt-2">Tue, 10:28 am <a href="#"><i class="icon-pin-alt ml-2 text-muted"></i></a></div>
-				// 				</div>
-				// 			</li>
+                    console.log('Chat socket closed unexpectedly, from room.html');
+                    
+                };
 
-                var css = 'h1 { background: red; }',
-    head = document.head || document.getElementsByTagName('head')[0],
-    style = document.createElement('style');
-
-head.appendChild(style);
-
-style.type = 'text/css';
-if (style.styleSheet){
-  // This is required for IE8 and below.
-  style.styleSheet.cssText = css;
-} else {
-  style.appendChild(document.createTextNode(css));
-}
-
-
-                function append_message(message_obj)
-                {
-                    checked_days = new Array();
-                    // if ( ! message_obj.timestamp in checked_days){
-
-
-                    // }
+                function  scroll_down()
+                    {
+                        var main_ul = document.getElementById("main-chat-ul");
+                        main_ul.scrollTop = main_ul.scrollHeight;
+                    }
+  
+                function append_message(message_obj){
                     var br = document.createElement('br')
                     var li_item = document.createElement('li');
                         var img_div = document.createElement('div');
@@ -243,16 +189,14 @@ if (style.styleSheet){
                     image_anchor.href = message_obj.sender_image;
                     image_item.src = message_obj.sender_image;
                     image_item.className = "rounded-circle"
-                    image_item.width = "60";
-                    image_item.height = "60";
-                   
+                    image_item.width = "40";
+                    image_item.height = "40";
 
                     chat_div.className = "media-body"
                         chat_area.textContent = message_obj.content;
                         chat_area.className = "media-chat-item";
                         time_area.textContent = message_obj.time;
                         time_area.className = "smaller_time";
-
                         
                     //  if message is from another user
                     if (message_obj.sender_name != username)
@@ -271,9 +215,10 @@ if (style.styleSheet){
                         
 
                         document.querySelector('#main-chat-ul').appendChild(li_item);
-
+                        scroll_down();
                     }
 
+          
                     else{
                         li_item.className = "media media-chat-item-reverse";
                         img_div.className = "ml-3";
@@ -286,34 +231,20 @@ if (style.styleSheet){
 
                         chat_div.appendChild(chat_area);
                         chat_div.appendChild(time_area); 
-                        
+
                         li_item.appendChild(chat_div);
                         li_item.appendChild(img_div);
                        
-                  
+                        
                         document.querySelector('#main-chat-ul').appendChild(li_item);
+                        scroll_down();
                        
                     }
 
-                   
-                    
-
-                    document.querySelector('#chat-log').value += ( message_obj['content'] + '\n' );
-                    
                 }
-            
-                chatSocket.onopen = function(e){
-                    console.log("on open called!", group_name)
-                    chatSocket.send(JSON.stringify({
-                        'command':'fetch_messages',
-                    }));
-                }
-            
-                chatSocket.onclose = function(e) {
-                    console.error('Chat socket closed unexpectedly, from room.html');
-                };
-            
+                 
                 document.querySelector('#chat-message-input').focus();
+                
                 document.querySelector('#chat-message-input').onkeyup = function(e) {
                     if (e.keyCode === 13) {  // enter, return
                         document.querySelector('#chat-message-submit').click();
@@ -334,9 +265,6 @@ if (style.styleSheet){
                             }));
                             messageInputDom.value = '';
                         }
-                    
-                    
-                  
                 };
             </script>
             

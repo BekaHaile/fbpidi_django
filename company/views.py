@@ -76,13 +76,11 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
             events = CompanyEvent.objects.filter(company=company)
             event_form = CompanyEventForm
             banks = Bank.objects.all()
-            chat_messages = ChatMessage.get_recieved_messages(self.request.user) #filter recieved messages related with the user
-            unread_messages_count  = ChatMessage.unread_messages(  self.request.user).count()
             company_bank_accounts = CompanyBankAccount.objects.filter(company=company)
             account_form = CompanyBankAccountForm()
 
             context = {'company':company,'staff_users':staff_users,'solution_form':sol_form,'solutions':solutions,
-                        'event_form':event_form,'events':events, 'chat_messages': chat_messages, 'unread_messages_count':unread_messages_count,
+                        'event_form':event_form,'events':events, 
                         'banks':banks, 'company_bank_accounts': company_bank_accounts, 'account_form':account_form}
             if "active_tab" in self.kwargs:#to activate a specific tab while opening the company profile, first used for message (inbox tab)
                 context ['active_tab'] = self.kwargs['active_tab']
@@ -274,8 +272,13 @@ class ViewFbpidiCompany(LoginRequiredMixin,View):
         banks = Bank.objects.all()
         company_bank_accounts = CompanyBankAccount.objects.filter(company=fbpidi)
         account_form = CompanyBankAccountForm()
-        return render(self.request,"admin/company/company_profile_fbpidi.html",
-        {'company':fbpidi,'events':events,'event_form':event_form, 'banks':banks, 'company_bank_accounts': company_bank_accounts, 'account_form':account_form})
+        context = {'company':fbpidi,'events':events,'event_form':event_form, 'banks':banks, 'company_bank_accounts': company_bank_accounts, 'account_form':account_form}
+        context['active_tab'] = 'inbox'
+        # if 'active_tab' in self.kwargs:
+            # print("########## Active tab is", self.kwargs['active_tab'])
+            # context['active_tab'] = self.kwargs['active_tab']
+
+        return render(self.request,"admin/company/company_profile_fbpidi.html",context)
     
     def post(self,*args,**kwargs):
         company = Company.objects.get(id=self.kwargs['id'])
