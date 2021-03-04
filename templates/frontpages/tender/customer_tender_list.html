@@ -22,7 +22,7 @@
 											</div>
 											
 											<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
-												<button href="#" type = "submit" class = "btn btn-lg btn-block btn-secondary">Search</button>
+												<button href="#" type = "submit" class = "btn btn-lg btn-block btn-secondary">{% trans "Search" %}</button>
 											</div>
 										</div>
 									</div>
@@ -39,10 +39,9 @@
 		<div class="bg-white border-bottom">
 			<div class="container">
 				<div class="page-header">
-					<h4 class="page-title">Tenders</h4>
+					<h4 class="page-title">{% trans "Tenders" %}</h4>
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Tenders</li>
+						<li class="breadcrumb-item"><a href="{% url 'index' %}">{% trans "Home" %}</a></li> 
 					</ol>
 				</div>
 			</div>
@@ -66,23 +65,23 @@
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
 											</ul>
 											<div class="d-sm-flex">
-												<label class="mr-2 mt-2 mb-sm-1 sort-label">Sort By:</label>
+												<label class="mr-2 mt-2 mb-sm-1 sort-label">{% trans "Sort By" %}:</label>
 												<div class="selectgroup">
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="All" class="selectgroup-input" checked="">
-														<span class="selectgroup-button d-md-flex">Recent <i class="fa fa-sort ml-2 mt-1"></i></span>
+														<span class="selectgroup-button d-md-flex">{% trans "Recent" %} <i class="fa fa-sort ml-2 mt-1"></i></span>
 													</label>
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">Manufacturer</span>
+														<span class="selectgroup-button">{% trans "Manufacturer" %}</span>
 													</label>
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">Free Only</span>
+														<span class="selectgroup-button">{% trans "Free Only" %}</span>
 													</label>
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">Open Only</span>
+														<span class="selectgroup-button">{% trans "Open Only" %}</span>
 													</label>
 													
 												</div>
@@ -115,13 +114,13 @@
 																<a href="/collaborations/customer_tender_detail/{{tender.id}}/" class="text-dark" style="margin-bottom: 3px;"><p>{{tender.tender_type}}</p></a>
 																
 																{% if tender.status == 'Open' %}
-																<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >Open</div>
+																<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >{% trans "Open" %}</div>
 																{%elif tender.status == 'Pending' %}
-																<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >Pending</div>
+																<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >{% trans "Pending" %}</div>
 																{%elif tender.status == 'Closed' %}
-																<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >Closed</div>
+																<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >{% trans "Closed" %}</div>
 																{%else%} 
-																<div style="background-color: blue; color:white; width: fit-content; padding: 5px;" >Suspended</div>
+																<div style="background-color: blue; color:white; width: fit-content; padding: 5px;" >{% trans "Suspended" %}</div>
 																{%endif%}
 
 																
@@ -131,7 +130,7 @@
 															<div class="item-card9-footer d-sm-flex">
 																<div class="item-card9-cost">
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																		<b>By: &nbsp</b>
+																		<b>{% trans "By" %}: &nbsp</b>
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.get_company.company_name}}">
 																			<img src="{{tender.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
 																		</a>
@@ -140,7 +139,7 @@
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.get_company.phone_number}}"><i class="fa fa-phone"></i></a>
 
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.get_company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
-																		<a class="" href="/collaborations/customer_tender_detail/{{tender.id}}/" ><b class="btn btn-secondary btn-sm mt-1">Tender Detail</b></a>
+																		<a class="" href="/collaborations/customer_tender_detail/{{tender.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Tender Detail" %}</b></a>
 																		
 																		<br>
 																		
@@ -148,7 +147,7 @@
 																</div>
 																<div class="ml-auto mt-3 mt-sm-0">
 																	
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{tender.timestamp}}</small></div> 
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{tender.timestamp}}</small></div> 
 																		
 																</div>
 															</div>
@@ -191,7 +190,7 @@
 									<input type="text" class="form-control br-tl-3 br-bl-3" placeholder="Search">
 									<div class="input-group-append ">
 										<button type="button" class="btn btn-secondary br-tr-3 br-br-3">
-											Search
+											{% trans "Search" %}
 										</button>
 									</div>
 								</div>
@@ -200,7 +199,7 @@
 						<div class="card mb-0">
 							
 							<div class="card-header border-top">
-								<h3 class="card-title">Posted By</h3>
+								<h3 class="card-title">{% trans "Posted By" %}</h3>
 							</div>
 							<div class="card-body">
 								<div class="filter-product-checkboxs">
@@ -225,7 +224,7 @@
 								</div>
 							</div>
 							<div class="card-footer">
-								<a href="#" class="btn btn-primary btn-block">Apply Filter</a>
+								<a href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>
 							</div>
 						</div>
 					</div>

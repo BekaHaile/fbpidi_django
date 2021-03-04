@@ -54,14 +54,14 @@
 				{%for research in researchs%}
 				<tr>
 					
-					<td>{{research.title|truncatewords:20}}</td>
-					<td>{{research.user|truncatewords:20}}</td>
+					<td>{{research.title|truncatechars_html:20}}</td>
+					<td>{{research.user|truncatechars_html:20}}</td>
 					<td>{{research.status}}</td>
 					<td>
 						{{research.accepted}}
 					</td>
 					<td>
-						{{research.description|safe|truncatewords:35}}
+						{{research.description|safe|truncatechars_html:35}}
 					</td>
 					<td class="text-center">
 						<div class="list-icons">

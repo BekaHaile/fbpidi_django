@@ -7,9 +7,9 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Checkout Page</h1>
+							<h1 class="">{% trans "Checkout Page" %}</h1>
 							<ol class="breadcrumb text-center">
-								<li class="breadcrumb-item"><a href="{%url 'index'%}">Home</a></li>
+								<li class="breadcrumb-item"><a href="{%url 'index'%}">{% trans "Home" %}</a></li>
 								<li class="breadcrumb-item"><a href="#">Pages</a></li>
 								<li class="breadcrumb-item active text-white" aria-current="page">Checkout</li>
 							</ol>
@@ -28,7 +28,7 @@
 						<div class="single-page  w-100  p-0">
 							<div class="wrapper wrapper2">
 								<div class="card-header">
-									<h3>Shipping Information</h3>
+									<h3>{% trans "Shipping Information" %}</h3>
 								</div>
 								<form id="login" class="card-body" tabindex="500">
 									 {%csrf_token%}
@@ -74,7 +74,7 @@
 									<div class="submit">
 										<div class="row">
 											<div class="col-6">
-												<a type="submit" class="btn btn-primary btn-block" href="{% url 'index' %}" >CONTINUE SHOPPING</a>
+												<a type="submit" class="btn btn-primary btn-block" href="{% url 'index' %}" >{% trans "CONTINUE SHOPPING" %}</a>
 											</div>
 											<div class="col-6">
 												<input type="submit" class="btn btn-secondary btn-block" href="{% url 'checkout' %}" value="COMPLETE ORDER" />

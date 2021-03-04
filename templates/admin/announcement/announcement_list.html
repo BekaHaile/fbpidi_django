@@ -40,6 +40,7 @@
 					<th>Title_am</th>
 					<th>company </th>
 					<th>User </th>
+					<th>TimeStamp</th>
 					<th class="text-center">Actions</th>
 				</tr>
 			</thead> 
@@ -47,11 +48,14 @@
 				{%for Announcement in Announcements%}
 				<tr>
 					
-					<td>{{Announcement.title|truncatewords:20}}</td>
-					<td>{{Announcement.title_am|truncatewords:20}}</td>
+					<td>{{Announcement.title|truncatechars_html:20}}</td>
+					<td>{{Announcement.title_am|truncatechars_html:20}}</td>
 					<td>{{Announcement.company}}</td>
 					<td>
 						{{Announcement.user.username|safe}}
+					</td>
+					<td>
+						{{Announcement.timestamp}}
 					</td>
 					<td class="text-center">
 						<div class="list-icons">

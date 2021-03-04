@@ -4,7 +4,7 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
-{%block pagename%}View Research{%endblock%}
+{%block pagename%}View FAQ{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -39,29 +39,26 @@
                                 
 					</div>
 								
-							<div class="col-xl-6 col-lg-6 col-md-6">
-										user {{forms.user}}
-										<h3>Question:</h3> <h4>{{forms.questions}}</h4>
-										<h3>Question amharic:</h3> <h4>{{forms.questions_am}}</h4>
-										</div>
+							<div  class="card-body">
+										 </br>
+										<h5 style="background-color:tomato;">Question In English:</h5> <h4>{{forms.questions}}</h4>
+										</br>
+										<h5 style="background-color:tomato;">Question In Amharic:</h5> <h4>{{forms.questions_am}}</h4>
+										</br>
+							</div>
 
-										</div>
+										 
 								
 							<div class="card-body">
-								
-								<div>
-									<div>
-										<label class="col-form-label col-lg-3"><h3> Answer </h3> </label>
+								 
+										 <h5 style="background-color:powderblue;">Answer In English:</h5> </h5>  
 										<p>{{forms.answers|safe}}</p>
-									</div>
-								</div>
-
-								<div>
-									<div>
-										<label class="col-form-label col-lg-3"><h3> Answer Amharic</h3> </label>
+									 
+								 
+									 
+										<h5 style="background-color:powderblue;">Answer In Amharic:<h5> </h5>  
 										<p>{{forms.answers_am|safe}}</p>
-									</div>
-								</div>
+									 
 								
 							</div>
 						</div>

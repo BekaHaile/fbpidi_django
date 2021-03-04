@@ -36,10 +36,11 @@
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
-					<th>title</th>
-					<th>tag</th>
-					<th>timestamp </th>
-					<th>publish</th>
+					<th>Title</th>
+					<th>Title Amharic </th>
+					<th>Tag</th>
+					<th>Publish</th>
+					<th>Comments</th>
 					<th>User </th>
 					<th class="text-center">Actions</th>
 				</tr>
@@ -48,13 +49,19 @@
 				{%for blog in blogs%}
 				<tr>
 					
-					<td>{{blog.title|truncatewords:20}}</td>
+					<td>{{blog.title|truncatechars_html:20}}</td>
+					<td>{{blog.title_am|truncatechars_html:20}}</td>
 					<td>{{blog.tag}}</td>
-					<td>{{blog.timestamp}}</td>
-					<td>{{blog.publish}}</td>
-					<td>
+					
+					<td>{{blog.publish}}</td> 
+
+					<td><a class="mr-0" href="{%url 'admin:blogComment_list_id' id=blog.id%}"><i class="fa fa-comment-o text-muted mr-2"></i>{{blog.countComment}}
+					</a></td>
+
+					<td> 
 						{{blog.user.username|safe}}
 					</td>
+
 					<td class="text-center">
 						<div class="list-icons">
 							<div class="dropdown">

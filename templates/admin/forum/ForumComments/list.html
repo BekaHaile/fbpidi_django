@@ -45,9 +45,9 @@
 				{%for researchprojectcategory in researchprojectcategorys%}
 				<tr>
 					
-					<td>{{researchprojectcategory.forum_question|safe|truncatewords:20}}</td>
+					<td>{{researchprojectcategory.forum_question|safe|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.user}}</td>
-					<td>{{researchprojectcategory.comment|safe|truncatewords:20}}</td>
+					<td>{{researchprojectcategory.comment|safe|truncatechars_html:20}}</td>
 					<td>
 						{%if researchprojectcategory.attachements%}
 						 <a href="{{researchprojectcategory.attachements.url}}" download="{{researchprojectcategory.attachements.url}}"> 
