@@ -26,10 +26,17 @@ class User(AbstractUser):
     is_company_admin = models.BooleanField(default=False)  # if user is company admin
     is_company_staff = models.BooleanField(default=False) # if user is company staff
     profile_image = models.ImageField(blank=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey('self',on_delete=models.RESTRICT,null=True,blank=True,related_name="created_by_user")
+    created_date = models.DateTimeField(auto_now_add=True,editable=False)
+    last_updated_by = models.ForeignKey('self',on_delete=models.RESTRICT,null=True,blank=True,related_name="updated_by_user")
+    last_updated_date = models.DateTimeField(null=True)
+    expired = models.BooleanField(default=False)
+
+    class Meta:
+        ordering=('-created_date',)
 
     def get_company_name(self):
-        if self.is_company_admin or self.is_superuser:
+        if self.is_company_admin:
            return CompanyAdmin.objects.get(user = self).get_company_name()
         elif self.is_company_staff:
             return CompanyStaff.objects.get(user = self).get_company_name()
@@ -45,7 +52,7 @@ class User(AbstractUser):
 
 
 class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=100,default="")
     city = models.CharField(max_length=100,default="")
     postal_code = models.CharField(max_length=100,default="")
@@ -67,9 +74,8 @@ class Customer(models.Model):
 
 
 class CompanyAdmin(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    is_suplier = models.BooleanField(default=False) # if the user is from a suplier company.
-    is_manufacturer = models.BooleanField(default=False) # if the user is from a manufacturer company.
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    designation = models.CharField(max_length=200,null=True)
     time_stamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -82,20 +88,3 @@ class CompanyAdmin(models.Model):
     def get_company(self):
         return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None
 
-
-# class CompanyStaff(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-#     company = models.ForeignKey(Company,on_delete=models.CASCADE)
-#     time_stamp = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return self.user.username
-
-class AssignedRoles(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
-    roles = models.ForeignKey(Permission, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.roles.codename

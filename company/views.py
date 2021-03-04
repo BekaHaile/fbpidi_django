@@ -32,13 +32,6 @@ class CreateCompanyProfile(LoginRequiredMixin,View):
         
         if form.is_valid():
             company = form.save(commit=False)
-            comp_admin = CompanyAdmin.objects.get(user=self.request.user)
-            if comp_admin.is_suplier:
-                company.company_type = "supplier"
-                company.company_type_am = "አቅራቢ" 
-            elif comp_admin.is_manufacturer:
-                company.company_type = "manufacturer"
-                company.company_type_am = "አምራች"
             company.product_category = form.cleaned_data.get("product_category")
             company.user = self.request.user
             company.save()
@@ -60,13 +53,6 @@ class CreateCompanyProfileAfterSignUp(LoginRequiredMixin,View):
         form = CompanyForm(self.request.POST,self.request.FILES)
         if form.is_valid():
             company = form.save(commit=False)
-            comp_admin = CompanyAdmin.objects.get(user=self.request.user)
-            if comp_admin.is_suplier:
-                company.company_type = "supplier"
-                company.company_type_am = "አቅራቢ" 
-            elif comp_admin.is_manufacturer:
-                company.company_type = "manufacturer"
-                company.company_type_am = "አምራች"
             company.product_category = form.cleaned_data.get("product_category")
             company.user = self.request.user
             company.save()

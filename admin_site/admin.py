@@ -6,8 +6,9 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
 # from accounts.forms import UserCreationForm 
 # views from accounts app
-from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLogView,
-                        UserDetailView,UpdateAdminProfile,CreateUserView,GroupView,GroupList)
+from accounts.views import (CompanyAdminSignUpView,UserListView,UserLogView,
+                        UserDetailView,MyProfileView,CreateUserView,CreateCompanyStaff,
+                        GroupView,GroupList)
 # views from admin_site app
 from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
@@ -59,8 +60,10 @@ from company.views import (
     CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
     CreateFbpidiCompanyProfile,ViewFbpidiCompany, CreateCompanyBankAccount, EditCompanyBankAccount, DeleteCompanyBankAccount,)
 
+from accounts.forms import AdminLoginForm
  
 class CustomAdminSite(admin.AdminSite):
+    login_form = AdminLoginForm
     def get_urls(self):
         urls = super().get_urls()
       
@@ -138,10 +141,11 @@ class CustomAdminSite(admin.AdminSite):
             
             path("signup/",CompanyAdminSignUpView.as_view(),name="signup"), 
             path("create_user/",wrap(CreateUserView.as_view()),name="create_user"),
+            path("create-my-staff/",wrap(CreateCompanyStaff.as_view()),name="create_my_staff"),
             path("users_list/",wrap(UserListView.as_view()),name="users_list"),
-            path("roles_list/",wrap(RolesView.as_view()),name="roles_list"),
-            path("user_detail/<option>/<id>/",wrap(UserDetailView.as_view()),name="user_detail"),
-            path("update_profile/",wrap(UpdateAdminProfile.as_view()),name="add_profile"),
+
+            path("user_detail/<pk>/",wrap(UserDetailView.as_view()),name="user_detail"),
+            path("update_my_profile/<pk>/",wrap(MyProfileView.as_view()),name="my_profile"),
             path("user_audit/",wrap(UserLogView.as_view()),name="useraudit"),
             path("group_list/",wrap(GroupList.as_view()),name="view_group"),
             path("manage_group/",wrap(GroupView.as_view()),name="create_group"),

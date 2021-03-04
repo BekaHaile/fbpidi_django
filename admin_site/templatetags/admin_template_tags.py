@@ -1,5 +1,7 @@
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.safestring import mark_safe
+
 from company.models import Company,CompanyStaff
 from product.models import Product
 from chat.models import  ChatMessage, ChatGroup, get_recieved_grouped_messages, get_unread_grouped_messages
@@ -26,7 +28,17 @@ def my_company_link(user):
         staff = CompanyStaff.objects.get(user=user)
         company = Company.objects.get(id=staff.company.id)
         return "/admin/view_company_profile/"
-        
+
+@register.simple_tag
+def user_create_button(user):
+    if user.is_superuser:
+        return mark_safe("/admin/create_user/")
+    elif user.is_company_admin:
+        try:
+            Company.objects.get(user=user)
+            return mark_safe("<a href='/admin/create-my-staff/' class='btn bg-teal btn-sm rounded-round'><i class='icon-add mr-2'></i>Create Staff</a>")
+        except ObjectDoesNotExist:
+            return mark_safe("<a href='/admin/create_company_profile/' class='btn bg-red btn-sm rounded-round'><i class='icon-add mr-2'></i>Please Create Your Company Profile</a>")
 
 # count all unread messages
 @register.simple_tag

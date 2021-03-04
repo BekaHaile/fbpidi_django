@@ -162,7 +162,7 @@
 									<ul class="media-list">
 										{%for staff_user in staff_users%}
 										<li class="media">
-											<a href="{%url 'admin:user_detail' option='profile_dtl' id=staff_user.user.id%}" class="mr-3">
+											<a href="{%url 'admin:user_detail' pk=staff_user.user.id%}" class="mr-3">
 												{%if staff_user.user.profile_image != ""%}
 												<img src="{{staff_user.user.profile_image.url}}" width="36" height="36" class="rounded-circle" alt="">
 												{%endif%}

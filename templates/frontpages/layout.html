@@ -147,7 +147,7 @@
                             </li>
                             {%endif%}
                             <li>
-                                <a href="{%url 'logout' %}?next={%url 'login'%}" class="text-dark"><i
+                                <a href="{%url 'logout' %}?next={%url 'cm_login'%}" class="text-dark"><i
                                         class="fa fa-sign-out mr-1"></i> <span>{% trans "Logout" %}</span></a>
                             </li>
                             {%else%}
@@ -156,7 +156,7 @@
                             </li>
 
                             <li>
-                                <a href="{%url 'login' %}" class="text-dark"><i class="fa fa-sign-in mr-1"></i> <span>{% trans "Login" %}</span></a>
+                                <a href="{%url 'cm_login' %}" class="text-dark"><i class="fa fa-sign-in mr-1"></i> <span>{% trans "Login" %}</span></a>
                             </li>
                             {%endif%}
 

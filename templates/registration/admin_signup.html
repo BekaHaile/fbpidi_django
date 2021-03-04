@@ -7,7 +7,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title></title>
+	<title>Industries Admin Signup Page</title>
 
 	<!-- Global stylesheets -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
@@ -166,20 +166,7 @@
 										 
 									</div>
 									
-
-									<div class="form-group">
-										<div class="form-group mb-3 mb-md-2">
-											<label class="d-block font-weight-semibold">Select a User Type</label>
-											{%for field in form.usertype%}
-											<div class="custom-control custom-control-right custom-radio custom-control-inline">
-												<!-- <input type="radio" required class="custom-control-input" name="staff_user_type" value="supplier" id="custom_radio_inline_right_checked" checked>
-												<label class="custom-control-label position-static" for="custom_radio_inline_right_checked">Supplier</label> -->
-												{{field}}
-											</div>
-											{%endfor%}
-										</div>
-									</div>
-									<a href="{% url 'admin:login'%}" class="btn btn-warning-400 btn-labeled btn-labeled-right">Sign In</a>
+									<a href="{% url 'admin:login'%}" class="btn bg-blue-400 btn-warning-400 btn-labeled btn-labeled-right">Sign In</a>
 									<button type="submit" class="btn bg-teal-400 btn-labeled btn-labeled-right"><b><i class="icon-plus3"></i></b> Create account</button>
 								</div>
 							</div>
