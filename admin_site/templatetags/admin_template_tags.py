@@ -44,5 +44,7 @@ def recieved_grouped_messages(user, max_num_group=None, exceluded = None):
 @register.simple_tag
 def get_grouped_unread_messages(user): 
     return views.get_unread_grouped_messages(user)
-
+@register.simple_tag
+def get_all_messages_grouped(user, max_num_group=None, exceluded = None):
+    return views.get_all_grouped_message(user, max_num_group, exceluded)
   

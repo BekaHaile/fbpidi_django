@@ -13,7 +13,9 @@ from chat.models import ChatMessage
 class ChatConsumer(WebsocketConsumer):
     def new_message(self, data):
         sender = User.objects.get(username = data['from'])
-        chat_group = ChatGroup.objects.get(group_name=self.group_name)
+
+        chat_group = list(ChatGroup.objects.ChatGroup.objects.get_or_create(group_name=self.group_name))
+        chat_group = chat_group[0]
         new_message = ChatMessage(chat_group=chat_group, sender = sender, content = data['message'])
         if chat_group.count_connected_users() > 1: # if number of connected users is greater than 1, means the reciever is online. So, read = True 
             new_message.read = True
@@ -30,24 +32,39 @@ class ChatConsumer(WebsocketConsumer):
             'new_message' : new_message
         }    
 
+    #custom method for closing connection while exceptions occur
+    def force_disconnect(self):
+        self.send(text_data = json.dumps({'message':"Force Disconnect"}))
+        
+    
     def connect(self):
         
         requested_group = self.scope['url_route']['kwargs']['group_name']
-        self.group_name = ""
+        self.group_name = "" 
         self.previous_messages = []
         try:
-            group = get_object_or_404(ChatGroup, group_name = requested_group)
+            #get_or_create returns (ChatGroup obj, True or False)
+            group = list(ChatGroup.objects.get_or_create(group_name = requested_group)) 
+            group = group[0]
+            
             self.group_name = group.group_name
             # Join room group
             async_to_sync(self.channel_layer.group_add)(
                 self.group_name ,
                 self.channel_name
-            )      
-            group.connect_user(self.scope['user'])
-            self.accept() 
+            )     
+            user = self.scope['user']
+            self.accept() #this is needed for sending both ok or force disconnect messages
+            if user.is_authenticated: 
+                group.connect_user(self.scope['user'])
+            else:
+                self.force_disconnect()
+            
         except Exception as e:
             print("############# Exception at consumers.connect ", str(e))
-        
+            self.accept()
+            self.force_disconnect()
+            
     def disconnect(self, close_code):
         # Leave room group
         group = get_object_or_404(ChatGroup, group_name = self.group_name)    
