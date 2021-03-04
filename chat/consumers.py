@@ -14,7 +14,7 @@ class ChatConsumer(WebsocketConsumer):
     def new_message(self, data):
         sender = User.objects.get(username = data['from'])
 
-        chat_group = list(ChatGroup.objects.ChatGroup.objects.get_or_create(group_name=self.group_name))
+        chat_group = list(ChatGroup.objects.get_or_create(group_name=self.group_name))
         chat_group = chat_group[0]
         new_message = ChatMessage(chat_group=chat_group, sender = sender, content = data['message'])
         if chat_group.count_connected_users() > 1: # if number of connected users is greater than 1, means the reciever is online. So, read = True 
@@ -55,6 +55,7 @@ class ChatConsumer(WebsocketConsumer):
             )     
             user = self.scope['user']
             self.accept() #this is needed for sending both ok or force disconnect messages
+            print()
             if user.is_authenticated: 
                 group.connect_user(self.scope['user'])
             else:
@@ -116,10 +117,6 @@ class CheckUnreadMessages(WebsocketConsumer):
         self.user = self.scope['user']
         self.accept()
         
-            
-        
-        
-
     def receive(self, text_data):
         data = json.loads(text_data)
         command = data['command']

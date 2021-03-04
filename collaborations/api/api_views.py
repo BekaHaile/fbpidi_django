@@ -37,9 +37,10 @@ class PollDetailApiView( APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, id = None):
+    def get(self, request):
         user = request.user
         try:
+            id = request.query_params['id']
             poll = get_object_or_404(PollsQuestion, id = id)
         except Http404:
             return Response(data = {'error':True, 'message':"Poll object not Found!"})
@@ -57,20 +58,22 @@ class PollDetailApiView( APIView):
             return Response(data)
         return Response(data = {'data':data})
         
-    def post(self, request, id = None):
+    def post(self, request):
             data = {}
             try:
                 selected_choice = Choices.objects.get( id = request.data['selected_choice'])
-                poll = PollsQuestion.objects.get(id = id)
+                poll = PollsQuestion.objects.get(id = request.data['id'])
+            except Http404:
+                return Response(data={'error':True, 'message':'poll or selected choice not Found'})
+            try:
                 result = PollsResult(user = request.user, poll=poll, choice=selected_choice, remark= request.data['remark'])
                 result.save()
                 data['message'] = 'Successfully Voted!'
-                return Response(data, status=status.HTTP_201_CREATED)
-
+                return Response(data = data)
             except Exception as e:
                 data['error'] = True
-                data['message'] = f"Exception Occuered: {str(e)}"
-                return Response(data, status=status.HTTP_304_NOT_MODIFIED)
+                data['message'] = "can't vote twice!"
+                return Response(data=data)
 
 
 class NewsListApiView(APIView):
@@ -89,9 +92,9 @@ class NewsListApiView(APIView):
 
 
 class NewsDetailApiView(generics.RetrieveAPIView):
-    def get(self, request, id = None):
+    def get(self, request, ):
         try:
-            news = get_object_or_404( News, id = id)
+            news = get_object_or_404( News, id = request.query_params['id'])
             return Response( data  = {'error' : False, 'news':NewsDetailSerializer(news).data} )
         except Http404:
             return Response(data = {"error":True, 'message':"News Object not Found!"})
@@ -109,9 +112,9 @@ class EventListApiView(APIView):
 
 
 class EventDetailApiView(APIView):
-    def get(self, request, id = None):
+    def get(self, request):
         try:
-            event = get_object_or_404( CompanyEvent, id = id)
+            event = get_object_or_404( CompanyEvent, id = request.query_params['id'])
             return Response( data = {'error':False, 'event':EventListSerializer(event).data})
         except Http404:
             return Response(data = {'error':True, 'Message': 'Event Not Found!'})
@@ -119,8 +122,9 @@ class EventDetailApiView(APIView):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def EventNotifyApiView(request, id = None):
-            if request.data['email'] and request.data['notify_in']:
+def EventNotifyApiView(request):
+            if request.data['email'] and request.data['notify_in'] and request.data['id'] :
+                id = request.data['id']
                 notify_in = int(request.data['notify_in'])
                 event = CompanyEvent.objects.get(id = id)
                 participant = EventParticipants(user =request.user, event= event,
@@ -142,7 +146,7 @@ def EventNotifyApiView(request, id = None):
                 else:
                     return Response(data={'error':True, 'message':'Invalid month to notify'}, status = status.HTTP_205_RESET_CONTENT)
 
-            return Response(data={'error':True, 'message':'Email and number of days to notify are required!'}, status = status.HTTP_205_RESET_CONTENT)
+            return Response(data={'error':True, 'message':'Email, event id and number of days to notify are required!'}, status = status.HTTP_205_RESET_CONTENT)
 
             
 def get_blog_tags():
@@ -172,7 +176,7 @@ class ApiBlogList(APIView):
 class ApiBlogDetail(APIView):
     def get(self, request):
         try:    
-            blog = get_object_or_404( Blog, id = request.data['id'])
+            blog = get_object_or_404( Blog, id = request.query_params['id'])
             return Response(data = {'error':False, 'count_comment': blog.countComment(), 'blog':BlogSerializer(blog).data,'comments': BlogCommentSerializer(blog.comments(), many = True ).data })
         except Http404:
             return Response(data = {'error':True, 'message': 'Blog Not Found!'})
@@ -181,7 +185,10 @@ class ApiBlogDetail(APIView):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def ApiCreateBlogComment(request):
-    blog = Blog.objects.get(id = request.data['id'])
+    try:
+        blog = Blog.objects.get(id = request.data['id'])
+    except Exception:
+        return Response(data = {'error':True, 'message':"Blog Not Found!"})
     comment = BlogComment(blog=blog, sender = request.user, content = request.data['content'])
     comment.save()
     return Response(data = {'error':False, 'message':"Successfully Commented on blog!"})
@@ -192,12 +199,12 @@ class ApiAnnouncementList(generics.ListAPIView):
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
 
-# announcement-detail/  request.data['id']
+# announcement-detail/  request.query_params['id']
 class ApiAnnouncementDetail(APIView):
     def get(self, request):
-        if request.data['id']:
+        if request.query_params['id']:
             try:
-                announcement = get_object_or_404(Announcement,id=int(request.data['id']))
+                announcement = get_object_or_404(Announcement,id=int(request.query_params['id']))
             except Exception:
                 return Response({'error':True, 'message': "Announcement object not Found!"})
 
@@ -213,7 +220,7 @@ class ApiTenderList(APIView):
 class ApiTenderDetail(APIView):
     def get(self, request):
         try:
-            tender = get_object_or_404(Tender, id = int(request.data['id']))
+            tender = get_object_or_404(Tender, id = int(request.query_params['id']))
         except Http404:
             return Response(data = {'error': True , 'message':'Tender object does not exist!'})
         return Response(data = {'error':False, 'tender':TenderSerializer(tender).data}, status=status.HTTP_200_OK)
@@ -243,7 +250,7 @@ class ApiVacancyList(APIView):
 class ApiVacancyDetail(APIView):
     def get(self, request):
         try:
-            vacancy = get_object_or_404(Vacancy, id = int(request.data['id']))
+            vacancy = get_object_or_404(Vacancy, id = int(request.query_params['id']))
             jobcategory = JobCategory.objects.all()
         except Http404:
             return Response(data = {'error': True , 'message':'Vacancy object does not exist!'})
@@ -260,7 +267,7 @@ class ApiVacancyApplication(APIView):
     permission_classes = ([IsAuthenticated])
     def get(self, request):
         try:
-            vacancy = get_object_or_404(Vacancy, id = int(request.data['id']))
+            vacancy = get_object_or_404(Vacancy, id = int(request.query_params['id']))
             if JobApplication.objects.filter(vacancy=vacancy, user=request.user).exists():
                 return Response(data = {'error':True, 'message': "You can't apply to the same vacancy Twice"})
             jobcategory = JobCategory.objects.all()
@@ -302,7 +309,7 @@ class ApiProject(APIView):
 
 class ApiProjectDetail(APIView):
     def get(self, request):
-        project = Project.objects.get(id = request.data['id'])
+        project = Project.objects.get(id = request.query_params['id'])
         category = ResearchProjectCategory.objects.all()
         user_created = get_user_created_projects(request)		
         return Response(data = {'error':False, 'project': ProjectSerializer(project).data, "user_created": ProjectSerializer(user_created, many = True).data,
@@ -320,10 +327,10 @@ class ApiResearch(APIView):
         return Response(data = {'error':False, 'researchs': ResearchSerializer(researchs, many = True).data, "user_created": ResearchSerializer(user_created, many = True).data,
                                 'category':ResearchProjectCategorySerializer(category, many = True).data})
 
-
+##didn't include try except while getting research obj because, in api, id is sent by the code when users click a button
 class ApiResearchDetail(APIView):
     def get(self, request):
-        research = Research.objects.get(id = request.data['id'])
+        research = Research.objects.get(id = request.query_params['id'])
         category = ResearchProjectCategory.objects.all()
         user_created = get_user_created_researchs(request)
         return Response(data = {'error':False, 'research': ResearchSerializer(research).data, "user_created": ResearchSerializer(user_created, many = True).data,
@@ -401,7 +408,7 @@ class ApiForumQuestionList(APIView):
 class ApiForumQuestionDetail(APIView):
     def get(self, request):
         try:
-            forum = get_object_or_404(ForumQuestion, id = request.data['id'])
+            forum = get_object_or_404(ForumQuestion, id = request.query_params['id'])
             user_created = get_user_created_forums(request) #if forum was created user
         except Http404:
             return Response(data = {'error':True, 'message': "Forum object not found"})
@@ -499,7 +506,10 @@ def ApiCommentReplayAction(request):
             if request.data['option'] == 'create':
                 replay = form.save(commit =False) #sets content
                 replay.user = request.user
-                replay.comment = ForumComments.objects.get(id = request.data['comment_id'])
+                try:
+                    replay.comment = ForumComments.objects.get(id = request.data['comment_id'])
+                except:
+                    return Response(data={'error':True, 'message': 'comment object not Found!' })
                 if request.FILES:
                     replay.attachements = request.FILES['attachements']
             else:#if option = 'edit'

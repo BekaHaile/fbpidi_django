@@ -6,6 +6,7 @@ from django.db.models import Q
 from chat.serializer import ChatMessageSerializer
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import Http404
 @login_required
 def index(request):
     return render(request, 'frontpages/chat/select_chat.html', {})
@@ -16,34 +17,39 @@ def index(request):
 @login_required
 def room(request, requested_group_name):
     #by default group_names are created as self.request.user.username + _ +the username of other user
-    if request.user.username in requested_group_name or request.user.is_superuser:
-        
-        group_name = ""
+    if request.user.username in requested_group_name or request.user.is_superuser:    
+        group = ChatGroup()
         participant_names = requested_group_name.split("_") # this comes from frontpage/chat/chat.html for customer or admin/chat/chat_layout.html scripts
         for name in participant_names:
             try:
                 User.objects.get(username = name)
             except Exception:
-                print('############# Exception at chat.views. cannot chat with Unkonwn users cannot ')
+                print('############# Exception at chat.views. cannot chat with Unkonwn users  ')
                 return redirect('index')
         try:
-            group = ChatGroup.objects.filter( Q(group_name__contains = participant_names[0]),  Q(group_name__contains = participant_names[1])).first()
-            if group:# if a group exists containg the usernames of the two users
-                group_name = group.group_name 
-                #update unread messages to read messages
-                group_unread_messages = ChatMessage.get_unread_messages_from_group(group_name, request.user)
-                for message in group_unread_messages:
-                    message.read = True
-                    message.save()      
-            else: 
-                group = ChatGroup(group_name=requested_group_name)
-                group.save()
+            q = Q( Q(group_name__contains = participant_names[0]),  Q(group_name__contains = participant_names[1]))
+            group = get_object_or_404(ChatGroup, q )
+            #update unread messages to read messages
+            group_unread_messages = ChatMessage.get_unread_messages_from_group(group.group_name, request.user)
+            for message in group_unread_messages:
+                message.read = True
+                message.save() 
+
+        except Http404: # if group does not exist, create it
+            print("HTTp 404 ", requested_group_name)
+            group = ChatGroup(group_name=requested_group_name)
+            group.save()
+        
         except Exception as e:
             print("#### Exception at chat.views", str(e))
+            return redirect('index')
+
         if request.user.is_customer:
-            return render(request, 'frontpages/chat/chat2.html', {'name': group_name})
+            return render(request, 'frontpages/chat/chat2.html', {'name': group.group_name})
         else:         
-            return render(request, 'admin/chat/chat_layout.html', {'name': group_name})
+            return render(request, 'admin/chat/chat_layout.html', {'name': group.group_name})
+
+        
     else:
         print("!!!!!!!!!! User ,", request.user, "  is trying to see other's chat")
         return redirect ('index')

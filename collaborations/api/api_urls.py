@@ -10,12 +10,12 @@ from collaborations.api.api_views import (PollListApiView, PollDetailApiView, Ne
 urlpatterns = [ 
     
     path("polls/", PollListApiView.as_view(), name = "client_polls" ),
-    path("poll_detail/<id>/", PollDetailApiView.as_view(), name = "client_poll_detail" ),
+    path("poll_detail/", PollDetailApiView.as_view(), name = "client_poll_detail" ),
     path('news/', NewsListApiView.as_view(), name = "client_news"),
-    path('news_detail/<id>/', NewsDetailApiView.as_view(), name = 'client_news_detail'),
+    path('news_detail/', NewsDetailApiView.as_view(), name = 'client_news_detail'),
     path('events/', EventListApiView.as_view(), name = 'client_events'),
-    path('event_detail/<id>/', EventDetailApiView.as_view(), name = "client_event_detail"),
-    path('event_notify/<id>/', EventNotifyApiView, name= 'event_notify'),
+    path('event_detail/', EventDetailApiView.as_view(), name = "client_event_detail"),
+    path('event_notify/', EventNotifyApiView, name= 'event_notify'),
 
     ##Forum
     path("forum_list/", ApiForumQuestionList.as_view(), name = "api_forum_list"), 
