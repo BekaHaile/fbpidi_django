@@ -58,9 +58,9 @@ class ApiAddToCartView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     def get(self,request):
-        if request.data['id']:
+        if request.query_params['id']:
             try:
-                product = get_object_or_404(Product,id=int(request.data['id']))
+                product = get_object_or_404(Product,id=int(request.query_params['id']))
             except Exception:
                 return Response({'error':True, 'message': "Product not Found!"})
 
@@ -100,12 +100,12 @@ class ApiDecrementFromCart(APIView):
     permission_classes = ([IsAuthenticated])
     
     def get(self,request):
-        if request.data['id']:
+        if request.query_params['id']:
             try:
-                product = get_object_or_404(Product,id=int(request.data['id']))
+                product = get_object_or_404(Product,id=int(request.query_params['id']))
             except Exception:
                 return Response({'error':True, 'message': "Product not Found!"})
-            product = get_object_or_404(Product,id=request.data['id'])
+            product = get_object_or_404(Product,id=request.query_params['id'])
             user_order_queryset = Order.objects.filter(user=request.user,ordered=False)
             if user_order_queryset.exists():
                 order = user_order_queryset[0]
@@ -173,7 +173,7 @@ class ApiCheckout(APIView):
 ######### newly added from core.api.api_views
 class ApiProductByCategoryView(APIView):
      def get(self, request):
-         products = Product.objects.filter(category = request.data['category_id'])
+         products = Product.objects.filter(category = request.query_params['category_id'])
          return Response(
              data ={'count': products.count(),
                  'products': ProductInfoSerializer(products, many = True).data
@@ -185,7 +185,7 @@ class ApiProductByCategoryView(APIView):
 class ApiProductDetailView(APIView):
     def get(self, request):
         try:
-            product = get_object_or_404(Product, id = request.data['id'])
+            product = get_object_or_404(Product, id = request.query_params['id'])
             return Response( data = {'error':False, 'product':ProducteFullSerializer(product ).data},)
         except Http404:
             return Response(data = {'error': True, 'message':'Product Not Found!'})
@@ -206,7 +206,7 @@ class ApiProductByMainCategory(APIView):
 
 #client/comp-by-main-category/
 class ApiCompanyByMainCategoryList(APIView):   
-    #  request.data['company_type'] should be = manufacturer or supplier, request[product_category = "Beverage", "Food", "Pharmaceuticals", "all"]
+    #  request.query_params['company_type'] should be = manufacturer or supplier, request[product_category = "Beverage", "Food", "Pharmaceuticals", "all"]
     def get(self,request): 
         product_category = request.query_params['product_category']
         companies = Company.objects.filter(company_type= request.query_params['company_type']) #all companies with 

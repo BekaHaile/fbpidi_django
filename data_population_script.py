@@ -36,6 +36,9 @@ def add_banks():
 if __name__ == '__main__':    
    
     d = ChatGroup.objects.all()
-    e = CompanyEvent.objects.first()
-    print(e.company.get_compnay_admin().username)
-
+    m = ChatMessage.objects.all()
+    for n in m:
+        n.delete()
+    for e in d:
+        e.delete()
+    print('messages ', m, " ", d)
