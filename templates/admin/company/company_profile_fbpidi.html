@@ -881,9 +881,37 @@
 												</div>
 
 												<div class="btn-group ml-3 mr-lg-3">
-													<button type="button" class="btn btn-light"><i class="icon-pencil7"></i> <span class="d-none d-lg-inline-block ml-2">Compose</span></button>
+													<button type="button" class="btn btn-light"><a href="#compose_modal" class="dropdown-item" data-toggle="modal" data-target="#compose_modal" ><i class="icon-pencil7"></i> <span class="d-none d-lg-inline-block ml-2">Compose</span></a></button>
 													<button type="button" class="btn btn-light"><i class="icon-bin"></i> <span class="d-none d-lg-inline-block ml-2">Delete</span></button>
 							                    	<button type="button" class="btn btn-light"><i class="icon-spam"></i> <span class="d-none d-lg-inline-block ml-2">Spam</span></button>
+												</div>
+
+												<!-- Chat compse modal -->
+												<div id="compose_modal" class="modal fade" tabindex="-1">
+													<div class="modal-dialog">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h5 class="modal-title">Chat With ..</h5>
+																
+															</div>					
+																<div class="modal-body">
+																	<div class="form-group" style="padding-left: 20px;">
+																					
+																		<div style="margin-bottom: 10px;" class="row">
+																			<h5> Please enter username of the user you want to chat :</h5>
+																		</div>
+																		<div style="margin-right: 5px;" class="row">
+																			<input id = "chat_to" style = "padding: 5px;" type="text" name = "chat_to" value="">
+																		</div>
+																	</div>						
+																</div>
+								
+																<div class="modal-footer">
+																	<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+																	<button type="submit" onclick="chat_with_user()" class="btn bg-primary">Chat</button>
+																</div>
+														</div>
+													</div>
 												</div>
 											</div>
 
@@ -1769,6 +1797,10 @@
 			<!-- /content area -->
 	
 			<script>
+					function chat_with_user(){
+					var user_name = document.getElementById('chat_to');
+					window.location.pathname = '/chat/with/' + user_name.value+ '/';
+				}
 				$(document).ready(function(){
 					$("#summernote").summernote();
 					$(".summernote").summernote();
