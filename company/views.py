@@ -389,7 +389,7 @@ class DeleteCompanyBankAccount(LoginRequiredMixin, View):
 
 class MnfcCompanyByMainCategory(View):
     def get(self,*args,**kwargs):
-        companies = Company.objects.filter(company_type="manufacturer")
+        companies = Company.objects.all()
         company_list = []
         context = {}
         if self.kwargs['option'] == "Beverage":
@@ -413,7 +413,7 @@ class MnfcCompanyByMainCategory(View):
 
 class SupCompanyByMainCategory(View):
     def get(self,*args,**kwargs):
-        companies = Company.objects.filter(company_type="supplier")
+        companies = Company.objects.all()
         company_list = []
         context = {}
         if self.kwargs['option'] == "Beverage":

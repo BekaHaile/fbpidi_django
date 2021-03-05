@@ -176,7 +176,7 @@
                             
                             {%elif user.is_staff%}
                             <li class="dropdown">
-                                <a href="{%url 'admin:user_detail' option='my_profile' id=user.id%}" class="text-dark">
+                                <a href="{%url 'admin:my_profile' pk=user.id%}" class="text-dark">
                                     <i class="fa fa-home mr-1"></i><span>{% trans "My Profile" %}</span>
                                 </a>
 

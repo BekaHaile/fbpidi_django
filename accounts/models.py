@@ -26,7 +26,7 @@ class User(AbstractUser):
     is_company_admin = models.BooleanField(default=False)  # if user is company admin
     is_company_staff = models.BooleanField(default=False) # if user is company staff
     profile_image = models.ImageField(blank=True)
-    created_by = models.ForeignKey('self',on_delete=models.RESTRICT,null=True,blank=True,related_name="created_by_user")
+    created_by = models.ForeignKey('self',on_delete=models.RESTRICT,null=True,blank=True,related_name="user_created_by")
     created_date = models.DateTimeField(auto_now_add=True,editable=False)
     last_updated_by = models.ForeignKey('self',on_delete=models.RESTRICT,null=True,blank=True,related_name="updated_by_user")
     last_updated_date = models.DateTimeField(null=True)
