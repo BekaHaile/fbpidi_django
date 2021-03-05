@@ -182,7 +182,7 @@
             </a>
 
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="{% url 'admin:user_detail' option='my_profile' id=user.id %}" class="dropdown-item"><i class="icon-user-plus"></i> My profile</a>
+                <a href="{% url 'admin:my_profile' pk=user.id%}" class="dropdown-item"><i class="icon-user-plus"></i> My profile</a>
                <a href="{{user|my_company_link}}" class="dropdown-item"><i class="icon-coins"></i> My Company</a>
                 {% if user.is_superuser %}
                 <a href="{% url 'admin:view_fbpidi_company' %}" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span id = "unread_messages" class="badge badge-pill bg-blue ml-auto">{{unread_messages_count}}</span></a>
@@ -242,12 +242,12 @@
  
             unread_socket.onclose = function(e) {
                 status = "";
-                var el = document.createElement('div');
-                el.setAttribute("style", "padding:1%; width: 30%; height:5%; position:absolute; font-size:13px; top:40%; left:40%; background-color: rgb(228, 228, 228); color:black;");
-                el.innerHTML = "Lost connection with FBPIDI system! \n Trying to Reconnect...";
-                document.body.appendChild(el);
+                // var el = document.createElement('div');
+                // el.setAttribute("style", "padding:1%; width: 30%; height:5%; position:absolute; font-size:13px; top:40%; left:40%; background-color: rgb(228, 228, 228); color:black;");
+                // el.innerHTML = "Lost connection with FBPIDI system! \n Trying to Reconnect...";
+                // document.body.appendChild(el);
 
-                setTimeout( function(){ el.parentNode.removeChild(el);}, 5000);
+                // setTimeout( function(){ el.parentNode.removeChild(el);}, 5000);
       
                 console.log('Chat socket closed unexpectedly, from room.html');
                 

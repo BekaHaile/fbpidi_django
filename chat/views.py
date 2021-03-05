@@ -25,7 +25,11 @@ def room(request, requested_group_name):
                 User.objects.get(username = name)
             except Exception:
                 print('############# Exception at chat.views. cannot chat with Unkonwn users  ')
-                return redirect('index')
+                if request.user.is_customer:
+                    return redirect('customer_chat_list')
+                elif request.user.is_superuser:
+                    return redirect('admin:index')
+                
         try:
             q = Q( Q(group_name__contains = participant_names[0]),  Q(group_name__contains = participant_names[1]))
             group = get_object_or_404(ChatGroup, q )
@@ -71,7 +75,6 @@ def chat_with(request, reciever_name):
                     message.read = True
                     message.save()      
             else: 
-            
                 g_name = f"{user.username}_{reciever_name}"
                 group = ChatGroup(group_name=g_name)
                 group.save()
@@ -82,7 +85,7 @@ def chat_with(request, reciever_name):
 
     except Exception as e:
         print("#### Exception at chat.views llls", str(e))
-        return redirect ('index')
+        return redirect (request.path)
 
 class ChatList( LoginRequiredMixin, View):
     def get(self, *args, **kwargs):

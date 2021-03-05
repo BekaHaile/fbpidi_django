@@ -132,6 +132,7 @@
                         <ul class="custom ">
 
                             {%if user.is_authenticated%}
+                            
 
                             {%if user.is_customer%}
                             <li class="dropdown">
@@ -146,8 +147,6 @@
                                 </a>
 
                             </li>
-                           
-
                             <li  class="nav-item dropdown">
                                 <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
                                 
@@ -171,19 +170,45 @@
                                    
                                 </div>
                             </li>
+                           
+
+                           
                               
                            
                             
                             {%elif user.is_staff%}
                             <li class="dropdown">
-                                <a href="{%url 'admin:user_detail' option='my_profile' id=user.id%}" class="text-dark">
+                                <a href="{%url 'admin:my_profile' pk=user.id%}" class="text-dark">
                                     <i class="fa fa-home mr-1"></i><span>{% trans "My Profile" %}</span>
                                 </a>
 
                             </li>
+                            <li  class="nav-item dropdown">
+                                <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
+                                
+                                    <a href = "{% url 'admin:view_company_profile_active_tab' active_tab='inbox' %}"><i class="fa fa-envelope" ></i><span>My Messages</span></a>
+                                    <span id = "unread_messages_list" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
+                                </a>
+                                
+                                
+                                <div style = "padding: 10px;   width: 300px;" class = "dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
+                                    <div class="dropdown-content-header">
+                                        <span class="font-weight-semibold">Messages</span>
+                                        <a href="#" class="text-default"><i class="icon-compose"></i></a>
+                                    </div>
+                                    <div class="dropdown-content-body dropdown-scrollable">
+                                        <ul id = "list_of_senders" style = "width: 100%;" class="media-list">
+                                            
+                                        </ul>
+                                    </div>
+                                
+                    
+                                   
+                                </div>
+                            </li>
                             {%endif%}
                             <li>
-                                <a href="{%url 'logout' %}?next={%url 'login'%}" class="text-dark"><i
+                                <a href="{%url 'logout' %}?next={%url 'cm_login'%}" class="text-dark"><i
                                         class="fa fa-sign-out mr-1"></i> <span>{% trans "Logout" %}</span></a>
                             </li>
                             {%else%}
@@ -192,7 +217,7 @@
                             </li>
 
                             <li>
-                                <a href="{%url 'login' %}" class="text-dark"><i class="fa fa-sign-in mr-1"></i> <span>{% trans "Login" %}</span></a>
+                                <a href="{%url 'cm_login' %}" class="text-dark"><i class="fa fa-sign-in mr-1"></i> <span>{% trans "Login" %}</span></a>
                             </li>
                             {%endif%}
 
@@ -558,11 +583,11 @@
  
             unread_socket.onclose = function(e) {
                 status = "";
-                var el = document.createElement('div');
-                el.setAttribute("style", "padding:1%; width: 30%; height:5%; position:absolute; font-size:13px; top:40%; left:40%; background-color: rgb(228, 228, 228); color:black;");
-                el.innerHTML = "Lost connection with FBPIDI system! \n Trying to Reconnect...";
-                document.body.appendChild(el);
-                setTimeout( function(){ el.parentNode.removeChild(el);}, 5000);
+                // var el = document.createElement('div');
+                // el.setAttribute("style", "padding:1%; width: 30%; height:5%; position:absolute; font-size:13px; top:40%; left:40%; background-color: rgb(228, 228, 228); color:black;");
+                // el.innerHTML = "Lost connection with FBPIDI system! \n Trying to Reconnect...";
+                // document.body.appendChild(el);
+                // setTimeout( function(){ el.parentNode.removeChild(el);}, 5000);
                 console.log('Chat socket closed unexpectedly, from room.html');
                 
     };

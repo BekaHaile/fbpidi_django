@@ -40,7 +40,7 @@
 									</div>
 								</div>
 								<hr class="divider">
-								<form id="login" class="card-body" action="{%url 'login' %}" method="POST" tabindex="500">
+								<form id="login" class="card-body" action="{%url 'cm_login' %}" method="POST" tabindex="500">
 									{%csrf_token%}
 									{{form|crispy}}
 									<div class="submit">
