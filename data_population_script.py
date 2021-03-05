@@ -41,4 +41,5 @@ if __name__ == '__main__':
         n.delete()
     for e in d:
         e.delete()
+    d = 
     print('messages ', m, " ", d)

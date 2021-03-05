@@ -242,12 +242,12 @@
  
             unread_socket.onclose = function(e) {
                 status = "";
-                var el = document.createElement('div');
-                el.setAttribute("style", "padding:1%; width: 30%; height:5%; position:absolute; font-size:13px; top:40%; left:40%; background-color: rgb(228, 228, 228); color:black;");
-                el.innerHTML = "Lost connection with FBPIDI system! \n Trying to Reconnect...";
-                document.body.appendChild(el);
+                // var el = document.createElement('div');
+                // el.setAttribute("style", "padding:1%; width: 30%; height:5%; position:absolute; font-size:13px; top:40%; left:40%; background-color: rgb(228, 228, 228); color:black;");
+                // el.innerHTML = "Lost connection with FBPIDI system! \n Trying to Reconnect...";
+                // document.body.appendChild(el);
 
-                setTimeout( function(){ el.parentNode.removeChild(el);}, 5000);
+                // setTimeout( function(){ el.parentNode.removeChild(el);}, 5000);
       
                 console.log('Chat socket closed unexpectedly, from room.html');
                 
