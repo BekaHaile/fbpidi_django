@@ -50,6 +50,11 @@ urlpatterns = [
     path('company/', include('company.urls')),
     path('product/', include('product.urls')),
     
+    path('auth/oauth/', include('rest_framework_social_oauth2.urls')), ### For both web and rest api social auth,
+    #  this is the redirect url for the web E.x. http://localhost:8000/auth/oauth/complete/google-oauth2/ 
+    #  this is b/c the rest_framework_social_oauth2 embade the social_django in itself
+    
+    
     ### api urls
     path("api/", include("core.api.api_urls")), #urls for the mobile view
     path("api/accounts/", include("accounts.api.api_urls") ),# api login, logout ...

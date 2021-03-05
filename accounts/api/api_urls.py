@@ -9,7 +9,6 @@ urlpatterns = [
     
     #12345
     path('social/<str:backend>/', exchange_token, name="api_social"), #localhost:8000/client/accounts/social/facebook/
-    path('api/auth/oauth/', include('rest_framework_social_oauth2.urls'), name ="api_auth"), ### for logging in api users
     
     # path("logout/", )
 
