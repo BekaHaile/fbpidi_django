@@ -32,13 +32,6 @@ class CreateCompanyProfile(LoginRequiredMixin,View):
         
         if form.is_valid():
             company = form.save(commit=False)
-            comp_admin = CompanyAdmin.objects.get(user=self.request.user)
-            if comp_admin.is_suplier:
-                company.company_type = "supplier"
-                company.company_type_am = "አቅራቢ" 
-            elif comp_admin.is_manufacturer:
-                company.company_type = "manufacturer"
-                company.company_type_am = "አምራች"
             company.product_category = form.cleaned_data.get("product_category")
             company.user = self.request.user
             company.save()
@@ -60,13 +53,6 @@ class CreateCompanyProfileAfterSignUp(LoginRequiredMixin,View):
         form = CompanyForm(self.request.POST,self.request.FILES)
         if form.is_valid():
             company = form.save(commit=False)
-            comp_admin = CompanyAdmin.objects.get(user=self.request.user)
-            if comp_admin.is_suplier:
-                company.company_type = "supplier"
-                company.company_type_am = "አቅራቢ" 
-            elif comp_admin.is_manufacturer:
-                company.company_type = "manufacturer"
-                company.company_type_am = "አምራች"
             company.product_category = form.cleaned_data.get("product_category")
             company.user = self.request.user
             company.save()
@@ -403,7 +389,7 @@ class DeleteCompanyBankAccount(LoginRequiredMixin, View):
 
 class MnfcCompanyByMainCategory(View):
     def get(self,*args,**kwargs):
-        companies = Company.objects.filter(company_type="manufacturer")
+        companies = Company.objects.all()
         company_list = []
         context = {}
         if self.kwargs['option'] == "Beverage":
@@ -427,7 +413,7 @@ class MnfcCompanyByMainCategory(View):
 
 class SupCompanyByMainCategory(View):
     def get(self,*args,**kwargs):
-        companies = Company.objects.filter(company_type="supplier")
+        companies = Company.objects.all()
         company_list = []
         context = {}
         if self.kwargs['option'] == "Beverage":
