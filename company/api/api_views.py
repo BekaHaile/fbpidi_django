@@ -42,6 +42,7 @@ class ApiCompanyDetailView(APIView):
     @permission_classes((IsAuthenticated))
     def get(self, request):
         try:
+            print("^^^^^^^^^^^^^^^^^^^^",request.query_params['id'])
             company = get_object_or_404(Company, id = request.query_params['id'])
             return Response(data= CompanyFullSerializer( company ).data)
         except Http404:

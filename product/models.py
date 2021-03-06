@@ -23,6 +23,8 @@ class Product(models.Model):
 
     def price(self):
         return ProductPrice.objects.filter(product=self).latest('timestamp')
+    def get_price(self):
+        return self.price().price
     
     def more_images(self):
         return ProductImage.objects.filter(product=self)

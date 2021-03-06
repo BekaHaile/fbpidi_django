@@ -36,19 +36,20 @@ class ApiCartSummary(APIView):
     permission_classes = [IsAuthenticated]
     
     def response(self, request, message = ""):
-        try:
-                order = Order.objects.get(user=request.user,ordered=False)
+        try:    
+ 
+                order = Order.objects.filter(user=request.user, ordered=False).first()           
                 products = Product.objects.all().order_by("timestamp")[:4]
                 count = 0
                 for product_order in order.products.all():
                     count += product_order.quantity
-
+                
                 return { 'error':False, 'data' : {'message': message,'total_orders':count,'orders':OrderSerializer( order).data, 
                                     'products': ProductInfoSerializer( products, many = True).data
                                         }, 
                         }
-        except ObjectDoesNotExist:
-                return{'error':True, 'message':"You Do Not have active order"}
+        except Exception as e:
+                return{'error':True, 'message':str(e)}
 
     def get(self, request):
         return Response( self.response( request ))

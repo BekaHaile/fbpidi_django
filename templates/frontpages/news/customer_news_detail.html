@@ -136,7 +136,7 @@
 						</div>
 						<!--/Business Overview-->
 
-						<h3 class="mt-5 mb-4 fs-20">Other Related News  </h3>
+						<h3 class="mt-5 mb-4 fs-20">{{related_message}} </h3>
 
 						<!--Related Posts-->
 						<div id="myCarousel5" class="owl-carousel owl-carousel-icons3">
@@ -235,29 +235,28 @@
 						</div>
 					
 						
-						<div class="card">
-							<div class="card-header">
-								<h3 class="card-title">Search Listings</h3>
+						<form action="{% url 'customer_news_list' %}" method = "GET">
+							<div class="card-header border-top">
+								<h3 class="card-title">{% trans "Posted By " %}</h3>
 							</div>
-							<form action = "/collaborations/customer_news_list/" method="GET">
 							<div class="card-body">
-								<div class="form-group">
-									<input type="text" name = "by_title" class="form-control keywords-input" id="search-text" placeholder="Search news by title or content.">
-								</div>
-								<div class="form-group">
-									<select name="by_category" id="select-countries" class="form-control custom-select select2-show-search">
-										<option value="All" selected>All</option>	
-										{% for category in NEWS_CATEGORY %}
-										<option value="{{category.0}}">{{category.0}}</option>
-										{% endfor %}
-									</select>
-								</div>
-								<div >
-									<button type = "submit"  class="btn  btn-block btn-secondary">Search</button>
+								<div class="filter-product-checkboxs">
+									{% for comp in companies %}
+									<label class="custom-control custom-checkbox mb-2">
+										<input type="checkbox" class="custom-control-input" name="by_company" value="{{comp.company_name}}">
+										<span class="custom-control-label">
+											{% print_translated comp.company_name comp.company_name_am LANGUAGE_CODE %}
+										</span>
+									</label>
+									{% endfor %}
+
 								</div>
 							</div>
-							</form>
+							<div class="card-footer">
+								<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>
+							</div>
 						</div>
+						</form>
 						
 					</div>
 					<!--/Right Side Content-->

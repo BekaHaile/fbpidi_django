@@ -4,30 +4,17 @@ from django.template.response import TemplateResponse
 from django.urls import path,include
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
-# from accounts.forms import UserCreationForm 
-#######################################
 # views from accounts app
 from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLogView,
                         UserDetailView,UpdateAdminProfile,CreateUserView,GroupView)
-
-# APIViews from accounts app
-##############################################################################
 
 
 # views from admin_site app
 from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
 
-# APIviews from admin_site app
-# from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,
-#                         EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
-
 
 from collaborations.views import ( 
-                        # CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
-                        # JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
-
-                        # SuperAdminVacancyList,
                         AdminNewsList, CreateNews, EditNews,  NewsDetail,
 
                         TenderList, CreateTender, TenderDetail, EditTender,  DeleteTender, ManageBankAccount

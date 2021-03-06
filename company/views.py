@@ -398,9 +398,6 @@ class DeleteCompanyBankAccount(LoginRequiredMixin, View):
             return redirect(redirect_url)
 
 
-
-############## newly added, delete this commet after everything has worked right
-
 class MnfcCompanyByMainCategory(View):
     def get(self,*args,**kwargs):
         companies = Company.objects.filter(company_type="manufacturer")

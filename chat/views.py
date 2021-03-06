@@ -7,6 +7,7 @@ from chat.serializer import ChatMessageSerializer
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
+from django.contrib import messages
 @login_required
 def index(request):
     return render(request, 'frontpages/chat/select_chat.html', {})
@@ -20,14 +21,15 @@ def room(request, requested_group_name):
     if request.user.username in requested_group_name or request.user.is_superuser:    
         group = ChatGroup()
         participant_names = requested_group_name.split("_") # this comes from frontpage/chat/chat.html for customer or admin/chat/chat_layout.html scripts
-        for name in participant_names:
+        for name in participant_names:# check if the username is valid
             try:
                 User.objects.get(username = name)
             except Exception:
                 print('############# Exception at chat.views. cannot chat with Unkonwn users  ')
                 if request.user.is_customer:
                     return redirect('customer_chat_list')
-                elif request.user.is_superuser:
+                else: 
+                    messages.warning(request,"A user with the specified username does not exist!")
                     return redirect('admin:index')
                 
         try:
@@ -40,12 +42,11 @@ def room(request, requested_group_name):
                 message.save() 
 
         except Http404: # if group does not exist, create it
-            print("HTTp 404 ", requested_group_name)
             group = ChatGroup(group_name=requested_group_name)
             group.save()
         
         except Exception as e:
-            print("#### Exception at chat.views", str(e))
+            print("############## Exception at chat.views", str(e))
             return redirect('index')
 
         if request.user.is_customer:
@@ -58,38 +59,15 @@ def room(request, requested_group_name):
         print("!!!!!!!!!! User ,", request.user, "  is trying to see other's chat")
         return redirect ('index')
 
-## open chat room for given reciever_name
+## I will use rthe room method for all, and delete this method
 @login_required
 def chat_with(request, reciever_name):
     #by default group_names are created as self.request.user.username + _ +the username of other user
     user = request.user
-
-    print("&&&&&&&&&&&&&&&&&&&&&&&&&& sender = ", user.username, " reciever ",reciever_name, " ", request )
-    try:
-            group = ChatGroup.objects.filter( Q(group_name__contains = user.username),  Q(group_name__contains = reciever_name)).first()
-            if group:# if a group exists containg the usernames of the two users
-                group_name = group.group_name 
-                #update unread messages to read messages
-                group_unread_messages = ChatMessage.get_unread_messages_from_group(group_name, user)
-                for message in group_unread_messages:
-                    message.read = True
-                    message.save()      
-            else: 
-                g_name = f"{user.username}_{reciever_name}"
-                group = ChatGroup(group_name=g_name)
-                group.save()
-            return redirect(f'/chat/{group.group_name}/')
-             
-            
-            
-
-    except Exception as e:
-        print("#### Exception at chat.views llls", str(e))
-        return redirect (request.path)
-
+    return redirect(f"/chat/{user.username}_{reciever_name}")
+    
 class ChatList( LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        print("+++++++++++++++++++++++++++++++it it inside!")
         return render(self.request, "frontpages/chat/chat_list.html", )
         
 
@@ -106,7 +84,6 @@ def get_grouped_message( list_of_messages, max_num_group):
         else:
             break
     return grouped
-
 
 #returns the latest message from a sender and count of unread messages from a sender
 def get_unread_grouped_messages(user):
@@ -132,7 +109,28 @@ def get_recieved_grouped_messages(user, num_group = None, excluded_group = None)
         recieved_messages = ChatMessage.objects.filter(q).order_by('-timestamp')
     max_num_group = recieved_messages.count() if num_group == None else num_group
     return get_grouped_message(list_of_messages = recieved_messages, max_num_group = max_num_group)
-    
+
+#new
+def get_grouped_all_message(user, num_group = None, exceluded_group = None):
+    chat_groups = ChatGroup.objects.filter(group_name__contains = user.username)      
+    if not exceluded_group == None:
+        try:
+            exceluded_group = get_object_or_404(ChatGroup, group_name = exceluded_group)
+            chat_groups = chat_groups.exclude(group_name=exceluded_group)
+        except Exception as e:
+            print (" Exception at chat.views get grouped all message second try", str(e))
+    else:
+        messages =[]
+        for group in chat_groups:
+            latest_message =ChatMessage.objects.filter(chat_group = group).first()
+            if latest_message:
+                new = ChatMessageSerializer(latest_message).data
+                new['count'] = 49
+                messages.append(new)
+    return messages
+
+
+#old
 def get_all_grouped_message(user, num_group = None, excluded_group = None):
     all_messages = []
     q = Q( Q(chat_group__group_name__contains = user.username)  )
@@ -140,13 +138,13 @@ def get_all_grouped_message(user, num_group = None, excluded_group = None):
     if not excluded_group == None:
         try:
             exceluded_group = get_object_or_404(ChatGroup, group_name = excluded_group)
-            all_messages = ChatMessage.objects.filter(q).exclude(chat_group__group_name = excluded_group).order_by('-timestamp')
+            all_messages = ChatMessage.objects.filter(q).exclude(chat_group__group_name = excluded_group).distinct().order_by('-timestamp')
             
         except Exception as e:
             print (" Exception at chat.views get_all grouped message ", str(e))
-            all_messages = ChatMessage.objects.filter(q).order_by('-timestamp')
+            all_messages = ChatMessage.objects.filter(q).distinct().order_by('-timestamp')
     else:
-        all_messages = ChatMessage.objects.filter(q).order_by('-timestamp')
+        all_messages = ChatMessage.objects.filter(q).distinct().order_by('-timestamp')
     max_num_group = all_messages.count() if num_group == None else num_group
     return get_grouped_message(list_of_messages = all_messages, max_num_group = max_num_group)
     
