@@ -1,0 +1,692 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+	<!-- /theme JS files -->
+ 
+{% endblock %}
+{%block pagename%}Settings{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Industry Information Form Dropdowns/Lookup Data</h5>
+						<div class="header-elements">
+							<div class="list-icons float-right">
+								<a  href="#" data-toggle="modal" data-target="#chklist_form" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Company Lookups</a>
+							</div>
+						</div>
+					</div>
+
+					<div class="card-body">
+						<ul class="nav nav-tabs">
+							<li class="nav-item"><a href="#basic-tab1" class="nav-link active" data-toggle="tab">Form of Ownership</a></li>
+							<li class="nav-item"><a href="#basic-tab2" class="nav-link" data-toggle="tab">Working Hours</a></li>
+							<li class="nav-item"><a href="#basic-tab3" class="nav-link" data-toggle="tab">Certifications</a></li>
+							<li class="nav-item"><a href="#basic-tab4" class="nav-link" data-toggle="tab">Management Tools</a></li>
+							<li class="nav-item"><a href="#basic-tab5" class="nav-link" data-toggle="tab">Source of energy</a></li>
+							<li class="nav-item"><a href="#basic-tab6" class="nav-link" data-toggle="tab">Support Types</a></li>
+							<li class="nav-item"><a href="#basic-tab7" class="nav-link" data-toggle="tab">Conditions</a></li>
+						</ul>
+
+						<div class="tab-content">
+							<div class="tab-pane fade show active" id="basic-tab1">
+								<p class="card-title">Form of Company/Business Ownership</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in object_list%}
+											{%if chklist.chk_type == "Forms of Ownership"%}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.chk_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_checklist' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+
+							<div class="tab-pane fade " id="basic-tab2">
+								<p class="card-title">Each Company have their own Working hours, please add the Standards here</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in object_list%}
+											{%if chklist.chk_type == "Working hours"%}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.chk_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_checklist' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+
+							<div class="tab-pane fade " id="basic-tab3">
+								<p class="card-title">Types Of Company Certifications</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in object_list%}
+											{%if chklist.chk_type == "Certifications" %}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.chk_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_checklist' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+							<div class="tab-pane fade " id="basic-tab4">
+								<p class="card-title">Management Tools That the company Uses/possibly could use</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in object_list%}
+											{%if chklist.chk_type == "Management Tools" %}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.chk_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_checklist' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+							<div class="tab-pane fade " id="basic-tab5">
+								<p class="card-title">Main Source of Energy the company uses</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in object_list%}
+											{%if chklist.chk_type == "Source of Energy" %}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.chk_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_checklist' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+							<div class="tab-pane fade " id="basic-tab6">
+								<p class="card-title"> kind of support needed to increase the production and market</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in object_list%}
+											{%if chklist.chk_type == "Areas of Major Challenges" %}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.chk_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_checklist' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+							<div class="tab-pane fade " id="basic-tab7">
+								<p class="card-title">Status of the Processing/Industry Facility</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in object_list%}
+											{%if chklist.chk_type == "Industry Status Checklists" %}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.chk_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_checklist' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+ 
+						</div>
+					</div>
+				</div>
+				<!-- Page length options main category -->
+				
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Investment/Project Information Form Dropdowns Data</h5>
+						<div class="header-elements">
+							<div class="list-icons float-right">
+								<a  href="#" data-toggle="modal" data-target="#project_form" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Project Lookups</a>
+							</div>
+						</div>
+					</div>
+
+					<div class="card-body">
+						<ul class="nav nav-tabs">
+							<li class="nav-item"><a href="#basic-tab1p" class="nav-link active" data-toggle="tab">Project Classification</a></li>
+							<li class="nav-item"><a href="#basic-tab2p" class="nav-link" data-toggle="tab">Land Acquisition</a></li>
+							<li class="nav-item"><a href="#basic-tab3p" class="nav-link" data-toggle="tab">Technology</a></li>
+							<li class="nav-item"><a href="#basic-tab4p" class="nav-link" data-toggle="tab">Automation</a></li>
+							<li class="nav-item"><a href="#basic-tab5p" class="nav-link" data-toggle="tab">Mode Of Project</a></li>
+							<li class="nav-item"><a href="#basic-tab6p" class="nav-link" data-toggle="tab">Facility Design</a></li>
+						</ul>
+
+						<div class="tab-content">
+							<div class="tab-pane fade show active" id="basic-tab1p">
+								<p class="card-title">Project Classification Lookups</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in pl_objects%}
+											{%if chklist.dropdown_type == "Project Classification"%}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.dropdown_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_plookup' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+
+							<div class="tab-pane fade " id="basic-tab2p">
+								<p class="card-title">Land Acquisition Lookups</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in pl_objects%}
+											{%if chklist.dropdown_type == "Land Acquisition"%}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.dropdown_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_plookup' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+
+							<div class="tab-pane fade " id="basic-tab3p">
+								<p class="card-title">Lookups for Technology that will be applied Attribute</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in pl_objects%}
+											{%if chklist.dropdown_type == "Technology" %}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.dropdown_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_plookup' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+							<div class="tab-pane fade " id="basic-tab4p">
+								<p class="card-title">Automation Type Lookup Values</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in pl_objects%}
+											{%if chklist.dropdown_type == "Automation" %}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.dropdown_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_plookup' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+							<div class="tab-pane fade " id="basic-tab5p">
+								<p class="card-title">Lookup values for Mode of Project Attribute</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in pl_objects%}
+											{%if chklist.dropdown_type == "Mode Of Project" %}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.dropdown_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_plookup' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+							<div class="tab-pane fade " id="basic-tab6p">
+								<p class="card-title">Facility design Attribute Lookup values</p>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Value Name</th>
+											<th>Attribute Type</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in pl_objects%}
+											{%if chklist.dropdown_type == "Areas of Major Challenges" %}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.dropdown_type}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																<a onclick="return confirm('Are you sure you want to delete this Lookup/Dropdown?');" href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+																<a  href="{%url 'admin:update_plookup' pk=chklist.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+											{%endif%}
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+							 
+ 
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /content area -->
+			<div id="chklist_form" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">CheckList Form</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+
+						<form action="{%url 'admin:create_checklist' %}" method="POST">
+							{%csrf_token%}
+							<div class="modal-body">
+								<div class="form-group">
+									<div class="row">
+										<div class="col-sm-6">
+											<label>{{chkform.name.label}}</label>
+											{{chkform.name}}
+										</div>
+
+										<div class="col-sm-6">
+											<label>{{chkform.chk_type.label}}</label>
+											{{chkform.chk_type}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn bg-primary">Submit form</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div id="project_form" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Investment/Project Attributes Lookup Values/Dropdowns Form</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+
+						<form action="{%url 'admin:create_plookup' %}" method="POST">
+							{%csrf_token%}
+							<div class="modal-body">
+								<div class="form-group">
+									<div class="row">
+										<div class="col-sm-6">
+											<label>{{projectform.name.label}}</label>
+											{{projectform.name}}
+										</div>
+
+										<div class="col-sm-6">
+											<label>{{projectform.dropdown_type.label}}</label>
+											{{projectform.dropdown_type}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn bg-primary">Submit form</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+{%endblock%}
