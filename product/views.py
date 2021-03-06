@@ -350,6 +350,7 @@ class CheckoutView(LoginRequiredMixin,View):
             order.save()
             return redirect("")
 
+################### newly added , delete this comment
 class ProductByCategoryView(View):
     def get(self,*args,**kwargs):
         products = Product.objects.filter(category=self.kwargs['cat_id'])
