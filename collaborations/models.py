@@ -276,6 +276,7 @@ class News(models.Model):
     ('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological')]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default = 1)
     title = models.CharField(max_length=500, null = False)
     title_am = models.CharField(max_length=500, null = False)
     description = models.TextField( verbose_name="News Description(English)" )
@@ -298,7 +299,9 @@ class News(models.Model):
     def get_company(self):
         return self.user.get_company()
     
+    
         
+
     class Meta:
         ordering = ['-timestamp',] 
 

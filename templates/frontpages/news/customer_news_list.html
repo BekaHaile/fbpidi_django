@@ -13,7 +13,8 @@
 						<div class="row">
 								<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 									<div class="text-center text-white ">
-										<h1 class=""><span class="font-weight-bold"></span> {{message}} </h1>
+										<h1 class=""><span class="font-weight-bold"></span> {% print_translated message message_am LANGUAGE_CODE %} </h1>
+								
 									</div>
 									<form action = "/collaborations/customer_news_list/" method = "GET" >
 											<div class="search-background px-4 py-3 mt-4">
@@ -95,18 +96,7 @@
 														<input type="radio" name="value" value="All" class="selectgroup-input" checked="">
 														<span class="selectgroup-button d-md-flex">All <i class="fa fa-sort ml-2 mt-1"></i></span>
 													</label>
-													<label class="selectgroup-item mb-md-0">
-														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">Distance</span>
-													</label>
-													<label class="selectgroup-item mb-0">
-														<input type="radio" name="value" value="Latest" class="selectgroup-input">
-														<span class="selectgroup-button">Latest</span>
-													</label>
-													<label class="selectgroup-item mb-0">
-														<input type="radio" name="value" value="Rating" class="selectgroup-input">
-														<span class="selectgroup-button">Rating</span>
-													</label>
+													
 												</div>
 											</div>
 										</div>
@@ -615,7 +605,7 @@
 						</form>
 
 
-						<form action = "/collaborations/customer_news_list/" method = "GET">
+						<form action = "{% url 'customer_news_list' %}" method = "GET">
 						<div class="card mb-0">
 							<div class="card-header">
 								<h3 class="card-title">Categories</h3>

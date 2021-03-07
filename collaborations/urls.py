@@ -69,7 +69,6 @@ urlpatterns = [
 
     ##News
     path("customer_news_list/", CustomerNewsList.as_view(), name = "customer_news_list"),
-    path("ajax/", Ajax, name = "ajax"),
     path("customer_news_detail/<id>/", CustomerNewsDetail.as_view(), name = "customer_news_detail"),
     ##Events
     path("customer_event_list/", CustomerEventList.as_view(), name = "customer_event_list"),

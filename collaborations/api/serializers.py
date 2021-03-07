@@ -21,7 +21,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
 class PollListSerializer(serializers.ModelSerializer):
     no_of_choices = serializers.IntegerField(source='count_choices') # count_votes is an attribute in the model
-    total_votes = serializers.IntegerField(source='count_votes')
+    no_of_votes = serializers.IntegerField(source='count_votes')
     company_info = serializers.SerializerMethodField('get_company_info') 
     
     class Meta:
@@ -49,7 +49,7 @@ class PollDetailSerializer(serializers.ModelSerializer):
 
 
 class NewsListSerializer(serializers.ModelSerializer):
-    image = serializers.CharField(source='get_single_image')  
+    images = serializers.CharField(source='get_single_image')  
     company_info = serializers.SerializerMethodField('get_company_info') 
    
     class Meta:
@@ -170,7 +170,7 @@ class VacancyDetailSerializer(serializers.ModelSerializer):
     company_info = serializers.SerializerMethodField('get_company_info')
     category_name = serializers.CharField(source='get_category_name')
     class Meta:
-        model = Vacancy
+        model = Vacancy()
         fields ="__all__"
 
     def get_company_info(self, vacancy):

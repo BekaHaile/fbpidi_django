@@ -211,10 +211,16 @@
 
 							</div>
 
+			<input id = "user_name" type="hidden" value="{{user.username}}">
 			<script>
 				function chat_with_user(){
-					var user_name = document.getElementById('chat_to');
-					window.location.pathname = '/chat/with/' + user_name.value+ '/';
+					var reciever = document.getElementById('chat_to');
+					console.log("user name is ", )
+					window.location.pathname = '/chat/' + user_name.value+"_"+ reciever.value+'/';
 				}
+				$(document).ready(function(){
+					$("#summernote").summernote();
+					$(".summernote").summernote();
+				});
 			</script>
 {% endblock %}
