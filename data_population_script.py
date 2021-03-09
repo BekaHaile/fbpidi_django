@@ -17,12 +17,14 @@ from django.conf import settings
 from chat.models import *
 from django.db.models import Count
 from django.utils.timezone import localtime
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 from django.db import connection, reset_queries
 import time
 import functools
+from django.utils import timezone
+
 
 def set_token_for_existing_users():
 
@@ -160,11 +162,14 @@ def with_out():
             print(m.title, " ", m.company.company_name),'\n'
 
 
+
 if __name__ == '__main__':    
-    # with_select()
-    # print("###############33")
-    # with_out()
-   m = ChatGroup.objects.all()
-   for n in m:
-       print(n)
-   
+    n = News.objects.get(title__icontains = "fourth")
+    n.last_updated_date = None
+    n.save()
+    print(n.last_updated_date)
+
+    # print(n.created_date - n.last_updated_date)
+    for i in n.get_images():
+        print(i.news.title," ", i.created_by, " ", i.created_date, " ", i.last_updated_date)
+

@@ -16,8 +16,6 @@ class PollsQuestion(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     choices = models.ManyToManyField('Choices',related_name='choices',default="")
 
-    def model_name():
-        return "Polls"
     
     def __str__(self):
         return self.title
@@ -46,8 +44,7 @@ class Choices (models.Model):
     description_am = models.TextField( verbose_name="Choice Description(Amharic)" )
     timestamp = models.DateTimeField(auto_now_add=True)
    
-    def model_name():
-        return "Poll Choices"
+
 
     def __str__(self):
         return self.choice_name
@@ -151,9 +148,6 @@ class Tender(models.Model):
     end_date = models.DateTimeField(verbose_name="Tender end date")
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def model_name():
-        return "Tenders"
-
     def get_applications(self):
         return TenderApplicant.objects.filter( tender = self )
     
@@ -190,9 +184,7 @@ class TenderApplicant(models.Model):
     tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def model_name():
-        return "Tender Applicants"
-
+  
     def __str__(self):
         return f"{self.first_name} {self.last_name} from {self.company_name}"
             
@@ -275,21 +267,19 @@ class News(models.Model):
     NEWS_CATAGORY = [ ('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),  
     ('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological')]
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True, editable=False)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default = 1)
     title = models.CharField(max_length=500, null = False)
     title_am = models.CharField(max_length=500, null = False)
     description = models.TextField( verbose_name="News Description(English)" )
     description_am = models.TextField( verbose_name="News Description(Amharic)" )
     catagory = models.TextField(verbose_name="News Catagory, the choices are ", choices=NEWS_CATAGORY)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="news_updated_by")
+    last_updated_date = models.DateTimeField(null=True)
+    expired = models.BooleanField(default=False)
 
-    def model_name():
-        return "News"
-
-    class Meta:
-        ordering = ['-timestamp',]
-
+    
     def get_images(self):
         return self.newsimages_set.all() if self.newsimages_set.exists() else None
 
@@ -297,26 +287,27 @@ class News(models.Model):
         return  self.newsimages_set.first().image.url 
 
     def get_company(self):
-        return self.user.get_company()
+        return self.created_by.get_company()
     
-    
-        
 
     class Meta:
-        ordering = ['-timestamp',] 
+        ordering = ['-created_date',] 
 
     
 class NewsImages(models.Model):
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1, related_name='newsimages')
+    created_date = models.DateTimeField(auto_now_add=True)
     news = models.ForeignKey(News, on_delete = models.CASCADE)
     name = models.CharField(verbose_name = "Image alternative name",max_length=255)
     image = models.ImageField(upload_to = "Images/News Images", max_length=254, verbose_name="News Image",help_text="jpg, png, gid", blank=False)  
-    timestamp = models.DateTimeField(auto_now_add=True)
+    last_updated_by = models.ForeignKey (settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, blank=True, null = True, related_name="updated_newsimages")
+    last_updated_date = models.DateTimeField(blank=True, null = True)
+    expired = models.BooleanField(default=False)
 
-    def model_name():
-        return "News Images" 
-
+    
+    
     class Meta:
-        ordering = ['-timestamp',]
+        ordering = ['-created_date',]
 
 
 # This can be created automatically if we use a manytomanyrelation, that's why I commented this table and added a tender_applications
@@ -326,6 +317,7 @@ class ForumQuestion(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     attachements = models.FileField(upload_to="Attachements/", null=True,max_length=254,help_text="only pdf files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return self.title
@@ -392,6 +384,7 @@ class Announcement(models.Model):
     def announcementimages(self):
         return self.announcementimages_set.all()
 
+
 class AnnouncementImages(models.Model):
     announcement = models.ForeignKey(Announcement, on_delete = models.CASCADE)
     image = models.ImageField(upload_to = "Announcements", max_length=254, verbose_name="Announcement Image",help_text="jpg, png, gid", blank=False)  
@@ -409,6 +402,7 @@ class AnnouncementImages(models.Model):
         size = (300, 300)
         im = im.resize(size, Image.ANTIALIAS)
         im.save(self.image.path)
+
 
 class ResearchProjectCategory(models.Model):
     cateoryname = models.CharField(max_length=500,null=False)
@@ -476,6 +470,7 @@ class Document_Category(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, blank=True, null=True) # if it is null then the category is created by the system
     timestamp = models.DateTimeField(auto_now_add=True)
 
+
 class Document(models.Model):
     DOC_CATEGORY = [ ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'),]
     
@@ -484,9 +479,3 @@ class Document(models.Model):
     document = models.FileField(upload_to="Documents/", blank="False")
     category = models.CharField( max_length = 250, choices=DOC_CATEGORY)
     timestamp = models.DateTimeField(verbose_name="upload time", auto_now_add=True)
-
-
-
-
-
-

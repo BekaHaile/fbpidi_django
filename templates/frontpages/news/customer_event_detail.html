@@ -73,7 +73,8 @@
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
 											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">By: </i><b>{% print_translated event.company.company_name event.company.company_name_am LANGUAGE_CODE %}</b></a></li>
-                                            <li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>Start date: {{event.start_date}}</b> </a></li>                                       
+                                          
+											<li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>Start date: {{event.start_date}}</b> </a></li>                                       
 										    <li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>End date: {{event.end_date}}</b> </a></li>
 										
 										</ul>
@@ -164,7 +165,7 @@
 										<div class="item-card7-text">
 											<ul class="icon-card mb-0 mt-2">
 												<li ><a href="{% url 'customer_event_detail' id=obj.id %}" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>{{obj.company.location}}</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{obj.timestamp}}</a></li>
+												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{obj.start_date}}</a></li>
 												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{% print_translated obj.company.company_name obj.company.company_name_am LANGUAGE_CODE %} </a></li>
 												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> {{obj.company.phone_number}}</a></li>
 											</ul>

@@ -17,47 +17,7 @@ def index(request):
 ## open chat room for given room_name
 @login_required
 def room(request, requested_group_name):
-    #by default group_names are created as self.request.user.username + _ +the username of other user
-    if request.user.username in requested_group_name or request.user.is_superuser:    
-        group = ChatGroup()
-        participant_names = requested_group_name.split("_") # this comes from frontpage/chat/chat.html for customer or admin/chat/chat_layout.html scripts
-        for name in participant_names:# check if the username is valid
-            try:
-                User.objects.get(username = name)
-            except Exception:
-                print('############# Exception at chat.views. cannot chat with Unkonwn users  ')
-                if request.user.is_customer:
-                    return redirect('customer_chat_list')
-                else: 
-                    messages.warning(request,"A user with the specified username does not exist!")
-                    return redirect('admin:index')
-                
-        try:
-            q = Q( Q(group_name__contains = participant_names[0]),  Q(group_name__contains = participant_names[1]))
-            group = get_object_or_404(ChatGroup, q )
-            #update unread messages to read messages
-            group_unread_messages = ChatMessage.get_unread_messages_from_group(group.group_name, request.user)
-            for message in group_unread_messages:
-                message.read = True
-                message.save() 
-
-        except Http404: # if group does not exist, create it
-            group = ChatGroup(group_name=requested_group_name)
-            group.save()
-        
-        except Exception as e:
-            print("############## Exception at chat.views", str(e))
-            return redirect('index')
-
-        if request.user.is_customer:
-            return render(request, 'frontpages/chat/chat2.html', {'name': group.group_name})
-        else:         
-            return render(request, 'admin/chat/chat_layout.html', {'name': group.group_name})
-
-        
-    else:
-        print("!!!!!!!!!! User ,", request.user, "  is trying to see other's chat")
-        return redirect ('index')
+    return redirect("index")
 
 ## I will use rthe room method for all, and delete this method
 @login_required
@@ -68,7 +28,7 @@ def chat_with(request, reciever_name):
     
 class ChatList( LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        return render(self.request, "frontpages/chat/chat_list.html", )
+        return redirect("index")
         
 
 def get_grouped_message( list_of_messages, max_num_group):
@@ -110,7 +70,7 @@ def get_recieved_grouped_messages(user, num_group = None, excluded_group = None)
     max_num_group = recieved_messages.count() if num_group == None else num_group
     return get_grouped_message(list_of_messages = recieved_messages, max_num_group = max_num_group)
 
-#new
+# all messages grouped
 def get_grouped_all_message(user, num_group = None, exceluded_group = None):
     chat_groups = ChatGroup.objects.filter(group_name__contains = user.username)      
     if not exceluded_group == None:
@@ -129,22 +89,3 @@ def get_grouped_all_message(user, num_group = None, exceluded_group = None):
                 messages.append(new)
     return messages
 
-
-#old
-def get_all_grouped_message(user, num_group = None, excluded_group = None):
-    all_messages = []
-    q = Q( Q(chat_group__group_name__contains = user.username)  )
-    
-    if not excluded_group == None:
-        try:
-            exceluded_group = get_object_or_404(ChatGroup, group_name = excluded_group)
-            all_messages = ChatMessage.objects.filter(q).exclude(chat_group__group_name = excluded_group).distinct().order_by('-timestamp')
-            
-        except Exception as e:
-            print (" Exception at chat.views get_all grouped message ", str(e))
-            all_messages = ChatMessage.objects.filter(q).distinct().order_by('-timestamp')
-    else:
-        all_messages = ChatMessage.objects.filter(q).distinct().order_by('-timestamp')
-    max_num_group = all_messages.count() if num_group == None else num_group
-    return get_grouped_message(list_of_messages = all_messages, max_num_group = max_num_group)
-    

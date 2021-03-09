@@ -1,9 +1,7 @@
 from django.urls import path
-
-
 from company.views import (
-    CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,
-    CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,CreateFbpidiCompanyProfile, MnfcCompanyByMainCategory, SupCompanyByMainCategory
+    CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,CreateCompanyProfileAfterSignUp,
+    ViewCompanyProfile,CreateCompanySolution,CreateFbpidiCompanyProfile, MnfcCompanyByMainCategory, SupCompanyByMainCategory
 )
 
 
