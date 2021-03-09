@@ -2,21 +2,63 @@ import datetime
 
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.contrib import messages
-from django.views import View
-from django.views.generic import CreateView
+from django.views.generic import CreateView,UpdateView,ListView,View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.utils import timezone
 
-from company.models import Company,CompanySolution,CompanyEvent,CompanyStaff, Bank, CompanyBankAccount
+from company.models import (Company,CompanySolution,CompanyEvent,
+                            CompanyStaff, Bank, CompanyBankAccount,
+                            InvestmentCapital)
 from accounts.models import CompanyAdmin,User
 from product.models import Order,OrderProduct
 
 
 
-from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm,FbpidiCompanyForm, CompanyBankAccountForm, EventParticipantForm
+from company.forms import (CompanyForm,CompanyProfileForm,CompanyDetailForm,CompanySolutionForm,
+                            CompanyEventForm,FbpidiCompanyForm,InvestmentCapitalForm,
+                         CompanyBankAccountForm, EventParticipantForm)
 from chat.models import ChatGroup, ChatMessage
+
+class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
+    model=Company
+    form_class = CompanyProfileForm
+    template_name = "admin/company/create_company_form.html"
+
+    def form_valid(self,form):
+        company = form.save(commit=False)
+        company.contact_person = self.request.user
+        company.craeted_by = self.request.user
+        company.save()
+        messages.success(self.request,"Company Profile Created")
+        return redirect("admin:create_company_detail",pk=company.id)
+
+class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
+    model = Company
+    form_class = CompanyDetailForm
+    template_name = "admin/company/create_company_detail.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['inv_capital_form'] = InvestmentCapitalForm
+        return context
+
+    def form_valid(self,form):
+        company = form.save(commit=False)
+        company.last_updated_by = self.request.user
+        company.last_updated_date = timezone.now()
+        company.save()
+        messages.success(self.request,"Company Detail Information Added")
+        return redirect("admin:index")
+
+class CreateInvestmentCapital(LoginRequiredMixin,View):
+    def post(self,*args,**kwargs):
+        print(self.request.POST['formData'])
+        return JsonResponse({"DATA!"})
+
+        
 
 class CreateCompanyProfile(LoginRequiredMixin,View):
     def get(self, *args,**kwargs):

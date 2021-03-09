@@ -17,7 +17,7 @@ from django.contrib.auth import views as auth_views
 from useraudit.models import FailedLoginLog,LoginAttempt,LoginLog,UserDeactivation
 
 from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,CompanyUserCreationForm,
-                            AdminCreateUserForm,GroupCreationForm,CompanyForm,FrontLoginForm)
+                            AdminCreateUserForm,GroupCreationForm,FrontLoginForm)
 from accounts.models import User,Company,CompanyAdmin,Customer
 from company.models import CompanyStaff
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail

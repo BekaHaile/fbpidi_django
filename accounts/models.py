@@ -44,11 +44,11 @@ class User(AbstractUser):
     def get_company(self):
         
         if self.is_company_admin:
-           return Company.objects.get(user = self)
+           return Company.objects.get(contact_person = self)
         elif self.is_company_staff:
-            return Company.objects.get(user = self)
+            return Company.objects.get(contact_person = self)
         elif self.is_superuser:
-            return Company.objects.get(company_name="FBPIDI")
+            return Company.objects.get(name="FBPIDI")
 
 
 class Customer(models.Model):

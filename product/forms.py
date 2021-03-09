@@ -9,9 +9,9 @@ class CategoryForm(forms.ModelForm):
 
     class Meta:
         model = Category
-        fields = ('category_type','category_name','category_name_am','description','description_am','image')
+        fields = ('category_type','category_name','category_name_am','description','description_am','icons')
         widgets = {
-            'image':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
+            'icons':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
             'category_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'category_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Sub Category Name(English)'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),
@@ -29,9 +29,9 @@ class SubCategoryForm(forms.ModelForm):
 
     class Meta:
         model = SubCategory
-        fields = ('category_name','sub_category_name','sub_category_name_am','description','description_am','image')
+        fields = ('category_name','sub_category_name','sub_category_name_am','description','description_am','icons')
         widgets = {
-            'image':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
+            'icons':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
             # 'category_name':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'sub_category_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Sub Category Name(English)'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),

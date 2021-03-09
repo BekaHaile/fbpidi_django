@@ -10,7 +10,6 @@ from admin_site.models import Category,SubCategory
 from company.models import Company
 # 
 from accounts.models import User,Company,Customer
-from accounts.forms import CompanyForm
 from product.forms import ReviewForm
 #
 from collaborations.models import News, NewsImages

@@ -1,76 +1,192 @@
+from django.contrib.gis.db import models as gis_models
 from django.db import models
 from django.conf import settings
-from admin_site.models import SubCategory
+
+from admin_site.models import Category,SubCategory,CompanyDropdownsMaster,ProjectDropDownsMaster
 
 
 class Company(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
-    company_name = models.CharField(
-        max_length=200, verbose_name="Company Name(English)")
-    company_name_am = models.CharField(
-        max_length=200, verbose_name="Company Name(Amharic)")
-    location = models.CharField(max_length=200)
-    email = models.EmailField(max_length=200)
-    phone_number = models.CharField(max_length=20)
-    detail = models.TextField(verbose_name="Company Detail(English)")
-    detail_am = models.TextField(verbose_name="Company Detail(Amharic)")
-    company_logo = models.ImageField(verbose_name="Company Logo",help_text="png,jpg,gif files, Max size 10MB")
-    company_intro = models.FileField(verbose_name="Company Intro",default="",null=True,blank=True, help_text="mp4,mkv,avi files, Max size 10MB")
-    company_type = models.CharField(max_length=255)
-    company_type_am = models.CharField(max_length=255)
-    number_of_employees = models.IntegerField(default=0,verbose_name="Number Of Employees")
-    established_year= models.IntegerField(default=0,verbose_name="Established Year")
-    certification = models.CharField(max_length=100,verbose_name="Certification")
-    city = models.CharField(max_length=100,default="",verbose_name="City")
-    postal_code = models.CharField(max_length=100,null=True,default="")
-    product_category = models.ForeignKey(SubCategory,null=True,blank=True,on_delete=models.CASCADE,verbose_name="Main Products")
-    capital = models.FloatField(default=0)
-    color = models.CharField(default="#000000",max_length=10,verbose_name="Your Company Theme")
-    facebook_link = models.CharField(max_length=100,default="",null=True,blank=True)
-    twiter_link = models.CharField(max_length=100,default="",null=True,blank=True)
-    google_link = models.CharField(max_length=100,default="",null=True,blank=True)
-    pintrest_link = models.CharField(max_length=100,default="",null=True,blank=True)
-    instagram_link = models.CharField(max_length=100,default="",null=True,blank=True)
-    linkedin_link = models.CharField(max_length=100,default="",null=True,blank=True)
-       # Trade Capacity
-    incoterms = models.CharField(max_length=100,null=True,blank=True,verbose_name="International Commercial Terms(English)",help_text="Incoterms")
-    incoterms_am  = models.CharField(max_length=100,null=True,blank=True,verbose_name="International Commercial Terms(Amharic)",help_text="Incoterms")
-    average_lead_time  = models.CharField(max_length=100,null=True,blank=True,verbose_name="Average Lead Time(Amharic)")
-    average_lead_time_am = models.CharField(max_length=100,null=True,blank=True,verbose_name="Average Lead Time(Amharic)")
-    no_trading_staff = models.IntegerField(default=0,verbose_name="Number of Trading Staff")
-    terms_of_payment = models.CharField(max_length=100,null=True,blank=True,verbose_name="Payment Method")
-    export_yr = models.IntegerField(default=0,verbose_name="Export Year",null=True,blank=True)
-    export_percentage = models.FloatField(default=0,verbose_name="Export Percentage",blank=True,null=True)
-    main_market = models.CharField(max_length=100,null=True,blank=True,verbose_name="Main Market(English)")   
-    main_market_am = models.CharField(max_length=100,null=True,blank=True,verbose_name="Main Market(Amharic)")                 
-    nearest_port = models.CharField(max_length=100,null=True,blank=True,verbose_name='Nearest Port(English)')
-    nearest_port_am = models.CharField(max_length=100,null=True,blank=True,verbose_name='Nearest Port(Amharic)')
-    import_export = models.BooleanField(default=False)
-        # production capacity
-    r_and_d_capacity = models.CharField(max_length=100,null=True,blank=True,verbose_name='R&D Capacity(English)')
-    r_and_d_capacity_am = models.CharField(max_length=100,null=True,blank=True,verbose_name='R&D Capacity(Amharic)')
-    no_of_rnd_staff= models.IntegerField(default=0,null=True,blank=True,verbose_name='Number of R&D Staff')
-    no_production_lines=models.IntegerField(default=0,null=True,blank=True,verbose_name='Number Of Production Lines')
-    anual_op_value = models.CharField(max_length=100,null=True,blank=True,verbose_name='Anual Output Value')
-    anual_op_main_products = models.TextField(verbose_name="Anual Output Value For Main Products(English)",blank=True,null=True)
-    anual_op_main_products_am = models.TextField(verbose_name="Anual Output Value For Main Products(Amharic)",blank=True,null=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self):
-        return self.company_name
-    
-    def get_image(self): 
-        return self.company_logo.url if self.company_logo.url else None
-        
-    def get_compnay_admin(self):
-        return self.user
+	name = models.CharField(verbose_name="Company Name in English", max_length=255,null=True)
+	name_am = models.CharField(verbose_name="Company Name in Amharic", max_length=255,null=True)
+	logo = models.FileField(max_length=254, verbose_name="Logo of the company",help_text="PNG, Max size 10MB", null=True)
+	geo_location	= gis_models.PointField(verbose_name="Company Location",null=True)
+	ownership_form = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,
+										verbose_name="Form Of Ownership",related_name="ownership_form")
+	established_yr	= models.IntegerField(default=0,verbose_name="Established Year")
+	contact_person	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True) # contact person
+	category	= models.ManyToManyField(Category,related_name="company_category") # category
+	expansion_plan	= models.TextField(verbose_name="Expansion Plan in English",null=True)
+	expansion_plan_am	= models.TextField(verbose_name="Expansion Plan in Amharic",null=True)
+	trade_license	= models.FileField(max_length=254, verbose_name="your Trade License",help_text="pdf, Max size 3MB", null=True)
+	working_hours	= models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,related_name="working_hours",null=True)
+	orgn_strct	= models.FileField(max_length=254, verbose_name="Organizational Structure",help_text="pdf, Max size 3MB", null=True)
+	lab_test_analysis = models.TextField(verbose_name="Laboratory test analysis in english",null=True)
+	lab_test_analysis_am = models.TextField(verbose_name="Laboratory test analysis in amharic",null=True)
+	lab_equipment	= models.TextField(verbose_name="Laboratory equipment",null=True)
+	lab_equipment_am	= models.TextField(verbose_name="Laboratory equipment in amharic",null=True)
+	outsourced_test_param = models.CharField(verbose_name="Outsourced test parameters and contract agreements in english", max_length=2000,null=True)
+	outsourced_test_param_am = models.CharField(verbose_name="Outsourced test parameters and contract agreements in amharic", max_length=2000,null=True)
+	certification	= models.ManyToManyField(CompanyDropdownsMaster,related_name="certification")  
+	conducted_research	= models.TextField(verbose_name="Conducted research and development",null=True)
+	conducted_research_am	= models.TextField(verbose_name="Conducted research and development in amharic",null=True)
+	new_product_developed	= models.CharField(verbose_name="New Product_Developed", max_length=2000,null=True)
+	new_product_developed_am	= models.CharField(verbose_name="New Product_Developed Amharic", max_length=2000,null=True) # under question
+	management_tools = models.ManyToManyField(CompanyDropdownsMaster,verbose_name="Management Tools",related_name="mgmt_tools")
+	electric_power = models.BooleanField(default=False)
+	water_supply = models.BooleanField(default=False)
+	telecom	= models.BooleanField(default=False)
+	marketing_department = models.BooleanField(default=False)
+	e_commerce	= models.BooleanField(default=False)
+	active_database =	models.BooleanField(default=False)
+	waste_trtmnt_system	= models.CharField(verbose_name="Waste Treatment and disposal system in english", max_length=2000,null=True)
+	waste_trtmnt_system_am	= models.CharField(verbose_name="Waste Treatment and disposal system in amharic", max_length=2000,null=True)
+	efluent_trtmnt_plant = models.CharField(verbose_name="Do you have effluent treatment plant in English", max_length=2000,null=True)
+	efluent_trtmnt_plant_am= models.CharField(verbose_name="Do you have effluent treatment plant in Amharic", max_length=2000,null=True)
+	env_mgmt_plan = models.BooleanField(default=False)
+	source_of_energy = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,related_name="source_of_energy",null=True)
+	gas_carb_emision = models.CharField(verbose_name="Measure of Gas/carbon emission to the environment in english", max_length=2000,null=True)
+	gas_carb_emision_am = models.CharField(verbose_name="Measure of Gas/carbon emission to the environment in amharic", max_length=2000,null=True)
+	compound_allot	= models.BooleanField(default=False)
+	comunity_compliant	= models.CharField(verbose_name="Environmental issue compliant with the community in english", max_length=2000,null=True)
+	comunity_compliant_am	= models.CharField(verbose_name="Environmental issue compliant with the community in amharic", max_length=2000,null=True)
+	env_focal_person = models.BooleanField(default=False)
+	safety_profesional	 = models.BooleanField(default=False)
+	notification_procedure	= models.BooleanField(default=False)
+	university_linkage	= models.CharField(verbose_name="University linkage in english", max_length=2000,null=True)
+	university_linkage_am	= models.CharField(verbose_name="University linkage in amharic", max_length=2000,null=True)
+	recall_system	= models.BooleanField(default=False)
+	quality_defects_am	= models.TextField(verbose_name="Product Quantity Defects in amharic in amharic",null=True)
+	quality_defects	= models.TextField(verbose_name="Product Quantity Defects in English",null=True)
+	gas_waste_mgmnt_measure	= models.TextField(verbose_name="Measures to reduce gas and waste management",null=True)
+	gas_waste_mgmnt_measure_am	= models.TextField(verbose_name="Measures to reduce gas and waste management in amharic",null=True)
+	support_required	= models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,verbose_name="Support Required",related_name="major_challenges")
+	company_condition = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,verbose_name="Company Condition",related_name="company_status")
+	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_created_by',null=True)
+	created_date	= models.DateTimeField(auto_now_add=True)
+	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_updated_by',null=True)
+	last_updated_date	= models.DateTimeField(null=True)
+	expired	= models.BooleanField(default=False)
 
-    def get_bank_accounts(self):
-        return self.companybankaccount_set.all() if self.companybankaccount_set.all().count() > 0 else None
+# Company Address Model
+class CompanyAddress(models.Model):
+	company = models.OneToOneField(Company,on_delete=models.CASCADE,related_name="company_address")
+	region = models.CharField(max_length=255, verbose_name="Rigion")
+	city_town = models.CharField(max_length=255, verbose_name="City Town")
+	subcity_zone = models.CharField(max_length=255, verbose_name="Subcity zone")
+	woreda = models.CharField(max_length=255, verbose_name="Woreda")
+	kebele = models.CharField(max_length=255, verbose_name="Kebele")
+	local_area = models.CharField(max_length=255, verbose_name="Local Area")
+	phone_number = models.CharField(max_length=255, verbose_name="Phone Number")
+	fax = models.CharField(max_length=255, verbose_name="Fax")
+	email = models.EmailField(verbose_name="Email Link", max_length=255)
+	facebooklink = models.CharField(verbose_name="Facebook Link", max_length=255)
+	twiterlink = models.CharField(verbose_name="Twiter Link", max_length=255)
+	instagramlink = models.CharField(verbose_name="Instagram Link", max_length=255)
+	linkedinlink = models.CharField(verbose_name="Linkedin Link", max_length=255)
+	googlelink = models.CharField(verbose_name="Google Link", max_length=255)
+	timestamp = models.DateField(auto_now_add=True)
 
-    def get_product_category_type(self):
-        return self.product_category.category_name.category_type
+# Company current Investment capital based on the following attributes.
+class InvestmentCapital(models.Model):
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="investment_capital")
+	year = models.IntegerField(unique=True)
+	machinery_cost	= models.FloatField(default=0)
+	building_cost	= models.FloatField(default=0)
+	working_capital	= models.FloatField(default=0)
+	timestamp = models.DateField(auto_now_add=True)
+
+# Certificates
+class Certificates(models.Model):
+    company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="certificates")
+    name = models.CharField(max_length=100,null=True)
+    certificate	= models.FileField(max_length=254, upload_to="companies/certificates/",
+                                    verbose_name="Certificate of competency",
+                                    help_text="pdf, Max size 3MB", blank=True)
+    timestamp = models.DateField(auto_now_add=True)
+
+	
+
+# Source and Amount of product input materials
+class SourceAmountIputs(models.Model):		
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="source_amount_inputs",default=0)
+	year =  models.IntegerField(unique=True)
+	import_company	= models.IntegerField(default=0)
+	govt_suplied	= models.IntegerField(default=0)
+	purchase_from_farmer	= models.IntegerField(default=0)
+	purchase_from_union	= models.IntegerField(default=0)
+	timestamp = models.DateField(auto_now_add=True)
+
+# Employees information/statistics
+class Employees(models.Model):
+	EMP_TYPE= [('','Select Employment Type'),('Permanent','Permanent'),('Temporary','Temporary'),('Foreign','Foreign')]
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="employees")
+	year	= models.IntegerField(default=0,unique=True)
+	employment_type	= models.CharField(max_length=200,verbose_name="The Employment Type", choices=EMP_TYPE)	
+	male	= models.IntegerField(default=0)	
+	female	= models.IntegerField(default=0)	
+	timestamp = models.DateField(auto_now_add=True)
+
+# New Jobs Created Every Year
+class JobOpportunities(models.Model):
+	JOB_TYPE = [ ('','Select Job Type'),('Permanent','Permanent'),('Temporary','Temporary'),]
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="job_oportunities")
+	year	= models.IntegerField(default=0,unique=True)
+	job_type = models.CharField(max_length=20,verbose_name="Types Of Job", choices=JOB_TYPE)
+	male	= models.IntegerField(default=0)
+	female	= models.IntegerField(default=0)	
+	timestamp = models.DateField(auto_now_add=True)
+
+
+# Employees Educational Status
+class EducationalStatus(models.Model):
+	EDUCATION_TYP = (('','Select Education Type'),('','12th Graduate below'),('Deploma TVET','Deploma TVET'),('Degree','Degree'),('Masters','Masters'),('PhD','PhD'),)
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="educational_status")
+	year = models.IntegerField(unique=True)
+	education_type	= models.CharField(verbose_name="Education Type ", max_length=2000)		
+	male	= models.IntegerField(default=0)		
+	female	= models.IntegerField(default=0)
+	timestamp = models.DateField(auto_now_add=True)	
+
+# Number of Female Employees in high positions
+class FemalesInPosition(models.Model):
+    company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="females_high_positions")
+    year = models.IntegerField(unique=True)
+    high_position = models.IntegerField(default=0)
+    med_position = models.IntegerField(default=0)
+    timestamp = models.DateField(auto_now_add=True)
+    
+# Yearly Marget Target In percent
+class MarketTarget(models.Model):
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="market_target",default=0)
+	year	= models.IntegerField(default=0,unique=True)
+	further_proc_power 	= models.FloatField(verbose_name="Further processing factors %",default=0)	
+	final_consumer	= models.FloatField(verbose_name="Final consumers %",default=0)	
+	restaurant_and_hotels = models.FloatField(verbose_name="Restaurant and Hotels %",default=0)	
+	institutions = models.FloatField(verbose_name="Institutions (University,Military...) %",default=0)	
+	epsa = models.FloatField(verbose_name="EPSA %",default=0)	
+	hospitals	= models.FloatField(verbose_name="Hospitals %",default=0)	
+	agents	= models.FloatField(verbose_name="Agents %",default=0)	
+	wholesaler_distributor	= models.FloatField(verbose_name="Wholesaler Distributor %",default=0)	
+	retailer = models.FloatField(verbose_name="Retailer %",default=0)	
+	other = models.FloatField(verbose_name="Other %",default=0)
+	timestamp = models.DateField(auto_now_add=True)
+
+# Yearly market destinations
+class MarketDestination(models.Model):
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="market_destination",default=0)
+	year	= models.IntegerField(default=0,unique=True)
+	domestic = models.FloatField(verbose_name="Domestic %",default=0)	
+	export	= models.FloatField(verbose_name="Export %",default=0)
+	timestamp = models.DateField(auto_now_add=True)
+
+# Daily Power consumption
+class PowerConsumption(models.Model):
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="power_consumption",default=0)
+	day	= models.DateField()
+	installed_capacity = models.FloatField(verbose_name="Installed capacity electric power demand kilowatt-hour (kWh) per day", default=0)	
+	current_supply = models.FloatField(verbose_name="Currently supplying electric power kilowatt-hour (kWh) per day", default=0)	
+	timestamp = models.DateField(auto_now_add=True)
+
 
 class CompanyStaff(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
@@ -85,6 +201,72 @@ class CompanyStaff(models.Model):
 
     def get_company(self):
         return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None
+
+# class InvestmentProject(models.Model):
+# 	company	= models.ForeignKey(Company, on_delete=models.CASCADE)
+# 	owner_share	= models.FloatField(default=0)
+# 	bank_share	= models.FloatField(default=0)
+# 	capital_in_dollary	= models.FloatField(default=0)
+# 	investment_license	= models.CharField(max_length=2000, verbose_name="Investment License Code")
+# 	issued_date	= models.DateField()
+# 	sector	= models.ForeignKey(Category,on_delete=models.RESTRICT,related_name="sector", verbose_name="Sector")
+# 	product_type = models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="product_type") 
+# 	site_location_name = models.CharField(verbose_name="Site location street name", max_length=2000)
+# 	distance_f_strt	= models.FloatField(default=0)
+# 	land_acquisition = models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT, verbose_name="Land Acquisition")
+# 	project_classification	= models.ForeignKey(ProjectDropDownsMaster, on_delete=models.CASCADE)
+# 	contact_person	=  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT)
+# 	remaining_work	= models.TextField(verbose_name="Remaining Work To be done")
+# 	remaining_work_am	= models.TextField(verbose_name="Remaining Work To be done in amharic")
+# 	major_problems	= models.TextField(verbose_name="Major Problems")
+# 	major_problems_am	= models.TextField(verbose_name="Major Problems in amharic")
+# 	operational_time =  models.DateField()
+# 	annual_raw_material =	models.TextField(verbose_name="Annual Raw material demand and type in English")
+# 	annual_raw_material_am =	models.TextField(verbose_name="Annual Raw material demand and type in Amharic")
+# 	power_need	= models.FloatField(default=0,verbose_name="power Need in kwh")
+# 	water_suply	= models.FloatField(default=0,verbose_name="Water Supply")
+# 	product_quantity = models.TextField(verbose_name="Product Quantity")
+# 	product_quantity_am = models.TextField(verbose_name="Product Quantity in amharic")
+# 	cond_provided_for_wy = models.TextField(verbose_name="Special Conditions Provided for women and youth")
+# 	cond_provided_for_wy_am = models.TextField(verbose_name="Special Conditions Provided for women and youth in amharic")
+# 	job_plan_recruited	= models.ForeignKey(JobOpportunities, on_delete=models.CASCADE)
+# 	education_stat	= models.ForeignKey(EducationalStatus, on_delete=models.CASCADE)
+# 	target_market =	models.CharField(verbose_name="Market Destination", max_length=2000,choices=MarketDestination)
+# 	env_impac_ass_doc =	models.FileField( max_length=254, verbose_name="Environmental Impact assessment document",help_text="pdf, Max size 3MB", blank=True)
+# 	capital_utilization	= models.IntegerField(default=0)
+# 	technology	= models.CharField(verbose_name="Technology going to be applied", max_length=2000)
+# 	automation	= models.CharField(verbose_name="Automation", max_length=2000)
+# 	mode_of_project	= models.CharField(verbose_name="Mode of Project", max_length=2000)
+# 	facility_design	= models.CharField(verbose_name="Facility design", max_length=2000)
+# 	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_created_by')
+# 	created_date	= models.DateTimeField(auto_now_add=True)
+# 	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_updated_by')
+# 	last_updated_date	= models.DateTimeField(null=True)
+# 	expired	= models.BooleanField(default=False)
+
+
+# class LandUsage(models.Model):
+# 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="land_usage")
+# 	total_land_size = models.FloatField(verbose_name="Total land size in meter square", max_length=2000)	 
+# 	production_building = models.FloatField(verbose_name="production building in meter square", max_length=2000)	 
+# 	office_building = models.FloatField(verbose_name="production building in meter square", max_length=2000)	 
+# 	warehouse = models.FloatField(verbose_name="Ware house in meter square", max_length=2000)	 
+# 	other = models.FloatField(verbose_name="production building in meter square", max_length=2000)
+# 	timestamp = models.DateTimeField(auto_now_add=True)	 
+
+# class ProjectState(models.Model):
+# 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="project_state")
+# 	percentage_construction_performance = models.FloatField(verbose_name="percentage of construction performance" )	
+# 	machinery_purchase_performance = models.FloatField(verbose_name="machinery Purchase Performance" )	
+# 	factory_building_performance = models.FloatField(verbose_name="factory Building Performance")	
+# 	machinery_installation = models.FloatField(verbose_name="machinery Installation" )	
+# 	commissioning_work = models.FloatField(verbose_name="commissioning Work" )	
+# 	rawmaterial_preparation = models.FloatField(verbose_name="raw Material Preparation" )	
+# 	hremployment_training = models.FloatField(verbose_name="HR Employment Training" )	
+# 	testproduct = models.FloatField(verbose_name="Test Product")	
+# 	certification = models.FloatField(verbose_name="certification")	
+# 	timestamp	= models.DateTimeField(auto_now_add=True)
+
 
 
 class CompanySolution(models.Model):

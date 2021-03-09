@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'core',
     'admin_site',
     'accounts',
@@ -63,7 +64,7 @@ INSTALLED_APPS = [
     'useraudit',
     'rest_framework',
     'rest_framework.authtoken',
-
+    'floppyforms',
     
  
 ]

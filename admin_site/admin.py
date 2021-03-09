@@ -61,8 +61,9 @@ from collaborations.Views.forums import(ListForumQuestionAdmin,CreateForumQuesti
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView)
                             
-from company.views import (
-    CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,EditCompanyEvent,
+from company.views import (CreateInvestmentCapital,
+    CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,
+    EditCompanyEvent,CreateMyCompanyProfile,CreateCompanyDetail,
     CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
     CreateFbpidiCompanyProfile,ViewFbpidiCompany, CreateCompanyBankAccount, EditCompanyBankAccount, DeleteCompanyBankAccount,)
 
@@ -206,6 +207,9 @@ class CustomAdminSite(admin.AdminSite):
         
             # path("",wrap(include("company.urls"))),
             path("create_company_profile/",wrap(CreateCompanyProfile.as_view()),name="create_company_profile"),
+            path("create_mycompany_profile/",wrap(CreateMyCompanyProfile.as_view()),name="create_my_company"),
+            path("create_company_detail/<pk>/",wrap(CreateCompanyDetail.as_view()),name="create_company_detail"),
+            path("create_investment_capital/<company>/",wrap(CreateInvestmentCapital.as_view()),name="create_inv_capital").
             path("company_list/<option>/",wrap(CompaniesView.as_view()),name="companies"),
             path("company_detail/<id>/",wrap(CompaniesDetailView.as_view()),name="company_detail"),
             path("create_company_profile_al/",wrap(CreateCompanyProfileAfterSignUp.as_view()) ,name='complete_company_profile'),
