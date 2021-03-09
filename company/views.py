@@ -1,4 +1,5 @@
 import datetime
+from django.utils import timezone
 
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
@@ -199,6 +200,7 @@ class CreateCompanySolution(LoginRequiredMixin,View):
         messages.warning(self.request,form.errors)
         return redirect("admin:view_company_profile")
 
+
 class CreateCompanyEvent(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
         form = CompanyEventForm(self.request.POST,self.request.FILES)
@@ -206,6 +208,7 @@ class CreateCompanyEvent(LoginRequiredMixin,View):
         if form.is_valid():
             event = form.save(commit=False)
             event.company = company
+            event.created_by = self.request.user
             event.save()
             messages.success(self.request,"Event Created Successfully")
             if company.company_type == "fbpidi":
@@ -218,6 +221,7 @@ class CreateCompanyEvent(LoginRequiredMixin,View):
                 return redirect("admin:view_fbpidi_company")
             else:
                 return redirect("admin:view_company_profile")
+
 
 class EditCompanyEvent(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
@@ -239,6 +243,8 @@ class EditCompanyEvent(LoginRequiredMixin,View):
             event.status = self.request.POST['status']
             if self.request.FILES:
                 event.image = self.request.FILES['image']
+            event.last_updated_by = self.request.user
+            event.last_updated_date = timezone.now()
             event.save() 
             messages.success(self.request,"Event Edited Successfully")
             return redirect("admin:view_fbpidi_company") if self.request.user.is_superuser else redirect("admin:view_company_profile")
@@ -246,7 +252,8 @@ class EditCompanyEvent(LoginRequiredMixin,View):
         else:
             messages.warning(self.request,form.errors)
             return redirect("admin:view_fbpidi_company") if self.request.user.is_superuser else redirect("admin:view_company_profile")
-            
+
+
 class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         form = FbpidiCompanyForm()

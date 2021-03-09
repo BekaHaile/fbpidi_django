@@ -101,22 +101,23 @@ class CompanySolution(models.Model):
 class CompanyEvent(models.Model):
     EVENT_STATUS = [('Upcoming', 'Upcoming'),('Open', 'Open' ), ('Closed', 'Closed')]
 
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE, related_name='companyevents', default=1)
+    created_date = models.DateTimeField(auto_now_add=True, editable=False, )
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
     title = models.CharField(max_length=200,verbose_name="Event Name(English)")
     title_am = models.CharField(max_length=200,verbose_name="Event Name(Amharic)")
     description = models.TextField(verbose_name="Description(English)")
     description_am = models.TextField(verbose_name="Description(Amharic)")
     image = models.ImageField(blank = True, null = True)
-    time_stamp = models.DateTimeField(auto_now_add=True)
     start_date = models.DateTimeField(verbose_name="Event start date")
     end_date = models.DateTimeField(verbose_name="Event end date")
     status = models.CharField(max_length=10, verbose_name="Tender status", choices=EVENT_STATUS)
-
-    def model_name():
-        return "Events"
+    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True)
+    last_updated_date = models.DateTimeField(null=True)
+    expired = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['-time_stamp',] 
+        ordering = ['-created_date',] 
 
     def get_image(self):
         return self.image.url if self.image else self.company.get_image()

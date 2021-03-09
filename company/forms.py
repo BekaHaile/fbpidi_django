@@ -89,7 +89,7 @@ class CompanySolutionForm(forms.ModelForm):
         }
 
 class CompanyEventForm(forms.ModelForm):
-    STATUS_CHOICE = [ ('Upcoming', 'Upcoming'),('Open', 'Open' ),('Closed', 'Closed')]
+    STATUS_CHOICE = [ ('Upcoming', 'Upcoming'),('Open', 'Open' )]
     image = forms.FileField(allow_empty_file=True, required=False, widget= forms.FileInput(attrs={'class': 'form-input-styled',}) )
     status = forms.ChoiceField(choices = STATUS_CHOICE, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
 

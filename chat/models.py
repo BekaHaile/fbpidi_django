@@ -68,7 +68,6 @@ class ChatMessage(models.Model):
 
     #no of unread messages from a specific sender
     def count_unread_messages_from_sender(sender_name, user):
-        
         q = Q( Q(chat_group__group_name__contains = sender.username) &  Q(chat_group__group_name__contains = user.username)& Q( read = False) & Q(sender = sender))
         return  ChatMessage.objects.filter(q).count()
 

@@ -1,4 +1,8 @@
 
+import os
+import datetime
+from django.utils import timezone
+ 
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.urls import reverse
@@ -16,7 +20,7 @@ from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationFo
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
 from company.forms import EventParticipantForm
 from accounts.models import User, CompanyAdmin, Company
-import os
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -32,7 +36,6 @@ from collaborations.models import ( PollsQuestion, Choices, PollsResult, Tender,
 									JobCategory,ForumQuestion, Faqs, Vacancy, JobApplication, JobCategory, News, NewsImages, ForumComments, 
 									CommentReplay,Announcement,AnnouncementImages,Research,ResearchProjectCategory, Document)
 from collaborations.api.serializers import NewsListSerializer
-import datetime
 
 from django.http import JsonResponse
 
@@ -71,7 +74,7 @@ def related_company_title_status(model_name, obj):
         t = Q (  Q(title__icontains = obj.title) | Q(title_am__icontains = obj.title_am )  )
         result = model.objects.filter(  q , t  ).exclude(id = obj.id)
         if result.count() == 0:
-            return {'query':model.objects.exclude(obj)[:3], 'message': f'Other {model_name}s ' }
+            return {'query':model.objects.exclude(id = obj.id)[:3], 'message': f'Other {model_name}s ' }
         else:
             return {'query': result, 'message':f'Other {model_name}s with related content' }
     else:
@@ -90,7 +93,7 @@ def SearchByTitle_All(model_name, request ):
         model= models[model_name]
         if not 'by_title' in request.GET: #not searching, just displaying latest news 
             query  = model.objects.all()
-            return { 'query': query, 'message': f" {model.model_name()} ",  'message_am': f" {model.model_name()} "} # 3 Polls Found!
+            return { 'query': query, 'message': f" {model_name} ",  'message_am': f" {model_name} "} # 3 Polls Found!
         else:   #if there is a filter_key list
             filter_key = request.GET['by_title']
             query = model.objects.filter( Q(title__icontains = filter_key) | Q(title_am__icontains = filter_key) |Q(description__icontains = filter_key ) | Q(description_am__icontains = filter_key) ).distinct() 
@@ -464,7 +467,6 @@ class CreateNews(LoginRequiredMixin, View):
         try:
                 if self.request.user.is_company_admin:
                     company = Company.objects.get(user = self.request.user)
-                    
                 elif self.request.user.is_company_staff:
                     company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
                     company = company_staff.company
@@ -482,12 +484,10 @@ class CreateNews(LoginRequiredMixin, View):
         form = NewsForm( self.request.POST) 
         if form.is_valid:
             news = form.save(commit=False)
-            news.user = self.request.user
+            news.created_by = self.request.user
             news.save()
-        
             for image in self.request.FILES.getlist('images'):
-                print ("saving ", image.name)
-                imag = NewsImages(news=news, name = image.name, image = image)
+                imag = NewsImages(created_by=self.request.user, created_date=timezone.now(), news=news, name = image.name, image = image)
                 imag.save()
             messages.success(self.request, "News Created Successfully!")
             return redirect("admin:news_list") 
@@ -515,12 +515,13 @@ class EditNews(LoginRequiredMixin, View):
                 news.title_am = self.request.POST['title_am']
                 news.description = self.request.POST['description']
                 news.description_am = self.request.POST['description_am']
+                news.last_updated_by = self.request.user
+                news.last_updated_date = timezone.now()    
                 news.save()
 
                 if self.request.FILES:
                     for image in self.request.FILES.getlist('images'):
-                        print ("saving new images", image.name)
-                        imag = NewsImages(news=news, name = image.name, image = image)
+                        imag = NewsImages(created_by=self.request.user, created_date=timezone.now(), news=news, name = image.name, image = image)
                         imag.save()
                 messages.success(self.request, "News Edited Successfully!")
                 return redirect(f"/admin/news_detail/{news.id}/") 
@@ -539,11 +540,9 @@ class NewsDetail(LoginRequiredMixin,View):
         if self.kwargs['id']:
             try:
                 news = News.objects.get(id =self.kwargs['id'] )
-                related_objs
                 context = {'form':NewsForm, 'news':news , "NEWS_CATEGORY": News.NEWS_CATAGORY}
                 return render(self.request,'admin/collaborations/news_detail.html',context)
             except Exception as e:
-                print(str(e))
                 return redirect("admin:news_list")
         print("error at newsDetail for admin")
         return redirect("admin:news_list")
@@ -595,7 +594,7 @@ class CustomerNewsDetail(View):
                 if comp.news_set.count() > 0:
                     companies.append(comp)
             news = get_object_or_404(News, id = self.kwargs['id'])
-            print("$$$$$$$$$$$$", companies)
+         
         except Exception as e:
             print("^^^^^^^^^^^^^^^^^^^^^^^^^^^ Exception at customerNews Detail ", e)
             return redirect('customer_news_list')
@@ -654,11 +653,11 @@ class CustomerEventList(View):
         
 class CustomerEventDetail(View):
     def get(self, *args, **kwargs): 
-        try:               
-            all_company = Company.objects.all()[:5]
+        try:
+            all_company = Company.objects.all()
             eventcompanies = []
             for comp in all_company:
-                if comp.companyevent_set.count() > 0:
+                if comp.companyevent_set.all().count() > 0:
                     eventcompanies.append(comp)
             event = get_object_or_404( CompanyEvent, id = self.kwargs['id']  )
             related_objs = related_company_title_status('CompanyEvent', event)

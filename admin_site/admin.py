@@ -10,7 +10,7 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,UserLogView,
                         UserDetailView,MyProfileView,CreateUserView,CreateCompanyStaff,
                         GroupView,GroupList)
 # views from admin_site app
-from admin_site.views.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,
+from admin_site.views.views import (AdminIndex,DeleteView,  Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
 
 from admin_site.views.dropdowns import (AllSettingsPage,
