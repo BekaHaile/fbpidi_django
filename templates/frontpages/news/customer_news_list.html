@@ -128,7 +128,7 @@
 																</a>
 																<!--<p >{{news.description|truncatechars_html:12|safe}}</p>-->
 
-																 <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Posted at : </span> {{news.timestamp}} </p>
+																 <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Posted at : </span> {{news.created_date}} </p>
 															</div>
 														</div>
 														<div class="card-footer pt-2 pb-2">
@@ -145,12 +145,12 @@
 
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.get_company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
 
-																		<a class="" href="/chat/with/{{news.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+																		<a class="" href="/chat/with/{{news.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 																		
 																		<a class="" href="/collaborations/customer_news_detail/{{news.id}}/" ><b class="btn btn-secondary btn-sm mt-1">News Detail</b></a>
 									
 																		<br>
-																		<!-- <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.timestamp}}</small></div> -->
+																		<!-- <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.created_date}}</small></div> -->
 																		
 																	</div>
 																</div>
@@ -158,7 +158,7 @@
 																	<!-- <a href="/collaborations/customer_news_detail/{{news.id}}/" class="btn btn-secondary btn-sm mt-4">
 																		View Detail
 																	</a> -->
-																	<!--<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.timestamp}}</small></div> -->
+																	<!--<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.created_date}}</small></div> -->
 																		
 																</div>
 															</div>

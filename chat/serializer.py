@@ -44,8 +44,8 @@ class ChatMessageSerializer(serializers.ModelSerializer):
         if chatmessage.sender.profile_image:
             return chatmessage.sender.profile_image.url
         else:
-            if chatmessage.sender.is_staff:
-                return chatmessage.sender.get_company().get_image()
+            if chatmessage.sender.is_staff  :
+                return chatmessage.sender.get_company().get_image() 
             else:
                 return '/static/frontpages/images/clients/unkonwn_user_icon.png'
                 # frontpages\images\clients
