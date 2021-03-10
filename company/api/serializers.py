@@ -6,7 +6,6 @@ from accounts.api.serializers import CompanyAdminSerializer
 
 class CompanyFullSerializer(serializers.ModelSerializer):
     product_category_name = serializers.CharField(source='get_product_category_type')
-    # product_category = ProductInfoSerializer(read_only=True)
     user = CompanyAdminSerializer(read_only=True)
     class Meta:
         model = Company

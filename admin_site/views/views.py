@@ -14,7 +14,7 @@ from chat.models import ChatGroup, ChatMessage
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
-from collaborations.models import (BlogComment,PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategory, 
+from collaborations.models import (BlogComment,PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategory, Tender, TenderApplicant, JobApplication, JobCategory,
                                     Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages,
                                     News, NewsImages,Project,Research,ResearchProjectCategory,ForumQuestion, Document)
 from django.http import HttpResponse, FileResponse
@@ -25,19 +25,13 @@ class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
             user = self.request.user
-            # filter messages where the user is a reciever i.e. (~Q(sender = user)) participant of the message i.e. Q(chat_group) and read = false (the chat group is neccessary since it's name contains
-            # the two participants
-            unread_message = ChatMessage.unread_messages(self.request.user)           
-            for m in unread_message:
-                print(m.sender, " ", m.content, ' \n')
-
-            context = {'unread_messages': unread_message, "unread_messages_count": unread_message.count()}
-
-            return render(self.request,"admin/index.html",context)
+            # unread_message = ChatMessage.unread_messages(self.request.user)           
+            # context = {'unread_messages': unread_message, "unread_messages_count": unread_message.count()}
+            return render(self.request,"admin/index.html",{})
         except Exception as e:
             print ("index error",str(e))
             return render(self.request,"admin/index.html",)
-
+        
 
 class DeleteView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):

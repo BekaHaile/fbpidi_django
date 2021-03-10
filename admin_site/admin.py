@@ -10,12 +10,14 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,UserLogView,
                         UserDetailView,MyProfileView,CreateUserView,CreateCompanyStaff,
                         GroupView,GroupList)
 # views from admin_site app
-from admin_site.views.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,
+from admin_site.views.views import (AdminIndex,DeleteView,  Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
 
-from admin_site.views.settings import (CheckListMasterList,
-                                       CreateCheckListMaster,
-                                        UpdateCheckListMaster)
+from admin_site.views.dropdowns import (AllSettingsPage,
+                                       CreateCompanyDropdownsMaster,
+                                        UpdateCompanyDropdownsMaster,
+                                        CreateProjectDropdownsMaster,
+                                        UpdateProjectDropdownsMaster)
 
 from collaborations.views import (CreateNews, EditNews, NewsDetail,AdminNewsList,
 
@@ -155,9 +157,11 @@ class CustomAdminSite(admin.AdminSite):
             path("user_audit/",wrap(UserLogView.as_view()),name="useraudit"),
             path("group_list/",wrap(GroupList.as_view()),name="view_group"),
             path("manage_group/",wrap(GroupView.as_view()),name="create_group"),
-            path("settings-page/",wrap(CheckListMasterList.as_view()),name='settings'),
-            path('create-checklist/',wrap(CreateCheckListMaster.as_view()),name='create_checklist'),
-            path('update-checklist/<pk>/',wrap(UpdateCheckListMaster.as_view()),name='update_checklist'),
+            path("settings-page/",wrap(AllSettingsPage.as_view()),name='settings'),
+            path('create-checklist/',wrap(CreateCompanyDropdownsMaster.as_view()),name='create_checklist'),
+            path('update-checklist/<pk>/',wrap(UpdateCompanyDropdownsMaster.as_view()),name='update_checklist'),
+            path('create-project-lookup/',wrap(CreateProjectDropdownsMaster.as_view()),name='create_plookup'),
+            path('update-project-lookup/<pk>/',wrap(UpdateProjectDropdownsMaster.as_view()),name='update_plookup'),
 
             path("categories/<option>/",wrap(CategoryView.as_view()),name="p_categories"),
             path("create_category/<option>",wrap(CreateCategories.as_view()),name="create_category"),

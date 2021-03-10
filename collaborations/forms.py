@@ -266,9 +266,7 @@ class NewsForm(forms.ModelForm):
             'title' : forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'News Title(English).'}),
             'title_am' : forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'News Title (Amharic).'}),
             'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Detail description on the news.(English)'}),
-            'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Detail description on the news.(Amharic)'}),
-            
-            
+            'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Detail description on the news.(Amharic)'}),  
         } 
 
 class ForumQuestionForm(forms.ModelForm):

@@ -76,7 +76,7 @@
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
 											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">By: </i><b>{% print_translated news.get_company.company_name news.get_company.company_name_am LANGUAGE_CODE %}</b></a></li>
-                                            <li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>{{news.timestamp}}</b> </a></li>                                       
+                                            <li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>{{news.created_date}}</b> </a></li>                                       
                                         </ul>
 									</div>
                                 </div>
@@ -136,7 +136,7 @@
 						</div>
 						<!--/Business Overview-->
 
-						<h3 class="mt-5 mb-4 fs-20">Other Related News  </h3>
+						<h3 class="mt-5 mb-4 fs-20">{{related_message}} </h3>
 
 						<!--Related Posts-->
 						<div id="myCarousel5" class="owl-carousel owl-carousel-icons3">
@@ -165,7 +165,7 @@
 										<div class="item-card7-text">
 											<ul class="icon-card mb-0 mt-2">
 												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>{{news.get_company.location}}</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{news.timestamp}}</a></li>
+												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{news.created_date}}</a></li>
 												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{% print_translated news.get_company.company_name news.get_company.company_name_am LANGUAGE_CODE %} </a></li>
 												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> {{news.get_company.phone_number}}</a></li>
 											</ul>
@@ -217,7 +217,7 @@
 										<h4 class="mb-4">Company Contact Info</h4>
 										<div>
 											<h6><span class="font-weight-semibold"><i class="fa fa-map mr-3 mb-2"></i></span><a href="#" class="text-body"> {{news.get_company.location}}</a></h6>
-											<h6><span class="font-weight-semibold"><i class="fa fa-envelope mr-3 mb-2"></i></span><a href="#" class="text-body"> {{news.user.email}}</a></h6>
+											<h6><span class="font-weight-semibold"><i class="fa fa-envelope mr-3 mb-2"></i></span><a href="#" class="text-body"> {{news.created_by.email}}</a></h6>
 											<h6><span class="font-weight-semibold"><i class="fa fa-phone mr-3 mb-2"></i></span><a href="#" class="text-secondary"> {{news.get_company.phone_number}}</a></h6>
 											<h6><span class="font-weight-semibold"><i class="fa fa-link mr-3 "></i></span><a href="#" class="text-secondary">https://spruko.com/</a></h6>
 										</div>
@@ -226,7 +226,7 @@
 							
 								<div class="card-footer">
 									<div class="">
-										<a href="{% url 'chat_with' reciever_name=news.user.username %}" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> Chat</a>
+										<a href="{% url 'chat_with' reciever_name=news.created_by.username %}" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> Chat</a>
 										<!-- <a href="#" class="btn btn-secondary mt-1 mb-1" data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> Contact Me</a> -->
 										<a href="/collaborations/customer_news_list/" class="btn btn-light mt-1 mb-1"><i class="fa fa-eye"></i>All Listings</a>
 									</div>
@@ -235,29 +235,28 @@
 						</div>
 					
 						
-						<div class="card">
-							<div class="card-header">
-								<h3 class="card-title">Search Listings</h3>
+						<form action="{% url 'customer_news_list' %}" method = "GET">
+							<div class="card-header border-top">
+								<h3 class="card-title">{% trans "Posted By " %}</h3>
 							</div>
-							<form action = "/collaborations/customer_news_list/" method="GET">
 							<div class="card-body">
-								<div class="form-group">
-									<input type="text" name = "by_title" class="form-control keywords-input" id="search-text" placeholder="Search news by title or content.">
-								</div>
-								<div class="form-group">
-									<select name="by_category" id="select-countries" class="form-control custom-select select2-show-search">
-										<option value="All" selected>All</option>	
-										{% for category in NEWS_CATEGORY %}
-										<option value="{{category.0}}">{{category.0}}</option>
-										{% endfor %}
-									</select>
-								</div>
-								<div >
-									<button type = "submit"  class="btn  btn-block btn-secondary">Search</button>
+								<div class="filter-product-checkboxs">
+									{% for comp in companies %}
+									<label class="custom-control custom-checkbox mb-2">
+										<input type="checkbox" class="custom-control-input" name="by_company" value="{{comp.company_name}}">
+										<span class="custom-control-label">
+											{% print_translated comp.company_name comp.company_name_am LANGUAGE_CODE %}
+										</span>
+									</label>
+									{% endfor %}
+
 								</div>
 							</div>
-							</form>
+							<div class="card-footer">
+								<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>
+							</div>
 						</div>
+						</form>
 						
 					</div>
 					<!--/Right Side Content-->

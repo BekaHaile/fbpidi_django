@@ -53,7 +53,7 @@ urlpatterns = [
     path("projects_list/", ApiProject.as_view(), name = "api_project_list"),
     path("project_detail/", ApiProjectDetail.as_view(), name = "api_project_detail"),
     
-    path("researchs_list/", ApiResearch.as_view(), name = "api_research_list"),
+    path("research_list/", ApiResearch.as_view(), name = "api_research_list"),
     path("research_detail/",ApiResearchDetail.as_view(), name = "api_research_detail" ),
     path("create_research/", ApiCreateResearch.as_view(), name = "api_create_research"),
     path("research_action/", ApiResearchAction, name = "api_research_action"),

@@ -37,7 +37,7 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1','127.0.0.2','192.168.1.113']
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
+
     'admin_site.apps.CustomAdminAppConfig',
     # 'django.contrib.admin',
     'django.contrib.auth',
@@ -55,14 +55,14 @@ INSTALLED_APPS = [
 
     'social_django',
     'rest_framework_social_oauth2', 
-    'oauth2_provider',#for rest_framework social_oauth
+    'oauth2_provider',#for rest_framework social_oauth providers
     
     'colorfield',
     'crispy_forms',
     'django_summernote',
     'useraudit',
     'rest_framework',
-    'rest_framework.authtoken',
+    'rest_framework.authtoken', # contains social auth
 
     
  
@@ -108,23 +108,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'fbpims.wsgi.application'
 
-ASGI_APPLICATION = 'fbpims.asgi.application'
 
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [("localhost", 6379)],
-#         },
-#     },
-# }
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-        
-    },
-}
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -135,7 +120,7 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'admindb',
         'USER': 'postgres',
         'PASSWORD': 'cbe@ps4woga',

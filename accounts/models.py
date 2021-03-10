@@ -36,16 +36,15 @@ class User(AbstractUser):
         ordering=('-created_date',)
 
     def get_company_name(self):
-        if self.is_company_admin:
-           return CompanyAdmin.objects.get(user = self).get_company_name()
-        elif self.is_company_staff:
-            return CompanyStaff.objects.get(user = self).get_company_name()
+        return self.get_company().company_name if self.is_staff else None
+        # if self.is_company_admin:
+        #    return CompanyAdmin.objects.get(user = self).get_company_name()
+        # elif self.is_company_staff:
+        #     return CompanyStaff.objects.get(user = self).get_company_name()
 
     def get_company(self):
         
-        if self.is_company_admin:
-           return Company.objects.get(user = self)
-        elif self.is_company_staff:
+        if self.is_company_admin or self.is_company_staff :
             return Company.objects.get(user = self)
         elif self.is_superuser:
             return Company.objects.get(company_name="FBPIDI")
@@ -82,9 +81,8 @@ class CompanyAdmin(models.Model):
         return self.user.username
     
     #this method works fine for only the company admin that created the company object (how to )
-    def get_company_name(self):
-        return Company.objects.get(user = self.user).company_name if Company.objects.get(user = self.user).company_name else None
+    # def get_company_name(self):
+    #     return Company.objects.get(user = self.user).company_name if Company.objects.get(user = self.user).company_name else None
 
-    def get_company(self):
-        return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None
-
+    # def get_company(self):
+    #     return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None

@@ -1,4 +1,8 @@
 
+import os
+import datetime
+from django.utils import timezone
+ 
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.urls import reverse
@@ -16,7 +20,7 @@ from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationFo
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
 from company.forms import EventParticipantForm
 from accounts.models import User, CompanyAdmin, Company
-import os
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -32,7 +36,6 @@ from collaborations.models import ( PollsQuestion, Choices, PollsResult, Tender,
 									JobCategory,ForumQuestion, Faqs, Vacancy, JobApplication, JobCategory, News, NewsImages, ForumComments, 
 									CommentReplay,Announcement,AnnouncementImages,Research,ResearchProjectCategory, Document)
 from collaborations.api.serializers import NewsListSerializer
-import datetime
 
 from django.http import JsonResponse
 
@@ -40,49 +43,112 @@ from django.http import JsonResponse
 models = { 'Announcement':Announcement, 'Blog':Blog, 'BlogComment':BlogComment, 'Choice':Choices, 'CompanyEvent':CompanyEvent, 'Tender':Tender, 'TenderApplicant':TenderApplicant, 
             'ForumQuestion':ForumQuestion, 'ForumComments':ForumComments, 'JobApplication':JobApplication, 'JobCategory':JobCategory, 'PollsQuestion':PollsQuestion, 'News':News }
 
+def related_company_title(model_name, obj):
+    """
+    given a modle name and an obj, searchs for other model objs with related company, if none found search for related objs with related title or description,
+    if none found returns 4 elements from the model
+    """
+    model = models[model_name]
+    result = FilterByCompanyname( [obj.company], model.objects.exclude(id =obj.id)  )
+    print(result)
+    if result.count() != 0:
+        return {'query':result, 'message':f"Other {model_name}s from {obj.company.company_name} "}
+    else:
+        result = search_title_related_objs(  obj, model.objects.exclude(id =obj.id)  )
+        if result['query'].count() != 0:
+            return {'query': result, 'message':f'Other {model_name}s with related content' }
+        else:
+            return {'query':model.objects.exclude(id = obj.id)[:4], 'message': f'Other {model_name}s ' }
+   
+
+def related_company_title_status(model_name, obj):
+    """
+    given status column containing obj finds related objs with related company or title with status open or upcoming \n 
+    For Event, Poll, Status
+    """
+    model = models[model_name]
+    q =  Q(   Q(status = 'Open') | Q(status = 'Upcoming')  )
+    c =  Q(   Q(company__company_name__contains = obj.company.company_name ) | Q(company__company_name_am__contains = obj.company.company_name_am ) ) 
+    result = model.objects.filter(c , q).exclude(id = obj.id)
+    if result.count() == 0:
+        t = Q (  Q(title__icontains = obj.title) | Q(title_am__icontains = obj.title_am )  )
+        result = model.objects.filter(  q , t  ).exclude(id = obj.id)
+        if result.count() == 0:
+            return {'query':model.objects.exclude(id = obj.id)[:3], 'message': f'Other {model_name}s ' }
+        else:
+            return {'query': result, 'message':f'Other {model_name}s with related content' }
+    else:
+        return {'query': result, 'message':f"Other {model_name}s from {obj.company.company_name} "}
+
+
+def search_title_related_objs( obj, query_list):
+    return {'query':query_list.filter( Q(title__icontains = obj.title) | Q(title_am__icontains = obj.title_am) |Q(description__icontains = obj.title ) | Q(description_am__icontains = obj.title_am) ).distinct()} 
+
 # returns all if there is no filter_key or there is no match, or the objects containg the filter_key, with their appropriat messages.
-def SearchByTitle_All(model_name, request ):    
+def SearchByTitle_All(model_name, request ): 
+    """
+    Search objects with requested title or title_am, if by_title is in request.kwargs, else return all
+    """   
     try:
         model= models[model_name]
-        if not 'by_title' in request.GET: 
+        if not 'by_title' in request.GET: #not searching, just displaying latest news 
             query  = model.objects.all()
-            return { 'query': query, 'message': f" {model.model_name()} " } # 3 Polls Found!
+            return { 'query': query, 'message': f" {model_name} ",  'message_am': f" {model_name} "} # 3 Polls Found!
         else:   #if there is a filter_key list
             filter_key = request.GET['by_title']
             query = model.objects.filter( Q(title__icontains = filter_key) | Q(title_am__icontains = filter_key) |Q(description__icontains = filter_key ) | Q(description_am__icontains = filter_key) ).distinct() 
             # if there is no match for the filter_key or there is no filter_key at all
             if query.count() == 0: 
                 query = model.objects.all()
-                return { 'query': query, 'message': f"No match containing '{filter_key}'!" }       
-            return { 'query': query, 'message': f"{query.count()} result found!" }
+                return { 'query': query, 'message': f"No match containing '{filter_key}'!", 'message_am': f"ካስገቡት ቃል '{filter_key}' ጋር የሚግናኝ አልተገኘም፡፡ !" }       
+            return { 'query': query, 'message': f"{query.count()} result found!", 'message_am': f"{query.count()} ውጤት ተገኝቷል!" }
     except Exception as e:
         print("Exception at SearchBYTitle_All", str(e))
 
 
-def SearchBYCategory_All(model_name, category_list, query_list):
+def FilterByCompanyname(company_list,  query_set):
     try:
-        model = models[model_name]
         q_object = Q()
-        for category_name in category_list:
-            q_object.add( Q(catagory = category_name ), Q.OR )
-        query = query_list.filter(q_object)
-        if query.count() == 0:
-            query = model.objects.all()
-            return { 'query': query, 'message': f"No match for the selected categories!" }
-        return { 'query': query, 'message': f"{query.count()} result found!" }
+        for company_name in company_list:
+            q_object.add( Q(company__company_name = company_name ), Q.OR )
+            q_object.add( Q(company__company_name_am = company_name ), Q.OR )
+        return query_set.filter(q_object).distinct()
     except Exception as e:
-        print("Exception at SearchBYCategory_All", str(e))
-        
+        print("###########Exception at FilterByCompanyName", str(e))
+        return []
+
+
 
 def SearchCategory_Title(model_name, request):
-    result = SearchByTitle_All('News', request) #returns matching objects, if none all objects
+    """
+    Uses both search by title and filter by category at once
+    """
+    result = SearchByTitle_All('News', request) #returns matching objects by title and title_am, if none all objects
     category_name = request.GET.getlist('by_category')
     if category_name[0] == 'All':
             return {'query':result['query'], 'message':f"{result['query'].count()} {request.GET['by_title']} result found in {category_name[0]} category!", 'searched_category':'All', 'searched_name': request.GET['by_title'] }   
-    result = SearchBYCategory_All('News', category_name, result['query'] )
+    result = filter_by('catagory', category_name, result['query'])
     result['searched_category'] = category_name[0]
     result['searched_name'] = request.GET['by_title']
     return result
+
+
+def filter_by(field_name, field_values, query):
+    """
+    accepts field_name like category or title etc and filter keys like ['Food','Beverage'] and filters from a query
+    """
+    kwargs ={}
+    q= Q()  
+    for value in field_values:
+        if value == 'All':
+            break
+        kwargs ['{0}__{1}'.format(field_name, 'contains')] = value
+        q.add(Q(**kwargs),Q.OR)
+        kwargs = {}
+    result = query.filter(q)
+    if not result.count() == 0:
+        return {'query':result,'message':f"{result.count()} result found!",'searched_category':'All','message_am':f"{result.count()} ተገኝቷል! " ,'searched_name': field_name }
+    return {'query':query, 'message':f"No results Found!", 'message_am':f"ካስገቡት ቃል  ጋር የሚግናኝ አልተገኘም፡፡ !" ,'searched_category':'All', 'searched_name': field_name }
 
 
 class PollIndex(View):
@@ -401,7 +467,6 @@ class CreateNews(LoginRequiredMixin, View):
         try:
                 if self.request.user.is_company_admin:
                     company = Company.objects.get(user = self.request.user)
-                    
                 elif self.request.user.is_company_staff:
                     company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
                     company = company_staff.company
@@ -419,12 +484,10 @@ class CreateNews(LoginRequiredMixin, View):
         form = NewsForm( self.request.POST) 
         if form.is_valid:
             news = form.save(commit=False)
-            news.user = self.request.user
+            news.created_by = self.request.user
             news.save()
-        
             for image in self.request.FILES.getlist('images'):
-                print ("saving ", image.name)
-                imag = NewsImages(news=news, name = image.name, image = image)
+                imag = NewsImages(created_by=self.request.user, created_date=timezone.now(), news=news, name = image.name, image = image)
                 imag.save()
             messages.success(self.request, "News Created Successfully!")
             return redirect("admin:news_list") 
@@ -452,12 +515,13 @@ class EditNews(LoginRequiredMixin, View):
                 news.title_am = self.request.POST['title_am']
                 news.description = self.request.POST['description']
                 news.description_am = self.request.POST['description_am']
+                news.last_updated_by = self.request.user
+                news.last_updated_date = timezone.now()    
                 news.save()
 
                 if self.request.FILES:
                     for image in self.request.FILES.getlist('images'):
-                        print ("saving new images", image.name)
-                        imag = NewsImages(news=news, name = image.name, image = image)
+                        imag = NewsImages(created_by=self.request.user, created_date=timezone.now(), news=news, name = image.name, image = image)
                         imag.save()
                 messages.success(self.request, "News Edited Successfully!")
                 return redirect(f"/admin/news_detail/{news.id}/") 
@@ -479,7 +543,6 @@ class NewsDetail(LoginRequiredMixin,View):
                 context = {'form':NewsForm, 'news':news , "NEWS_CATEGORY": News.NEWS_CATAGORY}
                 return render(self.request,'admin/collaborations/news_detail.html',context)
             except Exception as e:
-                print(str(e))
                 return redirect("admin:news_list")
         print("error at newsDetail for admin")
         return redirect("admin:news_list")
@@ -509,26 +572,35 @@ class CustomerNewsList(View):
             return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':result['query'], 'message':result['message'], 'NEWS_CATAGORY':News.NEWS_CATAGORY,
                                                                 'searched_category':result['searched_category'], 'searched_name':result['searched_name']})
         elif 'by_category' in self.request.GET:
-            result = SearchBYCategory_All('News', self.request.GET.getlist('by_category'), News.objects.all())
-        # else if the news list if by title of just the default (default is all but from latest to older)   
+            result = filter_by('catagory', self.request.GET.getlist('by_category'), News.objects.all())
+        elif 'by_company' in self.request.GET:
+            query = FilterByCompanyname(self.request.GET.getlist('by_company'), News.objects.all())
+            if query.count() > 0:
+                result = {'query' : query, 'message' : f"{query.count()} Found!", 'message_am' : f"{query.count()} ተገኝቷል!" }
+            else:
+                result = {'query' : News.objects.all(), 'message' : 'No match found!', 'message_am' : 'የጠየቁትን ማግኘት አልቻልንም!'} 
         else:
+            
             result = SearchByTitle_All('News', self.request)
-        return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':result['query'], 'message':result['message'], 'NEWS_CATAGORY':News.NEWS_CATAGORY})
+        return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':result['query'], 'message':result['message'], 'message_am':result['message_am'], 'NEWS_CATAGORY':News.NEWS_CATAGORY})
        
 
 class CustomerNewsDetail(View):
     def get(self, *args, **kwargs): 
         try:
+            all_company = Company.objects.all()[:5]
+            companies = []
+            for comp in all_company:
+                if comp.news_set.count() > 0:
+                    companies.append(comp)
             news = get_object_or_404(News, id = self.kwargs['id'])
+         
         except Exception as e:
-            return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':News.objects.all(), 'message':"News Not Found!", 'NEWS_CATAGORY':News.NEWS_CATAGORY})
-        title = news.title
-        title_am = news.title_am
-        related_news = News.objects.filter( Q(title__icontains = title) | Q(description__icontains = title) 
-                                            | Q(title_am__icontains = title) | Q(description_am__icontains = title )).distinct().exclude(id = news.id)
-        if related_news.count() == 0:
-            related_news = News.objects.all()[:4]
-        return render(self.request, "frontpages/news/customer_news_detail.html", {'news':news,'related_news':related_news, "NEWS_CATEGORY": News.NEWS_CATAGORY, 'related_news':related_news})
+            print("^^^^^^^^^^^^^^^^^^^^^^^^^^^ Exception at customerNews Detail ", e)
+            return redirect('customer_news_list')
+            
+        related_news = related_company_title('News', news)
+        return render(self.request, "frontpages/news/customer_news_detail.html", {'news':news,'related_news':related_news['query'], 'related_message':related_news['message'], 'companies':companies, "NEWS_CATEGORY": News.NEWS_CATAGORY})
     
 
 ##### Customer Events
@@ -559,21 +631,41 @@ def check_event_enddate(request, open_events):
 class CustomerEventList(View):
 	def get(self, *agrs, **kwargs):
             result = SearchByTitle_All('CompanyEvent', self.request)
+            if 'by_status' in self.request.GET:
+                result = filter_by('status',[self.request.GET['by_status']], result['query'])
+            if 'by_company' in self.request.GET:
+                query = FilterByCompanyname(self.request.GET.getlist('by_company'), result['query'])
+                if query.count() > 0:
+                   result ['query'] = query
+                   result ['message'] = f'{query.count()} Found!' 
+                else:
+                    result['message'] = 'No match found!'
             #12345 make it background
             event_participants = EventParticipants.objects.filter(notified = False, event__status = "Upcoming")
             check_event_participation(self.request, event_participants)
-            return render(self.request, "frontpages/news/customer_event_list.html", {'events':result['query'], 'message':result['message']})
+            all_company = Company.objects.all()
+            eventcompanies = []
+            for comp in all_company:
+                if comp.companyevent_set.count() > 0:
+                    eventcompanies.append(comp)
+            return render(self.request, "frontpages/news/customer_event_list.html", {'events':result['query'], 'message':result['message'], 'event_companies':eventcompanies})
         
         
 class CustomerEventDetail(View):
-    def get(self, *args, **kwargs):        
-            try:
-                event = get_object_or_404( CompanyEvent, id = self.kwargs['id']  )
-                return render(self.request, "frontpages/news/customer_event_detail.html", {'event':event,'event_participant_form':EventParticipantForm})
-            except Exception as e:
-                messages.warning('Event Not Found!')
-                return redirect("customer_event_list")
-
+    def get(self, *args, **kwargs): 
+        try:
+            all_company = Company.objects.all()
+            eventcompanies = []
+            for comp in all_company:
+                if comp.companyevent_set.all().count() > 0:
+                    eventcompanies.append(comp)
+            event = get_object_or_404( CompanyEvent, id = self.kwargs['id']  )
+            related_objs = related_company_title_status('CompanyEvent', event)
+            return render(self.request, "frontpages/news/customer_event_detail.html", {'event':event,'event_participant_form':EventParticipantForm, 'event_companies':eventcompanies, 'related_objs':related_objs['query'], 'related_message':related_objs['message']})
+        except Exception as e:
+            print("$$$$$$$$$$$$$$$$$$$$44 Exception at customerEventDetail", e)
+            result = SearchByTitle_All('CompanyEvent', self.request)
+            return redirect('customer_event_list')
 
 #12345  use ajax for event participation.
 class EventParticipation(LoginRequiredMixin, View):
@@ -584,7 +676,6 @@ class EventParticipation(LoginRequiredMixin, View):
                 try:
                     event = get_object_or_404( CompanyEvent, id = self.kwargs['id'])
                 except Http404:
-                    print("object not found!")
                     return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
                 participant = EventParticipants(user =request.user, event= event,
                                                 patricipant_email=request.POST['patricipant_email'])
@@ -596,9 +687,7 @@ class EventParticipation(LoginRequiredMixin, View):
                         try:
                             participant.save()   # if the email has been previously registered, it will through an unique exception
                         except Exception as e:
-                            print('You aleard have registered for a notification.')
                             return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
-                        print("participated Successfully!")        
                         return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
                             
                     else:
