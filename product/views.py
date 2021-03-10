@@ -8,8 +8,8 @@ from django.utils import timezone
 
 
 from admin_site.models import Category, SubCategory
-from product.models import Product,ProductImage,ProductPrice,Order,OrderProduct,InvoiceRecord
-from product.forms import SubCategoryForm,ProductCreationForm,CategoryForm,CheckoutForm
+from product.models import Product,Review,ProductImage,ProductPrice,Order,OrderProduct,InvoiceRecord
+from product.forms import SubCategoryForm,ProductCreationForm,CategoryForm,CheckoutForm,ReviewForm
 from accounts.models import User
 from company.models import Company
 

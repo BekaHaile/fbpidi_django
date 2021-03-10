@@ -186,7 +186,7 @@ class TenderApplicant(models.Model):
     phone_number = models.CharField(max_length=20,blank=True,null=True)
     email = models.EmailField(verbose_name="applicant email", max_length=255)
     company_name = models.CharField(verbose_name="first_name", max_length=50)
-    company_tin_number = models.CharField(verbose_name="first_name", max_length=50)
+    company_tin_numbe = models.CharField(verbose_name="first_name", max_length=50)
     tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
