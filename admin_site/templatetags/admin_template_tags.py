@@ -9,6 +9,7 @@ from chat import views
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from django.utils import timezone
 
 register = template.Library()
 
@@ -64,3 +65,7 @@ def get_grouped_unread_messages(user):
 def get_all_messages_grouped(user, max_num_group=None, exceluded = None):
     return views.get_grouped_all_message(user, max_num_group, exceluded)
   
+
+@register.simple_tag
+def get_date(date):
+    return date.date()

@@ -1,10 +1,11 @@
+import os
+from django.utils import timezone
 from django.shortcuts import render,redirect,get_object_or_404
-from django.views.generic import View
+from django.views.generic import View, ListView, DetailView, CreateView, UpdateView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-import os
 # 
 from product import models
 from accounts.models import User
@@ -19,6 +20,15 @@ from collaborations.models import (BlogComment,PollsQuestion, PollsResult, Choic
                                     News, NewsImages,Project,Research,ResearchProjectCategory,ForumQuestion, Document)
 from django.http import HttpResponse, FileResponse
 from django.db.models import Q
+
+def check_user_has_company(user):
+    try:
+        user.get_company()
+    except Exception:
+        messages.warning(self.request, "Currently, You are not related with any registered Company.")
+        print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
+        return redirect("admin:create_company_profile")
+
 # 
 # INDEX VIEW
 class AdminIndex(LoginRequiredMixin,View):
@@ -80,6 +90,16 @@ class DeleteView(LoginRequiredMixin,View):
                 message ="Research and project Category Deleted"
                 messages.success(self.request,message)
                 return redirect("admin:researchprojectcategory_list")
+            elif self.kwargs['model_name'] == 'PollsQuestion':
+                poll = PollsQuestion.objects.get(id = self.kwargs['id'])
+                poll.delete()
+                message = "Poll Deleted Successfully"
+                return redirect('admin:admin_polls')
+            elif self.kwargs['model_name'] == 'Choices':
+                choice = Choices.objects.get(id = self.kwargs['id'])
+                choice.delete()
+                message = "Poll choice Deleted Successfully"
+                return redirect('admin:admin_polls')
             elif self.kwargs['model_name'] == 'BlogCommentsAdmin':
                 blogcomments = BlogComment.objects.get(id=self.kwargs['id'])
                 blogcomments.delete()
@@ -300,131 +320,116 @@ class DeleteView(LoginRequiredMixin,View):
                     document.delete()
                     messages.success(self.request, "Document Deleted Successfully!")
                     return render(self.request, f"admin/document/list_document_by_category.html", {'documents':Document.objects.filter(category = category), 'categories': Document.DOC_CATEGORY})
-                
+            elif self.kwargs['model_name'] == 'Tender':
+                    tender = Tender.objects.get(id = self.kwargs['id'])
+                    tender.delete()
+                    messages.success(self.request, "Tender Deleted Successfully!")
+                    return redirect("admin:tenders")   
         
         except Exception as e:
                 messages.warning(self.request, "Could not find the Item!")
                 return redirect("admin:index") 
 
 
-class Polls(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        form = PollsForm()
-        polls = PollsQuestion.objects.all()
-        context = {'form':form, 'polls':polls}    
-        return render(self.request,'admin/pages/polls.html',context)
-    
-   
+class Polls(LoginRequiredMixin, ListView):
+    context_object_name = 'polls'
+    model = PollsQuestion
+    template_name = 'admin/poll/polls.html'
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return PollsQuestion.objects.all()
+        else:
+            return PollsQuestion.objects.filter(company=self.request.user.get_company())
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        context['form'] = PollsForm
+        return context
+
+
 class CreatePoll(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        try:
-                if self.request.user.is_company_admin:
-                    company = Company.objects.get(user = self.request.user)
-                    
-                elif self.request.user.is_company_staff:
-                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-                    company = Company.objects.get(id = company_staff.company.id)
-        except Exception as e:
-                messages.warning(self.request, "Currently, You are not related with any registered Company.")
-                print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
-                return redirect("admin:create_company_profile")
-
-        form = CreatePollForm()
-        context = {'form':form}
-        return render(self.request,'admin/pages/create_poll.html',context)
-    
+        check_user_has_company(self.request.user)
+        return render(self.request,'admin/poll/create_poll.html',{'form':CreatePollForm})
     def post(self,*args,**kwargs):
-        
         form = CreatePollForm(self.request.POST)  
         try:      
             if form.is_valid():
-                poll = PollsQuestion(
-                    user=self.request.user,
-                    title=form.cleaned_data.get('title'),
-                    title_am=form.cleaned_data.get('title_am'),
-                    description=form.cleaned_data.get("description"),
-                    description_am=form.cleaned_data.get('description_am'),
-                    
-                )
+                poll =form.save(commit=False)
+                poll.created_by = self.request.user
                 poll.save()
                 messages.success(self.request,"Poll was Successfully Created!")
                 return redirect("admin:admin_polls")
             else:
                 messages.warning(self.request, "Error! Poll was not Created!" )
-                return redirect("admin:admin_polls")
-                
+                return redirect("admin:admin_polls")    
         except Exception as e:
-           
+            print("there is an exception", e)
             return redirect("admin:admin_polls")
 
 
-class DetailPoll(LoginRequiredMixin,View):
-    def get(self, *args, **kwargs):  
-          
-        if self.kwargs['id'] :
-            try:
-                poll = PollsQuestion.objects.get(id = self.kwargs['id']  )
-                return render(self.request, "admin/pages/admin_poll_detail.html", {'poll':poll,})
+class DetailPoll(LoginRequiredMixin, DetailView):
+    model = PollsQuestion
+    template_name = "admin/poll/admin_poll_detail.html"
+    context_object_name  = "poll"
 
-            except Exception as e:
-                print("exception while showing poll Detail", str(e))
-                messages.warning(self.request, "Poll not found")
-                return redirect("admin:admin_polls") 
+    # def get(self, *args, **kwargs):  
+    #     if self.kwargs['id'] :
+    #         try:
+    #             poll = PollsQuestion.objects.get(id = self.kwargs['id']  )
+    #             return render(self.request, , {'poll':poll,})
 
-        else:
-            messages.warning(self.request, "Nothing selected!")
-            return redirect("admin:admin_polls")
+    #         except Exception as e:
+    #             print("exception while showing poll Detail", str(e))
+    #             messages.warning(self.request, "Poll not found")
+    #             return redirect("admin:admin_polls") 
+
+    #     else:
+    #         messages.warning(self.request, "Nothing selected!")
+    #         return redirect("admin:admin_polls")
 
 
 class AddChoice(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
-        
-        form = CreateChoiceForm()
-        context = {'form':form, 'poll':poll}
-        return render(self.request,'admin/pages/add_choice.html',context)
+        try:
+            poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
+            return render(self.request,'admin/poll/add_choice.html',{'form':CreateChoiceForm, 'poll':poll})
+        except Exception as e:
+            print("Exception at  add choice ", e)
+            return redirect('admin:admin_polls')
     
     def post(self,*args,**kwargs):
         form = CreateChoiceForm(self.request.POST)
-        
-        poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
-        if form.is_valid():
-            choice = Choices(
-                choice_name=form.cleaned_data.get('choice_name'),
-                choice_name_am=form.cleaned_data.get('choice_name_am'),
-                description=form.cleaned_data.get("description"),
-                description_am=form.cleaned_data.get('description_am'),     
-            )
-            choice.save()
-
-            poll.choices.add(choice)
-            poll.save()
-            
-            messages.success(self.request,"Choice Successfully Created!")
-            return redirect("admin:admin_polls")
-
-        else:
-            messages.warning(self.request, "Error! Choice Creation Failed! form case! " )
-            return redirect("admin:admin_polls")
+        try:
+            poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
+            if form.is_valid():
+                choice = form.save(commit=False)
+                choice.created_by = self.request.user
+                choice.save()
+                poll.choices.add(choice)
+                poll.save()
+                messages.success(self.request,"Choice Successfully Created!")
+                return redirect("admin:admin_polls")
+            else:
+                messages.warning(self.request, "Error! Choice Creation Failed! form case! " )
+                return redirect("admin:admin_polls")
+        except Exception as e:
+            print("Exception at add choice post ",e)
+            return redirect('admin:admin_polls')
 
 
 class EditPoll(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        pollform = CreatePollForm()
-        choiceform = CreateChoiceForm()
         try:
             poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
             # little verification (this verification is done at the front end, this is just for safety, like if user uses url)            
             if poll.count_votes() != 0:
                 messages.warning(self.request, "Couldn't Edit poll, because poll Edit has started!")
                 return redirect('admin:admin_polls')
-            context = {'pollform':pollform, 'choiceform':choiceform, 'poll':poll}
-            context['edit'] = True
+            return render(self.request,'admin/poll/create_poll.html', {'pollform':CreatePollForm, 'choiceform':CreateChoiceForm, 'poll':poll, 'edit':True})
         except Exception as e:          
-            print(str(e))
+            print("Exception at Edit poll ",str(e))
             messages.warning(self.request, "Error, Couldn't Edit poll!")
             return redirect('admin:admin_polls')
-        return render(self.request,'admin/pages/create_poll.html',context)
 
     def post(self,*args,**kwargs):
         form = CreatePollForm(self.request.POST)     
@@ -438,6 +443,8 @@ class EditPoll(LoginRequiredMixin,View):
         poll.title_am=self.request.POST['title_am']
         poll.description=self.request.POST["description"]
         poll.description_am=self.request.POST['description_am']
+        poll.last_updated_by =self.request.user
+        poll.last_updated_date = timezone.now()
         poll.save()
         messages.success(self.request,"Poll has been Edited Successfully!")
         return redirect("admin:admin_polls")
@@ -445,77 +452,30 @@ class EditPoll(LoginRequiredMixin,View):
 
 class EditChoice(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):        
-        choiceform = CreateChoiceForm()
-        
         try:
             choice = Choices.objects.get(id = self.request.GET['choice'][0] )
-            context = { 'choiceform':choiceform, 'choice':choice}
-            context['edit'] = True
-            
+            return render(self.request,'admin/poll/add_choice.html',{ 'choiceform':CreateChoiceForm, 'choice':choice, 'edit':True})
         except Exception as e:
-    
-            print(str(e))
+            print( "Exception at Editchoice get  ",str(e))
             messages.warning(self.request, "Error, Couldn't Edit Choice!")
             return redirect('admin:admin_polls')
-    
-        return render(self.request,'admin/pages/add_choice.html',context)
-
+        
     def post(self,*args,**kwargs):
-        
-        form = CreateChoiceForm(self.request.POST)
-        
+        form = CreateChoiceForm(self.request.POST)       
         try:
             choice = Choices.objects.get(id = self.request.POST['choice'])
-
         except Exception as e:
                 print("error at Editpoll post", str(e))
                 messages.warning(self.request, "Error! Choice was not Edited!" )
-                return redirect("admin:admin_polls")
-
-        
+                return redirect("admin:admin_polls")  
         choice.choice_name=self.request.POST['choice_name']
         choice.choice_name_am=self.request.POST['choice_name_am']
         choice.description=self.request.POST["description"]
         choice.description_am=self.request.POST['description_am']
+        choice.last_updated_by=self.request.user
+        choice.last_updated_date=timezone.now()
         choice.save()
         messages.success(self.request,"Choice has been Edited Successfully!")
         return redirect("admin:admin_polls")
     
-       
-class DeletePoll(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        message = ""
-        if self.kwargs['id'] :
-            poll = PollsQuestion.objects.filter(id = self.kwargs['id']  )
-            if poll:
-                poll.delete()
-                message = "Poll Deleted Successfully"
-                messages.success(self.request,message)
-                return redirect("admin:admin_polls")
-            else:
-                messages.warning(self.request, "NO such poll was found!")
-                return redirect("admin:admin_polls")
-
-
-        else:
-            messages.warning(self.request, "Nothing selected!")
-            return redirect("admin:admin_polls")
-
-class DeleteChoice(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        message = ""
-        if self.kwargs['id'] :
-            choice = Choices.objects.filter(id = self.kwargs['id']  )
-            if choice:
-                choice.delete()
-                message = "Choice Deleted Successfully"
-                messages.success(self.request, message)
-                return redirect("admin:admin_polls")
-            else:
-                messages.warning(self.request, "NO such Choice was found!")
-                return redirect("admin:admin_polls")
-
-
-        else:
-            messages.warning(self.request, "Nothing selected!")
-            return redirect("admin:admin_polls")
+  

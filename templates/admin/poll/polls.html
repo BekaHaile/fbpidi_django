@@ -48,8 +48,8 @@
 								<td><div class="summernote">{{poll.description|safe|truncatechars_html:5}}</div></td>
                                 <td>{{poll.count_choices}}</td>
                                 <td>{{poll.count_votes}}</td>
-                                <td>{{poll.user.username}}</td>
-								<td><span class="badge badge-success">{{poll.timestamp}}</span></td>
+                                <td>{{poll.created_by.username}}</td>
+								<td><span class="badge badge-success">{{poll.created_date}}</span></td>
 								<td class="text-center">
 									<div class="list-icons">
 										<div class="dropdown">
@@ -59,22 +59,21 @@
 
 											<div class="dropdown-menu dropdown-menu-right">
 												
-													
-													<a href="{%url 'admin:detail_poll' id=poll.id%}" class="dropdown-item"><i class="icon-eye"></i>View Poll Detail</a>
-													{% if poll.user == user %}
-														{% if poll.count_votes != 0 %}
-															<a style="pointer-events: none;color: currentColor; cursor: not-allowed; opacity: 0.5; text-decoration: none;" href="{%url 'admin:edit_poll' id=poll.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Poll</a>
+													{% if perms.collaborations.view_pollsquestion %}
+													<a href="{%url 'admin:detail_poll' pk=poll.id%}" class="dropdown-item"><i class="icon-eye"></i>View Poll Detail</a>
+													{% endif %}
+													{% if user.get_company == poll.company  or user.is_superuser %}
+														{% if poll.count_votes == 0  %}
+															<a  href="{%url 'admin:edit_poll' id=poll.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Poll</a>
 														{% else %}
-															<a href="{%url 'admin:edit_poll' id=poll.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Poll</a>
+														<a  href="#" class="dropdown-item"><i class="icon-pencil"></i>Cannot be edited, vote started!</a>
 														{% endif %}
-													
-														{% if perms.collaborations.add_choices and poll.user == user%}
+														{% if perms.collaborations.add_choices %}
 														<a href="{%url 'admin:add_choice' id=poll.id%}" class="dropdown-item"><i class="icon-plus3"></i>Add New Choice</a>
 														{% endif %}
 	
-	
-														{% if perms.collaborations.delete_pollsquestion and poll.user == user%}
-														<a href="{%url 'admin:delete_poll'  id=poll.id %}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this Poll?')"><i class="icon-trash"></i>Delete Poll</a>
+														{% if perms.collaborations.delete_pollsquestion %}
+														<a href="{%url 'admin:delete' model_name='PollsQuestion' id=poll.id %}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this Poll?')"><i class="icon-trash"></i>Delete Poll</a>
 														{%endif%}
 
 													{% endif %}
@@ -92,11 +91,5 @@
 				
 				
 			</div>
-			<!-- /content area -->
-			<!-- <script>
-				$(document).ready(function() {
-					$('.summernote').summernote('code', 'html_tags_string_from_db');
-				});
-			  </script> -->
 {%endblock%}
 

@@ -826,8 +826,8 @@
 										<h6 class="media-title font-weight-semibold">
 											<a href="#">{{event.title}}</a>
 										</h6>
-										Start Date:- <a href="#"><i class="fa fa-calendar-o text-muted mr-2" style = "margin-right: 20px;" ></i> <b>{{event.start_date}}</b></a> <br>
-                                  		End Date:-<a href="#"><i style = "margin-left: 10px;"class="fa fa-calendar-o text-muted mr-2" ></i><b> {{event.end_date}}</b></a>
+										Start Date:- <a href="#"><i class="fa fa-calendar-o text-muted mr-2" style = "margin-right: 20px;" ></i> <b>{{event.start_date.date}}</b></a> <br>
+                                  		End Date:-<a href="#"><i style = "margin-left: 10px;"class="fa fa-calendar-o text-muted mr-2" ></i><b> {{event.end_date.date}}</b></a>
                                         
 									</div>
 									
@@ -862,7 +862,7 @@
 													<h5 class="modal-title">Company Event Edit Form</h5>
 													<button type="button" class="close" data-dismiss="modal">&times;</button>
 												</div>
-												
+												<p style="padding-left:20px; background-color: wheat;"><b style="padding-left: 30x; margin:5px; ">Event is in "{{event.status}}" Status.</b></p>
 												<form action="{%url 'admin:edit_company_event' id=event.id%}" method="POST" enctype="multipart/form-data">
 													{%csrf_token%}
 													<div class="modal-body">
@@ -871,13 +871,10 @@
 																<div class="col-sm-6">
 																	<label>{{event_form.title.label|title}}</label>
 																	<input type="text" name = "title" class='form-control' placeholder= "Event Name (English)" value="{{event.title}}"/>
-
 																</div>
-					
 																<div class="col-sm-6">
 																	<label>{{event_form.title_am.label|title}}</label>
-																	<input type="text" name = "title_am" class='form-control' placeholder= "Event Name (Amharic)" value="{{event.title_am}}"/>
-																	
+																	<input type="text" name = "title_am" class='form-control' placeholder= "Event Name (Amharic)" value="{{event.title_am}}"/>	
 																</div>
 															</div>
 														</div>
@@ -927,26 +924,7 @@
 														</div>
 													 <!-- Date Fields End Here -->
 														
-													 <!-- status creation form -->
-														<div class="col-md-9" style="padding-left:0px;">
-															
-																
-																	<div class="col-lg-9" style="width: 100%; padding-left:0px; display: inline-block;">
-																		<label style="padding-left: 0px;" class="col-form-label col-lg-8">Current Status: <b>{{event.status}}</b></label>
-																			<select required name="status"  class="form-control " >
-																				{% for status in event_form.STATUS_CHOICE %}
-																					<option  value="{{status.0}}">{{status.0 }}</option>
-																					<div class="list-icons" style="width: 100%; display: inline-block; opacity: 1;" >
-																						<div class="dropdown">
-																							<a href="#" class="list-icons-item" data-toggle="dropdown">	</a>
-																						</div>
-																					</div>
-																				{%endfor%}
-																			</select>
-																	</div>
-															
-														</div>
-														<br>
+
 
 
 														<div class="form-group">
@@ -1053,24 +1031,7 @@
 													</div>
 											</div>
 											<!-- Date Fields End Here -->
-											
-											<!-- status creation form -->
-											<div class="col-md-6" style="padding-left:0px;">			
-														<div class="col-lg-9" style="width: 100%; padding-left:0px; display: inline-block;">
-															<label style="padding-left: 0px;" class="col-form-label col-lg-8">Status</label>
-																<select required name="status"  class="form-control " >
-																	{% for status in event_form.STATUS_CHOICE %}
-																		<option  value="{{status.0}}">{{status.0 }}</option>
-																		<div class="list-icons" style="width: 100%; display: inline-block; opacity: 1;" >
-																			<div class="dropdown">
-																				<a href="#" class="list-icons-item" data-toggle="dropdown">	</a>
-																			</div>
-																		</div>
-																	{%endfor%}
-																</select>
-														</div>
-											</div>
-											<br>
+
 												<div class="form-group">
 													<div class="row">
 														<div class="col-sm-12">

@@ -1,5 +1,6 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags %}
+{%load core_template_tags %}
 {% block extrastyle %}
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
@@ -122,8 +123,6 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 								<div class="col-md-6">
 									<div class="form-group ">
 										
-											
-										
 										<label class="col-form-label col-lg-8">Change tender document</label>
 										<input type = "file" name = "document" value="{{tender.document.url}}"/>
 											
@@ -138,18 +137,15 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 							
 							
 							<div class = "row">
-								
-								
 								<!-- start date edit  -->
-								<div class="col-md-4">
+								<div class="col-md-6">
 									<div class="form-group row">
-
 											<label class="col-form-label col-lg-3">Start Date</label>
 										<div class="col-lg-9">
 											<span class="input-group-prepend">
 															<span class="input-group-text"><i class="icon-calendar22"></i></span>
 														</span>
-												<input type="text" name="start_date" class="form-control daterange-single" value="{{start_date}}">
+												<input type="text" name="start_date" class="form-control daterange-single" value="{% change_end_date tender.start_date %}">
 										</div>
 										
 											
@@ -158,48 +154,21 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 
 
 								<!-- end date edit -->
-								<div class="col-md-4">
+								<div class="col-md-6">
 									<div class="form-group row">
 										<label class="col-form-label col-lg-3">End Date </label>
 										<div class="col-lg-9">
 											<span class="input-group-prepend">
 															<span class="input-group-text"><i class="icon-calendar22"></i></span>
 														</span>
-												<input type="text" name ="end_date" class="form-control daterange-single" value="{{end_date}}">
+												<input type="text" name ="end_date" class="form-control daterange-single" value="{% change_end_date tender.end_date %}">
 										</div>
 											
 									</div>
 								</div>
 
 
-								<!-- status edit -->
-								<div class="col-md-4">
-									<div class="form-group ">
-										<div style="width: 100%;">
-											<div class="col-lg-9" style="width: 95%; display: inline-block;">
-												<label>Current status : {{tender.status}}</label>
-												<select required name="status"  class="form-control form-control-uniform" data-fouc>
-
-													{% for status in tender.TENDER_STATUS %}
-
-														<option  value="{{status}}">{{status}}</option>
-														<div class="list-icons" style="width: 3%; display: inline-block;" >
-															<div class="dropdown">
-																<a href="#" class="list-icons-item" data-toggle="dropdown">
-																	
-																</a>
-									
-																
-															</div>
-														</div>
-
-													{%endfor%}
-					
-												</select>
-											</div>
-										</div>
-									</div>
-								</div>
+							
 
 
 							</div>		
@@ -393,7 +362,7 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 							</div>
 							
 							<div class = "row">
-								<div class="col-md-4">
+								<div class="col-md-6">
 									<div class="form-group row">
 										<div class="col-lg-9">
 											<span class="input-group-prepend" >
@@ -406,7 +375,7 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 								</div>
 
 
-								<div class="col-md-4">
+								<div class="col-md-6">
 									<div class="form-group row">
 										<div class="col-lg-9">
 											<span class="input-group-prepend" >
@@ -418,25 +387,7 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 									</div>
 								</div>
 
-								<div class="col-md-4">
-									<div class="form-group ">
-										<div style="width: 100%;">
-											<div class="col-lg-9" style="width: 95%; display: inline-block;">
-												<label class="col-form-label col-lg-8">Status</label>
-												<select required name="status"  class="form-control form-control-uniform" data-fouc>
-													{% for status in form.STATUS_CHOICE %}
-														<option  value="{{status.0}}">{{status.0 }}</option>
-														<div class="list-icons" style="width: 3%; display: inline-block;" >
-															<div class="dropdown">
-																<a href="#" class="list-icons-item" data-toggle="dropdown">	</a>
-															</div>
-														</div>
-													{%endfor%}
-												</select>
-											</div>
-										</div>
-									</div>
-								</div>
+								
 
 							</div>
 							

@@ -164,12 +164,17 @@ def with_out():
 
 
 if __name__ == '__main__':    
-    n = News.objects.get(title__icontains = "fourth")
-    n.last_updated_date = None
-    n.save()
-    print(n.last_updated_date)
+    for p in PollsQuestion.objects.all():
+        print(p.id, " ", p.title, " ", p.count_votes(), "\n")
+    t = PollsQuestion.objects.annotate(num_vote=Count ('pollsresult')).order_by('-num_vote')
+    for p in t:
+        print(p.id, " ", p.title, " ", p.count_votes(), "\n")
+    
 
-    # print(n.created_date - n.last_updated_date)
-    for i in n.get_images():
-        print(i.news.title," ", i.created_by, " ", i.created_date, " ", i.last_updated_date)
+    # p =EventParticipants.objects.filter(event__start_date. = today)
+    # for x in p:
+    #     print(x.patricipant_email, " ", x.event.title, " ", x.event.start_date, )
 
+    
+    
+    

@@ -45,16 +45,15 @@
                                 </div>
 
                                 <div>
-                                    <h2 >
-                                        Title:
+                                    <h2 ><b style="margin-right:10px">Title:</b>
                                          <a href="#" ><h1 style = "display: inline;" class="font-weight-semibold text-capitalize">{{news.title}} </h1></a>
                                     </h2> 
                                 </div>
                                 
                                 <div class="item7-card-desc d-flex mb-2 mt-3">
                  
-									<h6><i class="fa fa-calendar-o text-muted mr-2"></i><b>Created at :</b><a href="#" ><b> {{news.timestamp}}</b></a></h6>
-                                    <h6><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i><b>By</b> <a href="#"><b>{{news.get_company.company_name}}</b></a></h6>
+									<h6><b style = " margin-right:5px;">Created at :</b><i class="fa fa-calendar-o text-muted mr-2"></i><a href="#" class="mr-3"><b> {{news.created_date}}</a></h6>
+                                        <h6><b style = " margin-right:5px;">By :</b><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i><a href="#"><b>{{news.get_company.company_name}}</b></a></h6>
                                                                         
                                 </div>
                                 
@@ -64,7 +63,7 @@
 							</div>
 						</div>
 
-                        <div class="card">
+                        <div  style="padding-left: 20px; padding-top: 20px;" class="card">
                             <div class="card-header">
                                 <h2><b>Related Images</b></h2>
                             </div>
@@ -77,8 +76,8 @@
                                 
                             </div>           
                         </div>
-                        <div class="card">
-                            <div class="card-header">
+                        <div style="padding-left: 20px;" class="card">
+                            <div  class="card-header">
                                 <h2><b>News Description</b></h2>
                             </div>
                             <div class="card-body">    
