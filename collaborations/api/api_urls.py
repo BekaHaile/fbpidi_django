@@ -1,5 +1,5 @@
 from django.urls import path,include
-from collaborations.views import PollIndex
+
 from collaborations.api.api_views import (PollListApiView, PollDetailApiView, NewsListApiView, NewsDetailApiView, 
         EventListApiView, EventDetailApiView, EventNotifyApiView, ApiAnnouncementList, ApiAnnouncementDetail,
         ApiBlogList, ApiBlogDetail, ApiCreateBlogComment, ApiTenderList, ApiTenderDetail, ApiVacancyList,
@@ -9,6 +9,7 @@ from collaborations.api.api_views import (PollListApiView, PollDetailApiView, Ne
 
 urlpatterns = [ 
     
+    #"poll"
     path("polls/", PollListApiView.as_view(), name = "client_polls" ),
     path("poll_detail/", PollDetailApiView.as_view(), name = "client_poll_detail" ),
     path('news/', NewsListApiView.as_view(), name = "client_news"),
@@ -23,12 +24,8 @@ urlpatterns = [
     path("forum_action/", ApiCreateForumQuestion, name = "api_forum_create"),
     path('forum_comment_action/', ApiCommentAction, name = "api_comment_action"),
     path('forum_comment_replay_action/', ApiCommentReplayAction, name = "api_comment_replay_action"),
-    # path("edit-comment/<id>/<forum>/<type>/",EditCommentForum.as_view(),name="edit_comment"),
-    # path("forum-edit/<id>",EditForumQuestions.as_view(),name="forum_edit"),
-    # path("forum-search",SearchForum.as_view(),name="forum_search"),
-    # path("forum-form",CreateForumQuestion.as_view(),name="forum_form"),
     
-
+    #announcement 
     path("announcement-list/",ApiAnnouncementList.as_view(),name="api_announcement_list"),
     path("announcement-detail/",ApiAnnouncementDetail.as_view(),name="api_announcement_detail"),
     

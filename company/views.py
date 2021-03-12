@@ -529,8 +529,14 @@ class CreateCompanyEvent(LoginRequiredMixin,View):
         company = Company.objects.get(id=self.kwargs['company_id'])
         if form.is_valid():
             event = form.save(commit=False)
+            if event.start_date.date() > timezone.now().date():
+                event.status = "Upcoming"
+            elif event.start_date.date() == timezone.now().date():
+                 event.status = 'Open'
+            else:
+                event.status = 'Closed' 
             event.company = company
-            event.created_by = self.request.user
+            event.created_by = self.request.user               
             event.save()
             messages.success(self.request,"Event Created Successfully")
             if company.company_type == "fbpidi":
@@ -545,6 +551,10 @@ class CreateCompanyEvent(LoginRequiredMixin,View):
                 return redirect("admin:view_company_profile")
 
 
+def change_to_datetime(calender_date):
+    str_date = datetime.datetime.strptime(calender_date, '%m/%d/%Y').strftime('%Y-%m-%d')
+    return datetime.datetime.strptime(str_date,'%Y-%m-%d' )
+
 class EditCompanyEvent(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
         form = CompanyEventForm(self.request.POST,self.request.FILES)
@@ -555,14 +565,14 @@ class EditCompanyEvent(LoginRequiredMixin,View):
             event.title_am = self.request.POST['title_am']
             event.description = self.request.POST['description']
             event.description_am = self.request.POST['description_am']
-
-            starting_date = datetime.datetime.strptime(self.request.POST['start_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
-            print(type(starting_date))
-            ending_date=datetime.datetime.strptime(self.request.POST['end_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
-            event.start_date = starting_date
-            event.end_date = ending_date
-
-            event.status = self.request.POST['status']
+            event.start_date = change_to_datetime(self.request.POST['start_date'])
+            event.end_date = change_to_datetime(self.request.POST['end_date'])
+            if event.start_date.date() > timezone.now().date():
+                event.status = "Upcoming"
+            elif event.start_date.date() == timezone.now().date():
+                 event.status = 'Open'
+            else:
+                event.status = 'Closed' 
             if self.request.FILES:
                 event.image = self.request.FILES['image']
             event.last_updated_by = self.request.user
@@ -592,6 +602,7 @@ class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
             return redirect('admin:index')
         else:
             return render(self.request,"admin/company/company_form_fbpidi.html",{'form':form})
+
 
 class ViewFbpidiCompany(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -640,6 +651,7 @@ class ViewFbpidiCompany(LoginRequiredMixin,View):
             messages.warning(self.request,"Company Does Not Exist")
             return redirect("admin:view_fbpidi_company")
 
+
 class CreateCompanyBankAccount(LoginRequiredMixin, View):
         def post(self, *ags, **kwargs):
             form  = CompanyBankAccountForm(self.request.POST)
@@ -660,6 +672,7 @@ class CreateCompanyBankAccount(LoginRequiredMixin, View):
                         return redirect("admin:view_fbpidi_company")
                 else:
                         return redirect("admin:view_company_profile")      
+
 
 class EditCompanyBankAccount(LoginRequiredMixin, View):
        
@@ -684,6 +697,7 @@ class EditCompanyBankAccount(LoginRequiredMixin, View):
                         return redirect("admin:view_fbpidi_company")
                 else:
                         return redirect("admin:view_company_profile")      
+
 
 class DeleteCompanyBankAccount(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):

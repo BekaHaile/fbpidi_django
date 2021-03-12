@@ -141,33 +141,29 @@
 						<!--Related Posts-->
 						<div id="myCarousel5" class="owl-carousel owl-carousel-icons3">
 							<!-- Wrapper for carousel items -->
-							{% for news in related_news %}
+							{% for obj in related_news %}
 							<div class="item">
 								<div class="card">
 									<div class="item-card7-imgs">
-										<a href="/collaborations/customer_news_detail/{{news.id}}/"></a>
-										<img src="{{news.get_images.0.image.url}}" alt="img" class="cover-image">
+										<a href="/collaborations/customer_news_detail/{{obj.id}}/"></a>
+										<img src="{{obj.get_images.0.image.url}}" alt="img" class="cover-image">
 									</div>
 									<form action="/collaborations/customer_news_list/" method="GET"> 
 									<div class="item-card7-overlaytext">
-										
-										<input type="hidden" name="by_category" value = "{{news.catagory}}" width="0" height="0"/>
-										<h4><button  type = "submit"  style="border: none; background-color: #ff8819; color:white;" class="font-weight-semibold" class="text-dark">{{news.catagory}}</button> </h4>
-										
-										
+										<input type="hidden" name="by_category" value = "{{obj.catagory}}" width="0" height="0"/>
+										<h4><button  type = "submit"  style="border: none; background-color: #ff8819; color:white;" class="font-weight-semibold" class="text-dark">{{obj.catagory}}</button> </h4>
 									</div>
 									</form>
-									
 									<div class="card-body">
 										<div class="item-card7-desc">
-											<a  class="text-dark"><h4 class="font-weight-semibold">{{news.title}} </h4></a>
+											<a  class="text-dark"><h4 class="font-weight-semibold">{{obj.title}} </h4></a>
 										</div>
 										<div class="item-card7-text">
 											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>{{news.get_company.location}}</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{news.created_date}}</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{% print_translated news.get_company.company_name news.get_company.company_name_am LANGUAGE_CODE %} </a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> {{news.get_company.phone_number}}</a></li>
+												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>{{obj.get_company.location}}</a></li>
+												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{obj.created_date}}</a></li>
+												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{% print_translated obj.get_company.company_name obj.get_company.company_name_am LANGUAGE_CODE %} </a></li>
+												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> {{obj.get_company.phone_number}}</a></li>
 											</ul>
 										</div>
 									</div>
@@ -175,15 +171,9 @@
 							</div>
 								
 							{% endfor %}
-
-						
 						</div>
-						<!--/Related Posts-->
-
-						
-						
+						<!--/Related Posts-->		
 					</div>
-
 					<!--Right Side Content-->
 					<div class="col-xl-4 col-lg-4 col-md-12">
 						<div class="card overflow-hidden">

@@ -2,6 +2,8 @@
 {%load i18n%}
 {%load core_template_tags%}
 {%block content%}
+	
+
 {% get_current_language as LANGUAGE_CODE %}
 
 <!-- USED THE busines_education/ template -->
@@ -107,13 +109,19 @@
 											</div>
 					
 										</div>
-											
-										<div class="col-md-6"  >
-											<label class="col-form-label ">{{event_participant_form.notify_in.label|title}}</label>
-											<div >
-												<input type="number" class="form-control" min = "0" max="15" name = "notify_in" placeholder = "Notify me before -- days" />
+										<div class="col-md-6">
+											<div class="form-group row">
+												<div class="col-lg-9">
+													<span class="input-group-prepend" >
+																	<span class="input-group-text"><i class="icon-calendar22">	Notify me on</i></span>
+																</span>
+														<input type="text" name="notify_on" class="form-control daterange-single" value="">
+												</div>
+													
 											</div>
 										</div>
+											
+										
 									</div>
 									<div class="col-sm-4">
 										
@@ -165,7 +173,7 @@
 										<div class="item-card7-text">
 											<ul class="icon-card mb-0 mt-2">
 												<li ><a href="{% url 'customer_event_detail' id=obj.id %}" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>{{obj.company.location}}</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{obj.start_date}}</a></li>
+												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{obj.start_date.date}}</a></li>
 												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{% print_translated obj.company.company_name obj.company.company_name_am LANGUAGE_CODE %} </a></li>
 												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> {{obj.company.phone_number}}</a></li>
 											</ul>
@@ -215,8 +223,6 @@
 								<div class="card-footer">
 									<div class="">
 										<a href="/chat/{{user.username}}_{{event.get_company_admin.username}}/" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> Chat</a>
-										<!-- <a href="#" class="btn btn-secondary mt-1 mb-1" data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> Contact Me</a> -->
-										<!-- <a href="#" class="btn btn-light mt-1 mb-1"><i class="fa fa-eye"></i>All Listings</a> -->
 									</div>
 								</div>
 							</div>
@@ -392,4 +398,28 @@
 				</div>
 			</div>
 		</div>
+		<!-- js for date picker calender -->
+		<script>
+			console.log("It is what it is....")
+		</script>
+		<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+		<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+		
+		<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+		<script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
+		<script src="/static/admin/global_assets/js/plugins/pickers/anytime.min.js"></script>
+		<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.js"></script>
+		<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.date.js"></script>
+		<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.time.js"></script>
+		<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/legacy.js"></script>
+		<script src="/static/admin/global_assets/js/plugins/notifications/jgrowl.min.js"></script>
+		<script src="/static/admin/global_assets/js/demo_pages/picker_date.js"></script>
+		<script>
+			$(document).ready(function () {
+				$('#summernote').summernote();
+				$('.summernote').summernote();
+			});
+		</script>
+		
+
 		{%endblock%}

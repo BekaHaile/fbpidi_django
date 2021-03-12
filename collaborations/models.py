@@ -8,18 +8,27 @@ from PIL import Image
 
 
 class PollsQuestion(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=2000, verbose_name="Poll title (English)")
     title_am = models.CharField(max_length=2000, verbose_name="Poll title(Amharic)")
     description = models.TextField(verbose_name="Poll Description(English)")
     description_am = models.TextField(verbose_name="Poll Description(Amharic)")
-    timestamp = models.DateTimeField(auto_now_add=True)
     choices = models.ManyToManyField('Choices',related_name='choices',default="")
+    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="poll_updated_by")
+    last_updated_date = models.DateTimeField(null=True)
+    expired = models.BooleanField(default=False)
+
 
     
     def __str__(self):
         return self.title
-    
+
+    def save(self):
+        self.company = self.created_by.get_company()
+        super(PollsQuestion, self).save()
+        
     def count_votes(self):
         return self.pollsresult_set.count()
         
@@ -27,41 +36,45 @@ class PollsQuestion(models.Model):
         return self.choices.count()
     
     def get_company(self):
-        return self.user.get_company()
+        return self.company
     
     def get_image(self):
         #gets the company by using the user, and in the company model there is a method called get_image() which returns image url
-        return self.get_company().get_image()
+        return self.company.get_image()
 
     class Meta:
-        ordering = ['-timestamp',] 
+        ordering = ['-created_date',] 
 
 
 class Choices (models.Model):
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+    created_date = models.DateTimeField(auto_now_add=True)
     choice_name = models.CharField( max_length=2000, verbose_name="Choice name (English)" )
     choice_name_am = models.CharField( max_length=2000, verbose_name="Choice name(Amharic)" )
     description = models.TextField( verbose_name="Choice Description(English)" )
     description_am = models.TextField( verbose_name="Choice Description(Amharic)" )
-    timestamp = models.DateTimeField(auto_now_add=True)
-   
-
-
+    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="poll_choice_updated_by")
+    last_updated_date = models.DateTimeField(null=True)
+    expired = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.choice_name
 
     def count_votes(self):
         return self.pollsresult_set.count()
 
+        
     class Meta:
-        ordering = ['-timestamp',] 
+        ordering = ['-created_date',] 
 
 
 class PollsResult(models.Model):    
     poll = models.ForeignKey(PollsQuestion, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
     choice = models.ForeignKey(Choices, on_delete=models.CASCADE)
     remark = models.CharField( max_length=200,verbose_name= "Any remarks the user may have", default="" )
-    timestamp = models.DateTimeField(auto_now_add=True)
+    
 
     def __str__(self):
         return f"{self.poll.title}'s Result "
@@ -128,8 +141,10 @@ class Faqs(models.Model):
  
 
 class Tender(models.Model):
-    TENDER_STATUS = ['Open', 'Pending', 'Closed', 'Suspended']
-    user = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.CASCADE )
+    TENDER_STATUS = ['Open', 'Upcoming', 'Closed', 'Suspended']
+    created_by = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.CASCADE )
+    created_date = models.DateTimeField(auto_now_add=True)
+    company = models.ForeignKey( Company, on_delete= models.CASCADE, default=1)
     title = models.CharField( max_length=200, verbose_name="Tender title (English)" )
     title_am = models.CharField( max_length=200, verbose_name="Tender title(Amharic)" )
     description = models.TextField( verbose_name="Tender Description(English)" )
@@ -138,7 +153,7 @@ class Tender(models.Model):
     tender_type = models.CharField(max_length=4, verbose_name="Tender type", choices=[ ('Free', 'Free'), ('Paid', 'Paid')], default="Free" )
     document_price = models.FloatField(verbose_name="documnet price (for paid tenders)", max_length = 6, default=0)
     status = models.CharField(max_length=10, verbose_name="Tender status", choices=[
-                                                                                        ('Pending', 'Pending'),('Open', 'Open' ), 
+                                                                                        ('Upcoming', 'Upcoming'),('Open', 'Open' ), 
                                                                                         ('Closed', 'Closed'), ('Suspended', 'Suspended')
                                                                                     ])
     #if we r using the company logo there is no need to save it twice, we can get it from user.company.get_image()   
@@ -146,14 +161,17 @@ class Tender(models.Model):
     bank_account = models.ManyToManyField('company.CompanyBankAccount', related_name="accounts")
     start_date = models.DateTimeField(verbose_name="Tender start date")
     end_date = models.DateTimeField(verbose_name="Tender end date")
-    timestamp = models.DateTimeField(auto_now_add=True)
+    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="tender_updated_by")
+    last_updated_date = models.DateTimeField(null=True)
+    expired = models.BooleanField(default=False)
 
+    
+    
     def get_applications(self):
         return TenderApplicant.objects.filter( tender = self )
     
-    
     def get_company(self):
-        return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None
+        return self.company
     
     def get_bank_accounts(self):
         return self.bank_account.all()
@@ -170,8 +188,13 @@ class Tender(models.Model):
             return unrelated_bank_accounts
         return None  
 
+    def save(self):
+        self.company = self.created_by.get_company()
+        super(Tender, self).save()
+
+
     class Meta:
-        ordering = ['-timestamp',] 
+        ordering = ['-created_date',] 
 
 
 class TenderApplicant(models.Model):
@@ -289,6 +312,9 @@ class News(models.Model):
     def get_company(self):
         return self.created_by.get_company()
     
+    def save(self):
+        self.company = self.created_by.get_company()
+        super(News, self).save()
 
     class Meta:
         ordering = ['-created_date',] 
@@ -394,7 +420,6 @@ class AnnouncementImages(models.Model):
         ordering = ['-timestamp',]
 
     def save(self):           
-
         super(AnnouncementImages, self).save()
 
         

@@ -15,7 +15,7 @@
 	<!-- /theme JS files -->
  
 {% endblock %}
-{%block pagename%}Tenders List{%endblock%}
+{%block pagename%}To Home{%endblock%}
 {%block content%}
 
  <!--  Only super users can watch this -->
@@ -64,7 +64,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <p style="display: inline;"><b>Status :</b></p>
-                                            <a href="#" style="display: inline;">
+                                            <a href="#" style="display: inline;" class = "mr-3">
                                                 {% if tender.status == 'Open' %}
                                                 <div  style="background-color: #66bb6a;; color:white; width: fit-content; padding: 5px; display: inline; " >Open</div>
                                                 {%elif tender.status == 'Pending' %}
@@ -76,9 +76,9 @@
                                                 {%endif%}
                                             </a>
                                         
-                                        <p style="display: inline;"><b>Type :</b> </p><a href="#" style="padding-left: 10px;">{{tender.tender_type}}</a>
+                                        <p style="display: inline;"><b>Type :</b> </p><a href="#" style="padding-left: 10px;" class = "mr-3">{{tender.tender_type}}</a>
                                         {% if tender.tender_type == "Paid"%}
-                                        <a href="#" style="padding-left: 10px;"><i class="fa fa-calendar-o text-muted mr-2"></i>Document price : {{tender.document_price}}</a>
+                                        <p style = "display: inline;" ><b>Document price :</b></p><a href="#" style="padding-left: 10px;"> {{tender.document_price}}</a>
                                         {%endif%}
                                     
                                     </div>

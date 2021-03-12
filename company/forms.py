@@ -421,11 +421,9 @@ class CompanySolutionForm(forms.ModelForm):
 class CompanyEventForm(forms.ModelForm):
     STATUS_CHOICE = [ ('Upcoming', 'Upcoming'),('Open', 'Open' )]
     image = forms.FileField(allow_empty_file=True, required=False, widget= forms.FileInput(attrs={'class': 'form-input-styled',}) )
-    status = forms.ChoiceField(choices = STATUS_CHOICE, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
-
     class Meta:
         model=CompanyEvent
-        fields = ('title','title_am','description','description_am','image','status', 'start_date', 'end_date')
+        fields = ('title','title_am','description','description_am','image', 'start_date', 'end_date')
         widgets = {
             'title':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (English)'}),
             'title_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (Amharic)'}),

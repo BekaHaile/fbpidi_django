@@ -26,7 +26,7 @@ class PollListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = PollsQuestion()
-        fields = ('id','title', 'title_am', 'total_votes', 'no_of_choices' ,'company_info', 'user', 'timestamp' )
+        fields = ('id','title', 'title_am', 'no_of_votes', 'no_of_choices' ,'company_info', 'user', 'timestamp',  )
     
     def get_company_info(self, poll):
         company = poll.get_company()

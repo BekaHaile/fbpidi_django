@@ -4,6 +4,7 @@ from django.utils.safestring import mark_safe
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from django.utils import timezone
 
 
 from company.models import Company,CompanyStaff
@@ -12,7 +13,7 @@ from chat.models import  ChatMessage, ChatGroup
 from chat import views
 
 
-from accounts.models import User
+from accounts.models import FbpidiUser
 
 register = template.Library()
 
@@ -62,3 +63,7 @@ def get_grouped_unread_messages(user):
 def get_all_messages_grouped(user, max_num_group=None, exceluded = None):
     return views.get_grouped_all_message(user, max_num_group, exceluded)
   
+
+@register.simple_tag
+def get_date(date):
+    return date.date()

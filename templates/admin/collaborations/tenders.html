@@ -51,8 +51,8 @@
 								<td>{{tender.get_company.company_name}}</td>
 								<td>{{tender.tender_type}}</td>	
 
-								<td>{{tender.start_date}}</td>
-								<td>{{tender.end_date}}</td>
+								<td>{{tender.start_date.date}}</td>
+								<td>{{tender.end_date.date}}</td>
 								<td>{{tender.status}}</td>
 								<td>{{tender.get_applications.count}}</td>
 								
@@ -64,11 +64,19 @@
 												<i class="icon-menu9"></i>
 											</a>
 											<div class="dropdown-menu dropdown-menu-right">	
-												{% if user == tender.user  %}											
-													
-													<a href="{%url 'admin:tender_detail' id=tender.id%}"  class="dropdown-item"><i class="icon-eye"></i>View tender Detail</a>
+												
+												{% if user.get_company == tender.company or user.is_superuser %}											
+													{% if perms.collaborations.view_tender %}
+													<a href="{%url 'admin:tender_detail' pk=tender.id%}"  class="dropdown-item"><i class="icon-eye"></i>View tender Detail</a>
+													{% endif %}
+
+													{% if perms.collaborations.change_tender %}
 													<a href="{%url 'admin:edit_tender' id=tender.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Tender</a>	
-													<a href="{%url 'admin:delete_tender'  id=tender.id %}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this tender?')"><i class="icon-trash"></i>Delete Tender</a>
+													{% endif %}
+
+													{% if perms.collaborations.delete_tender %}
+													<a href="{%url 'admin:delete' model_name='Tender' id=tender.id %}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this tender?')"><i class="icon-trash"></i>Delete Tender</a>
+													{% endif %}
 												{% else %}
 												<a href="#"  class="dropdown-item">You Are Not Authorized to Perform Any Action On this Tender.</a>
 												

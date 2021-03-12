@@ -109,10 +109,10 @@ class PollsForm(forms.ModelForm):
     
     class Meta:
         model = PollsQuestion
-        fields = ('user','title', 'title_am',
+        fields = ('created_by','title', 'title_am',
                   'description', 'description_am','choices')
         widgets = {
-            'user':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'created_by':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title in English'}),
             'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in English'}),
             'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title in Amharic'}),
@@ -149,14 +149,10 @@ class CreateChoiceForm(forms.ModelForm):
 class TenderForm(forms.ModelForm):
     # user, bank_account, document
     
-    STATUS_CHOICE = [ ('Pending', 'Pending'),('Open', 'Open' )]
     tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
-    status = forms.ChoiceField(choices = STATUS_CHOICE, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
-
-
     class Meta:
         model = Tender
-        fields = ('title', 'title_am','description', 'description_am','tender_type', 'status', )
+        fields = ('title', 'title_am','description', 'description_am','tender_type',  )
         widgets = {
                 'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
                 'description':forms.Textarea(attrs={'class':'summernote','placeholder':'description of the Tender'}),
@@ -166,15 +162,11 @@ class TenderForm(forms.ModelForm):
 
 class TenderEditForm(forms.ModelForm):
     # user, bank_account, document
-    tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
-    status = forms.ChoiceField(choices = [ ('Pending', 'Pending'),('Open', 'Open' ),  ('Closed', 'Closed'), ('Suspended', 'Suspended')
-                                          ], required=True,)
-                                
-    
+    tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),) 
     
     class Meta:
         model = Tender
-        fields = ('title', 'title_am','description', 'description_am','tender_type', 'status')
+        fields = ('title', 'title_am','description', 'description_am','tender_type')
         widgets = {
                 'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
                 'description':forms.Textarea(attrs={'class':'summernote'}),
