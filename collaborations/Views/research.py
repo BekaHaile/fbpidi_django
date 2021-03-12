@@ -1,6 +1,7 @@
 
 from django.urls import reverse
 import datetime
+from django.utils import timezone
 from django.views import View
 
 from django.http import HttpResponse, FileResponse
@@ -59,50 +60,59 @@ from collaborations.models import ( Research, Project,
 									ResearchProjectCategory
 									)
 
-class ListResearchProjectCategoryAdmin(LoginRequiredMixin ,View):
-	def get(self,*args,**kwargs):
-		form = ResearchProjectCategory.objects.all()
-		template_name = "admin/researchproject/research_project_category_list.html"
-		context = {'researchprojectcategorys':form}
-		return render(self.request, template_name,context)
 
 class CreateResearchProjectCategoryAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
-		form = ResearchProjectCategoryForm()
 		template_name = "admin/researchproject/research_project_category_form.html"
-		context = {'forms':form}
-		return render(self.request, template_name,context)
+		return render(self.request, template_name, {'forms':ResearchProjectCategoryForm})
 	def post(self,*args,**kwargs):
-		form = ResearchProjectCategoryForm(self.request.POST)
-		template_name = "admin/researchproject/research_project_category_form.html"
-		context = {'forms':form}
-		if form.is_valid():
-			research = ResearchProjectCategory()
-			research = form.save(commit=False)
-			research.user = self.request.user
-			research.save()
-			messages.success(self.request, "Added New ResearchProjectCategory Successfully")
-			return redirect("admin:researchprojectcategory_form")
+		try:
+			form = ResearchProjectCategoryForm(self.request.POST)
+			if form.is_valid():
+				research = form.save(commit=False)
+				research.created_by = self.request.user
+				research.save()
+				messages.success(self.request, "Added New Category Successfully!")
+				return redirect("admin:research_project_category_list")
+		except Exception as e:
+			print ("Exception at Create research project category ", e)
+			return redirect("admin:research_project_category_list")
+	
+class ListResearchProjectCategoryAdmin(LoginRequiredMixin , ListView):
+	model = ResearchProjectCategory
+	context_object_name = 'researchprojectcategorys'
+	template_name = "admin/researchproject/research_project_category_list.html"
+
 
 class ResearchProjectCategoryDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
-		form = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
-		template_name = "admin/researchproject/research_project_category_detail.html"
-		context = {'forms':form}
-		return render(self.request, template_name,context)
+		try:
+			form = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
+			template_name = "admin/researchproject/research_project_category_detail.html"
+			return render(self.request, template_name,  {'forms':form})
+		except Exception as e:
+			messages.warning(self.request, "Couldn't find the category!")
+			return redirect("admin:research_project_category_list")
 	def post(self,*args,**kwargs):
-		form = ResearchProjectCategoryForm(self.request.POST)
-		emplate_name = "admin/researchproject/research_project_category_detail.html"
-		context = {'forms':form}
-		if form.is_valid():
-			research = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
-			research.cateoryname=form.cleaned_data.get('cateoryname')
-			research.detail=form.cleaned_data.get('detail')
-			research.user = self.request.user 
-			research.save()
-			messages.success(self.request, "Edited ResearchProjectCategory Successfully")
-			return redirect("admin:researchprojectcategory_list")
-		return render(self.request, template_name,context)
+		try:
+			rp_category = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
+			form = ResearchProjectCategoryForm(self.request.POST)
+			if form.is_valid():
+				rp_category.cateoryname=form.cleaned_data.get('cateoryname')
+				rp_category.cateoryname_am=form.cleaned_data.get('cateoryname_am')
+				rp_category.detail=form.cleaned_data.get('detail')
+				rp_category.last_updated_by = self.request.user 
+				rp_category.last_updated_date = timezone.now()
+				rp_category.save()
+				messages.success(self.request, "Edited ResearchProjectCategory Successfully")
+				return redirect(f'/admin/researchprojectcategorys-detail/{rp_category.id}/')
+
+			messages.WARNING(self.request, "Couldn't edit category. Invalid input data!")
+			return redirect("admin:research_project_category_list")
+		except Exception as e:
+			print ("Exception at Research Project Categor Detail post", e)
+			messages.warning(self.request, "Could not edit category!")
+			return redirect("admin:research_project_category_list")
 
 
 class ListResearchAdmin(LoginRequiredMixin ,View):
@@ -113,6 +123,7 @@ class ListResearchAdmin(LoginRequiredMixin ,View):
 		context = {'researchs':form,"pending":pending}
 		return render(self.request, template_name,context)
 
+
 class ListPendingResearchAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.filter(accepted="PENDING")
@@ -120,12 +131,14 @@ class ListPendingResearchAdmin(LoginRequiredMixin ,View):
 		context = {'researchs':form}
 		return render(self.request, template_name,context)
 
+
 class ResearchDetailView(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
 		template_name = "admin/researchproject/research_view.html"
 		context = {'forms':form}
 		return render(self.request, template_name,context)
+
 
 class CreateResearchAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
@@ -152,6 +165,7 @@ class CreateResearchAdmin(LoginRequiredMixin, View):
 			messages.success(self.request, "Added New Research Successfully")
 			return redirect("admin:research_form")
 		return render(self.request, template_name,context)
+
 
 class ResearchApprove(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):

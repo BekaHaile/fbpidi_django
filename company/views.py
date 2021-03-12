@@ -30,7 +30,6 @@ class CreateCompanyProfile(LoginRequiredMixin,View):
 
     def post(self, *args,**kwargs):
         form = CompanyForm(self.request.POST,self.request.FILES)
-        
         if form.is_valid():
             company = form.save(commit=False)
             company.product_category = form.cleaned_data.get("product_category")

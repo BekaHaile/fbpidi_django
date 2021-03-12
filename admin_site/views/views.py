@@ -87,9 +87,8 @@ class DeleteView(LoginRequiredMixin,View):
             elif self.kwargs['model_name'] == 'ResearchProjectCategory':
                 category = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
                 category.delete()
-                message ="Research and project Category Deleted"
-                messages.success(self.request,message)
-                return redirect("admin:researchprojectcategory_list")
+                messages.success(self.request,"Research and project Category Deleted")
+                return redirect("admin:research_project_category_list")
             elif self.kwargs['model_name'] == 'PollsQuestion':
                 poll = PollsQuestion.objects.get(id = self.kwargs['id'])
                 poll.delete()
@@ -106,13 +105,17 @@ class DeleteView(LoginRequiredMixin,View):
                 message = "BlogComment Deleted"
                 messages.success(self.request,message)
                 return redirect("admin:blogComment_list")
+            elif self.kwargs['model_name'] == 'Announcement':
+                announcement = Announcement.objects.get(id=self.kwargs['id'])
+                announcement.delete()
+                messages.success(self.request, "Announcement Deleted Successfully!")
+                return redirect("admin:anounce_list")
             elif self.kwargs['model_name'] == 'AnnouncementImages':
                 announcementimages = AnnouncementImages.objects.get(id=self.kwargs['id'])
                 id =announcementimages.announcement.id
                 announcementimages.delete()
-                message ="AnnouncementImages Deleted"
-                messages.success(self.request,message)
-                return redirect(f"/admin/anounce-Detail/Announcement/{id}")
+                messages.success(self.request, "AnnouncementImages Deleted")
+                return redirect(f"/admin/anounce-Detail/{id}/")
             elif self.kwargs['model_name'] == 'Project':
                 research = Project.objects.get(id=self.kwargs['id'])
                 research.delete()
@@ -145,11 +148,6 @@ class DeleteView(LoginRequiredMixin,View):
                 message ="comment Replay Deleted"
                 messages.success(self.request,message)
                 return redirect("admin:comment_replay_detail")
-            elif self.kwargs['model_name'] == 'Announcement':
-                announcement = Announcement.objects.get(id=self.kwargs['id'])
-                announcement.delete()
-                message ="Announcement Deleted"
-                return redirect("admin:anounce_list")
             elif self.kwargs['model_name'] == 'JobCategory':
                 jobcategory = JobCategory.objects.get(id=self.kwargs['id'])
                 jobcategory.delete()
@@ -327,7 +325,7 @@ class DeleteView(LoginRequiredMixin,View):
                     return redirect("admin:tenders")   
         
         except Exception as e:
-                messages.warning(self.request, "Could not find the Item!")
+                messages.warning(self.request, "Exception while deleting! \n hint: item may not be available!")
                 return redirect("admin:index") 
 
 

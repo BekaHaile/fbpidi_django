@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.conf import settings
 from admin_site.models import SubCategory
@@ -72,6 +73,7 @@ class Company(models.Model):
     def get_product_category_type(self):
         return self.product_category.category_name.category_type
 
+
 class CompanyStaff(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
@@ -130,17 +132,17 @@ class CompanyEvent(models.Model):
     def get_company_admin(self):
         return self.company.get_compnay_admin()
 
+
 class EventParticipants(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     event = models.ForeignKey(CompanyEvent, on_delete=models.CASCADE)
     patricipant_email = models.EmailField(max_length=200, blank=True)
-    notifiy_in = models.IntegerField(default=1)
+    notify_on = models.DateTimeField(blank=False, null=False)
     notified = models.BooleanField(verbose_name="If notification is sent = True", default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        unique_together = (('patricipant_email', 'event'))
-        ordering = ['-timestamp']
+    # class Meta:
+        # unique_together = (('patricipant_email', 'event'))
         
 
 class Bank(models.Model):

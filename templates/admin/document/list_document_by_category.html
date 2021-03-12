@@ -58,7 +58,7 @@
 											<i class="icon-download"></i>
 										</a><br>
 										{% if perms.collaborations.delete_document %}
-											{% if user.is_superuser or user.get_company == document.user.get_company %}
+											{% if user.is_superuser or user.get_company == document.company %}
 												<a href="{%url 'admin:delete' model_name='Document' id=document.id%}" style="color: rgb(175, 13, 13);"   onclick="return confirm ('Are you sure you want to delete this Document?')">
 													<i class="icon-trash"></i>
 											{% endif %}

@@ -44,16 +44,14 @@ def sendWelcomeEmail(request,user):
 def sendEventNotification(request, participant):
     
     current_site = get_current_site(request)
-    mail_message = f'The Event titled "{participant.event.title}" Will start after {participant.notifiy_in}.'
+    mail_message = f'The Event titled "{participant.event.title}" Will start after on {participant.notify_on.date}.'
     mail_subject = f'Event Notification From IIMP'
     to_email = participant.patricipant_email
     email = EmailMessage(mail_subject, mail_message, to=[participant.patricipant_email])
     email.content_subtype = "html"  
     try:
         email.send()
-        print("Email sent to ", participant.patricipant_email)
-        participant.notified = False
-        participant.save()
+        print("Event notification Email sent to ", participant.patricipant_email)
         return True
     except Exception as e:
         print("Exception While Sending Email ", str(e))
@@ -68,7 +66,7 @@ def sendEventClosedNotification(request, event):
     email.content_subtype = "html"  
     try:
         email.send()
-        print("Email sent to ", event.created_by.email)
+        print("Event closed Email sent to ", event.created_by.email)
         return True
     except Exception as e:
         print("Exception While Sending Email ", str(e))

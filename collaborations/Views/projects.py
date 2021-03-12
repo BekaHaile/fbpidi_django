@@ -1,6 +1,7 @@
 
 from django.urls import reverse
 import datetime
+from django.utils import timezone
 from django.views import View
 
 from django.http import HttpResponse, FileResponse
@@ -59,63 +60,47 @@ from collaborations.models import ( Research, Project,
 									ResearchProjectCategory
 									)
 
-# ------------ Project
+# ------------ Project Admin side
 
-class ListProjectAdmin(LoginRequiredMixin ,View):
-	def get(self,*args,**kwargs):
-		form = Project.objects.all()
-		pending = Project.objects.filter(status="PENDING").count()
-		template_name = "admin/researchproject/project_list.html"
-		context = {'researchs':form,'pending':pending}
-		return render(self.request, template_name,context)
+class ListProjectAdmin(LoginRequiredMixin, ListView):
+	model = Project
+	template_name = "admin/researchproject/project_list.html"
+	context_object_name = 'projects'
+	def get_queryset(self):
+		if self.request.user.is_superuser:
+			return Project.objects.all()
+		else:
+			return Project.objects.filter(company=self.request.user.get_company())
+	
+	# def get(self,*args,**kwargs):
+	# 	form = Project.objects.all()
+	# 	pending = Project.objects.filter(status="PENDING").count()
+	# 	template_name = "admin/researchproject/project_list.html"
+	# 	context = {'researchs':form,'pending':pending}
+	# 	return render(self.request, template_name,context)
 
-class ListPendingProjectAdmin(LoginRequiredMixin ,View):
-	def get(self,*args,**kwargs):
-		form = Project.objects.filter(accepted="PENDING")
-		template_name = "admin/researchproject/pending_list.html"
-		context = {'researchs':form}
-		return render(self.request, template_name,context)
-
-class ProjectDetailView(LoginRequiredMixin, View):
-	def get(self,*args,**kwargs):
-		form = Project.objects.get(id=self.kwargs['id'])
-		template_name = "admin/researchproject/project_view.html"
-		context = {'forms':form}
-		return render(self.request, template_name,context)
 
 class CreateProjectAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
-		form = ProjectForm()
 		template_name = "admin/researchproject/project_form.html"
-		context = {'forms':form}
-		print("________________Fork________________________")
-		return render(self.request, template_name,context)
-	def post(self,*args,**kwargs):		
-		form = ProjectForm(self.request.POST,self.request.FILES)
-		template_name = "admin/researchproject/project_form.html"
-		context = {'forms':form}
-		if form.is_valid():
-			project = Project()
-			project = form.save(commit=False)
-			if self.request.user.is_customer:
-				project.accepted = "PENDING"
-			else:
-				project.accepted = "APPROVED"
-			project.user = self.request.user
-			if form.cleaned_data.get("attachements"):
-				project.attachements = form.cleaned_data.get("attachements")
-			project.save()
-			messages.success(self.request, "Added New Project Successfully")
-			return redirect("admin:project_form")
-		return render(self.request, template_name,context)
+		return render(self.request, template_name,  {'forms': ProjectForm})
+	def post(self,*args,**kwargs):	
+		try:	
+			form = ProjectForm(self.request.POST,self.request.FILES)
+			if form.is_valid():
+				project = form.save(commit=False)
+				project.created_by = self.request.user
+				if form.cleaned_data.get("attachements"):
+					project.attachements = form.cleaned_data.get("attachements")
+				project.save()
+				messages.success(self.request, "Added New Project Successfully")
+				return redirect("admin:project_list")
+			messages.warning(self.request, "Couldn't create Project. Invalud input data!")
+			return redirect("admin:project_list")
+		except Exception as e:
+			messages.warning(self.request, "Couldn't create Project. Exception occured!")
+			return redirect("admin:project_list")
 
-class ProjectApprove(LoginRequiredMixin, View):
-	def get(self,*args,**kwargs):
-		form = Project.objects.get(id=self.kwargs['id'])
-		form.accepted = "APPROVED"
-		form.save()
-		messages.success(self.request, "Changed Status to APPROVED Successfully")
-		return redirect("admin:pedning_list")
 
 class ProjectDetailAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
@@ -127,21 +112,49 @@ class ProjectDetailAdmin(LoginRequiredMixin, View):
 	def post(self,*args,**kwargs):
 		form = ProjectForm(self.request.POST,self.request.FILES)
 		template_name = "admin/researchproject/project_detil.html"
-		context = {'forms':form}
 		if form.is_valid():
 			project = Project.objects.get(id=self.kwargs['id'])
 			project.title = form.cleaned_data.get('title')
 			project.description = form.cleaned_data.get('description')
-			project.detail = form.cleaned_data.get('detail')
 			project.status = form.cleaned_data.get('status')
 			project.category = form.cleaned_data.get('category')
 			if form.cleaned_data.get("attachements"):
 				project.attachements = form.cleaned_data.get("attachements")
-			project.user = self.request.user
+			project.last_updated_by = self.request.user
+			project.last_updated_date = timezone.now()
 			project.save()
 			messages.success(self.request, "Edited Project Successfully")
 			return redirect("admin:project_list")
 		return render(self.request, template_name,context)
+
+
+########### Customer side
+class ListProject(View):
+	def get(self,*args,**kwargs):
+		form = Project.objects.filter(accepted="APPROVED")
+		category = ResearchProjectCategory.objects.all()
+		if str(self.request.user) != "AnonymousUser":
+			usercreated = Project.objects.filter(user=self.request.user,accepted="APPROVED")
+		else:
+			usercreated = ""
+		context = {'researchs':form,"usercreated":usercreated,"category":category}
+		template_name = "frontpages/project/project_list.html"
+		
+		return render(self.request, template_name,context)
+
+
+class ProjectDetailView(LoginRequiredMixin, DetailView):
+	model = Project
+	context_object_name = 'forms'
+	template_name = "admin/researchproject/project_view.html"
+
+
+	# def get(self,*args,**kwargs):
+	# 	form = Project.objects.get(id=self.kwargs['id'])
+	# 	template_name = "admin/researchproject/project_view.html"
+	# 	context = {'forms':form}
+	# 	return render(self.request, template_name,context)
+
 
 class SearchProject(View):
 	def get(self,*args,**kwargs):
@@ -163,18 +176,6 @@ class SearchProject(View):
 		# 	userCreated = ""
 		return render(self.request, template_name,context)
 
-class ListProject(View):
-	def get(self,*args,**kwargs):
-		form = Project.objects.filter(accepted="APPROVED")
-		category = ResearchProjectCategory.objects.all()
-		if str(self.request.user) != "AnonymousUser":
-			usercreated = Project.objects.filter(user=self.request.user,accepted="APPROVED")
-		else:
-			usercreated = ""
-		context = {'researchs':form,"usercreated":usercreated,"category":category}
-		template_name = "frontpages/project/project_list.html"
-		
-		return render(self.request, template_name,context)
 
 class ProjectCategorySearch(View):
 	def get(self,*args,**kwargs):
@@ -188,6 +189,7 @@ class ProjectCategorySearch(View):
 		template_name = "frontpages/project/project_list.html"
 		return render(self.request, template_name,context)
 
+
 class ProjectDetail(View):
 	def get(self,*args,**kwargs):
 		form = Project.objects.get(id=self.kwargs['id'])
@@ -200,6 +202,7 @@ class ProjectDetail(View):
 		template_name = "frontpages/project/project_detail.html"
 		
 		return render(self.request, template_name,context)
+
 
 class EditProject(View):
 
