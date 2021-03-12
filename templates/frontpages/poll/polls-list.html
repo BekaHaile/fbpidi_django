@@ -42,7 +42,6 @@
 					<h4 class="page-title">{% trans "Polls" %}</h4>
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="#">{% trans "Home" %}</a></li>
-						<li class="breadcrumb-item"><a href="#">{% trans "Pages" %}</a></li>
 						<li class="breadcrumb-item active" aria-current="page">{% trans "Polls" %}</li>
 					</ol>
 				</div>
@@ -67,16 +66,22 @@
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
 											</ul>
 											<div class="d-sm-flex">
-												<label class="mr-2 mt-2 mb-sm-1 sort-label">{% trans "Sort By" %}:</label>
+												
 												<div class="selectgroup">
-													<label class="selectgroup-item mb-md-0">
-														<input type="radio" name="value" value="All" class="selectgroup-input" checked="">
-														<span class="selectgroup-button d-md-flex">{% trans "Recent" %} <i class="fa fa-sort ml-2 mt-1"></i></span>
-													</label>
-													<label class="selectgroup-item mb-md-0">
-														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">{% trans "Number of votes" %}</span>
-													</label>
+													<form action="{% url 'polls' %}" method="GET">
+														<label class="selectgroup-item mb-md-0">
+															<input type="hidden" name="" value="">
+															<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "All" %}</button></span>
+														</label>
+													</form>
+													<form action="{% url 'polls' %}" method="GET">
+														<label class="selectgroup-item mb-md-0">
+															<input type="hidden" name="by_no_vote" value="">
+															<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "Highest votes" %}</button></span>
+														</label>
+													</form>
+
+													
 													
 												</div>
 											</div>
@@ -90,8 +95,8 @@
 													<div class="item-card9-img">
 														<div class="item-card9-imgs">
 															<a href="/collaborations/poll_detail/{{poll.id}}/"></a>
-															{% if poll.get_image %}
-															<img src="{{poll.get_image}}"  alt="img" class="cover-image">
+															{% if poll.company.get_image %}
+															<img src="{{poll.company.get_image}}"  alt="img" class="cover-image">
 															{% else %}
 															
 															<img src="/static/frontpages/images/products/products/v1.jpg" alt="img" class="cover-image">
@@ -112,7 +117,7 @@
 																{%endif%}
 
 																{% if poll.count_choices > 0 %}
-																<p class="mr-0" style="display: block;"><i class="fa fa-hand-stop-o text-muted mr-2"></i>
+																<p class="mr-0" style="display: block;">
 																	{% if poll.count_votes > 1 %}
 																		{{poll.count_votes}} 
 																		{% trans "Votes" %}
@@ -120,6 +125,7 @@
 																		{{poll.count_votes}} 
 																		{% trans "Vote" %}
 																	{%endif%}
+																	<i class="fa fa-hand-stop-o text-muted mr-2"></i>
 																</p>
 																{% endif %}
 															</div>
@@ -129,17 +135,12 @@
 																<div class="item-card9-cost">
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
 																		<b>By: &nbsp</b>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.user.get_company.company_name}}">
-																			<img src="{{poll.user.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.company.company_name}}">
+																			<img src="{{poll.company.get_image}}" alt="image" class="avatar brround  mr-2">
 																		</a>
-
-																		
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.user.get_company.phone_number}}"><i class="fa fa-phone"></i></a>
-																		
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.user.get_company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
-
-																		<a class="" href="/chat/with/{{poll.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-																		
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.company.phone_number}}"><i class="fa fa-phone"></i></a>	
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+																		<a class="" href="/chat/with/{{poll.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 																		<a class="" href="/collaborations/poll_detail/{{poll.id}}/" ><b class="btn btn-secondary btn-sm mt-1">Poll Detail</b></a>
 													
 																		<br>
@@ -148,7 +149,7 @@
 																</div>
 																<div class="ml-auto mt-3 mt-sm-0">
 																	
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{poll.timestamp}}</small></div> 
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{poll.created_date}}</small></div> 
 																		
 																</div>
 															</div>
@@ -200,36 +201,35 @@
 							</div>
 						</div>
 						</form>
+
+
 						<div class="card mb-0">
-							<div class="card-header border-top">
-								<h3 class="card-title">{% trans "Posted By" %}</h3>
-							</div>
-							<div class="card-body">
-								<div class="filter-product-checkboxs">
-									<label class="custom-control custom-checkbox mb-2">
-										<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
-										<span class="custom-control-label">
-											{% trans "Supplier" %}
-										</span>
-									</label>
-									<label class="custom-control custom-checkbox mb-2">
-										<input type="checkbox" class="custom-control-input" name="checkbox2" value="option2">
-										<span class="custom-control-label">
-											{% trans "Manufacturer" %}
-										</span>
-									</label>
-									<label class="custom-control custom-checkbox mb-0">
-										<input type="checkbox" class="custom-control-input" name="checkbox2" value="option2">
-										<span class="custom-control-label">
-											{% trans "Reseller" %}
-										</span>
-									</label>
+
+
+							<form action="{% url 'polls' %}" method = "GET">		
+								<div class="card-header border-top">
+									<h3 class="card-title">{% trans "Filter by company" %}</h3>
 								</div>
-							</div>
-							<div class="card-footer">
-								<a href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>
-							</div>
+								<div class="card-body">
+										<div class="filter-product-checkboxs">
+											{% for comp in companies %}
+											<label class="custom-control custom-checkbox mb-2">
+												<input type="checkbox" class="custom-control-input" name="by_company" value="{{comp.company_name}}">
+												<span class="custom-control-label">
+													{% print_translated comp.company_name comp.company_name_am LANGUAGE_CODE %}
+												</span>
+											</label>
+										{% endfor %}
+										</div>
+								</div>
+								<div class="card-footer">
+									<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</button>
+								</div>
+							</form>
+
+
 						</div>
+
 					</div>
 					<!--/Right Side Content-->
 				</div>

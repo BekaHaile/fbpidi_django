@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.urls import reverse
 from django.views import View
-from django.db.models import Q
+from django.db.models import Q, Count
 
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
@@ -25,7 +25,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import FileResponse, HttpResponse, HttpResponseRedirect
-from accounts.email_messages import sendEventNotification, sendEventClosedNotification
+from accounts.email_messages import sendEventNotification, sendEventClosedNotification, sendTenderEmailNotification
 from wsgiref.util import FileWrapper
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -40,8 +40,8 @@ from collaborations.api.serializers import NewsListSerializer
 from django.http import JsonResponse
 
 ### a dictionay holding model names with model objects, Used to hold a model object for a string
-models = { 'Announcement':Announcement, 'Blog':Blog, 'BlogComment':BlogComment, 'Choice':Choices, 'CompanyEvent':CompanyEvent, 'Tender':Tender, 'TenderApplicant':TenderApplicant, 
-            'ForumQuestion':ForumQuestion, 'ForumComments':ForumComments, 'JobApplication':JobApplication, 'JobCategory':JobCategory, 'PollsQuestion':PollsQuestion, 'News':News }
+models = { 'Announcement':Announcement, 'Blog':Blog, 'BlogComment':BlogComment, 'Choice':Choices, 'Event':CompanyEvent, 'Tender':Tender, 'TenderApplicant':TenderApplicant, 
+            'Forums':ForumQuestion, 'Forum Comments':ForumComments, 'Job Application':JobApplication, 'Job Category':JobCategory, 'Polls':PollsQuestion, 'News':News }
 
 def related_company_title(model_name, obj):
     """
@@ -50,9 +50,9 @@ def related_company_title(model_name, obj):
     """
     model = models[model_name]
     result = FilterByCompanyname( [obj.company], model.objects.exclude(id =obj.id)  )
-    print(result)
-    if result.count() != 0:
-        return {'query':result, 'message':f"Other {model_name}s from {obj.company.company_name} "}
+    if result['query'].count() != 0:
+        print("############## query", result['query'])
+        return {'query':result['query'], 'message':f"Other {model_name}s from {obj.company.company_name} "}
     else:
         result = search_title_related_objs(  obj, model.objects.exclude(id =obj.id)  )
         if result['query'].count() != 0:
@@ -60,6 +60,7 @@ def related_company_title(model_name, obj):
         else:
             return {'query':model.objects.exclude(id = obj.id)[:4], 'message': f'Other {model_name}s ' }
    
+
 
 def related_company_title_status(model_name, obj):
     """
@@ -112,18 +113,18 @@ def FilterByCompanyname(company_list,  query_set):
         for company_name in company_list:
             q_object.add( Q(company__company_name = company_name ), Q.OR )
             q_object.add( Q(company__company_name_am = company_name ), Q.OR )
-        return query_set.filter(q_object).distinct()
+        query = query_set.filter(q_object).distinct()
+        return {'query':query, 'message':f'{query.count()} result Found!'}
     except Exception as e:
         print("###########Exception at FilterByCompanyName", str(e))
-        return []
+        return {'query':query, 'message':f"No company found!", 'message_am':f"ምንም ማግኘት አልተቻለም!"}
 
-
-
+#  Uses both search by title and filter by category at once
 def SearchCategory_Title(model_name, request):
     """
     Uses both search by title and filter by category at once
     """
-    result = SearchByTitle_All('News', request) #returns matching objects by title and title_am, if none all objects
+    result = SearchByTitle_All(model_name, request) #returns matching objects by title and title_am, if none all objects
     category_name = request.GET.getlist('by_category')
     if category_name[0] == 'All':
             return {'query':result['query'], 'message':f"{result['query'].count()} {request.GET['by_title']} result found in {category_name[0]} category!", 'searched_category':'All', 'searched_name': request.GET['by_title'] }   
@@ -132,7 +133,7 @@ def SearchCategory_Title(model_name, request):
     result['searched_name'] = request.GET['by_title']
     return result
 
-
+# accepts dynamic field name with filtering field value keys, and filters from the query
 def filter_by(field_name, field_values, query):
     """
     accepts field_name like category or title etc and filter keys like ['Food','Beverage'] and filters from a query
@@ -148,13 +149,32 @@ def filter_by(field_name, field_values, query):
     result = query.filter(q)
     if not result.count() == 0:
         return {'query':result,'message':f"{result.count()} result found!",'searched_category':'All','message_am':f"{result.count()} ተገኝቷል! " ,'searched_name': field_name }
-    return {'query':query, 'message':f"No results Found!", 'message_am':f"ካስገቡት ቃል  ጋር የሚግናኝ አልተገኘም፡፡ !" ,'searched_category':'All', 'searched_name': field_name }
+    return {'query':result, 'message':f"No results Found!", 'message_am':f"ካስገቡት ቃል  ጋር የሚግናኝ አልተገኘም፡፡ !" ,'searched_category':'All', 'searched_name': field_name }
 
 
-class PollIndex(View):
+class CustomerPollList(View):
     def get(self, *args, **kwargs):
-        result = SearchByTitle_All('PollsQuestion', self.request) # this returns all if there is no search key or filter by search
-        return render(self.request, "frontpages/poll/polls-list.html", { 'polls':result['query'], 'message' : result['message']})
+        result ={}
+        if 'by_company' in self.request.GET:
+            result = FilterByCompanyname(self.request.GET.getlist('by_company'), PollsQuestion.objects.all())
+        elif 'by_no_vote' in self.request.GET:
+            result['query'] = PollsQuestion.objects.annotate(num_vote=Count('pollsresult')).order_by('-num_vote')
+            if result['query'].count() > 0:
+                result['message'] = "Polls in order of number of votes!"
+            else:
+                result['message'] = "No result Found!"
+        else:
+            result = SearchByTitle_All('Polls', self.request) # this returns all if there is no search key or filter by search
+        
+        companies = []
+        for comp in Company.objects.all():
+            if comp.pollsquestion_set.count()>0:
+                companies.append(comp)
+        if result['query']==0:
+            print("############inside")
+            result['query'] = PollsQuestion.objects.all()
+            result['message'] = 'No Result Found!'
+        return render(self.request, "frontpages/poll/polls-list.html", { 'polls':result['query'], 'message' : result['message'], 'companies':companies})
 
 
 #only visible to logged in and never voted before
@@ -198,118 +218,139 @@ class PollDetail(LoginRequiredMixin,View):
         return redirect("polls")
         
 
+def change_to_datetime(calender_date):
+    str_date = datetime.datetime.strptime(calender_date, '%m/%d/%Y').strftime('%Y-%m-%d')
+    return datetime.datetime.strptime(str_date,'%Y-%m-%d' )
+
+def check_user_has_company(request):
+    try:
+        return request.user.get_company()
+    except Exception as e:
+        messages.warning(request, "Currently, You are not related with any registered Company.")
+        print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
+        return render(request, 'admin/company/company_form_create.html',{})
+
 ########## tender related views
 class CreateTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:    
-            form = TenderForm()
-            try:
-                if self.request.user.is_company_admin:
-                    company = Company.objects.get(user = self.request.user)
-                    
-                elif self.request.user.is_company_staff:
-                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-                    company = company_staff.company
-            except Exception as e:
-                messages.warning(self.request, "Currently, You are not related with any registered Company.")
-                print("Exception while trying to find the company of an company admin or company staff user in createTender ", str(e))
-                return redirect("admin:create_company_profile")
+            company = check_user_has_company(self.request)
             company_bank_accounts = company.get_bank_accounts()
-            context = {'form':form, 'company_bank_accounts':company_bank_accounts}
-            return render(self.request,'admin/collaborations/create_tender.html',context)
+            return render(self.request,'admin/collaborations/create_tender.html',{'form':TenderForm, 'company_bank_accounts':company_bank_accounts})
         except Exception as e: 
             print("execption at createtender ", str(e))
             return redirect("admin:index")
-    
     def post(self,*args,**kwargs):
-        form = TenderForm(self.request.POST)  
-        try:                 
+        try:
+            form = TenderForm(self.request.POST)       
             if form.is_valid():
                 tender = form.save(commit=False)
-                user = None
-                tender.user = self.request.user
+                tender.created_by = self.request.user
                 if  self.request.FILES['document']:
                     tender.document = self.request.FILES['document']
-
                 if self.request.POST['tender_type'] == "Paid":
                     tender.document_price = self.request.POST['document_price']
                 else:
-                    tender.document_price = 0
-
-                starting_date=datetime.datetime.strptime(self.request.POST['start_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
-                ending_date=datetime.datetime.strptime(self.request.POST['end_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
-                tender.start_date = starting_date
-                tender.end_date = ending_date
-                tender.save()
-                tender.bank_account.add(self.request.POST['company_bank_account'])
-                
+                    tender.document_price = 0     
+                tender.start_date = change_to_datetime(self.request.POST['start_date'])
+                tender.end_date = change_to_datetime(self.request.POST['end_date'])
+                today = datetime.datetime.now().date()
+                if tender.start_date.date() > today:
+                    tender.status = "Upcoming"
+                elif tender.start_date.date() <= today  :
+                    tender.status = "Open"
+                else:
+                    tender.status = "Closed"
+                tender.save()    
+                if 'company_bank_account' in self.request.POST:
+                    tender.bank_account.add(self.request.POST['company_bank_account'])                
                 messages.success(self.request,"Tender Successfully Created")
-                return redirect("admin:tenders")
-                
+                return redirect("admin:tenders")   
             else:
                 print(form.errors)
                 messages.warning(self.request, "Error! Tender was not Created!" )
-                return redirect("admin:tenders")
-                
+                return redirect("admin:tenders")   
         except Exception as e:
             print("Exception at collaborations.views.CreateTender post" , str (e))
             return redirect("admin:tenders")
 
 
-def check_tender_enddate(request, tenders):
-    now = datetime.datetime.now()
+def check_tender_startdate(request, tenders):
+    today = timezone.now().date()
     for tender in tenders:
-        endstr = str(tender.end_date.date)
-        #need real comparison
-        if tender.end_date.day < datetime.datetime.now().day and tender.end_date.month <= now.month:
-                    sendTenderClosedEmailNotification(request, tender.user, tender)
-                    tender.status = "Closed"
-                    tender.save()
-                    
-    return True
-
-#Admin Side
-class TenderList(LoginRequiredMixin,View):
-    def get(self, *args, **kwargs):
-                  
-        try:    
-            if self.request.user.is_superuser:
-                tenders = Tender.objects.all()
-                #12345 make this thing work in background
-                # result = check_tender_enddate(self.request, tenders.filter(status="Open"))       
-                return render(self.request, "admin/collaborations/tenders.html", {'tenders':tenders,})
-
+        if tender.start_date.date() <= today and tender.status != 'Open':
+            if sendTenderEmailNotification(request, tender.created_by, tender, f"IIMP system has changed the status of the Tender titled '{tender.title}' to 'Open'. This occurs when the start date you set for a tender has reached.\n Then the system will automatically change the status for data consistency ."):
+                tender.status = "Open"
+                tender.save()
             else:
-                tenders = Tender.objects.filter(user = self.request.user)
-                if not tenders:
-                    messages.warning(self.request, "You have no tenders to control!!")
-                    return render(self.request, "admin/collaborations/tenders.html")
+                print("########## could not send email to open tender ")                 
 
-                tenders = check_tender_enddate(self.request, tenders)       
-                return render(self.request, "admin/collaborations/tenders.html", {'tenders':tenders,})
-        except Exception as e:
-                messages.warning(self.request, "Error while getting tenders",)
-                print(str(e))
-                return redirect("admin:index") 
+def check_tender_enddate(request, tenders):
+    today = timezone.now().date()
+    for tender in tenders:
+        if tender.end_date.date() == today and tender.status != 'Closed':
+            if sendTenderEmailNotification(request, tender.created_by, tender, f"IIMP system has changed the status of the Tender titled '{tender.title}' to 'Closed'. This occurs when the end date you set for a tender has reached. \n Then the system will automatically change the status for data consistency ."):
+                tender.status = "Closed"
+                tender.save() 
+            else:
+                print("could not send email to close tender")                
 
 
-class TenderDetail(LoginRequiredMixin,View):
-    def get(self, *args, **kwargs):         
-        form = TenderForm()
-        if self.kwargs['id']:
-            try:
-                tender = Tender.objects.get(id =self.kwargs['id'] )
-                company = tender.get_company()
-                company_bank_accounts = company.get_bank_accounts()
-                context = {'form':form, 'company_bank_accounts':company_bank_accounts, 'tender':tender}
-                return render(self.request,'admin/collaborations/tender_detail.html',context)
-            except Exception as e:
-                print("tender error", str(e))
-                messages.warning(self.request,"Tender edit error")
-                return redirect("admin:tenders")
+class TenderList(LoginRequiredMixin, ListView):
+    model = Tender
+    template_name = "admin/collaborations/tenders.html"
+    context_object_name = 'tenders'  
+    def get_queryset(self):
+        check_tender_startdate(self.request, Tender.objects.filter( status='Upcoming') )
+        check_tender_enddate(self.request, Tender.objects.filter( Q(status = 'Open') | Q(status = 'Upcoming') )  )
+        if self.request.user.is_superuser:
+            return Tender.objects.all()
+        else:
+            return Tender.objects.filter(company = self.request.user.get_company())
 
-        print("error at tenderDetail for admin")
-        return redirect("admin:admin_polls")
+    # def get(self, *args, **kwargs):           
+    #     try:
+    #         if self.request.user.is_superuser:
+    #             tenders = Tender.objects.all()
+    #             return render(self.request, "admin/collaborations/tenders.html", {'tenders':tenders,})
+    #         else: 
+    #             tenders = Tender.objects.filter(company = self.request.user.get_company())
+    #             if not tenders:
+    #                 messages.warning(self.request, "You have no tenders to control!!")
+    #                 return render(self.request, "admin/collaborations/tenders.html")
+    #             check_tender_enddate(self.request, tenders)       
+    #             return render(self.request, "admin/collaborations/tenders.html", {'tenders':tenders,})
+    #     except Exception as e:
+    #             messages.warning(self.request, "Error while getting tenders",)
+    #             print("Exception at tenderList get",str(e))
+    #             return redirect("admin:index") 
+
+
+class TenderDetail(LoginRequiredMixin, DetailView):
+    model = Tender
+    context_object_name = 'tender'
+    template_name = 'admin/collaborations/tender_detail.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company_bank_accounts'] = context['tender'].company.get_bank_accounts()
+        context['form'] = TenderForm
+        return context
+
+ # def get(self, *args, **kwargs):         
+    #     form = TenderForm()
+    #     if 'id' in self.kwargs:
+    #         try:
+    #             tender = Tender.objects.get(id =self.kwargs['id'] )
+    #             company_bank_accounts = tender.company.get_bank_accounts()
+    #             context = {'form':form, 'company_bank_accounts':company_bank_accounts, 'tender':tender}
+    #             return render(self.request,'admin/collaborations/tender_detail.html',context)
+    #         except Exception as e:
+    #             print("tender error", str(e))
+    #             messages.warning(self.request,"Tender edit error")
+    #             return redirect("admin:tenders")
+
+    #     print("error at tenderDetail for admin")
+    #     return redirect("admin:admin_polls")
 
 
 class ManageBankAccount(LoginRequiredMixin,View):
@@ -328,97 +369,81 @@ class ManageBankAccount(LoginRequiredMixin,View):
 
 class EditTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        
-        form = TenderEditForm()
-        context = {}
-        tender = Tender.objects.get(id =self.kwargs['id'] )
-        company = tender.get_company()
-
-        if company:
-            company_bank_accounts = company.get_bank_accounts()
-            
-            start_date =str(tender.start_date)
-            start_date =start_date[:19]
-            end_date =str(tender.end_date)
-            end_date = end_date[:19]
-            start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
-            end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
+        try:
+            tender = Tender.objects.get(id =self.kwargs['id'] )
+            company_bank_accounts = tender.company.get_bank_accounts()
             banks= Bank.objects.all() # if there will be a scenario where the admin needs to add register new bank account
-            context = {'form':form, 'banks':banks, 'company_bank_accounts':company_bank_accounts, 'start_date':start_date, 'end_date': end_date}
-            if self.kwargs['id']:   
-                    context['tender'] = tender 
-                    context['edit'] = True
-                    return render(self.request,'admin/collaborations/create_tender.html',context)
-              
-        else:
-            print ("no company")
-
-        return render(self.request,'admin/collaborations/create_tender.html',{})
+            return render(self.request,'admin/collaborations/create_tender.html', {'form':TenderEditForm(),'tender':tender,'edit':True, 'banks':banks, 'company_bank_accounts':company_bank_accounts})
+        except Exception as e:
+            print("Exception at Edit Tender,get ", e)
+            return redirect("admin:tenders")
 
     def post(self,*args,**kwargs):  
         form = TenderEditForm(self.request.POST)                       
         if form.is_valid():
             try:
-                tender= Tender.objects.get(id = self.kwargs['id'])
-                message = []             
-                starting_date=datetime.datetime.strptime(self.request.POST['start_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
-                ending_date=datetime.datetime.strptime(self.request.POST['end_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
-                tender.start_date = starting_date
-                tender.end_date = ending_date
+                tender= Tender.objects.get(id = self.kwargs['id'])            
                 tender.title = self.request.POST['title']
                 tender.title_am = self.request.POST['title_am']
                 tender.description = self.request.POST['description']
                 tender.description_am = self.request.POST['description_am']
                 tender.tender_type = self.request.POST['tender_type']
+                tender.start_date = change_to_datetime(self.request.POST['start_date'])
+                tender.end_date = change_to_datetime(self.request.POST['end_date'])
                 if self.request.POST["tender_type"] == "Free":
                     tender.document_price = 0
                 else:
                     tender.document_price = self.request.POST["document_price"]
-                tender.status = self.request.POST["status"]
                 if self.request.FILES:
                     tender.document = self.request.FILES['document'] 
+
+                today = datetime.datetime.now().date()
+                if tender.start_date.date() > today:
+                    tender.status = "Upcoming"
+                elif tender.start_date.date() <= today :
+                    tender.status = "Open"
+                else:
+                    tender.status = "Closed"
+                tender.last_updated_by = self.request.user
+                tender.last_updated_date = timezone.now()
                 tender.save()
 
             except Exception as e:
-                print("There is an Exception while tying to edit a tender!")   
-            
+                print("There is an Exception while tying to edit a tender!", e)  
+                return redirect("admin:tenders")
             messages.success(self.request,"Tender Successfully Edited")
             return redirect("admin:tenders") 
-                
         else:
             messages.warning(self.request, "Error! Tender was not Edited!" )
             return redirect("admin:tenders")
 
 
-class DeleteTender(LoginRequiredMixin,View):
-	def get(self,*args,**kwargs):
-		message = ""
-		if self.kwargs['id'] :
-			tender = Tender.objects.filter(id = self.kwargs['id']  )
-			if tender:
-				tender.delete()
-				message = "Tender Deleted Successfully"
-				messages.success(self.request,message)
-				return redirect("admin:tenders")
-			else:
-				messages.warning(self.request, "NO such tender was found!")
-				return redirect("admin:tenders")
-
-
-		else:
-			messages.warning(self.request, "Nothing selected!")
-			return redirect("admin:tenders")
-
-
 ######## Tender for customers
 class CustomerTenderList(View):
-    def get(self, *args, **kwargs):          
-        try:
+    def get(self, *args, **kwargs):   
+            result = {}       
+            if 'by_status' in self.request.GET:
+                result = filter_by('status', self.request.GET.getlist('by_status'), Tender.objects.all())
+            elif 'by_company' in self.request.GET:
+                by_company = FilterByCompanyname(self.request.GET.getlist('by_company'),  Tender.objects.all())
+                result = filter_by('status', ['Open', 'Upcoming'], by_company['query'])
+            elif 'by_document_type' in self.request.GET:
+                by_type = filter_by('tender_type', self.request.GET.getlist('by_document_type'),  Tender.objects.all())
+                result = filter_by('status', ['Open', 'Upcoming'], by_type['query'])
+            else:
                 result = SearchByTitle_All('Tender', self.request)
-                return render(self.request, "frontpages/tender/customer_tender_list.html", {'tenders':result['query'], 'message':result['message']})
-        except Exception as e:
-                messages.warning(self.request, "Error while getting tenders")
-                return redirect("tender_list")     
+            if  result['query'].count() == 0:
+                result['query'] = Tender.objects.filter( Q(status='Open') | Q(status = 'Upcoming') )
+            companies = []
+            for comp in Company.objects.all():
+                if comp.tender_set.count() > 0:
+                    companies.append(comp)
+               
+            return render(self.request, "frontpages/tender/customer_tender_list.html", {'tenders':result['query'], 'companies': companies, 'message':result['message']})
+        
+        # except Exception as e:
+        #         print( "Error while getting tenders",e)
+        #         return redirect("index")     
 
 
 class CustomerTenderDetail(View):
@@ -464,21 +489,8 @@ class ApplyForTender(View):
 
 class CreateNews(LoginRequiredMixin, View):
     def get(self,*args,**kwargs):
-        try:
-                if self.request.user.is_company_admin:
-                    company = Company.objects.get(user = self.request.user)
-                elif self.request.user.is_company_staff:
-                    company_staff = CompanyStaff.objects.filter(user=self.request.user).first()
-                    company = company_staff.company
-        except Exception as e:
-                messages.warning(self.request, "Currently, You are not related with any registered Company.")
-                print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
-                return redirect("admin:create_company_profile")
-
-        form = NewsForm()    
-        context = {'form':form,}
-        return render(self.request,'admin/collaborations/create_news.html',context)
-        return redirect("admin:news_list")
+        check_user_has_company(self.request) 
+        return render(self.request,'admin/collaborations/create_news.html',{'form':NewsForm})
     
     def post(self, *args, **kwargs):
         form = NewsForm( self.request.POST) 
@@ -531,9 +543,7 @@ class EditNews(LoginRequiredMixin, View):
 
 class AdminNewsList(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        newslist = News.objects.all()
-        return render(self.request, "admin/collaborations/admin_news_list.html", {'newslist':newslist})
-
+        return render(self.request, "admin/collaborations/admin_news_list.html", {'newslist':News.objects.all()})
 
 class NewsDetail(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):         
@@ -574,29 +584,26 @@ class CustomerNewsList(View):
         elif 'by_category' in self.request.GET:
             result = filter_by('catagory', self.request.GET.getlist('by_category'), News.objects.all())
         elif 'by_company' in self.request.GET:
-            query = FilterByCompanyname(self.request.GET.getlist('by_company'), News.objects.all())
-            if query.count() > 0:
-                result = {'query' : query, 'message' : f"{query.count()} Found!", 'message_am' : f"{query.count()} ተገኝቷል!" }
-            else:
-                result = {'query' : News.objects.all(), 'message' : 'No match found!', 'message_am' : 'የጠየቁትን ማግኘት አልቻልንም!'} 
-        else:
-            
+            result = FilterByCompanyname(self.request.GET.getlist('by_company'), News.objects.all())
+        else: 
             result = SearchByTitle_All('News', self.request)
-        return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':result['query'], 'message':result['message'], 'message_am':result['message_am'], 'NEWS_CATAGORY':News.NEWS_CATAGORY})
+
+        if result['query']==0:
+            result['query'] = News.objects.all()
+        return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':result['query'], 'message':result['message'],  'NEWS_CATAGORY':News.NEWS_CATAGORY})
        
 
 class CustomerNewsDetail(View):
     def get(self, *args, **kwargs): 
         try:
-            all_company = Company.objects.all()[:5]
             companies = []
-            for comp in all_company:
+            for comp in Company.objects.all():
                 if comp.news_set.count() > 0:
                     companies.append(comp)
             news = get_object_or_404(News, id = self.kwargs['id'])
          
         except Exception as e:
-            print("^^^^^^^^^^^^^^^^^^^^^^^^^^^ Exception at customerNews Detail ", e)
+            print("Exception at customerNews Detail ", e)
             return redirect('customer_news_list')
             
         related_news = related_company_title('News', news)
@@ -605,47 +612,42 @@ class CustomerNewsDetail(View):
 
 ##### Customer Events
 def check_event_participation(request, event_participants):
-    today = datetime.datetime.now()
-    today = today.strftime('%Y-%m-%d %H:%M:%S')
-   
+    today = timezone.now().date()
     for participant in event_participants:  
-        start_day = participant.event.start_date
-        start_day = start_day.strftime('%Y-%m-%d %H:%M:%S')
-        # if start_day > today and start_day - today == participant.notifiy_in:
-        #     sendEventNotification(request, participant) 
-    return True
-
+        print(participant.patricipant_email, " ", participant.event.title," ", participant.event.start_date)
+        if participant.event.start_date.date() == today:
+            print("Event found!")
+    
 
 def check_event_enddate(request, open_events):
-    now = datetime.datetime.now() 
-    for event in open_events:
-        endstr = str(event.end_date.date)
-        #need real comparison
-        if event.end_date.day < datetime.datetime.now().day and event.end_date.month < now.month:
-                    sendEventClosedNotification(request, event)
-                    event.status = "Closed"
-                    event.save()        
-    return True
+    today = timezone.now().date() 
+    print("something", open_events)
+    for event in open_events: 
+        print("event closed found ", event.title, " ", event.end_date, " ", event.end_date.date())
+        if event.end_date.date() == today:
+            
+            sendEventClosedNotification(request, event)
+            event.status = "Closed"
+            event.save()        
 
 
 class CustomerEventList(View):
 	def get(self, *agrs, **kwargs):
-            result = SearchByTitle_All('CompanyEvent', self.request)
+            result ={}
             if 'by_status' in self.request.GET:
-                result = filter_by('status',[self.request.GET['by_status']], result['query'])
-            if 'by_company' in self.request.GET:
-                query = FilterByCompanyname(self.request.GET.getlist('by_company'), result['query'])
-                if query.count() > 0:
-                   result ['query'] = query
-                   result ['message'] = f'{query.count()} Found!' 
-                else:
-                    result['message'] = 'No match found!'
+                result = filter_by('status',[self.request.GET['by_status']], CompanyEvent.objects.all())
+            elif 'by_company' in self.request.GET:
+                result = FilterByCompanyname(self.request.GET.getlist('by_company'), CompanyEvent.objects.all())
+            else:
+                result = SearchByTitle_All('Event', self.request)
+            if result['query'].count() == 0:
+                result['query'] = CompanyEvent.objects.all()
             #12345 make it background
-            event_participants = EventParticipants.objects.filter(notified = False, event__status = "Upcoming")
-            check_event_participation(self.request, event_participants)
-            all_company = Company.objects.all()
+            check_event_enddate(self.request, CompanyEvent.objects.filter( status = 'Upcoming') )
+            # event_participants = EventParticipants.objects.filter(notified = False, event__status = "Upcoming")
+            # check_event_participation(self.request, event_participants)
             eventcompanies = []
-            for comp in all_company:
+            for comp in Company.objects.all():
                 if comp.companyevent_set.count() > 0:
                     eventcompanies.append(comp)
             return render(self.request, "frontpages/news/customer_event_list.html", {'events':result['query'], 'message':result['message'], 'event_companies':eventcompanies})
@@ -654,58 +656,61 @@ class CustomerEventList(View):
 class CustomerEventDetail(View):
     def get(self, *args, **kwargs): 
         try:
-            all_company = Company.objects.all()
             eventcompanies = []
-            for comp in all_company:
+            for comp in Company.objects.all():
                 if comp.companyevent_set.all().count() > 0:
                     eventcompanies.append(comp)
             event = get_object_or_404( CompanyEvent, id = self.kwargs['id']  )
-            related_objs = related_company_title_status('CompanyEvent', event)
+            related_objs = related_company_title_status('Event', event)
             return render(self.request, "frontpages/news/customer_event_detail.html", {'event':event,'event_participant_form':EventParticipantForm, 'event_companies':eventcompanies, 'related_objs':related_objs['query'], 'related_message':related_objs['message']})
         except Exception as e:
-            print("$$$$$$$$$$$$$$$$$$$$44 Exception at customerEventDetail", e)
-            result = SearchByTitle_All('CompanyEvent', self.request)
+            print("Exception at customerEventDetail", e)
+            result = SearchByTitle_All('Event', self.request)
             return redirect('customer_event_list')
 
 #12345  use ajax for event participation.
 class EventParticipation(LoginRequiredMixin, View):
     def post(self, *args, **kwargs):   
         
-        if 'patricipant_email' in self.request.POST and 'notify_in' in self.request.POST:
-                notify_in = int(self.request.POST['notify_in'])
+        if 'patricipant_email' in self.request.POST and 'notify_on' in self.request.POST:
+                notify_on = self.request.POST['notify_on']
                 try:
                     event = get_object_or_404( CompanyEvent, id = self.kwargs['id'])
+                    print("$$$$$$$$$$$$$$$$ notify on",notify_on)
+                    return redirect(f'collaborations/customer_event_detail/{event.id}/')
+                
                 except Http404:
                     return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
-                participant = EventParticipants(user =request.user, event= event,
-                                                patricipant_email=request.POST['patricipant_email'])
-                #12345 Real date comparison
-                if event.start_date.month <= datetime.datetime.now().month:
-                    if notify_in <=  event.start_date.day - datetime.datetime.now().day: 
-                        participant.notified= False
-                        participant.notifiy_in = notify_in
-                        try:
-                            participant.save()   # if the email has been previously registered, it will through an unique exception
-                        except Exception as e:
-                            return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
-                        return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
+                # participant = EventParticipants(user =request.user, event= event,
+                #                                 patricipant_email=request.POST['patricipant_email'])
+                # #12345 Real date comparison
+                # if event.start_date.month <= datetime.datetime.now().month:
+                #     if notify_in <=  event.start_date.day - datetime.datetime.now().day: 
+                #         participant.notified= False
+                #         participant.notifiy_in = notify_in
+                #         try:
+                #             participant.save()   # if the email has been previously registered, it will through an unique exception
+                #         except Exception as e:
+                #             return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
+                #         return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
                             
-                    else:
-                        print('Invalid Date to notify')
-                        return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
+                #     else:
+                #         print('Invalid Date to notify')
+                #         return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
                         
-                else:
-                    print('Invalid month to notify')
-                    return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
-
-        print('Email and notifi me in are required!')
-        return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
+                # else:
+                #     print('Invalid month to notify')
+                #     return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
+        else:
+            print('Email and notifi me in are required!')
+            return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
 
 
 #########Document
 ###Admin Side
 class CreateDocument(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
+        check_user_has_company(self.request)
         return render(self.request, "admin/document/create_document.html", {'form':DocumentForm})
     def post(self, args, **kwargs):
         form = DocumentForm(self.request.POST)

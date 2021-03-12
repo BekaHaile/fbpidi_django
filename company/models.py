@@ -118,6 +118,11 @@ class CompanyEvent(models.Model):
 
     class Meta:
         ordering = ['-created_date',] 
+    
+    def save(self):
+        self.company = self.created_by.get_company()
+        super(CompanyEvent, self).save()
+    
 
     def get_image(self):
         return self.image.url if self.image else self.company.get_image()

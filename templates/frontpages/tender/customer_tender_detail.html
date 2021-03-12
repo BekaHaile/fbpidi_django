@@ -18,7 +18,9 @@
 							<h1 class="">{% trans "Tender-Details" %}</h1>
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="">{% trans "Home" %}</a></li>
-								<li class="breadcrumb-item"><a href="/collaborations/tender_list/">{% trans "Tender" %}</a></li> 
+								<li class="breadcrumb-item"><a href="{% url 'tender_list' %}">{% trans "Tenders list" %}/</a></li> 
+								<li class="breadcrumb-item"><a href="#">{% trans "Tender" %}/</a></li> 
+								
 							</ol>
 						</div>
 					</div>
@@ -60,8 +62,8 @@
 
                                 {% if tender.status == 'Open' %}
 								<div  style="background-color: #66bb6a;; color:white; width: fit-content; padding: 5px; " >{% trans "Open" %}</div>
-								{%elif tender.status == 'Pending' %}
-								<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >{% trans "Pending" %}</div>
+								{%elif tender.status == 'Upcoming' %}
+								<div style="background-color: yellow; color:black; width: fit-content; padding: 5px;" >{% trans "Upcoming" %}</div>
 								{%elif tender.status == 'Closed' %}
 								<div style="background-color: #ef5350; color:white; width: fit-content; padding: 5px;" >{% trans "Closed" %}</div>
 								{%else%} 
