@@ -17,7 +17,7 @@ register = template.Library()
 @register.filter
 def company_count(type):
     try:
-        co = Company.objects.filter(company_type=type)
+        co = Company.objects.all()
         return co.count() 
     except ObjectDoesNotExist:
         return 0
@@ -26,7 +26,7 @@ def company_count(type):
 @register.filter
 def company_product_count(company):
     try:
-        product = Product.objects.filter(user=company.user)
+        product = Product.objects.filter(user=company.contact_person)
         return product.count()
     except ObjectDoesNotExist:
         return 0

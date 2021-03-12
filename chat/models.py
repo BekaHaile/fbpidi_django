@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import User
+from django.conf import settings
 from django.db.models import Q
 from datetime import datetime
 
@@ -11,7 +11,7 @@ class ChatGroup(models.Model):
     """
     group_name = models.CharField(max_length=200, verbose_name="chat group name", unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    connected_users = models.ManyToManyField(User, related_name="connected")
+    connected_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="connected")
 
 
     def __str__(self):
@@ -37,7 +37,7 @@ class ChatGroup(models.Model):
 
 class ChatMessage(models.Model):
     chat_group = models.ForeignKey( ChatGroup, on_delete = models.CASCADE)
-    sender = models.ForeignKey(User, on_delete= models.CASCADE)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
     read = models.BooleanField(default=False)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)

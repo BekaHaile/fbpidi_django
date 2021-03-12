@@ -20,11 +20,11 @@ def create_auth_token(sender, instance = None, created = False, **kwargs):
         Token.objects.create(user = instance)
         
 
-class User(AbstractUser):
+class FbpidiUser(AbstractUser):
     phone_number = models.CharField(max_length=20,blank=True,null=True) 
-    is_customer = models.BooleanField(default=False)  # if user is customer
-    is_company_admin = models.BooleanField(default=False)  # if user is company admin
-    is_company_staff = models.BooleanField(default=False) # if user is company staff
+    is_customer = models.BooleanField(default=False)  # ifFbpidiUser is customer
+    is_company_admin = models.BooleanField(default=False)  # ifFbpidiUser is company admin
+    is_company_staff = models.BooleanField(default=False) # ifFbpidiUser is company staff
     profile_image = models.ImageField(blank=True)
     created_by = models.ForeignKey('self',on_delete=models.RESTRICT,null=True,blank=True,related_name="user_created_by")
     created_date = models.DateTimeField(auto_now_add=True,editable=False)
@@ -36,24 +36,23 @@ class User(AbstractUser):
         ordering=('-created_date',)
 
     def get_company_name(self):
-        return self.get_company().company_name if self.is_staff else None
+        return self.get_company().name if self.is_staff else None
         # if self.is_company_admin:
         #    return CompanyAdmin.objects.get(user = self).get_company_name()
         # elif self.is_company_staff:
         #     return CompanyStaff.objects.get(user = self).get_company_name()
 
     def get_company(self):
-        
         if self.is_company_admin:
            return Company.objects.get(contact_person = self)
         elif self.is_company_staff:
-            return Company.objects.get(contact_person = self)
+            return Company.objects.get(company_staff = self)
         elif self.is_superuser:
             return Company.objects.get(name="FBPIDI")
 
 
 class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     address = models.CharField(max_length=100,default="")
     city = models.CharField(max_length=100,default="")
     postal_code = models.CharField(max_length=100,default="")
@@ -75,7 +74,7 @@ class Customer(models.Model):
 
 
 class CompanyAdmin(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     designation = models.CharField(max_length=200,null=True)
     time_stamp = models.DateTimeField(auto_now_add=True)
 

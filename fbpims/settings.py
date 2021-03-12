@@ -199,7 +199,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'complete_login'
 LOGOUT_REDIRECT_URL = 'login'
  
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.FbpidiUser'
 
 
 MEDIA_URL = '/media/uploads/'

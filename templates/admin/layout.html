@@ -296,11 +296,11 @@
 						</li>
 						{%if user.is_superuser%}
 						<li class="nav-item">
-							<a href="#" class="nav-link">
+							<a href="{%url 'admin:companies'%}" class="nav-link">
 								<i class="icon-office"></i>
 								<span>Indistries</span>
 								<span class="badge bg-blue-400 align-self-center ml-auto">
-									0
+									{{user|company_count}}
 								</span>
 							</a>
 						</li>
@@ -310,7 +310,7 @@
 						
 						
 						<li class="nav-item">
-							<a href="{{user|my_company_link}}" class="nav-link"><i class="icon-coins"></i><span>My Company</span></a>
+							<a href="{%url 'admin:update_company_info' pk=user|get_company_id%}" class="nav-link"><i class="icon-coins"></i><span>My Company</span></a>
 						</li>
               			  
 

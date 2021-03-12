@@ -61,11 +61,16 @@ from collaborations.Views.forums import(ListForumQuestionAdmin,CreateForumQuesti
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
                             ProductDetailView,AddProductImage,CreatePrice,CategoryView)
                             
-from company.views import (CreateInvestmentCapital,
-    CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,
-    EditCompanyEvent,CreateMyCompanyProfile,CreateCompanyDetail,
-    CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
-    CreateFbpidiCompanyProfile,ViewFbpidiCompany, CreateCompanyBankAccount, EditCompanyBankAccount, DeleteCompanyBankAccount,)
+from company.views import (CreateInvestmentCapital,CreateCertificates,CreateEmployees,CreateJobsCreatedYearly,
+                            CreateEducationStatus,CreateFemaleinPosition,CreateAnualSourceofInputs,
+                            CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,
+                            EditCompanyEvent,CreateMyCompanyProfile,CreateCompanyDetail,
+                            CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
+                            CreateFbpidiCompanyProfile,ViewFbpidiCompany, CreateCompanyBankAccount,
+                            EditCompanyBankAccount, DeleteCompanyBankAccount,CreateMarketDestination,
+                            CreateMarketTarget,CreatePowerConsumption,CreateCompanyAddress,
+                            UpdateCompanyAddress,CheckYearField,
+                            ViewMyCompanyProfile)
 
 from accounts.forms import AdminLoginForm
  
@@ -81,38 +86,7 @@ class CustomAdminSite(admin.AdminSite):
             return update_wrapper(wrapper, view)
 
         my_urls = [
-            path('forum-list',wrap(ListForumQuestionAdmin.as_view()),name="forum_list"),
-            path('forum-form',wrap(CreateForumQuestionAdmin.as_view()),name="forum_form"),
-            path('forum-detail/<model_name>/<id>',wrap(ForumQuestionDetail.as_view()),name="forum_detail"),
-
-            path('forum-comment-list',wrap(ListForumCommentAdmin.as_view()),name="forum_comment_list"),
-            path('forum-comment-detail/<model_name>/<id>',wrap(ForumCommentsDetail.as_view()),name="forum_comment_detail"),
-
-            path('comment-replay-list',wrap(ListCommentReplayAdmin.as_view()),name="comment_replay_list"),
-            path('comment-replay-detail/<model_name>/<id>',wrap(CommentReplayDetail.as_view()),name="comment_replay_detail"),
-
-            path('project-view/<id>',wrap(ProjectDetailView.as_view()),name='project_view'),
-            path('project-approve/<id>',wrap(ProjectApprove.as_view()),name="project_approve"),
-            path('pedning-project-list',wrap(ListPendingProjectAdmin.as_view()),name="pedning_project_list"),
-            path('project-list',wrap(ListProjectAdmin.as_view()),name="project_list"),
-            path('project-form',wrap(CreateProjectAdmin.as_view()),name="project_form"),
-            path('project-detail/<model_name>/<id>',wrap(ProjectDetailAdmin.as_view()),name="project_detail"),
-
-            path('research-view/<id>',wrap(ResearchDetailView.as_view()),name='research_view'),
-            path('research-approve/<id>',wrap(ResearchApprove.as_view()),name="research_approve"),
-            path('pedning-research-list',wrap(ListPendingResearchAdmin.as_view()),name="pedning_research_list"),
-            path('research-list',wrap(ListResearchAdmin.as_view()),name="research_list"),
-            path('research-form',wrap(CreateResearchAdmin.as_view()),name="research_form"),
-            path('research-detail/<model_name>/<id>',wrap(ResearchDetailAdmin.as_view()),name="research_detail"),
-
-            path('researchprojectcategorys-detail/<model_name>/<id>',wrap(ResearchProjectCategoryDetail.as_view()),name='researchprojectcategory_detail'),
-            path('researchprojectcategorys-form',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
-            path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
             
-            path('anounce-Detail/<model_name>/<id>',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
-            path('anounce-List',wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),
-            path('anounce-form',wrap(CreatAnnouncementAdmin.as_view()),name="anounce_Create"),
-            #path('JobCategory-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),
            
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
             path('download/<name>/<id>',wrap(Download.as_view()),name="Download"),
@@ -204,18 +178,33 @@ class CustomAdminSite(admin.AdminSite):
             # path("",include("company.urls")),
             
 
-        
+            # Company Paths
             # path("",wrap(include("company.urls"))),
             path("create_company_profile/",wrap(CreateCompanyProfile.as_view()),name="create_company_profile"),
             path("create_mycompany_profile/",wrap(CreateMyCompanyProfile.as_view()),name="create_my_company"),
             path("create_company_detail/<pk>/",wrap(CreateCompanyDetail.as_view()),name="create_company_detail"),
-            path("create_investment_capital/<company>/",wrap(CreateInvestmentCapital.as_view()),name="create_inv_capital").
-            path("company_list/<option>/",wrap(CompaniesView.as_view()),name="companies"),
-            path("company_detail/<id>/",wrap(CompaniesDetailView.as_view()),name="company_detail"),
+            path("create_investment_capital/<company>/",wrap(CreateInvestmentCapital.as_view()),name="create_inv_capital"),
+            path("create_company_certificates/<company>",wrap(CreateCertificates.as_view()),name="create_comp_certificate"),
+            path("create_employees/<company>/",wrap(CreateEmployees.as_view()),name="create_employees"),
+            path("create_jobs_created/<company>/",wrap(CreateJobsCreatedYearly.as_view()),name="create_jobs_created"),
+            path("create_education_status/<company>/",wrap(CreateEducationStatus.as_view()),name="create_education_status"),
+            path("create_femalein_posn/<company>/",wrap(CreateFemaleinPosition.as_view()),name="create_female_posn"),
+            path("create_srcamnt_inputs/<company>/",wrap(CreateAnualSourceofInputs.as_view()),name="create_srcamnt_inputs"),
+            path("create_market_destination/<company>/",wrap(CreateMarketDestination.as_view()),name="create_destination"),
+            path("create_market_target/<company>/",wrap(CreateMarketTarget.as_view()),name="create_target"),
+            path("create_power_consumption/<company>/",wrap(CreatePowerConsumption.as_view()),name="create_power_consumed"),
+            path("create_company_address/<company>/",wrap(CreateCompanyAddress.as_view()),name="create_company_address"),
+            path("update_company_address/<pk>/",wrap(UpdateCompanyAddress.as_view()),name="update_company_address"),
+            path("update_company_info/<pk>",wrap(ViewMyCompanyProfile.as_view()),name="update_company_info"),
+            path("check_company_year_data/<model>/<company>/<year>/",wrap(CheckYearField.as_view()),name="check_year_data"),
+
+            path("company_list/",wrap(CompaniesView.as_view()),name="companies"),
+            path("company_detail/<pk>/",wrap(CompaniesDetailView.as_view()),name="company_detail"),
             path("create_company_profile_al/",wrap(CreateCompanyProfileAfterSignUp.as_view()) ,name='complete_company_profile'),
             path("view_company_profile/",wrap(ViewCompanyProfile.as_view()) ,name='view_company_profile'),
             path("view_company_profile/<active_tab>/",wrap(ViewCompanyProfile.as_view()) ,name='view_company_profile_active_tab'),
             
+
             path("edit_company_profile/<id>/",wrap(ViewCompanyProfile.as_view()),name="edit_company_profile"),
             path("create_company_solution/<company_id>",wrap(CreateCompanySolution.as_view()),name="create_company_solution"),
             path("create_company_event/<company_id>",wrap(CreateCompanyEvent.as_view()),name="create_company_event"),
@@ -233,7 +222,40 @@ class CustomAdminSite(admin.AdminSite):
              path('create_document/', wrap(CreateDocument.as_view()), name='create_document'),
              path('edit_document/<id>/', wrap(EditDocument.as_view()), name='edit_document'),
              path('list_document_by_category/<option>/', wrap(DocumentListing.as_view()), name = "list_document_by_category"),
-        
+
+
+            path('forum-list',wrap(ListForumQuestionAdmin.as_view()),name="forum_list"),
+            path('forum-form',wrap(CreateForumQuestionAdmin.as_view()),name="forum_form"),
+            path('forum-detail/<model_name>/<id>',wrap(ForumQuestionDetail.as_view()),name="forum_detail"),
+
+            path('forum-comment-list',wrap(ListForumCommentAdmin.as_view()),name="forum_comment_list"),
+            path('forum-comment-detail/<model_name>/<id>',wrap(ForumCommentsDetail.as_view()),name="forum_comment_detail"),
+
+            path('comment-replay-list',wrap(ListCommentReplayAdmin.as_view()),name="comment_replay_list"),
+            path('comment-replay-detail/<model_name>/<id>',wrap(CommentReplayDetail.as_view()),name="comment_replay_detail"),
+
+            path('project-view/<id>',wrap(ProjectDetailView.as_view()),name='project_view'),
+            path('project-approve/<id>',wrap(ProjectApprove.as_view()),name="project_approve"),
+            path('pedning-project-list',wrap(ListPendingProjectAdmin.as_view()),name="pedning_project_list"),
+            path('project-list',wrap(ListProjectAdmin.as_view()),name="project_list"),
+            path('project-form',wrap(CreateProjectAdmin.as_view()),name="project_form"),
+            path('project-detail/<model_name>/<id>',wrap(ProjectDetailAdmin.as_view()),name="project_detail"),
+
+            path('research-view/<id>',wrap(ResearchDetailView.as_view()),name='research_view'),
+            path('research-approve/<id>',wrap(ResearchApprove.as_view()),name="research_approve"),
+            path('pedning-research-list',wrap(ListPendingResearchAdmin.as_view()),name="pedning_research_list"),
+            path('research-list',wrap(ListResearchAdmin.as_view()),name="research_list"),
+            path('research-form',wrap(CreateResearchAdmin.as_view()),name="research_form"),
+            path('research-detail/<model_name>/<id>',wrap(ResearchDetailAdmin.as_view()),name="research_detail"),
+
+            path('researchprojectcategorys-detail/<model_name>/<id>',wrap(ResearchProjectCategoryDetail.as_view()),name='researchprojectcategory_detail'),
+            path('researchprojectcategorys-form',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
+            path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
+            
+            path('anounce-Detail/<model_name>/<id>',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
+            path('anounce-List',wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),
+            path('anounce-form',wrap(CreatAnnouncementAdmin.as_view()),name="anounce_Create"),
+            #path('JobCategory-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),
         ]
         return my_urls + urls
 

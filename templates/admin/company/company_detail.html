@@ -1,6 +1,11 @@
 {%extends 'admin/base_site.html'%}
-{%load core_template_tags%}
+{%load crispy_forms_tags%}
 {% block extrastyle %}
+<script>
+	var my_token = "{{csrf_token}}";
+	var company_id = "{{object.id}}";
+	var address_id = "{{object.get_company_address.id}}";
+</script>
 <!-- Theme JS files -->
 <script src="/static/admin/global_assets/js/plugins/visualization/echarts/echarts.min.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
@@ -8,8 +13,10 @@
 <script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
 <script src="/static/admin/global_assets/js/plugins/ui/fullcalendar/fullcalendar.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/user_pages_profile.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+<script src="/static/admin/assets/js/company_detail.js"></script>
 <!-- /theme JS files -->
-
+{{form.media}}
 {% endblock %}
 {%block pagename%}Company - Profile{%endblock%}
 {%block content%}
@@ -29,75 +36,28 @@
 							<!-- Timeline -->
 							<div class="timeline timeline-left">
 								<div class="timeline-container">
-
-									<!-- Sales stats -->
-									<div class="timeline-row">
-										<!-- <div class="timeline-icon">
-											<a href="#"><img src="/static/admin/global_assets/images/demo/users/face24.jpg" alt=""></a>
-										</div> -->
-
-										<div class="card">
-											<div class="card-header header-elements-sm-inline">
-												<h6 class="card-title">Weekly statistics</h6>
-												<div class="header-elements">
-													<span><i class="icon-history mr-2 text-success"></i> Updated 3 hours ago</span>
-
-													<div class="list-icons ml-3">
-								                		<a class="list-icons-item" data-action="reload"></a>
-								                	</div>
-							                	</div>
-											</div>
-
-											<div class="card-body">
-												<div class="chart-container">
-													<div class="chart has-fixed-height" id="weekly_statistics"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- /sales stats -->
-
-
-									<!-- Blog post -->
-									<div class="timeline-row">
+									<div class="timeline-row" style="min-height: calc(120vh + 110px); max-height: calc(120vh + 140px);overflow-y: scroll;">
 										<!-- <div class="timeline-icon">
 											<img src="/static/admin/global_assets/images/demo/users/face12.jpg" alt="">
 										</div> -->
 
 										<div class="card">
 											<div class="card-header header-elements-sm-inline">
-												<h6 class="card-title">{{company.company_name|title}}</h6>
+												<h6 class="card-title">You Can Edit/Update Your Company Profile Here</h6>
 											</div>
 
 											<div class="card-body">
-												<div class="card-img-actions mb-3">
-													{{company.detail|safe}}
-												</div>
-												<div class="card-img-actions mb-3">
-													{%if company.company_intro%}
-													<video controls autoplay="true" width="600">
-														<source src="{{company.company_intro.url}}" type="">
-													</video>
-													<!-- <video width="500" preload="auto" autoplay="true" src="{{company.company_intro.url}}"></video> -->
-													{%endif%}
-												</div>
-												
+												 <form id='update_company_info' action="#" enctype="multipart/form-data" method="post">
+													{%csrf_token%}
+													{{form|crispy}}
+													<div>
+														<button id="submit_update" type="submit" class="btn btn-success btn-md">Save Chages <i class="fa fa-mark"></i></button>
+													</div>
+												</form>
 											</div>
-											{%if user.is_superuser%}
-											{%else%}
 											<div class="card-footer">
-												{%if perms.accounts.delete_company%}
-												<div class="" style="float: left;">
-													<a href="{%url 'admin:delete' model_name='company' id=company.id%}" class="btn btn-danger">Delete Company Profile</a>
-												</div>
-												{%endif%}
-												{%if perms.accounts.change_company%}
-												<div class="" style="float: right;">
-													<a href="{%url 'admin:comp_profile' option='edit' id=company.id%}" class="btn btn-warning">Edit Company Profile</a>
-												</div>
-												{%endif%}
+												 
 											</div>
-											{%endif%}
 										</div>
 									</div>
 									<!-- /blog post -->
@@ -162,29 +122,29 @@
 
 						<!-- Sidebar content -->
 						<div class="sidebar-content">
-
-							<!-- User card -->
 							<div class="card">
-								<div class="card-body text-center">
+								<div class="card-body bg-indigo-400 text-center card-img-top" style=" background-size: contain;">
 									<div class="card-img-actions d-inline-block mb-3">
-										<img class="img-fluid rounded-circle" src="{{company.company_logo.url}}" width="170" height="170" alt="">
-										<div class="card-img-actions-overlay card-img rounded-circle">
+										<img class="img-fluid rounded-circle" src="{{object.logo.url}}" width="170" height="170" alt="">
+										<div class="card-img-actions-overlay rounded-circle">
+											
 										</div>
 									</div>
 
-						    		<h6 class="font-weight-semibold mb-0">{{company.company_name}}</h6>
+						    		<h6 class="font-weight-semibold mb-0">{{object.name}}</h6>
+						    		<!-- <span class="d-block opacity-75">{{company.products.all}}</span> -->
 
 					    			<div class="list-icons list-icons-extended mt-3">
-				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>
-				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Twitter" data-container="body"><i class="icon-twitter"></i></a>
-				                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Github" data-container="body"><i class="icon-github"></i></a>
+				                    	<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Google Drive"><i class="icon-google-drive"></i></a>
+				                    	<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Twitter"><i class="icon-twitter"></i></a>
+				                    	<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Github"><i class="icon-github"></i></a>
 			                    	</div>
 						    	</div>
-					    	</div>
+								</div>
 					    	<!-- /user card -->
 							<div class="card">
 								<div class="card-header bg-transparent header-elements-inline">
-									<span class="card-title font-weight-semibold">Company Contact</span>
+									<span class="card-title font-weight-semibold">Yearly and Daily Company Info</span>
 									<div class="header-elements">
 										<div class="list-icons">
 					                		<a class="list-icons-item" data-action="collapse"></a>
@@ -195,103 +155,94 @@
 								<div class="card-body p-0">
 									<ul class="nav nav-sidebar my-2">
 										<li class="nav-item">
-											<a href="#" class="nav-link">
+											{%if object.get_company_address%}
+											<a href="#" id="edit_address" data-toggle="modal" data-target="#address_form_modal" class="nav-link">
 												<i class="icon-phone"></i>
-												 Phone
-												 <span class="badge bg-warning badge-pill ml-auto">{{company.phone_number}}</span>
+												 Company Address 
+												 <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-pencil"></i>edit</span>
 											</a>
+											{%else%}
+											<a href="#" data-toggle="modal" data-target="# " class="nav-link">
+												<i class="icon-phone"></i>
+												 Company Address
+												 <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+											</a>
+											{%endif%}
 										</li>
 										<li class="nav-item">
-											<a href="#" class="nav-link">
-												<i class="icon-envelope"></i>
-												Email
-												<span class="text-muted font-size-sm font-weight-normal ml-auto">{{company.email}}</span>
-											</a>
-										</li>
-										<li class="nav-item">
-											<a href="#" class="nav-link">
-												<i class="icon-location3"></i>
-												Location
-												<span class="badge bg-danger badge-pill ml-auto">{{company.location}}</span>
-											</a>
-										</li>
-										
-									</ul>
-								</div>
-							</div>
-
-							<!-- Navigation -->
-							<div class="card">
-								<div class="card-header bg-transparent header-elements-inline">
-									<span class="card-title font-weight-semibold">Activities</span>
-									<div class="header-elements">
-										<div class="list-icons">
-					                		<a class="list-icons-item" data-action="collapse"></a>
-				                		</div>
-			                		</div>
-								</div>
-
-								<div class="card-body p-0">
-									<ul class="nav nav-sidebar my-2">
-										<li class="nav-item">
-											<a href="#" class="nav-link">
-												<i class="icon-paste"></i>
-												 Sold
-												 <span class="badge bg-warning badge-pill ml-auto">32</span>
-											</a>
-										</li>
-										<li class="nav-item">
-											<a href="#" class="nav-link">
+											<a href="#" data-toggle="modal" data-target="#inv_capital_form_modal" class="nav-link">
 												<i class="icon-cash3"></i>
-												Quotes
-												<span class="badge bg-primary badge-pill ml-auto">82</span>
+												Investment Capital
+												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" class="nav-link">
-												<i class="icon-cart"></i>
-												Orders
-												<span class="badge bg-danger badge-pill ml-auto">29</span>
+											<a href="#" data-toggle="modal" data-target="#certificate_form_modal" class="nav-link">
+												<i class="icon-certificate"></i>
+												Certificate
+												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="{%url 'admin:admin_products' user_type=company.id%}" class="nav-link">
-												<i class="icon-stack"></i>
-												Products
-												<span class="badge bg-success badge-pill ml-auto">{{company|company_product_count}}</span>
+											<a href="#" data-toggle="modal" data-target="#employees_form_modal" class="nav-link">
+												<i class="icon-users4"></i>
+												Employees
+												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
 											</a>
 										</li>
-
-										<li class="nav-item-divider"></li>
-
 										<li class="nav-item">
-											<a href="#" class="nav-link">
-												<i class="icon-calendar3"></i>
-												Events
-												<span class="badge bg-teal-400 badge-pill ml-auto">48</span>
+											<a href="#" data-toggle="modal" data-target="#createdjob_form_modal" class="nav-link">
+												<i class="icon-task"></i>
+												Created Jobs
+												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="modal" data-target="#education_status_form_modal" class="nav-link">
+												<i class="icon-user-tie"></i>
+												Employee Education Status
+												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="modal" data-target="#femaleposn_form_modal" class="nav-link">
+												<i class="icon-users4"></i>
+												Females Employees
+												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="modal" data-target="#srcamnt_input_form_modal" class="nav-link">
+												<i class="icon-stack2"></i>
+												Source & Ammount of inputs
+												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="modal" data-target="#power_consumption_form_modal" class="nav-link">
+												<i class="icon-power2"></i>
+												Daily Power Consumption
+												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="modal" data-target="#destination_form_modal" class="nav-link">
+												<i class="icon-location3"></i>
+												Market Destination
+												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="modal" data-target="#target_form_modal" class="nav-link">
+												<i class="icon-target "></i>
+												Target Market
+												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
 											</a>
 										</li>
 										
 									</ul>
 								</div>
-							</div>
-							<!-- /navigation -->
-
-							<!-- Balance changes -->
-							<div class="card">
-								<div class="card-header bg-transparent header-elements-inline">
-									<span class="card-title font-weight-semibold">Orders Summary</span>
-									<div class="header-elements">
-										<span><i class="icon-arrow-down22 text-danger"></i> <span class="font-weight-semibold">- 29.4%</span></span>
-			                		</div>
-								</div>
-
-								<div class="card-body">
-									<div class="chart-container">
-										<div class="chart has-fixed-height" id="balance_statistics"></div>
-									</div>
-								</div>
-							</div>
+							</div> 
 							<!-- /balance changes -->
 
 						</div>
@@ -305,4 +256,26 @@
 
 			</div>
 			<!-- /content area -->
+			{%include 'admin/company/company_form_modals.html'%}
+<!-- Modal Area End -->
+			 <script>
+				 $(document).ready(function(){
+					 $("#edit_address").click(function(){
+						$("#id_region").val("{{object.get_company_address.region}}".toUpperCase());
+						$("#id_city_town").val("{{object.get_company_address.city_town}}".toUpperCase());
+						$("#id_subcity_zone").val("{{object.get_company_address.subcity_zone}}".toUpperCase());
+						$("#id_woreda").val("{{object.get_company_address.woreda}}".toUpperCase());
+						$("#id_kebele").val("{{object.get_company_address.kebele}}".toUpperCase());
+						$("#id_local_area").val("{{object.get_company_address.local_area}}".toUpperCase());
+						$("#id_phone_number").val("{{object.get_company_address.phone_number}}".toUpperCase());
+						$("#id_fax").val("{{object.get_company_address.fax}}".toUpperCase());
+						$("#id_email").val("{{object.get_company_address.email}}".toUpperCase());
+						$("#id_facebooklink").val("{{object.get_company_address.facebooklink}}".toUpperCase());
+						$("#id_twiterlink").val("{{object.get_company_address.twiterlink}}".toUpperCase());
+						$("#id_instagramlink").val("{{object.get_company_address.instagramlink}}".toUpperCase());
+						$("#id_linkedinlink").val("{{object.get_company_address.linkedinlink}}".toUpperCase());
+						$("#id_googlelink").val("{{object.get_company_address.googlelink}}".toUpperCase());
+					 });
+				 });
+			 </script>
 {%endblock%}
