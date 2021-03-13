@@ -281,8 +281,7 @@ class ForumQuestionForm(forms.ModelForm):
         }               
 
 class CommentForm(forms.ModelForm):
-    
-    attachements = forms.FileField(required=False)
+     
     class Meta:
         model = ForumComments
         fields = ('comment',)
@@ -290,8 +289,7 @@ class CommentForm(forms.ModelForm):
             'comment':forms.Textarea(attrs={'class':'form-control','placeholder':'Your Comment on the Forum'}),
         }
 
-class CommentReplayForm(forms.ModelForm):
-    attachements = forms.FileField(required=False)
+class CommentReplayForm(forms.ModelForm): 
     class Meta:
         model = CommentReplay
         fields = ('content',)

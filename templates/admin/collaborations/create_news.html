@@ -28,7 +28,7 @@
             <form action="{%url 'admin:edit_news'  id=news.id %}" method="POST" enctype="multipart/form-data">
                 <fieldset class="mb-3 ml-3 mr-3">
                    
-                    <legend class="text-uppercase font-size-sm font-weight-bold">Edit  "{{news.title}}" </legend>
+                    <legend class="text-uppercase font-size-sm font-weight-bold">Edit  News </legend>
                     {%csrf_token%}
                     <div class="form-group row">
                         <label class="col-form-label col-lg-3">News Title: <Title></Title>(English) </label>

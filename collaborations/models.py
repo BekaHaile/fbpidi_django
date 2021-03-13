@@ -336,7 +336,6 @@ class ForumComments(models.Model):
     forum_question=models.ForeignKey(ForumQuestion,on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     comment = models.TextField(null=False)
-    attachements = models.FileField(upload_to="Attachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -357,7 +356,6 @@ class CommentReplay(models.Model):
     comment = models.ForeignKey(ForumComments,on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(null=False)
-    attachements = models.FileField(upload_to="Attachements/", null=True,max_length=254,help_text="only pdf files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

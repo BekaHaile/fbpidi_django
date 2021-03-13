@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from admin_site.models import SubCategory
+from django.utils import timezone
 
 
 class Company(models.Model):
@@ -129,7 +130,7 @@ class EventParticipants(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     event = models.ForeignKey(CompanyEvent, on_delete=models.CASCADE)
     patricipant_email = models.EmailField(max_length=200, blank=True)
-    notifiy_in = models.IntegerField(default=1)
+    notifiy_on = models.DateTimeField(default=timezone.now())
     notified = models.BooleanField(verbose_name="If notification is sent = True", default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 

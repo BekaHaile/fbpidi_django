@@ -387,9 +387,10 @@ class ProductDetailView(View):
         try:
             form = ReviewForm()
             product = Product.objects.get(id=self.kwargs['id'])
-            reviews = Review.objects.filter(product=product)
+            #reviews = Review.objects.filter(product=product)
             images = ProductImage.objects.filter(product=product)
-            context = {'product':product,'images':images,'form':form,'reviews':reviews}
+            #context = {'product':product,'images':images,'form':form,'reviews':reviews}
+            context = {'product':product,'images':images,'form':form}
             return render(self.request,'frontpages/product/product_detail.html',context)
         except ObjectDoesNotExist:
             return redirect("index")

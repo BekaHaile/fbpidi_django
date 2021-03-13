@@ -59,7 +59,7 @@ urlpatterns = [
     path("search-tag/<name>",SearchBlogTag.as_view(),name="search_blogtag"),
     path("blog-list/",BlogList.as_view(),name="blog_grid_right"),
     path("blog-search/",SearchBlog.as_view(),name="blog_search"),
-    path("blog-details/<id>",BlogDetail.as_view(),name="blog_details"),
+    path("blog-detail/<id>",BlogDetail.as_view(),name="blog_details"),
     path("blog-comment/<id>",CreateBlogComment.as_view(),name="Comment"),
 
     path("vacancy-list/",VacancyList.as_view(),name="vacancy"),
