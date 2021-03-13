@@ -20,7 +20,7 @@ def create_auth_token(sender, instance = None, created = False, **kwargs):
         Token.objects.create(user = instance)
         
 
-class FbpidiUser(AbstractUser):
+class UserProfile(AbstractUser):
     phone_number = models.CharField(max_length=20,blank=True,null=True) 
     is_customer = models.BooleanField(default=False)  # ifFbpidiUser is customer
     is_company_admin = models.BooleanField(default=False)  # ifFbpidiUser is company admin
@@ -32,7 +32,7 @@ class FbpidiUser(AbstractUser):
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
 
-    class Meta:
+    class Meta(AbstractUser.Meta):
         ordering=('-created_date',)
 
     def get_company_name(self):
@@ -43,12 +43,15 @@ class FbpidiUser(AbstractUser):
         #     return CompanyStaff.objects.get(user = self).get_company_name()
 
     def get_company(self):
-        if self.is_company_admin:
-           return Company.objects.get(contact_person = self)
-        elif self.is_company_staff:
-            return Company.objects.get(company_staff = self)
-        elif self.is_superuser:
-            return Company.objects.get(name="FBPIDI")
+        try:
+            if self.is_company_admin:
+                return Company.objects.get(contact_person = self)
+            elif self.is_company_staff:
+                return Company.objects.get(company_staff = self)
+            elif self.is_superuser:
+                return Company.objects.get(name="FBPIDI")
+        except Company.DoesNotExist:
+            return None
 
 
 class Customer(models.Model):

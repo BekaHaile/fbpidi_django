@@ -3,8 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 
 
-from admin_site.models import SubCategory
-from company.models import Company
+from company.models import Company,SubCategory
 
 class Product(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=False)

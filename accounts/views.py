@@ -18,11 +18,11 @@ from useraudit.models import FailedLoginLog,LoginAttempt,LoginLog,UserDeactivati
 
 from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,CompanyUserCreationForm,
                             AdminCreateUserForm,GroupCreationForm,FrontLoginForm)
-from accounts.models import FbpidiUser,Company,CompanyAdmin,Customer
+from accounts.models import UserProfile,Company,CompanyAdmin,Customer
 from company.models import CompanyStaff,Company
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
 
-# Login view for the front end/customer FbpidiUser
+# Login view for the front end/customer UserProfile
 class LoginView(auth_views.LoginView):
     form_class = FrontLoginForm
     template_name = 'registration/login.html'
@@ -52,7 +52,7 @@ class CompanyAdminSignUpView(CreateView):
 
 # view for customer sign up
 class CustomerSignUpView(CreateView):
-    model = FbpidiUser
+    model = UserProfile
     form_class = CustomerCreationForm
     template_name = 'registration/customer_signup.html'
 
@@ -72,7 +72,7 @@ class CustomerSignUpView(CreateView):
 class CompleteLoginView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         
-        user = FbpidiUser.objects.get(id=self.request.user.id)
+        user = UserProfile.objects.get(id=self.request.user.id)
         if user.is_staff:
             if user.is_company_admin:
                 try:
@@ -97,8 +97,8 @@ class CompleteLoginView(LoginRequiredMixin,View):
 def activate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
-        user = FbpidiUser._default_manager.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, FbpidiUser.DoesNotExist):
+        user = UserProfile._default_manager.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, UserProfile.DoesNotExist):
         user = None
     if user is not None and default_token_generator.check_token(user, token):
         user.is_active = True
@@ -115,7 +115,7 @@ def activate(request, uidb64, token):
         {'message':"Activation link is invalid!"})
 
 class MyProfileView(LoginRequiredMixin,UpdateView):
-    model = FbpidiUser
+    model = UserProfile
     fields = ('first_name', 'last_name','username', 'email', 'phone_number','profile_image')
     template_name = "admin/accounts/user_profile.html"
 
@@ -125,19 +125,19 @@ class MyProfileView(LoginRequiredMixin,UpdateView):
 
 # to list all users in the admin page
 class UserListView(LoginRequiredMixin, ListView):
-    model=FbpidiUser
+    model=UserProfile
     template_name = "admin/accounts/users_list.html"
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return FbpidiUser.objects.all().exclude(id=self.request.user.id)
+            return UserProfile.objects.all().exclude(id=self.request.user.id)
         elif self.request.user.is_company_admin:
-            return FbpidiUser.objects.filter(created_by=self.request.user).exclude(id=self.request.user.id)
+            return UserProfile.objects.filter(created_by=self.request.user).exclude(id=self.request.user.id)
 
 
 # to see a users detail profile
 class UserDetailView(LoginRequiredMixin, UpdateView):
-    model = FbpidiUser
+    model = UserProfile
     fields = ['first_name', 'last_name','username', 'email', 'phone_number','profile_image']
     template_name = "admin/accounts/user_detail.html"
 
@@ -146,7 +146,7 @@ class UserDetailView(LoginRequiredMixin, UpdateView):
         return redirect("admin:user_detail",pk=self.kwargs['pk'])
 
 class CreateCompanyStaff(LoginRequiredMixin,CreateView):
-    model=FbpidiUser
+    model=UserProfile
     form_class = CompanyUserCreationForm
     template_name = "admin/accounts/user_form.html"
 
@@ -161,7 +161,7 @@ class CreateCompanyStaff(LoginRequiredMixin,CreateView):
         return redirect("admin:users_list")
 
 class CreateUserView(LoginRequiredMixin, CreateView):
-    model=FbpidiUser
+    model=UserProfile
     form_class=AdminCreateUserForm
     template_name = "admin/accounts/user_form.html"
 

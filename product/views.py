@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from django.views.generic import View
+from django.views.generic import View,ListView,UpdateView,CreateView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -7,11 +7,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
 
-from admin_site.models import Category, SubCategory
+from admin_site.models import Category
 from product.models import Product,ProductImage,ProductPrice,Order,OrderProduct,InvoiceRecord
-from product.forms import SubCategoryForm,ProductCreationForm,CategoryForm,CheckoutForm
+from product.forms import SubCategoryForm,BrandForm,ProductCreationForm,CategoryForm,CheckoutForm
 from accounts.models import User
-from company.models import Company
+from company.models import Company,SubCategory,Brand
 
 import random
 import string
@@ -23,123 +23,162 @@ def create_invoice(invoice,user):
     return '#INV-'.join(random.choices(string.ascii_uppercase + (invoice.join(user.id))))
 
 # This is class/view is crated for displaying all categories and sub categories 
-class CategoryView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        context = {}
-        if self.kwargs['option'] == 'category':
-            categories = Category.objects.all()
-            context = {'categories':categories,'option':'category'}
-        elif self.kwargs['option'] == 'sub_category':
-            sub_categories = SubCategory.objects.all()
-            context = {
-                "sub_categories":sub_categories,'option':'sub_category'
-            }
-        return render(self.request,"admin/product/categories.html",context)
+class CategoryView(LoginRequiredMixin,ListView):
+    model = Category
+    template_name = "admin/product/categories.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = True
+        return context
 
 # This class/view is created for displaying category and sub category detail and editing
-class CategoryDetail(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        context = {}
-        if self.kwargs['option'] == "category":
-            category = Category.objects.get(id=self.kwargs['cat_id'])
-            context = {
-                'category':category,
-                'edit':'edit'
-            }
-        elif self.kwargs['option'] == "sub_category":
-            sub_category = SubCategory.objects.get(id=self.kwargs['cat_id'])
-            cat_types = Category.objects.all().distinct('category_name')
-            context = {
-                'sub_category':sub_category,
-                'categories_name':cat_types,
-                'edit':'edit'
-            }
-        return render(self.request,"admin/product/category_form.html",context)
-    
-    def post(self,*args,**kwargs):
-        context = {}
-        message = ""
-        option = ""
-        if self.kwargs['option'] == "category":
-            
-            category = Category.objects.get(id=self.kwargs['cat_id'])
-            category.category_name = self.request.POST['category_name']
-            category.category_type = self.request.POST['category_type']
-            category.description = self.request.POST['description']
-            category.category_name_am = self.request.POST['category_name_am']
-            category.category_type_am = self.request.POST['category_type']
-            category.description_am = self.request.POST['description_am']
-            if self.request.FILES.get('image') != None:
-                category.image = self.request.FILES.get('image')
-            category.save()
-            message = "Category Updated Successfully"
-            option = "category"
-        elif self.kwargs['option'] == "sub_category":
-            sub_category = SubCategory.objects.get(id=self.kwargs['cat_id'])
-            sub_category.category_name = Category.objects.get(id=self.request.POST['category_name'])
-            sub_category.sub_category_name = self.request.POST['sub_category_name']
-            sub_category.description = self.request.POST['description']
-            sub_category.sub_category_name_am = self.request.POST['sub_category_name_am']
-            sub_category.description_am = self.request.POST['description_am']
-            if self.request.FILES.get('image') != None:
-                sub_category.image = self.request.FILES.get('image')
-            sub_category.save()
-            message = "Sub-Category Updated Successfully"
-            option = "sub_category"
-        messages.success(self.request,message)
-        return redirect("admin:p_categories",option=option)
+class CategoryDetail(LoginRequiredMixin,UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = "admin/product/category_form_update.html"
+    success_url = "/admin/categories/"
+
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = True
+        return context
 
 # This class/view is created for creating new categories
-class CreateCategories(LoginRequiredMixin,View):
+class CreateCategories(LoginRequiredMixin,CreateView):
     cat_list_am = { "Food":'ምግብ',"Beverage":'መጠጥ',"Pharmaceuticals":'መድሃኒት' }
-     
-    def get(self,*args,**kwargs):
-        context = {}
-        if self.kwargs['option'] == "category":
-            form = CategoryForm()
-            context = {
-                'category':"category",
-                 'form':form,
-            }
-        elif self.kwargs['option'] == "sub_category":
-            form = SubCategoryForm()
-            context = {
-                'sub_category':'sub_category',
-                'form':form,
-            }
-        return render(self.request,"admin/product/category_form.html",context)
+    model = Category
+    form_class = CategoryForm
+    template_name = "admin/product/category_form_create.html"
     
-    def post(self,*args,**kwargs):
-        if self.kwargs['option'] == "category":
-            form = CategoryForm(self.request.POST,self.request.FILES)
-            context = {
-                'category':"category",
-                 'form':form,
-            }
-            if form.is_valid():
-                category = form.save(commit=False)
-                category.user = self.request.user
-                category.category_type_am=self.cat_list_am[form.cleaned_data.get('category_type')],
-                category.save()
-                messages.success(self.request,"You Created a New Category")
-                return redirect("admin:p_categories",option='category')
-            else:
-                return render(self.request,"admin/product/category_form.html",context)
-        elif self.kwargs['option'] == "sub_category":
-            form = SubCategoryForm(self.request.POST,self.request.FILES)
-            context = {
-                'sub_category':'sub_category',
-                'form':form,
-            }
-            if form.is_valid():
-                sub_category = form.save(commit=False)
-                sub_category.user=self.request.user
-                sub_category.category_name=form.cleaned_data.get('category_name')
-                sub_category.save()
-                messages.success(self.request,"You Created a New Sub Category")
-                return redirect("admin:p_categories", option='sub_category')
-            else:
-                return render(self.request,"admin/product/category_form.html",context)
+    def form_valid(self,form):
+        category = form.save(commit=False)
+        category.created_by = self.request.user
+        category.category_type_am=self.cat_list_am[form.cleaned_data.get('category_type')],
+        category.save()
+        messages.success(self.request,"You Created a New Category")
+        return redirect("admin:categories")
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = True
+        return context
+
+class SubCategoryView(LoginRequiredMixin,ListView):
+    model = SubCategory
+    template_name = "admin/product/categories.html"
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return SubCategory.objects.all()
+        else:
+            return SubCategory.objects.filter(company=Company.objects.get(contact_person=self.request.user))
+            
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sub_category'] = True
+        return context
+
+# This class/view is created for displaying category and sub category detail and editing
+class SubCategoryDetail(LoginRequiredMixin,UpdateView):
+    model = SubCategory
+    form_class = SubCategoryForm
+    template_name = "admin/product/category_form_update.html"
+    success_url = "/admin/sub_categories/"
+
+    def get_form_kwargs(self):
+        kwargs = super(SubCategoryDetail,self).get_form_kwargs()
+        kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        return kwargs
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sub_category'] = True
+        return context
+
+# This class/view is created for creating new categories
+class CreateSubCategories(LoginRequiredMixin,CreateView):
+    model = SubCategory
+    form_class = SubCategoryForm
+    template_name = "admin/product/category_form_create.html"
+    
+    def get_form_kwargs(self):
+        kwargs = super(CreateSubCategories,self).get_form_kwargs()
+        kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        return kwargs
+
+    def form_valid(self,form):        
+        sub_category = form.save(commit=False)
+        sub_category.created_by = self.request.user
+        # sub_category.category_name=form.cleaned_data.get('category_name')
+        sub_category.company = Company.objects.get(contact_person=self.request.user)
+        sub_category.save()
+        messages.success(self.request,"You Created a New Sub Category")
+        return redirect("admin:sub_categories")
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sub_category'] = True
+        return context
+
+
+
+class BrandView(LoginRequiredMixin,ListView):
+    model = Brand
+    template_name = "admin/product/categories.html"
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return Brand.objects.all()
+        else:
+            return Brand.objects.filter(company=Company.objects.get(contact_person=self.request.user))
+            
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['brand'] = True
+        return context
+
+# This class/view is created for displaying category and sub category detail and editing
+class BrandDetail(LoginRequiredMixin,UpdateView):
+    model = Brand
+    form_class = BrandForm
+    template_name = "admin/product/category_form_update.html"
+    success_url = "/admin/brands/"
+
+    def get_form_kwargs(self):
+        kwargs = super(BrandDetail,self).get_form_kwargs()
+        kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        return kwargs
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['brand'] = True
+        return context
+
+# This class/view is created for creating new brands
+class CreateBrand(LoginRequiredMixin,CreateView):
+    model = Brand
+    form_class = BrandForm
+    template_name = "admin/product/category_form_create.html"
+    
+    def get_form_kwargs(self):
+        kwargs = super(CreateBrand,self).get_form_kwargs()
+        kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        return kwargs
+
+    def form_valid(self,form):        
+        brand = form.save(commit=False)
+        brand.created_by = self.request.user
+        brand.company = Company.objects.get(contact_person=self.request.user)
+        brand.save()
+        messages.success(self.request,"You Created a New Brand")
+        return redirect("admin:brands")
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['brand'] = True
+        return context
 
 
 

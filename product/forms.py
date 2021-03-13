@@ -1,6 +1,7 @@
 from django import forms
 from product.models import Product, ProductPrice,ShippingAddress,Review
-from admin_site.models import Category,SubCategory
+from admin_site.models import Category
+from company.models import SubCategory,Company,Brand
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 
@@ -19,13 +20,37 @@ class CategoryForm(forms.ModelForm):
             'description_am':forms.Textarea(attrs={'class':'summernote'}),
         }
 
+class BrandForm(forms.ModelForm):
+    def __init__(self,*args,**kwargs):
+        self.company = kwargs.pop('company')
+        super(BrandForm,self).__init__(*args,**kwargs)
+        self.fields['product_type'].empty_label = "Select A Product Type"
+        self.fields['product_type'].queryset = SubCategory.objects.filter(company=self.company)
+        
+    class Meta:
+        model = Brand
+        fields = ('product_type','brand_name','brand_name_am',)
+        widgets = {
+            'product_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'brand_name':forms.TextInput(attrs={'placeholder':'Product Brand Name'}),
+            'brand_name_am':forms.TextInput(attrs={'placeholder':'Product Brand Name in Amharic'})
+        }
+
 class SubCategoryForm(forms.ModelForm):
-    category_name = forms.ModelChoiceField(
-        empty_label="Select Category Type",
-        queryset=Category.objects.all(),
-        widget=forms.Select(attrs={'class':'form-control form-control-uniform'}),
-        required=True
-    )
+    # category_name = forms.ModelChoiceField(
+    #     empty_label="Select Category Type",
+    #     queryset=Category.objects.filter(),
+    #     widget=forms.Select(attrs={'class':'form-control form-control-uniform'}),
+    #     required=True
+    # )
+
+    def __init__(self,*args,**kwargs):
+        self.company = kwargs.pop('company')
+        super(SubCategoryForm,self).__init__(*args,**kwargs)
+        self.fields['category_name'].queryset = self.company.category.all()
+        self.fields['category_name'].empty_label = "Select A Product Category"
+
+   
 
     class Meta:
         model = SubCategory

@@ -40,6 +40,21 @@ class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
         return redirect("admin:create_company_detail",pk=company.id)
 
 
+class CreateCompanyProfile(LoginRequiredMixin,CreateView):
+    model = Company
+    form_class = CompanyProfileForm_Superadmin
+    template_name = "admin/company/create_company_form_1.html"
+
+    def form_valid(self,form):
+        company = form.save(commit=False)
+        company.ownership_form = form.cleaned_data.get("ownership")
+        company.created_by = self.request.user
+        company.save()
+        messages.success(self.request,"Company Profile Created")
+        return redirect("admin:create_company_detail",pk=company.id)
+
+    def form_invalid(self,form):
+        print(form.errors)
 
 class CreateCompanyAddress(LoginRequiredMixin,CreateView):
     model = CompanyAddress
@@ -361,28 +376,6 @@ class CheckYearField(LoginRequiredMixin,View):
                                     'data':json.loads(serializers.serialize('json',[target],ensure_ascii=False))[0]})
             except MarketTarget.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
-
-class CreateCompanyProfile(LoginRequiredMixin,View):
-    def get(self, *args,**kwargs):
-        form = CompanyForm()
-        try:
-            Company.objects.get(user=self.request.user)
-            return redirect("admin:view_company_profile")
-        except:
-            return render(self.request,"admin/company/company_form_create.html",{"form":form})
-
-    def post(self, *args,**kwargs):
-        form = CompanyForm(self.request.POST,self.request.FILES)
-        
-        if form.is_valid():
-            company = form.save(commit=False)
-            company.product_category = form.cleaned_data.get("product_category")
-            company.user = self.request.user
-            company.save()
-            messages.success(self.request,"Company Profile Created")
-            return redirect("admin:index")
-        return render(self.request,"admin/company/company_form_create.html",{'form':form})
-
 
 
 class CreateCompanyProfileAfterSignUp(LoginRequiredMixin,View):

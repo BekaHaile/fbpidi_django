@@ -6,8 +6,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # 
 from product.models import Product, ProductImage,Review
-from admin_site.models import Category,SubCategory
-from company.models import Company
+from admin_site.models import Category
+from company.models import Company,SubCategory
 # 
 from accounts.models import User,Company,Customer
 from product.forms import ReviewForm

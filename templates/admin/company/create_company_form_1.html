@@ -6,6 +6,7 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/inputs/inputmask.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/validation/validate.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 
 {{ form.media }}
 {% endblock %}
@@ -27,7 +28,7 @@
 			</div>
 		</div>
 		<div class="card-body m-2">
-			<form id="companyform" action="{%url 'admin:create_my_company'%}"
+			<form id="companyform" action="{%url 'admin:create_company_profile'%}"
 					method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
 
 			<fieldset>
@@ -50,11 +51,15 @@
 				 
 				
 				<div class="form-group row">
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<label for="">{{form.ownership.label}}</label>
 						{{form.ownership}}
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
+						<label for="">{{form.contact_person.label}}</label>
+						{{form.contact_person}}
+					</div>
+					<div class="col-md-4">
 						<label for="">{{form.established_yr.label}}</label>
 						{{form.established_yr}}
 					</div>

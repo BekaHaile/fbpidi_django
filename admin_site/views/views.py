@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 # 
 from product import models
-from accounts.models import User
+from accounts.models import UserProfile
 from company.models import Company,CompanyEvent
 from admin_site.models import Category
 from chat.models import ChatGroup, ChatMessage
@@ -22,26 +22,29 @@ from django.http import HttpResponse, FileResponse
 from django.db.models import Q
 
 def check_user_has_company(user):
-    try:
-        user.get_company()
-    except Exception:
-        messages.warning(self.request, "Currently, You are not related with any registered Company.")
+    if user.get_company() == None:
+        messages.warning(self.request, "Currently, You have not registered a Company.")
+        return redirect("admin:create_mycompany_profile")
+    else:
+        return 
         print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
-        return redirect("admin:create_company_profile")
+        
 
 # 
 # INDEX VIEW
 class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        try:
-            user = self.request.user
-            # unread_message = ChatMessage.unread_messages(self.request.user)           
-            # context = {'unread_messages': unread_message, "unread_messages_count": unread_message.count()}
-            return render(self.request,"admin/index.html",{})
-        except Exception as e:
-            print ("index error",str(e))
-            return render(self.request,"admin/index.html",)
-        
+        user = self.request.user
+        if user.is_company_admin:
+            if user.get_company() == None:
+                # messages.warning(self.request, "Please Create Your Company Profile")
+                return redirect("admin:create_my_company")
+            else:
+                pass 
+        else:
+            pass
+        return render(self.request,"admin/index.html",{})
+
 
 class DeleteView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -175,7 +178,7 @@ class DeleteView(LoginRequiredMixin,View):
                 messages.success(self.request,message)
                 return redirect("admin:p_categories",option='sub_category')
             elif self.kwargs['model_name'] == 'user_account':
-                user = User.objects.get(id=self.kwargs['id'])
+                user = UserProfile.objects.get(id=self.kwargs['id'])
                 user.delete()
                 message ="User Deleted"
                 messages.success(self.request,message)
@@ -272,7 +275,7 @@ class DeleteView(LoginRequiredMixin,View):
                 messages.success(self.request,message)
                 return redirect("admin:p_categories",option='sub_category')
             elif self.kwargs['model_name'] == 'user_account':
-                user = User.objects.get(id=self.kwargs['id'])
+                user = UserProfile.objects.get(id=self.kwargs['id'])
                 user.delete()
                 message ="User Deleted"
                 messages.success(self.request,message)

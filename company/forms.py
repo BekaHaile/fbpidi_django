@@ -3,8 +3,8 @@ from django import forms
 from django.contrib.gis import forms as gis_form
 import floppyforms as fl_forms
 
-from admin_site.models import SubCategory,CompanyDropdownsMaster
-from accounts.models import FbpidiUser
+from admin_site.models import CompanyDropdownsMaster
+from accounts.models import UserProfile
 from company.models import *
 
 # fields=(
@@ -316,26 +316,26 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
         widget=forms.Select(attrs={'class':'form-control form-control-uniform',})
     )
     # location = fl_forms.gis.PointField(widget=CustomPointWidget)
-    location = gis_form.PointField(widget=
-        gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 500}))
-
+     
     class Meta:
         model = Company
         fields = (
-            'contact_person','name','name_am','logo','established_yr','category','trade_license',
+            'contact_person','name','name_am','logo','established_yr','category','trade_license','geo_location'
             )
         widgets = {
+            'contact_person':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'logo':forms.FileInput(attrs={'class':''}),
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 500}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','placeholder':'Established Year'}),
             'category':forms.SelectMultiple(attrs={'class':'form-control',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
         }
 
     def __init__(self,*args,**kwargs):
-        super(CompanyUpdateForm,self).__init__(*args,**kwargs)
-        # self.fields['contact_person'].queryset = FbpidiUser.objects.filter(contact_person=)
+        super(CompanyProfileForm_Superadmin,self).__init__(*args,**kwargs)
+        self.fields['contact_person'].queryset = UserProfile.objects.filter(is_company_admin=True)
 
 class CompanyUpdateForm(forms.ModelForm):
      
@@ -402,7 +402,7 @@ class CompanyUpdateForm(forms.ModelForm):
         self.fields['working_hours'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Working hours")
         self.fields['working_hours'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Working hours")
         self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
-  
+
 
 class CompanySolutionForm(forms.ModelForm):
 

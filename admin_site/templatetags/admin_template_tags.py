@@ -13,16 +13,19 @@ from chat.models import  ChatMessage, ChatGroup
 from chat import views
 
 
-from accounts.models import FbpidiUser
+from accounts.models import UserProfile
 
 register = template.Library()
 
 @register.filter
 def get_company_id(user):
-    user = User.objects.get(id=user.id)
+    user = UserProfile.objects.get(id=user.id)
     print(user.id)
     if user.is_company_admin:
-        return user.get_company().id
+        if user.get_company() != None:
+            return user.get_company().id
+        else:
+            return 0
     else:
         return user.get_company().id
 

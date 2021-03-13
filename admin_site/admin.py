@@ -59,7 +59,8 @@ from collaborations.Views.forums import(ListForumQuestionAdmin,CreateForumQuesti
                                           ListCommentReplayAdmin,CommentReplayDetail, )
 
 from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
-                            ProductDetailView,AddProductImage,CreatePrice,CategoryView)
+                            ProductDetailView,AddProductImage,CreatePrice,CategoryView,SubCategoryView,
+                            SubCategoryDetail,CreateSubCategories,BrandView,BrandDetail,CreateBrand)
                             
 from company.views import (CreateInvestmentCapital,CreateCertificates,CreateEmployees,CreateJobsCreatedYearly,
                             CreateEducationStatus,CreateFemaleinPosition,CreateAnualSourceofInputs,
@@ -138,9 +139,15 @@ class CustomAdminSite(admin.AdminSite):
             path('create-project-lookup/',wrap(CreateProjectDropdownsMaster.as_view()),name='create_plookup'),
             path('update-project-lookup/<pk>/',wrap(UpdateProjectDropdownsMaster.as_view()),name='update_plookup'),
 
-            path("categories/<option>/",wrap(CategoryView.as_view()),name="p_categories"),
-            path("create_category/<option>",wrap(CreateCategories.as_view()),name="create_category"),
-            path("category_edit/<option>/<cat_id>/",wrap(CategoryDetail.as_view()),name="edit_category"),
+            path("categories/",wrap(CategoryView.as_view()),name="categories"),
+            path("create_category/",wrap(CreateCategories.as_view()),name="create_category"),
+            path("category_edit/<pk>/",wrap(CategoryDetail.as_view()),name="edit_category"),
+            path("sub_categories/",wrap(SubCategoryView.as_view()),name="sub_categories"),
+            path("create_sub_category/",wrap(CreateSubCategories.as_view()),name="create_subcategory"),
+            path("sub_category_edit/<pk>/",wrap(SubCategoryDetail.as_view()),name="edit_subcategory"),
+            path("brands/",wrap(BrandView.as_view()),name="brands"),
+            path("create_brand/",wrap(CreateBrand.as_view()),name="create_brand"),
+            path("brand_edit/<pk>/",wrap(BrandDetail.as_view()),name="edit_brand"),
             path("delete/<model_name>/<id>/",wrap(DeleteView.as_view()),name="delete"),
             path("products_list/<user_type>/",wrap(AdminProductListView.as_view()),name="admin_products"),
             path("create_product/",wrap(CreateProductView.as_view()),name="create_product"),

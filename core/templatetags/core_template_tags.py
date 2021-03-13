@@ -2,10 +2,10 @@ from django import template
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
 
-from company.models import Company
+from company.models import Company,SubCategory
 from product.models import Product
-from admin_site.models import Category,SubCategory
-from accounts.models import User
+from admin_site.models import Category
+from accounts.models import UserProfile
 import datetime
 from chat.models import ChatMessage, ChatGroup
 import os
@@ -38,7 +38,7 @@ def product_count(non):
 
 @register.filter
 def happy_customer(non):
-    return User.objects.all().count()
+    return UserProfile.objects.all().count()
 
 
 @register.filter

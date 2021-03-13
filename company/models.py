@@ -1,9 +1,35 @@
 from django.contrib.gis.db import models as gis_models
 from django.db import models
 from django.conf import settings
+from admin_site.models import Category,CompanyDropdownsMaster,ProjectDropDownsMaster
 
-from admin_site.models import Category,SubCategory,CompanyDropdownsMaster,ProjectDropDownsMaster
+class SubCategory(models.Model):
+    company = models.ForeignKey('Company',on_delete=models.CASCADE,related_name='company_product_category')
+    category_name = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True,verbose_name="Category Type")
+    sub_category_name = models.CharField(max_length=200,verbose_name="Sub-Category Name(English)")
+    sub_category_name_am = models.CharField(max_length=200,verbose_name="Sub-Category Name(Amharic)")
+    description = models.TextField(verbose_name="Description (English)")
+    description_am = models.TextField(verbose_name="Description (Amharic)")
+    icons = models.ImageField()
+    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='subcat_created_by',null=True)
+    created_date	= models.DateTimeField(auto_now_add=True)
+    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='subcat_updated_by',null=True)
+    last_updated_date	= models.DateTimeField(null=True)
+    expired	= models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.sub_category_name
+
+class Brand(models.Model):
+	company = models.ForeignKey('Company',on_delete=models.CASCADE,related_name="company_brand")
+	product_type = models.ForeignKey(SubCategory,on_delete=models.CASCADE, verbose_name="Product Type", related_name="product_category")
+	brand_name = models.CharField(max_length=200,verbose_name="Product Brand Name(English)")
+	brand_name_am = models.CharField(max_length=200,verbose_name="Product Brand Name(Amharic)")
+	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='brand_created_by',null=True)
+	created_date	= models.DateTimeField(auto_now_add=True)
+	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='brand_updated_by',null=True)
+	last_updated_date	= models.DateTimeField(null=True)
+	expired	= models.BooleanField(default=False)
 
 class Company(models.Model):
 	name = models.CharField(verbose_name="Company Name in English", max_length=255,null=True)

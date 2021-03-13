@@ -27,22 +27,6 @@ class Category(models.Model):
     def __str__(self):
         return self.category_name
 
-class SubCategory(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=False,null=False)
-    category_name = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True,verbose_name="Category Type")
-    sub_category_name = models.CharField(max_length=200,verbose_name="Sub-Category Name(English)")
-    sub_category_name_am = models.CharField(max_length=200,verbose_name="Sub-Category Name(Amharic)")
-    description = models.TextField(verbose_name="Description (English)")
-    description_am = models.TextField(verbose_name="Description (Amharic)")
-    icons = models.ImageField()
-    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='subcat_created_by',null=True)
-    created_date	= models.DateTimeField(auto_now_add=True)
-    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='subcat_updated_by',null=True)
-    last_updated_date	= models.DateTimeField(null=True)
-    expired	= models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.sub_category_name
 
 # class CategoryProduct(models.Model):
 #     category_type = models.ForeignKey(SubCategory,on_delete=models.RESTRICT,verbose_name="Category")
