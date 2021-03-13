@@ -70,22 +70,22 @@
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="All" class="selectgroup-input" checked="">
 														<form action="{% url 'customer_event_list' %}" method="GET">
-															<input type="hidden" name = "by_status" value='All'>
-															<span class="selectgroup-button d-md-flex"><button style="border: hidden; background-color: white; color: #a7b4c9;" type="submit">{% trans "All" %} </button><i class="fa fa-sort ml-2 mt-1"></i></span>
+															<input type="hidden" >
+															<span class="selectgroup-button d-md-flex"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "All" %} </button><i class="fa fa-sort ml-2 mt-1"></i></span>
 														</form>
 													</label>
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="Distance" class="selectgroup-input">
 														<form action="{% url 'customer_event_list' %}" method="GET">
 															<input type="hidden" name = "by_status" value='Upcoming'>
-															<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #a7b4c9;" type="submit">{% trans "Upcoming Events" %}</button></span>
+															<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "Upcoming Events" %}</button></span>
 														</form>
 													</label>
 													<label class="selectgroup-item mb-0">
 														<input type="radio" name="value" value="Latest" class="selectgroup-input">
 														<form action="{% url 'customer_event_list' %}" method="GET">
 															<input type="hidden" name = "by_status" value='Open'>
-															<span  class="selectgroup-button"><button style="border: hidden; background-color: white; color: #a7b4c9;" type="submit">{% trans "Open Events" %}</button></span>
+															<span  class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "Open Events" %}</button></span>
 														</form>
 														
 													</label>
@@ -121,6 +121,15 @@
 
 																<small>{% change_end_date event.start_date %} </small> -
 																<small>{% change_end_date event.end_date %}</small>
+																{% if event.status == 'Open' %}
+																<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >{% trans "Open" %}</div>
+																{%elif event.status == 'Upcoming' %}
+																<div style="background-color: yellow; color:black; width: fit-content; padding: 5px;" >{% trans "Upcoming" %}</div>
+																{%elif event.status == 'Closed' %}
+																<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >{% trans "Closed" %}</div>
+																{%else%} 
+																<div style="background-color: blue; color:white; width: fit-content; padding: 5px;" >{% trans "Suspended" %}</div>
+																{%endif%}
 
 															</div>
 														</div>
@@ -205,28 +214,30 @@
 							</div>
 						</form>
 
-						<form action="{% url 'customer_event_list' %}" method = "GET">
-							<div class="card-header border-top">
-								<h3 class="card-title">{% trans "Posted By " %}</h3>
-							</div>
-							<div class="card-body">
-								<div class="filter-product-checkboxs">
-									{% for comp in event_companies %}
-									<label class="custom-control custom-checkbox mb-2">
-										<input type="checkbox" class="custom-control-input" name="by_company" value="{{comp.company_name}}">
-										<span class="custom-control-label">
-											{% print_translated comp.company_name comp.company_name_am LANGUAGE_CODE %}
-										</span>
-									</label>
-									{% endfor %}
-
+						<div class="card mb-0">
+							<form action="{% url 'customer_event_list' %}" method = "GET">
+								<div class="card-header border-top">
+									<h3 class="card-title">{% trans "Filter by Company " %}</h3>
 								</div>
-							</div>
-							<div class="card-footer">
-								<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>
-							</div>
+								<div class="card-body">
+									<div class="filter-product-checkboxs">
+										{% for comp in event_companies %}
+										<label class="custom-control custom-checkbox mb-2">
+											<input type="checkbox" class="custom-control-input" name="by_company" value="{{comp.company_name}}">
+											<span class="custom-control-label">
+												{% print_translated comp.company_name comp.company_name_am LANGUAGE_CODE %}
+											</span>
+										</label>
+										{% endfor %}
+
+									</div>
+								</div>
+								<div class="card-footer">
+									<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</button>
+								</div>
+							</form>
 						</div>
-						</form>
+						
 					</div>
 					<!--/Right Side Content-->
 				</div>

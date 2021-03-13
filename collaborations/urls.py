@@ -1,6 +1,6 @@
 from django.urls import path,include
 
-from .views import (PollIndex, PollDetail, Ajax,
+from .views import (CustomerPollList, PollDetail, Ajax,
                     CustomerTenderList, CustomerTenderDetail,
 
                     ApplyForTender,CustomerNewsList,
@@ -36,7 +36,7 @@ urlpatterns = [
     path("research-detail/<id>",ResearchDetail.as_view(),name="research_detail"),
     path("research-category/<id>",ResearchCategorySearch.as_view(),name="researchcategory_search"),
 
-    path("polls/", PollIndex.as_view(), name = "polls" ),
+    path("polls/", CustomerPollList.as_view(), name = "polls" ),
     path("poll_detail/<id>/", PollDetail.as_view(), name = "poll_detail"),
     
     path("edit-comment/<id>/<forum>/<type>/",EditCommentForum.as_view(),name="edit_comment"),

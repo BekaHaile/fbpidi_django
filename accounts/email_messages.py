@@ -52,24 +52,42 @@ def sendEventNotification(request, participant):
     try:
         email.send()
         print("Email sent to ", participant.patricipant_email)
+        participant.notified = False
+        participant.save()
+        return True
     except Exception as e:
         print("Exception While Sending Email ", str(e))
-    participant.notified = False
-    participant.save()
-    return email
-
+        return False
 
 def sendEventClosedNotification(request, event):
     current_site = get_current_site(request)
-    mail_message = f"IIMP system has changed the status of the Event titled '{event.title}'. This occurs when the creator of the event didn't change the stutus ."
+    mail_message = f"IIMP system has changed the status of the Event titled '{event.title}'. This occurs when the creator of the event didn't change the status ."
     mail_subject = f'Event Notification From IIMP'
-    to_email = event.company.user.email
-    email = EmailMessage(mail_subject, mail_message, to=[event.company.user.email])
+    to_email = event.created_by.email
+    email = EmailMessage(mail_subject, mail_message, to=[event.created_by.email])
     email.content_subtype = "html"  
     try:
         email.send()
-        print("Email sent to ", event.company.user.email)
+        print("Email sent to ", event.created_by.email)
+        return True
     except Exception as e:
         print("Exception While Sending Email ", str(e))
+        return False
     
-    return email
+    
+def sendTenderEmailNotification(request, user, tender, message):
+    current_site = get_current_site(request)
+    mail_message = message
+    mail_subject = f'Tender Notification From IIMP'
+    to_email = user.email
+    email = EmailMessage(mail_subject, mail_message, to=[user.email])
+    email.content_subtype = "html"  
+    try:
+        email.send()
+        print("Email sent to ", user.email)
+        return True
+    except Exception as e:
+        print("Exception While Sending Email ", str(e))
+        return False
+
+    

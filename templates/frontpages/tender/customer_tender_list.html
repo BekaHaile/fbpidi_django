@@ -10,19 +10,18 @@
 				<div class="header-text1 mb-0">
 					<div class="container">
 						<div class="row">
-							<div class="col-xkll-8 col-lg-12 col-md-12 d-block mx-auto">
+							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class=""><span class="font-weight-bold"></span>{{message}} </h1>
+									<h1 class=""><span class="font-weight-bold"></span>{{message}}</h1>
 								</div>
-								<form action = "{% url 'tender_list' %}" method = "GET">
+								<form action="{% url 'tender_list'  %}" metho = "GET">
 									<div class="search-background px-4 py-3 mt-4">
 										<div class="form row row-sm">
 											<div class="form-group  col-xl-10 col-lg-9 col-md-12 mb-0">
-												<input type="text" name = 'by_title' class="form-control input-lg border-white" id="text" placeholder="Search Tender">
+												<input type="text" name = 'by_title' class="form-control input-lg border-white" id="text" placeholder="Search tender by title">
 											</div>
-											
 											<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
-												<button href="#" type = "submit" class = "btn btn-lg btn-block btn-secondary">{% trans "Search" %}</button>
+												<button href="#" type = "submit" class="btn btn-lg btn-block btn-secondary">{% trans "Search" %}</button>
 											</div>
 										</div>
 									</div>
@@ -39,7 +38,7 @@
 		<div class="bg-white border-bottom">
 			<div class="container">
 				<div class="page-header">
-					<h4 class="page-title">{% trans "Tenders" %}</h4>
+					<a href="{% url 'tender_list' %}"><h4 class="page-title">{% trans "Tenders" %}</h4></a>
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="{% url 'index' %}">{% trans "Home" %}</a></li> 
 					</ol>
@@ -65,24 +64,41 @@
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
 											</ul>
 											<div class="d-sm-flex">
-												<label class="mr-2 mt-2 mb-sm-1 sort-label">{% trans "Sort By" %}:</label>
+												<label class="mr-2 mt-2 mb-sm-1 sort-label">{% trans "Filter " %}:</label>
 												<div class="selectgroup">
+													<form action="{% url 'tender_list' %}" method="GET">
+														<label class="selectgroup-item mb-md-0">
+															<input type="hidden">
+															<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "All" %}</button></span>
+														</label>
+														</form>
+													
+													<form action="{% url 'tender_list' %}" method="GET">
 													<label class="selectgroup-item mb-md-0">
-														<input type="radio" name="value" value="All" class="selectgroup-input" checked="">
-														<span class="selectgroup-button d-md-flex">{% trans "Recent" %} <i class="fa fa-sort ml-2 mt-1"></i></span>
+														<input type="hidden" name="by_document_type" value="Free">
+														<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "Free Only" %}</button></span>
 													</label>
+													</form>
+
+													<form action="{% url 'tender_list' %}" method="GET">
 													<label class="selectgroup-item mb-md-0">
-														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">{% trans "Manufacturer" %}</span>
+														<input type="hidden" name="by_document_type" value="Paid">
+														<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "Paid Only" %}</button></span>
 													</label>
+													</form>
+
+													<form action="{% url 'tender_list' %}" method="GET">
 													<label class="selectgroup-item mb-md-0">
-														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">{% trans "Free Only" %}</span>
+														{% if tenders.0.status != 'Closed' %}
+														<input type="hidden" name="by_status" value="Closed">
+														<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "Closed Only" %}</button></span>
+														{% else %}
+														<input type="hidden" name="by_status" value="Open">
+														<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "Open Only" %}</button></span>
+														{% endif %}
 													</label>
-													<label class="selectgroup-item mb-md-0">
-														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">{% trans "Open Only" %}</span>
-													</label>
+													</form>
+													
 													
 												</div>
 											</div>
@@ -96,7 +112,7 @@
 													<div class="item-card9-img">
 														<div class="item-card9-imgs">
 															<a href="/collaborations/customer_tender_detail/{{tender.id}}/"></a>
-															{% if tender.get_company.get_image %}
+															{% if tender.company.get_image %}
 															<img src="{{tender.get_company.get_image}}"  alt="img" class="cover-image">
 															{% else %}
 															
@@ -115,8 +131,8 @@
 																
 																{% if tender.status == 'Open' %}
 																<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >{% trans "Open" %}</div>
-																{%elif tender.status == 'Pending' %}
-																<div style="background-color: yellow; color:white; width: fit-content; padding: 5px;" >{% trans "Pending" %}</div>
+																{%elif tender.status == 'Upcoming' %}
+																<div style="background-color: yellow; color:black; width: fit-content; padding: 5px;" >{% trans "Upcoming" %}</div>
 																{%elif tender.status == 'Closed' %}
 																<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >{% trans "Closed" %}</div>
 																{%else%} 
@@ -131,16 +147,15 @@
 																<div class="item-card9-cost">
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
 																		<b>{% trans "By" %}: &nbsp</b>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.get_company.company_name}}">
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.company.company_name}}">
 																			<img src="{{tender.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
 																		</a>
-
 																		
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.get_company.phone_number}}"><i class="fa fa-phone"></i></a>
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.company.phone_number}}"><i class="fa fa-phone"></i></a>
 
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.get_company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
 
-																		<a class="mr-2" href="/chat/with/{{tender.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+																		<a class="mr-2" href="/chat/with/{{tender.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 										
 																		<a class="" href="/collaborations/customer_tender_detail/{{tender.id}}/" ><b class="btn btn-secondary btn-sm mt-1">Tender Detail</b></a>
 
@@ -151,7 +166,7 @@
 																</div>
 																<div class="ml-auto mt-3 mt-sm-0">
 																	
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{tender.timestamp}}</small></div> 
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "Posted" %}:</b> {{tender.created_date}}</small></div> 
 																		
 																</div>
 															</div>
@@ -188,7 +203,7 @@
 
 					<!--Right Side Content-->
 					<div class="col-xl-3 col-lg-3 col-md-12">
-						<div class="card">
+						<!-- <div class="card">
 							<div class="card-body">
 								<div class="input-group">
 									<input type="text" class="form-control br-tl-3 br-bl-3" placeholder="Search">
@@ -199,38 +214,34 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
 						<div class="card mb-0">
 							
-							<div class="card-header border-top">
-								<h3 class="card-title">{% trans "Posted By" %}</h3>
-							</div>
-							<div class="card-body">
-								<div class="filter-product-checkboxs">
-									<label class="custom-control custom-checkbox mb-2">
-										<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
-										<span class="custom-control-label">
-											Supplier
-										</span>
-									</label>
-									<label class="custom-control custom-checkbox mb-2">
-										<input type="checkbox" class="custom-control-input" name="checkbox2" value="option2">
-										<span class="custom-control-label">
-											Manufacturer
-										</span>
-									</label>
-									<label class="custom-control custom-checkbox mb-0">
-										<input type="checkbox" class="custom-control-input" name="checkbox2" value="option2">
-										<span class="custom-control-label">
-											Reseller
-										</span>
-									</label>
+							<form action="{% url 'tender_list' %}" method = "GET">
+								<div class="card-header border-top">
+									<h3 class="card-title">{% trans "Filter by company " %}</h3>
+								</div>
+								<div class="card-body">
+									<div class="filter-product-checkboxs">
+										{% for comp in companies %}
+										<label class="custom-control custom-checkbox mb-2">
+											<input type="checkbox" class="custom-control-input" name="by_company" value="{{comp.company_name}}">
+											<span class="custom-control-label">
+												{% print_translated comp.company_name comp.company_name_am LANGUAGE_CODE %}
+											</span>
+										</label>
+										{% endfor %}
+	
+									</div>
+								</div>
+								<div class="card-footer">
+									<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</button>
 								</div>
 							</div>
-							<div class="card-footer">
-								<a href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>
-							</div>
+							</form>
 						</div>
+						<br>
+					
 					</div>
 					<!--/Right Side Content-->
 				</div>
