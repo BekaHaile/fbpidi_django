@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import Permission, Group
+from django.urls import reverse
+
 
 from django.conf import settings
 import datetime
@@ -44,6 +46,8 @@ class PollsQuestion(models.Model):
 
     class Meta:
         ordering = ['-created_date',] 
+    
+
 
 
 class Choices (models.Model):

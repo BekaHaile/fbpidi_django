@@ -24,6 +24,7 @@ from accounts.models import User, CompanyAdmin, Company
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
+from django.core.paginator import Paginator
 from django.http import FileResponse, HttpResponse, HttpResponseRedirect
 from accounts.email_messages import sendEventNotification, sendEventClosedNotification, sendTenderEmailNotification
 from wsgiref.util import FileWrapper
@@ -158,6 +159,14 @@ def filter_by(field_name, field_values, query):
         return {'query':result,'message':f"{result.count()} result found!",'searched_category':'All','message_am':f"{result.count()} ተገኝቷል! " ,'searched_name': field_name }
     return {'query':result, 'message':f"No results Found!", 'message_am':f"ካስገቡት ቃል  ጋር የሚግናኝ አልተገኘም፡፡ !" ,'searched_category':'All', 'searched_name': field_name }
 
+# returns paginated data from a query set
+def get_paginated_data(request, query):
+    page_number = request.GET.get('page', 1)
+    try:
+        return Paginator(query, 1).page(page_number)
+    except EmptyPage:
+        return Paginator(query, 1).page(1)
+
 
 class CustomerPollList(View):
     def get(self, *args, **kwargs):
@@ -180,7 +189,8 @@ class CustomerPollList(View):
         if result['query']==0:
             result['query'] = PollsQuestion.objects.all()
             result['message'] = 'No Result Found!'
-        return render(self.request, "frontpages/poll/polls-list.html", { 'polls':result['query'], 'message' : result['message'], 'companies':companies})
+        data = get_paginated_data(self.request, result['query'])
+        return render(self.request, "frontpages/poll/polls-list.html", { 'polls':data, 'message' : result['message'], 'companies':companies})
 
 
 #only visible to logged in and never voted before
@@ -417,7 +427,6 @@ class EditTender(LoginRequiredMixin,View):
             messages.warning(self.request, "Error! Tender was not Edited!" )
             return redirect("admin:tenders")
 
-
 ######## Tender for customers
 class CustomerTenderList(View):
     def get(self, *args, **kwargs): 
@@ -439,8 +448,10 @@ class CustomerTenderList(View):
             for comp in Company.objects.all():
                 if comp.tender_set.count() > 0:
                     companies.append(comp)
-               
-            return render(self.request, "frontpages/tender/customer_tender_list.html", {'tenders':result['query'], 'companies': companies, 'message':result['message']})
+ 
+            data = get_paginated_data(self.request, result['query'])
+
+            return render(self.request, "frontpages/tender/customer_tender_list.html", {'tenders':data, 'companies': companies, 'message':result['message']})
         
         except Exception as e:
                 print( "Error while getting tenders",e)
@@ -581,7 +592,8 @@ class CustomerNewsList(View):
 
         if result['query']==0:
             result['query'] = News.objects.all()
-        return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':result['query'], 'message':result['message'],  'NEWS_CATAGORY':News.NEWS_CATAGORY})
+        data = get_paginated_data(self.request, result['query'])
+        return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':data, 'message':result['message'],  'NEWS_CATAGORY':News.NEWS_CATAGORY})
        
 
 class CustomerNewsDetail(View):
@@ -639,6 +651,7 @@ class CustomerEventList(View):
                 result = SearchByTitle_All('Event', self.request)
             if result['query'].count() == 0:
                 result['query'] = CompanyEvent.objects.all()
+            data = get_paginated_data(self.request, result['query'])
             #12345 make it background
             check_event_enddate(self.request, CompanyEvent.objects.filter( status = 'Upcoming') )
             event_participants = EventParticipants.objects.filter(notified = False, event__status = "Upcoming")
@@ -647,7 +660,8 @@ class CustomerEventList(View):
             for comp in Company.objects.all():
                 if comp.companyevent_set.count() > 0:
                     eventcompanies.append(comp)
-            return render(self.request, "frontpages/news/customer_event_list.html", {'events':result['query'], 'message':result['message'], 'event_companies':eventcompanies})
+            
+            return render(self.request, "frontpages/news/customer_event_list.html", {'events':data, 'message':result['message'], 'event_companies':eventcompanies})
         
         
 class CustomerEventDetail(View):

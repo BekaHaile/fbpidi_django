@@ -92,10 +92,6 @@
 						</div>
 					</div>
 
-					<img width="0px" height="0px" src="" id="blogImageEdit" name="blogImageEdit" class="form-input-styled" >
-
-						 
-
 					<input type="hidden" name="x" id="x" value="">
 					<input type="hidden" name="y" id="y" value="" >
 					<input type="hidden" name="width" id="width" value="">
@@ -123,19 +119,15 @@
 	          </button>
 	        </div>
 	        <div class="modal-body">
-	          <img src="" id="image" style="max-width: 100%;">
+	          <img src="" id="modal_image_field" style="max-width: 100%;">
 	        </div>
 	        <div class="modal-footer">
-	          <button type="button" class="btn btn-default" data-dismiss="modal">Nevermind</button>
-	          <button type="button" id="js-crop-and-upload" class="btn btn-primary js-crop-and-upload">Done Croppping</button>
+	          <button type="button" id= "cancel-btn" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	          <button type="button" id="js-crop-and-upload-button" class="btn btn-primary js-crop-and-upload">Done Croppping</button>
 	        </div>
 	      </div>
 	    </div>
   	</div>
-			
-
-
-	  
 
 <!-- /content area -->
 <script>
@@ -143,45 +135,58 @@
 		$('#summernote').summernote();
 		$('.summernote').summernote();
 	});
-
-	var cropper;
-	var imageFile;
-	var baseb4ImageString;
 	var cropX;
 	var cropY;
 	var cropWidth;
 	var cropHeight;
+	var modal_image  = document.getElementById("modal_image_field");
 
-	var imageField = document.getElementById('blogImageEdit')
-	var modalCropEdit = document.getElementById('image')
-	var force = document.getElementById('force')
+	// function close_modal(){
+	// 	$("#modalCrop").modal("hide");
+	// 	console.log("before closing the modal "+ modal_image.attributes['src'].value)
+	// 	$("#modal_image_field").attr("src", "");
+	// 			var modal_image = document.getElementById("modal_image_field")
+	// 			console.log("from closing the modal "+ modal_image.attributes['src'].value)
+	// 	}
+
+
+	
 	$("#blogImage").change(function () {
 	
 		if (this.files && this.files[0]) {
 			var reader = new FileReader();
+			reader.readAsDataURL(this.files[0])
+			
 			reader.onload = function (e) {
-			$("#image").attr("src", e.target.result);
-            $("#modalCrop").modal("show");
-				}
-				reader.readAsDataURL(this.files[0])
+							var c = document.getElementById('blogImage')
+							console.log("the e targe file is ", e.target.result);
+							modal_image.attributes['src'].value = ""	
+							
+							//console.log("the value of c src is "+ c.attributes['src'].value)
+							//  $("#modal_image_field").attr("src", e.target.result);
+							$("#modalCrop").modal("show");
+							e.target.result = "";	
+						}
+
+			console.log("all files ", this.files)
+			console.log("Files of 0 ", this.files[0])
 
 			}
 		})
 
 	$("#modalCrop").on("shown.bs.modal", function () {
-		modalCropEdit = document.getElementById('image')
+		modalCropEdit = document.getElementById('modal_image_field')
 		cropper = new Cropper(modalCropEdit,{
 					viewMode: 1,
-			          aspectRatio: 3/1,
-			          minCropBoxWidth: 300,
-			          minCropBoxHeight: 100,
+					aspectRatio: 3/1,
+					minCropBoxWidth: 300,
+					minCropBoxHeight: 100,
 
 					crop(event){
-						console.log("log3")
-						console.log(event.detail.x)
-						// console.log(image)
+						
+						console.log("inside crop, the event is "+event)
 						setImageCropProperties(
-							image,
+							modal_image_field,
 							event.detail.x,
 							event.detail.y,
 							event.detail.width,
@@ -189,48 +194,33 @@
 					}
 				})
 	})
+	var cancel = document.getElementById("cancel-btn")
+	cancel.addEventListener("click", function(e){
+		$("#modalCrop").modal("hide");
+	})
+	var confirm = document.getElementById("js-crop-and-upload-button")
+	confirm.addEventListener("click",function(event){
 
-	
+		cropImage(cropX,cropY,cropWidth,cropHeight);
+		console.log("finished cropping");
+		$("#modalCrop").modal("hide");
+
+	})
+
 	function setImageCropProperties(image,x,y,width,height){
-		imageFile = image;
-		// console.log(imageFile)
+		console.log("Set image cropper called!")
 		cropX = x;
 		cropY = y;
 		cropWidth = width;
 		cropHeight = height;  
 	}
+	
 	function cropImage(x,y,width,height){
-		var x = document.getElementById("x")
-		x.value =  cropX
-
-		var y = document.getElementById("y")
-		y.value =  cropY
-
-		var width = document.getElementById("width")
-		width.value =  cropWidth
-
-		var height = document.getElementById("height")
-		height.value =  cropHeight
-
-		// console.log(requestData)
-		console.log(x)
-		// console.log(requestData)
-		console.log(y)
-		console.log(x.val)
-		// console.log(requestData)
-		console.log(width)
-		console.log(width.val)
-		// console.log(requestData)
-		console.log(height)
-		console.log(height.val)
+		document.getElementById("x").value = cropX;
+		document.getElementById("y").value = cropY;
+		document.getElementById("width").value = cropWidth;
+		document.getElementById("height").value = cropHeight;
 	}
-	var confirm = document.getElementById("js-crop-and-upload")
-	confirm.addEventListener("click",function(event){
-
-		cropImage(cropX,cropY,cropWidth,cropHeight)
-		$("#modalCrop").modal("hide");
-
-	})
-
+	
 </script>
 {%endblock%}

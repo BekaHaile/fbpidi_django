@@ -104,6 +104,7 @@
 											</div>
 										</div>
 									</div>
+									{{tenders}}
 									<div class="tab-content">
 										<div class="tab-pane active" id="tab-11">
 											{% for tender in tenders %}
@@ -183,19 +184,32 @@
 									
 									</div>
 								</div>
+								{% if tenders.has_other_pages %}
 								<div class="center-block text-center">
 									<ul class="pagination mb-5">
-										<li class="page-item page-prev disabled">
-											<a class="page-link" href="#" tabindex="-1">Prev</a>
-										</li>
-										<li class="page-item active"><a class="page-link" href="#">1</a></li>
-										<li class="page-item"><a class="page-link" href="#">2</a></li>
-										<li class="page-item"><a class="page-link" href="#">3</a></li>
-										<li class="page-item page-next">
-											<a class="page-link" href="#">Next</a>
-										</li>
+										{% if tenders.has_previous %}
+										<li class="page-item page-prev "><a class="page-link" href="?page={{tenders.previous_page_number}}" tabindex="-1">Prev</a></li>
+										{% else %}
+										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">Prev</a></li>
+										{% endif %}
+										
+										{% for i in tenders.paginator.page_range %}
+											{% if tenders.number == i %}
+													<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+											{% else %}
+													<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+											{% endif %}
+										{% endfor %}
+
+										{% if tenders.has_next %}
+										<li class="page-item page-next"><a class="page-link" href="?page={{tenders.next_page_number}}">Next</a></li>
+										{% else %}
+										<li class="page-item page-next disabled"><a class="page-link" href="#">Next</a></li>
+										{% endif %}
 									</ul>
 								</div>
+								{% endif %}
+
 							</div>
 						</div>
 						<!--/Add lists-->

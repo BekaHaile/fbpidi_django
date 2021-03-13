@@ -9,9 +9,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models import User						 
 from collaborations.models import Announcement,AnnouncementImages
 from collaborations.forms import AnnouncementForm
-from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname
+from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname, get_paginated_data
 from company.models import Company
 
+
+### customer side 
 class AnnouncementDetail(View):
 	def get(self,*args,**kwargs):
 		announcement = Announcement.objects.get(id=self.kwargs['id'])
@@ -27,12 +29,13 @@ class ListAnnouncement(View):
 			result = SearchByTitle_All('Announcement', self.request)
 		if result['query'].count() == 0:
 			result['query'] = Announcement.objects.all()
+		data = get_paginated_data(self.request, result['query'])
 		companies = []
 		for comp in Company.objects.all():
 			if comp.announcement_set.count() > 0:
 				companies.append(comp)
 		template_name="frontpages/announcement/customer_announcement.html"
-		return render(self.request, template_name, {'Announcements':result['query'], 'message':result['message'], 'companies': companies})
+		return render(self.request, template_name, {'Announcements':data, 'message':result['message'], 'companies': companies})
 	
 
 #### Announcement related with admin side
