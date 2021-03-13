@@ -123,17 +123,17 @@ class EventDetailApiView(APIView):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def EventNotifyApiView(request):
-            if request.data['email'] and request.data['notify_in'] and request.data['id'] :
+            if request.data['email'] and request.data['notify_on'] and request.data['id'] :
                 id = request.data['id']
-                notify_in = int(request.data['notify_in'])
+                notify_on = int(request.data['notify_on'])
                 event = CompanyEvent.objects.get(id = id)
                 participant = EventParticipants(user =request.user, event= event,
                                                 patricipant_email=request.data['email'])
                 #??? Real comparison
                 if event.start_date.month <= datetime.datetime.now().month:
-                    if notify_in <=  event.start_date.day - datetime.datetime.now().day: 
+                    if notify_on <=  event.start_date.day - datetime.datetime.now().day: 
                         participant.notified= False
-                        participant.notifiy_in = notify_in
+                        participant.notifiy_in = notify_on
                         try:
                             participant.save()   # if the email has been previously registered, it will through an unique exception
                         except Exception as e:

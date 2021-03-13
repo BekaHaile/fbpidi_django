@@ -106,13 +106,13 @@ class CompanyEventForm(forms.ModelForm):
         }
 
 class EventParticipantForm(forms.ModelForm):
-    notify_in = forms.IntegerField(required=False,)  
+    notify_on = forms.IntegerField(required=False,)  
     class Meta:
         model=EventParticipants
-        fields = ('patricipant_email', 'notify_in')
+        fields = ('patricipant_email', 'notify_on')
         widgets = {
             'patricipant_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address..'}),
-             'notify_in':forms.NumberInput(attrs={'class': 'form-control', 'max':'10', 'placeholder':"Notify me before -- days" })
+             'notify_on':forms.NumberInput(attrs={'class': 'form-control', 'max':'10', 'placeholder':"Notify me before -- days" })
         }
 
 class CompanyBankAccountForm(forms.ModelForm):

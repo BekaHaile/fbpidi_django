@@ -20,7 +20,6 @@ from admin_site.views.dropdowns import (AllSettingsPage,
                                         UpdateProjectDropdownsMaster)
 
 from collaborations.views import (CreateNews, EditNews, NewsDetail,AdminNewsList,
-
                         TenderList, CreateTender, TenderDetail, 
                         EditTender,  ManageBankAccount,
                         CreateDocument, DocumentListing, EditDocument
@@ -34,7 +33,7 @@ from collaborations.Views.vacancy import(CreateVacancy,AdminVacancyList,VacancyD
 from collaborations.Views.projects import(
 
                         ListProjectAdmin,CreateProjectAdmin,ProjectDetailAdmin,
-                        ListPendingProjectAdmin,ProjectDetailView,ProjectApprove,
+                        ProjectDetailView,
                         
 
                         )
@@ -90,11 +89,9 @@ class CustomAdminSite(admin.AdminSite):
             path('comment-replay-list',wrap(ListCommentReplayAdmin.as_view()),name="comment_replay_list"),
             path('comment-replay-detail/<model_name>/<id>',wrap(CommentReplayDetail.as_view()),name="comment_replay_detail"),
 
-            path('project-view/<id>',wrap(ProjectDetailView.as_view()),name='project_view'),
-            path('project-approve/<id>',wrap(ProjectApprove.as_view()),name="project_approve"),
-            path('pedning-project-list',wrap(ListPendingProjectAdmin.as_view()),name="pedning_project_list"),
-            path('project-list',wrap(ListProjectAdmin.as_view()),name="project_list"),
+            #admin project 
             path('project-form',wrap(CreateProjectAdmin.as_view()),name="project_form"),
+            path('project-list',wrap(ListProjectAdmin.as_view()),name="project_list"),
             path('project-detail/<model_name>/<id>',wrap(ProjectDetailAdmin.as_view()),name="project_detail"),
 
             path('research-view/<id>',wrap(ResearchDetailView.as_view()),name='research_view'),
@@ -104,13 +101,13 @@ class CustomAdminSite(admin.AdminSite):
             path('research-form',wrap(CreateResearchAdmin.as_view()),name="research_form"),
             path('research-detail/<model_name>/<id>',wrap(ResearchDetailAdmin.as_view()),name="research_detail"),
 
-            path('researchprojectcategorys-detail/<model_name>/<id>',wrap(ResearchProjectCategoryDetail.as_view()),name='researchprojectcategory_detail'),
-            path('researchprojectcategorys-form',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
-            path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
+            path('researchprojectcategorys-detail/<id>/',wrap(ResearchProjectCategoryDetail.as_view()),name='researchprojectcategory_detail'),
+            path('researchprojectcategorys-form/',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
+            path('researchprojectcategorys-list/',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
             
-            path('anounce-Detail/<model_name>/<id>',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
-            path('anounce-List',wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),
-            path('anounce-form',wrap(CreatAnnouncementAdmin.as_view()),name="anounce_Create"),
+            path('anounce-Detail/<id>/',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
+            path('anounce-List/',wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),
+            path('anounce-form/',wrap(CreatAnnouncementAdmin.as_view()),name="anounce_Create"),
             #path('JobCategory-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),
            
             path('', wrap(AdminIndex.as_view()),name="admin_home"),

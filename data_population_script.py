@@ -4,7 +4,7 @@ import django
 django.setup()
 from accounts.models import User
 
-from company.models import Bank, EventParticipants, CompanyEvent, Company
+from company.models import Bank,  CompanyEvent, Company
 from accounts.models import User
 from rest_framework.authtoken.models import Token
 from company.api.serializers import *
@@ -164,17 +164,9 @@ def with_out():
 
 
 if __name__ == '__main__':    
-    for p in PollsQuestion.objects.all():
-        print(p.id, " ", p.title, " ", p.count_votes(), "\n")
-    t = PollsQuestion.objects.annotate(num_vote=Count ('pollsresult')).order_by('-num_vote')
-    for p in t:
-        print(p.id, " ", p.title, " ", p.count_votes(), "\n")
-    
-
-    # p =EventParticipants.objects.filter(event__start_date. = today)
-    # for x in p:
-    #     print(x.patricipant_email, " ", x.event.title, " ", x.event.start_date, )
-
+    n = CompanyEvent.objects.first()
+    d = n.start_date - timedelta(days=1)
+    print(Company.objects.get(id =1))
     
     
     

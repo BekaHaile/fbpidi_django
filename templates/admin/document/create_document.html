@@ -57,7 +57,7 @@
 
                 </fieldset>
                 {% if perms.collaborations.change_document %}
-                    {% if user.is_superuser or user.get_company == document.user.get_company %}
+                    {% if user.is_superuser or user.get_company == document.company %}
                         <div class="text-right">
                             <button style="padding-left: 10%; padding-right: 10%;" type="submit"
                                 class="btn btn-primary rounded-round">Edit</button>

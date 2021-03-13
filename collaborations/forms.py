@@ -21,7 +21,7 @@ JOB_CHOICES=[('Temporary','Temporary'),
 CURRENT_STATUS = [('JUST GRADUATED','JUST GRADUATED'),('WORKING','WORKING'),
                 ('LOOKING FOR JOB','LOOKING FOR JOB')]
 
-RESEARCH_STATUS = [('Complited','Complited'),('Inprogress','Inprogress'),]
+RESEARCH_STATUS = [('Completed','Completed'),('Inprogress','Inprogress'),]
 
 class FaqsForm(forms.ModelForm):
     
@@ -295,12 +295,12 @@ class AnnouncementForm(forms.ModelForm):
 
     class Meta:
         model = Announcement
-        fields = ('title','title_am','containt','containt_am')
+        fields = ('title','title_am','description','description_am')
         widgets = {
         'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Announcement in English'}),
         'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Announcement in Amharic'}),
-        'containt':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in English'}),
-        'containt_am':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in Amharic'}),
+        'description':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in English'}),
+        'description_am':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in Amharic'}),
         }
         
 class ResearchProjectCategoryForm(forms.ModelForm):
@@ -319,16 +319,14 @@ class ProjectForm(forms.ModelForm):
     # description = forms.CharField(widget=SummernoteWidget())
     # detail = forms.CharField(widget=SummernoteWidget())
     status = forms.ChoiceField(choices = RESEARCH_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
-
+    category = forms.ModelChoiceField( ResearchProjectCategory.objects.all(), empty_label="Select Category",required=True, widget=forms.Select(attrs={'class':'form-control form-control-uniform'}))
     class Meta:
         model = Project
-        fields  = ('title','description','detail','status','category')
+        fields  = ('title','description','status','category')
         widgets = {
-
-        'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+        # 'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
         'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Project'}),
         'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
-        'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The whole Project'}),
         }
 
 class ResearchForm(forms.ModelForm):
