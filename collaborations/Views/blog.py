@@ -1,15 +1,14 @@
 
-from django.urls import reverse
+
 import datetime
 from django.views import View
 
 from django.http import HttpResponse, FileResponse
 from collaborations.models import Blog, BlogComment
-from collaborations.forms import FaqsForm
 from django.shortcuts import render, redirect, reverse
 
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
-from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategory, News, NewsImages
+from collaborations.models import  Blog, BlogComment, Blog, BlogComment, JobCategory, News, NewsImages
 									 #redirect with context
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View

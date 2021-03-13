@@ -43,6 +43,15 @@ from django.http import JsonResponse
 models = { 'Announcement':Announcement, 'Blog':Blog, 'BlogComment':BlogComment, 'Choice':Choices, 'Event':CompanyEvent, 'Tender':Tender, 'TenderApplicant':TenderApplicant, 
             'Forums':ForumQuestion, 'Forum Comments':ForumComments, 'Job Application':JobApplication, 'Job Category':JobCategory, 'Polls':PollsQuestion, 'News':News }
 
+def check_user_has_company(request):
+    try:
+        return request.user.get_company()
+    except Exception as e:
+        messages.warning(request, "Currently, You are not related with any registered Company.")
+        print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
+        return redirect(request, 'admin:create_company_profile', {})
+
+
 def related_company_title(model_name, obj):
     """
     given a modle name and an obj, searchs for other model objs with related company, if none found search for related objs with related title or description,
@@ -51,7 +60,6 @@ def related_company_title(model_name, obj):
     model = models[model_name]
     result = FilterByCompanyname( [obj.company], model.objects.exclude(id =obj.id)  )
     if result['query'].count() != 0:
-        print("############## query", result['query'])
         return {'query':result['query'], 'message':f"Other {model_name}s from {obj.company.company_name} "}
     else:
         result = search_title_related_objs(  obj, model.objects.exclude(id =obj.id)  )
@@ -60,7 +68,6 @@ def related_company_title(model_name, obj):
         else:
             return {'query':model.objects.exclude(id = obj.id)[:4], 'message': f'Other {model_name}s ' }
    
-
 
 def related_company_title_status(model_name, obj):
     """
@@ -105,7 +112,7 @@ def SearchByTitle_All(model_name, request ):
             return { 'query': query, 'message': f"{query.count()} result found!", 'message_am': f"{query.count()} ውጤት ተገኝቷል!" }
     except Exception as e:
         print("Exception at SearchBYTitle_All", str(e))
-
+        return {'query':[], 'message':'Exception occured!'}
 
 def FilterByCompanyname(company_list,  query_set):
     try:
@@ -171,7 +178,6 @@ class CustomerPollList(View):
             if comp.pollsquestion_set.count()>0:
                 companies.append(comp)
         if result['query']==0:
-            print("############inside")
             result['query'] = PollsQuestion.objects.all()
             result['message'] = 'No Result Found!'
         return render(self.request, "frontpages/poll/polls-list.html", { 'polls':result['query'], 'message' : result['message'], 'companies':companies})
@@ -222,19 +228,13 @@ def change_to_datetime(calender_date):
     str_date = datetime.datetime.strptime(calender_date, '%m/%d/%Y').strftime('%Y-%m-%d')
     return datetime.datetime.strptime(str_date,'%Y-%m-%d' )
 
-def check_user_has_company(request):
-    try:
-        return request.user.get_company()
-    except Exception as e:
-        messages.warning(request, "Currently, You are not related with any registered Company.")
-        print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
-        return render(request, 'admin/company/company_form_create.html',{})
 
 ########## tender related views
 class CreateTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:    
-            company = check_user_has_company(self.request)
+            check_user_has_company(self.request)
+            company = self.request.user.get_company()
             company_bank_accounts = company.get_bank_accounts()
             return render(self.request,'admin/collaborations/create_tender.html',{'form':TenderForm, 'company_bank_accounts':company_bank_accounts})
         except Exception as e: 
@@ -267,7 +267,6 @@ class CreateTender(LoginRequiredMixin,View):
                 messages.success(self.request,"Tender Successfully Created")
                 return redirect("admin:tenders")   
             else:
-                print(form.errors)
                 messages.warning(self.request, "Error! Tender was not Created!" )
                 return redirect("admin:tenders")   
         except Exception as e:
@@ -284,6 +283,7 @@ def check_tender_startdate(request, tenders):
                 tender.save()
             else:
                 print("########## could not send email to open tender ")                 
+
 
 def check_tender_enddate(request, tenders):
     today = timezone.now().date()
@@ -420,7 +420,8 @@ class EditTender(LoginRequiredMixin,View):
 
 ######## Tender for customers
 class CustomerTenderList(View):
-    def get(self, *args, **kwargs):   
+    def get(self, *args, **kwargs): 
+        try:
             result = {}       
             if 'by_status' in self.request.GET:
                 result = filter_by('status', self.request.GET.getlist('by_status'), Tender.objects.all())
@@ -441,48 +442,32 @@ class CustomerTenderList(View):
                
             return render(self.request, "frontpages/tender/customer_tender_list.html", {'tenders':result['query'], 'companies': companies, 'message':result['message']})
         
-        # except Exception as e:
-        #         print( "Error while getting tenders",e)
-        #         return redirect("index")     
+        except Exception as e:
+                print( "Error while getting tenders",e)
+                return redirect("index")     
 
 
 class CustomerTenderDetail(View):
     def get(self, *args, **kwargs):  
-        
-        if self.kwargs['id'] :
-            try:
-                tender = Tender.objects.get(id = self.kwargs['id']  )
-                applicant_form = TenderApplicantForm()
-                return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applicant_form':applicant_form})
-            except Exception as e:
-            	print("Exception at customerTenderDetail :", str(e))
-            	messages.warning(self.request, "tender not found")
-            	return redirect("tender_list")
-        else:
-        	messages.warning(self.request, "Nothing selected!")
-        	return redirect("tender_list")
+        try:
+            tender = Tender.objects.get(id = self.kwargs['id']  )
+            return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applicant_form':TenderApplicantForm})
+        except Exception as e:
+            print("Exception at customerTenderDetail :", str(e))
+            messages.warning(self.request, "tender not found")
+            return redirect("tender_list")
 
 
 class ApplyForTender(View):
 	def post(self, *args, **kwargs):
-		tender= Tender.objects.get(id = self.kwargs['id'])
-		if tender:
-			applicant = TenderApplicant(
-                first_name = self.request.POST['first_name'], 
-                last_name = self.request.POST['last_name'],
-                email = self.request.POST['email'],
-                phone_number = self.request.POST['phone_number'],
-                company_name = self.request.POST['company_name'],
-                company_tin_number=self.request.POST['company_tin_number'],
-                tender = tender
-            )
-			applicant.save()
-			messages.success(self.request, "Application Successfully Completed")
-			return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applied':True})
-		else:
-			print("Error Occured!")
-			messages.warning(self.request,"Error while Applying!")
-			return redirect("/collaborations/tender_list/")
+            tender= Tender.objects.get(id = self.kwargs['id']) 
+            applicant = TenderApplicant(first_name = self.request.POST['first_name'], last_name = self.request.POST['last_name'],email = self.request.POST['email'],phone_number = self.request.POST['phone_number'],company_name = self.request.POST['company_name'],company_tin_number=self.request.POST['company_tin_number'],tender = tender)
+            applicant.save()
+            messages.success(self.request, "Application Successfully Completed")
+            return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applied':True})
+        # except Exception as e:
+        #     print("Exception at Apply for tender ",e)
+        #     return redirect("/collaborations/tender_list/")
 
 
 ############ News
@@ -510,7 +495,7 @@ class CreateNews(LoginRequiredMixin, View):
 class EditNews(LoginRequiredMixin, View):
     def get(self,*args,**kwargs):
         try:   
-            if self.kwargs['id']:
+            if 'id' in self.kwargs:
                 news = News.objects.get(id =  self.kwargs['id'])
                 return render(self.request,'admin/collaborations/create_news.html',{'news':news, 'edit':True})
         except Exception as e: 
@@ -530,8 +515,7 @@ class EditNews(LoginRequiredMixin, View):
                 news.last_updated_by = self.request.user
                 news.last_updated_date = timezone.now()    
                 news.save()
-
-                if self.request.FILES:
+                if 'images' in self.request.FILES:
                     for image in self.request.FILES.getlist('images'):
                         imag = NewsImages(created_by=self.request.user, created_date=timezone.now(), news=news, name = image.name, image = image)
                         imag.save()
@@ -541,11 +525,18 @@ class EditNews(LoginRequiredMixin, View):
                 messages.warning(self.request, "Error! News not Edited!")
 
 
-class AdminNewsList(LoginRequiredMixin, View):
-    def get(self, *args, **kwargs):
-        return render(self.request, "admin/collaborations/admin_news_list.html", {'newslist':News.objects.all()})
+class AdminNewsList(LoginRequiredMixin, ListView):
+    model = News
+    template_name = "admin/collaborations/admin_news_list.html"
+    context_object_name = 'newslist'
+    def get_queryset (self):
+        if self.request.user.is_superuser:
+            return News.objects.all()
+        else: 
+            return News.objects.filter(company=self.request.user.get_company())
 
-class NewsDetail(LoginRequiredMixin,View):
+
+class NewsDetail(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):         
         if self.kwargs['id']:
             try:
@@ -601,34 +592,40 @@ class CustomerNewsDetail(View):
                 if comp.news_set.count() > 0:
                     companies.append(comp)
             news = get_object_or_404(News, id = self.kwargs['id'])
-         
         except Exception as e:
             print("Exception at customerNews Detail ", e)
             return redirect('customer_news_list')
-            
         related_news = related_company_title('News', news)
         return render(self.request, "frontpages/news/customer_news_detail.html", {'news':news,'related_news':related_news['query'], 'related_message':related_news['message'], 'companies':companies, "NEWS_CATEGORY": News.NEWS_CATAGORY})
     
 
 ##### Customer Events
 def check_event_participation(request, event_participants):
-    today = timezone.now().date()
-    for participant in event_participants:  
-        print(participant.patricipant_email, " ", participant.event.title," ", participant.event.start_date)
-        if participant.event.start_date.date() == today:
-            print("Event found!")
-    
+        today = timezone.now().date()
+        for participant in event_participants:
+            print("participant notify on date is ", participant.notify_on)
+            if participant.notify_on.date() <= today: #lesser than is used, because if we check event participation notification once a day and 
+                                                      # if the system could not send on the notify date, then it will send even if the notify me date has passed, but the event is in upcoming status
+                print("date has matched!")
+                if sendEventNotification(request, participant):
+                    participant.notified = True
+                    participant.save()
+                else:
+                    print("Couldn't send event notification ")
+
 
 def check_event_enddate(request, open_events):
-    today = timezone.now().date() 
-    print("something", open_events)
+    today = timezone.now().date()
+    print("inside endedata")
     for event in open_events: 
-        print("event closed found ", event.title, " ", event.end_date, " ", event.end_date.date())
-        if event.end_date.date() == today:
-            
-            sendEventClosedNotification(request, event)
-            event.status = "Closed"
-            event.save()        
+        print("enent end date ", event.end_date.date()," ",today)
+        if today >= event.end_date.date():
+            print("event closed found ", event.title, " ", event.end_date, " ", event.end_date.date())
+            if sendEventClosedNotification(request, event):
+                event.status = "Closed"
+                event.save()        
+            else:
+                print("Couldn't send Email to close event")
 
 
 class CustomerEventList(View):
@@ -644,8 +641,8 @@ class CustomerEventList(View):
                 result['query'] = CompanyEvent.objects.all()
             #12345 make it background
             check_event_enddate(self.request, CompanyEvent.objects.filter( status = 'Upcoming') )
-            # event_participants = EventParticipants.objects.filter(notified = False, event__status = "Upcoming")
-            # check_event_participation(self.request, event_participants)
+            event_participants = EventParticipants.objects.filter(notified = False, event__status = "Upcoming")
+            check_event_participation(self.request, event_participants)
             eventcompanies = []
             for comp in Company.objects.all():
                 if comp.companyevent_set.count() > 0:
@@ -671,38 +668,19 @@ class CustomerEventDetail(View):
 #12345  use ajax for event participation.
 class EventParticipation(LoginRequiredMixin, View):
     def post(self, *args, **kwargs):   
-        
-        if 'patricipant_email' in self.request.POST and 'notify_on' in self.request.POST:
-                notify_on = self.request.POST['notify_on']
+        if 'patricipant_email' in self.request.POST:
                 try:
                     event = get_object_or_404( CompanyEvent, id = self.kwargs['id'])
-                    print("$$$$$$$$$$$$$$$$ notify on",notify_on)
-                    return redirect(f'collaborations/customer_event_detail/{event.id}/')
-                
-                except Http404:
+                    participant = EventParticipants(user =self.request.user, event= event, patricipant_email=self.request.POST['patricipant_email'])
+                    if self.request.POST[ "notify_on"] == '':
+                        participant.notify_on = participant.event.start_date - timezone.timedelta(days=1)
+                    participant.save()
+                    return redirect(f'/collaborations/customer_event_detail/{event.id}/')
+                except Exception as e:
+                    print("Exception occured while trying to paricipate in event", e)
                     return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
-                # participant = EventParticipants(user =request.user, event= event,
-                #                                 patricipant_email=request.POST['patricipant_email'])
-                # #12345 Real date comparison
-                # if event.start_date.month <= datetime.datetime.now().month:
-                #     if notify_in <=  event.start_date.day - datetime.datetime.now().day: 
-                #         participant.notified= False
-                #         participant.notifiy_in = notify_in
-                #         try:
-                #             participant.save()   # if the email has been previously registered, it will through an unique exception
-                #         except Exception as e:
-                #             return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
-                #         return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
-                            
-                #     else:
-                #         print('Invalid Date to notify')
-                #         return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
-                        
-                # else:
-                #     print('Invalid month to notify')
-                #     return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
         else:
-            print('Email and notifi me in are required!')
+            print('Email and notifiy me on are required!')
             return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
 
 
@@ -716,7 +694,7 @@ class CreateDocument(LoginRequiredMixin, View):
         form = DocumentForm(self.request.POST)
         if form.is_valid():
             document = form.save(commit=False)
-            document.user = self.request.user
+            document.created_by = self.request.user
             document.document =  self.request.FILES['document']
             document.save()
             messages.success(self.request,'Successfully created the document!')
@@ -730,12 +708,11 @@ class EditDocument(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
             doc = get_object_or_404(Document, id = self.kwargs['id'])
+            return render(self.request, "admin/document/create_document.html", {'edit':True, 'document':doc, 'form':DocumentForm, })
         except Http404:
             messages.warning(self.request, "Document not Found!")
             return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})
-        # return redirect("/admin/list_document_by_category/all/")
-        return render(self.request, "admin/document/create_document.html", {'edit':True, 'document':doc, 'form':DocumentForm, })
-    
+        
     def post(self, args, **kwargs):
         try:
             document = get_object_or_404(Document, id = self.kwargs['id'])
@@ -746,6 +723,8 @@ class EditDocument(LoginRequiredMixin, View):
         document.category = self.request.POST['category']
         if self.request.FILES:
             document.document =  self.request.FILES['document']
+        document.last_updated_by = self.request.user
+        document.last_updated_date = timezone.now()
         document.save()
         messages.success(self.request,'Successfully Edited the document!')
         return render(self.request, f"admin/document/list_document_by_category.html", {'documents':Document.objects.filter(category = document.category), 'categories': Document.DOC_CATEGORY})
@@ -753,8 +732,9 @@ class EditDocument(LoginRequiredMixin, View):
        
 class DocumentListing(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
+        documents = []
         if self.kwargs['option'] != 'all':
-            documents =  Document.objects.filter( category = self.kwargs['option'])
+            documents =  Document.objects.filter( category = self.kwargs['option'] , company=self.request.user.get_company())
             if documents.count() != 0:
                 return render(self.request, "admin/document/list_document_by_category.html", {'documents':documents, 'categories':Document.DOC_CATEGORY})
             else:

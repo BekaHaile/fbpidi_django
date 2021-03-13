@@ -1,144 +1,125 @@
-
-from django.urls import reverse
-import datetime
-from django.views import View
-
-from django.http import HttpResponse, FileResponse
-from collaborations.models import Blog, BlogComment
-from collaborations.forms import FaqsForm
-from django.shortcuts import render, redirect, reverse
-
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
-from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategory, News, NewsImages
-									 #redirect with context
-from django.http import HttpResponse, HttpResponseRedirect
-from django.views import View
-from django.contrib import messages
-
-from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
-from accounts.models import User, CompanyAdmin, Company
 import os
+import datetime
+from django.utils import timezone
+from django.views import View 
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.views.generic import CreateView, UpdateView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
-
-from django.http import FileResponse, HttpResponse
-
-from accounts.models import User
-from accounts.email_messages import sendEventNotification
-
-from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
-from django.http import HttpResponse, FileResponse
-						 
-from wsgiref.util import FileWrapper
-
-
-
-from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
-
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
-from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
-								 VacancyForm,JobCategoryForm,
-								 ForumQuestionForm,CommentForm,CommentReplayForm,
-								 AnnouncementForm,ResearchForm,
-								 ResearchProjectCategoryForm
-								 )
-
-from collaborations.models import ( Blog, BlogComment,Faqs,
-									Vacancy,JobApplication, JobCategory,
-									ForumQuestion, ForumComments, CommentReplay,
-									Announcement,AnnouncementImages,
-									Research,
-									ResearchProjectCategory
-									
-									)
-
-from collaborations.forms import (AnnouncementForm,)
-
-from collaborations.models import ( Announcement, )
+from accounts.models import User						 
+from collaborations.models import Announcement,AnnouncementImages
+from collaborations.forms import AnnouncementForm
+from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname
+from company.models import Company
 
 class AnnouncementDetail(View):
 	def get(self,*args,**kwargs):
 		announcement = Announcement.objects.get(id=self.kwargs['id'])
-		template_name="frontpages/announcement/announcement_detail.html"
-		context={'post':announcement}
-		return render(self.request, template_name,context)
-
+		template_name="frontpages/announcement/customer_announcement_detail.html"
+		return render(self.request, template_name,{'post':announcement})
+	
 class ListAnnouncement(View):
 	def get(self,*args,**kwargs):
-		announcement = Announcement.objects.all()
-		template_name="frontpages/announcement/announcement_list.html"
-		context={'Announcements':announcement}
-		return render(self.request, template_name,context)
+		result = {}
+		if 'by_company' in self.request.GET:
+			result = FilterByCompanyname(self.request.GET.getlist('by_company'), Announcement.objects.all())
+		else:
+			result = SearchByTitle_All('Announcement', self.request)
+		if result['query'].count() == 0:
+			result['query'] = Announcement.objects.all()
+		companies = []
+		for comp in Company.objects.all():
+			if comp.announcement_set.count() > 0:
+				companies.append(comp)
+		template_name="frontpages/announcement/customer_announcement.html"
+		return render(self.request, template_name, {'Announcements':result['query'], 'message':result['message'], 'companies': companies})
+	
 
-class ListAnnouncementAdmin(LoginRequiredMixin,View):
+#### Announcement related with admin side
+class CreatAnnouncementAdmin(LoginRequiredMixin,View): 
 	def get(self,*args,**kwargs):
-		announcement = Announcement.objects.all()
-		template_name="admin/announcement/announcement_list.html"
-		context={'Announcements':announcement}
-		return render(self.request, template_name,context)
+		template_name="admin/announcement/announcement_form.html"
+		return render(self.request, template_name,{'form': AnnouncementForm})
+	def post(self,*args,**kwargs):
+		form = AnnouncementForm(self.request.POST,self.request.FILES) 
+		try:
+			if form.is_valid():
+				announcement = form.save(commit=False)
+				announcement.created_by = self.request.user  
+				announcement.save()
+				for image in self.request.FILES.getlist('images'):
+					announcementimage= AnnouncementImages( announcement=announcement, image = image )
+					announcementimage.save()
+				messages.success(self.request, "Added New Announcement Successfully")
+				return redirect("admin:anounce_list")
+			messages.warning(self.request, "Couldn't create announcement! Form contains invalid inputs!")
+			return redirect("admin:anounce_list")
+		except Exception as e:
+			print("Exception at create announcement ",e)
+			return redirect("admin:anounce_list")
+
+
+class ListAnnouncementAdmin(LoginRequiredMixin, ListView):
+	model = Announcement
+	template_name = "admin/announcement/announcement_list.html"
+	context_object_name = "Announcements"
+	def get_queryset(self):
+		try:
+			if self.request.user.is_superuser:
+				return Announcement.objects.all()
+			else:
+				return Announcement.objects.filter(company=self.request.user.get_company())
+		except Exception as e:
+			print("Exception at List announcement admin ", e)
+			return Announcement.objects.all()
+
+	# def get(self,*args,**kwargs):
+	# 	announcements = []
+	# 	try:
+	# 		if self.request.user.is_superuser:
+	# 			announcements = Announcement.objects.all()
+	# 		else:
+	# 			announcements = Announcement.objects.filter(company=self.request.user.get_company())
+	# 		return render(self.request, "admin/announcement/announcement_list.html", {'Announcements':announcements})
+	# 	except Exception as e:
+	# 		print("Exception at List announcement admin ", e)
+	# 		return redirect("admin:anounce_list")
+		
 
 class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
-		announcement = Announcement.objects.get(id=self.kwargs['id'])
-		template_name="admin/announcement/announcement_detail.html"
-		context={'announcement':announcement}
-		return render(self.request, template_name,context)
-	def post(self,*agrs,**kwargs):
-		announcement = AnnouncementForm(self.request.POST)
-		announcementpost = Announcement.objects.get(id=self.kwargs['id'])
-		context={'announcement':announcement}
-		template_name="admin/announcement/announcement_detail.html"
-		if announcement.is_valid():
-			announcementpost.title = announcement.cleaned_data.get('title')
-			announcementpost.title_am = announcement.cleaned_data.get('title_am')
-			announcementpost.containt = announcement.cleaned_data.get('containt')
-			announcementpost.containt_am = announcement.cleaned_data.get('containt_am')
-			announcementpost.save()
-			for images in self.request.FILES.getlist('images'):
-				print("image name:"+str(images.name))
-				announcementimages= AnnouncementImagesanouncement()
-				announcementimages.announcement = post
-				announcementimages.image = images
-				announcementimages.save()
-
-			messages.success(self.request, "Edited Announcement Successfully")
+		try:
+			announcement = Announcement.objects.get(id=self.kwargs['id'])
+			template_name="admin/announcement/announcement_detail.html"
+			return render(self.request, template_name, {'announcement':announcement})
+		except Exception as e:
+			print("Exception at Announcement Detail ",e)
 			return redirect("admin:anounce_list")
-		return render(self.request, template_name,context)
+
+	def post(self,*agrs,**kwargs):
+		try:
+			announcement = AnnouncementForm(self.request.POST)
+			announcementpost = Announcement.objects.get(id=self.kwargs['id'])
+			if announcement.is_valid():
+				announcementpost.title = announcement.cleaned_data.get('title')
+				announcementpost.title_am = announcement.cleaned_data.get('title_am')
+				announcementpost.description = announcement.cleaned_data.get('description')
+				announcementpost.description_am = announcement.cleaned_data.get('description_am')
+				announcementpost.last_updated_by = self.request.user
+				announcementpost.last_updated_date = timezone.now()
+				announcementpost.save()
+				if 'images' in self.request.FILES:
+					for image in self.request.FILES.getlist('images'):
+						announcementimage= AnnouncementImages( announcement=announcementpost, image= image)
+						announcementimage.save()
+				messages.success(self.request, "Edited Announcement Successfully")
+				return redirect(f"/admin/anounce-Detail/{announcementpost.id}/")
+			messages.warning(self.request, "Could not edit announcement, invalid form!")
+			return redirect('admin:anounce_list')
+		except Exception as e:
+			print("Exception at announcement detail post ",e)
+			messages.warning(self.request, "Couldn't Edit announcement!")
+			return redirect('admin:anounce_list')
 
 
 
-class CreatAnnouncementAdmin(LoginRequiredMixin,View): 
-	def company_admin(self,*args,**kwarges):
-		force = Company.objects.get(user=self.request.user)
-		return force
-	
-	def get(self,*args,**kwargs):
-		announcement = AnnouncementForm()
-		template_name="admin/announcement/announcement_form.html"
-		context={'form':announcement}
-		return render(self.request, template_name,context)
-	def post(self,*args,**kwargs):
-		announcement = AnnouncementForm(self.request.POST,self.request.FILES)
-		context={'announcement':announcement}
-		template_name="admin/announcement/announcement_form.html"
-		print("----------")
-		if announcement.is_valid():
-			post = Announcement()
-			post = announcement.save(commit=False)
-			post.user = self.request.user  
-			post.company = self.company_admin()         
-			post.save()
-			for images in self.request.FILES.getlist('images'):
-				print("image name:"+str(images.name))
-				announcementimages= AnnouncementImages()
-				announcementimages.announcement = post
-				announcementimages.image = images
-				announcementimages.save()
-
-
-			announcementimages.image
-			messages.success(self.request, "Added New Announcement Successfully")
-			return redirect("admin:anounce_Create")
-		return render(self.request, template_name,context)

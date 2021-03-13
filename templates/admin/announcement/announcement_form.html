@@ -9,12 +9,8 @@
 
 <!-- Content area -->
 <div class="content">
-
-	
 	<div class="card">
- 
 		<div class="card-body">
-
 			<form action="" method="POST" enctype="multipart/form-data">
 				<fieldset class="mb-3 ml-3 mr-3">
 					<legend class="text-uppercase font-size-sm font-weight-bold">Create Announcement</legend>
@@ -38,17 +34,17 @@
 						</div>
 					</div> 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Announcement Content (English) *</label>
+						<label class="col-form-label col-lg-3">Announcement description (English) *</label>
 						<div class="col-lg-9">
-							{{form.containt|safe}}
+							{{form.description|safe}}
 						</div>
 						
 					</div>
 
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Announcement Content (Amharic) *</label>
+						<label class="col-form-label col-lg-3">Announcement description (Amharic) *</label>
 						<div class="col-lg-9">
-							{{form.containt_am|safe}}
+							{{form.description_am|safe}}
 						</div>
 					</div>
 

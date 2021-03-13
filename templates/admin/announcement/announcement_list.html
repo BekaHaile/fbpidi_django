@@ -13,13 +13,6 @@
 
 <!-- Content area -->
 <div class="content">
-
-	<!-- Page length options main category -->
-	
-	<!-- /page length options -->
-
-	<!-- Page length options sub-category-->
-	
 	<div class="card">
 		<div class="card-header header-elements-inline">
 			<h5 class="card-title">Announcements</h5>
@@ -39,8 +32,8 @@
 					<th>Title</th>
 					<th>Title_am</th>
 					<th>company </th>
-					<th>User </th>
-					<th>TimeStamp</th>
+					<th>Created by </th>
+					<th>Created date</th>
 					<th class="text-center">Actions</th>
 				</tr>
 			</thead> 
@@ -51,12 +44,8 @@
 					<td>{{Announcement.title|truncatechars_html:20}}</td>
 					<td>{{Announcement.title_am|truncatechars_html:20}}</td>
 					<td>{{Announcement.company}}</td>
-					<td>
-						{{Announcement.user.username|safe}}
-					</td>
-					<td>
-						{{Announcement.timestamp}}
-					</td>
+					<td>{{Announcement.created_by.username|safe}}</td>
+					<td>{{Announcement.created_date}}</td>
 					<td class="text-center">
 						<div class="list-icons">
 							<div class="dropdown">
@@ -65,14 +54,15 @@
 								</a>
 									
 								<div class="dropdown-menu dropdown-menu-right">
-									{% if user.is_superuser or user.get_company == Announcement.user.get_company %}
-									<a href="{%url 'admin:delete' model_name='Announcement' id=Announcement.id%}" class="dropdown-item" onclick="return confirm('are you sure you want to delete this')"><i class="icon-trash"></i>Delete Announcement</a>
-									{%endif%}
+								{% if user.is_superuser or user.get_company == Announcement.created_by.get_company %}
+								
+									<!-- 12345  add perms -->
+										<a href="{%url 'admin:anounce_Detail'   id=Announcement.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Item</a>	
 									
-									{% if user.is_superuser or user.get_company == Announcement.user.get_company %}
-									<a href="{%url 'admin:anounce_Detail'  model_name='Announcement' id=Announcement.id%}" class="dropdown-item"  >
-										<i class="icon-pencil"></i>Edit Announcement</a>
-										{%endif%}
+										<a href="{%url 'admin:delete' model_name='Announcement' id=Announcement.id%}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this Announcement?')"><i class="icon-trash"></i>Delete Item</a>
+											
+							
+								{%endif%}
 								</div>
 							</div>
 						</div>

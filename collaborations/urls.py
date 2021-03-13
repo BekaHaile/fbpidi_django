@@ -15,7 +15,7 @@ from .Views.vacancy import (VacancyMoreDetail, CreateApplication, VacancyList,
 from .Views.announcement import (AnnouncementDetail,ListAnnouncement,)  
 
 from .Views.projects import (EditProject,ListProject,ProjectDetail,CreateProject
-                            ,SearchProject,ProjectCategorySearch,)  
+                            ,SearchProject,ProjectCategorySearch, ProjectDetailView)  
 from .Views.faq import FaqList
 
 from .Views.research import (EditResearch,ListResearch,ResearchDetail,CreateResearch,SearchResearch,
@@ -23,7 +23,8 @@ from .Views.research import (EditResearch,ListResearch,ResearchDetail,CreateRese
                     
 
 urlpatterns = [ 
-
+    path('project-view/<id>/',ProjectDetailView.as_view(),name='project_view'),
+    
     path("project-list",ListProject.as_view(),name="project_list"),
     path('project-search',SearchProject.as_view(),name='project_search'),
     path("project-detail/<id>",ProjectDetail.as_view(),name="project_detail"),

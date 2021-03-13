@@ -20,7 +20,6 @@ from admin_site.views.dropdowns import (AllSettingsPage,
                                         UpdateProjectDropdownsMaster)
 
 from collaborations.views import (CreateNews, EditNews, NewsDetail,AdminNewsList,
-
                         TenderList, CreateTender, TenderDetail, 
                         EditTender,  ManageBankAccount,
                         CreateDocument, DocumentListing, EditDocument
@@ -34,7 +33,7 @@ from collaborations.Views.vacancy import(CreateVacancy,AdminVacancyList,VacancyD
 from collaborations.Views.projects import(
 
                         ListProjectAdmin,CreateProjectAdmin,ProjectDetailAdmin,
-                        ListPendingProjectAdmin,ProjectDetailView,ProjectApprove,
+                        ProjectDetailView,
                         
 
                         )

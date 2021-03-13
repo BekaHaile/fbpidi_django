@@ -1,0 +1,284 @@
+{%extends 'frontpages/layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+{%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+
+		<!--Sliders Section-->
+		<div>
+			<div class="cover-image sptb-1 bg-background" data-image-src="/static/frontpages/images/banners/banner1.jpg">
+				<div class="header-text1 mb-0">
+					<div class="container">
+						<div class="row">
+							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
+								<div class="text-center text-white ">
+									<h1 class=""><span class="font-weight-bold"></span>{{message}}</h1>
+								</div>
+								<form action  = "/collaborations/announcement-list/" method="GET">
+									<div class="search-background px-4 py-3 mt-4">
+										<div class="form row row-sm">
+											<div class="form-group  col-xl-10 col-lg-9 col-md-12 mb-0">
+												<input type="text" name = 'by_title' class="form-control input-lg border-white" id="text" placeholder="Search announcement by title">
+											</div>
+											
+											<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
+												<button href="#" type = "submit" class="btn btn-lg btn-block btn-secondary">{% trans "Search" %}</button>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div><!-- /header-text -->
+			</div>
+		</div>
+		<!--/Sliders Section-->
+
+		<!--Breadcrumb-->
+		<div class="bg-white border-bottom">
+			<div class="container">
+				<div class="page-header">
+					<h4 class="page-title">{% trans "Announcement List" %}</h4>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="#">{% trans "Home" %}</a></li>
+						<li class="breadcrumb-item active" aria-current="page">{% trans "Announcement List" %}</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<!--/Breadcrumb-->
+
+		<!--Add listing-->
+		<section class="sptb">
+			<div class="container">
+				<div class="row">
+					<div class="col-xl-9 col-lg-9 col-md-12">
+						<!--Add lists-->
+						<div class=" mb-lg-0">
+							<div class="">
+								<div class="item2-gl business-list-01">
+									<div class="">
+										<div class="bg-white p-5 item2-gl-nav d-flex">
+											<h6 class="mb-0 mt-3">Showing 1 to 10 of 30 entries</h6>
+											<ul class="nav item2-gl-menu ml-auto mt-1">
+												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
+												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
+											</ul>
+											<div class="d-sm-flex">
+												
+												<div class="selectgroup">
+													<form action="/collaborations/announcement-list/" method="GET">
+														<label class="selectgroup-item mb-md-0">
+															<input type="hidden" name="" value="">
+															<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "All" %}</button></span>
+														</label>
+													</form>
+													
+													
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="tab-content">
+										<div class="tab-pane active" id="tab-11">
+											{%for post in Announcements%}
+											<div class="card overflow-hidden">
+												<div class="d-md-flex">
+													<div class="item-card9-img">
+														<div class="item-card9-imgs">
+															<a href="/collaborations/announcement-detail/{{post.id}}/"></a>
+															{% if post.images.count > 0 %}
+															<img src="{{post.images.0.url}}"  alt="img" class="cover-image">
+															{% else %}
+															<img src="{{post.company.get_image}}" alt="img" class="cover-image">
+															{% endif %}
+														</div>
+														
+														
+													</div>
+													<div class="card border-0 mb-0">
+														<div class="card-body h-100">
+															<div class="item-card9">
+																<a href="/collaborations/announcement-detail/{{post.id}}/" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated post.title post.title_am LANGUAGE_CODE%}</h4></a>
+															
+															</div>
+
+														</div>
+
+
+														<div class="card-footer pt-2 pb-2">
+															<div class="item-card9-footer d-sm-flex">
+																<div class="item-card9-cost">
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																		<b>By: &nbsp</b>
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{post.company.company_name}}">
+																			<img src="{{post.company.get_image}}" alt="image" class="avatar brround  mr-2">
+																		</a>
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{post.company.phone_number}}"><i class="fa fa-phone"></i></a>	
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{post.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+																		<a class="" href="/chat/with/{{post.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+																		<a class="" href="/collaborations/announcement-detail/{{post.id}}/" ><b class="btn btn-secondary btn-sm mt-1">Read More</b></a>
+													
+																		<br>
+																		
+																	</div>
+																</div>
+																<div class="ml-auto mt-3 mt-sm-0">
+																	
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{post.created_date}}</small></div> 
+																		
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											{%endfor%}
+										</div>
+
+
+
+
+									
+									</div>
+								</div>
+								<div class="center-block text-center">
+									<ul class="pagination mb-5">
+										<li class="page-item page-prev disabled">
+											<a class="page-link" href="#" tabindex="-1">Prev</a>
+										</li>
+										<li class="page-item active"><a class="page-link" href="#">1</a></li>
+										<li class="page-item"><a class="page-link" href="#">2</a></li>
+										<li class="page-item"><a class="page-link" href="#">3</a></li>
+										<li class="page-item page-next">
+											<a class="page-link" href="#">Next</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<!--/Add lists-->
+					</div>
+
+					<!--Right Side Content-->
+					<div class="col-xl-3 col-lg-3 col-md-12">
+						<form action  = "{% url 'polls' %} " method="GET">
+						<div class="card">
+							<div class="card-body">
+								<div class="input-group">
+									
+									<input type="text" name = "by_title" class="form-control br-tl-3 br-bl-3" placeholder="Search">
+									<div class="input-group-append ">
+										<button type="submit" class="btn btn-secondary br-tr-3 br-br-3">
+											{% trans "Search" %}
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						</form>
+
+
+						<div class="card mb-0">
+
+
+							<form action="/collaborations/announcement-list/" method = "GET">		
+								<div class="card-header border-top">
+									<h3 class="card-title">{% trans "Filter by company" %}</h3>
+								</div>
+								<div class="card-body">
+										<div class="filter-product-checkboxs">
+											{% for comp in companies %}
+											<label class="custom-control custom-checkbox mb-2">
+												<input type="checkbox" class="custom-control-input" name="by_company" value="{{comp.company_name}}">
+												<span class="custom-control-label">
+													{% print_translated comp.company_name comp.company_name_am LANGUAGE_CODE %}
+												</span>
+											</label>
+										{% endfor %}
+										</div>
+								</div>
+								<div class="card-footer">
+									<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</button>
+								</div>
+							</form>
+
+
+						</div>
+
+					</div>
+					<!--/Right Side Content-->
+				</div>
+			</div>
+		</section>
+		<!--/Add Listings-->
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Subscribe To Our Newsletter</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+						<div class="input-group sub-input mt-0">
+							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Newsletter-->
+
+
+		<!-- Message Modal -->
+		<div class="modal fade" id="contact" tabindex="-1" role="dialog"  aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="examplecontactLongTitle">Send Message</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<input type="text" class="form-control" id="contact-name" placeholder="Your Name">
+						</div>
+						<div class="form-group">
+							<input type="email" class="form-control" id="contact-email" placeholder="Email Address">
+						</div>
+						<div class="form-group mb-0">
+							<textarea class="form-control" name="example-textarea-input" rows="6" placeholder="Message"></textarea>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+						<button type="button" class="btn btn-success">Send</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Home Video Modal -->
+		<div class="modal fade" id="homeVideo" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="pauseVid()"><i class="fa fa-times" aria-hidden="true"></i></button>
+					<div class="embed-responsive embed-responsive-16by9">
+						<video id="gossVideo" class="embed-responsive-item" controls="controls">
+							<source src="/static/frontpages/video/300052515.mp4" type="video/mp4">
+						</video>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{%endblock%} 
