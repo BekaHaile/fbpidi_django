@@ -614,7 +614,7 @@ class CustomerNewsDetail(View):
             print("Exception at customerNews Detail ", e)
             return redirect('customer_news_list')
         related_news = related_company_title('News', news)
-        return render(self.request, "frontpages/news/customer_news_detail.html", {'news':news,'related_news':related_news['query'], 'related_message':related_news['message'], 'companies':companies, "NEWS_CATEGORY": News.NEWS_CATAGORY})
+        return render(self.request, "frontpages/news/customer_news_detail.html", {'news':news,'related_news':related_news['query'], 'related_message':related_news['message'], 'related_message_am':related_news['message_am'], 'companies':companies, "NEWS_CATEGORY": News.NEWS_CATAGORY})
     
 
 ##### Customer Events

@@ -130,7 +130,7 @@
 																</a>
 																<!--<p >{{news.description|truncatechars_html:12|safe}}</p>-->
 
-																 <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Posted at : </span> {{news.created_date}} </p>
+																 <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> {% trans "By" %}  </span>{% print_translated news.company.company_name news.company.company_name_am LANGUAGE_CODE %} </p>
 															</div>
 														</div>
 														<div class="card-footer pt-2 pb-2">
@@ -157,10 +157,7 @@
 																	</div>
 																</div>
 																<div class="ml-auto mt-3 mt-sm-0">
-																	<!-- <a href="/collaborations/customer_news_detail/{{news.id}}/" class="btn btn-secondary btn-sm mt-4">
-																		View Detail
-																	</a> -->
-																	<!--<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.created_date}}</small></div> -->
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.created_date}}</small></div>
 																		
 																</div>
 															</div>
