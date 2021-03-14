@@ -111,7 +111,7 @@ class CustomAdminSite(admin.AdminSite):
             path('researchprojectcategorys-form',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
             path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
             
-            path('anounce-Detail/<model_name>/<id>',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
+            path('anounce-Detail/<model_name>/<id>/',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
             path('anounce-List',wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),
             path('anounce-form',wrap(CreatAnnouncementAdmin.as_view()),name="anounce_Create"),
             #path('JobCategory-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),
@@ -137,7 +137,7 @@ class CustomAdminSite(admin.AdminSite):
             path("faq-detail/<model_name>/<id>",wrap(FaqsView.as_view()),name="faqs_detail"),
             path("faq-form/",wrap(CreateFaqs.as_view()),name="admin_Faqsform"),
             path("faq-list/",wrap(FaqsList.as_view()),name="admin_Faqs"),  
-            path("faq-pendding-list/",wrap(FaqApprovdList.as_view()),name="admin_approved_Faqs"),
+            path("faq-approved-list/",wrap(FaqApprovdList.as_view()),name="admin_approved_Faqs"),
             path("faq-pendding-list/",wrap(FaqPendingList.as_view()),name="admin_pendding_Faqs"),
             path("faq-approve/<id>",wrap(FaqApprove.as_view()),name="approve_Faqs"),
             path("faq-view/<model_name>/<id>",wrap(FaqsDetail.as_view()),name="view_Faqs"),

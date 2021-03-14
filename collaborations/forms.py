@@ -330,20 +330,17 @@ class ProjectForm(forms.ModelForm):
         }
 
 class ResearchForm(forms.ModelForm):
-    attachements = forms.FileField(required=False)
     # description = forms.CharField(widget=SummernoteWidget())
     # detail = forms.CharField(widget=SummernoteWidget())
     status = forms.ChoiceField(choices = RESEARCH_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
 
     class Meta:
         model = Research
-        fields  = ('title','description','detail','status','category')
+        fields  = ('title','description','status','category')
         widgets = {
-
         'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
         'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Research'}),
         'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
-        'detail':forms.Textarea(attrs={'class':'summernote','placeholder':'The whole research'}),
         }
         
 class DocumentForm(forms.ModelForm):

@@ -135,7 +135,7 @@ class EventParticipants(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     event = models.ForeignKey(CompanyEvent, on_delete=models.CASCADE)
     patricipant_email = models.EmailField(max_length=200, blank=True)
-    notifiy_on = models.DateTimeField(default=timezone.now())
+    notifiy_on = models.DateTimeField(blank=True,null=True)
     notified = models.BooleanField(verbose_name="If notification is sent = True", default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 

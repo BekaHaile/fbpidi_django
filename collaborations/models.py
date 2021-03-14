@@ -453,19 +453,25 @@ class ResearchProjectCategory(models.Model):
 class Research(models.Model):
     title = models.CharField(max_length=500,null=False)
     description = models.TextField(null=False)
-    detail = models.TextField(null=False)
     status = models.CharField(max_length=100,null=False)
     accepted = models.CharField(max_length=100,null=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(ResearchProjectCategory, on_delete = models.CASCADE)
-    attachements = models.FileField(upload_to="ResearchAttachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
-
+    
     class Meta:
         ordering = ['-timestamp',]
+
+    def researchfiles(self):
+        return self.researchattachment_set.all()
     
     def get_category_name(self):
         return self.category.cateoryname
+
+class ResearchAttachment(models.Model):
+    research = models.ForeignKey(Research, on_delete=models.CASCADE)
+    attachement = models.FileField(upload_to="ResearchAttachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
+    timestamp = models.DateTimeField(auto_now_add=True)
 
 
 class Project(models.Model):

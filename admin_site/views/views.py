@@ -17,7 +17,7 @@ from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
 from collaborations.models import (BlogComment,PollsQuestion, PollsResult, Choices,Faqs, Vacancy, JobCategory, Tender, TenderApplicant, JobApplication, JobCategory,
                                     Blog, Announcement, ForumComments, CommentReplay, AnnouncementImages,
-                                    News, NewsImages,Project,Research,ResearchProjectCategory,ForumQuestion, Document)
+                                    News, NewsImages,Project,ResearchAttachment,Research,ResearchProjectCategory,ForumQuestion, Document)
 from django.http import HttpResponse, FileResponse
 from django.db.models import Q
 
@@ -125,6 +125,13 @@ class DeleteView(LoginRequiredMixin,View):
                 message ="Research Deleted"
                 messages.success(self.request,message)
                 return redirect("admin:research_list") 
+            elif self.kwargs['model_name'] == 'ResearchAttachment':
+                researchimages = ResearchAttachment.objects.get(id=self.kwargs['id'])
+                id =researchimages.research.id
+                researchimages.delete()
+                message ="Research File Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:research_detail",model_name="Research",id=id) 
             elif self.kwargs['model_name'] == 'ProjectClient':
                 research = Project.objects.get(id=self.kwargs['id'])
                 research.delete()
@@ -209,7 +216,7 @@ class DeleteView(LoginRequiredMixin,View):
                 announcementimages.delete()
                 message ="AnnouncementImages Deleted"
                 messages.success(self.request,message)
-                return redirect(f"/admin/anounce-Detail/Announcement/{id}")
+                return redirect("admin:anounce_Detail",model_name="Announcement",id=id)
             elif self.kwargs['model_name'] == 'Project':
                 research = Project.objects.get(id=self.kwargs['id'])
                 research.delete()

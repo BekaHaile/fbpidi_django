@@ -1,5 +1,6 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags %}
+{% load core_template_tags %}
 {% block extrastyle %}
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
@@ -54,6 +55,23 @@
 					</div>
 
 					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Research Category *</label>
+						<div class="col-lg-9">
+						<select required name="category" class="form-control form-control-uniform" data-fouc>
+								<option value="{{forms.category.id}}">{{forms.category}}</option>
+								{%for cat_names in category%}
+									{%if cat_names == forms.category %}
+									{%else%}
+									<option value="{{cat_names.id}}">{{cat_names}}</option>
+									{%endif%}
+								{%endfor%}
+								 
+							</select>
+					</div>
+							
+					</div>
+
+					<div class="form-group row">
 						<label class="col-form-label col-lg-3">Research Description*</label>
 						<div class="col-lg-9">
 								<textarea  required class="summernote" name="description" >{{forms.description}}</textarea>
@@ -61,14 +79,87 @@
 							
 					</div>
 
-					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Research Detail *</label>
-						<div class="col-lg-9">
-								<textarea required class="summernote" name="detail" >{{forms.detail}}</textarea>
-						</div>
-							
-					</div>
+					<div class="card">
+						<label class="col-form-label col-lg-3"> Manage Files  *</label>
+		                
+		                <div class="card-body" >    
+		                        <div class="media-body">
+		                        	<div class="mt-4 mb-3 row">
+		                                {%for file in forms.researchfiles%}
+					                <div class="col-sm-6 col-lg-3">
+					                	<a style="margin-bottom:10" href="{%url 'admin:delete' model_name='ResearchAttachment' id=file.id%}" style="color: rgb(175, 13, 13);"   onclick="return confirm ('Are you sure you want to delete this Document?')">
+													<i class="icon-trash"></i>
+												</a>
+					                    <div class="card">
+					                        <div class="card-img-actions m-1">
+					                        	
+					                            <a href="{{file.attachement.url}}" download="{{file.attachement.url}}">
 
+										{% file_type file.attachement.url as file_type%}
+										{% if file_type  == 'image' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-image fa-4x"></i>
+										{% elif file_type  == 'video' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-play-circle fa-4x"></i>
+										{% elif file_type == 'audio' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-music fa-4x"></i>
+										{% elif file_type == 'word' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-word-o fa-4x"></i>
+										{% elif file_type == 'pdf'  %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-pdf-o fa-4x"></i>
+										{% elif file_type == 'excel'%}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-excel-o fa-4x"></i>
+										{% elif file_type == 'exe' %}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "icon-cogs fa-4x"></i>
+										{% else %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file fa-4x"></i>
+										{% endif %}
+										{{file.attachement.name}}
+									</a>
+					                        </div>
+					                    </div>
+					                </div>
+
+					                {%endfor%}
+            </div>
+		                            {%if forms.researchfiles.count == 0 %}
+		                            <div class="alert alert-warning" role="alert">
+										<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+										<span class="font-weight-semibold">You have to upload an image</span>
+									</div>
+		                            
+		                        </div>
+		                    
+		                </div>
+		                
+		                <div class="card-footer">   
+		                	<div class="form-group row">
+						 
+						  <label class="col-form-label col-lg-3">Add images:</label>
+						  <div class="col-lg-9">
+						  		<input required type="file" id="files" name="files" multiple>
+						  </div>
+						
+							</div>
+		                </div>        
+		            </div> 
+
+		                            {%else%}
+		                            
+		                        </div>
+		                    
+		                </div>
+		                <div class="card-footer">   
+		                	<div class="form-group row">
+						 
+						  <label class="col-form-label col-lg-3">Add images:</label>
+						  <div class="col-lg-9">
+						  		<input type="file" id="files" name="files" multiple>
+						  </div>
+						
+							</div>
+		                </div>        
+		            </div>
+		            			{%endif%}
 
 						
 				</fieldset>

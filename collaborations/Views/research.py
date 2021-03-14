@@ -50,6 +50,7 @@ from collaborations.models import ( Blog, BlogComment,Faqs,
 									ForumQuestion, ForumComments, CommentReplay,
 									Announcement,AnnouncementImages,
 									Research,
+									ResearchAttachment,
 									ResearchProjectCategory
 									
 									)
@@ -146,9 +147,16 @@ class CreateResearchAdmin(LoginRequiredMixin, View):
 			else:
 				research.accepted = "APPROVED"
 			research.user = self.request.user
-			if form.cleaned_data.get("attachements"):
-				research.attachements = form.cleaned_data.get("attachements")
 			research.save()
+			for file in self.request.FILES.getlist('files'):
+				print("file name:"+str(file.name))
+				researchattachment= ResearchAttachment()
+				researchattachment.research = research
+				researchattachment.attachement = file
+				researchattachment.save()
+
+
+			researchattachment.attachement
 			messages.success(self.request, "Added New Research Successfully")
 			return redirect("admin:research_form")
 		return render(self.request, template_name,context)
@@ -165,7 +173,8 @@ class ResearchDetailAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
 		template_name = "admin/researchproject/research_detil.html"
-		context = {'forms':form}
+		researchcategory=ResearchProjectCategory.objects.all()
+		context = {'forms':form,"category":researchcategory}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = ResearchForm(self.request.POST)
@@ -178,11 +187,16 @@ class ResearchDetailAdmin(LoginRequiredMixin, View):
 			research.detail = form.cleaned_data.get('detail')
 			research.status = form.cleaned_data.get('status')
 			research.category = form.cleaned_data.get('category')
-			if form.cleaned_data.get("attachements"):
-				research.attachements = form.cleaned_data.get("attachements")
-			research.user = self.request.user
 			research.save()
+			for file in self.request.FILES.getlist('files'):
+				print("file name:"+str(file.name))
+				researchattachment= ResearchAttachment()
+				researchattachment.research = research
+				researchattachment.attachement = file
+				researchattachment.save()
+			messages.success(self.request, "Edited Research Successfully")
 			return redirect("admin:research_list")
+		print("Not Really")
 		return render(self.request, template_name,context)
 
 class SearchResearch(View):
