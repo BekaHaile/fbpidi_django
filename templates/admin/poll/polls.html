@@ -63,10 +63,12 @@
 													<a href="{%url 'admin:detail_poll' pk=poll.id%}" class="dropdown-item"><i class="icon-eye"></i>View Poll Detail</a>
 													{% endif %}
 													{% if user.get_company == poll.company  or user.is_superuser %}
-														{% if poll.count_votes == 0  %}
+														{% if perms.collaborations.change_pollsquestion %}
+															{% if  poll.count_votes == 0  %}
 															<a  href="{%url 'admin:edit_poll' id=poll.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Poll</a>
-														{% else %}
-														<a  href="#" class="dropdown-item"><i class="icon-pencil"></i>Cannot be edited, vote started!</a>
+															{% else %}
+															<a  href="#" class="dropdown-item"><i class="icon-pencil"></i>Cannot be edited, vote started!</a>
+															{% endif %}
 														{% endif %}
 														{% if perms.collaborations.add_choices %}
 														<a href="{%url 'admin:add_choice' id=poll.id%}" class="dropdown-item"><i class="icon-plus3"></i>Add New Choice</a>

@@ -12,7 +12,7 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class=""><span class="font-weight-bold"></span>{{message}}</h1>
+									<h1 class=""><span class="font-weight-bold"></span>{% print_translated message message_am LANGUAGE_CODE %}</h1>
 								</div>
 								<form action  = "{% url 'polls' %} " method="GET">
 									<div class="search-background px-4 py-3 mt-4">
@@ -60,7 +60,7 @@
 								<div class="item2-gl business-list-01">
 									<div class="">
 										<div class="bg-white p-5 item2-gl-nav d-flex">
-											<h6 class="mb-0 mt-3">Showing 1 to 10 of 30 entries</h6>
+											<h6 class="mb-0 mt-3">Showing {{polls}}</h6>
 											<ul class="nav item2-gl-menu ml-auto mt-1">
 												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
@@ -141,7 +141,7 @@
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.company.phone_number}}"><i class="fa fa-phone"></i></a>	
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
 																		<a class="" href="/chat/with/{{poll.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-																		<a class="" href="/collaborations/poll_detail/{{poll.id}}/" ><b class="btn btn-secondary btn-sm mt-1">Poll Detail</b></a>
+																		<a class="" href="/collaborations/poll_detail/{{poll.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Poll Detail" %}</b></a>
 													
 																		<br>
 																		
@@ -166,19 +166,31 @@
 									
 									</div>
 								</div>
+								{% if polls.has_other_pages %}
 								<div class="center-block text-center">
 									<ul class="pagination mb-5">
-										<li class="page-item page-prev disabled">
-											<a class="page-link" href="#" tabindex="-1">Prev</a>
-										</li>
-										<li class="page-item active"><a class="page-link" href="#">1</a></li>
-										<li class="page-item"><a class="page-link" href="#">2</a></li>
-										<li class="page-item"><a class="page-link" href="#">3</a></li>
-										<li class="page-item page-next">
-											<a class="page-link" href="#">Next</a>
-										</li>
+										{% if polls.has_previous %}
+										<li class="page-item page-prev "><a class="page-link" href="?page={{polls.previous_page_number}}" tabindex="-1">">{% trans "Prev" %}</a></li>
+										{% else %}
+										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">">{% trans "Prev" %}</a></li>
+										{% endif %}
+										
+										{% for i in polls.paginator.page_range %}
+											{% if polls.number == i %}
+													<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+											{% else %}
+													<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+											{% endif %}
+										{% endfor %}
+
+										{% if polls.has_next %}
+										<li class="page-item page-next"><a class="page-link" href="?page={{polls.next_page_number}}">{% trans "Next" %}</a></li>
+										{% else %}
+										<li class="page-item page-next disabled"><a class="page-link" href="#">{% trans "Next" %}</a></li>
+										{% endif %}
 									</ul>
 								</div>
+								{% endif %}
 							</div>
 						</div>
 						<!--/Add lists-->

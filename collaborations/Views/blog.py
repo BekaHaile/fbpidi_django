@@ -1,14 +1,15 @@
 
-
+from django.urls import reverse
 import datetime
 from django.views import View
 
 from django.http import HttpResponse, FileResponse
 from collaborations.models import Blog, BlogComment
+from collaborations.forms import FaqsForm
 from django.shortcuts import render, redirect, reverse
 
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
-from collaborations.models import  Blog, BlogComment, Blog, BlogComment, JobCategory, News, NewsImages
+from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategory, News, NewsImages
 									 #redirect with context
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
@@ -108,7 +109,8 @@ class CreatBlog(LoginRequiredMixin,View):
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = BlogsForm(self.request.POST,self.request.FILES)
-		
+		import pprint
+		pprint.pprint(self.request.FILES)
 		context={'form':form}
 		if form.is_valid():
 			# the data we need for cropping
@@ -123,23 +125,30 @@ class CreatBlog(LoginRequiredMixin,View):
 			return redirect("admin:admin_Blogs")
 		return render(self.request, "admin/pages/blog_form.html",context)
 
-class AdminBlogList(LoginRequiredMixin,View):
+class AdminBlogList(LoginRequiredMixin, ListView):
 	template_name="admin/pages/blog_list.html"
-	def get(self,*args,**kwargs):
+	model = Blog
+	context_object_name = 'blogs'
+	def get_queryset(self):
 		if self.request.user.is_superuser:
-			blogs = Blog.objects.all()
-			template_name="admin/pages/blog_list.html"
-			context={'blogs':blogs}
-			return render(self.request, template_name,context)
+			return Blog.objects.all()
 		else:
-			blogs = Blog.objects.all()
-			filterdblogs = []
-			for blog in blogs:
-				if self.request.user.get_company == blog.user.get_company:
-					filterdblogs.append(blog)
-			template_name="admin/pages/blog_list.html"
-			context={'blogs':filterdblogs}
-			return render(self.request, template_name,context)
+			return Blog.objects.filter(user = self.request.user)
+	# def get(self,*args,**kwargs):
+		# if self.request.user.is_superuser:
+		# 	blogs = Blog.objects.all()
+		# 	template_name="admin/pages/blog_list.html"
+		# 	context={'blogs':blogs}
+		# 	return render(self.request, template_name,context)
+		# else:
+		# 	blogs = Blog.objects.all()
+		# 	filterdblogs = []
+		# 	for blog in blogs:
+		# 		if self.request.user.get_company == blog.user.get_company:
+		# 			filterdblogs.append(blog)
+		# 	template_name="admin/pages/blog_list.html"
+		# # 	context={'blogs':filterdblogs}
+		# 	return render(self.request, template_name,{'blogs':Blog.objects.all()})
 
 
 		
@@ -148,8 +157,6 @@ class BlogView(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		blogs = Blog.objects.get(id=self.kwargs['id'])
 		template_name="admin/pages/blog_detail.html"
-		print("^^^^^^^^^^^")
-		print(blogs.publish)
 		context = {'form':blogs}
 		return render(self.request, "admin/pages/blog_detail.html",context)
 	def post(self,*args,**kwargs):
