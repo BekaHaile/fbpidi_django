@@ -173,7 +173,7 @@
 									<a href="{%url 'admin:categories'%}" class="nav-link"><i class="icon-drawer"></i>
 										<span>Category</span></a>
 								</li>
-
+								{%if user.get_company.main_category != "Pharmaceuticals"%}
 								<li class="nav-item">
 									<a href="{%url 'admin:sub_categories'%}" class="nav-link"><i class="icon-folder6"></i>
 										<span>Product Type</span></a>
@@ -182,27 +182,19 @@
 									<a href="{%url 'admin:brands'%}" class="nav-link"><i class="mi-branding-watermark"></i>
 										<span>Product Brands</span></a>
 								</li> 
+								{%endif%}
 							</ul>
 						</li>
-						
 						<li class="nav-item">
-							{%if user.is_superuser%}
-							<a href="{%url 'admin:admin_products' user_type='admin'%}" class="nav-link"><i
+							<a href="{%url 'admin:admin_products'%}" class="nav-link"><i
 									class="icon-stack"></i> <span>Products</span></a>
-							{%else%}
-							<a href="{%url 'admin:admin_products' user_type='provider'%}" class="nav-link"><i
-									class="icon-stack"></i> <span>Products</span></a>
-							{%endif%}
 						</li>
+						
 						<li class="nav-item nav-item-submenu">
 							<a href="#" class="nav-link"><i>R&D</i> 
 								<span>Project & Research</span></a>
 								<ul class="nav nav-group-sub" data-submenu-title="Form components">
-									<li class="nav-item">
-										<a href="{%url 'admin:project_list' %}" class="nav-link"><i>R</i>
-											<span>Project</span>
-										</a>
-									</li>
+									
 									<li class="nav-item">
 										<a href="{%url 'admin:research_list' %}" class="nav-link"><i>R</i>
 											<span>Research</span>

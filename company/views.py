@@ -31,8 +31,6 @@ class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
 
     def form_valid(self,form):
         company = form.save(commit=False)
-        company.geo_location = form.cleaned_data.get('location')
-        company.ownership_form = form.cleaned_data.get('ownership')
         company.contact_person = self.request.user
         company.craeted_by = self.request.user
         company.save()
@@ -47,7 +45,6 @@ class CreateCompanyProfile(LoginRequiredMixin,CreateView):
 
     def form_valid(self,form):
         company = form.save(commit=False)
-        company.ownership_form = form.cleaned_data.get("ownership")
         company.created_by = self.request.user
         company.save()
         messages.success(self.request,"Company Profile Created")
@@ -80,6 +77,12 @@ class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
     form_class = CompanyDetailForm
     template_name = "admin/company/create_company_detail.html"
 
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(CreateCompanyDetail,self).get_form_kwargs()
+        kwargs.update({'main_type': Company.objects.get(id=self.kwargs['pk']).main_category})
+        return kwargs
+
+
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         context['inv_capital_form'] = InvestmentCapitalForm
@@ -99,11 +102,6 @@ class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
         company = form.save(commit=False)
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
-        company.working_hours = form.cleaned_data.get('working_hours')
-        company.certification.set(form.cleaned_data.get('certification'))
-        company.management_tools.set(form.cleaned_data.get('management_tools'))
-        company.source_of_energy = form.cleaned_data.get('source_of_energy')
-        company.support_required = form.cleaned_data.get('support_required')
         company.save()
         messages.success(self.request,"Company Detail Information Added")
         return redirect("admin:update_company_info",pk=self.kwargs['pk'])
@@ -112,6 +110,11 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
     model = Company
     form_class = CompanyUpdateForm
     template_name = 'admin/company/company_detail.html'
+
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(ViewMyCompanyProfile,self).get_form_kwargs()
+        kwargs.update({'main_type': Company.objects.get(id=self.kwargs['pk']).main_category})
+        return kwargs
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
@@ -130,8 +133,6 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
 
     def form_valid(self,form):
         company = form.save(commit=False)
-        company.category.set(form.cleaned_data.get('category')) 
-        company.geo_location = form.cleaned_data.get('location')
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
         company.save()

@@ -26,7 +26,7 @@ def company_count(type):
 @register.filter
 def company_product_count(company):
     try:
-        product = Product.objects.filter(user=company.contact_person)
+        product = Product.objects.filter(created_by=company.contact_person)
         return product.count()
     except ObjectDoesNotExist:
         return 0
@@ -43,12 +43,12 @@ def happy_customer(non):
 
 @register.filter
 def company_count_bycategory(category):
-    return Company.objects.filter(product_category=category).count()
+    return Company.objects.filter(category=category).count()
 
 
 @register.filter
 def product_count_bycategory(category):
-    return Product.objects.filter(category=category).count()
+    return Product.objects.filter(fandb_category=category).count()
 
 @register.simple_tag
 def print_translated(en_data,am_data,lan_code):

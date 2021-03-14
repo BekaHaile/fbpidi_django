@@ -4,6 +4,13 @@ from django.db import models
 from django.conf import settings
 from admin_site.models import Category,CompanyDropdownsMaster,ProjectDropDownsMaster
 
+CAT_LIST = (
+    ('','Select Company Type'),
+    ("Food",'Food'),
+    ("Beverage",'Beverages'),
+    ("Pharmaceuticals",'Pharmaceuticals'),
+)
+
 class SubCategory(models.Model):
     company = models.ForeignKey('Company',on_delete=models.CASCADE,related_name='company_product_category')
     category_name = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True,verbose_name="Category Type")
@@ -22,7 +29,7 @@ class SubCategory(models.Model):
         return self.sub_category_name
 
 class Brand(models.Model):
-	company = models.ForeignKey('Company',on_delete=models.CASCADE,related_name="company_brand")
+	company = models.ForeignKey('Company',on_delete=models.CASCADE,related_name="company_brand",choices=CAT_LIST)
 	product_type = models.ForeignKey(SubCategory,on_delete=models.CASCADE, verbose_name="Product Type", related_name="product_category")
 	brand_name = models.CharField(max_length=200,verbose_name="Product Brand Name(English)")
 	brand_name_am = models.CharField(max_length=200,verbose_name="Product Brand Name(Amharic)")
@@ -32,7 +39,11 @@ class Brand(models.Model):
 	last_updated_date	= models.DateTimeField(null=True)
 	expired	= models.BooleanField(default=False)
 
+	def __str__(self):
+		return self.brand_name			
+
 class Company(models.Model):
+	main_category = models.CharField(max_length=100,verbose_name="Company Type",choices=CAT_LIST)
 	name = models.CharField(verbose_name="Company Name in English", max_length=255,null=True)
 	name_am = models.CharField(verbose_name="Company Name in Amharic", max_length=255,null=True)
 	logo = models.FileField(max_length=254, verbose_name="Logo of the company",help_text="PNG, Max size 10MB", null=True)

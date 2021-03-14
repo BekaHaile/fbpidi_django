@@ -57,9 +57,7 @@ from collaborations.Views.forums import(ListForumQuestionAdmin,CreateForumQuesti
                                           ListForumCommentAdmin,ForumCommentsDetail,
                                           ListCommentReplayAdmin,CommentReplayDetail, )
 
-from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
-                            ProductDetailView,AddProductImage,CreatePrice,CategoryView,SubCategoryView,
-                            SubCategoryDetail,CreateSubCategories,BrandView,BrandDetail,CreateBrand)
+from product.views import *
                             
 from company.views import (CreateInvestmentCapital,CreateCertificates,CreateEmployees,CreateJobsCreatedYearly,
                             CreateEducationStatus,CreateFemaleinPosition,CreateAnualSourceofInputs,
@@ -148,12 +146,36 @@ class CustomAdminSite(admin.AdminSite):
             path("create_brand/",wrap(CreateBrand.as_view()),name="create_brand"),
             path("brand_edit/<pk>/",wrap(BrandDetail.as_view()),name="edit_brand"),
             path("delete/<model_name>/<id>/",wrap(DeleteView.as_view()),name="delete"),
-            path("products_list/<user_type>/",wrap(AdminProductListView.as_view()),name="admin_products"),
+            path("products_list/",wrap(AdminProductListView.as_view()),name="admin_products"),
             path("create_product/",wrap(CreateProductView.as_view()),name="create_product"),
-            path("product_detail/<option>/<id>/",wrap(ProductDetailView.as_view()),name="product_detail"),
-            path("add_more_images/",wrap(AddProductImage.as_view()),name="add_product_image"),
-            path("create_price/",wrap(CreatePrice.as_view()),name="create_price"),
+            path("product_detail/<pk>/",wrap(ProductUpdateView.as_view()),name="product_detail"),
+            path("add_more_images/<pk>/",wrap(AddProductImage.as_view()),name="add_product_image"),
+            path("create_price/<pk>/",wrap(CreatePrice.as_view()),name="create_price"),
+            path('create_dose/',wrap(CreateDose.as_view()),name="create_dose"),
+            path('update_dose/<pk>/',wrap(UpdateDose.as_view()),name="update_dose"),
+            path('update_dosage/<pk>/',wrap(UpdateDosageForm.as_view()),name="update_dosage"),
+            path('create_dosage/',wrap(CreateDosageForm.as_view()),name="create_dosage"),
+            path('production_capacity/<product>/',wrap(ListProductionCapacity.as_view()),name="production_capacity"),
+            path('production_capacity_create/<product>/',wrap(CreateProductionCapacity.as_view()),name="create_production_capacity"),
+            path('production_capacity_update/<pk>/',wrap(UpdateProductionCapacity.as_view()),name="update_production_capacity"),
+
+            path('anual_input_need/<product>/',wrap(ListAnualInputNeed.as_view()),name="anual_input_need"),
+            path('anual_input_need_create/<product>/',wrap(CreateAnualInputNeed.as_view()),name="create_anual_inp_need"),
+            path('anual_input_need_update/<pk>/',wrap(UpdateAnualInputNeed.as_view()),name="update_anual_inp_need"),
             
+            path('input_demand_spply/<product>/',wrap(ListInputDemandSupply.as_view()),name="demand_supply_list"),
+            path('input_demand_supply_create/<product>/',wrap(CreateInputDemandSupply.as_view()),name="create_demand_supply"),
+            path('input_demand_supply_update/<pk>/',wrap(UpdateInputDemandSupply.as_view()),name="update_demand_supply"),
+
+            path('sales_performance/<product>/',wrap(ListSalesPerformance.as_view()),name="sales_performance"),
+            path('sales_performance_create/<product>/',wrap(CreateSalesPerformance.as_view()),name="create_sales_performance"),
+            path('sales_performance_update/<pk>/',wrap(UpdateSalesPerformance.as_view()),name="update_sales_performance"),
+            
+            path('packaging/<product>/',wrap(ListPackaging.as_view()),name="packaging"),
+            path('create_packaging/<product>/',wrap(CreatePackaging.as_view()),name="create_packaging"),
+            path('upadte_packaging/<pk>/',wrap(UpdatePackaging.as_view()),name="update_packaging"),
+
+
             # paths for polls, 
             path("polls/", wrap(Polls.as_view()), name = "admin_polls"),
             path("create_poll/", wrap(CreatePoll.as_view()), name = "create_poll"),
@@ -237,12 +259,12 @@ class CustomAdminSite(admin.AdminSite):
             path('comment-replay-list',wrap(ListCommentReplayAdmin.as_view()),name="comment_replay_list"),
             path('comment-replay-detail/<model_name>/<id>',wrap(CommentReplayDetail.as_view()),name="comment_replay_detail"),
 
-            path('project-view/<id>',wrap(ProjectDetailView.as_view()),name='project_view'),
-            path('project-approve/<id>',wrap(ProjectApprove.as_view()),name="project_approve"),
-            path('pedning-project-list',wrap(ListPendingProjectAdmin.as_view()),name="pedning_project_list"),
-            path('project-list',wrap(ListProjectAdmin.as_view()),name="project_list"),
-            path('project-form',wrap(CreateProjectAdmin.as_view()),name="project_form"),
-            path('project-detail/<model_name>/<id>',wrap(ProjectDetailAdmin.as_view()),name="project_detail"),
+            # path('project-view/<id>',wrap(ProjectDetailView.as_view()),name='project_view'),
+            # path('project-approve/<id>',wrap(ProjectApprove.as_view()),name="project_approve"),
+            # path('pedning-project-list',wrap(ListPendingProjectAdmin.as_view()),name="pedning_project_list"),
+            # path('project-list',wrap(ListProjectAdmin.as_view()),name="project_list"),
+            # path('project-form',wrap(CreateProjectAdmin.as_view()),name="project_form"),
+            # path('project-detail/<model_name>/<id>',wrap(ProjectDetailAdmin.as_view()),name="project_detail"),
 
             path('research-view/<id>',wrap(ResearchDetailView.as_view()),name='research_view'),
             path('research-approve/<id>',wrap(ResearchApprove.as_view()),name="research_approve"),

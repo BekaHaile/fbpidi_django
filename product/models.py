@@ -2,37 +2,143 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
-
-from company.models import Company,SubCategory
+from admin_site.models import Category
+from company.models import Company,SubCategory,Brand
 
 class Product(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=False)
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
     name = models.CharField(max_length=255,verbose_name="Product Name(English)")
     name_am = models.CharField(max_length=255,verbose_name="Product Name(Amharic)")
-    category = models.ForeignKey(SubCategory,on_delete=models.CASCADE, blank=True,null=True, verbose_name="Product Category")
+    fandb_category = models.ForeignKey(Brand,on_delete=models.CASCADE, blank=True,null=True,
+                                 verbose_name="Product Category",related_name="product_category")
+    pharmacy_category = models.ForeignKey(Category,on_delete=models.CASCADE, blank=True,null=True, 
+                                        verbose_name="Pharmacy Product Category",related_name="pharmacy_category")
+    uom = models.CharField(max_length=25,verbose_name="Unit of Measurement",null=True)
+    quantity = models.FloatField(verbose_name="Product Quantity",default=0)
+    therapeutic_group = models.CharField(max_length=255,verbose_name="Therapeutic Group",null=True,blank=True)
+    dose = models.ForeignKey('Dose',on_delete=models.RESTRICT,null=True,blank=True,related_name="product_dose")
+    dosage_form = models.ForeignKey('DosageForm',on_delete=models.RESTRICT,null=True,blank=True,related_name="product_dosage_form")
     description = models.TextField(verbose_name="Product Description(English)")
     description_am = models.TextField(verbose_name="Product Description(Amharic)")
-    discount = models.FloatField(default=0.0)
     image = models.ImageField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='product_created_by',null=True)
+    created_date	= models.DateTimeField(auto_now_add=True)
+    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='product_updated_by',null=True)
+    last_updated_date	= models.DateTimeField(null=True)
+    expired	= models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
 
     def price(self):
-        return ProductPrice.objects.filter(product=self).latest('timestamp')
+        return ProductPrice.objects.filter(product=self) 
    
-    
     def more_images(self):
         return ProductImage.objects.filter(product=self)
 
     def get_category(self):
         return self.category.category_name.category_type
 
+class Dose(models.Model):
+    dose = models.TextField(verbose_name="Dose in English")
+    dose_am = models.TextField(verbose_name="Dose in Amharic")
+    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='dose_created_by',null=True)
+    created_date	= models.DateTimeField(auto_now_add=True)
+    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='dose_updated_by',null=True)
+    last_updated_date	= models.DateTimeField(null=True)
+    expired	= models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.dose
+    
+class DosageForm(models.Model):
+    dosage_form = models.CharField(verbose_name="Dosage Form in English",max_length=255)
+    dosage_form_am = models.CharField(verbose_name="Dosage Form in Amharic",max_length=255)
+    description = models.TextField(verbose_name="Dosage Form Description in English")
+    description_am = models.TextField(verbose_name="Dosage Form Description in Amharic")
+    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='dosage_created_by',null=True)
+    created_date	= models.DateTimeField(auto_now_add=True)
+    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='dosage_updated_by',null=True)
+    last_updated_date	= models.DateTimeField(null=True)
+    expired	= models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.dosage_form
+
+class ProductionCapacity(models.Model):	 		
+    product	= models.ForeignKey(Product, on_delete=models.CASCADE,related_name="production_capacity") 
+    p_date = models.DateField()
+    install_prdn_capacity	= models.IntegerField(default=0,verbose_name="Installed Production Capacity")		
+    atnbl_prdn_capacity = models.FloatField(default=0,verbose_name="Attainable Production Capacity")		
+    actual_prdn_capacity = models.FloatField(default=0,verbose_name="Actual Production Capacity")		
+    production_plan	= models.FloatField(default=0,verbose_name="Production Plan")		
+    extraction_rate	= models.FloatField(default=0,verbose_name="Average Extraction Rate")	
+    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='prdn_created_by',null=True)
+    created_date	= models.DateTimeField(auto_now_add=True)
+    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='prdn_updated_by',null=True)
+    last_updated_date	= models.DateTimeField(null=True)
+    expired	= models.BooleanField(default=False)
+
+class ProductPackaging(models.Model):
+    PACKAGING_CATEGORY =  (('','Select Packaging Category'),('Primary','Primary'),('Secondary','Secondary'),('Teritiary','Teritiary'))
+    product	= models.ForeignKey(Product, on_delete=models.CASCADE,related_name="product_packaging")
+    packaging	= models.CharField(verbose_name="Pckaging Type", max_length=2000)	 
+    category	= models.CharField(verbose_name="Packaging Category", max_length=200, choices=PACKAGING_CATEGORY)
+    amount = models.IntegerField(verbose_name="Amount",default=0)	 
+    local_input	= models.FloatField(default=0,verbose_name="Source of Local Inputs in %")			
+    import_input	= models.FloatField(default=0,verbose_name="Source of Imported Inputs in %")			
+    wastage	= models.IntegerField(verbose_name="Wastage in %",default=0)	
+    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='package_created_by',null=True)
+    created_date	= models.DateTimeField(auto_now_add=True)
+    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='package_updated_by',null=True)
+    last_updated_date	= models.DateTimeField(null=True)
+    expired	= models.BooleanField(default=False)		
+
+class ProductionAndSalesPerformance(models.Model):
+    product	= models.ForeignKey(Product, on_delete=models.CASCADE,related_name="sales_performance")
+    activity_year	= models.IntegerField()			 
+    production_amount	= models.FloatField(default=0,verbose_name="Total Production Amount")			
+    sales_amount	= models.FloatField(default=0,verbose_name="Total Sales Amount")			
+    sales_value	= models.FloatField(default=0,verbose_name="Total Sales Value in Birr")
+    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='performance_created_by',null=True)
+    created_date	= models.DateTimeField(auto_now_add=True)
+    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='performance_updated_by',null=True)
+    last_updated_date	= models.DateTimeField(null=True)
+    expired	= models.BooleanField(default=False)
+
+class AnnualInputNeed(models.Model):				
+    product	= models.ForeignKey(Product, on_delete=models.CASCADE,related_name="input_need")
+    input_name = models.CharField(max_length=255,verbose_name="Product Input")
+    year = models.IntegerField()
+    is_active_input	= models.BooleanField(default=False,verbose_name="Active or Not-Active Input")		
+    amount	= models.FloatField(default=0,verbose_name="Amount")			
+    local_input	= models.FloatField(default=0,verbose_name="Local Inputs in %")			
+    import_input	= models.FloatField(default=0,verbose_name="Imported Imputs in %")
+    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='inputs_created_by',null=True)
+    created_date	= models.DateTimeField(auto_now_add=True)
+    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='inputs_updated_by',null=True)
+    last_updated_date	= models.DateTimeField(null=True)
+    expired	= models.BooleanField(default=False)	
+
+    def __str__(self):
+        return self.input_name
+
+class InputDemandSupply(models.Model):
+    product	= models.ForeignKey(Product, on_delete=models.CASCADE,related_name="product_input_demand_supply")
+    input_type	= models.ForeignKey(AnnualInputNeed, on_delete=models.CASCADE,related_name="input_demand_supply")
+    year = models.IntegerField()		
+    demand	= models.FloatField(default=0,verbose_name="Input Demand")			
+    supply	= models.FloatField(default=0,verbose_name="Input Supply")
+    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='demand_created_by',null=True)
+    created_date	= models.DateTimeField(auto_now_add=True)
+    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='demand_updated_by',null=True)
+    last_updated_date	= models.DateTimeField(null=True)
+    expired	= models.BooleanField(default=False)	
+
+
 
 class ProductImage(models.Model):
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name="product_image")
     image = models.ImageField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -41,12 +147,15 @@ class ProductImage(models.Model):
 
 
 class ProductPrice(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=False)
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10,decimal_places=2)
-    startdate = models.DateField(auto_now_add=True)
-    end_date = models.DateField(auto_now_add=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    startdate = models.DateField()
+    end_date = models.DateField()
+    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='price_created_by',null=True)
+    created_date	= models.DateTimeField(auto_now_add=True)
+    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='price_updated_by',null=True)
+    last_updated_date	= models.DateTimeField(null=True)
+    expired	= models.BooleanField(default=False)
     
 
     def __str__(self):
