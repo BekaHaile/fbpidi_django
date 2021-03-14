@@ -84,7 +84,7 @@
 								<div class="item2-gl business-list-01">
 									<div class="">
 										<div class="bg-white p-5 item2-gl-nav d-flex">
-											<h6 class="mb-0 mt-3">Showing {{news_list}}</h6>
+											<h4 class="mb-0 mt-3">{% trans "Page" %} {{news_list.number}} {% trans "of" %} {{news_list.paginator.num_pages}}</h4>
 											<ul class="nav item2-gl-menu ml-auto mt-1">
 												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
@@ -138,7 +138,7 @@
 																<div class="item-card9-cost">
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
 																		<b>{% trans "By" %}: &nbsp</b>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.get_company.company_name}}">
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.company.company_name}} ">
 																			<img src="{{news.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
 																		
 																		</a>
@@ -147,9 +147,9 @@
 
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.get_company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
 
-																		<a class="" href="/chat/with/{{news.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+																		<a class="" href="/chat/with/{{news.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title= "{% trans 'Chat with staff' %} "><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 																		
-																		<a class="" href="/collaborations/customer_news_detail/{{news.id}}/" ><b class="btn btn-secondary btn-sm mt-1">News Detail</b></a>
+																		<a class="" href="/collaborations/customer_news_detail/{{news.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "News Detail" %}</b></a>
 									
 																		<br>
 																		<!-- <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.created_date}}</small></div> -->
@@ -573,9 +573,9 @@
 								<div class="center-block text-center">
 									<ul class="pagination mb-5">
 										{% if news_list.has_previous %}
-										<li class="page-item page-prev "><a class="page-link" href="?page={{news_list.previous_page_number}}" tabindex="-1">Prev</a></li>
+										<li class="page-item page-prev "><a class="page-link" href="?page={{news_list.previous_page_number}}" tabindex="-1">{% trans "Prev" %}</a></li>
 										{% else %}
-										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">Prev</a></li>
+										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">{% trans "Prev" %}</a></li>
 										{% endif %}
 										
 										{% for i in news_list.paginator.page_range %}
@@ -587,9 +587,9 @@
 										{% endfor %}
 
 										{% if news_list.has_next %}
-										<li class="page-item page-next"><a class="page-link" href="?page={{news_list.next_page_number}}">Next</a></li>
+										<li class="page-item page-next"><a class="page-link" href="?page={{news_list.next_page_number}}">{% trans "Next" %}</a></li>
 										{% else %}
-										<li class="page-item page-next disabled"><a class="page-link" href="#">Next</a></li>
+										<li class="page-item page-next disabled"><a class="page-link" href="#">{% trans "Next" %}</a></li>
 										{% endif %}
 									</ul>
 								</div>
@@ -622,7 +622,7 @@
 						<form action = "{% url 'customer_news_list' %}" method = "GET">
 						<div class="card mb-0">
 							<div class="card-header">
-								<h3 class="card-title">Categories</h3>
+								<h3 class="card-title">{% trans "Categories" %}</h3>
 							</div>
 							<div class="card-body">
 								<div class="" id="container">

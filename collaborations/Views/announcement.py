@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models import User						 
 from collaborations.models import Announcement,AnnouncementImages
 from collaborations.forms import AnnouncementForm
-from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname, get_paginated_data
+from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname, get_paginated_data, check_user_has_company
 from company.models import Company
 
 
@@ -20,6 +20,7 @@ class AnnouncementDetail(View):
 		template_name="frontpages/announcement/customer_announcement_detail.html"
 		return render(self.request, template_name,{'post':announcement})
 	
+
 class ListAnnouncement(View):
 	def get(self,*args,**kwargs):
 		result = {}
@@ -35,7 +36,7 @@ class ListAnnouncement(View):
 			if comp.announcement_set.count() > 0:
 				companies.append(comp)
 		template_name="frontpages/announcement/customer_announcement.html"
-		return render(self.request, template_name, {'Announcements':data, 'message':result['message'], 'companies': companies})
+		return render(self.request, template_name, {'Announcements':data, 'message':result['message'],'message_am':result['message_am'], 'companies': companies})
 	
 
 #### Announcement related with admin side
@@ -67,15 +68,11 @@ class ListAnnouncementAdmin(LoginRequiredMixin, ListView):
 	template_name = "admin/announcement/announcement_list.html"
 	context_object_name = "Announcements"
 	def get_queryset(self):
-		try:
 			if self.request.user.is_superuser:
 				return Announcement.objects.all()
 			else:
-				return Announcement.objects.filter(company=self.request.user.get_company())
-		except Exception as e:
-			print("Exception at List announcement admin ", e)
-			return Announcement.objects.all()
-
+				return Announcement.objects.filter(company=self.request.user.get_company()) if check_user_has_company(self.request) else []
+		
 	# def get(self,*args,**kwargs):
 	# 	announcements = []
 	# 	try:

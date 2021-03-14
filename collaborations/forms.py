@@ -242,8 +242,8 @@ class JobCategoryForm(forms.ModelForm):
         }
 
 class NewsForm(forms.ModelForm):
-    NEWS_CATAGORY = [ ('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),  
-    ('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological')]
+    NEWS_CATAGORY = ( ('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),  
+    ('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological'))
     catagory = forms.ChoiceField(choices = NEWS_CATAGORY, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
 
     class Meta:

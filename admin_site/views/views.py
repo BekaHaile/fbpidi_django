@@ -343,6 +343,7 @@ class Polls(LoginRequiredMixin, ListView):
         context['form'] = PollsForm
         return context
 
+
 class CreatePoll(LoginRequiredMixin, CreateView):
     model = PollsQuestion
     form_class = CreatePollForm
@@ -351,7 +352,6 @@ class CreatePoll(LoginRequiredMixin, CreateView):
     success_url = "/admin/polls/"
 
     def form_valid(self, form):
-        print("((((((((((((((((( ", self.kwargs)
         poll = form.save(commit=False)
         poll.created_by = self.request.user
         poll.save()
@@ -422,6 +422,20 @@ class DetailPoll(LoginRequiredMixin, DetailView):
 #         except Exception as e:
 #             print("Poll not found ", e)
 
+class AddChoice(LoginRequiredMixin, CreateView):
+    model = Choices
+    form_class = CreateChoiceForm
+    template_name = 'admin/poll/add_choice.html'
+    template_name_suffix = '_create_form'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['poll']  = PollsQuestion.objects.get(id = self.kwargs['id'] )
+        return context
+        
+    
+
+
 
 class AddChoice(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -452,53 +466,59 @@ class AddChoice(LoginRequiredMixin,View):
             return redirect('admin:admin_polls')
 
 
-class EditPoll(LoginRequiredMixin, UpdateView):
-    model = PollsQuestion
-    form_class = CreatePollForm
-    template_name = "admin/poll/create_poll.html"
-    template_name_suffix = '_update_form'
+# class EditPoll(LoginRequiredMixin, UpdateView):
+#     model = PollsQuestion
+#     form_class = CreatePollForm
+#     template_name = "admin/poll/create_poll.html"
+#     template_name_suffix = '_update_form'
+#     context_object_name = 'poll'
 
-    def form_valid(self, form):
-        poll = form.save(commit = False)
-        poll.last_updated_by = self.request.user
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['edit'] = True
+#         return context
+        
+#     def form_valid(self, form):
+#         poll = form.save(commit = False)
+#         poll.last_updated_by = self.request.user
+#         poll.last_updated_date = timezone.now()
+#         poll.save()
+#         messages.success(self.request,"Poll has been Edited Successfully!")
+#         return redirect("admin:admin_polls")
+
+    
+    
+class EditPoll(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        try:
+            poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
+            # little verification (this verification is done at the front end, this is just for safety, like if user uses url)            
+            if poll.count_votes() != 0:
+                messages.warning(self.request, "Couldn't Edit poll, because poll Edit has started!")
+                return redirect('admin:admin_polls')
+            return render(self.request,'admin/poll/create_poll.html', {'pollform':CreatePollForm, 'choiceform':CreateChoiceForm, 'poll':poll, 'edit':True})
+        except Exception as e:          
+            print("Exception at Edit poll ",str(e))
+            messages.warning(self.request, "Error, Couldn't Edit poll!")
+            return redirect('admin:admin_polls')
+
+    def post(self,*args,**kwargs):
+        form = CreatePollForm(self.request.POST)     
+        try:
+            poll = PollsQuestion.objects.get(id = self.kwargs['id'])
+        except Exception as e:
+                print("error at Editpoll post", str(e))
+                messages.warning(self.request, "Error! Poll was not Edited!" )
+                return redirect("admin:admin_polls")
+        poll.title=self.request.POST['title']
+        poll.title_am=self.request.POST['title_am']
+        poll.description=self.request.POST["description"]
+        poll.description_am=self.request.POST['description_am']
+        poll.last_updated_by =self.request.user
         poll.last_updated_date = timezone.now()
         poll.save()
         messages.success(self.request,"Poll has been Edited Successfully!")
         return redirect("admin:admin_polls")
-
-    
-    
-# class EditPoll(LoginRequiredMixin,View):
-#     def get(self,*args,**kwargs):
-#         try:
-#             poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
-#             # little verification (this verification is done at the front end, this is just for safety, like if user uses url)            
-#             if poll.count_votes() != 0:
-#                 messages.warning(self.request, "Couldn't Edit poll, because poll Edit has started!")
-#                 return redirect('admin:admin_polls')
-#             return render(self.request,'admin/poll/create_poll.html', {'pollform':CreatePollForm, 'choiceform':CreateChoiceForm, 'poll':poll, 'edit':True})
-#         except Exception as e:          
-#             print("Exception at Edit poll ",str(e))
-#             messages.warning(self.request, "Error, Couldn't Edit poll!")
-#             return redirect('admin:admin_polls')
-
-    # def post(self,*args,**kwargs):
-    #     form = CreatePollForm(self.request.POST)     
-    #     try:
-    #         poll = PollsQuestion.objects.get(id = self.kwargs['id'])
-    #     except Exception as e:
-    #             print("error at Editpoll post", str(e))
-    #             messages.warning(self.request, "Error! Poll was not Edited!" )
-    #             return redirect("admin:admin_polls")
-    #     poll.title=self.request.POST['title']
-    #     poll.title_am=self.request.POST['title_am']
-    #     poll.description=self.request.POST["description"]
-    #     poll.description_am=self.request.POST['description_am']
-    #     poll.last_updated_by =self.request.user
-    #     poll.last_updated_date = timezone.now()
-    #     poll.save()
-    #     messages.success(self.request,"Poll has been Edited Successfully!")
-    #     return redirect("admin:admin_polls")
 
 
 class EditChoice(LoginRequiredMixin,View):

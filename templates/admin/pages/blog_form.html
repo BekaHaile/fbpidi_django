@@ -110,7 +110,7 @@
 </div>
 
 
-			<div class="modal fade" id="modalCrop">
+	<div class="modal fade" id="modalCrop">
 	    <div class="modal-dialog">
 	      <div class="modal-content">
 	        <div class="modal-header">
@@ -163,7 +163,7 @@
 							modal_image.attributes['src'].value = ""	
 							
 							//console.log("the value of c src is "+ c.attributes['src'].value)
-							//  $("#modal_image_field").attr("src", e.target.result);
+							 $("#modal_image_field").attr("src", e.target.result);
 							$("#modalCrop").modal("show");
 							e.target.result = "";	
 						}

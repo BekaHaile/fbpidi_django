@@ -12,7 +12,7 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class=""><span class="font-weight-bold"></span>{{message}}</h1>
+									<h1 class=""><span class="font-weight-bold"></span>{% print_translated message message_am LANGUAGE_CODE %}</h1>
 								</div>
 								<form action  = "{% url 'polls' %} " method="GET">
 									<div class="search-background px-4 py-3 mt-4">
@@ -141,7 +141,7 @@
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.company.phone_number}}"><i class="fa fa-phone"></i></a>	
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
 																		<a class="" href="/chat/with/{{poll.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-																		<a class="" href="/collaborations/poll_detail/{{poll.id}}/" ><b class="btn btn-secondary btn-sm mt-1">Poll Detail</b></a>
+																		<a class="" href="/collaborations/poll_detail/{{poll.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Poll Detail" %}</b></a>
 													
 																		<br>
 																		
@@ -170,9 +170,9 @@
 								<div class="center-block text-center">
 									<ul class="pagination mb-5">
 										{% if polls.has_previous %}
-										<li class="page-item page-prev "><a class="page-link" href="?page={{polls.previous_page_number}}" tabindex="-1">Prev</a></li>
+										<li class="page-item page-prev "><a class="page-link" href="?page={{polls.previous_page_number}}" tabindex="-1">">{% trans "Prev" %}</a></li>
 										{% else %}
-										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">Prev</a></li>
+										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">">{% trans "Prev" %}</a></li>
 										{% endif %}
 										
 										{% for i in polls.paginator.page_range %}
@@ -184,9 +184,9 @@
 										{% endfor %}
 
 										{% if polls.has_next %}
-										<li class="page-item page-next"><a class="page-link" href="?page={{polls.next_page_number}}">Next</a></li>
+										<li class="page-item page-next"><a class="page-link" href="?page={{polls.next_page_number}}">{% trans "Next" %}</a></li>
 										{% else %}
-										<li class="page-item page-next disabled"><a class="page-link" href="#">Next</a></li>
+										<li class="page-item page-next disabled"><a class="page-link" href="#">{% trans "Next" %}</a></li>
 										{% endif %}
 									</ul>
 								</div>

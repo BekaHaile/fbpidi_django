@@ -12,7 +12,7 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class=""><span class="font-weight-bold"></span>{{message}}</h1>
+									<h1 class=""><span class="font-weight-bold"></span>{% print_translated message message_am LANGUAGE_CODE %}</h1>
 								</div>
 								<form action="{% url 'tender_list'  %}" metho = "GET">
 									<div class="search-background px-4 py-3 mt-4">
@@ -58,7 +58,7 @@
 								<div class="item2-gl business-list-01">
 									<div class="">
 										<div class="bg-white p-5 item2-gl-nav d-flex">
-											<h6 class="mb-0 mt-3">Showing 1 to 10 of 30 entries</h6>
+											<h4 class="mb-0 mt-3">{% trans "Page" %} {{tenders.number}} {% trans "of" %} {{tenders.paginator.num_pages}}</h4>
 											<ul class="nav item2-gl-menu ml-auto mt-1">
 												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
@@ -89,9 +89,9 @@
 
 													<form action="{% url 'tender_list' %}" method="GET">
 													<label class="selectgroup-item mb-md-0">
-														{% if tenders.0.status != 'Closed' %}
-														<input type="hidden" name="by_status" value="Closed">
-														<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "Closed Only" %}</button></span>
+														{% if tenders.0.status != 'Open' %}
+														<input type="hidden" name="by_status" value="Open">
+														<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "Open Only" %}</button></span>
 														{% else %}
 														<input type="hidden" name="by_status" value="Open">
 														<span class="selectgroup-button"><button style="border: hidden; background-color: white; color: #0a2045;" type="submit">{% trans "Open Only" %}</button></span>
@@ -104,7 +104,7 @@
 											</div>
 										</div>
 									</div>
-									{{tenders}}
+								
 									<div class="tab-content">
 										<div class="tab-pane active" id="tab-11">
 											{% for tender in tenders %}
@@ -136,8 +136,6 @@
 																<div style="background-color: yellow; color:black; width: fit-content; padding: 5px;" >{% trans "Upcoming" %}</div>
 																{%elif tender.status == 'Closed' %}
 																<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >{% trans "Closed" %}</div>
-																{%else%} 
-																<div style="background-color: blue; color:white; width: fit-content; padding: 5px;" >{% trans "Suspended" %}</div>
 																{%endif%}
 
 																
@@ -148,7 +146,7 @@
 																<div class="item-card9-cost">
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
 																		<b>{% trans "By" %}: &nbsp</b>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.company.company_name}}">
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{% print_translated comp.company_name comp.company_name_am LANGUAGE_CODE %}">
 																			<img src="{{tender.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
 																		</a>
 																		
@@ -158,7 +156,7 @@
 
 																		<a class="mr-2" href="/chat/with/{{tender.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 										
-																		<a class="" href="/collaborations/customer_tender_detail/{{tender.id}}/" ><b class="btn btn-secondary btn-sm mt-1">Tender Detail</b></a>
+																		<a class="" href="/collaborations/customer_tender_detail/{{tender.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Tender Detail" %}</b></a>
 
 																		
 																		<br>
@@ -188,9 +186,9 @@
 								<div class="center-block text-center">
 									<ul class="pagination mb-5">
 										{% if tenders.has_previous %}
-										<li class="page-item page-prev "><a class="page-link" href="?page={{tenders.previous_page_number}}" tabindex="-1">Prev</a></li>
+										<li class="page-item page-prev "><a class="page-link" href="?page={{tenders.previous_page_number}}" tabindex="-1">{% trans "Prev" %}</a></li>
 										{% else %}
-										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">Prev</a></li>
+										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">{% trans "Prev" %}</a></li>
 										{% endif %}
 										
 										{% for i in tenders.paginator.page_range %}
@@ -202,9 +200,9 @@
 										{% endfor %}
 
 										{% if tenders.has_next %}
-										<li class="page-item page-next"><a class="page-link" href="?page={{tenders.next_page_number}}">Next</a></li>
+										<li class="page-item page-next"><a class="page-link" href="?page={{tenders.next_page_number}}">{% trans "Next" %}</a></li>
 										{% else %}
-										<li class="page-item page-next disabled"><a class="page-link" href="#">Next</a></li>
+										<li class="page-item page-next disabled"><a class="page-link" href="#">{% trans "Next" %}</a></li>
 										{% endif %}
 									</ul>
 								</div>

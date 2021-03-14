@@ -44,7 +44,7 @@ def sendWelcomeEmail(request,user):
 def sendEventNotification(request, participant):
     
     current_site = get_current_site(request)
-    mail_message = f'The Event titled "{participant.event.title}" Will start after on {participant.notify_on.date}.'
+    mail_message = f'The Event titled "{participant.event.title}" Will start on {participant.event.start_date.date()}.'
     mail_subject = f'Event Notification From IIMP'
     to_email = participant.patricipant_email
     email = EmailMessage(mail_subject, mail_message, to=[participant.patricipant_email])

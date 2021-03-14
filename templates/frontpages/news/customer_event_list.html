@@ -12,7 +12,7 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class=""><span class="font-weight-bold"></span>{{message}}</h1>
+									<h1 class=""><span class="font-weight-bold"></span>{% print_translated message message_am LANGUAGE_CODE %}</h1>
 								</div>
 								<form action="{% url 'customer_event_list'  %}" metho = "GET">
 									<div class="search-background px-4 py-3 mt-4">
@@ -59,7 +59,7 @@
 								<div class="item2-gl business-list-01">
 									<div class="">
 										<div class="bg-white p-5 item2-gl-nav d-flex">
-											<h6 class="mb-0 mt-3">Showing {{events}}</h6>
+											<h6 class="mb-0 mt-3">{% trans "Page" %} {{events.number}} {% trans "of" %} {{events.paginator.num_pages}}</h6>
 											<ul class="nav item2-gl-menu ml-auto mt-1">
 												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
@@ -119,8 +119,7 @@
 																	<h4 class="font-weight-semibold mt-1 mb-1">{% print_translated event.title|safe event.title_am|safe LANGUAGE_CODE %}</h4>
 																</a>
 
-																<small>{% change_end_date event.start_date %} </small> -
-																<small>{% change_end_date event.end_date %}</small>
+																<small>{% change_end_date event.start_date %} </small> - <small>{% change_end_date event.end_date %}</small>
 																{% if event.status == 'Open' %}
 																<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >{% trans "Open" %}</div>
 																{%elif event.status == 'Upcoming' %}
@@ -137,7 +136,7 @@
 															<div class="item-card9-footer d-sm-flex">
 																<div class="item-card9-cost">
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																		<b>By: &nbsp</b>
+																		<b>{% trans "By" %}: &nbsp</b>
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{event.company.company_name}}">
 																			<img src="{{event.company.get_image}}" alt="image" class="avatar brround  mr-2">
 																		</a>
@@ -147,7 +146,7 @@
 
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{event.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
 																		<a class="" href="/chat/with/{{event.get_company_admin.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-																		<a class="" href="/collaborations/customer_event_detail/{{event.id}}/" ><b class="btn btn-secondary btn-sm mt-1">Event Detail</b></a>
+																		<a class="" href="/collaborations/customer_event_detail/{{event.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Event Detail" %}</b></a>
 							
 																	</div>
 																</div>
@@ -162,7 +161,7 @@
 																	<!--<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >Closed</div>-->
 																	<!--{% endif %}-->
 
-																	<div class="text-dark font-weight-normal mb-0 mt-1 item-card2-desc"><small > <b>  At:</b> {{event.created_date}}</small></div>
+																	<div class="text-dark font-weight-normal mb-0 mt-1 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{event.created_date}}</small></div>
 																	
 																</div>
 															</div>
@@ -179,9 +178,9 @@
 								<div class="center-block text-center">
 									<ul class="pagination mb-5">
 										{% if events.has_previous %}
-										<li class="page-item page-prev "><a class="page-link" href="?page={{events.previous_page_number}}" tabindex="-1">Prev</a></li>
+										<li class="page-item page-prev "><a class="page-link" href="?page={{events.previous_page_number}}" tabindex="-1">{% trans "Prev" %}</a></li>
 										{% else %}
-										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">Prev</a></li>
+										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">{% trans "Prev" %}</a></li>
 										{% endif %}
 										
 										{% for i in events.paginator.page_range %}
@@ -193,9 +192,9 @@
 										{% endfor %}
 
 										{% if events.has_next %}
-										<li class="page-item page-next"><a class="page-link" href="?page={{events.next_page_number}}">Next</a></li>
+										<li class="page-item page-next"><a class="page-link" href="?page={{events.next_page_number}}">{% trans "Next" %}</a></li>
 										{% else %}
-										<li class="page-item page-next disabled"><a class="page-link" href="#">Next</a></li>
+										<li class="page-item page-next disabled"><a class="page-link" href="#">{% trans "Next" %}</a></li>
 										{% endif %}
 									</ul>
 								</div>

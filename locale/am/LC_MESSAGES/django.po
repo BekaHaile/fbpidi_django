@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-13 11:29+0300\n"
+"POT-Creation-Date: 2021-03-13 21:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,15 +98,15 @@ msgid "Ecommerce - Product Detail"
 msgstr ""
 
 #: .\templates\frontpages\announcement\customer_announcement.html:25
-#: .\templates\frontpages\announcement\customer_announcement.html:174
+#: .\templates\frontpages\announcement\customer_announcement.html:186
 #: .\templates\frontpages\blog-details-right.html:38
 #: .\templates\frontpages\blog-grid-right.html:37
 #: .\templates\frontpages\news\customer_event_list.html:24
-#: .\templates\frontpages\news\customer_event_list.html:208
+#: .\templates\frontpages\news\customer_event_list.html:220
 #: .\templates\frontpages\news\customer_news_list.html:47
-#: .\templates\frontpages\news\customer_news_list.html:601
+#: .\templates\frontpages\news\customer_news_list.html:613
 #: .\templates\frontpages\poll\polls-list.html:25
-#: .\templates\frontpages\poll\polls-list.html:197
+#: .\templates\frontpages\poll\polls-list.html:209
 #: .\templates\frontpages\project\project_list.html:39
 #: .\templates\frontpages\research\research_detail.html:50
 #: .\templates\frontpages\research\research_detail_edit.html:54
@@ -114,7 +114,7 @@ msgstr ""
 #: .\templates\frontpages\research\research_list.html:51
 #: .\templates\frontpages\tender\customer_tender_detail.html:198
 #: .\templates\frontpages\tender\customer_tender_list.html:24
-#: .\templates\frontpages\tender\customer_tender_list.html:212
+#: .\templates\frontpages\tender\customer_tender_list.html:226
 #, fuzzy
 #| msgid "Search Now"
 msgid "Search"
@@ -139,18 +139,18 @@ msgstr "ሁሉም"
 msgid "At"
 msgstr "በ"
 
-#: .\templates\frontpages\announcement\customer_announcement.html:188
-#: .\templates\frontpages\poll\polls-list.html:211
+#: .\templates\frontpages\announcement\customer_announcement.html:200
+#: .\templates\frontpages\poll\polls-list.html:223
 msgid "Filter by company"
 msgstr "በድርጅት አጣራ"
 
-#: .\templates\frontpages\announcement\customer_announcement.html:203
+#: .\templates\frontpages\announcement\customer_announcement.html:215
 #: .\templates\frontpages\news\customer_event_detail.html:251
-#: .\templates\frontpages\news\customer_event_list.html:236
+#: .\templates\frontpages\news\customer_event_list.html:248
 #: .\templates\frontpages\news\customer_news_detail.html:246
-#: .\templates\frontpages\news\customer_news_list.html:650
-#: .\templates\frontpages\poll\polls-list.html:226
-#: .\templates\frontpages\tender\customer_tender_list.html:238
+#: .\templates\frontpages\news\customer_news_list.html:662
+#: .\templates\frontpages\poll\polls-list.html:238
+#: .\templates\frontpages\tender\customer_tender_list.html:252
 msgid "Apply Filter"
 msgstr "አጣራ"
 
@@ -550,7 +550,7 @@ msgid "Contact Us"
 msgstr "ተገናኙን"
 
 #: .\templates\frontpages\news\customer_event_detail.html:235
-#: .\templates\frontpages\tender\customer_tender_list.html:222
+#: .\templates\frontpages\tender\customer_tender_list.html:236
 msgid "Filter by company "
 msgstr "ብድርጅት ለይ"
 
@@ -572,13 +572,13 @@ msgstr "ክፈት ዝግጅቶች"
 
 #: .\templates\frontpages\news\customer_event_list.html:125
 #: .\templates\frontpages\tender\customer_tender_detail.html:64
-#: .\templates\frontpages\tender\customer_tender_list.html:133
+#: .\templates\frontpages\tender\customer_tender_list.html:134
 msgid "Open"
 msgstr "ክፈት"
 
 #: .\templates\frontpages\news\customer_event_list.html:127
 #: .\templates\frontpages\tender\customer_tender_detail.html:66
-#: .\templates\frontpages\tender\customer_tender_list.html:135
+#: .\templates\frontpages\tender\customer_tender_list.html:136
 #, fuzzy
 #| msgid "Upcoming Events"
 msgid "Upcoming"
@@ -586,17 +586,17 @@ msgstr "መጪ የዝግጅቶች"
 
 #: .\templates\frontpages\news\customer_event_list.html:129
 #: .\templates\frontpages\tender\customer_tender_detail.html:68
-#: .\templates\frontpages\tender\customer_tender_list.html:137
+#: .\templates\frontpages\tender\customer_tender_list.html:138
 msgid "Closed"
 msgstr "ዝግ"
 
 #: .\templates\frontpages\news\customer_event_list.html:131
 #: .\templates\frontpages\tender\customer_tender_detail.html:70
-#: .\templates\frontpages\tender\customer_tender_list.html:139
+#: .\templates\frontpages\tender\customer_tender_list.html:140
 msgid "Suspended"
 msgstr "ታግዷል"
 
-#: .\templates\frontpages\news\customer_event_list.html:220
+#: .\templates\frontpages\news\customer_event_list.html:232
 msgid "Filter by Company "
 msgstr ""
 
@@ -616,11 +616,11 @@ msgid "Pages"
 msgstr "ገጾች"
 
 #: .\templates\frontpages\news\customer_news_list.html:140
-#: .\templates\frontpages\tender\customer_tender_list.html:149
+#: .\templates\frontpages\tender\customer_tender_list.html:150
 msgid "By"
 msgstr "በ"
 
-#: .\templates\frontpages\news\customer_news_list.html:690
+#: .\templates\frontpages\news\customer_news_list.html:702
 msgid "Send Message"
 msgstr ""
 
@@ -884,7 +884,7 @@ msgstr "ዝግ"
 msgid "Open Only"
 msgstr "ክፈት ብቻ"
 
-#: .\templates\frontpages\tender\customer_tender_list.html:169
+#: .\templates\frontpages\tender\customer_tender_list.html:170
 #, fuzzy
 #| msgid "Posted By"
 msgid "Posted"
