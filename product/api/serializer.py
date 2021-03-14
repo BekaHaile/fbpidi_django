@@ -30,7 +30,7 @@ class ProducteFullSerializer(serializers.ModelSerializer):
 
 class ProductInfoSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='get_category')
-    company = CompanyInfoSerializer
+    company = CompanyInfoSerializer(read_only=True)
     class Meta:
         model  = Product
         fields = "__all__"

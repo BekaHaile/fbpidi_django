@@ -392,50 +392,59 @@ class CommentReplay(models.Model):
     
 
 class Announcement(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     title = models.CharField(max_length=500,null=False)
     title_am = models.CharField(max_length=500,null=False)
-    containt = models.TextField(null=False)
-    containt_am = models.TextField(null=False)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-
+    description = models.TextField(null=False)
+    description_am = models.TextField(null=False)
+    last_updated_by = models.ForeignKey (settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, blank=True, null = True, related_name="announcemnt_updated")
+    last_updated_date = models.DateTimeField(blank=True, null = True)
+    expired = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['-timestamp',]
+        ordering = ['-created_date',]
 
     def announcementimages(self):
         return self.announcementimages_set.all()
+    
+    def save(self):
+        self.company = self.created_by.get_company()
+        super(Announcement, self).save()
 
 
 class AnnouncementImages(models.Model):
     announcement = models.ForeignKey(Announcement, on_delete = models.CASCADE)
     image = models.ImageField(upload_to = "Announcements", max_length=254, verbose_name="Announcement Image",help_text="jpg, png, gid", blank=False)  
-    timestamp = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    expired = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['-timestamp',]
+        ordering = ['-created_date',]
 
-    def save(self):           
-        super(AnnouncementImages, self).save()
+    # def save(self):           
+    #     super(AnnouncementImages, self).save()
 
         
-        im = Image.open(self.image)  
-        size = (300, 300)
-        im = im.resize(size, Image.ANTIALIAS)
-        im.save(self.image.path)
+    #     im = Image.open(self.image)  
+    #     size = (300, 300)
+    #     im = im.resize(size, Image.ANTIALIAS)
+    #     im.save(self.image.path)
 
 
 class ResearchProjectCategory(models.Model):
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
     cateoryname = models.CharField(max_length=500,null=False)
     cateoryname_am = models.CharField(max_length=500,null=False)
     detail = models.TextField(null=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    last_updated_by = models.ForeignKey (settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, blank=True, null = True, related_name="category_updated")
+    last_updated_date = models.DateTimeField(blank=True, null = True)
+    expired = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['-timestamp',]
+        ordering = ['-created_date',]
 
     def __str__(self):
         return self.cateoryname
@@ -475,18 +484,25 @@ class ResearchAttachment(models.Model):
 
 
 class Project(models.Model):
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=500,null=False)
     description = models.TextField(null=False)
-    detail = models.TextField(null=False)
     status = models.CharField(max_length=100,null=False)
-    accepted = models.CharField(max_length=100,null=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(ResearchProjectCategory, on_delete = models.CASCADE)
     attachements = models.FileField(upload_to="ProjectAttachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
+    last_updated_by = models.ForeignKey (settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, blank=True, null = True, related_name="project_updated")
+    last_updated_date = models.DateTimeField(blank=True, null = True)
+    expired = models.BooleanField(default=False)
+
 
     class Meta:
-        ordering = ['-timestamp',]
+        ordering = ['-created_date',]
+
+    def save(self):
+        self.company = self.created_by.get_company()
+        super(Project,self).save()
     
     def get_category_name(self):
         return self.category.cateoryname
@@ -496,15 +512,26 @@ class Document_Category(models.Model):
     
     title = models.CharField(max_length=250, verbose_name="category title", help_text="category name for documents.")
     description = models.CharField(max_length = 250, verbose_name = "category description", help_text="some detail information about the category")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, blank=True, null=True) # if it is null then the category is created by the system
-    timestamp = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, blank=True, null=True) # if it is null then the category is created by the system
+    created_date = models.DateTimeField(auto_now_add=True)
 
 
 class Document(models.Model):
     DOC_CATEGORY = [ ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'),]
-    
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(verbose_name="upload time", auto_now_add=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=250, verbose_name="document title")
     document = models.FileField(upload_to="Documents/", blank="False")
     category = models.CharField( max_length = 250, choices=DOC_CATEGORY)
-    timestamp = models.DateTimeField(verbose_name="upload time", auto_now_add=True)
+    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="document_updated_by")
+    last_updated_date = models.DateTimeField(null=True)
+    expired = models.BooleanField(default=False)
+
+    def save(self):
+        self.company = self.created_by.get_company()
+        super(Document, self).save()
+    
+    class Meta:
+        ordering = ['-created_date']

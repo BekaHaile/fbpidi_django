@@ -67,8 +67,8 @@
                                             <a href="#" style="display: inline;" class = "mr-3">
                                                 {% if tender.status == 'Open' %}
                                                 <div  style="background-color: #66bb6a;; color:white; width: fit-content; padding: 5px; display: inline; " >Open</div>
-                                                {%elif tender.status == 'Pending' %}
-                                                <div style="background-color: yellow; color:#ef5350; width: fit-content; padding: 5px;  display: inline;" >Pending</div>
+                                                {%elif tender.status == 'Upcoming' %}
+                                                <div style="background-color: yellow; color:#ef5350; width: fit-content; padding: 5px;  display: inline;" >Upcoming</div>
                                                 {%elif tender.status == 'Closed' %}
                                                 <div style="background-color: #ef5350; color:white; width: fit-content; padding: 5px; display: inline;" >Closed</div>
                                                 {%else%} 
