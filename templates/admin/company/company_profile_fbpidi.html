@@ -640,25 +640,7 @@
 														</div>
 													 <!-- Date Fields End Here -->
 													
-													 <!-- status creation form -->
-														<div class="col-md-9" style="padding-left:0px;">
-															
-																
-																	<div class="col-lg-9" style="width: 100%; padding-left:0px; display: inline-block;">
-																		<label style="padding-left: 0px;" class="col-form-label col-lg-8">Current Status: <b>{{event.status}}</b></label>
-																			<select required name="status"  class="form-control " >
-																				{% for status in event_form.STATUS_CHOICE %}
-																					<option  value="{{status.0}}">{{status.0 }}</option>
-																					<div class="list-icons" style="width: 100%; display: inline-block; opacity: 1;" >
-																						<div class="dropdown">
-																							<a href="#" class="list-icons-item" data-toggle="dropdown">	</a>
-																						</div>
-																					</div>
-																				{%endfor%}
-																			</select>
-																	</div>
-															
-														</div>
+													 
 														<br>
 
 
@@ -757,24 +739,6 @@
 											<!-- Date Fields End Here -->
 											
 
-											<div class="col-md-6" style="padding-left:0px;">
-												
-													
-														<div class="col-lg-9" style="width: 100%; padding-left:0px; display: inline-block;">
-															<label style="padding-left: 0px;" class="col-form-label col-lg-8">Status</label>
-																<select required name="status"  class="form-control " >
-																	{% for status in event_form.STATUS_CHOICE %}
-																		<option  value="{{status.0}}">{{status.0 }}</option>
-																		<div class="list-icons" style="width: 100%; display: inline-block; opacity: 1;" >
-																			<div class="dropdown">
-																				<a href="#" class="list-icons-item" data-toggle="dropdown">	</a>
-																			</div>
-																		</div>
-																	{%endfor%}
-																</select>
-														</div>
-												
-											</div>
 											<br>
 
 											<div class="form-group">

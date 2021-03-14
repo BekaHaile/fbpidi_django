@@ -355,19 +355,20 @@ class CompanyEvent(models.Model):
     
     def get_company_admin(self):
         return self.company.get_compnay_admin()
+    
+    def model_am(self):
+        return "ዝግጅቶች"
 
 
 class EventParticipants(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     event = models.ForeignKey(CompanyEvent, on_delete=models.CASCADE)
     patricipant_email = models.EmailField(max_length=200, blank=True)
-    notify_on = models.DateTimeField(blank=False, null=False)
+    notify_on = models.DateField(blank=False, null=False)
     notified = models.BooleanField(verbose_name="If notification is sent = True", default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    # class Meta:
-        # unique_together = (('patricipant_email', 'event'))
-        
+   
 
 class Bank(models.Model):
     bank_name = models.CharField(verbose_name="bank name", max_length=255,)
