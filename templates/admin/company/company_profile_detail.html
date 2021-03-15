@@ -4,35 +4,10 @@
 {%load crispy_forms_tags%}
 {% block extrastyle %}
 
-	<!-- Theme JS files -->
-	<script src="/static/admin/global_assets/js/plugins/extensions/rowlink.js"></script>
-	<script src="/static/admin/global_assets/js/plugins/visualization/echarts/echarts.min.js"></script>
-	<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
-	<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
-	<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
-	<script src="/static/admin/global_assets/js/plugins/ui/fullcalendar/fullcalendar.min.js"></script> 
-	<script src="/static/admin/global_assets/js/demo_pages/user_pages_profile_tabbed.js"></script>
-	<script src="/static/admin/global_assets/js/demo_pages/job_list.js"></script>
-	<!-- /theme JS files -->
-	<script src="/static/admin/global_assets/js/plugins/pickers/color/spectrum.js"></script>
-    <script src="/static/admin/global_assets/js/plugins/forms/styling/switchery.min.js"></script>
-	<script src="/static/admin/global_assets/js/demo_pages/picker_color.js"></script>
-	
-	<script src="/static/admin/global_assets/js/plugins/notifications/bootbox.min.js"></script>
-	<script src="/static/admin/global_assets/js/demo_pages/components_modals.js"></script>
-
 	<!-- links for image cropper -->
 	<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
-<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 
-
-
-<link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
-<script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
-
-
-	<!-- links for image cropper -->
-	<!-- js for date picker calender -->
 	<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
     <script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
     <script src="/static/admin/global_assets/js/plugins/pickers/anytime.min.js"></script>
@@ -42,21 +17,33 @@
     <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/legacy.js"></script>
     <script src="/static/admin/global_assets/js/plugins/notifications/jgrowl.min.js"></script>
 	<script src="/static/admin/global_assets/js/demo_pages/picker_date.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/ui/fab.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/sticky.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/prism.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/extra_fab.js"></script>
 
+	<style>
+		.unread {
+			background-color: red;
+		}
+		
+	</style>
 	{{form.media}}
 {% endblock %}
-{%block pagename%}Company Profile{%endblock%}
+{%block pagename%}Company Profile: {{company.name}}
+{%endblock%}
 {%block content%}
-<style>
-	.unread {
-		background-color: red;
-	}
-	
-</style>
 
 			<!-- Content area -->
 			<div class="content">
-
+				<ul class="fab-menu fab-menu-fixed fab-menu-bottom-right" data-toggle="modal" data-target="#rating_form">
+					<li>
+						<a class="fab-menu-btn btn bg-teal-400 btn-float rounded-round btn-icon">
+							<i class="fab-icon-open icon-star-full2"></i>
+							<i class="fab-icon-close icon-star-full2"></i>
+						</a>
+					</li>
+				</ul>
 				<!-- Inner container -->
 				<div class="d-md-flex align-items-md-start">
 
@@ -70,7 +57,7 @@
 							<div class="card">
 								<div class="card-body bg-indigo-400 text-center card-img-top" style="background-size: contain;">
 									<div class="card-img-actions d-inline-block mb-3">
-										<img class="img-fluid rounded-circle" src="{%if object.logo%}{{object.logo.url}}{%endif%}" width="170" height="170" alt="">
+										<img class="img-fluid rounded-circle" src="{%if object.logo%}{{object.logo.url}}{%endif%}" width="170" height="120" alt="">
 										<div class="card-img-actions-overlay rounded-circle">
 											
 										</div>
@@ -1214,22 +1201,51 @@
 
 				</div>
 				<!-- /inner container -->
-
+					
+			</div>
+			<div id="rating_form" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Only for Institution expert observation.</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+			
+						<form action="{%url 'admin:rate_company' pk=object.id%}" enctype="multipart/form-data" method="POST">
+							{%csrf_token%}
+							
+							<div class="modal-body">
+								{%if object.company_condition%}
+								<div class="form-group">
+									<h4>Current Company Condition:<span>&nbsp;</span>{{object.company_condition.name}}</h4>
+								</div>
+								{%endif%}
+								<div class="form-group row">
+											<label>Update {{rating_form.company_condition.label}}</label>
+												{{rating_form.company_condition}}
+											<span class="form-text text-muted">{{rating_form.company_condition.help_text}}</span>
+								</div>
+								 
+			
+							</div>
+			
+							<div class="modal-footer">
+								<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+								<button type="submit" id="submit_certificate" class="btn bg-primary">Submit form</button>
+							</div>
+						</form>
+					</div>
+				</div>
 			</div>
 			<!-- /content area -->
 			<input id = "user_name" type="hidden" value="{{user.username}}">
+			 
 			<script>
 				function chat_with_user(){
 					var reciever = document.getElementById('chat_to');
 					console.log("user name is ", )
 					window.location.pathname = '/chat/' + user_name.value+"_"+ reciever.value+'/';
 				}
-				$(document).ready(function(){
-					$("#summernote").summernote();
-					$(".summernote").summernote();
-				});
-			</script>
-			<script>
 				$(document).ready(function () {
 					$('#summernote').summernote();
 					$('.summernote').summernote();

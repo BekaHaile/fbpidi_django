@@ -98,37 +98,42 @@
 												<div class="col-md-6">
 													<label for="">{{form.name.label}}</label>
 													{{form.name}}
+													<span class="form-text text-warning">{{form.name.errors}}</span>
 												</div>
 												<div class="col-md-6">
 													<label for="">{{form.name_am.label}}</label>
 													{{form.name_am}}
+													<span class="form-text text-warning">{{form.name_am.errors}}</span>
 												</div>					
 										</div>
 										<div class="form-group row">
 											<label for="">{{form.geo_location.label}}</label>
 										</div>
 										<div class="form-group row">
-												{{form.geo_location}}					
+												{{form.geo_location}}	
+												<span class="form-text text-warning">{{form.geo_location.errors}}</span>				
 										</div>
-										<div class="form-group row">
-											{{form.main_category}}					
-									</div>
+										
 										 
 										
 										<div class="form-group row">
-											<div class="col-md-6">
+											<div class="col-md-4">
+												<label for="">{{form.main_category.label}}</label>
+												{{form.main_category}}	
+												<span class="form-text text-warning">{{form.main_category.errors}}</span>				
+											</div>
+											<div class="col-md-4">
 												<label for="">{{form.ownership_form.label}}</label>
 												{{form.ownership_form}}
+												<span class="form-text text-warning">{{form.ownership_form.errors}}</span>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<label for="">{{form.established_yr.label}}</label>
 												{{form.established_yr}}
+												<span class="form-text text-warning">{{form.established_yr.errors}}</span>
 											</div>
 										</div>
-										<div class="form-group">
-												<label for="">{{form.category.label}}</label>
-												{{form.category}}									
-										</div>
+										 
 										<div class="form-group row">
 											
 											<div class="col-md-6">
@@ -139,6 +144,7 @@
 													<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
 												</div>
 												<span class="form-text text-muted">{{form.trade_license.help_text}}b</span>
+												<span class="form-text text-warning">{{form.trade_license.errors}}</span>
 											</div>
 											<div class="col-md-6">
 												<label>{{form.logo.label}}</label>
@@ -147,7 +153,8 @@
 													<span class="filename" style="user-select: none;">No file selected</span>
 													<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
 												</div>
-												<span class="form-text text-muted">{{form.logo.help_text}}b</span>
+												<span class="form-text text-muted">{{form.logo.help_text}}</span>
+												<span class="form-text text-warning">{{form.logo.errors}}</span>
 											</div>
 											 
 										 </div>

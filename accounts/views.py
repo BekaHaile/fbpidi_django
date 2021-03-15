@@ -154,7 +154,7 @@ class CreateCompanyStaff(LoginRequiredMixin,CreateView):
         user = form.save()
         user.created_by = self.request.user
         user.save()
-        company = Company.objects.get(user=self.request.user)
+        company = Company.objects.get(contact_person=self.request.user)
         comp_staff = CompanyStaff.objects.create(user=user,company=company)
         comp_staff.save()
         messages.success(self.request,"You Created a User Successfully!")

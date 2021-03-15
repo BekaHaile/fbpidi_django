@@ -116,17 +116,17 @@
 					<div class="card-body">
 						<div class="media">
 							<div class="mr-3">
-								<a href="#">{%if user.profile_image != ""%}
+								<a href="#">{%if user.get_company.logo%}
 									<!-- /static/admin/global_assets/images/demo/users/face11.jpg -->
-									<img src="{{user.profile_image.url}}" class="rounded-circle mr-2" height="34" alt="">
+									<img src="{{user.get_company.logo.url}}" class="rounded-circle mr-2" height="34" alt="">
 									{%endif%}</a>
 							</div>
 
 							<div class="media-body">
 								<div class="media-title font-weight-semibold">
-									{% firstof user.get_short_name user.get_username %}</div>
+									{{user.get_company.name}}</div>
 								<div class="font-size-xs opacity-50">
-									<i class="icon-pin font-size-sm"></i> &nbsp;Santa Ana, CA
+									<i class="icon-pin font-size-sm"></i> &nbsp;{{user.get_company.get_company_address.city_town}}
 								</div>
 							</div>
 

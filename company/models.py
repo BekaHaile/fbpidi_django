@@ -1,8 +1,14 @@
+
 from django.contrib.gis.db import models as gis_models
 from django.utils import timezone
 from django.db import models
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
+
 from admin_site.models import Category,CompanyDropdownsMaster,ProjectDropDownsMaster
+
+allowed_file_extensions = ['pdf', 'doc', 'docx', 'jpg', 'png', 'xlsx', 'xls']
+allowed_image_extensions = ['png','jpg',]
 
 CAT_LIST = (
     ('','Select Company Type'),
@@ -18,7 +24,7 @@ class SubCategory(models.Model):
     sub_category_name_am = models.CharField(max_length=200,verbose_name="Sub-Category Name(Amharic)")
     description = models.TextField(verbose_name="Description (English)")
     description_am = models.TextField(verbose_name="Description (Amharic)")
-    icons = models.ImageField()
+    icons = models.ImageField( verbose_name="Category Icon")
     created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='subcat_created_by',null=True)
     created_date	= models.DateTimeField(auto_now_add=True)
     last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='subcat_updated_by',null=True)
@@ -46,18 +52,27 @@ class Company(models.Model):
 	main_category = models.CharField(max_length=100,verbose_name="Company Type",choices=CAT_LIST)
 	name = models.CharField(verbose_name="Company Name in English", max_length=255,null=True)
 	name_am = models.CharField(verbose_name="Company Name in Amharic", max_length=255,null=True)
-	logo = models.FileField(max_length=254, verbose_name="Logo of the company",help_text="PNG, Max size 10MB", null=True)
+	logo = models.FileField(max_length=254, verbose_name="Logo of the company",
+							help_text="png,jpg Max size 10MB", null=True,
+							upload_to="company/logo/",
+							validators=[FileExtensionValidator(allowed_extensions=allowed_image_extensions)])
 	geo_location	= gis_models.PointField(verbose_name="Company Location",null=True)
 	ownership_form = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,
 										verbose_name="Form Of Ownership",related_name="ownership_form")
 	established_yr	= models.IntegerField(default=0,verbose_name="Established Year")
 	contact_person	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True,related_name="contact_person") # contact person
-	category	= models.ManyToManyField(Category,related_name="company_category") # category
+	category	= models.ManyToManyField(Category,related_name="company_category",verbose_name="Company Product Types") # category
 	expansion_plan	= models.TextField(verbose_name="Expansion Plan in English",null=True,blank=True)
 	expansion_plan_am	= models.TextField(verbose_name="Expansion Plan in Amharic",null=True,blank=True)
-	trade_license	= models.FileField(max_length=254, verbose_name="your Trade License",help_text="PDF,JPEG,PNG, Max size 10MB", null=True)
+	trade_license	= models.FileField(max_length=254, verbose_name="your Trade License",
+									help_text="Images and pdf files less than 10MB", null=True,
+									upload_to="company/trade_license/",
+									validators=[FileExtensionValidator(allowed_extensions=allowed_file_extensions)])
 	working_hours	= models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,related_name="working_hours",null=True)
-	orgn_strct	= models.FileField(max_length=254, verbose_name="Organizational Structure",help_text="PDF,JPEG,PNG, Max size 10MB", null=True)
+	orgn_strct	= models.FileField(max_length=254, verbose_name="Organizational Structure",
+							help_text="Image and pdf files less thatn 10MB", null=True,
+							upload_to="company/organization_structure/",
+							validators=[FileExtensionValidator(allowed_extensions=allowed_file_extensions)])
 	lab_test_analysis = models.TextField(verbose_name="Laboratory test analysis in english",null=True,blank=True)
 	lab_test_analysis_am = models.TextField(verbose_name="Laboratory test analysis in amharic",null=True,blank=True)
 	lab_equipment	= models.TextField(verbose_name="Laboratory equipment",null=True,blank=True)
@@ -96,8 +111,8 @@ class Company(models.Model):
 	quality_defects	= models.TextField(verbose_name="What quality defect frequently observed in your product? in English",null=True,blank=True)
 	gas_waste_mgmnt_measure	= models.TextField(verbose_name="What measures does your company introduced to reduce its gas and waste management? in English",null=True,blank=True)
 	gas_waste_mgmnt_measure_am	= models.TextField(verbose_name="What measures does your company introduced to reduce its gas and waste management? in amharic",null=True,blank=True)
-	support_required	= models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,verbose_name="Support Required",related_name="major_challenges")
-	company_condition = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,verbose_name="Company Condition",related_name="company_status")
+	support_required	= models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,verbose_name="What kind of support do you need to increase your production and market",related_name="major_challenges")
+	company_condition = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,verbose_name="Status of processing/ industry facility",related_name="company_status")
 	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_created_by',null=True)
 	created_date	= models.DateTimeField(auto_now_add=True)
 	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_updated_by',null=True)
@@ -140,9 +155,11 @@ class InvestmentCapital(models.Model):
 class Certificates(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="certificates")
     name = models.CharField(max_length=100,null=True)
-    certificate	= models.FileField(max_length=254, upload_to="companies/certificates/",
+    certificate	= models.FileField(max_length=254,
+									upload_to="company/certificates/",
                                     verbose_name="Certificate of Competency",
-                                    help_text="PDF,PNG,JPEG, Max size 10MB")
+                                    help_text="Images and pdf files less thatn 10MB",
+									validators=[FileExtensionValidator(allowed_extensions=allowed_file_extensions)])
     timestamp = models.DateField(auto_now_add=True)
 
 	
@@ -233,8 +250,9 @@ class PowerConsumption(models.Model):
 
 
 class CompanyStaff(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
-    company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_staff")
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, 
+		on_delete=models.CASCADE, primary_key=True,related_name="company_staff")
+    company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="staff_company")
     time_stamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

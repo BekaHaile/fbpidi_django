@@ -14,8 +14,7 @@ from django.db.models import Q
 from admin_site.models import Category
 from product.models import *
 from product.forms import *
-from accounts.models import User
-from company.models import Company,SubCategory,Brand
+from company.models import *
 
 
 
@@ -75,8 +74,10 @@ class SubCategoryView(LoginRequiredMixin,ListView):
     def get_queryset(self):
         if self.request.user.is_superuser:
             return SubCategory.objects.all()
-        else:
+        elif self.request.user.is_company_admin:
             return SubCategory.objects.filter(company=Company.objects.get(contact_person=self.request.user))
+        elif self.request.user.is_company_staff:
+            return SubCategory.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
             
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
@@ -92,7 +93,10 @@ class SubCategoryDetail(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(SubCategoryDetail,self).get_form_kwargs()
-        kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        if self.request.user.is_company_admin:
+            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
         return kwargs
 
     def get_context_data(self,**kwargs):
@@ -108,14 +112,19 @@ class CreateSubCategories(LoginRequiredMixin,CreateView):
     
     def get_form_kwargs(self):
         kwargs = super(CreateSubCategories,self).get_form_kwargs()
-        kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        if self.request.user.is_company_admin:
+            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
         return kwargs
 
     def form_valid(self,form):        
         sub_category = form.save(commit=False)
         sub_category.created_by = self.request.user
-        # sub_category.category_name=form.cleaned_data.get('category_name')
-        sub_category.company = Company.objects.get(contact_person=self.request.user)
+        if self.request.user.is_company_admin:
+            sub_category.company = Company.objects.get(contact_person=self.request.user)
+        elif self.request.user.is_company_staff:
+            sub_category.company = CompanyStaff.objects.get(user=self.request.user).company        
         sub_category.save()
         messages.success(self.request,"You Created a New Sub Category")
         return redirect("admin:sub_categories")
@@ -134,8 +143,10 @@ class BrandView(LoginRequiredMixin,ListView):
     def get_queryset(self):
         if self.request.user.is_superuser:
             return Brand.objects.all()
-        else:
+        elif self.request.user.is_company_admin:
             return Brand.objects.filter(company=Company.objects.get(contact_person=self.request.user))
+        elif self.request.user.is_company_staff:
+            return Brand.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
             
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
@@ -151,7 +162,10 @@ class BrandDetail(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(BrandDetail,self).get_form_kwargs()
-        kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        if self.request.user.is_company_admin:
+            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
         return kwargs
 
     def get_context_data(self,**kwargs):
@@ -167,13 +181,19 @@ class CreateBrand(LoginRequiredMixin,CreateView):
     
     def get_form_kwargs(self):
         kwargs = super(CreateBrand,self).get_form_kwargs()
-        kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        if self.request.user.is_company_admin:
+            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
         return kwargs
 
     def form_valid(self,form):        
         brand = form.save(commit=False)
         brand.created_by = self.request.user
-        brand.company = Company.objects.get(contact_person=self.request.user)
+        if self.request.user.is_company_admin:
+            brand.company = Company.objects.get(contact_person=self.request.user)
+        elif self.request.user.is_company_staff:
+            brand.company = CompanyStaff.objects.get(user=self.request.user).company
         brand.save()
         messages.success(self.request,"You Created a New Brand")
         return redirect("admin:brands")
@@ -195,7 +215,7 @@ class AdminProductListView(LoginRequiredMixin,ListView):
         elif self.request.user.is_company_admin:
             return Product.objects.filter(company=self.request.user.get_company())
         elif self.request.user.is_company_staff:
-            return Product.objects.filter(company=self.request.user.company)
+            return Product.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
 
 class CreateProductView(LoginRequiredMixin,CreateView):
     model=Product
@@ -204,7 +224,10 @@ class CreateProductView(LoginRequiredMixin,CreateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreateProductView,self).get_form_kwargs()
-        kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        if self.request.user.is_company_admin:
+            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
         return kwargs
 
     def form_valid(self,form):
@@ -224,7 +247,7 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(ProductUpdateView,self).get_form_kwargs()
-        kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        kwargs.update({'company':Product.objects.get(id=self.kwargs['pk']).company})
         return kwargs
 
     def get_context_data(self,**kwargs):

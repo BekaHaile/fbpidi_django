@@ -20,14 +20,11 @@ register = template.Library()
 @register.filter
 def get_company_id(user):
     user = UserProfile.objects.get(id=user.id)
-    print(user.id)
-    if user.is_company_admin:
-        if user.get_company() != None:
-            return user.get_company().id
-        else:
-            return 0
-    else:
+    if user.get_company() != None:
         return user.get_company().id
+        print(user.get_company().id)
+    else:
+        return 0
 
 @register.filter
 def company_count(user):
@@ -41,7 +38,7 @@ def user_create_button(user):
         return mark_safe("/admin/create_user/")
     elif user.is_company_admin:
         try:
-            Company.objects.get(user=user)
+            Company.objects.get(contact_person=user)
             return mark_safe("<a href='/admin/create-my-staff/' class='btn bg-teal btn-sm rounded-round'><i class='icon-add mr-2'></i>Create Staff</a>")
         except ObjectDoesNotExist:
             return mark_safe("<a href='/admin/create_company_profile/' class='btn bg-red btn-sm rounded-round'><i class='icon-add mr-2'></i>Please Create Your Company Profile</a>")

@@ -1,7 +1,7 @@
 import datetime
 from django import forms
 from django.contrib.gis import forms as gis_form
-import floppyforms as fl_forms
+from django.db.models import OuterRef,Exists
 
 from admin_site.models import CompanyDropdownsMaster
 from accounts.models import UserProfile
@@ -22,16 +22,6 @@ from company.models import *
 #             'company_condition',
 # )
 
-class LocationWidgetBuilder(fl_forms.gis.PointWidget, fl_forms.gis.BaseOsmWidget):
-    pass
-
-class CustomPointWidget(LocationWidgetBuilder):
-    map_width = 900
-    map_height = 300
-
-class CustomPointWidgetEdit(LocationWidgetBuilder):
-    map_width = 560
-    map_height = 300
 
 class CompanyForm(forms.ModelForm):
     pass
@@ -173,7 +163,7 @@ class PowerConsumptionForm(forms.ModelForm):
             'current_supply':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_current_supply")'}),
         }
 
-class CompanyDetailForm(forms.ModelForm):
+class MyCompanyDetailForm(forms.ModelForm):
     
     # company_condition = forms.ModelChoiceField(
     #     label="Status of processing/ industry facility.",
@@ -185,14 +175,16 @@ class CompanyDetailForm(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         self.main_type = kwargs.pop('main_type')
-        super(CompanyDetailForm,self).__init__(*args,**kwargs)
+        super(MyCompanyDetailForm,self).__init__(*args,**kwargs)
         self.fields['category'].queryset = Category.objects.filter(category_type=self.main_type)
         self.fields['working_hours'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Working hours")
         self.fields['working_hours'].empty_label = "Select Working Hour"
         self.fields['certification'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Certifications")
         self.fields['management_tools'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Management Tools")
         self.fields['source_of_energy'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Source of Energy")
+        self.fields['source_of_energy'].empty_label = "Select Source of Energy"
         self.fields['support_required'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Areas of Major Challenges")
+        self.fields['support_required'].empty_label = "Select One"
 
     class Meta:
         model=Company
@@ -207,7 +199,7 @@ class CompanyDetailForm(forms.ModelForm):
             'gas_carb_emision','gas_carb_emision_am','compound_allot','comunity_compliant', 
             'comunity_compliant_am','env_focal_person','safety_profesional','notification_procedure', 
             'university_linkage','university_linkage_am','recall_system','quality_defects_am', 
-            'quality_defects','gas_waste_mgmnt_measure','gas_waste_mgmnt_measure_am','company_condition'
+            'quality_defects','gas_waste_mgmnt_measure','gas_waste_mgmnt_measure_am'
             
             )
         widgets = {
@@ -285,10 +277,11 @@ class CompanyProfileForm(forms.ModelForm):
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'logo':forms.FileInput(attrs={'class':''}),
-            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 500}),
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','placeholder':'Established Year'}),
-            'main_category':forms.Select(attrs={'class':'form-control',}),
+            'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
+            'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',})
         }
 
 
@@ -304,29 +297,37 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'logo':forms.FileInput(attrs={'class':''}),
-            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 500}),
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 900, 'map_height': 400}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','placeholder':'Established Year'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
-            'ownership_form':forms.Select(attrs={'class':'form-control fomr-control-uniform'}),
+            'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform'}),
         }
 
     def __init__(self,*args,**kwargs):
         super(CompanyProfileForm_Superadmin,self).__init__(*args,**kwargs)
-        self.fields['contact_person'].queryset = UserProfile.objects.filter(is_company_admin=True)
+        self.fields['contact_person'].queryset = UserProfile.objects.filter(is_company_admin=True).exclude(
+                                                Exists(Company.objects.filter(contact_person=OuterRef('pk'))))
+        self.fields['contact_person'].empty_label="Select Company contact Person"
         self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
         self.fields['ownership_form'].empty_label="Select Form Of Ownership"
 
-class CompanyUpdateForm(forms.ModelForm):
-     
-    # company_condition = forms.ModelChoiceField(
-    #     label="Status of processing/ industry facility.",
-    #     empty_label="Select One Status",
-    #     queryset = CompanyDropdownsMaster.objects.filter(chk_type="Industry Status Checklists"),
-    #     required=False,
-    #     widget=forms.Select(attrs={'class':'form-control form-control-uniform','data-fouc':''})
-    # )
+class CompanyRatingForm(forms.ModelForm):
 
+    def __init__(self,*args,**kwargs):
+        super(CompanyRatingForm,self).__init__(*args,**kwargs)
+        self.fields['company_condition'].empty_label="Select One Status"
+        self.fields['company_condition'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Industry Status Checklists")
+
+    class Meta:
+        model = Company
+        fields = ('company_condition',)
+        widgets = {
+            'company_condition':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+        }
+
+class CompanyUpdateForm(forms.ModelForm):
+    #  default_lat=38.781596,default_lon=8.983564,
     class Meta:
         model=Company
         fields=('name','name_am','logo','established_yr','category','ownership_form','trade_license',

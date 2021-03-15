@@ -59,16 +59,7 @@ from collaborations.Views.forums import(ListForumQuestionAdmin,CreateForumQuesti
 
 from product.views import *
                             
-from company.views import (CreateInvestmentCapital,CreateCertificates,CreateEmployees,CreateJobsCreatedYearly,
-                            CreateEducationStatus,CreateFemaleinPosition,CreateAnualSourceofInputs,
-                            CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,
-                            EditCompanyEvent,CreateMyCompanyProfile,CreateCompanyDetail,
-                            CreateCompanyProfileAfterSignUp,ViewCompanyProfile,CreateCompanySolution,
-                            CreateFbpidiCompanyProfile,ViewFbpidiCompany, CreateCompanyBankAccount,
-                            EditCompanyBankAccount, DeleteCompanyBankAccount,CreateMarketDestination,
-                            CreateMarketTarget,CreatePowerConsumption,CreateCompanyAddress,
-                            UpdateCompanyAddress,CheckYearField,
-                            ViewMyCompanyProfile)
+from company.views import *
 
 from accounts.forms import AdminLoginForm
  
@@ -207,7 +198,8 @@ class CustomAdminSite(admin.AdminSite):
             # path("",wrap(include("company.urls"))),
             path("create_company_profile/",wrap(CreateCompanyProfile.as_view()),name="create_company_profile"),
             path("create_mycompany_profile/",wrap(CreateMyCompanyProfile.as_view()),name="create_my_company"),
-            path("create_company_detail/<pk>/",wrap(CreateCompanyDetail.as_view()),name="create_company_detail"),
+            path("create_mycompany_detail/<pk>/",wrap(CreateMyCompanyDetail.as_view()),name="create_mycompany_detail"),
+            path("create_company_detail_info/<pk>/",wrap(CreateCompanyDetail.as_view()),name="create_company_detail"),
             path("create_investment_capital/<company>/",wrap(CreateInvestmentCapital.as_view()),name="create_inv_capital"),
             path("create_company_certificates/<company>",wrap(CreateCertificates.as_view()),name="create_comp_certificate"),
             path("create_employees/<company>/",wrap(CreateEmployees.as_view()),name="create_employees"),
@@ -225,6 +217,7 @@ class CustomAdminSite(admin.AdminSite):
 
             path("company_list/",wrap(CompaniesView.as_view()),name="companies"),
             path("company_detail/<pk>/",wrap(CompaniesDetailView.as_view()),name="company_detail"),
+            path("rate_company_status/<pk>/",wrap(RateCompany.as_view()),name="rate_company"),
             path("create_company_profile_al/",wrap(CreateCompanyProfileAfterSignUp.as_view()) ,name='complete_company_profile'),
             path("view_company_profile/",wrap(ViewCompanyProfile.as_view()) ,name='view_company_profile'),
             path("view_company_profile/<active_tab>/",wrap(ViewCompanyProfile.as_view()) ,name='view_company_profile_active_tab'),

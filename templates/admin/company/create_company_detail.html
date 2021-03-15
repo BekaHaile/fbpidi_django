@@ -102,17 +102,13 @@
 								<div class="card-body m-2">
 									<form id="company_detail_form" class="wizard-form steps-enable-all" action="#"
 										method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
-										
+										{{form.errors}}
 										<!-- {{form|crispy}} -->
 										<h6>Company Profile</h6>
 										<fieldset>
 											<hr>
 											<div class="form-group row">
-												<div class="col-md-6">
-													<label class="d-block font-weight-semibold">Does the company have expansion plan?</label>
-													<label for=""><input type="radio" name="expn_plan" id="expn_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
-													<label for=""><input type="radio" name="expn_plan" id="expn_no" checked><span class="ml-2">No</span></label>
-												</div>
+												
 												<div class="col-md-6 ">
 													<label class="font-weight-semibold" for="">Add Company Address</label>
 													
@@ -129,7 +125,12 @@
 													{%endif%}
 
 												</div>	
-												<div class="" id="div_expn" style="display: none;">
+												<div class="col-md-6">
+													<label class="d-block font-weight-semibold">Does the company have expansion plan?</label>
+													<label for=""><input type="radio" name="expn_plan" id="expn_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+													<label for=""><input type="radio" name="expn_plan" id="expn_no" checked><span class="ml-2">No</span></label>
+												</div>
+												<div class="col-md-12" id="div_expn" style="display: none;">
 													<label for="">If Yes Please Specify</label>
 													<div class="form-group">
 														{{form.expansion_plan.label}}
@@ -294,12 +295,17 @@
 											</div>
 											<hr>
 											<div class="form-group row">
-												<div class="col-md-6">
+												<div class="col-md-4">
+													<label for="">{{form.category.label}}</label>
+													{{form.category}}
+													<span class="form-text text-warning">{{form.category.errors}}</span>
+												</div>
+												<div class="col-md-4">
 													<label for="">{{form.management_tools.label}}</label>
 													{{form.management_tools}}
 													<span class="form-text text-warning">{{form.management_tools.errors}}</span>
 												</div>
-												<div class="col-md-6">
+												<div class="col-md-4">
 													<label for="">{{form.certification.label}}</label>
 													{{form.certification}}
 													<span class="form-text text-warning">{{form.certification.errors}}</span>

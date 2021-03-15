@@ -45,21 +45,28 @@
 				<div class="form-group row">
 					<label for="">{{form.geo_location.label}}</label>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row p-2 ml-2">
 						{{form.geo_location}}					
 				</div>
 				 
-				
 				<div class="form-group row">
-					<div class="col-md-4">
-						<label for="">{{form.ownership_form.label}}</label>
-						{{form.ownership_form}}
-					</div>
-					<div class="col-md-4">
+					<div class="col-md-6">
 						<label for="">{{form.contact_person.label}}</label>
 						{{form.contact_person}}
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-6">
+						<label for="">{{form.main_category.label}}</label>
+						{{form.main_category}}
+					</div>
+				</div>
+				
+				<div class="form-group row">
+					<div class="col-md-6">
+						<label for="">{{form.ownership_form.label}}</label>
+						{{form.ownership_form}}
+					</div>
+					
+					<div class="col-md-6">
 						<label for="">{{form.established_yr.label}}</label>
 						{{form.established_yr}}
 					</div>

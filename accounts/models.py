@@ -32,6 +32,9 @@ class UserProfile(AbstractUser):
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
 
+    def __str__(self):
+        return "{} : {} {}".format(self.username,self.first_name,self.last_name)
+
     class Meta(AbstractUser.Meta):
         ordering=('-created_date',)
 
@@ -47,7 +50,7 @@ class UserProfile(AbstractUser):
             if self.is_company_admin:
                 return Company.objects.get(contact_person = self)
             elif self.is_company_staff:
-                return Company.objects.get(company_staff = self)
+                return CompanyStaff.objects.get(user=self).company
             elif self.is_superuser:
                 return Company.objects.get(name="FBPIDI")
         except Company.DoesNotExist:

@@ -35,7 +35,7 @@ class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
         company.craeted_by = self.request.user
         company.save()
         messages.success(self.request,"Company Profile Created")
-        return redirect("admin:create_company_detail",pk=company.id)
+        return redirect("admin:create_mycompany_detail",pk=company.id)
 
 
 class CreateCompanyProfile(LoginRequiredMixin,CreateView):
@@ -53,29 +53,48 @@ class CreateCompanyProfile(LoginRequiredMixin,CreateView):
     def form_invalid(self,form):
         print(form.errors)
 
-class CreateCompanyAddress(LoginRequiredMixin,CreateView):
-    model = CompanyAddress
-    form_class = CompanyAddressForm
+
+class CreateMyCompanyDetail(LoginRequiredMixin,UpdateView):
+    model = Company
+    form_class = MyCompanyDetailForm
+    template_name = "admin/company/create_company_detail.html"
+
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(CreateMyCompanyDetail,self).get_form_kwargs()
+        kwargs.update({'main_type': Company.objects.get(id=self.kwargs['pk']).main_category})
+        return kwargs
+
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['inv_capital_form'] = InvestmentCapitalForm
+        context['certificate_form'] = CertificateForm
+        context['employees_form'] = EmployeesForm
+        context['job_created_form'] = JobCreatedForm
+        context['edication_form'] = EducationStatusForm
+        context['female_posn_form'] = FemalesInPositionForm
+        context['src_amnt_input_form'] = SourceAmountIputsForm
+        context['destination_form'] = MarketDestinationForm
+        context['target_form'] = MarketTargetForm
+        context['consumption_form'] = PowerConsumptionForm
+        context['address_form'] = CompanyAddressForm
+        return context
 
     def form_valid(self,form):
-        address = form.save(commit=False)
-        address.company = Company.objects.get(id=self.kwargs['company'])
-        address.save()
-        return JsonResponse({'error':False,'message':'Company Address Saved Successfully'})
-
-class UpdateCompanyAddress(LoginRequiredMixin,UpdateView):
-    model = CompanyAddress
-    form_class = CompanyAddressForm
-
-    def form_valid(self,form):
-        form.save()
-        return JsonResponse({'error':False,'message':'Company Address Updated Successfully'})
-
+        company = form.save(commit=False)
+        company.category.set(form.cleaned_data.get('category'))
+        company.management_tools.set(form.cleaned_data.get('management_tools'))
+        company.certification.set(form.cleaned_data.get('certification'))
+        company.last_updated_by = self.request.user
+        company.last_updated_date = timezone.now()
+        company.save()
+        messages.success(self.request,"Company Detail Information Added")
+        return redirect("admin:update_company_info",pk=self.kwargs['pk'])
 
 class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
     model = Company
-    form_class = CompanyDetailForm
-    template_name = "admin/company/create_company_detail.html"
+    form_class = MyCompanyDetailForm
+    template_name = "admin/company/create_company_detail_1.html"
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreateCompanyDetail,self).get_form_kwargs()
@@ -100,11 +119,14 @@ class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
 
     def form_valid(self,form):
         company = form.save(commit=False)
+        company.category.set(form.cleaned_data.get('category'))
+        company.management_tools.set(form.cleaned_data.get('management_tools'))
+        company.certification.set(form.cleaned_data.get('certification'))
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
         company.save()
         messages.success(self.request,"Company Detail Information Added")
-        return redirect("admin:update_company_info",pk=self.kwargs['pk'])
+        return redirect("admin:companies")
 
 class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
     model = Company
@@ -133,12 +155,64 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
 
     def form_valid(self,form):
         company = form.save(commit=False)
+        company.category.set(form.cleaned_data.get('category'))
+        company.management_tools.set(form.cleaned_data.get('management_tools'))
+        company.certification.set(form.cleaned_data.get('certification'))
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
         company.save()
         messages.success(self.request,"Company Detail Information Updated")
         return redirect("admin:update_company_info",pk=self.kwargs['pk'])
 
+    
+class CompaniesView(LoginRequiredMixin,ListView):
+    model = Company
+    template_name = "admin/company/companies.html"
+
+class CompaniesDetailView(LoginRequiredMixin,UpdateView):
+    model = Company
+    form_class = CompanyUpdateForm
+    template_name = "admin/company/company_profile_detail.html"
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rating_form'] = CompanyRatingForm
+        return context
+
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(CompaniesDetailView,self).get_form_kwargs()
+        kwargs.update({'main_type': Company.objects.get(id=self.kwargs['pk']).main_category})
+        return kwargs
+
+class RateCompany(LoginRequiredMixin,UpdateView):
+    model=Company
+    form_class = CompanyRatingForm
+
+    def form_valid(self,form):
+        rating = form.save(commit=False)
+        rating.last_updated_by=self.request.user
+        rating.last_updated_date = timezone.now()
+        rating.save()
+        return redirect("admin:company_detail", pk=self.kwargs['pk'])
+
+
+class CreateCompanyAddress(LoginRequiredMixin,CreateView):
+    model = CompanyAddress
+    form_class = CompanyAddressForm
+
+    def form_valid(self,form):
+        address = form.save(commit=False)
+        address.company = Company.objects.get(id=self.kwargs['company'])
+        address.save()
+        return JsonResponse({'error':False,'message':'Company Address Saved Successfully'})
+
+class UpdateCompanyAddress(LoginRequiredMixin,UpdateView):
+    model = CompanyAddress
+    form_class = CompanyAddressForm
+
+    def form_valid(self,form):
+        form.save()
+        return JsonResponse({'error':False,'message':'Company Address Updated Successfully'})
 
 
 class CreateInvestmentCapital(LoginRequiredMixin,CreateView):
@@ -313,70 +387,74 @@ class CreateMarketTarget(LoginRequiredMixin,View):
 
 class CheckYearField(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
+        company = Company.objects.get(id=self.kwargs['company'])
         if self.kwargs['model'] == "investment":
+            
             try:
                 # json.dumps(model_to_dict(investment))
-                investment=InvestmentCapital.objects.get(company=self.kwargs['company'],year=self.kwargs['year']) 
+                investment=InvestmentCapital.objects.get(company=company,year=self.kwargs['year']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data': json.loads(serializers.serialize('json',[investment],ensure_ascii=False))[0] })
             except InvestmentCapital.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "employee":
             try:
-                employee = Employees.objects.get(company=self.kwargs['company'],year=self.kwargs['year']) 
+                employee = Employees.objects.get(company=company,year=self.kwargs['year']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[employee],ensure_ascii=False))[0]})
             except Employees.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "jobs_created":
             try:
-                jobs = JobOpportunities.objects.get(company=self.kwargs['company'],year=self.kwargs['year']) 
+                jobs = JobOpportunities.objects.get(company=company,year=self.kwargs['year']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[jobs],ensure_ascii=False))[0]})
             except JobOpportunities.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "education":
             try:
-                education = EducationalStatus.objects.get(company=self.kwargs['company'],year=self.kwargs['year']) 
+                education = EducationalStatus.objects.get(company=company,year=self.kwargs['year']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[education],ensure_ascii=False))[0]})
             except EducationalStatus.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "female_emp":
             try:
-                female_emp = FemalesInPosition.objects.get(company=self.kwargs['company'],year=self.kwargs['year']) 
+                female_emp = FemalesInPosition.objects.get(company=company,year=self.kwargs['year']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[female_emp],ensure_ascii=False))[0]})
             except FemalesInPosition.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "src_amnt":
             try:
-                src_amnt = SourceAmountIputs.objects.get(company=self.kwargs['company'],year=self.kwargs['year']) 
+                src_amnt = SourceAmountIputs.objects.get(company=company,year=self.kwargs['year']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[src_amnt],ensure_ascii=False))[0]})
             except SourceAmountIputs.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "power_consumption":
             try:
-                power_consumed = PowerConsumption.objects.get(company=self.kwargs['company'],day=self.kwargs['year']) 
+                power_consumed = PowerConsumption.objects.get(company=company,day=self.kwargs['year']) 
                 return JsonResponse({"error":True,"message":"Data For this Date Exists",
                                     'data':json.loads(serializers.serialize('json',[power_consumed],ensure_ascii=False))[0]})
             except PowerConsumption.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are Good to Go"})
         elif self.kwargs['model'] == "destination":
             try:
-                destination = MarketDestination.objects.get(company=self.kwargs['company'],year=self.kwargs['year']) 
+                destination = MarketDestination.objects.get(company=company,year=self.kwargs['year']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[destination],ensure_ascii=False))[0]})
             except MarketDestination.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "target":
             try:
-                target = MarketTarget.objects.get(company=self.kwargs['company'],year=self.kwargs['year']) 
+                target = MarketTarget.objects.get(company=company,year=self.kwargs['year']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[target],ensure_ascii=False))[0]})
             except MarketTarget.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
+
+
 
 
 class CreateCompanyProfileAfterSignUp(LoginRequiredMixin,View):
@@ -496,14 +574,6 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
             else:
                 return redirect("admin:view_company_profile")
     
-class CompaniesView(LoginRequiredMixin,ListView):
-    model = Company
-    template_name = "admin/company/companies.html"
-
-class CompaniesDetailView(LoginRequiredMixin,UpdateView):
-    model = Company
-    form_class = CompanyUpdateForm
-    template_name = "admin/company/company_profile_detail.html"
 
 class CreateCompanySolution(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
