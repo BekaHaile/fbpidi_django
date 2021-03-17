@@ -7,7 +7,7 @@ from product.models import Product
 from admin_site.models import Category,SubCategory
 from accounts.models import User
 import datetime
-from chat.models import ChatMessage, ChatGroup
+from chat.models import ChatMessages, ChatGroup
 import os
 from chat import views as chat_views
 
@@ -31,10 +31,12 @@ def company_product_count(company):
     except ObjectDoesNotExist:
         return 0
 
+
 @register.filter
 def product_count(non):
     product = Product.objects.all()
     return product.count()
+
 
 @register.filter
 def happy_customer(non):

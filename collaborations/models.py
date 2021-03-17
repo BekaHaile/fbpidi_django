@@ -22,8 +22,8 @@ class PollsQuestion(models.Model):
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
 
-    def model_am(self):
-        return "ምርጫዎች"
+    
+    model_am = "ምርጫዎች"
 
     def __str__(self):
         return self.title
@@ -101,8 +101,7 @@ class Blog(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     publish = models.BooleanField(null=False,default=False)
 
-    def model_am(self):
-        return "ብሎጎች" 
+    model_am =  "ብሎጎች" 
 
     def __str__(self):
         return self.title
@@ -143,8 +142,7 @@ class Faqs(models.Model):
     class Meta:
         ordering = ['-timestamp',]
     
-    def model_am(self):
-        return "በተደጋጋሚ የተጠየቁ ጥያቄዎች"
+    model_am = "በተደጋጋሚ የተጠየቁ ጥያቄዎች"
 
 
 class Tender(models.Model):
@@ -195,8 +193,7 @@ class Tender(models.Model):
             return unrelated_bank_accounts
         return None  
 
-    def model_am(self):
-        return "ጨረቶች"
+    model_am = "ጨረቶች"
         
     def save(self):
         self.company = self.created_by.get_company()
@@ -273,8 +270,7 @@ class Vacancy(models.Model):
     def get_company(self):
         return self.company
 
-    def model_am(self):
-        return "ክፍት የስራ ቦቶች"
+    model_am = "ክፍት የስራ ቦቶች"
 
 
 class JobApplication(models.Model):
@@ -315,8 +311,7 @@ class News(models.Model):
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
 
-    def model_am(self):
-        return "ዜናዎች"
+    model_am ="ዜናዎች"
 
     def get_images(self):
         return self.newsimages_set.all() if self.newsimages_set.exists() else None
@@ -374,8 +369,7 @@ class ForumQuestion(models.Model):
     def comments(self):
         return self.forumcomments_set.all()
     
-    def model_am(self):
-        return "ውይይቶች"
+    model_am = "ውይይቶች"
     
 
 class ForumComments(models.Model):
@@ -414,6 +408,7 @@ class CommentReplay(models.Model):
     
 
 class Announcement(models.Model):
+
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -435,8 +430,7 @@ class Announcement(models.Model):
         self.company = self.created_by.get_company()
         super(Announcement, self).save()
     
-    def model_am(self):
-        return "መግለጫዎች"
+    model_am = "መግለጫዎች"
     
 
 
@@ -497,8 +491,7 @@ class Research(models.Model):
     def get_category_name(self):
         return self.category.cateoryname
     
-    def model_am(self):
-        return "ምርምር"
+    model_am = "ምርምር"
 
 
 class Project(models.Model):
@@ -524,8 +517,7 @@ class Project(models.Model):
     
     def get_category_name(self):
         return self.category.cateoryname
-    def model_am(self):
-        return "ፕሮጀክት"
+    model_am =  "ፕሮጀክት"
 
 class Document_Category(models.Model):
     
@@ -536,7 +528,7 @@ class Document_Category(models.Model):
 
 
 class Document(models.Model):
-    DOC_CATEGORY = [ ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('Company Forms', 'Company Forms'), ('Finance','Finance'),]
+    DOC_CATEGORY = [ ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'), ('Finance','Finance')]
 
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(verbose_name="upload time", auto_now_add=True)

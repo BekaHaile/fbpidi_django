@@ -13,6 +13,7 @@
 								<div class="card-header bg-transparent header-elements-inline">
 									<h6 class="card-title">My inbox</h6>
 								</div>
+							
 
 								<!-- Action toolbar -->
 								<div class="bg-light">
@@ -101,107 +102,101 @@
 
 
 								<!-- Table -->
-								{% get_all_messages_grouped user as recieved_messages %}
+								
 								<div class="table-responsive">
 									<table class="table table-inbox">										
 										<tbody data-link="row" class="rowlink">
-											{% for message in recieved_messages %}
-												{% if message.read == False %}
-												<tr class = "unread" > 
-												{% else %}
-												<tr style="background-color: rgb(228, 228, 228);"> 
-												{% endif %}
-													<td class="table-inbox-checkbox rowlink-skip">
-														<a href="/chat/{{message.chat_group}}/" ></a>
-														<input type="checkbox" class="form-input-styled" data-fouc>
-													</td>
-													<td class="table-inbox-star rowlink-skip">
-														<a href="#">
-															<i class="icon-star-empty3 text-muted"></i>
-														</a>
-													</td>
-													<td class="table-inbox-image">
-														<img src="{{message.sender_image}}" class="rounded-circle" width="32" height="32" alt="">
+											{% for message in chat_list %}
+												<!-- if the current user is the receiver of the message -->
+
+												{% if user.username == message.receiver_name %} 
+													{% if message.seen == False %}
+														<tr class = "unread" > 
+													{% else %}
+														<tr style="background-color: rgb(228, 228, 228);"> 
+													{% endif %}
 														
-													</td>
-													<td class="table-inbox-name">
-														<a href="/chat/{{message.chat_group}}/" >
-															<div class="letter-icon-title text-default">{{message.sender_name}}</div>
-														</a>
-													</td>
-													<td class="table-inbox-message">
+															<td class="table-inbox-checkbox rowlink-skip">
+																<a href="/chat/with/{{message.sender_name}}/" ></a>
+																<input type="checkbox" class="form-input-styled" data-fouc>
+															</td>
+															<td class="table-inbox-star rowlink-skip">
+																<a href="#">
+																	<i class="icon-star-empty3 text-muted"></i>
+																</a>
+															</td>
+															<td class="table-inbox-image">
+																<img src="{{message.sender_image}}" class="rounded-circle" width="32" height="32" alt="">
+																
+															</td>
+															<td class="table-inbox-name">
+																<a href="/chat/with/{{message.sender_name}}/" >
+																	<div class="letter-icon-title text-default"><b></b>{{message.sender_name}}</b></div>
+																</a>
+															</td>
+															<!-- the rest is the same whether the user is a receiver or a sender -->
+															<td class="table-inbox-message">
+																<div class="table-inbox-subject">{{message.message|truncatechars_html:20}}/div>
+																<!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
+															</td>
+															<td class="table-inbox-attachment">
+																<i class="icon-attachment text-muted"></i>
+															</td>
+															<td class="table-inbox-time">
+																{{message.time}}
+															</td>
+														</tr>
+												{% else %}
+												<!-- this means the current user is the sender of this message -->
+															
+															<tr style="background-color: rgb(228, 228, 228);"> 
+															
+																<td class="table-inbox-checkbox rowlink-skip">
+																	<a href="/chat/with/{{message.receiver_name}}/" ></a>
+																	<input type="checkbox" class="form-input-styled" data-fouc>
+																</td>
+																<td class="table-inbox-star rowlink-skip">
+																	<a href="#">
+																		<i class="icon-star-empty3 text-muted"></i>
+																	</a>
+																</td>
+																<td class="table-inbox-image">
+																	<img src="{{message.receiver_image}}" class="rounded-circle" width="32" height="32" alt="">
+																	
+																</td>
+																<td class="table-inbox-name">
+																	<a href="/chat/with/{{message.receiver_name}}/" >
+																		<div class="letter-icon-title text-default"><b>{{message.receiver_name}}</b></div>
+																	</a>
+																</td>
+															
+
+																<!-- the rest is the same whether the user is a receiver or a sender -->
+																<td class="table-inbox-message">
+																
+																	<div class="table-inbox-subject">{{message.message}} &nbsp;-&nbsp;</div>
+																	<!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
+																</td>
+																<td class="table-inbox-attachment">
+																	<i class="icon-attachment text-muted"></i>
+																</td>
+																<td class="table-inbox-time">
+																	{{message.time}}
+																</td>
+															</tr>
+
 													
-														<div class="table-inbox-subject">{{message.content}} &nbsp;-&nbsp;</div>
-														<!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
-													</td>
-													<td class="table-inbox-attachment">
-														<i class="icon-attachment text-muted"></i>
-													</td>
-													<td class="table-inbox-time">
-														{{message.time}}
-													</td>
+												{% endif %}
 												
-												</tr>
+												
 											{% endfor%}
 											
 
 										
 
-											<tr class="unread">
-												<td class="table-inbox-checkbox rowlink-skip">
-													<input type="checkbox" class="form-input-styled" data-fouc>
-												</td>
-												<td class="table-inbox-star rowlink-skip">
-													<a href="#">
-														<i class="icon-star-full2 text-warning-300"></i>
-													</a>
-												</td>
-												<td class="table-inbox-image">
-													<img src="/static/admin/global_assets/images/demo/users/face2.jpg" class="rounded-circle" width="32" height="32" alt="">
-												</td>
-												<td class="table-inbox-name">
-													<a href="mail_read.html">
-														<div class="letter-icon-title text-default">dummy data for checking</div>
-													</a>
-												</td>
-												<td class="table-inbox-message">
-													<div class="table-inbox-subject">Any time these ten years, they tell me, has that man held up &nbsp;-&nbsp;</div>
-													<span class="text-muted font-weight-normal">That picture, and exhibited that stump to an incredulous world. But the time of his justification has now come. His three whales are as good whales as were ever published in Wapping, at any rate; and his stump</span>
-												</td>
-												<td class="table-inbox-attachment"></td>
-												<td class="table-inbox-time">
-													8:37 pm
-												</td>
-											</tr>
+											
 
-								
-
-											<tr style="background-color: rgb(228, 228, 228);">
-												<td class="table-inbox-checkbox rowlink-skip">
-													<input type="checkbox" class="form-input-styled" data-fouc>
-												</td>
-												<td class="table-inbox-star rowlink-skip">
-													<a href="#">
-														<i class="icon-star-empty3 text-muted"></i>
-													</a>
-												</td>
-												<td class="table-inbox-image">
-													<img src="/static/admin/global_assets/images/demo/users/face24.jpg" class="rounded-circle" width="32" height="32" alt="">
-												</td>
-												<td class="table-inbox-name">
-													<a href="mail_read.html">
-														<div class="letter-icon-title text-default">dummy data for checking</div>
-													</a>
-												</td>
-												<td class="table-inbox-message">
-													<div class="table-inbox-subject">On the spires of some old-fashioned churches &nbsp;-&nbsp;</div>
-													<span class="text-muted font-weight-normal">You will see sheet-iron whales placed there for weather-cocks; but they are so elevated, and besides that are to all intents and purposes so labelled with "HANDS OFF!" you cannot examine them</span>
-												</td>
-												<td class="table-inbox-attachment"></td>
-												<td class="table-inbox-time">
-													Nov 28
-												</td>
-											</tr>
+											
 
 										
 										</tbody>
@@ -212,11 +207,14 @@
 							</div>
 
 			<input id = "user_name" type="hidden" value="{{user.username}}">
+
+
 			<script>
 				function chat_with_user(){
 					var reciever = document.getElementById('chat_to');
 					console.log("user name is ", )
-					window.location.pathname = '/chat/' + user_name.value+"_"+ reciever.value+'/';
+					windown.location.pathname = '/chat/with/'+ reciever.value+'/';
+					// window.location.pathname = '/chat/' + user_name.value+"_"+ reciever.value+'/';
 				}
 				$(document).ready(function(){
 					$("#summernote").summernote();

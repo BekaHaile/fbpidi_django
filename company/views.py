@@ -17,7 +17,8 @@ from product.models import Order,OrderProduct
 
 
 from company.forms import CompanyForm,CompanySolutionForm,CompanyEventForm,FbpidiCompanyForm, CompanyBankAccountForm, EventParticipantForm
-from chat.models import ChatGroup, ChatMessage
+from chat.models import ChatGroup, ChatMessage, ChatMessages
+from chat.views import get_grouped_chats
 
 class CreateCompanyProfile(LoginRequiredMixin,View):
     def get(self, *args,**kwargs):
@@ -80,7 +81,7 @@ class ViewCompanyProfile(LoginRequiredMixin,View):
             account_form = CompanyBankAccountForm()
 
             context = {'company':company,'staff_users':staff_users,'solution_form':sol_form,'solutions':solutions,
-                        'event_form':event_form,'events':events, 
+                        'event_form':event_form,'events':events, 'chat_list':get_grouped_chats(self.request.user),
                         'banks':banks, 'company_bank_accounts': company_bank_accounts, 'account_form':account_form}
             if "active_tab" in self.kwargs:#to activate a specific tab while opening the company profile, first used for message (inbox tab)
                 context ['active_tab'] = self.kwargs['active_tab']
@@ -289,7 +290,7 @@ class ViewFbpidiCompany(LoginRequiredMixin,View):
         banks = Bank.objects.all()
         company_bank_accounts = CompanyBankAccount.objects.filter(company=fbpidi)
         account_form = CompanyBankAccountForm()
-        context = {'company':fbpidi,'events':events,'event_form':event_form, 'banks':banks, 'company_bank_accounts': company_bank_accounts, 'account_form':account_form}
+        context = {'company':fbpidi,'events':events,'event_form':event_form, 'banks':banks, 'company_bank_accounts': company_bank_accounts,'chat_list':get_grouped_chats(self.request.user), 'account_form':account_form}
         context['active_tab'] = 'inbox'
         # if 'active_tab' in self.kwargs:
             # print("########## Active tab is", self.kwargs['active_tab'])

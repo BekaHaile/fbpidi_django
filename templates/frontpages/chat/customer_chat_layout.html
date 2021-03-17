@@ -1,0 +1,414 @@
+ 
+{%extends 'frontpages/layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+{% load admin_template_tags%}
+
+{% block extrastyle %}
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/demo_pages/chat_layouts.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/reconnecting-websocket.js"></script>
+<!-- /theme JS files -->
+
+
+{% endblock %}
+{%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+
+<style>
+    .smaller_time{
+        display: block;
+        color: grey;
+    }
+</style>
+
+
+		<!--Sliders Section-->
+		<div>
+			<div class="cover-image sptb-1 bg-background" data-image-src="/static/frontpages/images/banners/banner1.jpg">
+				<div class="header-text1 mb-0">
+					<div class="container">
+						<div class="row">
+							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
+								<div class="text-center text-white ">
+									<h2  class=""><span class="font-weight-bold" id =  "main-card-title"></span>  </h2>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				</div><!-- /header-text -->
+			</div>
+		</div>
+		<!--/Sliders Section-->
+
+		<!--Breadcrumb-->
+		<div class="bg-white border-bottom">
+			<div class="container">
+				<div class="page-header">
+					<h4 class="page-title">Chat List</h4>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/">Home</a></li>
+						<li class="breadcrumb-item active"><a href="#">Chats</a></li>
+						
+					</ol>
+				</div>
+			</div>
+		</div>
+		<!--/Breadcrumb-->
+
+		<!--Add listing-->
+		
+			<div class="container">
+				<div class="row">
+					<div class="col-xl-9 col-lg-9 col-md-12">
+						<!--Add lists-->
+						<div class=" mb-lg-0">
+							<div class="">
+								<div class="item2-gl business-list-01">
+									
+                                    <div class="content">
+
+                                        <div class = "row" style = "margin:0px 5px; padding:5px 5px;" >
+                                            <!-- Main chats -->
+                                            <div class="card col-md-8 fload-left " style = "margin-right:3%">
+                                                <div class="card-header header-elements-inline">
+                                                        <h5 id =  "main-card-title" class="card-title">
+                                                            Your Chats with <b>{{other_user.username}}</b>
+                                                        </h5>
+                                                       
+                                                    
+                                                    
+                                                    <span id = "online-item"></span>
+                                                    <div class="header-elements">
+                                                        <div class="list-icons">
+                                                            <a class="list-icons-item" data-action="collapse"></a>
+                                                            <a class="list-icons-item" data-action="reload"></a>
+                                                            <a class="list-icons-item" data-action="remove"></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                        
+                        
+                                                <div class="card-body">
+                                                    <ul id = "main-chat-ul" class="media-list media-chat media-chat-scrollable mb-3" style="scroll-margin-top: inherit ;" >
+                                                       
+                                                        <!-- <li class="media content-divider justify-content-center text-muted mx-0">
+                                                            <span id = "date-span" class="px-2">Monday, Feb 10</span>
+                                                        </li> -->
+                                                        
+                                                        {% for m in old_messages %}  
+                                                        
+                                                            {% if m.sender_name == request.user.username %}
+                                                            <li class="media media-chat-item-reverse">
+                                                                <div class="media-body">
+                                                                    <div class="media-chat-item">{{m.message}}</div>
+                                                                    <div class="font-size-sm text-muted mt-2">{{m.time}}<a href="#"></a></div>
+                                                                </div>
+                                
+                                                                <div class="ml-3">
+                                                                    <a href="{{m.sender_image}}" target = "blank">
+                                                                        <img src="{{m.sender_image}}" class="rounded-circle" width="60" height="60" alt="">
+                                                                    </a>
+                                                                </div>
+                                                            </li>
+                                                            {% else %}
+                                                                <li class="media">
+                                                                    <div class="mr-3">
+                                                                        <a href="{{m.sender_image}}" target = "blank">
+                                                                            <img src="{{m.sender_image}}" class="rounded-circle" width="60" height="60" alt="">
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="media-body">
+                                                                        <div class="media-chat-item">{{m.message}}</div>
+                                                                        <div class="font-size-sm text-muted mt-2">{{m.time}} <a href="#"></a></div>
+                                                                    </div>
+                                                                </li>
+                                                            {% endif %}
+                                                                
+                                                        {% endfor %}
+                        
+                                                    </ul>
+                                                    
+                        
+                                                    <textarea id =  "chat-message-input" name="enter-message" class="form-control mb-3" rows="3" cols="1" placeholder="message..."></textarea>
+                        
+                                                    <div class="d-flex align-items-center">
+                                                        <!-- <div class="list-icons list-icons-extended">
+                                                            <a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send photo"><i class="icon-file-picture"></i></a>
+                                                            <a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send video"><i class="icon-file-video"></i></a>
+                                                            <a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send file"><i class="icon-file-plus"></i></a>
+                                                        </div> -->
+                                                        
+                                                        <button type="button"  id = "chat-message-submit" class="btn bg-teal-400 btn-labeled btn-labeled-right ml-auto" ><b><i class="icon-paperplane"></i></b> Send</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /line content divider -->
+                        
+                                            <!--  other chats -->
+                                            <div class="card col-md-3 float-right" style = "background-color: rgb(230, 230, 230);">
+                                                <div class="card-header header-elements-inline">
+                                                    <h5 class="card-title"><b>Other Chats</b></h5>
+                                                    <div class="header-elements">
+                                                        <div class="list-icons">
+                                                            <a class="list-icons-item" data-action="collapse"></a>
+                                                            <a class="list-icons-item" data-action="reload"></a>
+                                                            <a class="list-icons-item" data-action="remove"></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                        
+                                                <div class="card-body" style = "padding:5px 10px;">
+                                                
+                                                    <ul class="media-list media-chat-scrollable mb-3">
+                                                        {% for message_obj in other_chats %} 
+                                                            <div class = "card card-body" style = "padding:5px 15px; ">
+                                                                {% if user.username == message_obj.sender_name %}
+                                                                    <li class="media">
+                                                                        <div class="mr-3"><a href="{{message_obj.receiver_image}}"><img src="{{message_obj.receiver_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
+                                                                        <div class="media-body">
+                                                                            <div class="media-title d-flex flex-nowrap">
+                                                                                <a href="/chat/with/{{message_obj.receiver_name}}/" class="font-weight-semibold mr-3">{{message_obj.receiver_name}}</a>
+                                                                                <span class="font-size-sm text-muted text-nowrap ml-auto">{{message_obj.time}} <a href="#"><i class="icon-pin-alt font-size-base text-muted ml-2"></i></a></span>
+                                                                            </div>
+                                                                            <p> {{message_obj.message|truncatechars_html:20}}</p>
+                                                                        </div>
+                                                                    </li>
+                                                                {% else %}
+                                                                    <li class="media">
+                                                                        <div class="mr-3"><a href="{{message_obj.sender_image}}"><img src="{{message_obj.sender_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
+                                                                        <div class="media-body">
+                                                                            <div class="media-title d-flex flex-nowrap">
+                                                                                <a href="/chat/with/{{message_obj.sender_name}}/" class="font-weight-semibold "><p style = " display:inline;" class ="mr-3">{{message_obj.sender_name}}</p>
+                                                                                    {% if message_obj.seen == False %}
+                                                                                    <span class="badge bg-danger badge-pill ml-auto">Unread message</span>
+                                                                                    {% endif %}
+                                                                                </a>
+                                                                                
+                                                                                <span class="font-size-sm text-muted text-nowrap ml-auto">{{message_obj.time}} <a href="#"></a></span>
+                                                                            </div>
+                                                                            <p> {{message_obj.message|truncatechars_html:30}}</p>
+                                                                        </div>
+                                                                    </li>
+                        
+                                                                {% endif %} 
+                                                            </div>
+                                                        {% endfor %}
+                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+                                     
+                                    <input type = "hidden" id = "username" value = "{{user.username}}">
+                                    <!-- ####################################################################################### -->
+
+                                   
+
+
+								</div>
+								
+							</div>
+						</div>
+						<!--/Add lists-->
+					</div>
+
+					<!--Right Side Content-->
+					
+					<div class="col-xl-3 col-lg-3 col-md-12">
+						<form action = "/collaborations/customer_news_list/" method = "GET" >
+					
+						<div class="card">
+							<div class="card-body">
+								<div class="input-group">
+										<input type="text" id = "by_title" name = "by_title" class="form-control br-tl-3 br-bl-3" placeholder="Search">
+										<div class="input-group-append ">
+											<button type="submit" class="btn btn-secondary br-tr-3 br-br-3">
+												Search
+											</button>
+										</div>
+								</div>
+							</div>
+						</div>
+						</form>
+
+
+						<form action = "/collaborations/customer_news_list/" method = "GET">
+						<div class="card mb-0">
+							<div class="card-header">
+								<h3 class="card-title">Campanies</h3>
+							</div>
+							<div class="card-body">
+								<div class="" id="container">
+									<div class="filter-product-checkboxs">
+										
+										<label class="custom-control custom-checkbox mb-3">
+											<input type="checkbox" class="custom-control-input" name="by_category"   value="{{category.0}}">
+											<span class="custom-control-label">
+												<a  class="text-dark"></a>
+											</span>
+										</label>
+									
+										
+									</div>
+								</div>
+							</div>
+					
+							<div class="card-footer">
+								<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">Apply Filter</a>
+							</div>
+						</div>
+						</form>
+					</div>
+					<!--/Right Side Content-->
+				</div>
+			</div>
+		</section>
+		<!--/Add Listings-->
+
+        <script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
+	    <script src="/static/admin/global_assets/js/plugins/ui/perfect_scrollbar.min.js"></script> 
+
+        <script>
+            scroll_down()
+            setInterval(load_messages, 2000);
+            var user_name = document.getElementById("username").value
+            function  scroll_down(){
+                    var main_ul = document.getElementById("main-chat-ul");
+                    main_ul.scrollTop = main_ul.scrollHeight;
+                }
+          
+            function append_message(message_obj){
+                            console.log("from append"+message_obj)
+                            var br = document.createElement('br')
+                            var li_item = document.createElement('li');
+                                var img_div = document.createElement('div');
+                                    var image_anchor = document.createElement('a');
+                                        var image_item = document.createElement('img');
+        
+                                var chat_div = document.createElement('div');
+                                    var chat_area = document.createElement('p');
+                                    var time_area = document.createElement('small');
+        
+                            // common for both sender and reciever
+                            image_anchor.href = message_obj.sender_image;
+                            image_item.src = message_obj.sender_image;
+                            image_item.className = "rounded-circle"
+                            image_item.width = "50";
+                            image_item.height = "50";
+        
+                            chat_div.className = "media-body"
+                                chat_area.textContent = message_obj.message;
+                                chat_area.className = "media-chat-item";
+                                time_area.textContent = message_obj.time;
+                                time_area.className = "smaller_time";
+                                
+                            //  if message is from another user
+                            if (message_obj.sender_name != user_name)
+                            {  
+                                li_item.className = "media";
+                                img_div.className = "mr-3";
+        
+                                image_anchor.appendChild(image_item);
+                                img_div.appendChild(image_anchor);
+        
+                                chat_div.appendChild(chat_area);
+                                chat_div.appendChild(time_area);
+        
+                                li_item.appendChild(img_div);
+                                li_item.appendChild(chat_div);
+                                
+                                document.querySelector('#main-chat-ul').appendChild(li_item);
+                                scroll_down();
+                            }
+                            else{
+                                li_item.className = "media media-chat-item-reverse";
+                                img_div.className = "ml-3";
+        
+                                chat_div.appendChild(chat_area);
+                                chat_div.appendChild(time_area);
+        
+                                image_anchor.appendChild(image_item);
+                                img_div.appendChild(image_anchor);
+        
+                                chat_div.appendChild(chat_area);
+                                chat_div.appendChild(time_area); 
+        
+                                li_item.appendChild(chat_div);
+                                li_item.appendChild(img_div);
+                               
+                                document.querySelector('#main-chat-ul').appendChild(li_item);
+                                scroll_down();
+                               
+                            }
+        
+                        }
+                
+             document.querySelector('#chat-message-submit').onclick = function(e) {
+                            var messageInputDom = document.querySelector('#chat-message-input');
+                            
+                            const message = messageInputDom.value;
+                            if (message == "" || message == null){
+                                window.alert("No message to Send!");
+                            }
+                           else{
+                                messageInputDom.value = '';
+                               fetch("{% url 'chat_request' id=other_user.id %}",
+                                {
+                                    method:"POST",
+                                    credentials: 'same-origin',
+                                    headers:{
+                                        "content-Type":'application/json',
+                                        'X-CSRFToken':'{{csrf_token}}'
+                                    },
+                                    body:JSON.stringify({
+                                        'message': message,
+                                    })
+                                }
+                               ).then(e => e.json()).then(messages=>{
+                                   for (m of messages)
+                                        {
+                                            console.log(m," \n")
+                                            append_message(m)
+                                        }                       
+                                    });   
+                                    
+                            }
+                        };
+        
+        
+            document.querySelector('#chat-message-input').focus();
+            document.querySelector('#chat-message-input').onkeyup = function(e) {
+                if (e.keyCode === 13) {  // enter, return
+                    document.querySelector('#chat-message-submit').click();
+                }
+            };
+            
+            function load_messages(){
+                 fetch( "{% url 'chat_request' id=other_user.id %}").then(e=>e.json()).then(messages =>
+                {   
+                    for (m of messages){    
+                        m.forEach(append_message)
+                    }
+                });
+            }
+            
+        </script>
+        
+		
+	
+
+		<!--<section class="sptb">-->
+			
+			
+		{%endblock%}
+
+	
+		
+
+
+
+		

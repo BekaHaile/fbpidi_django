@@ -165,8 +165,9 @@ def with_out():
 
 
 if __name__ == '__main__':    
-   for n in EventParticipants.objects.all():
-       print(n.patricipant_email, " on ", n.event, n.timestamp)
+   u = User.objects.get(id = 1)
+   c = ChatMessages.objects.filter( Q(sender = u)| )
+
 
     
     
