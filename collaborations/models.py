@@ -193,7 +193,7 @@ class Tender(models.Model):
             return unrelated_bank_accounts
         return None  
 
-    model_am = "ጨረቶች"
+    model_am = "ጨረታዎች"
         
     def save(self):
         self.company = self.created_by.get_company()
@@ -430,7 +430,7 @@ class Announcement(models.Model):
         self.company = self.created_by.get_company()
         super(Announcement, self).save()
     
-    model_am = "መግለጫዎች"
+    model_am = "ማስታወቂያ"
     
 
 

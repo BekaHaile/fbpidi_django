@@ -49,7 +49,14 @@ def chat_ajax_handler(request, id):
 # opens the chatting page and loads saved messages
 @login_required
 def chat_with(request, reciever_name):
-    other_user= User.objects.get(username=reciever_name)
+    try:
+        other_user= User.objects.get(username=reciever_name)
+    except Exception as e:
+        print("Exception at chat with ",e)
+        if request.user.is_customer:
+            return redirect('customer_chat_list')
+        else:
+            return redirect("admin:view_company_profile")
     messages = []
     if request.method == 'GET':
         q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) ) | 

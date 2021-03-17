@@ -1,5 +1,5 @@
 {%extends 'frontpages/layout.html'%}
-
+{%load core_template_tags%}
 {%block content%}
 		<!--Breadcrumb-->
 		<section>
@@ -49,6 +49,19 @@
 								<a href="{% url 'favorite' %}" class="d-flex border-bottom">
 									<span class="icon1 mr-2"><i class="typcn typcn-heart-outline fs-20"></i></span> My Favorite
 								</a>
+								<a href="{% url 'customer_chat_list' %}" class="d-flex border-bottom">
+									<span class="icon1 mr-2"><i class="typcn typcn-mail  fs-20"></i></span>
+									
+									{% count_unread_messages user as unread_messages_count %}
+									Inbox
+									{% if unread_messages_count == 0 %}
+									<span class="badge bg-success badge-pill ml-auto" style = "color: white">No new Message</span>
+									{% else %}
+									<span class="badge bg-danger badge-pill ml-auto" style = "color: white">{{unread_messages_count}}</span>
+									{% endif %}
+									
+								</a>
+								
 								<a href="{% url 'manged' %}" class="d-flex border-bottom">
 									<span class="icon1 mr-2"><i class="typcn typcn-folder fs-20"></i></span> Managed Listings
 								</a>

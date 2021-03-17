@@ -1,12 +1,13 @@
-{%extends 'admin/base_site.html'%}
 
+
+{%extends 'frontpages/profile_layout.html'%}
 {%load i18n%}
 {%load core_template_tags%} 
-{%load admin_template_tags%}
-
-{%block content%}
-
 {% get_current_language as LANGUAGE_CODE %}
+
+{%block profile_content%}
+
+
 
 
 							<div class="card">
@@ -136,7 +137,7 @@
 															</td>
 															<!-- the rest is the same whether the user is a receiver or a sender -->
 															<td class="table-inbox-message">
-																<div class="table-inbox-subject">{{message.message|truncatechars_html:20}}/div>
+																<div class="table-inbox-subject">{{message.message|safe|truncatechars_html:20}}</div>
 																<!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
 															</td>
 															<td class="table-inbox-attachment">

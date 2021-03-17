@@ -2,7 +2,7 @@
 {%extends 'frontpages/layout.html'%}
 {%load i18n%}
 {%load core_template_tags%}
-{% load admin_template_tags%}
+
 
 {% block extrastyle %}
 <!-- Theme JS files -->
@@ -20,7 +20,15 @@
         display: block;
         color: grey;
     }
+    #main-chat-ul{
+        height: 300px;
+        overflow:hidden;
+        overflow-y:scroll;
+    }
 </style>
+<script>
+   
+</script>
 
 
 		<!--Sliders Section-->
@@ -49,7 +57,7 @@
 					<h4 class="page-title">Chat List</h4>
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="/">Home</a></li>
-						<li class="breadcrumb-item active"><a href="#">Chats</a></li>
+						<li class="breadcrumb-item active"><a href="{% url 'customer_chat_list' %}">Chats</a></li>
 						
 					</ol>
 				</div>
@@ -60,8 +68,8 @@
 		<!--Add listing-->
 		
 			<div class="container">
-				<div class="row">
-					<div class="col-xl-9 col-lg-9 col-md-12">
+				<div class="row" style = "margin-top:15px;">
+					<div class="col-xl-8 col-lg-8 col-md-12">
 						<!--Add lists-->
 						<div class=" mb-lg-0">
 							<div class="">
@@ -69,28 +77,16 @@
 									
                                     <div class="content">
 
-                                        <div class = "row" style = "margin:0px 5px; padding:5px 5px;" >
+                                        <div  >
                                             <!-- Main chats -->
-                                            <div class="card col-md-8 fload-left " style = "margin-right:3%">
+                                            <div class = "card">
                                                 <div class="card-header header-elements-inline">
                                                         <h5 id =  "main-card-title" class="card-title">
-                                                            Your Chats with <b>{{other_user.username}}</b>
+                                                            {% trans "Your Chats with " %}<b>{{other_user.username}}</b>
                                                         </h5>
-                                                       
-                                                    
-                                                    
-                                                    <span id = "online-item"></span>
-                                                    <div class="header-elements">
-                                                        <div class="list-icons">
-                                                            <a class="list-icons-item" data-action="collapse"></a>
-                                                            <a class="list-icons-item" data-action="reload"></a>
-                                                            <a class="list-icons-item" data-action="remove"></a>
-                                                        </div>
-                                                    </div>
+                                                           
                                                 </div>
-                                                <hr>
-                        
-                        
+                                                
                                                 <div class="card-body">
                                                     <ul id = "main-chat-ul" class="media-list media-chat media-chat-scrollable mb-3" style="scroll-margin-top: inherit ;" >
                                                        
@@ -101,8 +97,8 @@
                                                         {% for m in old_messages %}  
                                                         
                                                             {% if m.sender_name == request.user.username %}
-                                                            <li class="media media-chat-item-reverse">
-                                                                <div class="media-body">
+                                                            <li class="media media-chat-item-reverse " >
+                                                                <div class="media-body ml-3">
                                                                     <div class="media-chat-item">{{m.message}}</div>
                                                                     <div class="font-size-sm text-muted mt-2">{{m.time}}<a href="#"></a></div>
                                                                 </div>
@@ -113,6 +109,7 @@
                                                                     </a>
                                                                 </div>
                                                             </li>
+                                                            <br>
                                                             {% else %}
                                                                 <li class="media">
                                                                     <div class="mr-3">
@@ -125,6 +122,7 @@
                                                                         <div class="font-size-sm text-muted mt-2">{{m.time}} <a href="#"></a></div>
                                                                     </div>
                                                                 </li>
+                                                                <br>
                                                             {% endif %}
                                                                 
                                                         {% endfor %}
@@ -141,73 +139,18 @@
                                                             <a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send file"><i class="icon-file-plus"></i></a>
                                                         </div> -->
                                                         
-                                                        <button type="button"  id = "chat-message-submit" class="btn bg-teal-400 btn-labeled btn-labeled-right ml-auto" ><b><i class="icon-paperplane"></i></b> Send</button>
+                                                        <button type="button"  id = "chat-message-submit" class="btn bg-teal-400 btn-labeled btn-labeled-right ml-auto" style = "background-color: #26a69a; color:white" ><b><i class="icon-paperplane"></i></b> Send</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- /line content divider -->
+                                           
                         
-                                            <!--  other chats -->
-                                            <div class="card col-md-3 float-right" style = "background-color: rgb(230, 230, 230);">
-                                                <div class="card-header header-elements-inline">
-                                                    <h5 class="card-title"><b>Other Chats</b></h5>
-                                                    <div class="header-elements">
-                                                        <div class="list-icons">
-                                                            <a class="list-icons-item" data-action="collapse"></a>
-                                                            <a class="list-icons-item" data-action="reload"></a>
-                                                            <a class="list-icons-item" data-action="remove"></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                        
-                                                <div class="card-body" style = "padding:5px 10px;">
-                                                
-                                                    <ul class="media-list media-chat-scrollable mb-3">
-                                                        {% for message_obj in other_chats %} 
-                                                            <div class = "card card-body" style = "padding:5px 15px; ">
-                                                                {% if user.username == message_obj.sender_name %}
-                                                                    <li class="media">
-                                                                        <div class="mr-3"><a href="{{message_obj.receiver_image}}"><img src="{{message_obj.receiver_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
-                                                                        <div class="media-body">
-                                                                            <div class="media-title d-flex flex-nowrap">
-                                                                                <a href="/chat/with/{{message_obj.receiver_name}}/" class="font-weight-semibold mr-3">{{message_obj.receiver_name}}</a>
-                                                                                <span class="font-size-sm text-muted text-nowrap ml-auto">{{message_obj.time}} <a href="#"><i class="icon-pin-alt font-size-base text-muted ml-2"></i></a></span>
-                                                                            </div>
-                                                                            <p> {{message_obj.message|truncatechars_html:20}}</p>
-                                                                        </div>
-                                                                    </li>
-                                                                {% else %}
-                                                                    <li class="media">
-                                                                        <div class="mr-3"><a href="{{message_obj.sender_image}}"><img src="{{message_obj.sender_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
-                                                                        <div class="media-body">
-                                                                            <div class="media-title d-flex flex-nowrap">
-                                                                                <a href="/chat/with/{{message_obj.sender_name}}/" class="font-weight-semibold "><p style = " display:inline;" class ="mr-3">{{message_obj.sender_name}}</p>
-                                                                                    {% if message_obj.seen == False %}
-                                                                                    <span class="badge bg-danger badge-pill ml-auto">Unread message</span>
-                                                                                    {% endif %}
-                                                                                </a>
-                                                                                
-                                                                                <span class="font-size-sm text-muted text-nowrap ml-auto">{{message_obj.time}} <a href="#"></a></span>
-                                                                            </div>
-                                                                            <p> {{message_obj.message|truncatechars_html:30}}</p>
-                                                                        </div>
-                                                                    </li>
-                        
-                                                                {% endif %} 
-                                                            </div>
-                                                        {% endfor %}
-                                                
-                                                </div>
-                                            </div>
+                                         
                                         </div>
                                     
                                     </div>
                                      
                                     <input type = "hidden" id = "username" value = "{{user.username}}">
-                                    <!-- ####################################################################################### -->
-
-                                   
-
 
 								</div>
 								
@@ -218,50 +161,58 @@
 
 					<!--Right Side Content-->
 					
-					<div class="col-xl-3 col-lg-3 col-md-12">
-						<form action = "/collaborations/customer_news_list/" method = "GET" >
-					
-						<div class="card">
-							<div class="card-body">
-								<div class="input-group">
-										<input type="text" id = "by_title" name = "by_title" class="form-control br-tl-3 br-bl-3" placeholder="Search">
-										<div class="input-group-append ">
-											<button type="submit" class="btn btn-secondary br-tr-3 br-br-3">
-												Search
-											</button>
-										</div>
-								</div>
-							</div>
-						</div>
-						</form>
-
-
-						<form action = "/collaborations/customer_news_list/" method = "GET">
-						<div class="card mb-0">
-							<div class="card-header">
-								<h3 class="card-title">Campanies</h3>
-							</div>
-							<div class="card-body">
-								<div class="" id="container">
-									<div class="filter-product-checkboxs">
-										
-										<label class="custom-control custom-checkbox mb-3">
-											<input type="checkbox" class="custom-control-input" name="by_category"   value="{{category.0}}">
-											<span class="custom-control-label">
-												<a  class="text-dark"></a>
-											</span>
-										</label>
-									
-										
-									</div>
-								</div>
-							</div>
-					
-							<div class="card-footer">
-								<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">Apply Filter</a>
-							</div>
-						</div>
-						</form>
+					<div class="col-xl-4 col-lg-4 col-md-12">
+						<div class = "card" >
+                            <div class="card-header header-elements-inline">
+                                <h5 class="card-title"><b>Other Chats</b></h5>
+                                <div class="header-elements">
+                                    <div class="list-icons">
+                                        <a class="list-icons-item" data-action="collapse"></a>
+                                        <a class="list-icons-item" data-action="reload"></a>
+                                        <a class="list-icons-item" data-action="remove"></a>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="card-body" style = "padding:5px 10px;">
+                            
+                                <ul class="media-list media-chat-scrollable mb-3">
+                                    {% for message_obj in other_chats %} 
+                                        <div class = "card card-body" style = "padding:5px 15px; ">
+                                            {% if user.username == message_obj.sender_name %}
+                                                <li class="media">
+                                                    <div class="mr-3"><a href="{{message_obj.receiver_image}}"><img src="{{message_obj.receiver_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
+                                                    <div class="media-body">
+                                                        <div class="media-title d-flex flex-nowrap">
+                                                            <a href="/chat/with/{{message_obj.receiver_name}}/" class="font-weight-semibold mr-3">{{message_obj.receiver_name}}</a>
+                                                            <span class="font-size-sm text-muted text-nowrap ml-auto">{{message_obj.time}} <a href="#"><i class="icon-pin-alt font-size-base text-muted ml-2"></i></a></span>
+                                                        </div>
+                                                        <p> {{message_obj.message|truncatechars_html:20}}</p>
+                                                    </div>
+                                                </li>
+                                            {% else %}
+                                                <li class="media">
+                                                    <div class="mr-3"><a href="{{message_obj.sender_image}}"><img src="{{message_obj.sender_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
+                                                    <div class="media-body">
+                                                        <div class="media-title d-flex flex-nowrap">
+                                                            <a href="/chat/with/{{message_obj.sender_name}}/" class="font-weight-semibold "><p style = " display:inline;" class ="mr-3">{{message_obj.sender_name}}</p>
+                                                                {% if message_obj.seen == False %}
+                                                                <span class="badge bg-danger badge-pill ml-auto">Unread message</span>
+                                                                {% endif %}
+                                                            </a>
+                                                            
+                                                            <span class="font-size-sm text-muted text-nowrap ml-auto">{{message_obj.time}} <a href="#"></a></span>
+                                                        </div>
+                                                        <p> {{message_obj.message|truncatechars_html:30}}</p>
+                                                    </div>
+                                                </li>
+    
+                                            {% endif %} 
+                                        </div>
+                                    {% endfor %}
+                            
+                            </div>
+                        </div>
 					</div>
 					<!--/Right Side Content-->
 				</div>
@@ -378,7 +329,6 @@
                                     
                             }
                         };
-        
         
             document.querySelector('#chat-message-input').focus();
             document.querySelector('#chat-message-input').onkeyup = function(e) {
