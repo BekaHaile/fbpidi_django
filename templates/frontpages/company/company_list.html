@@ -12,12 +12,12 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class=""><span class="font-weight-bold">{{count}}</span> {% trans "listings available" %}</h1>
+									<h1 class=""><span class="font-weight-bold">{{object_list.count}}</span> {% trans "listings available" %}</h1>
 								</div>
 								<div class="search-background px-4 py-3 mt-4">
 									<div class="form row row-sm">
 										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
-											<input type="text" class="form-control input-lg border-white" id="text" placeholder="Search Products">
+											<input type="text" class="form-control input-lg border-white" id="text" placeholder="Search Company">
 										</div>
 										<div class="form-group col-xl-4 col-lg-4 select2-lg  col-md-12 mb-0 border-white">
 											<select class="form-control select2-show-search w-100" data-placeholder="Select">
@@ -53,11 +53,10 @@
 		<div class="bg-white border-bottom">
 			<div class="container">
 				<div class="page-header">
-					<h4 class="page-title">Business list 03</h4>
+					<h4 class="page-title">Industry List</h4>
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">Home</a></li>
-						<li class="breadcrumb-item"><a href="#">Pages</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Business list 03</li>
+						<li class="breadcrumb-item"><a href="{%url 'index'%}">Home</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Industries</li>
 					</ol>
 				</div>
 			</div>
@@ -75,7 +74,7 @@
 								<div class="item2-gl ">
 									<div class="">
 										<div class="bg-white p-5 item2-gl-nav d-flex">
-											<h6 class="mb-0 mt-3">Showing 1 to 10 of 30 entries</h6>
+											<h6 class="mb-0 mt-3">Showing {{object_list.count}} entries</h6>
 											<ul class="nav item2-gl-menu ml-auto mt-1">
 												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
@@ -105,87 +104,130 @@
 									</div>
 									<div class="tab-content">
 										<div class="tab-pane active" id="tab-11">
-											{%for company in companies%}
+											{%for company in object_list%}
 											<div class="card overflow-hidden">
-												<div class="card-body">
-													<div class="item-card9 d-sm-flex">
-														<div class="mr-5 w-150">
-															<img src="{{company.company_logo.url}}" alt="image" class="w-100 border br-4">
+												<!-- <div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">New</span></div> -->
+												<div class="d-md-flex">
+													<div class="item-card9-img">
+														<div class="item-card9-imgs">
+															<a href="#"></a>
+															<img src="{{company.logo.url}}" alt="img" class="cover-image">
+															<!-- /media/Images/News%20Images/wp2234690.png -->
 														</div>
-														<div class="d-block w-100 mt-2 mt-sm-0">
-															<div class="d-flex">
-																<a href="{% url 'bs_2' %}">{%print_translated company.company_type company.company_type_am LANGUAGE_CODE%}</a>
-															</div>
-															<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.company_name company.company_name_am LANGUAGE_CODE%}<i class="ion-checkmark-circled text-success ml-1"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Verified"></i></h4></a>
-															<p class="">{%print_translated company.detail|truncatechars:20 company.detail_am|truncatechars:20 LANGUAGE_CODE %}</p>
-															<div class="item-card2-desc mt-3">
-																<div class="item-card2-desc-cost row">
-																	<div class="col-md-6">
-																		<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> {{company.city}}, {{company.location}}</h6>
-																	</div>
-																	<div class="col-md-6">
-																		<h6 class="text-dark font-weight-normal mb-0 mt-2 mt-md-0"><i class="fa fa-phone mr-1"></i> <a href="#">{{company.phone_number}}</a></h6>
-																	</div>
+														<div class="item-card9-icons">
+															<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
+														</div>
+														<div class="item-cardreview-absolute bg-secondary">{%print_translated company.main_category company.main_category LANGUAGE_CODE%}</div>
+													</div>
+													<div class="card border-0 mb-0">
+														<div class="card-body h-100">
+															<div class="item-card9">
+																<a href="#" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.name company.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
+																<div class="rating-stars d-flex mr-5">
+																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
+																	<a class="fs-13 leading-tight mt-1" href="#">{{company|company_product_count}} Products</a>
 																</div>
+																<div class="mt-2 mb-2">
+																	<!-- <a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i>{{company.geo_location.x}} , {{company.geo_location.y}}</a> -->
+																	<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{company.get_company_address.city_town}}, {{company.get_company_address.local_area}}, {{company.get_company_address.fax}}</a>
+																</div>
+																<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark">{%print_translated company.detail|truncatechars_html:100|safe company.detail_am|truncatechars_html:100|safe LANGUAGE_CODE%}</p>
 															</div>
 														</div>
-													</div>
-												</div>
-												<div class="card-footer py-3 d-sm-flex">
-													<div class="">
-														<a class="btn btn-sm btn-light mr-2"><i class="fa fa-heart-o"></i> Add to Favorites</a>
-														<a class="btn btn-sm btn-light"><i class="fa fa-eye"></i> 125</a>
-														<a class="" href="/chat/with/{{company.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-
-													</div>
-													<div class="ml-auto mt-3 mt-sm-0">
-														<div class="rating-stars d-flex">
-															<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="3">
-															<div class="rating-stars-container">
-																<div class="rating-star sm">
-																	<i class="fa fa-star"></i>
+														<div class="card-footer pt-2 pb-2">
+															<div class="item-card9-footer d-sm-flex">
+																<div class="item-card9-cost">
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																		<a class="" href="mailto:{{company.get_company_address.email}}" ><i class="fa fa-envelope"></i></a>
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
+																		<a class="" href="{{company.get_company_address.googlelink}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{company.get_company_address.googlelink}}"><i class="fa fa-globe"></i></a>
+																		<a class="" href="/chat/with/{{product.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+																		
+																		<a class="" href="#"><i class="fa fa-share-alt"></i></a>
+																	</div>
 																</div>
-																<div class="rating-star sm">
-																	<i class="fa fa-star"></i>
+																<div class="ml-auto mt-3 mt-sm-0">
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
 																</div>
-																<div class="rating-star sm">
-																	<i class="fa fa-star"></i>
-																</div>
-																<div class="rating-star sm">
-																	<i class="fa fa-star"></i>
-																</div>
-																<div class="rating-star sm">
-																	<i class="fa fa-star"></i>
-																</div>
-															</div><a href="#" class="ml-1"> 52 Reviews</a>
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
+											 
 											{%endfor%}
 										</div>
 										<div class="tab-pane" id="tab-12">
 											<div class="row">
-												<div class="col-xl-6 col-lg-6 col-md-12">
+												{%for company in object_list%}
+												<div class="col-lg-6 col-md-6 col-xl-6">
+													<div class="card overflow-hidden">
+														<!-- <div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">New</span></div> -->
+														<div class="h-100">
+															<div class="item-card9-img">
+																<div class="item-card9-imgs">
+																	<a href="{% url 'bs_2' %}"></a>
+																	<img src="{{company.logo.url}}" alt="img" class="cover-image">
+																</div>
+																<div class="item-card9-icons">
+																	<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
+																</div>
+																<div class="item-cardreview-absolute bg-secondary">{{company.main_category}}</div>
+															</div>
+															<div class="card border-0 mb-0">
+																<div class="card-body">
+																	<div class="item-card9">
+																		<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.name company.name_am LANGUAGE_CODE%}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
+																		<div class="rating-stars d-flex mr-5">
+																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
+																			<a class="fs-13 leading-tight mt-1" href="#">{{company|company_product_count}} Products</a>
+																		</div>
+																		<div class="mt-2 mb-2">
+																			<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i> {{company.get_company_address.city_town}}</a>
+																			<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{company.get_company_address.local_area}}, {{company.get_company_address.fax}}</a>
+																		</div>
+																		<p class="mb-0 leading-tight">{%print_translated company.detail|truncatechars_html:100|safe company.detail_am|truncatechars_html:100|safe LANGUAGE_CODE%}</p>
+																	</div>
+																</div>
+																<div class="card-footer pt-2 pb-2">
+																	<div class="item-card9-footer d-sm-flex">
+																		<div class="item-card9-cost">
+																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																				<a class="" href="mailto:{{company.get_company_address.email}}" ><i class="fa fa-envelope"></i></a>
+																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
+																				<a class="" href="{{company.get_company_address.googlelink}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{company.get_company_address.googlelink}}"><i class="fa fa-globe"></i></a>
+																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
+																			</div>
+																		</div>
+																		<div class="ml-auto mt-3 mt-sm-0">
+																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<!-- <div class="col-xl-6 col-lg-6 col-md-12">
 													<div class="card overflow-hidden">
 														<div class="card-body">
 															<div class="item-card9">
 																<div class="mr-5 w-150">
-																	<img src="/static/frontpages/images/products/thumbnail-products/h1.jpg" alt="image" class="w-100 border br-4">
+																	<img src="{{company.logo.url}}" alt="image" class="w-100 border br-4">
 																</div>
 																<div class="d-block w-100 mt-2">
 																	<div class="d-flex">
-																		<a href="{% url 'bs_2' %}">RealEstate</a>
+																		<a href="{% url 'manufac_category_main' option=company.main_category %}">{{company.main_category}}</a>
 																	</div>
-																	<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">BHK RealEstates Consultancy <i class="ion-checkmark-circled text-success ml-1"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Verified"></i></h4></a>
-																	<p class="">At vero eos et accusamus et iusto odio dignissimos ducimus praesentium voluptatum</p>
+																	<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.name company.name_am LANGUAGE_CODE%}<i class="ion-checkmark-circled text-success ml-1"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Verified"></i></h4></a>
+																	<p class="">{%print_translated company.detail|truncatechars_html:180|safe company.detail_am|truncatechars_html:180|safe LANGUAGE_CODE %}</p>
 																	<div class="item-card2-desc mt-3">
 																		<div class="item-card2-desc-cost row">
 																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> New York, NY 10012, US-52014</h6>
+																				<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> {{company.get_company_address.city_town}}, {{company.get_company_address.local_area}}, {{company.get_company_address.fax}}</h6>
 																			</div>
 																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#">+145 258-356-5869</a></h6>
+																				<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#">{{company.get_company_address.phone_number}}</a></h6>
 																			</div>
 																		</div>
 																	</div>
@@ -221,304 +263,27 @@
 															</div>
 														</div>
 													</div>
-												</div>
-												<div class="col-xl-6 col-lg-6 col-md-12">
-													<div class="card overflow-hidden">
-														<div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">New</span></div>
-														<div class="card-body">
-															<div class="item-card9">
-																<div class="mr-5 w-150">
-																	<img src="/static/frontpages/images/products/thumbnail-products/dummy.jpg" alt="image" class="w-100 border br-4">
-																</div>
-																<div class="d-block w-100 mt-2">
-																	<div class="d-flex">
-																		<a href="{% url 'bs_2' %}">Jobs</a>
-																	</div>
-																	<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">Software Private Limited <i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
-																	<p class="">At vero eos et accusamus et iusto odio dignissimos ducimus praesentium voluptatum</p>
-																	<div class="item-card2-desc mt-3">
-																		<div class="item-card2-desc-cost row">
-																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> New York, NY 10012, US-52014</h6>
-																			</div>
-																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#">+145 258-356-5869</a></h6>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="card-footer py-3">
-															<div class="">
-																<a class="btn btn-sm btn-light mr-2"><i class="fa fa-heart-o"></i> Add to Favorites</a>
-																<a class="btn btn-sm btn-light"><i class="fa fa-eye"></i> 354</a>
-															</div>
-															<div class="ml-auto mt-3">
-																<div class="rating-stars d-flex">
-																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="3">
-																	<div class="rating-stars-container">
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																	</div><a href="#" class="ml-1"> 42 Reviews</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="col-xl-6 col-lg-6 col-md-12">
-													<div class="card overflow-hidden">
-														<div class="power-ribbon power-ribbon-top-left text-warning"><span class="bg-warning"><i class="fa fa-bolt"></i></span></div>
-														<div class="card-body">
-															<div class="item-card9">
-																<div class="mr-5 w-150">
-																	<img src="/static/frontpages/images/products/thumbnail-products/v1.jpg" alt="image" class="w-100 border br-4">
-																</div>
-																<div class="d-block w-100 mt-2">
-																	<div class="d-flex">
-																		<a href="{% url 'bs_2' %}">Cars</a>
-																	</div>
-																	<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">jsmith Automobiles <i class="ion-checkmark-circled text-success ml-1"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Verified"></i></h4></a>
-																	<p class="">At vero eos et accusamus et iusto odio dignissimos ducimus praesentium voluptatum</p>
-																	<div class="item-card2-desc mt-3">
-																		<div class="item-card2-desc-cost row">
-																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> New York, NY 10012, US-52014</h6>
-																			</div>
-																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#">+145 258-356-5869</a></h6>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="card-footer py-3">
-															<div class="">
-																<a class="btn btn-sm btn-light mr-2"><i class="fa fa-heart-o"></i> Add to Favorites</a>
-																<a class="btn btn-sm btn-light"><i class="fa fa-eye"></i> 357</a>
-															</div>
-															<div class="ml-auto mt-3">
-																<div class="rating-stars d-flex">
-																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="3">
-																	<div class="rating-stars-container">
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																	</div><a href="#" class="ml-1"> 28 Reviews</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="col-xl-6 col-lg-6 col-md-12">
-													<div class="card overflow-hidden">
-														<div class="card-body">
-															<div class="item-card9">
-																<div class="mr-5 w-150">
-																	<img src="/static/frontpages/images/products/thumbnail-products/b1.jpg" alt="image" class="w-100 border br-4">
-																</div>
-																<div class="d-block w-100 mt-2">
-																	<div class="d-flex">
-																		<a href="{% url 'bs_2' %}">Beauty & Spa</a>
-																	</div>
-																	<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">Gogious Beauty Spa <i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
-																	<p class="">At vero eos et accusamus et iusto odio dignissimos ducimus praesentium voluptatum</p>
-																	<div class="item-card2-desc mt-3">
-																		<div class="item-card2-desc-cost row">
-																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> New York, NY 10012, US-52014</h6>
-																			</div>
-																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#">+145 258-356-5869</a></h6>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="card-footer py-3">
-															<div class="">
-																<a class="btn btn-sm btn-light mr-2"><i class="fa fa-heart-o"></i> Add to Favorites</a>
-																<a class="btn btn-sm btn-light"><i class="fa fa-eye"></i> 124</a>
-															</div>
-															<div class="ml-auto mt-3">
-																<div class="rating-stars d-flex">
-																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="3">
-																	<div class="rating-stars-container">
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																	</div><a href="#" class="ml-1"> 24 Reviews</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="col-xl-6 col-lg-6 col-md-12">
-													<div class="card overflow-hidden">
-														<div class="card-body">
-															<div class="item-card9">
-																<div class="mr-5 w-150">
-																	<img src="/static/frontpages/images/products/thumbnail-products/f1.jpg" alt="image" class="w-100 border br-4">
-																</div>
-																<div class="d-block w-100 mt-2">
-																	<div class="d-flex">
-																		<a href="{% url 'bs_2' %}">Restaurant</a>
-																	</div>
-																	<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">Dimount Restaurant & Hotel <i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
-																	<p class="">At vero eos et accusamus et iusto odio dignissimos ducimus praesentium voluptatum</p>
-																	<div class="item-card2-desc mt-3">
-																		<div class="item-card2-desc-cost row">
-																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> New York, NY 10012, US-52014</h6>
-																			</div>
-																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#">+145 258-356-5869</a></h6>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="card-footer py-3">
-															<div class="">
-																<a class="btn btn-sm btn-light mr-2"><i class="fa fa-heart-o"></i> Add to Favorites</a>
-																<a class="btn btn-sm btn-light"><i class="fa fa-eye"></i> 452</a>
-															</div>
-															<div class="ml-auto mt-3">
-																<div class="rating-stars d-flex">
-																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="3">
-																	<div class="rating-stars-container">
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																	</div><a href="#" class="ml-1"> 24 Reviews</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="col-xl-6 col-lg-6 col-md-12">
-													<div class="card overflow-hidden">
-														<div class="card-body">
-															<div class="item-card9">
-																<div class="mr-5 w-150">
-																	<img src="/static/frontpages/images/products/thumbnail-products/j1.jpg" alt="image" class="w-100 border br-4">
-																</div>
-																<div class="d-block w-100 mt-2">
-																	<div class="d-flex">
-																		<a href="{% url 'bs_2' %}">RealEstate</a>
-																	</div>
-																	<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">Consultancy Private Limited <i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
-																	<p class="">At vero eos et accusamus et iusto odio dignissimos ducimus praesentium voluptatum</p>
-																	<div class="item-card2-desc mt-3">
-																		<div class="item-card2-desc-cost row">
-																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> New York, NY 10012, US-52014</h6>
-																			</div>
-																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#">+145 258-356-5869</a></h6>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="card-footer py-3">
-															<div class="">
-																<a class="btn btn-sm btn-light mr-2"><i class="fa fa-heart-o"></i> Add to Favorites</a>
-																<a class="btn btn-sm btn-light"><i class="fa fa-eye"></i> 357</a>
-															</div>
-															<div class="ml-auto mt-3">
-																<div class="rating-stars d-flex">
-																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="3">
-																	<div class="rating-stars-container">
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																	</div><a href="#" class="ml-1"> 85 Reviews</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
+												</div> -->
+												 
+												{%endfor%}
+												 
 											</div>
 										</div>
 									</div>
 								</div>
 								<div class="center-block text-center">
-									<ul class="pagination mb-5">
-										<li class="page-item page-prev disabled">
-											<a class="page-link" href="#" tabindex="-1">Prev</a>
+									 <ul class="pagination mb-5">
+										{% if page_obj.has_previous %}
+										<li class="page-item page-prev ">
+											<a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Prev</a>
 										</li>
-										<li class="page-item active"><a class="page-link" href="#">1</a></li>
-										<li class="page-item"><a class="page-link" href="#">2</a></li>
-										<li class="page-item"><a class="page-link" href="#">3</a></li>
+										{%endif%}
+										<li class="page-item active"><a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a></li>
+										{% if page_obj.has_next %}
 										<li class="page-item page-next">
-											<a class="page-link" href="#">Next</a>
+											<a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
 										</li>
+										{%endif%}
 									</ul>
 								</div>
 							</div>

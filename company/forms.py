@@ -2,6 +2,9 @@ import datetime
 from django import forms
 from django.contrib.gis import forms as gis_form
 from django.db.models import OuterRef,Exists
+from django.db.transaction import atomic
+
+from PIL import Image
 
 from admin_site.models import CompanyDropdownsMaster
 from accounts.models import UserProfile
@@ -22,9 +25,6 @@ from company.models import *
 #             'company_condition',
 # )
 
-
-class CompanyForm(forms.ModelForm):
-    pass
 
 YEAR_CHOICES=[('','Select Year'),]
 YEAR_CHOICES += [(r,r) for r in range(2000, datetime.date.today().year+1)]
@@ -262,6 +262,10 @@ class CompanyAddressForm(forms.ModelForm):
         }
 
 class CompanyProfileForm(forms.ModelForm):
+    x = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(),required=False)
     
     def __init__(self,*args,**kwargs):
         super(CompanyProfileForm,self).__init__(*args,**kwargs)
@@ -271,7 +275,8 @@ class CompanyProfileForm(forms.ModelForm):
     class Meta:
         model = Company
         fields = (
-            'ownership_form','name','name_am','geo_location','logo','established_yr','main_category','trade_license',
+            'ownership_form','name','name_am','geo_location','logo','established_yr',
+            'main_category','trade_license','detail','detail_am',
             )
         widgets = {
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
@@ -281,16 +286,54 @@ class CompanyProfileForm(forms.ModelForm):
             'established_yr':forms.TextInput(attrs={'class':'form-control','placeholder':'Established Year'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
-            'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',})
+            'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
+            'detail':forms.Textarea(attrs={'class':'summernote'}),
+            'detail_am':forms.Textarea(attrs={'class':'summernote'}),
         }
 
+    @atomic
+    def save(self,commit=True):
+        profile = super(CompanyProfileForm, self).save()
+
+        x = self.cleaned_data.get('x')
+        y = self.cleaned_data.get('y')
+        w = self.cleaned_data.get('width')
+        h = self.cleaned_data.get('height')
+
+        if (x or y or w or h ):
+                image = Image.open(profile.logo)
+                cropped_image = image.crop((x, y, w+x, h+y))
+                resized_image = cropped_image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image.save(profile.logo.path)
+
+                return profile
+                
+        else:
+                image = Image.open(profile.logo)
+                resized_image = image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image.save(profile.logo.path)
+                return profile
+                    
 
 class CompanyProfileForm_Superadmin(forms.ModelForm):
-     
+    x = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(),required=False)
+
+    def __init__(self,*args,**kwargs):
+        super(CompanyProfileForm_Superadmin,self).__init__(*args,**kwargs)
+        self.fields['contact_person'].queryset = UserProfile.objects.filter(is_company_admin=True).exclude(
+                                                Exists(Company.objects.filter(contact_person=OuterRef('pk'))))
+        self.fields['contact_person'].empty_label="Select Company contact Person"
+        self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
+        self.fields['ownership_form'].empty_label="Select Form Of Ownership"
+
     class Meta:
         model = Company
         fields = (
-            'contact_person','name','name_am','logo','ownership_form','established_yr','main_category','trade_license','geo_location'
+            'contact_person','name','name_am','logo','ownership_form','established_yr',
+            'main_category','trade_license','geo_location','detail','detail_am',
             )
         widgets = {
             'contact_person':forms.Select(attrs={'class':'form-control form-control-uniform'}),
@@ -302,15 +345,34 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'detail':forms.Textarea(attrs={'class':'summernote'}),
+            'detail_am':forms.Textarea(attrs={'class':'summernote'}),
         }
 
-    def __init__(self,*args,**kwargs):
-        super(CompanyProfileForm_Superadmin,self).__init__(*args,**kwargs)
-        self.fields['contact_person'].queryset = UserProfile.objects.filter(is_company_admin=True).exclude(
-                                                Exists(Company.objects.filter(contact_person=OuterRef('pk'))))
-        self.fields['contact_person'].empty_label="Select Company contact Person"
-        self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
-        self.fields['ownership_form'].empty_label="Select Form Of Ownership"
+    
+    
+    @atomic
+    def save(self,commit=True):
+        profile = super(CompanyProfileForm_Superadmin, self).save()
+
+        x = self.cleaned_data.get('x')
+        y = self.cleaned_data.get('y')
+        w = self.cleaned_data.get('width')
+        h = self.cleaned_data.get('height')
+
+        if (x or y or w or h ):
+                image = Image.open(profile.logo)
+                cropped_image = image.crop((x, y, w+x, h+y))
+                resized_image = cropped_image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image.save(profile.logo.path)
+
+                return profile
+                
+        else:
+                image = Image.open(profile.logo)
+                resized_image = image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image.save(profile.logo.path)
+                return profile
 
 class CompanyRatingForm(forms.ModelForm):
 
@@ -328,10 +390,29 @@ class CompanyRatingForm(forms.ModelForm):
 
 class CompanyUpdateForm(forms.ModelForm):
     #  default_lat=38.781596,default_lon=8.983564,
+    x = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(),required=False)
+
+    def __init__(self,*args,**kwargs):
+        self.main_type = kwargs.pop('main_type')
+        super(CompanyUpdateForm,self).__init__(*args,**kwargs)
+        self.fields['category'].queryset = Category.objects.filter(category_type=self.main_type)
+        self.fields['certification'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Certifications")
+        self.fields['source_of_energy'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Source of Energy")
+        self.fields['support_required'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Areas of Major Challenges")
+        self.fields['management_tools'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Management Tools")
+        self.fields['working_hours'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Working hours")
+        self.fields['working_hours'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Working hours")
+        self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
+
+
     class Meta:
         model=Company
         fields=('name','name_am','logo','established_yr','category','ownership_form','trade_license',
             'expansion_plan','expansion_plan_am','geo_location',
+            'detail','detail_am',
             'orgn_strct','certification','management_tools','working_hours',
             'lab_test_analysis','lab_test_analysis_am','lab_equipment',
             'lab_equipment_am','outsourced_test_param','outsourced_test_param_am',
@@ -372,20 +453,33 @@ class CompanyUpdateForm(forms.ModelForm):
                 'quality_defects_am':forms.Textarea(attrs={'class':'summernote'}),
                 'gas_waste_mgmnt_measure':forms.Textarea(attrs={'class':'summernote'}),
                 'gas_waste_mgmnt_measure_am':forms.Textarea(attrs={'class':'summernote'}),
+                'detail':forms.Textarea(attrs={'class':'summernote'}),
+                'detail_am':forms.Textarea(attrs={'class':'summernote'}),
             }
         
-    def __init__(self,*args,**kwargs):
-        self.main_type = kwargs.pop('main_type')
-        super(CompanyUpdateForm,self).__init__(*args,**kwargs)
-        self.fields['category'].queryset = Category.objects.filter(category_type=self.main_type)
-        self.fields['certification'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Certifications")
-        self.fields['source_of_energy'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Source of Energy")
-        self.fields['support_required'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Areas of Major Challenges")
-        self.fields['management_tools'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Management Tools")
-        self.fields['working_hours'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Working hours")
-        self.fields['working_hours'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Working hours")
-        self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
+    
+    @atomic
+    def save(self,commit=True):
+        profile = super(CompanyUpdateForm, self).save()
 
+        x = self.cleaned_data.get('x')
+        y = self.cleaned_data.get('y')
+        w = self.cleaned_data.get('width')
+        h = self.cleaned_data.get('height')
+
+        if (x or y or w or h ):
+                image = Image.open(profile.logo)
+                cropped_image = image.crop((x, y, w+x, h+y))
+                resized_image = cropped_image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image.save(profile.logo.path)
+
+                return profile
+                
+        else:
+                image = Image.open(profile.logo)
+                resized_image = image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image.save(profile.logo.path)
+                return profile
 
 class CompanySolutionForm(forms.ModelForm):
 

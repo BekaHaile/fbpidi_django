@@ -31,13 +31,16 @@ class Product(models.Model):
         return self.name
 
     def price(self):
-        return ProductPrice.objects.filter(product=self) 
+        return ProductPrice.objects.filter(product=self).latest('created_date')
    
     def more_images(self):
         return ProductImage.objects.filter(product=self)
 
     def get_category(self):
         return self.category.category_name.category_type
+    
+    class Meta:
+        ordering = ('-created_date',)
 
 class Dose(models.Model):
     dose = models.TextField(verbose_name="Dose in English")
@@ -238,7 +241,7 @@ class InvoiceRecord(models.Model):
 class Review(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name="review")
     rating = models.IntegerField()
     review = models.TextField()
     time_stamp = models.DateTimeField(auto_now_add=True)

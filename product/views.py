@@ -2,7 +2,7 @@ import random
 import string
 
 from django.shortcuts import render,redirect,get_object_or_404
-from django.views.generic import View,ListView,UpdateView,CreateView
+from django.views.generic import View,ListView,UpdateView,CreateView,DetailView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -757,48 +757,50 @@ class ProductByCategoryView(View):
         return render(self.request,"frontpages/product/product_category.html",context)
 
 
-class ProductByMainCategory(View):
-    def get(self,*args,**kwargs):
-        products = Product.objects.all()
-        product_list = []
-        context = {}
-        if self.kwargs['option'] == "Beverage":
-            for product in products:
-                if product.category.category_name.category_type == "Beverage":
-                    product_list.append(product)
-        elif self.kwargs['option'] == "Food":
-            for product in products:
-                if product.category.category_name.category_type == "Food":
-                    product_list.append(product)
-        elif self.kwargs['option'] == "Pharmaceuticals":
-            for product in products:
-                if product.category.category_name.category_type == "Pharmaceuticals":
-                    product_list.append(product)
-        elif self.kwargs['option'] == "all":
-            for product in products:
-                product_list.append(product)
-        context['products'] = product_list
-        context['count'] = len(product_list)
-        return render(self.request,"frontpages/product/product_category.html",context)
-
-class ProductDetailView(View):
-    def get(self,*args,**kwargs):
-        try:
-            form = ReviewForm()
-            product = Product.objects.get(id=self.kwargs['id'])
-            reviews = Review.objects.filter(product=product)
-            images = ProductImage.objects.filter(product=product)
-            context = {'product':product,'images':images,'form':form,'reviews':reviews}
-            return render(self.request,'frontpages/product/product_detail.html',context)
-        except ObjectDoesNotExist:
-            return redirect("index")
+class ProductByMainCategory(ListView):
+    model=Product
+    template_name="frontpages/product/product_category.html"
+    paginate_by = 3
     
-    def post(self, *args,**kwargs):
-        form = ReviewForm(self.request.POST)
-        if form.is_valid():
-            review = form.save(commit=False)
-            review.product = Product.objects.get(id=self.kwargs['id'])
-            review.save()
-            return redirect('product_detail',id=self.kwargs['id'])
-        else:
-            return redirect("product_detail",id=self.kwargs['id'])
+    def get_queryset(self):
+        brands = []
+        if self.kwargs['option'] == "Beverage":
+            categories = Category.objects.filter(category_type="Beverage")
+            for category in categories:
+                for sub_cat in category.sub_category.all():
+                    for brand in sub_cat.product_category.all():
+                        brands.append(brand)
+            return Product.objects.filter(fandb_category__in=brands)
+        elif self.kwargs['option'] == "Food":
+            categories = Category.objects.filter(category_type="Food")
+            for category in categories:
+                for sub_cat in category.sub_category.all():
+                    for brand in sub_cat.product_category.all():
+                        brands.append(brand)
+            return Product.objects.filter(fandb_category__in=brands)
+        elif self.kwargs['option'] == "Pharmaceuticals":
+            return Product.objects.filter(pharmacy_category__in=Category.objects.filter(category_type="Pharmaceuticals"))
+        elif self.kwargs['option'] == "all":
+            return Product.objects.all()
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = "frontpages/product/product_detail.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['related_products'] = Product.objects.filter(fandb_category=Product.objects.get(id=self.kwargs['pk']).fandb_category)[:6]
+        context['reviews'] = Review.objects.filter(product=Product.objects.get(id=self.kwargs['pk']))
+        context['form'] = ReviewForm
+        return context
+
+class CreateReview(CreateView):
+    model=Review
+    form_class = ReviewForm
+
+    def form_valid(self, form):
+        review = form.save(commit=False)
+        review.product = Product.objects.get(id=self.kwargs['product'])
+        review.save()
+        return redirect('product_detail',pk=self.kwargs['product'])
+        

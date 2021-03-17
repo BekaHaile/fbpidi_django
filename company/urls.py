@@ -1,13 +1,12 @@
 from django.urls import path
 from company.views import (
-    CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,CreateCompanyProfileAfterSignUp,
-    ViewCompanyProfile,CreateCompanySolution,CreateFbpidiCompanyProfile, MnfcCompanyByMainCategory, SupCompanyByMainCategory
+    CompaniesDetailView,CompaniesView,CreateCompanyProfile,CreateCompanyEvent,
+    CreateFbpidiCompanyProfile, CompanyByMainCategory
 )
 
 
 urlpatterns = [
-    path("man_comp-by-main-category/<option>/",MnfcCompanyByMainCategory.as_view(),name="manufac_category_main"),
-    path("sup_comp-by-main-category/<option>/",SupCompanyByMainCategory.as_view(),name="suplier_category_main"),
+    path("man_comp-by-main-category/<option>/",CompanyByMainCategory.as_view(),name="manufac_category_main"),
     
 ]
 
