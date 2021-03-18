@@ -132,8 +132,7 @@ class CompanyEvent(models.Model):
     def get_company_admin(self):
         return self.company.get_compnay_admin()
     
-    def model_am(self):
-        return "ዝግጅቶች"
+    model_am = "ዝግጅቶች"
 
 
 class EventParticipants(models.Model):

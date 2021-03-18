@@ -150,14 +150,14 @@
                             <li  class="nav-item dropdown">
                                 <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
                                 
-                                    <a href = "#"><i class="fa fa-envelope" ></i><span>My Messages</span></a>
-                                    <span id = "unread_messages_list" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
+                                    <a href = "{% url 'customer_chat_list' %} "><i class="fa fa-envelope" ></i><span>{% trans "My Messages" %}</span></a>
+                                    <span id = "num_unread_messages" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
                                 </a>
                                 
                                 
                                 <div style = "padding: 10px;   width: 300px;" class = "dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
                                     <div class="dropdown-content-header">
-                                        <span class="font-weight-semibold">Messages</span>
+                                        <span class="font-weight-semibold">{% trans " List of Messages" %}</span>
                                         <a href="#" class="text-default"><i class="icon-compose"></i></a>
                                     </div>
                                     <div class="dropdown-content-body dropdown-scrollable">
@@ -183,17 +183,20 @@
                                 </a>
 
                             </li>
+                            
+
+                            <!--  -->
                             <li  class="nav-item dropdown">
                                 <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
                                 
-                                    <a href = "{% url 'admin:view_company_profile_active_tab' active_tab='inbox' %}"><i class="fa fa-envelope" ></i><span>My Messages</span></a>
-                                    <span id = "unread_messages_list" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
+                                    <a href = "{% url 'admin:view_company_profile_active_tab' active_tab='inbox' %}"></i><span>{% trans "My Messages" %}</span></a>
+                                    <span id = "num_unread_messages" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
                                 </a>
                                 
                                 
                                 <div style = "padding: 10px;   width: 300px;" class = "dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
                                     <div class="dropdown-content-header">
-                                        <span class="font-weight-semibold">Messages</span>
+                                        <span class="font-weight-semibold">{% trans " List of Messages" %}</span>
                                         <a href="#" class="text-default"><i class="icon-compose"></i></a>
                                     </div>
                                     <div class="dropdown-content-body dropdown-scrollable">
@@ -230,13 +233,13 @@
                                         {% csrf_token %}
                                         <input name="next" type="hidden" value="{{ redirect_to }}"/>
                                         <input type="hidden" name="language" value="en">
-                                        <input id="lan_btn" type="submit" value="{% trans " English" %}" />
+                                        <input id="lan_btn" type="submit" value='{% trans  "English" %}' />
                                     </form>
                                     <form class="dropdown-item" action="{% url 'set_language' %}" method="post">
                                         {% csrf_token %}
                                         <input name="next" type="hidden" value="{{ redirect_to }}"/>
                                         <input type="hidden" name="language" value="am">
-                                        <input id="lan_btn" type="submit" value="{% trans " Amharic" %}" />
+                                        <input id="lan_btn" type="submit" value='{% trans " Amharic" %}' />
                                     </form>
                                 </div>
                             </li>
@@ -306,7 +309,7 @@
 
                     <li><a href="#">{% trans "Announcement" %} <span class="fa fa-caret-down m-0"></span></a>
                         <ul class="sub-menu">
-                        <li><a href="{% url 'announcement_list' %}">{% trans "Announcements" %}</a></li>
+                        <li><a href="{% url 'announcement_list' %}">{% trans "Announcement" %}</a></li>
                         <li><a href="{% url 'customer_event_list' %}">{% trans "Events" %}</a></li>
                         <li><a href="{% url 'customer_news_list' %}">{% trans "News" %}</a></li>
                         <li><a href="{% url 'tender_list' %}">{% trans "Tenders" %}</a></li>
@@ -472,6 +475,86 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        setInterval(check_inbox, 2000);
+        function check_inbox(){
+              
+                fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>
+                {   num_unread_messages = data['num']
+
+                    document.getElementById("num_unread_messages").innerHTML = num_unread_messages
+                     // first clear the list area 
+                    document.getElementById('list_of_senders').innerHTML = "";
+                    for (unread_message of data['unread_messages']){
+                        console.log("from for loop"+unread_message.sender_name+" "+unread_message.message)
+                        append_unread_messages(unread_message);
+                    }
+
+                });
+            }
+
+            function append_unread_messages(message_obj){
+                console.log("from appende meesages"+message_obj)
+        
+        var li_item = document.createElement('li');
+        li_item.id = message_obj.content;
+        var li_card_item = document.createElement('div');
+        li_card_item.className = "card card-body "
+        li_card_item.style['padding']="5px";
+        li_card_item.style['margin']="0px 0px 5px";
+        
+            var img_div = document.createElement('div');
+                var image_anchor = document.createElement('a');
+                    var image_item = document.createElement('img');
+
+                var chat_div = document.createElement('div');
+                        var name_anch = document.createElement('a');
+                        var count_area = document.createElement('p');
+            var time_area = document.createElement('small');           
+              
+    //    ######################## setting values
+                image_item.src = message_obj.sender_image;
+                image_item.className = "rounded-circle mr-2"
+                image_item.width = "36";
+                image_item.height = "36";
+               
+            image_anchor.href = "/chat/with/"+message_obj.sender_name+"/";
+            image_anchor.style['display'] = 'inline'
+            image_anchor.appendChild(image_item);
+
+        img_div.style['display'] ='inline'
+        img_div.appendChild(image_anchor)
+            name_anch.href = "/chat/with/"+message_obj.sender_name+"/";
+            name_anch.target = "blank";
+            name_anch.className = "mr-3";
+            name_anch.textContent = message_obj.sender_name;
+            count_area.className = "badge bg-danger badge-pill ml-auto float-right";
+            count_area.style['color'] = "white"
+            count_area.textContent = message_obj.count;
+            
+        img_div.appendChild(name_anch) 
+        img_div.appendChild(count_area)
+        
+        time_area.textContent = message_obj.time;
+        time_area.className = "text-muted float-right font-size-sm";
+
+        chat_div.className = "media-body";
+        chat_div.appendChild(time_area);
+        
+        li_card_item.appendChild(img_div);
+        li_card_item.appendChild(chat_div)
+        li_item.className = "media";
+        li_item.appendChild(li_card_item);
+        
+        ul_item =document.getElementById('list_of_senders')
+        ul_item.appendChild(li_item);
+
+    }
+    
+
+    </script>
+
 </section>
 <!--Footer Section-->
 <!-- Back to top -->

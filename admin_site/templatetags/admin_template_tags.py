@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 
 from company.models import Company,CompanyStaff
 from product.models import Product
-from chat.models import  ChatMessage, ChatGroup
+from chat.models import  ChatMessage, ChatGroup,ChatMessages
 from chat import views
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -48,23 +48,9 @@ def user_create_button(user):
 # count all unread messages
 @register.simple_tag
 def count_unread_messages(user):
-    return ChatMessage.count_unread_message(user)
+    return ChatMessages.count_unread_messages(user)
 
 
-@register.simple_tag
-def recieved_grouped_messages(user, max_num_group=None, exceluded = None):
-        return views.get_recieved_grouped_messages(user, max_num_group, exceluded)
-
-
-@register.simple_tag
-def get_grouped_unread_messages(user): 
-    return views.get_unread_grouped_messages(user)
-
-
-@register.simple_tag
-def get_all_messages_grouped(user, max_num_group=None, exceluded = None):
-    return views.get_grouped_all_message(user, max_num_group, exceluded)
-  
 
 @register.simple_tag
 def get_date(date):

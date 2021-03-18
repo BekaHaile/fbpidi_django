@@ -159,9 +159,9 @@
 										<a href="{% url 'customer_event_detail' id=obj.id %}"></a>
 										
 										{% if obj.image %}	
-										<img src="{{obj.image.url}}"  alt="img" class="cover-image">
+										<img src="{{obj.image.url}}" height="300px" alt="img" class="cover-image">
 										{% else %}
-										<img src="{{obj.company.get_image}}" alt="img" class="cover-image">
+										<img src="{{obj.company.get_image}}"  height="300px" alt="img" class="cover-image">
 										{% endif %}
 										
 									</div>
@@ -222,7 +222,7 @@
 							
 								<div class="card-footer">
 									<div class="">
-										<a href="/chat/{{user.username}}_{{event.get_company_admin.username}}/" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> {% trans "Chat" %}</a>
+										<a href="/chat/with/{{event.get_company_admin.username}}/" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> {% trans "Chat" %}</a>
 									</div>
 								</div>
 							</div>

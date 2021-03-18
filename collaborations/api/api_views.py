@@ -123,30 +123,49 @@ class EventDetailApiView(APIView):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def EventNotifyApiView(request):
-            if request.data['email'] and request.data['notify_on'] and request.data['id'] :
-                id = request.data['id']
-                notify_on = int(request.data['notify_on'])
-                event = CompanyEvent.objects.get(id = id)
-                participant = EventParticipants(user =request.user, event= event,
-                                                patricipant_email=request.data['email'])
-                #??? Real comparison
-                if event.start_date.month <= datetime.datetime.now().month:
-                    if notify_on <=  event.start_date.day - datetime.datetime.now().day: 
-                        participant.notified= False
-                        participant.notifiy_in = notify_on
-                        try:
-                            participant.save()   # if the email has been previously registered, it will through an unique exception
-                        except Exception as e:
-                            return Response(data={'error':True, 'message':'You aleard have registered for a notification.'}, status = status.HTTP_205_RESET_CONTENT)
-                            
-                        return Response(data={'error':False}, status=status.HTTP_201_CREATED)  
-                    
-                    else:
-                        return  Response(data={'error':True, 'message':'Invalid Date to notify'}, status = status.HTTP_205_RESET_CONTENT)
-                else:
-                    return Response(data={'error':True, 'message':'Invalid month to notify'}, status = status.HTTP_205_RESET_CONTENT)
 
-            return Response(data={'error':True, 'message':'Email, event id and number of days to notify are required!'}, status = status.HTTP_205_RESET_CONTENT)
+    #    try:   
+                if request.data['email'] and request.data['notify_on'] and request.data['id'] :
+                    event = CompanyEvent.objects.get(id = request.data['id'])
+                    older = EventParticipants.objects.filter(event = event, patricipant_email = request.data['email']).first()
+                    if older:
+                        older.notify_on = request.data['notify_on']
+                        older.notified = False
+                        older.save()
+                    else:
+                        participant = EventParticipants(user =request.user, event= event, patricipant_email= request.data['email'], notify_on=request.data['notify_on'])
+                        participant.save()
+                    return Response(data={'error':False}, status=status.HTTP_201_CREATED)
+                return Response(data={'error':True, 'message':'Email, event id and number of days to notify are required!'}, status = status.HTTP_205_RESET_CONTENT)
+
+                    
+
+
+
+            # if request.data['email'] and request.data['notify_on'] and request.data['id'] :
+            #     id = request.data['id']
+            #     notify_on = request.data['notify_on']
+            #     event = CompanyEvent.objects.get(id = id)
+            #     participant = EventParticipants(user =request.user, event= event,
+            #                                     patricipant_email=request.data['email'])
+            #     #??? Real comparison
+            #     if event.start_date.month <= datetime.datetime.now().month:
+            #         if notify_on <=  event.start_date.day - datetime.datetime.now().day: 
+            #             participant.notified= False
+            #             participant.notifiy_in = notify_on
+            #             try:
+            #                 participant.save()   # if the email has been previously registered, it will through an unique exception
+            #             except Exception as e:
+            #                 return Response(data={'error':True, 'message':'You aleard have registered for a notification.'}, status = status.HTTP_205_RESET_CONTENT)
+                            
+            #             return Response(data={'error':False}, status=status.HTTP_201_CREATED)  
+                    
+            #         else:
+            #             return  Response(data={'error':True, 'message':'Invalid Date to notify'}, status = status.HTTP_205_RESET_CONTENT)
+            #     else:
+            #         return Response(data={'error':True, 'message':'Invalid month to notify'}, status = status.HTTP_205_RESET_CONTENT)
+
+            # return Response(data={'error':True, 'message':'Email, event id and number of days to notify are required!'}, status = status.HTTP_205_RESET_CONTENT)
 
             
 def get_blog_tags():
@@ -359,7 +378,7 @@ class ApiCreateResearch(APIView):
                 research.attachements = request.FILES['attachements']
             research.save()
             return Response(data = {'error':False, 'researchs': ResearchSerializer(research).data})
-        return Response(data ={'error':True, 'message':"Invaid inputs to create a research!"})
+        return Response(data ={'error':True, 'message': f"Invaid inputs to create a research!{form.errors}"})
 
 
 @api_view(['POST'])
@@ -373,21 +392,24 @@ def ApiResearchAction(request):
                  research= get_object_or_404(Research, id = request.data['id'])
             except Http404:
                 return Response(data={'error':True, 'message': 'Research object not Found!' })
-            if research.user == request.user and request.data['option'] == 'delete':
-                research.delete()
-                return Response(data = {'error':False, 'researchs':ResearchSerializer( Research.objects.all(),many =True ).data})  
+            print(research.user.id, " ", request.user.id)   
+            
+            if research.user == request.user:
+                if request.data['option'] == 'delete':
+                    research.delete()
+                    return Response(data = {'error':False, 'researchs':ResearchSerializer( Research.objects.all(),many =True ).data})  
 
-            elif research.user == request.user and request.data['option'] == 'edit':
-                research.title = request.data['title']
-                research.description = request.data['description']
-                research.detail = request.data['detail']
-                status = request.data['status']
-                category = request.data['category']
-                if request.FILES:
-                    research.attachements = request.FILES['attachements']  
-                research.save()   
-                return Response(data= {'error':False, 'research': ForumDetailSerializer(research).data})
-     
+                elif request.data['option'] == 'edit':
+                    research.title = request.data['title']
+                    research.description = request.data['description']
+                    research.detail = request.data['detail']
+                    status = request.data['status']
+                    category = request.data['category']
+                    if request.FILES:
+                        research.attachements = request.FILES['attachements']  
+                    research.save()   
+                    return Response(data= {'error':False, 'research': ForumDetailSerializer(research).data})
+        
             else:
                 return Response( data = {'error':True, 'message': "You can't edit others comment" })
         else:

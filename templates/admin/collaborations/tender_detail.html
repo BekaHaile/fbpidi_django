@@ -38,7 +38,7 @@
     
                                 <div class= "text-right" class="card-header header-elements-inline">					
                                     <div class="header-elements">
-                                            {% if perms.collaborations.change_tender and tender.user == user%}
+                                            {% if perms.collaborations.change_tender and tender.company == user.get_company %}
                                                 
                                                 <div class="list-icons">
                                                     <a href="{%url 'admin:edit_tender' id=tender.id %}"   style = "margin-left: 40px; " class = "btn bg-teal btn-sm rounded-round"><i class="icon-pencil mr-2"></i>Edit this Tender</a>
