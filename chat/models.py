@@ -6,8 +6,8 @@ from datetime import datetime
     
         
 class ChatMessages(models.Model):
-    sender = models.ForeignKey(User, related_name = "sent_messages", on_delete= models.CASCADE)
-    receiver = models.ForeignKey(User, related_name = "recieved_messages", on_delete= models.CASCADE)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, related_name = "sent_messages", on_delete= models.CASCADE)
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, related_name = "recieved_messages", on_delete= models.CASCADE)
     message = models.TextField()
     seen = models.BooleanField(default = False)
     created_date = models.DateTimeField(auto_now_add=True)
