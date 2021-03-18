@@ -186,7 +186,7 @@ class ListResearch(View):
 			else:
 				result = {'query':Research.objects.all(),'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
 		else:
-			result = {'query':Research.objects.all(),'message':"Researchs",'message_am':"ምርምር"}
+			result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"Researchs",'message_am':"ምርምር"}
 		
 		print(self.request.path)
 		template_name="frontpages/research/research_list.html"
