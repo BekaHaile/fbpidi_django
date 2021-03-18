@@ -163,10 +163,11 @@ def with_out():
 
 
 
-if __name__ == '__main__':    
-    n = CompanyEvent.objects.first()
-    d = n.start_date - timedelta(days=1)
-    print(Company.objects.get(id =1))
+if __name__ == '__main__':
+    add_banks()  
+    # n = CompanyEvent.objects.first()
+    # d = n.start_date - timedelta(days=1)
+    # print(Company.objects.get(id =1))
     
     
     

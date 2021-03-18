@@ -78,7 +78,7 @@
 						</div>
 							
 					</div>
-
+					{%if forms.researchfiles%}
 					<div class="card">
 						<label class="col-form-label col-lg-3"> Manage Files  *</label>
 		                
@@ -121,6 +121,7 @@
 
 					                {%endfor%}
             </div>
+            		{%endif%}
 		                            {%if forms.researchfiles.count == 0 %}
 		                            <div class="alert alert-warning" role="alert">
 										<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
@@ -130,17 +131,17 @@
 		                        </div>
 		                    
 		                </div>
-		                
-		                <div class="card-footer">   
+		                 
 		                	<div class="form-group row">
-						 
-						  <label class="col-form-label col-lg-3">Add images:</label>
-						  <div class="col-lg-9">
-						  		<input required type="file" id="files" name="files" multiple>
-						  </div>
-						
+						<label class="col-form-label col-lg-3">Upload your attchment (if you have one):</label>
+						<div class="col-lg-9">
+							<div class="uniform-uploader">
+								<input type="file" id="files" name="files" class="form-input-styled" data-fouc="" multiple/>
+								<span class="filename" style="user-select: none;">No file selected</span>
+								<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
 							</div>
-		                </div>        
+						</div>
+					</div>        
 		            </div> 
 
 		                            {%else%}
@@ -151,7 +152,7 @@
 		                <div class="card-footer">   
 		                	<div class="form-group row">
 						 
-						  <label class="col-form-label col-lg-3">Add images:</label>
+						  <label class="col-form-label col-lg-3">Add Files:</label>
 						  <div class="col-lg-9">
 						  		<input type="file" id="files" name="files" multiple>
 						  </div>

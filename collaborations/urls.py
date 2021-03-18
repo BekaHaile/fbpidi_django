@@ -19,7 +19,7 @@ from .Views.projects import (EditProject,ListProject,ProjectDetail,CreateProject
 from .Views.faq import FaqList
 
 from .Views.research import (EditResearch,ListResearch,ResearchDetail,CreateResearch,SearchResearch,
-                    ResearchCategorySearch,)  
+                    ResearchCategorySearch,CreateResearchAdmin)  
                     
 
 urlpatterns = [ 
@@ -31,9 +31,9 @@ urlpatterns = [
     path("project-category/<id>",ProjectCategorySearch.as_view(),name="projectcategory_search"),
 
     path("research-list",ListResearch.as_view(),name="research_list"),
+    path('research-form',CreateResearch.as_view(),name="research_form"),
     path("research-edit/<id>",EditResearch.as_view(),name="research_edit"),
     path('research-search',SearchResearch.as_view(),name='research_search'),
-    path("research-form",CreateResearch.as_view(),name="research_form"),
     path("research-detail/<id>",ResearchDetail.as_view(),name="research_detail"),
     path("research-category/<id>",ResearchCategorySearch.as_view(),name="researchcategory_search"),
 

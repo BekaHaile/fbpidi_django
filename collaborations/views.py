@@ -40,7 +40,7 @@ from collaborations.api.serializers import NewsListSerializer
 from django.http import JsonResponse
 
 ### a dictionay holding model names with model objects, Used to hold a model object for a string
-models = { 'Announcement':Announcement, 'Blog':Blog, 'BlogComment':BlogComment, 'Choice':Choices, 'Event':CompanyEvent, 'Tender':Tender, 'TenderApplicant':TenderApplicant, 
+models = { 'Research':Research,'Announcement':Announcement, 'Blog':Blog, 'BlogComment':BlogComment, 'Choice':Choices, 'Event':CompanyEvent, 'Tender':Tender, 'TenderApplicant':TenderApplicant, 
             'Forums':ForumQuestion, 'Forum Comments':ForumComments, 'Job Application':JobApplication, 'Job Category':JobCategory, 'Polls':PollsQuestion, 'News':News }
 
 def check_user_has_company(request):
