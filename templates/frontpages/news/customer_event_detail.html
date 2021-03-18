@@ -97,8 +97,8 @@
 										</div>
                                     </div>
                                 </div>
-								
-								{% if event.status == "Upcoming" %}
+								 
+								{%if event.status == "upcomming" %}
 								<form action="{% url 'event_participation' id=event.id %}" method="POST">
 									{%csrf_token%}
 									<br>
@@ -128,9 +128,8 @@
 										<button type="submit" class="btn bg-primary" class="badge badge-secondary" style="margin-right: 20px; color:white;">{% trans "Remind Me" %}</button>
 										
 									</div>
-								</form>
+								</form> 
 								{%endif%}
-								
 							</div>
 
 							<div class="card-header">
