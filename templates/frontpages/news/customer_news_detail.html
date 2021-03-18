@@ -15,13 +15,13 @@
 								<div class="text-center text-white ">
 									<h1 class="mb-2">
 										<span class="font-weight-semibold">
-											News Detail
+											{% trans "News Detail" %}
 										</span>
 									</h1>
 									<ol class="breadcrumb" style="display: inline-flex;">
-										<li class="breadcrumb-item"><a href="">Home</a></li>
-										<li class="breadcrumb-item"><a href="/collaborations/customer_news_list/">News</a></li>
-										<li class="breadcrumb-item active text-white" aria-current="page">News Details</li>
+										<li class="breadcrumb-item"><a href="">{% trans "Home" %}</a></li>
+										<li class="breadcrumb-item"><a href="/collaborations/customer_news_list/">{% trans "News" %}</a></li>
+										<li class="breadcrumb-item active text-white" aria-current="page">{% trans "News Details" %}</li>
 									</ol>
 								</div>
 							</div>
@@ -32,7 +32,7 @@
 					<div class="d-sm-flex container">
 						<div>
 							<a href="#" class="text-white d-inline-block mr-4 ">
-								<i class="icon icon-location-pin text-white mr-2"></i>{{news.get_company.location}}
+								<i class="icon icon-location-pin text-white mr-2"></i>{% trans "Company Address" %}: {{news.get_company.location}}
 							</a>
 						</div>
 
@@ -52,10 +52,10 @@
 		<div class="bg-white border-bottom">
 			<div class="container">
 				<div class="page-header">
-					<h4 class="page-title">News</h4>
+					<h4 class="page-title">{% trans "News" %}</h4>
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">News</li>
+						<li class="breadcrumb-item"><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
+						<li class="breadcrumb-item active" aria-current="page">{% trans "News" %}</li>
 					</ol>
 				</div>
 			</div>
@@ -75,7 +75,7 @@
 									<a href="#" class="text-dark"><h3>{%print_translated news.title news.title_am LANGUAGE_CODE%}</h3></a>
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
-											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">By: </i><b>{% print_translated news.get_company.company_name news.get_company.company_name_am LANGUAGE_CODE %}</b></a></li>
+											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">{% trans "By" %}: </i><b>{% print_translated news.get_company.company_name news.get_company.company_name_am LANGUAGE_CODE %}</b></a></li>
                                             <li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>{{news.created_date}}</b> </a></li>                                       
                                         </ul>
 									</div>
@@ -125,7 +125,7 @@
 							</div>
 
 							<div class="card-header">
-								<h3 class="card-title">News Description</h3>
+								<h3 class="card-title">{% trans "News Description" %}</h3>
 							</div>
 							<div class="card-body pt-0">
 								<div class="mb-0">
@@ -136,7 +136,7 @@
 						</div>
 						<!--/Business Overview-->
 
-						<h3 class="mt-5 mb-4 fs-20">{{related_message}} </h3>
+						<h3 class="mt-5 mb-4 fs-20">{% print_translated related_message related_message_am LANGUAGE_CODE %} </h3>
 
 						<!--Related Posts-->
 						<div id="myCarousel5" class="owl-carousel owl-carousel-icons3">
@@ -156,12 +156,12 @@
 									</form>
 									<div class="card-body">
 										<div class="item-card7-desc">
-											<a  class="text-dark"><h4 class="font-weight-semibold">{{obj.title}} </h4></a>
+											<a  class="text-dark"><h4 class="font-weight-semibold">{% print_translated obj.title obj.title_am LANGUAGE_CODE %} </a>
 										</div>
 										<div class="item-card7-text">
 											<ul class="icon-card mb-0 mt-2">
 												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>{{obj.get_company.location}}</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{obj.created_date}}</a></li>
+												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{obj.created_date.date}}</a></li>
 												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{% print_translated obj.get_company.company_name obj.get_company.company_name_am LANGUAGE_CODE %} </a></li>
 												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> {{obj.get_company.phone_number}}</a></li>
 											</ul>
@@ -178,7 +178,7 @@
 					<div class="col-xl-4 col-lg-4 col-md-12">
 						<div class="card overflow-hidden">
 							<div class="card-header">
-								<h3 class="card-title">Company Information</h3>
+								<h3 class="card-title">{% trans "Company Information" %}</h3>
 							</div>
 							<div class="card-body item-user">
 								<div class="profile-details">
@@ -195,7 +195,7 @@
 								<div class="tab-menu-heading border-0 p-0">
 									<div class="tabs-menu1">
 										<ul class="nav">
-											<li class=""><a href="#tab-contact" class="active" data-toggle="tab">Contat</a></li>
+											<li class=""><a href="#tab-contact" class="active" data-toggle="tab">{% trans "Contat" %}</a></li>
 											
 										</ul>
 									</div>
@@ -204,21 +204,21 @@
 							<div class="tab-content border-0 bg-white">
 								<div class="tab-pane active" id="tab-contact">
 									<div class="card-body item-user">
-										<h4 class="mb-4">Company Contact Info</h4>
+										<h4 class="mb-4">{% trans "Company Contact Info" %}</h4>
 										<div>
 											<h6><span class="font-weight-semibold"><i class="fa fa-map mr-3 mb-2"></i></span><a href="#" class="text-body"> {{news.get_company.location}}</a></h6>
 											<h6><span class="font-weight-semibold"><i class="fa fa-envelope mr-3 mb-2"></i></span><a href="#" class="text-body"> {{news.created_by.email}}</a></h6>
 											<h6><span class="font-weight-semibold"><i class="fa fa-phone mr-3 mb-2"></i></span><a href="#" class="text-secondary"> {{news.get_company.phone_number}}</a></h6>
-											<h6><span class="font-weight-semibold"><i class="fa fa-link mr-3 "></i></span><a href="#" class="text-secondary">https://spruko.com/</a></h6>
+											
 										</div>
 									</div>
 								</div>
 							
 								<div class="card-footer">
 									<div class="">
-										<a href="{% url 'chat_with' reciever_name=news.created_by.username %}" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> Chat</a>
+										<a href="{% url 'chat_with' reciever_name=news.created_by.username %}" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i>{% trans "Chat" %}</a>
 										<!-- <a href="#" class="btn btn-secondary mt-1 mb-1" data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> Contact Me</a> -->
-										<a href="/collaborations/customer_news_list/" class="btn btn-light mt-1 mb-1"><i class="fa fa-eye"></i>All Listings</a>
+										<a href="/collaborations/customer_news_list/" class="btn btn-light mt-1 mb-1"><i class="fa fa-eye"></i>{% trans "All Listings" %}</a>
 									</div>
 								</div>
 							</div>
@@ -226,8 +226,9 @@
 					
 						
 						<form action="{% url 'customer_news_list' %}" method = "GET">
+						<div class = "card">
 							<div class="card-header border-top">
-								<h3 class="card-title">{% trans "Posted By " %}</h3>
+								<h3 class="card-title">{% trans "Filter by company" %}</h3>
 							</div>
 							<div class="card-body">
 								<div class="filter-product-checkboxs">

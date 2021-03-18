@@ -24,6 +24,7 @@ from accounts.models import User, CompanyAdmin, Company
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
+from django.core.paginator import Paginator
 from django.http import FileResponse, HttpResponse, HttpResponseRedirect
 from accounts.email_messages import sendEventNotification, sendEventClosedNotification, sendTenderEmailNotification
 from wsgiref.util import FileWrapper
@@ -48,8 +49,8 @@ def check_user_has_company(request):
         return request.user.get_company()
     except Exception as e:
         messages.warning(request, "Currently, You are not related with any registered Company.")
-        print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
-        return redirect(request, 'admin:create_company_profile', {})
+        print("Exception while trying to find the company of an company admin or company staff user in  ", str(e))
+        return False
 
 
 def related_company_title(model_name, obj):
@@ -60,13 +61,13 @@ def related_company_title(model_name, obj):
     model = models[model_name]
     result = FilterByCompanyname( [obj.company], model.objects.exclude(id =obj.id)  )
     if result['query'].count() != 0:
-        return {'query':result['query'], 'message':f"Other {model_name}s from {obj.company.company_name} "}
+        return {'query':result['query'], 'message':f"Other {model_name}s from {obj.company.company_name} ", 'message_am': f"ሌሎቸ በ{obj.company.company_name_am} ድርጅት የተለቀቁ {obj.model_am()}" }
     else:
         result = search_title_related_objs(  obj, model.objects.exclude(id =obj.id)  )
         if result['query'].count() != 0:
-            return {'query': result, 'message':f'Other {model_name}s with related content' }
+            return {'query': result, 'message':f'Other {model_name}s with related content', 'message_am': f"ሌሎች ተቀራራቢ ውጤቶች "}
         else:
-            return {'query':model.objects.exclude(id = obj.id)[:4], 'message': f'Other {model_name}s ' }
+            return {'query':model.objects.exclude(id = obj.id)[:4], 'message': f'Other {model_name}s ', 'message_am': 'ሌሎች ውጤቶች'}
    
 
 def related_company_title_status(model_name, obj):
@@ -82,11 +83,11 @@ def related_company_title_status(model_name, obj):
         t = Q (  Q(title__icontains = obj.title) | Q(title_am__icontains = obj.title_am )  )
         result = model.objects.filter(  q , t  ).exclude(id = obj.id)
         if result.count() == 0:
-            return {'query':model.objects.exclude(id = obj.id)[:3], 'message': f'Other {model_name}s ' }
+            return {'query':model.objects.exclude(id = obj.id)[:3], 'message': f'Other {model_name}s ', 'message_am': 'ሌሎቸ ውጤቶች' }
         else:
-            return {'query': result, 'message':f'Other {model_name}s with related content' }
+            return {'query': result, 'message':f'Other {model_name}s with related content', 'message_am':'ሌሎች ተቀራራቢ ውጤቶቸ'  }
     else:
-        return {'query': result, 'message':f"Other {model_name}s from {obj.company.company_name} "}
+        return {'query': result, 'message':f"Other {model_name}s from {obj.company.company_name} ", 'message_am': f"ሌሎቸ በ{obj.company.company_name_am} ድርጅት የተለቀቁ" }
 
 
 def search_title_related_objs( obj, query_list):
@@ -101,7 +102,7 @@ def SearchByTitle_All(model_name, request ):
         model= models[model_name]
         if not 'by_title' in request.GET: #not searching, just displaying latest news 
             query  = model.objects.all()
-            return { 'query': query, 'message': f" {model_name} ",  'message_am': f" {model_name} "} # 3 Polls Found!
+            return { 'query': query, 'message': f" {model_name} ",  'message_am': f" {query.first().model_am()} "} # 3 Polls Found!
         else:   #if there is a filter_key list
             filter_key = request.GET['by_title']
             query = model.objects.filter( Q(title__icontains = filter_key) | Q(title_am__icontains = filter_key) |Q(description__icontains = filter_key ) | Q(description_am__icontains = filter_key) ).distinct() 
@@ -114,6 +115,7 @@ def SearchByTitle_All(model_name, request ):
         print("Exception at SearchBYTitle_All", str(e))
         return {'query':[], 'message':'Exception occured!'}
 
+
 def FilterByCompanyname(company_list,  query_set):
     try:
         q_object = Q()
@@ -121,7 +123,7 @@ def FilterByCompanyname(company_list,  query_set):
             q_object.add( Q(company__company_name = company_name ), Q.OR )
             q_object.add( Q(company__company_name_am = company_name ), Q.OR )
         query = query_set.filter(q_object).distinct()
-        return {'query':query, 'message':f'{query.count()} result Found!'}
+        return {'query':query, 'message':f'{query.count()} result Found!', 'message_am': f" {query.count()} ውጤት ተገኝቷል" }
     except Exception as e:
         print("###########Exception at FilterByCompanyName", str(e))
         return {'query':query, 'message':f"No company found!", 'message_am':f"ምንም ማግኘት አልተቻለም!"}
@@ -134,7 +136,9 @@ def SearchCategory_Title(model_name, request):
     result = SearchByTitle_All(model_name, request) #returns matching objects by title and title_am, if none all objects
     category_name = request.GET.getlist('by_category')
     if category_name[0] == 'All':
-            return {'query':result['query'], 'message':f"{result['query'].count()} {request.GET['by_title']} result found in {category_name[0]} category!", 'searched_category':'All', 'searched_name': request.GET['by_title'] }   
+            return {'query':result['query'],'message':f"{result['query'].count()} {request.GET['by_title']} result found in {category_name[0]} category!", 
+                                            'message_am': f"በ {category_name[0]} {result['query'].count()} ውጤት ተገኝቷል",
+                                            'searched_category':'All', 'searched_name': request.GET['by_title'] }   
     result = filter_by('catagory', category_name, result['query'])
     result['searched_category'] = category_name[0]
     result['searched_name'] = request.GET['by_title']
@@ -156,7 +160,15 @@ def filter_by(field_name, field_values, query):
     result = query.filter(q)
     if not result.count() == 0:
         return {'query':result,'message':f"{result.count()} result found!",'searched_category':'All','message_am':f"{result.count()} ተገኝቷል! " ,'searched_name': field_name }
-    return {'query':result, 'message':f"No results Found!", 'message_am':f"ካስገቡት ቃል  ጋር የሚግናኝ አልተገኘም፡፡ !" ,'searched_category':'All', 'searched_name': field_name }
+    return {'query':result, 'message':f"No results Found!", 'message_am':f" ምንም ውጤት አልተገኘም፡፡ !" ,'searched_category':'All', 'searched_name': field_name }
+
+# returns paginated data from a query set
+def get_paginated_data(request, query):
+    page_number = request.GET.get('page', 1)
+    try:
+        return Paginator(query, 1).page(page_number)
+    except EmptyPage:
+        return Paginator(query, 1).page(1)
 
 
 class CustomerPollList(View):
@@ -180,7 +192,8 @@ class CustomerPollList(View):
         if result['query']==0:
             result['query'] = PollsQuestion.objects.all()
             result['message'] = 'No Result Found!'
-        return render(self.request, "frontpages/poll/polls-list.html", { 'polls':result['query'], 'message' : result['message'], 'companies':companies})
+        data = get_paginated_data(self.request, result['query'])
+        return render(self.request, "frontpages/poll/polls-list.html", { 'polls':data, 'message' : result['message'], 'message_am':result['message_am'],'companies':companies})
 
 
 #only visible to logged in and never voted before
@@ -233,7 +246,6 @@ def change_to_datetime(calender_date):
 class CreateTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:    
-            check_user_has_company(self.request)
             company = self.request.user.get_company()
             company_bank_accounts = company.get_bank_accounts()
             return render(self.request,'admin/collaborations/create_tender.html',{'form':TenderForm, 'company_bank_accounts':company_bank_accounts})
@@ -304,9 +316,9 @@ class TenderList(LoginRequiredMixin, ListView):
         check_tender_startdate(self.request, Tender.objects.filter( status='Upcoming') )
         check_tender_enddate(self.request, Tender.objects.filter( Q(status = 'Open') | Q(status = 'Upcoming') )  )
         if self.request.user.is_superuser:
-            return Tender.objects.all()
+            return Tender.objects.all() 
         else:
-            return Tender.objects.filter(company = self.request.user.get_company())
+            return Tender.objects.filter(company = self.request.user.get_company()) if check_user_has_company(self.request) else []
 
     # def get(self, *args, **kwargs):           
     #     try:
@@ -417,7 +429,6 @@ class EditTender(LoginRequiredMixin,View):
             messages.warning(self.request, "Error! Tender was not Edited!" )
             return redirect("admin:tenders")
 
-
 ######## Tender for customers
 class CustomerTenderList(View):
     def get(self, *args, **kwargs): 
@@ -439,8 +450,10 @@ class CustomerTenderList(View):
             for comp in Company.objects.all():
                 if comp.tender_set.count() > 0:
                     companies.append(comp)
-               
-            return render(self.request, "frontpages/tender/customer_tender_list.html", {'tenders':result['query'], 'companies': companies, 'message':result['message']})
+ 
+            data = get_paginated_data(self.request, result['query'])
+
+            return render(self.request, "frontpages/tender/customer_tender_list.html", {'tenders':data, 'companies': companies, 'message':result['message'], 'message_am':result['message_am']})
         
         except Exception as e:
                 print( "Error while getting tenders",e)
@@ -532,9 +545,12 @@ class AdminNewsList(LoginRequiredMixin, ListView):
     def get_queryset (self):
         if self.request.user.is_superuser:
             return News.objects.all()
-        else: 
-            return News.objects.filter(company=self.request.user.get_company())
-
+        else:
+            try: 
+                return News.objects.filter(company=self.request.user.get_company()) if check_user_has_company(self.request) else []
+            except Exception as e:
+                print("Exception while trying to fetch news objects")
+                return redirect("admin:index")
 
 class NewsDetail(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):         
@@ -570,7 +586,7 @@ class CustomerNewsList(View):
         result = []
         if 'by_category' in self.request.GET and 'by_title' in self.request.GET:
             result = SearchCategory_Title('News', self.request)
-            return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':result['query'], 'message':result['message'], 'NEWS_CATAGORY':News.NEWS_CATAGORY,
+            return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':result['query'], 'message':result['message'],  'message_am':result['message_am'],'NEWS_CATAGORY':News.NEWS_CATAGORY,
                                                                 'searched_category':result['searched_category'], 'searched_name':result['searched_name']})
         elif 'by_category' in self.request.GET:
             result = filter_by('catagory', self.request.GET.getlist('by_category'), News.objects.all())
@@ -579,9 +595,11 @@ class CustomerNewsList(View):
         else: 
             result = SearchByTitle_All('News', self.request)
 
-        if result['query']==0:
+        if result['query'].count()==0:
             result['query'] = News.objects.all()
-        return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':result['query'], 'message':result['message'],  'NEWS_CATAGORY':News.NEWS_CATAGORY})
+        data = get_paginated_data(self.request, result['query'])
+       
+        return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':data, 'message':result['message'],  'message_am':result['message_am'], 'NEWS_CATAGORY':News.NEWS_CATAGORY})
        
 
 class CustomerNewsDetail(View):
@@ -596,17 +614,15 @@ class CustomerNewsDetail(View):
             print("Exception at customerNews Detail ", e)
             return redirect('customer_news_list')
         related_news = related_company_title('News', news)
-        return render(self.request, "frontpages/news/customer_news_detail.html", {'news':news,'related_news':related_news['query'], 'related_message':related_news['message'], 'companies':companies, "NEWS_CATEGORY": News.NEWS_CATAGORY})
+        return render(self.request, "frontpages/news/customer_news_detail.html", {'news':news,'related_news':related_news['query'], 'related_message':related_news['message'], 'related_message_am':related_news['message_am'], 'companies':companies, "NEWS_CATEGORY": News.NEWS_CATAGORY})
     
 
 ##### Customer Events
 def check_event_participation(request, event_participants):
         today = timezone.now().date()
         for participant in event_participants:
-            print("participant notify on date is ", participant.notify_on)
-            if participant.notify_on.date() <= today: #lesser than is used, because if we check event participation notification once a day and 
+            if participant.notify_on <= today: #lesser than is used, because if we check event participation notification once a day and 
                                                       # if the system could not send on the notify date, then it will send even if the notify me date has passed, but the event is in upcoming status
-                print("date has matched!")
                 if sendEventNotification(request, participant):
                     participant.notified = True
                     participant.save()
@@ -616,9 +632,7 @@ def check_event_participation(request, event_participants):
 
 def check_event_enddate(request, open_events):
     today = timezone.now().date()
-    print("inside endedata")
     for event in open_events: 
-        print("enent end date ", event.end_date.date()," ",today)
         if today >= event.end_date.date():
             print("event closed found ", event.title, " ", event.end_date, " ", event.end_date.date())
             if sendEventClosedNotification(request, event):
@@ -639,6 +653,7 @@ class CustomerEventList(View):
                 result = SearchByTitle_All('Event', self.request)
             if result['query'].count() == 0:
                 result['query'] = CompanyEvent.objects.all()
+            data = get_paginated_data(self.request, result['query'])
             #12345 make it background
             check_event_enddate(self.request, CompanyEvent.objects.filter( status = 'Upcoming') )
             event_participants = EventParticipants.objects.filter(notified = False, event__status = "Upcoming")
@@ -647,7 +662,8 @@ class CustomerEventList(View):
             for comp in Company.objects.all():
                 if comp.companyevent_set.count() > 0:
                     eventcompanies.append(comp)
-            return render(self.request, "frontpages/news/customer_event_list.html", {'events':result['query'], 'message':result['message'], 'event_companies':eventcompanies})
+            
+            return render(self.request, "frontpages/news/customer_event_list.html", {'events':data, 'message':result['message'],  'message_am':result['message_am'],'event_companies':eventcompanies})
         
         
 class CustomerEventDetail(View):
@@ -659,7 +675,7 @@ class CustomerEventDetail(View):
                     eventcompanies.append(comp)
             event = get_object_or_404( CompanyEvent, id = self.kwargs['id']  )
             related_objs = related_company_title_status('Event', event)
-            return render(self.request, "frontpages/news/customer_event_detail.html", {'event':event,'event_participant_form':EventParticipantForm, 'event_companies':eventcompanies, 'related_objs':related_objs['query'], 'related_message':related_objs['message']})
+            return render(self.request, "frontpages/news/customer_event_detail.html", {'event':event,'event_participant_form':EventParticipantForm, 'event_companies':eventcompanies, 'related_objs':related_objs['query'], 'related_message':related_objs['message'], 'related_message_am':related_objs['message_am']})
         except Exception as e:
             print("Exception at customerEventDetail", e)
             result = SearchByTitle_All('Event', self.request)
@@ -668,21 +684,21 @@ class CustomerEventDetail(View):
 #12345  use ajax for event participation.
 class EventParticipation(LoginRequiredMixin, View):
     def post(self, *args, **kwargs):   
-        if 'patricipant_email' in self.request.POST:
-                try:
+                try:  
                     event = get_object_or_404( CompanyEvent, id = self.kwargs['id'])
-                    participant = EventParticipants(user =self.request.user, event= event, patricipant_email=self.request.POST['patricipant_email'])
-                    if self.request.POST[ "notify_on"] == '':
-                        participant.notify_on = participant.event.start_date - timezone.timedelta(days=1)
-                    participant.save()
+                    older = EventParticipants.objects.filter(event = event, patricipant_email = self.request.POST['patricipant_email']).first()
+                    if older:
+                        older.notify_on = self.request.POST["notify_on"]
+                        older.notified = False
+                        older.save()
+                    else:
+                        participant = EventParticipants(user =self.request.user, event= event, patricipant_email=self.request.POST['patricipant_email'], notify_on=self.request.POST[ "notify_on"])
+                        participant.save()
                     return redirect(f'/collaborations/customer_event_detail/{event.id}/')
                 except Exception as e:
                     print("Exception occured while trying to paricipate in event", e)
                     return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
-        else:
-            print('Email and notifiy me on are required!')
-            return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
-
+        
 
 #########Document
 ###Admin Side
@@ -733,11 +749,13 @@ class EditDocument(LoginRequiredMixin, View):
 class DocumentListing(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         documents = []
-        if self.kwargs['option'] != 'all':
-            documents =  Document.objects.filter( category = self.kwargs['option'] , company=self.request.user.get_company())
-            if documents.count() != 0:
-                return render(self.request, "admin/document/list_document_by_category.html", {'documents':documents, 'categories':Document.DOC_CATEGORY})
-            else:
-                messages.warning(self.request, f"No documents for {self.kwargs['option']}")
-        return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})
-
+        if check_user_has_company(self.request):
+            if self.kwargs['option'] != 'all':
+                documents =  Document.objects.filter( category = self.kwargs['option'] , company=self.request.user.get_company())
+                if documents.count() != 0:
+                    return render(self.request, "admin/document/list_document_by_category.html", {'documents':documents, 'categories':Document.DOC_CATEGORY})
+                else:
+                    messages.warning(self.request, f"No documents for {self.kwargs['option']}")
+            return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})
+        else:        
+            return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})

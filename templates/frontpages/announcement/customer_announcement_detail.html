@@ -73,13 +73,20 @@
 								<div class="product-slider">
 									<div id="carousel" class="carousel slide" data-ride="carousel">
 										<div class="carousel-inner">
-											<div class="carousel-item active"><img height = "100" src="{{post.announcementimages.0.image.url}}" alt="{{image.name}}"> </div>  
 											
-                                            {% for image in post.announcementimages %}
-                                                {% if image.image.url != post.announcementimages.0.image.url %}
-                                                    <div class="carousel-item "><img height = "100" src="{{image.image.url}}" alt="{{image.name}}"> </div>
-                                                {%endif%}
-                                            {% endfor %}
+											{% if post.announcementimages %}
+											<div class="carousel-item active"><img height = "100" src="{{post.announcementimages.0.image.url}}" alt="{{image.name}}"> </div>  											
+												{% for image in post.announcementimages %}
+													{% if image.image.url != post.announcementimages.0.image.url %}
+														<div class="carousel-item "><img height = "100" src="{{image.image.url}}" alt="{{image.name}}"> </div>
+													{%endif%}
+                                            	{% endfor %}
+											{% else %}
+										
+											<div class="carousel-item active"><img height = "100" src="{{post.company.get_image}}" alt="{{image.name}}"> </div>  
+											
+
+											{% endif %}
 										</div>
 										<a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
 											<i class="fa fa-angle-left" aria-hidden="true"></i>

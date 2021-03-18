@@ -50,12 +50,9 @@ class BlogsForm(forms.ModelForm):
                     'tag_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in Amharic'}),
                     
                             }
-
+    
     def save(self,user,x,y,w,h):
-        ## change 'BlogsForm' with the one you want to use
         blog = super(BlogsForm, self).save(commit=False)
-        ## if there are values that need to be set
-
         blog.user = user
         blog.save()
 
@@ -64,7 +61,6 @@ class BlogsForm(forms.ModelForm):
             # just resize and save
             # change blog.blogImage with the image you want to resize 
             image = Image.open(blog.blogImage)
-            
             resized_image = image.resize((w1, h1), Image.ANTIALIAS)
             resized_image.save(blog.blogImage.path)
             return blog
@@ -109,10 +105,9 @@ class PollsForm(forms.ModelForm):
     
     class Meta:
         model = PollsQuestion
-        fields = ('created_by','title', 'title_am',
-                  'description', 'description_am','choices')
+        fields = ('title', 'title_am',
+                  'description', 'description_am')
         widgets = {
-            'created_by':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title in English'}),
             'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in English'}),
             'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title in Amharic'}),
@@ -247,8 +242,8 @@ class JobCategoryForm(forms.ModelForm):
         }
 
 class NewsForm(forms.ModelForm):
-    NEWS_CATAGORY = [ ('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),  
-    ('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological')]
+    NEWS_CATAGORY = ( ('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),  
+    ('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological'))
     catagory = forms.ChoiceField(choices = NEWS_CATAGORY, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
 
     class Meta:

@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import Permission, Group
+from django.urls import reverse
+
 
 from django.conf import settings
 import datetime
@@ -20,8 +22,9 @@ class PollsQuestion(models.Model):
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
 
+    def model_am(self):
+        return "ምርጫዎች"
 
-    
     def __str__(self):
         return self.title
 
@@ -44,7 +47,7 @@ class PollsQuestion(models.Model):
 
     class Meta:
         ordering = ['-created_date',] 
-
+    
 
 class Choices (models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
@@ -98,6 +101,9 @@ class Blog(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     publish = models.BooleanField(null=False,default=False)
 
+    def model_am(self):
+        return "ብሎጎች" 
+
     def __str__(self):
         return self.title
 
@@ -136,9 +142,10 @@ class Faqs(models.Model):
 
     class Meta:
         ordering = ['-timestamp',]
+    
+    def model_am(self):
+        return "በተደጋጋሚ የተጠየቁ ጥያቄዎች"
 
-
- 
 
 class Tender(models.Model):
     TENDER_STATUS = ['Open', 'Upcoming', 'Closed', 'Suspended']
@@ -188,6 +195,9 @@ class Tender(models.Model):
             return unrelated_bank_accounts
         return None  
 
+    def model_am(self):
+        return "ጨረቶች"
+        
     def save(self):
         self.company = self.created_by.get_company()
         super(Tender, self).save()
@@ -263,6 +273,9 @@ class Vacancy(models.Model):
     def get_company(self):
         return self.company
 
+    def model_am(self):
+        return "ክፍት የስራ ቦቶች"
+
 
 class JobApplication(models.Model):
     CURRENT_STATUS = [('JUST GRADUATED','JUST GRADUATED'),('WORKING','WORKING'),
@@ -302,7 +315,9 @@ class News(models.Model):
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
 
-    
+    def model_am(self):
+        return "ዜናዎች"
+
     def get_images(self):
         return self.newsimages_set.all() if self.newsimages_set.exists() else None
 
@@ -318,6 +333,8 @@ class News(models.Model):
 
     class Meta:
         ordering = ['-created_date',] 
+    
+
 
     
 class NewsImages(models.Model):
@@ -356,6 +373,9 @@ class ForumQuestion(models.Model):
 
     def comments(self):
         return self.forumcomments_set.all()
+    
+    def model_am(self):
+        return "ውይይቶች"
     
 
 class ForumComments(models.Model):
@@ -412,6 +432,11 @@ class Announcement(models.Model):
     def save(self):
         self.company = self.created_by.get_company()
         super(Announcement, self).save()
+    
+    def model_am(self):
+        return "መግለጫዎች"
+    
+
 
 
 class AnnouncementImages(models.Model):
@@ -423,14 +448,6 @@ class AnnouncementImages(models.Model):
     class Meta:
         ordering = ['-created_date',]
 
-    # def save(self):           
-    #     super(AnnouncementImages, self).save()
-
-        
-    #     im = Image.open(self.image)  
-    #     size = (300, 300)
-    #     im = im.resize(size, Image.ANTIALIAS)
-    #     im.save(self.image.path)
 
 
 class ResearchProjectCategory(models.Model):
@@ -457,6 +474,8 @@ class ResearchProjectCategory(models.Model):
 
     def Researchs(self):
         return self.research_set.all()
+    
+    
 
 
 class Research(models.Model):
@@ -476,6 +495,9 @@ class Research(models.Model):
     
     def get_category_name(self):
         return self.category.cateoryname
+    
+    def model_am(self):
+        return "ምርምር"
 
 class ResearchAttachment(models.Model):
     research = models.ForeignKey(Research, on_delete=models.CASCADE)
@@ -506,7 +528,8 @@ class Project(models.Model):
     
     def get_category_name(self):
         return self.category.cateoryname
-    
+    def model_am(self):
+        return "ፕሮጀክት"
 
 class Document_Category(models.Model):
     

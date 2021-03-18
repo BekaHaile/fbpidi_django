@@ -8,6 +8,7 @@ from company.models import Bank,  CompanyEvent, Company
 from accounts.models import User
 from rest_framework.authtoken.models import Token
 from company.api.serializers import *
+from company.models import *
 from collaborations.models import *
 from admin_site.api.serializers import *
 from product.models import *
@@ -168,6 +169,10 @@ if __name__ == '__main__':
     # n = CompanyEvent.objects.first()
     # d = n.start_date - timedelta(days=1)
     # print(Company.objects.get(id =1))
+
+    # for n in EventParticipants.objects.all():
+    #    print(n.patricipant_email, " on ", n.event, n.timestamp)
+
     
     
     
