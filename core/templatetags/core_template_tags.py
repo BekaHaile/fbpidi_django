@@ -7,7 +7,7 @@ from product.models import Product,Review,Brand
 from admin_site.models import Category
 from accounts.models import UserProfile
 import datetime
-from chat.models import ChatMessage, ChatGroup
+from chat.models import ChatMessages
 import os
 from chat import views as chat_views
 
@@ -34,10 +34,12 @@ def company_product_count(company):
     except ObjectDoesNotExist:
         return 0
 
+
 @register.filter
 def product_count(non):
     product = Product.objects.all()
     return product.count()
+
 
 @register.filter
 def happy_customer(non):
@@ -92,12 +94,6 @@ def change_end_date(end_date):
             end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
             return end_date 
 
-image_formats = ['jpg',]
-
-@register.simple_tag
-def count_unread_messages(user):
-    return ChatMessage.count_unread_message(user)
-
 
 @register.simple_tag()
 def file_type( file_url):
@@ -122,17 +118,8 @@ def file_type( file_url):
 # count all unread messages
 @register.simple_tag
 def count_unread_messages(user):
-    return ChatMessage.count_unread_message(user)
+    return ChatMessages.count_unread_messages(user)
 
-
-@register.simple_tag
-def recieved_grouped_messages(user, max_num_group = None, exceluded = None):
-        return chat_views.get_recieved_grouped_messages(user, max_num_group, exceluded)
-
-
-@register.simple_tag
-def get_grouped_unread_messages(user):  
-    return chat_views.get_unread_grouped_messages(user)
 
 
 

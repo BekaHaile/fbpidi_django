@@ -738,7 +738,7 @@ class ViewFbpidiCompany(LoginRequiredMixin,View):
         banks = Bank.objects.all()
         company_bank_accounts = CompanyBankAccount.objects.filter(company=fbpidi)
         account_form = CompanyBankAccountForm()
-        context = {'company':fbpidi,'events':events,'event_form':event_form, 'banks':banks, 'company_bank_accounts': company_bank_accounts, 'account_form':account_form}
+        context = {'company':fbpidi,'events':events,'event_form':event_form, 'banks':banks, 'company_bank_accounts': company_bank_accounts,'chat_list':get_grouped_chats(self.request.user), 'account_form':account_form}
         context['active_tab'] = 'inbox'
         # if 'active_tab' in self.kwargs:
             # print("########## Active tab is", self.kwargs['active_tab'])

@@ -23,21 +23,24 @@ class AnnouncementDetail(View):
 
 class ListAnnouncement(View):
 	def get(self,*args,**kwargs):
-		result = {}
-		if 'by_company' in self.request.GET:
-			result = FilterByCompanyname(self.request.GET.getlist('by_company'), Announcement.objects.all())
-		else:
-			result = SearchByTitle_All('Announcement', self.request)
-		if result['query'].count() == 0:
-			result['query'] = Announcement.objects.all()
-		data = get_paginated_data(self.request, result['query'])
-		companies = []
-		for comp in Company.objects.all():
-			if comp.announcement_set.count() > 0:
-				companies.append(comp)
-		template_name="frontpages/announcement/customer_announcement.html"
-		return render(self.request, template_name, {'Announcements':data, 'message':result['message'],'message_am':result['message_am'], 'companies': companies})
 	
+			result = {}
+			if 'by_company' in self.request.GET:
+				result = FilterByCompanyname(self.request.GET.getlist('by_company'), Announcement.objects.all())
+			else:
+				result = SearchByTitle_All('Announcement', self.request)
+				print("########## ", result)
+			if result['query']  :
+				result['query'] = Announcement.objects.all()
+			data = get_paginated_data(self.request, result['query'])
+			companies = []
+			for comp in Company.objects.all():
+				if comp.announcement_set.count() > 0:
+					companies.append(comp)
+			template_name="frontpages/announcement/customer_announcement.html"
+			return render(self.request, template_name, {'Announcements':data, 'message':result['message'],'message_am':result['message_am'], 'companies': companies})
+		
+		
 
 #### Announcement related with admin side
 class CreatAnnouncementAdmin(LoginRequiredMixin,View): 

@@ -3,6 +3,28 @@ from django.conf import settings
 from django.db.models import Q
 from datetime import datetime
 
+    
+        
+class ChatMessages(models.Model):
+    sender = models.ForeignKey(User, related_name = "sent_messages", on_delete= models.CASCADE)
+    receiver = models.ForeignKey(User, related_name = "recieved_messages", on_delete= models.CASCADE)
+    message = models.TextField()
+    seen = models.BooleanField(default = False)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    
+
+    def count_unread_messages(user):
+        return ChatMessages.objects.filter(receiver = user, seen =False).count()
+
+    def get_unread_from_sender(sender,user):
+        unread_messages = ChatMessages.objects.filter(sender = sender, receiver=user, seen =False).order_by('-created_date')
+        return {'count':unread_messages.count(), 'last_message':unread_messages.first()}
+    
+    
+
+
+
 
 class ChatGroup(models.Model):
     """
@@ -31,8 +53,6 @@ class ChatGroup(models.Model):
         if user in self.connected_users.all():
             self.connected_users.remove(user)
             self.save()
-    
-        
 
 
 class ChatMessage(models.Model):
@@ -42,7 +62,8 @@ class ChatMessage(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
-   
+    class Meta:
+        ordering = ['timestamp']
     def __str__(self):
         return f'{self.sender.username} : {self.content}'
 
@@ -80,8 +101,3 @@ class ChatMessage(models.Model):
         """
         latest_10 = ChatMessage.objects.filter(chat_group__group_name = chat_group).order_by('-timestamp')[:n]
         return latest_10[::-1]
-
-
-
-
-    

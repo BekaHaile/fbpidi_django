@@ -3,13 +3,12 @@
 {% block extrastyle %}
 <!-- Theme JS files -->
 <script src="/static/admin/global_assets/js/demo_pages/chat_layouts.js"></script>
-<script src="/static/admin/global_assets/js/demo_pages/reconnecting-websocket.js"></script>
 
 <!-- /theme JS files -->
 
 
 {% endblock %}
-{%block pagename%}Chat - Layout{%endblock%}
+{%block pagename%}Chat Messages{%endblock%}
 {%block content%} 
 
 <style>
@@ -17,164 +16,161 @@
         display: block;
         color: grey;
     }
+    #main-chat-ul{
+        max-height:500px;
+        overflow-y:auto;
+        scroll-behavior: auto;
+    }
 </style>
-
-           
 			<!-- Content area -->
 			<div class="content">
 
-                
-				<!-- Main chats -->
-				<div class="card">
-
-					<div class="card-header header-elements-inline">
-                      
-						<h5 id =  "main-card-title" class="card-title">
-                           
-                        </h5>
-                        <span id = "online-item"></span>
-						<div class="header-elements">
-							<div class="list-icons">
-		                		<a class="list-icons-item" data-action="collapse"></a>
-		                		<a class="list-icons-item" data-action="reload"></a>
-		                		<a class="list-icons-item" data-action="remove"></a>
-		                	</div>
-	                	</div>
-					</div>
-
-
-					<div class="card-body">
-						<ul id = "main-chat-ul" class="media-list media-chat media-chat-scrollable mb-3">
-						
-                            <li class="media content-divider justify-content-center text-muted mx-0">
-								<span id = "date-span" class="px-2">Monday, Feb 10</span>
+                <div class = "row" style = "margin:0px 5px; padding:5px 5px;" >
+                    <!-- Main chats -->
+                    <div class="card col-md-8 fload-left " style = "margin-right:3%">
+                        <div class="card-header header-elements-inline">
+                                <h5 id =  "main-card-title" class="card-title">
+                                    Your Chats with <b>{{other_user.username}}</b>
+                                </h5>
                                
-
-							</li>
-
-						</ul>
-
-                    	<textarea id =  "chat-message-input" name="enter-message" class="form-control mb-3" rows="3" cols="1" placeholder="message..."></textarea>
-
-                    	<div class="d-flex align-items-center">
-                    		<!-- <div class="list-icons list-icons-extended">
-                                <a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send photo"><i class="icon-file-picture"></i></a>
-                            	<a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send video"><i class="icon-file-video"></i></a>
-                                <a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send file"><i class="icon-file-plus"></i></a>
-                    		</div> -->
-
-                    		<button type="button"  id = "chat-message-submit" class="btn bg-teal-400 btn-labeled btn-labeled-right ml-auto"><b><i class="icon-paperplane"></i></b> Send</button>
-                    	</div>
-					</div>
-				</div>
-				<!-- /line content divider -->
-
-
-
-				<!-- Line of other chats -->
-				<div class="card">
-					<div class="card-header header-elements-inline">
-						<h5 class="card-title">Other Chats</h5>
-						<div class="header-elements">
-							<div class="list-icons">
-		                		<a class="list-icons-item" data-action="collapse"></a>
-		                		<a class="list-icons-item" data-action="reload"></a>
-		                		<a class="list-icons-item" data-action="remove"></a>
-		                	</div>
-	                	</div>
-					</div>
-
-                    <div class="card-body">
-                        {% recieved_grouped_messages user 5 name as recieved_grouped_messages %}
-                        <ul class="media-list media-chat-scrollable mb-3">
-                            {% for message_obj in recieved_grouped_messages %} 
-                        
-                                <!-- <li class="media content-divider justify-content-center text-muted mx-0">
-                                    <span class="px-2">Saturday, Feb 12</span>
-                                </li> -->
-
-                                <li class="media">
-                                    <div class="mr-3"><a href="{{message_obj.sender_image}}"><img src="{{message_obj.sender_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
-                                    <div class="media-body">
-                                        <div class="media-title d-flex flex-nowrap">
-                                            <a href="/chat/{{message_obj.chat_group}}/" class="font-weight-semibold mr-3">{{message_obj.sender_name}}</a>
-                                            <span class="font-size-sm text-muted text-nowrap ml-auto">{{message_obj.time}} <a href="#"><i class="icon-pin-alt font-size-base text-muted ml-2"></i></a></span>
-                                        </div>
-                                        {{message_obj.content}}
-                                    </div>
-                                </li>
-                            {% endfor %}
-                    
                             
-                    
+                            
+                            <span id = "online-item"></span>
+                            <div class="header-elements">
+                                <div class="list-icons">
+                                    <a class="list-icons-item" data-action="collapse"></a>
+                                    <a class="list-icons-item" data-action="reload"></a>
+                                    <a class="list-icons-item" data-action="remove"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+
+
+                        <div class="card-body">
+                            <ul id = "main-chat-ul" class="media-list media-chat media-chat-scrollable mb-3" style="scroll-margin-top: inherit ;" >
+                               
+                                <!-- <li class="media content-divider justify-content-center text-muted mx-0">
+                                    <span id = "date-span" class="px-2">Monday, Feb 10</span>
+                                </li> -->
+                                
+                                {% for m in old_messages %}  
+                                
+                                    {% if m.sender_name == request.user.username %}
+                                    <li class="media media-chat-item-reverse">
+                                        <div class="media-body">
+                                            <div class="media-chat-item">{{m.message}}</div>
+                                            <div class="font-size-sm text-muted mt-2">{{m.time}}<a href="#"></a></div>
+                                        </div>
+        
+                                        <div class="ml-3">
+                                            <a href="{{m.sender_image}}" target = "blank">
+                                                <img src="{{m.sender_image}}" class="rounded-circle" width="60" height="60" alt="">
+                                            </a>
+                                        </div>
+                                    </li>
+                                    {% else %}
+                                        <li class="media">
+                                            <div class="mr-3">
+                                                <a href="{{m.sender_image}}" target = "blank">
+                                                    <img src="{{m.sender_image}}" class="rounded-circle" width="60" height="60" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <div class="media-chat-item">{{m.message}}</div>
+                                                <div class="font-size-sm text-muted mt-2">{{m.time}} <a href="#"></a></div>
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                        
+                                {% endfor %}
+
+                            </ul>
+                            
+
+                            <textarea id =  "chat-message-input" name="enter-message" class="form-control mb-3" rows="3" cols="1" placeholder="message..."></textarea>
+
+                            <div class="d-flex align-items-center">
+                                <!-- <div class="list-icons list-icons-extended">
+                                    <a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send photo"><i class="icon-file-picture"></i></a>
+                                    <a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send video"><i class="icon-file-video"></i></a>
+                                    <a href="#" class="list-icons-item" data-popup="tooltip" data-container="body" title="Send file"><i class="icon-file-plus"></i></a>
+                                </div> -->
+                                
+                                <button type="button"  id = "chat-message-submit" class="btn bg-teal-400 btn-labeled btn-labeled-right ml-auto" ><b><i class="icon-paperplane"></i></b> Send</button>
+                            </div>
+                        </div>
                     </div>
-				</div>
-				<!-- /line content divider -->
+                    <!-- /line content divider -->
 
+                    <!--  other chats -->
+                    <div class="card col-md-3 float-right" style = "background-color: rgb(230, 230, 230);">
+                        <div class="card-header header-elements-inline">
+                            <h5 class="card-title"><b>Other Chats</b></h5>
+                            <div class="header-elements">
+                                <div class="list-icons">
+                                    <a class="list-icons-item" data-action="collapse"></a>
+                                    <a class="list-icons-item" data-action="reload"></a>
+                                    <a class="list-icons-item" data-action="remove"></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body" style = "padding:5px 10px;">
+                        
+                            <ul class="media-list media-chat-scrollable mb-3">
+                                {% for message_obj in other_chats %} 
+                                    <div class = "card card-body" style = "padding:5px 15px; ">
+                                        {% if user.username == message_obj.sender_name %}
+                                            <li class="media">
+                                                <div class="mr-3"><a href="{{message_obj.receiver_image}}"><img src="{{message_obj.receiver_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
+                                                <div class="media-body">
+                                                    <div class="media-title d-flex flex-nowrap">
+                                                        <a href="/chat/with/{{message_obj.receiver_name}}/" class="font-weight-semibold mr-3">{{message_obj.receiver_name}}</a>
+                                                        <span class="font-size-sm text-muted text-nowrap ml-auto">{{message_obj.time}} <a href="#"><i class="icon-pin-alt font-size-base text-muted ml-2"></i></a></span>
+                                                    </div>
+                                                    <p> {{message_obj.message|truncatechars_html:20}}</p>
+                                                </div>
+                                            </li>
+                                        {% else %}
+                                            <li class="media">
+                                                <div class="mr-3"><a href="{{message_obj.sender_image}}"><img src="{{message_obj.sender_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
+                                                <div class="media-body">
+                                                    <div class="media-title d-flex flex-nowrap">
+                                                        <a href="/chat/with/{{message_obj.sender_name}}/" class="font-weight-semibold "><p style = " display:inline;" class ="mr-3">{{message_obj.sender_name}}</p>
+                                                            {% if message_obj.seen == False %}
+                                                            <span class="badge bg-danger badge-pill ml-auto">Unread message</span>
+                                                            {% endif %}
+                                                        </a>
+                                                        
+                                                        <span class="font-size-sm text-muted text-nowrap ml-auto">{{message_obj.time}} <a href="#"></a></span>
+                                                    </div>
+                                                    <p> {{message_obj.message|truncatechars_html:30}}</p>
+                                                </div>
+                                            </li>
+
+                                        {% endif %} 
+                                    </div>
+                                {% endfor %}
+                        
+                        </div>
+                    </div>
+                </div>
+			
 			</div>
-			<!-- /content area -->
-
+			
 <input type = "hidden" id = "username" value = "{{user.username}}">
-
-
-<!-- the variable name is sent from views.py  -->
-{{ name|json_script:"g_name" }}
-            <script>
-                const group_name = JSON.parse(document.getElementById('g_name').textContent);
-                var username = document.getElementById("username").value
-                const chatSocket = new ReconnectingWebSocket(
-                    'ws://'
-                    + window.location.host
-                    + '/ws/chat/'
-                    + group_name
-                    + '/'
-                );
-                
-           
-                chatSocket.onopen = function(e){
-                    console.log("on open called!", group_name)
-                    document.getElementById("chat-message-input").disabled = false;
-                    document.getElementById("chat-message-input").value = "";
-                    document.getElementById("chat-message-submit").disabled = false;
-                    chatSocket.send(JSON.stringify({
-                        'command':'fetch_messages',
-                    }));
-                }
-
-                chatSocket.onmessage = function(e) { 
-                    const data = JSON.parse(e.data);
-                    var messages = data['message']
-                    if (messages == 'Force Disconnect'){
-                        console.log('FBPIDI closed connection forcefully, due to some exception')
-                        window.location.pathname = '/'
-                    }
-                    else{
-                        for (i in messages){
-                        if (messages[i].sender_name != username){
-                            document.getElementById("main-card-title").innerHTML = "Your Chats with : <b>"+messages[i].sender_name+"<b>"  
-                            break;
-                        }
-                    }
-                    messages.forEach(append_message);}
-                };
-             
-                chatSocket.onclose = function(e) {
-                   
-                    document.getElementById("chat-message-input").value = "Connection Lost, Cannot write message!"
-                    document.getElementById("chat-message-input").disabled = true;
-                    document.getElementById("chat-message-submit").disabled = true;
-
-                    console.log('Chat socket closed unexpectedly, from room.html');
-                    
-                };
-
-                function  scroll_down()
-                    {
-                        var main_ul = document.getElementById("main-chat-ul");
-                        main_ul.scrollTop = main_ul.scrollHeight;
-                    }
+<script>
+    scroll_down()
+    setInterval(load_messages, 2000);
+    var user_name = document.getElementById("username").value
+    function  scroll_down(){
+            var main_ul = document.getElementById("main-chat-ul");
+            main_ul.scrollTop = main_ul.scrollHeight;
+        }
   
-                function append_message(message_obj){
+    function append_message(message_obj){
+                    console.log("from append"+message_obj)
                     var br = document.createElement('br')
                     var li_item = document.createElement('li');
                         var img_div = document.createElement('div');
@@ -185,21 +181,21 @@
                             var chat_area = document.createElement('p');
                             var time_area = document.createElement('small');
 
-                    // common for bothe sender and reciever
+                    // common for both sender and reciever
                     image_anchor.href = message_obj.sender_image;
                     image_item.src = message_obj.sender_image;
                     image_item.className = "rounded-circle"
-                    image_item.width = "40";
-                    image_item.height = "40";
+                    image_item.width = "50";
+                    image_item.height = "50";
 
                     chat_div.className = "media-body"
-                        chat_area.textContent = message_obj.content;
+                        chat_area.textContent = message_obj.message;
                         chat_area.className = "media-chat-item";
                         time_area.textContent = message_obj.time;
                         time_area.className = "smaller_time";
                         
                     //  if message is from another user
-                    if (message_obj.sender_name != username)
+                    if (message_obj.sender_name != user_name)
                     {  
                         li_item.className = "media";
                         img_div.className = "mr-3";
@@ -213,12 +209,9 @@
                         li_item.appendChild(img_div);
                         li_item.appendChild(chat_div);
                         
-
                         document.querySelector('#main-chat-ul').appendChild(li_item);
                         scroll_down();
                     }
-
-          
                     else{
                         li_item.className = "media media-chat-item-reverse";
                         img_div.className = "ml-3";
@@ -235,37 +228,63 @@
                         li_item.appendChild(chat_div);
                         li_item.appendChild(img_div);
                        
-                        
                         document.querySelector('#main-chat-ul').appendChild(li_item);
                         scroll_down();
                        
                     }
 
                 }
-                 
-                document.querySelector('#chat-message-input').focus();
-                
-                document.querySelector('#chat-message-input').onkeyup = function(e) {
-                    if (e.keyCode === 13) {  // enter, return
-                        document.querySelector('#chat-message-submit').click();
+        
+     document.querySelector('#chat-message-submit').onclick = function(e) {
+                    var messageInputDom = document.querySelector('#chat-message-input');
+                    
+                    const message = messageInputDom.value;
+                    if (message == "" || message == null){
+                        window.alert("No message to Send!");
+                    }
+                   else{
+                        messageInputDom.value = '';
+                       fetch("{% url 'chat_request' id=other_user.id %}",
+                        {
+                            method:"POST",
+                            credentials: 'same-origin',
+                            headers:{
+                                "content-Type":'application/json',
+                                'X-CSRFToken':'{{csrf_token}}'
+                            },
+                            body:JSON.stringify({
+                                'message': message,
+                            })
+                        }
+                       ).then(e => e.json()).then(messages=>{
+                           for (m of messages)
+                                {
+                                    console.log(m," \n")
+                                    append_message(m)
+                                }                       
+                            });   
+                            
                     }
                 };
-            
-                document.querySelector('#chat-message-submit').onclick = function(e) {
-                    const messageInputDom = document.querySelector('#chat-message-input');
-                    const message = messageInputDom.value;
-                   if (message == "" || message == null){
-                       window.alert("No message to Send!");
-                   }
-                   else{
-                                chatSocket.send(JSON.stringify({
-                                'message': message,
-                                'command':'new_message',
-                                'from':username
-                            }));
-                            messageInputDom.value = '';
-                        }
-                };
-            </script>
-            
+
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+    
+    function load_messages(){
+         fetch( "{% url 'chat_request' id=other_user.id %}").then(e=>e.json()).then(messages =>
+        {   
+            for (m of messages){    
+                m.forEach(append_message)
+            }
+        });
+    }
+    
+</script>
+
+        
 {%endblock%}

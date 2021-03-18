@@ -1,91 +1,125 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from accounts.models import User
-from chat.models import ChatGroup, ChatMessage
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from chat.serializer import ChatMessageSerializer
+import json
+
 from django.views import View
+from django.db.models import Q
+from django.http import Http404, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+
+from accounts.models import User
 from django.contrib import messages
-@login_required
-def index(request):
-    return render(request, 'frontpages/chat/select_chat.html', {})
+from chat.models import ChatMessages
+from chat.serializer import ChatMessagesSerializer
 
-## checks the user type and redirect it to the correct url
+#checks if a requested user does exist in the database
+@login_required
+def check_username(request, username):
+    try:
+        u = get_object_or_404(User, username = username)
+        return JsonResponse({'result':True}, safe =False, )
+    except Http404:
+        related = User.objects.filter(username__icontains = username)[:3]
+        result = {'result':False,'related':[]}
+        for u in related:
+            result['related'].append( u.username )
+        return JsonResponse(result, safe=False)
+
+
+@login_required
+def chat_ajax_handler(request, id):
+    messages = []
+    if request.method == 'GET': #get all unread messages(only), these are new unread messages other than those that are loaded when the user opens the chat layout page. like online chats from the other user
+        print (" a get request from",request.user)
+        other_user = User.objects.get(id = id)
+        q = Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False)  ) 
+        unread_messages = ChatMessages.objects.filter(q)
+        for m in unread_messages:
+            m.seen = True
+            m.save()
+        messages.append(ChatMessagesSerializer( unread_messages, many = True).data)
+    elif request.method == 'POST':  #save the message and send it back for the sender to be displayed
+        data = json.loads(request.body)
+        m = ChatMessages(sender = request.user, receiver = User.objects.get(id = id), message = data['message'])
+        m.save()
+        messages.append( ChatMessagesSerializer( m).data)
+    return JsonResponse(messages, safe = False)
     
-## open chat room for given room_name
-@login_required
-def room(request, requested_group_name):
-    return redirect("index")
 
-## I will use rthe room method for all, and delete this method
+# opens the chatting page and loads saved messages
 @login_required
 def chat_with(request, reciever_name):
-    #by default group_names are created as self.request.user.username + _ +the username of other user
-    user = request.user
-    return redirect(f"/chat/{user.username}_{reciever_name}")
-    
-class ChatList( LoginRequiredMixin, View):
-    def get(self, *args, **kwargs):
-        return redirect("index")
-        
-
-def get_grouped_message( list_of_messages, max_num_group):
-    sender_names = []
-    grouped = []
-    for latest_sender_message in list_of_messages:
-        if len(sender_names) < max_num_group: 
-           if not latest_sender_message.sender.username in sender_names :
-                new = ChatMessageSerializer(latest_sender_message).data
-                new['count'] = list_of_messages.filter(sender__username = latest_sender_message.sender.username).count()
-                grouped.append(new)
-                sender_names.append(latest_sender_message.sender.username)
+    try:
+        other_user= User.objects.get(username=reciever_name)
+    except Exception as e:
+        print("Exception at chat with ",e)
+        if request.user.is_customer:
+            return redirect('customer_chat_list')
         else:
-            break
-    return grouped
-
-#returns the latest message from a sender and count of unread messages from a sender
-def get_unread_grouped_messages(user):
-    q = Q( Q(chat_group__group_name__contains = user.username) & Q( read = False) & ~Q(sender = user))
-    unread_messages = ChatMessage.objects.filter(q).order_by('-timestamp') 
-    return get_grouped_message(list_of_messages= unread_messages, max_num_group= unread_messages.count())
-
-
-#returns the latest messages from different senders grouped by sender names and count of total messages from each sender
-def get_recieved_grouped_messages(user, num_group = None, excluded_group = None):
-    recieved_messages = []
-    q = Q( Q(chat_group__group_name__contains = user.username)  & ~Q(sender = user))
+            return redirect("admin:view_company_profile")
+    messages = []
+    if request.method == 'GET':
+        q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) ) | 
+               Q( Q(sender = request.user) & Q(receiver = other_user) ) 
+            )
+        query_messages = ChatMessages.objects.filter(q).order_by("-created_date")
+        unread = query_messages.filter( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False))
+        for m in unread:
+            m.seen = True
+            m.save()
+        num_of_messages = unread.count() if unread.count()>=5 else 5 #set number of messages to 5 if unread messages are lesser than 5, or set z numer equal to no of unread messages
+        query_messages = query_messages[:num_of_messages]
+        reversed_query = query_messages[::-1]#we need -created_date to retrieve from db, and order of created_date to display for users, so we have to reverse it
+        messages = ChatMessagesSerializer(reversed_query, many = True).data
+ 
+    other_chats = get_grouped_chats(user=request.user, excluded_user=other_user)
+    if request.user.is_customer:
+        return render(request, 'frontpages/chat/customer_chat_layout.html',{'other_user':other_user, 'old_messages': messages,'other_chats':other_chats})
+    else:    
+        return render(request, 'admin/chat/chat_layout.html',{'other_user':other_user, 'old_messages': messages,'other_chats':other_chats})
     
-    if not excluded_group == None:
-        try:
-            exceluded_group = get_object_or_404(ChatGroup, group_name = excluded_group)
-            recieved_messages = ChatMessage.objects.filter(q).exclude(chat_group__group_name = excluded_group).order_by('-timestamp')
+@login_required    
+def list_unread_messages(request):
+        all_unread_messages = ChatMessages.objects.filter(receiver = request.user, seen =False).order_by('-created_date')        
+        sender_names = []
+        grouped_unread_messages = []
+        for m in all_unread_messages:
+            if not m.sender.username in sender_names:
+                latest_from_sender= ChatMessagesSerializer(m).data
+                count = all_unread_messages.filter(sender__username = m.sender.username).count()
+                # add the number of unread messages from a 
+                latest_from_sender['count'] = count 
+                grouped_unread_messages.append(latest_from_sender)
+                sender_names.append(m.sender.username)
+
+        data = {'num':all_unread_messages.count(), 'unread_messages':grouped_unread_messages}
+        return JsonResponse( data, safe = False)
+
+# for the admin side the chat listing is done inside the viewcompanyprofile view 
+class CustomerChatList( LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        return render(self.request, 'frontpages/chat/chat_list.html', {'chat_list':get_grouped_chats(self.request.user, None)})
+   
+
+def get_grouped_chats(user, excluded_user = None):
+        if excluded_user !=None:
+            to_exclude = Q( Q(receiver = excluded_user) | Q(sender = excluded_user))
+            other_messages = ChatMessages.objects.filter( Q(receiver = user) | Q(sender = user)).exclude( to_exclude).order_by('-created_date')
+        else:
+            other_messages = ChatMessages.objects.filter( Q(receiver = user) | Q(sender = user)).order_by('-created_date')
             
-        except Exception as e:
-            print (" Exception at chat.views get_recieved grouped message ", str(e))
-            recieved_messages = ChatMessage.objects.filter(q).order_by('-timestamp')
-    else:
-        recieved_messages = ChatMessage.objects.filter(q).order_by('-timestamp')
-    max_num_group = recieved_messages.count() if num_group == None else num_group
-    return get_grouped_message(list_of_messages = recieved_messages, max_num_group = max_num_group)
+        other_user_names = []
+        grouped_other_messages = []
+        for m in other_messages:
+            if not m.receiver.username in other_user_names and  user == m.sender :
+                grouped_other_messages.append(  ChatMessagesSerializer(m).data  )
+                other_user_names.append(m.receiver.username)
+            elif  not m.sender.username in other_user_names and user == m.receiver :
+                grouped_other_messages.append(  ChatMessagesSerializer(m).data  )
+                other_user_names.append(m.sender.username)
+             
+        return  grouped_other_messages
 
-# all messages grouped
-def get_grouped_all_message(user, num_group = None, exceluded_group = None):
-    chat_groups = ChatGroup.objects.filter(group_name__contains = user.username)      
-    if not exceluded_group == None:
-        try:
-            exceluded_group = get_object_or_404(ChatGroup, group_name = exceluded_group)
-            chat_groups = chat_groups.exclude(group_name=exceluded_group)
-        except Exception as e:
-            print (" Exception at chat.views get grouped all message second try", str(e))
-    else:
-        messages =[]
-        for group in chat_groups:
-            latest_message =ChatMessage.objects.filter(chat_group = group).first()
-            if latest_message:
-                new = ChatMessageSerializer(latest_message).data
-                new['count'] = 49
-                messages.append(new)
-    return messages
 
+
+        # return {'count':unread_messages.count(), 'unread_messages':}
