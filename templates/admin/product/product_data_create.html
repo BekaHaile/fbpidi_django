@@ -1,0 +1,142 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags%}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+{% endblock %}
+{%block pagename%}
+{%if flag == "production_capacity"%}
+Production Capacity Form
+{%elif flag == "anual_input_need"%}
+Product Anual Input Need Form
+{%elif flag == "demand_supply"%}
+Anual Input Demand and Supply Data Form
+{%elif flag == "sales_performance"%}
+Product Production and Sales Performance Data Form
+{%elif flag == "packaging"%}
+Product Packaging Data Form
+{%endif%}
+{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+	<!-- Starting step -->
+	
+	{%if flag == "production_capacity"%}
+	<div class="card">
+		<div class="card-header bg-white header-elements-inline">
+			<h6 class="card-title">Create Production Capacity for Product: {{product.name}}</span></h6>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a class="list-icons-item" data-action="collapse"></a>
+					<a class="list-icons-item" data-action="reload"></a>
+					<a class="list-icons-item" data-action="remove"></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="card-body">
+			<form action="{%url 'admin:create_production_capacity' product=product.id%}"
+			method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
+			 {{form|crispy}}
+			<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
+		</form>
+		</div>
+	</div>
+	{%elif flag == "anual_input_need"%}
+	<div class="card">
+		<div class="card-header bg-white header-elements-inline">
+			<h6 class="card-title">Add Annual Input Need Data for Product: {{product.name}}</span></h6>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a class="list-icons-item" data-action="collapse"></a>
+					<a class="list-icons-item" data-action="reload"></a>
+					<a class="list-icons-item" data-action="remove"></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="card-body">
+			<form action="{%url 'admin:create_anual_inp_need' product=product.id%}"
+			method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
+			 {{form|crispy}}
+			<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
+		</form>
+		</div>
+	</div>
+	{%elif flag == "demand_supply"%}
+	<div class="card">
+		<div class="card-header bg-white header-elements-inline">
+			<h6 class="card-title">Add Anual Input Demand and Supply data for Product: {{product.name}}</span></h6>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a class="list-icons-item" data-action="collapse"></a>
+					<a class="list-icons-item" data-action="reload"></a>
+					<a class="list-icons-item" data-action="remove"></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="card-body">
+			<form action="{%url 'admin:create_demand_supply' product=product.id%}"
+			method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
+			 {{form|crispy}}
+			<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
+		</form>
+		</div>
+	</div>
+	{%elif flag == "sales_performance"%}
+	<div class="card">
+		<div class="card-header bg-white header-elements-inline">
+			<h6 class="card-title">Add Anual Sales Performance data for Product: {{product.name}}</span></h6>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a class="list-icons-item" data-action="collapse"></a>
+					<a class="list-icons-item" data-action="reload"></a>
+					<a class="list-icons-item" data-action="remove"></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="card-body">
+			<form action="{%url 'admin:create_sales_performance' product=product.id%}"
+			method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
+			 {{form|crispy}}
+			<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
+		</form>
+		</div>
+	</div>
+	{%elif flag == "packaging" %}
+	<div class="card">
+		<div class="card-header bg-white header-elements-inline">
+			<h6 class="card-title">Add Packaging data for Product: {{product.name}}</span></h6>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a class="list-icons-item" data-action="collapse"></a>
+					<a class="list-icons-item" data-action="reload"></a>
+					<a class="list-icons-item" data-action="remove"></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="card-body">
+			<form action="{%url 'admin:create_packaging' product=product.id%}"
+			method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
+			 {{form|crispy}}
+			<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
+		</form>
+		</div>
+	</div>
+	{%endif%}
+	<!-- /starting step -->
+
+</div>
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$(".summernote").summernote();
+	});
+</script>
+{%endblock%}

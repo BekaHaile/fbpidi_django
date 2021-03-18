@@ -8,6 +8,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster
 from admin_site.forms import CompanyDropdownsMasterForm,ProjectDropdownsMasterForm
+from product.models import Dose,DosageForm
+from product.forms import DoseForm,DosageFormForm
+
 
 class CreateCompanyDropdownsMaster(LoginRequiredMixin,CreateView):
     model = CompanyDropdownsMaster
@@ -48,6 +51,10 @@ class AllSettingsPage(LoginRequiredMixin,ListView):
         context['chkform'] = CompanyDropdownsMasterForm()
         context['projectform'] = ProjectDropdownsMasterForm()
         context['pl_objects'] = ProjectDropDownsMaster.objects.all()
+        context['dose_form'] = DoseForm()
+        context['doses'] = Dose.objects.all()
+        context['dosage_forms'] = DosageForm.objects.all()
+        context['dosage_form_form'] = DosageFormForm()
         context['flag'] = "company_dropdown"
         return context
 

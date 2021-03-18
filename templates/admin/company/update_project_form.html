@@ -1,0 +1,215 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags%}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/wizards/steps.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/inputs/inputmask.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/validation/validate.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+
+<link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
+<script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
+
+{% endblock %}
+{%block pagename%}Investment Project Form {%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+	<!-- Starting step -->
+	<div class="card">
+		<div class="card-header bg-white header-elements-inline">
+			<h6 class="card-title">Update Investment Project</span></h6>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a class="list-icons-item" data-action="collapse"></a>
+					<a class="list-icons-item" data-action="reload"></a>
+					<a class="list-icons-item" data-action="remove"></a>
+				</div>
+			</div>
+		</div>
+		<div class="card-body m-2">
+			<form id="companyform" action="{%url 'admin:update_project' pk=object.id%}"
+					method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
+				<fieldset>
+					{{form|crispy}}
+				</fieldset>
+				<div class="float-right">
+					<button class="btn btn-primary pl-4 pr-4" type="submit"><span>Save Changes   </span><i class="icon-check"></i> </button>
+				</div>
+			</form>
+		</div>
+		<hr>
+		<div>
+			{%if object.land_usage.all%}
+			<p class="text text-primary p-4 m-1">			Investment Land Size and Usage </p>
+			<form id="usage_form" action="{%url 'admin:update_land_use' pk=land_usage_data.id%}" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					{{usage_form|crispy}}
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+			{%else%}
+			<a href="#" data-toggle="modal" data-target='#usage_form_modal'  class="float-right btn btn-warning btn-md m-2">Add Land Usage</a>
+			{%endif%}
+			
+		</div>
+		<hr>
+		  {%if object.project_state.all%}
+		  <p class="text text-primary p-4 m-1">Project State form</p>
+		  <div>
+			<form id="usage_form" action="{%url 'admin:update_project_state'  pk=project_state.id%}" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					{{pstate_form|crispy}}
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		 </div>
+<hr>		  {%else%}
+		  <hr>
+		<div>
+			<a href="#" data-toggle="modal" data-target='#status_form_modal' class="float-right btn btn-warning btn-md m-2">Add  Project State</a>
+		</div>
+		 
+		<hr>
+		{%endif%}
+		<div>
+			<a href="#" data-toggle="modal" data-target='#product_form_modal' class="float-right btn btn-warning btn-md m-2">Add  Product Quantity</a>
+		</div>
+		<hr>
+		<div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Product</th>
+						<th>Expected Normal Capacity</th>
+						<th>Espected anual Sales</th>
+						<th>Local Share</th>
+						<th>Export share</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for lu in object.project_product_qty.all%}
+					<tr>
+						<td>{{lu.product_tobe_produced}}</td>
+						<td>{{lu.expected_normal_capacity}}</td>
+						<td>{{lu.expected_anual_sales}}</td>
+						<td>{{lu.local_share}}</td>
+						<td>{{lu.export_share}}</td>
+	
+					</tr>
+					{%endfor%}
+				</tbody>
+			</table>
+		</div>
+		<hr>
+	</div>
+	<!-- /starting step -->
+
+</div>
+<!-- /content area -->
+<div id="usage_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Land size and usage</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<span></span>
+			<form id="usage_form" action="{%url 'admin:create_land_use' project=object.id%}" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					{{usage_form|crispy}}
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div id="status_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">The current state of the project </h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<span></span>
+			<form id="usage_form" action="{%url 'admin:create_project_state'  project=object.id%}" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					{{pstate_form|crispy}}
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="product_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Product Quantity</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<span></span>
+			<form id="usage_form" action="{%url 'admin:create_product_qty'  project=object.id%}" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					{{product_form|crispy}}
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	$(document).ready(function () {
+		$(".summernote").summernote();
+ 		$("#id_total_land_size").val("{{land_usage_data.total_land_size}}");
+		$("#id_production_building").val("{{land_usage_data.production_building}}");
+		$("#id_office_building").val("{{land_usage_data.office_building}}");
+		$("#id_warehouse").val("{{land_usage_data.warehouse}}");
+		$("#id_other").val("{{land_usage_data.other}}");
+		// 
+ 		$("#id_percentage_construction_performance").val("{{project_state.percentage_construction_performance}}");
+		$("#id_machinery_purchase_performance").val("{{project_state.machinery_purchase_performance}}");
+		$("#id_factory_building_performance").val("{{project_state.factory_building_performance}}");
+		$("#id_machinery_installation").val("{{project_state.machinery_installation}}");
+		$("#id_commissioning_work").val("{{project_state.commissioning_work}}");
+		$("#id_rawmaterial_preparation").val("{{project_state.rawmaterial_preparation}}");
+		$("#id_hremployment_training").val("{{project_state.hremployment_training}}");
+		$("#id_testproduct").val("{{project_state.testproduct}}");
+		$("#id_certification").val("{{project_state.certification}}");
+	});
+</script>
+{%endblock%}

@@ -113,8 +113,8 @@ var FormWizard = function() {
                 finish: 'Submit form <i class="icon-arrow-right14 ml-2" />'
             },
             onFinished: function (event, currentIndex) {
-                // alert('Form submitted.');
-                $("#companyform").submit();
+                $("#company_detail_form").submit(); 
+                $("#project_detail_form").submit();             
             }
         });
 

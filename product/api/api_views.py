@@ -12,13 +12,13 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import permission_classes, authentication_classes, api_view 
 
 
-from admin_site.models import Category,SubCategory
+from admin_site.models import Category
 from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
 
 from collaborations.models import News
 from collaborations.api.serializers import NewsListSerializer
 
-from company.models import Company
+from company.models import Company,SubCategory
 from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer
 
 from product.models import Product, ProductImage, ProductPrice, Order, OrderProduct, InvoiceRecord

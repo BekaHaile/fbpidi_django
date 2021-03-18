@@ -1,0 +1,713 @@
+<div id="inv_capital_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Yearly Investment Capital Data</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<form id="inv_capital_form" action="#" method="POST">
+
+				{%csrf_token%}
+				<div class="modal-body">
+					<div class="form-group">
+						<span class="form-text text-warning" id="errors"></span>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-6">
+								{{inv_capital_form.year_inv.label}}
+								 {{inv_capital_form.year_inv}}
+							</div>
+
+							<div class="col-sm-6">
+								{{inv_capital_form.machinery_cost.label}}
+								 {{inv_capital_form.machinery_cost}}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-6">
+								{{inv_capital_form.building_cost.label}}
+								{{inv_capital_form.building_cost}}
+							</div>
+
+							<div class="col-sm-6">
+								{{inv_capital_form.working_capital.label}}
+								 {{inv_capital_form.working_capital}}
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_inv_capital" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div id="certificate_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Competency Certificate Form</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+
+			<form id="certificate_form" action="#" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<span class="form-text text-warning" id="errors_certificate"></span>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-6">
+								<label for="">{{certificate_form.name.label}}</label>
+								 {{certificate_form.name}}
+							</div>
+
+							<div class="col-md-6">
+								<label>{{certificate_form.certificate.label}}</label>
+								<div class="uniform-uploader">
+									{{certificate_form.certificate}}
+									<span class="filename" style="user-select: none;">No file selected</span>
+									<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+								</div>
+								<span class="form-text text-muted">{{certificate_form.certificate.help_text}}</span>
+							</div>		
+						</div>
+					</div>
+					 
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_certificate" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="employees_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Yearly Number Of Employees Based on their Employment Type</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<span></span>
+			<form id="employee_form" action="#" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<span class="form-text text-warning" id="errors_employee"></span>
+					</div>
+					<div class="form-group">
+						<div class="row">
+                            <div class="col-sm-6">
+								<label for="">{{employees_form.year_emp.label}}</label>
+								 {{employees_form.year_emp}}
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{employees_form.employment_type.label}}</label>
+								 {{employees_form.employment_type}}
+							</div>
+
+							 
+						</div>
+					</div>
+                    <div class="form-group">
+						<div class="row">
+                            <div class="col-sm-6">
+								<label for="">{{employees_form.male.label}}</label>
+								 {{employees_form.male}}
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{employees_form.female.label}}</label>
+								 {{employees_form.female}}
+							</div>
+
+							 
+						</div>
+					</div>
+					 
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="createdjob_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Jobs Created This Year</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<span></span>
+			<form id="jobcreated_form" action="#" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<span class="form-text text-warning" id="errors_jobs"></span>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-6">
+								<label for="">{{job_created_form.year_job.label}}</label>
+								 {{job_created_form.year_job}}
+							</div>
+
+							<div class="col-sm-6">
+								<label for="">{{job_created_form.job_type.label}}</label>
+								 {{job_created_form.job_type}}
+							</div>		
+						</div>
+					</div>
+                    <div class="form-group">
+						<div class="row">
+							<div class="col-sm-6">
+								<label for="">{{job_created_form.male.label}}</label>
+								 {{job_created_form.male}}
+							</div>
+
+							<div class="col-sm-6">
+								<label for="">{{job_created_form.female.label}}</label>
+								 {{job_created_form.female}}
+							</div>		
+						</div>
+					</div>
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_jobs" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="education_status_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Employees Educational Status</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<span></span>
+			<form id="education_stat_form" action="#" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<span class="form-text text-warning" id="errors_education"></span>
+					</div>
+					<div class="form-group">
+						<div class="row">
+                            <div class="col-sm-6">
+								<label for="">{{edication_form.year_edu.label}}</label>
+								 {{edication_form.year_edu}}
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{edication_form.education_type.label}}</label>
+								 {{edication_form.education_type}}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+                            <div class="col-sm-6">
+								<label for="">{{edication_form.male.label}}</label>
+								 {{edication_form.male}}
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{edication_form.female.label}}</label>
+								 {{edication_form.female}}
+							</div>
+						</div>
+					</div>
+					 
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_education" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="femaleposn_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Number of females employees in position levels</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<span></span>
+			<form id="femaleposn_form" action="#" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<span class="form-text text-warning" id="errors_femaleposn"></span>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-4">
+								<label for="">{{female_posn_form.year_fem.label}}</label>
+								 {{female_posn_form.year_fem}}
+							</div>
+							<div class="col-sm-4">
+								<label for="">{{female_posn_form.high_position.label}}</label>
+								 {{female_posn_form.high_position}}
+								 <span class="form-text text-muted">{{female_posn_form.high_position.help_text}}</span>
+							</div>
+
+							<div class="col-md-4">
+								<label>{{female_posn_form.med_position.label}}</label>
+									{{female_posn_form.med_position}}
+									<span class="form-text text-muted">{{female_posn_form.med_position.help_text}}</span>									
+							</div>		
+						</div>
+					</div>
+					 
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_femaleposn" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="srcamnt_input_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Sources and amount of your inputs per Year</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<span></span>
+			<form id="srcamnt_input_form" action="#" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<span class="form-text text-warning" id="errors_input"></span>
+					</div>
+					<div class="form-group">
+						<div class="row">
+                            <div class="col-sm-12">
+								<label for="">{{src_amnt_input_form.year_src.label}}</label>
+								 {{src_amnt_input_form.year_src}}
+							</div>
+						</div>
+					</div>
+                    <div class="form-group">
+						<div class="row">
+                            <div class="col-sm-6">
+								<label for="">{{src_amnt_input_form.import_company.label}}</label>
+								 {{src_amnt_input_form.import_company}}
+								 <span class="form-text text-muted">{{src_amnt_input_form.import_company.help_text}}</span>	
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{src_amnt_input_form.govt_suplied.label}}</label>
+								 {{src_amnt_input_form.govt_suplied}}
+								 <span class="form-text text-muted">{{src_amnt_input_form.govt_suplied.help_text}}</span>
+							</div>
+
+							 
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+                            <div class="col-sm-6">
+								<label for="">{{src_amnt_input_form.purchase_from_farmer.label}}</label>
+								 {{src_amnt_input_form.purchase_from_farmer}}
+								 <span class="form-text text-muted">{{src_amnt_input_form.purchase_from_farmer.help_text}}</span>	
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{src_amnt_input_form.purchase_from_union.label}}</label>
+								 {{src_amnt_input_form.purchase_from_union}}
+								 <span class="form-text text-muted">{{src_amnt_input_form.purchase_from_union.help_text}}</span>
+							</div>
+
+							 
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+                            <div class="col-sm-6">
+								<label for="">{{src_amnt_input_form.purchase_from_agents.label}}</label>
+								 {{src_amnt_input_form.purchase_from_agents}}
+								 <span class="form-text text-muted">{{src_amnt_input_form.purchase_from_agents.help_text}}</span>	
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{src_amnt_input_form.purchase_from_other.label}}</label>
+								 {{src_amnt_input_form.purchase_from_other}}
+								 <span class="form-text text-muted">{{src_amnt_input_form.purchase_from_other.help_text}}</span>
+							</div>
+
+							 
+						</div>
+					</div>
+					 
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_input_srcamnt" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="target_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Target market in percent (%) </h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<span></span>
+			<form id="target_form" action="#" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<span class="form-text text-warning" id="errors_target"></span>
+					</div>
+					<div class="form-group">
+						<div class="row">
+                            <div class="col-sm-12">
+								<label for="">{{target_form.year_target.label}}</label>
+								 {{target_form.year_target}}
+							</div>
+						</div>
+					</div>
+                    <div class="form-group">
+						<div class="row">
+                            <div class="col-sm-6">
+								<label for="">{{target_form.further_proc_power.label}}</label>
+								 {{target_form.further_proc_power}}
+								 <span class="form-text text-muted">{{target_form.further_proc_power.help_text}}</span>	
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{target_form.final_consumer.label}}</label>
+								 {{target_form.final_consumer}}
+								 <span class="form-text text-muted">{{target_form.final_consumer.help_text}}</span>
+							</div>
+
+							 
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+                            <div class="col-sm-6">
+								<label for="">{{target_form.restaurant_and_hotels.label}}</label>
+								 {{target_form.restaurant_and_hotels}}
+								 <span class="form-text text-muted">{{src_amnt_input_form.restaurant_and_hotels.help_text}}</span>	
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{target_form.institutions.label}}</label>
+								 {{target_form.institutions}}
+								 <span class="form-text text-muted">{{target_form.institutions.help_text}}</span>
+							</div>
+
+							 
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+                            <div class="col-sm-6">
+								<label for="">{{target_form.epsa.label}}</label>
+								 {{target_form.epsa}}
+								 <span class="form-text text-muted">{{target_form.epsa.help_text}}</span>	
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{target_form.hospitals.label}}</label>
+								 {{target_form.hospitals}}
+								 <span class="form-text text-muted">{{target_form.hospitals.help_text}}</span>
+							</div>
+
+							 
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+                            <div class="col-sm-6">
+								<label for="">{{target_form.agents.label}}</label>
+								 {{target_form.agents}}
+								 <span class="form-text text-muted">{{target_form.agents.help_text}}</span>	
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{target_form.wholesaler_distributor.label}}</label>
+								 {{target_form.wholesaler_distributor}}
+								 <span class="form-text text-muted">{{target_form.wholesaler_distributor.help_text}}</span>
+							</div>
+
+							 
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+                            <div class="col-sm-6">
+								<label for="">{{target_form.retailer.label}}</label>
+								 {{target_form.retailer}}
+								 <span class="form-text text-muted">{{target_form.retailer.help_text}}</span>	
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{target_form.other.label}}</label>
+								 {{target_form.other}}
+								 <span class="form-text text-muted">{{target_form.other.help_text}}</span>
+							</div>
+
+							 
+						</div>
+					</div>
+					 
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_target" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="destination_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Where do you sell your products?</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<span></span>
+			<form id="destination_form" action="#" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<span class="form-text text-warning" id="errors_destination"></span>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-4">
+								<label for="">{{destination_form.year_destn.label}}</label>
+								 {{destination_form.year_destn}}
+							</div>
+							<div class="col-sm-4">
+								<label for="">{{destination_form.domestic.label}}</label>
+								 {{destination_form.domestic}}
+								 <span class="form-text text-muted">{{destination_form.domestic.help_text}}</span>
+							</div>
+
+							<div class="col-md-4">
+								<label>{{destination_form.export.label}}</label>
+									{{destination_form.export}}
+									<span class="form-text text-muted">{{destination_form.export.help_text}}</span>									
+							</div>		
+						</div>
+					</div>
+					 
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_destination" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="power_consumption_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">How many kilowatt-hour electric power you use per day?</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			 
+			<form id="power_consumption_form" action="#" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<span class="form-text text-warning" id="errors_powerc"></span>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-4">
+								<label for="">{{consumption_form.day.label}}</label>
+								 {{consumption_form.day}}
+							</div>
+							<div class="col-sm-4">
+								<label for="">{{consumption_form.installed_capacity.label}}</label>
+								 {{consumption_form.installed_capacity}}
+								 <span class="form-text text-muted">{{consumption_form.installed_capacity.help_text}}</span>
+							</div>
+
+							<div class="col-md-4">
+								<label>{{consumption_form.current_supply.label}}</label>
+									{{consumption_form.current_supply}}
+									<span class="form-text text-muted">{{consumption_form.current_supply.help_text}}</span>									
+							</div>		
+						</div>
+					</div>
+					 
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_powerconsumed" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="address_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Company Address Form</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<span></span>
+			<form {%if object.get_company_address%} id="address_form_update"{%else%}id="company_address_form"{%endif%} action="#" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<span class="form-text text-warning" id="error_span"></span>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-4">
+								<label for="">{{address_form.region.label}}</label>
+								 {{address_form.region}}
+							</div>
+							<div class="col-sm-4">
+								<label for="">{{address_form.city_town.label}}</label>
+								 {{address_form.city_town}}
+								 <span class="form-text text-muted">{{address_form.city_town.help_text}}</span>
+							</div>
+
+							<div class="col-md-4">
+								<label>{{address_form.subcity_zone.label}}</label>
+									{{address_form.subcity_zone}}
+									<span class="form-text text-muted">{{address_form.subcity_zone.help_text}}</span>									
+							</div>		
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-4">
+								<label for="">{{address_form.woreda.label}}</label>
+								 {{address_form.woreda}}
+							</div>
+							<div class="col-sm-4">
+								<label for="">{{address_form.kebele.label}}</label>
+								 {{address_form.kebele}}
+								 <span class="form-text text-muted">{{address_form.kebele.help_text}}</span>
+							</div>
+
+							<div class="col-md-4">
+								<label>{{address_form.local_area.label}}</label>
+									{{address_form.local_area}}
+									<span class="form-text text-muted">{{address_form.local_area.help_text}}</span>									
+							</div>		
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-4">
+								<label for="">{{address_form.phone_number.label}}</label>
+								 {{address_form.phone_number}}
+							</div>
+							<div class="col-sm-4">
+								<label for="">{{address_form.fax.label}}</label>
+								 {{address_form.fax}}
+								 <span class="form-text text-muted">{{address_form.fax.help_text}}</span>
+							</div>
+
+							<div class="col-md-4">
+								<label>{{address_form.email.label}}</label>
+									{{address_form.email}}
+									<span class="form-text text-muted">{{address_form.email.help_text}}</span>									
+							</div>		
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-4">
+								<label for="">{{address_form.facebooklink.label}}</label>
+								 {{address_form.facebooklink}}
+							</div>
+							<div class="col-sm-4">
+								<label for="">{{address_form.twiterlink.label}}</label>
+								 {{address_form.twiterlink}}
+								 <span class="form-text text-muted">{{address_form.twiterlink.help_text}}</span>
+							</div>
+
+							<div class="col-md-4">
+								<label>{{address_form.instagramlink.label}}</label>
+									{{address_form.instagramlink}}
+									<span class="form-text text-muted">{{address_form.instagramlink.help_text}}</span>									
+							</div>		
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-6">
+								<label for="">{{address_form.linkedinlink.label}}</label>
+								 {{address_form.linkedinlink}}
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{address_form.googlelink.label}}</label>
+								 {{address_form.googlelink}}
+								 <span class="form-text text-muted">{{address_form.googlelink.help_text}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_address" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

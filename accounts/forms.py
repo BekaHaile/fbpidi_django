@@ -248,20 +248,4 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
-class CompanyForm(forms.ModelForm):
-
-    class Meta:
-        model = Company
-        fields = ('company_name', 'company_name_am', 'email', 'phone_number',
-                  'detail', 'detail_am', 'company_logo', 'location', 'company_intro',)
-        widgets = {
-            'company_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Company Name(English)'}),
-            'company_name_am': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Company Name(Amharic)'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address..'}),
-            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number...', "data-mask": "+251-99999-9999"}),
-            'company_logo': forms.FileInput(attrs={'class': 'form-input-styled'}),
-            'company_intro': forms.FileInput(attrs={'class': 'form-input-styled'}),
-            'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address'}),
-            'detail': forms.Textarea(attrs={'class': 'summernote'}),
-            'detail_am': forms.Textarea(attrs={'class': 'summernote'}),
-        }
+ 

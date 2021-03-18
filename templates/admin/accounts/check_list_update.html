@@ -7,7 +7,7 @@
 <script src="/static/admin/global_assets/js/plugins/forms/validation/validate.min.js"></script>
 
 {% endblock %}
-{%block pagename%}Industry and Investment/Project Form Dropdown/Lookups{%endblock%}
+{%block pagename%}Industry Product and Investment/Project Form Dropdown/Lookups{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
@@ -23,10 +23,15 @@
 								action="{%url 'admin:update_checklist' pk=object.id %}"
 							{%elif flag == 'project_dropdown' %}
 							action="{%url 'admin:update_plookup' pk=object.id %}"
+							{%elif flag == 'product_dose' %}
+							action="{%url 'admin:update_dose' pk=object.id %}"
+							{%elif flag == 'product_dosage' %}
+							action="{%url 'admin:update_dosage' pk=object.id %}"
+							
 							{%endif%}
 							 method="POST">{%csrf_token%}
 							<fieldset class="mb-3 ml-3 mr-3">
-								<legend class="text-uppercase font-size-sm font-weight-bold">Update Drop down</legend>
+								<legend class="text-uppercase font-size-sm font-weight-bold">Update Data</legend>
 								{{form|crispy}}
 							</fieldset>
 

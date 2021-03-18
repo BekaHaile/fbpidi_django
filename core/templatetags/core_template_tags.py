@@ -2,10 +2,10 @@ from django import template
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
 
-from company.models import Company
-from product.models import Product
-from admin_site.models import Category,SubCategory
-from accounts.models import User
+from company.models import Company,SubCategory
+from product.models import Product,Review,Brand
+from admin_site.models import Category
+from accounts.models import UserProfile
 import datetime
 from chat.models import ChatMessages
 import os
@@ -13,11 +13,14 @@ from chat import views as chat_views
 
 register = template.Library()
 
+@register.filter
+def review_count(product):
+    return Review.objects.filter(product=product).count()
 
 @register.filter
 def company_count(type):
     try:
-        co = Company.objects.filter(company_type=type)
+        co = Company.objects.all()
         return co.count() 
     except ObjectDoesNotExist:
         return 0
@@ -26,7 +29,7 @@ def company_count(type):
 @register.filter
 def company_product_count(company):
     try:
-        product = Product.objects.filter(user=company.user)
+        product = Product.objects.filter(company=company)
         return product.count()
     except ObjectDoesNotExist:
         return 0
@@ -40,17 +43,42 @@ def product_count(non):
 
 @register.filter
 def happy_customer(non):
-    return User.objects.all().count()
+    return UserProfile.objects.all().count()
 
 
 @register.filter
 def company_count_bycategory(category):
-    return Company.objects.filter(product_category=category).count()
+    return Company.objects.filter(category=category).count()
 
 
 @register.filter
 def product_count_bycategory(category):
-    return Product.objects.filter(category=category).count()
+    category = Category.objects.get(id=category)
+    if category.category_type == "Pharmaceuticals":
+        return Product.objects.filter(pharmacy_category=category).count()
+    elif category.category_type == "Food" or category.category_type == "Beverage":
+        brands = []
+        sub_categories = category.sub_category.all()
+        for sub_cat in sub_categories:
+            for brand in sub_cat.product_category.all():
+                brands.append(brand)
+        return Product.objects.filter(fandb_category__in=brands).count()
+
+
+@register.filter
+def count_food_and_beverage_products(category):
+    category = Category.objects.get(id=category)
+    brands = []
+    sub_categories = category.sub_category.all()
+    for sub_cat in sub_categories:
+        for brand in sub_cat.product_category.all():
+            brands.append(brand)
+    return Product.objects.filter(fandb_category__in=brands).count()
+
+@register.filter
+def pharmacy_product_count(category):
+    return Product.objects.filter(pharmacy_category=category).count()
+
 
 @register.simple_tag
 def print_translated(en_data,am_data,lan_code):

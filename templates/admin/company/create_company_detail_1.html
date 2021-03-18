@@ -1,0 +1,566 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags%}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/wizards/steps.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/inputs/inputmask.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/validation/validate.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/extensions/cookie.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_wizard.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+<script src="/static/admin/assets/js/company_detail.js"></script>
+
+	<script>
+	    var my_token = "{{csrf_token}}";
+		var company_id = "{{object.id}}";
+	</script>
+
+	
+	{{form.media}}
+
+{% endblock %}
+{%block pagename%}Company Form {%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+	<!-- Starting step -->
+	<div class="card">
+		<div class="card-header bg-white header-elements-inline">
+			<h6 class="card-title">Complete the form in each tab</span></h6>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a class="list-icons-item" data-action="collapse"></a>
+					<a class="list-icons-item" data-action="reload"></a>
+					<a class="list-icons-item" data-action="remove"></a>
+				</div>
+			</div>
+		</div>
+		<div class="card-body">
+			<form id="company_detail_form" class="wizard-form steps-enable-all" action="#"
+										method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
+										{{form.errors}}
+										<!-- {{form|crispy}} -->
+										<h6>Company Profile</h6>
+										<fieldset>
+											<hr>
+											<div class="form-group row">
+												
+												<div class="col-md-6 ">
+													<label class="font-weight-semibold" for="">Add Company Address</label>
+													
+													{%if object.get_company_address%}
+													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+															data-toggle="modal" data-target="#" id="">
+														<i class="fa fa-check"> </i>
+													</button>
+													{%else%}
+													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+															data-toggle="modal" data-target="#address_form_modal" id="">
+														<i class="fa fa-plus"> </i>
+													</button>
+													{%endif%}
+
+												</div>	
+												<div class="col-md-6">
+													<label class="d-block font-weight-semibold">Does the company have expansion plan?</label>
+													<label for=""><input type="radio" name="expn_plan" id="expn_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+													<label for=""><input type="radio" name="expn_plan" id="expn_no" checked><span class="ml-2">No</span></label>
+												</div>
+												<div class="col-md-12" id="div_expn" style="display: none;">
+													<label for="">If Yes Please Specify</label>
+													<div class="form-group">
+														{{form.expansion_plan.label}}
+														{{form.expansion_plan}}
+														<span class="form-text text-warning">{{form.expansion_plan.errors}}</span>
+													</div>
+													<div class="form-group">
+														<label for="">{{form.expansion_plan_am.label}}</label>
+														{{form.expansion_plan_am}}
+														<span class="form-text text-warning">{{form.expansion_plan_am.errors}}</span>
+													</div>
+													
+												</div>
+											</div>
+											<hr>
+											<div class="form-group row">
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for="">Current Investment Capital In Birr?</label>
+													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+															data-toggle="modal" data-target="#inv_capital_form_modal" id="">
+														<i class="fa fa-plus"> </i>
+													</button>
+												</div>
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for="">Do you have Valid Certificate of Competency?</label>
+													
+													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+															data-toggle="modal" data-target="#certificate_form_modal" id="">
+														<i class="fa fa-plus"> </i>
+													</button>
+												</div>
+												
+											</div>
+											<hr>
+											<div class="form-group row">
+													<div class="col-md-6">
+														<label>{{form.working_hours.label}}</label>
+															{{form.working_hours}}
+															<span class="form-text text-warning">{{form.working_hours.errors}}</span>
+													</div>
+													<div class="col-md-6">
+														<label>{{form.orgn_strct.label}}</label>
+														<div class="uniform-uploader">
+															{{form.orgn_strct}}
+															<span class="filename" style="user-select: none;">No file selected</span>
+															<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+														</div>
+														<span class="form-text text-muted">{{form.orgn_strct.help_text}}</span>
+														<span class="form-text text-warning">{{form.orgn_strct.errors}}</span>
+													</div>					
+											</div>
+											<hr>
+											<div class="form-group row">
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for="">Number Of Employees</label>
+													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+															data-toggle="modal" data-target="#employees_form_modal" id="">
+														<i class="fa fa-plus"> </i>
+													</button>
+												</div>
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for="">New Job Created This Year</label>
+													
+													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+															data-toggle="modal" data-target="#createdjob_form_modal" id="">
+														<i class="fa fa-plus"> </i>
+													</button>
+												</div>
+												
+											</div>
+											<hr>
+											<div class="form-group row">
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for="">Employees Educational Status</label>
+													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+															data-toggle="modal" data-target="#education_status_form_modal" id="">
+														<i class="fa fa-plus"> </i>
+													</button>
+												</div>
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for="">Number of females in position levels</label>
+													
+													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+															data-toggle="modal" data-target="#femaleposn_form_modal" id="">
+														<i class="fa fa-plus"> </i>
+													</button>
+												</div>
+												
+											</div>
+											<hr>
+											</fieldset>
+											<h6>The Second Tab</h6>
+											<fieldset>
+											<hr>
+											<div class="form-group">
+												<div></div>
+												<label class="d-block font-weight-semibold">Do you have quality control laboratory?</label>
+												<label for=""><input type="radio" name="lab" id="lab_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+												<label for=""><input type="radio" name="lab" id="lab_no" checked><span class="ml-2">No</span></label>
+												<div id="div_lab" style="display: none;">
+													<label for="">Please Specifiy The Following</label>
+													<div class="form-group">
+														{{form.lab_test_analysis.label}}
+														{{form.lab_test_analysis}}
+														<span class="form-text text-warning">{{form.lab_test_analysis.errors}}</span>
+													</div>
+													<div class="form-group">
+														<label for="">{{form.lab_test_analysis_am.label}}</label>
+														{{form.lab_test_analysis_am}}
+														<span class="form-text text-warning">{{form.lab_test_analysis_am.errors}}</span>
+													</div>
+													<div class="form-group">
+														{{form.lab_equipment.label}}
+														{{form.lab_equipment}}
+														<span class="form-text text-warning">{{form.lab_equipment.errors}}</span>
+													</div>
+													<div class="form-group">
+														<label for="">{{form.lab_equipment_am.label}}</label>
+														{{form.lab_equipment_am}}
+														<span class="form-text text-warning">{{form.lab_equipment_am.errors}}</span>
+													</div>
+													
+												</div>
+											</div>
+											<hr>
+											<div class="form-group">
+												<label class="d-block font-weight-semibold">Does the company outsource test parameters and contract agreement?</label>
+												<label for=""><input type="radio" name="outsource" id="outsrc_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+												<label for=""><input type="radio" name="outsource" id="outsrc_no" checked><span class="ml-2">No</span></label>
+												<div id="div_outsrc" style="display: none;">
+													<label for="">Please Specifiy The Following</label>
+													<div class="form-group">
+														{{form.outsourced_test_param.label}}
+														{{form.outsourced_test_param}}
+														<span class="form-text text-warning">{{form.outsourced_test_param.errors}}</span>
+													</div>
+													<div class="form-group">
+														<label for="">{{form.outsourced_test_param_am.label}}</label>
+														{{form.outsourced_test_param_am}}
+														<span class="form-text text-warning">{{form.outsourced_test_param_am.errors}}</span>
+													</div>
+													
+												</div>
+											</div>
+											<hr>
+											<div class="form-group row">
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for="">Sources and amount of your inputs</label>
+													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+															data-toggle="modal" data-target="#srcamnt_input_form_modal" id="">
+														<i class="fa fa-plus"> </i>
+													</button>
+												</div>
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for="">How many kilowatt-hour electric power you use per day?</label>
+													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+															data-toggle="modal" data-target="#power_consumption_form_modal" id="">
+														<i class="fa fa-plus"> </i>
+													</button>
+												</div>
+												
+											</div>
+											<hr>
+											<div class="form-group row">
+												<div class="col-md-4">
+													<label for="">{{form.category.label}}</label>
+													{{form.category}}
+													<span class="form-text text-warning">{{form.category.errors}}</span>
+												</div>
+												<div class="col-md-4">
+													<label for="">{{form.management_tools.label}}</label>
+													{{form.management_tools}}
+													<span class="form-text text-warning">{{form.management_tools.errors}}</span>
+												</div>
+												<div class="col-md-4">
+													<label for="">{{form.certification.label}}</label>
+													{{form.certification}}
+													<span class="form-text text-warning">{{form.certification.errors}}</span>
+												</div>
+												
+											</div>
+											<hr>
+											<div class="form-group">
+												<label class="d-block font-weight-semibold">Does your company conduct Research and Development?</label>
+												<label for=""><input type="radio" name="research" id="rsrch_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+												<label for=""><input type="radio" name="research" id="rsrch_no" checked><span class="ml-2">No</span></label>
+												<div id="div_rsrch" style="display: none;">
+													<label class="p-2" for="">Please Specifiy The Following</label>
+													<div class="form-group">
+														{{form.conducted_research.label}}
+														{{form.conducted_research}}
+														<span class="form-text text-warning">{{form.conducted_research.errors}}</span>
+													</div>
+													<div class="form-group">
+														<label for="">{{form.conducted_research_am.label}}</label>
+														{{form.conducted_research_am}}
+														<span class="form-text text-warning">{{form.conducted_research_am.errors}}</span>
+													</div>
+													
+												</div>
+											</div>
+											<hr>
+										</fieldset>
+										<h6>The Third Tab</h6>
+										<fieldset>
+										<hr>
+											<div class="form-group">
+												<label class="d-block font-weight-semibold">Do you have new product developed?</label>
+												<label for=""><input type="radio" name="new_product" id="product_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+												<label for=""><input type="radio" name="new_product" id="product_no" checked><span class="ml-2">No</span></label>
+												<div id="div_product" style="display: none;">
+													<label class="p-2" for="">Please Specifiy The Following</label>
+													<div class="form-group">
+														{{form.new_product_developed.label}}
+														{{form.new_product_developed}}
+														<span class="form-text text-warning">{{form.new_product_developed.errors}}</span>
+													</div>
+													<div class="form-group">
+														<label for="">{{form.new_product_developed_am.label}}</label>
+														{{form.new_product_developed_am}}
+														<span class="form-text text-warning">{{form.new_product_developed_am.errors}}</span>
+													</div>
+													
+												</div>
+											</div>
+											<hr>
+											<div class="form-group row">
+												<div class="col-md-6">
+													<label class="font-weight-semibold"  for="">Where do you sell your products?</label>
+													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+															data-toggle="modal" data-target="#destination_form_modal" id="">
+														<i class="fa fa-plus"> </i>
+													</button>
+												</div>
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for="">Target market in percent (%) </label>
+													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+															data-toggle="modal" data-target="#target_form_modal" id="">
+														<i class="fa fa-plus"> </i>
+													</button>
+												</div>
+												
+											</div>
+											<hr>
+											<div class="form-group">
+												<label class="d-block font-weight-semibold">Do you have properly available infrastructure?</label>
+												
+												<div class="ml-4 row">
+													<div class="col-md-4">
+														<label class="mr-2 font-weight-semibold" for=""><span class="mr-1">{{form.electric_power}}</span>{{form.electric_power.label}}</label>
+													</div>
+													<div class="col-md-4">
+														<label class="mr-2 font-weight-semibold" for=""><span class="mr-1">{{form.water_supply}}</span>{{form.water_supply.label}}</label>
+													</div>
+
+													<div class="col-md-4">
+														<label class="mr-2 font-weight-semibold" for=""><span class="mr-1">{{form.telecom}}</span>{{form.telecom.label}}</label>
+														
+													</div>
+												</div>
+											</div>
+											<hr>
+											<div class="form-group row ml-4">
+												<div class="col-md-4">
+													<label class="font-weight-semibold pr-2" for=""><span class="mr-1">{{form.marketing_department}}</span>{{form.marketing_department.label}}</label>
+													
+												</div>
+												<div class="col-md-4">
+													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.e_commerce}}</span>{{form.e_commerce.label}}</label>
+													
+												</div>
+												<div class="col-md-4">
+													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.active_database}}</span>{{form.active_database.label}}</label>
+													
+												</div>
+												
+											</div>
+											<hr>
+											<div class="form-group">
+												<label class="d-block font-weight-semibold">Does the company have waste treatment and disposal system?</label>
+												<label for=""><input type="radio" name="waste_trtmt" id="wastetrt_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+												<label for=""><input type="radio" name="waste_trtmt" id="wastetrt_no" checked><span class="ml-2">No</span></label>
+												<div id="div_waste_trtmt" style="display: none;">
+													<label class="p-2" for="">Please Specifiy The Following</label>
+													<div class="form-group">
+														{{form.waste_trtmnt_system.label}}
+														{{form.waste_trtmnt_system}}
+														<span class="form-text text-warning">{{form.waste_trtmnt_system.errors}}</span>
+													</div>
+													<div class="form-group">
+														<label for="">{{form.waste_trtmnt_system_am.label}}</label>
+														{{form.waste_trtmnt_system_am}}
+														<span class="form-text text-warning">{{form.waste_trtmnt_system_am.errors}}</span>
+													</div>
+													
+												</div>
+											</div>
+											<hr>
+										</fieldset>
+										<h6>The fourth Tab</h6>
+										<fieldset>
+										<hr>
+											<div class="form-group row ml-4">
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.efluent_treatment_plant}}</span>{{form.efluent_treatment_plant.label}}</label>
+													
+												</div>
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.env_mgmt_plan}}</span>{{form.env_mgmt_plan.label}}</label>
+													
+												</div>
+												
+											</div>
+											<hr>
+											
+											<div class="form-group">
+												<div class="row">
+													<div class="col-md-6">
+														<label class="d-block font-weight-semibold">Does your company measure its gas /carbon/ emission to the environment?</label>
+														<label for=""><input type="radio" name="carbon_emision" id="ce_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+														<label for=""><input type="radio" name="carbon_emision" id="ce_no" checked><span class="ml-2">No</span></label>
+														
+													</div>		
+													<div class="col-md-6">
+														<label>{{form.source_of_energy.label}}</label>
+															{{form.source_of_energy}}
+															<span class="form-text text-warning">{{form.source_of_energy.errors}}</span>
+													</div>
+																
+												</div>
+												<div class="col-md-12" id="div_ce" style="display: none;">
+													<label for="" class="p-2">Please Specify the following</label>
+													<div class="form-group">
+														<label for="">{{form.gas_carb_emision.label}}</label>
+														{{form.gas_carb_emision}}
+														<span class="form-text text-warning">{{form.gas_carb_emision.errors}}</span>
+													</div>
+													<div class="form-group">
+														<label for="">{{form.gas_carb_emision_am.label}}</label>
+														{{form.gas_carb_emision_am}}
+														<span class="form-text text-warning">{{form.gas_carb_emision_am.errors}}</span>
+													</div>
+													
+												</div>
+											</div>
+											<hr>
+											<div class="form-group">
+												<label class="d-block font-weight-semibold">Is there any environmental issue complaint with the local community?</label>
+												<label for=""><input type="radio" name="env_complaint" id="env_complaint_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+												<label for=""><input type="radio" name="env_complaint" id="env_complaint_no" checked><span class="ml-2">No</span></label>
+												<div id="div_env_complaint" style="display: none;">
+													<label for="" class="p-2">Please Specify the following</label>
+													<div class="form-group">
+														<label for="">{{form.comunity_compliant.label}}</label>
+														{{form.comunity_compliant}}
+														<span class="form-text text-warning">{{form.comunity_compliant.errors}}</span>
+													</div>
+													<div class="form-group">
+														<label for="">{{form.comunity_compliant_am.label}}</label>
+														{{form.comunity_compliant_am}}
+														<span class="form-text text-warning">{{form.comunity_compliant_am.errors}}</span>
+													</div>
+													
+												</div>
+											</div>
+											<hr>
+											<div class="form-group row ml-4">
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.compound_allot}}</span>{{form.compound_allot.label}}</label>
+													
+												</div>
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.env_focal_person}}</span>{{form.env_focal_person.label}}</label>
+													
+												</div>
+												
+											</div>
+											<hr>
+											<div class="form-group row ml-4">
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.safety_profesional}}</span>{{form.safety_profesional.label}}</label>
+													
+												</div>
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.notification_procedure}}</span>{{form.notification_procedure.label}}</label>
+													
+												</div>
+												
+											</div>
+											<hr>
+											<div class="form-group">
+												<label class="d-block font-weight-semibold">Industry university linkage</label>
+												<label for=""><input type="radio" name="linkage" id="linkage_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+												<label for=""><input type="radio" name="linkage" id="linkage_no" checked><span class="ml-2">No</span></label>
+												<div id="div_linkage" style="display: none;">
+													<label for="" class="p-2">Please Specify the following</label>
+													<div class="form-group">
+														<label for="">{{form.university_linkage.label}}</label>
+														{{form.university_linkage}}
+														<span class="form-text text-warning">{{form.university_linkage.errors}}</span>
+													</div>
+													<div class="form-group">
+														<label for="">{{form.university_linkage_am.label}}</label>
+														{{form.university_linkage_am}}
+														<span class="form-text text-warning">{{form.university_linkage_am.errors}}</span>
+													</div>
+													
+												</div>
+											</div>
+											<hr>
+										</fieldset>
+										<h6>The Fifth Tab</h6>
+										<fieldset>
+										<hr>
+											<div class="form-group">
+												<label class="d-block font-weight-semibold">{{form.quality_defects.label}}</label>
+														{{form.quality_defects}}
+														<span class="form-text text-warning">{{form.quality_defects.errors}}</span>
+											</div>
+											<div class="form-group">
+												<label class="d-block font-weight-semibold">{{form.quality_defects_am.label}}</label>
+														{{form.quality_defects_am}}
+														<span class="form-text text-warning">{{form.quality_defects_am.errors}}</span>
+											</div>
+											<hr>
+											<div class="form-group">
+												<label class="d-block font-weight-semibold">{{form.gas_waste_mgmnt_measure.label}}</label>
+														{{form.gas_waste_mgmnt_measure}}
+														<span class="form-text text-warning">{{form.gas_waste_mgmnt_measure.errors}}</span>
+											</div>
+											<div class="form-group">
+												<label class="d-block font-weight-semibold">{{form.gas_waste_mgmnt_measure_am.label}}</label>
+														{{form.gas_waste_mgmnt_measure_am}}
+														<span class="form-text text-warning">{{form.gas_waste_mgmnt_measure_am.errors}}</span>
+											</div>
+											<hr>
+											<div class="form-group row ml-4">
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.recall_system}}</span>{{form.recall_system.label}}</label>
+													
+												</div>
+												<div class="col-md-6">
+													<label class="font-weight-semibold" for="">{{form.support_required.label}}</label>
+													{{form.support_required}}
+													<span class="form-text text-warning">{{form.support_required.errors}}</span>
+												</div>
+												
+											</div>
+											<hr>
+										</fieldset>
+									</form>
+		</div>
+		 
+	</div>
+	<!-- /starting step -->
+
+</div>
+<!-- /content area -->
+<!-- MOdal Area Start -->
+{%include 'admin/company/company_form_modals.html'%}
+<!-- Modal Area End -->
+ <script>
+		// $("#company_detail_form").submit(function(e){
+        //             e.preventDefault();
+        //             $form = $(this);
+        //             var formData = new FormData(this);
+        //             console.log(formData);
+                    
+        //             $.ajax({
+        //             	url:"{%url 'admin:create_company_detail' pk=object.id%}",
+        //             	type:"POST",
+        //             	headers: { "X-CSRFToken": my_token },
+        //             	data:formData,
+        //             	processData: false,
+        //             	contentType: false,
+        //             	success:function(result){
+		// 					console.log(result);
+        //             		if(result['error'] == false){
+        //             			// $("#power_consumption_form_modal").modal("hide");
+        //             			$("#errors_powerc").html(result['message']);
+        //             		}else{
+        //             			$("#errors_powerc").html(result['message']);
+                                
+        //             		}
+        //             	},
+        //             	error:function(error){
+        
+        //             	}
+        //             });
+         
+        //         });
+		
+
+</script>
+{%endblock%}
