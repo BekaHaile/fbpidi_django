@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'core',
     'admin_site',
     'accounts',
@@ -62,8 +63,8 @@ INSTALLED_APPS = [
     'django_summernote',
     'useraudit',
     'rest_framework',
-    'rest_framework.authtoken', # contains social auth
-
+    'rest_framework.authtoken',
+    'floppyforms',
 
 ]
 
@@ -118,8 +119,8 @@ DATABASES = {
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'admindb',
         'USER': 'postgres',
         'PASSWORD': 'cbe@ps4woga',
@@ -197,7 +198,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'complete_login'
 LOGOUT_REDIRECT_URL = 'login'
  
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.UserProfile'
 
 
 MEDIA_URL = '/media/uploads/'

@@ -1,0 +1,258 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+
+<script src="/static/admin/global_assets/js/plugins/media/fancybox.min.js"></script> 
+<script src="/static/admin/global_assets/js/demo_pages/gallery.js"></script>
+{% endblock %}
+{%block pagename%}Product Detail Form{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+ 
+	<div class="card">
+
+		<div class="card-body">
+
+			<form action="{%url 'admin:product_detail' pk=object.id%}" method="POST" id="pdform" enctype="multipart/form-data">
+				<fieldset class="mb-3 ml-3 mr-3">
+					<legend class="text-uppercase font-size-sm font-weight-bold">Update Product</legend>
+					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
+					 
+					{%csrf_token%}
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.name.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.name}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.name_am.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.name_am}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.uom.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.uom}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.quantity.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.quantity}}
+						</div>
+					</div>
+					{%if user.get_company.main_category == "Food" or user.get_company.main_category == "Beverage" %}
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.fandb_category.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.fandb_category}}
+						</div>
+					</div>
+					{%elif user.get_company.main_category == "Pharmaceuticals"%}
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.pharmacy_category.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.pharmacy_category}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.dose.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.dose}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.dosage_form.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.dosage_form}}
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.therapeutic_group.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.therapeutic_group}}
+						</div>
+					</div>
+					{%endif%}
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.description.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.description|safe}}
+							<span class="form-text text-warning">{{form.description.errors}}</span>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.description_am.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.description_am|safe}}
+							<span class="form-text text-warning">{{form.description_am.errors}}</span>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.image.label|title}}</label>
+						<div class="col-lg-9">
+							<div class="uniform-uploader">{{form.image|safe}}<span
+								class="filename" style="user-select: none;">No file selected</span><span
+								class="action btn bg-warning" style="user-select: none;">Choose File</span>
+							</div>
+							
+						</div>
+					</div>
+				</fieldset>
+
+				<div class="text-right">
+					<button id="submit" style="padding-left: 10%; padding-right: 10%;" type="submit"
+						class="btn btn-primary rounded-round">Submit Changes</button>
+				</div>
+			</form>
+			<hr>
+			<div class="row">
+				<div class="col-md-8">
+					<p class="text text-muted">Add More Product Images</p>
+
+				</div>
+				<div class="col-md-4">
+					<a class="float-right btn btn-success btn-md" href="#" data-toggle="modal" data-target="#image_modal" ><i class="fa fa-plus"></i> Add More Images</a>
+
+				</div>
+
+			</div>
+			<hr>
+			<div class="mt-4 mb-3 row">
+				{%for pd_img in object.product_image.all%}
+				<div class="col-sm-6 col-lg-3">
+					<div class="card">
+						<div class="card-img-actions m-1">
+							<img class="card-img img-fluid" src="{{pd_img.image.url}}" alt="">
+							<div class="card-img-actions-overlay card-img">
+								<a href="{{pd_img.image.url}}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round" data-popup="lightbox" rel="group">
+									<i class="icon-plus3"></i>
+								</a>
+
+								<a href="{%url 'admin:delete' model_name='product_image' id=pd_img.id%}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+									<i class="icon-trash"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				{%endfor%}
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-8">
+					<p class="text text-muted">Update Product Prices</p>
+
+				</div>
+				<div class="col-md-4">
+					<a class="float-right btn btn-success btn-md" href="#" data-toggle="modal" data-target="#price_modal" ><i class="fa fa-plus"></i> Add Price</a>
+				</div>
+
+			</div>
+			<hr>
+			<div class="row">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Price</th>
+							<th>Start Date</th>
+							<th>End Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						{%for price in object.price.all%}
+							<tr>
+								<td>{{forloop.counter}}</td>
+								<td>ETB {{price.price}}</td>
+								<td>{{price.startdate|date}}</td>
+								<td>{{price.end_date|date}}</td>
+							</tr>
+						{%endfor%}
+					</tbody>
+				</table>
+			</div>
+			<hr>
+			<div class="row">
+				<a href="{%url 'admin:production_capacity' product=object.id%}" class="btn btn-warning btn-md m-2">Production Capacity</a>
+				<a href="{%url 'admin:anual_input_need' product=object.id%}" class="btn btn-warning btn-md m-2">Anual Input Need</a>
+				<a href="{%url 'admin:demand_supply_list' product=object.id%}" class="btn btn-warning btn-md m-2">Input demand & Supply</a>
+				<a href="{%url 'admin:sales_performance' product=object.id%}" class="btn btn-warning btn-md m-2">Production sales Performance</a>
+				<a href="{%url 'admin:packaging' product=object.id%}" class="btn btn-warning btn-md m-2">Product Packaging Data</a>
+			</div>
+			<hr>
+		</div>
+	</div>
+
+</div>
+<div id="image_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Upload Product Images </h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div> 
+			<div class="modal-body">
+				<form action="{%url 'admin:add_product_image' pk=object.id%}" method="POST" enctype="multipart/form-data">
+					{%csrf_token%}
+					{{image_form|crispy}}
+					<button type="submit" class="btn btn-success btn-md">Save Image</button>
+				</form>
+			</div>
+			
+		</div>
+	</div>
+</div>
+<div id="price_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Create New Prices</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div> 
+			<div class="modal-body">
+				<form action="{%url 'admin:create_price' pk=object.id%}" method="POST" enctype="multipart/form-data">
+					{%csrf_token%}
+					<div class="form-group row">
+						<div class="col-md-4">
+							<label for="">{{price_form.price.label}}</label>
+							{{price_form.price}}
+						</div>
+						<div class="col-md-4">
+							<label for="">{{price_form.startdate.label}}</label>
+							{{price_form.startdate}}
+						</div>
+						<div class="col-md-4">
+							<label for="">{{price_form.end_date.label}}</label>
+							{{price_form.end_date}}
+						</div>
+					</div>
+					<button type="submit" class="btn btn-success btn-md">Create Price</button>
+				</form>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+
+		$("#submit").click(function(){
+			$("#pdform").submit()
+		});
+	});
+</script>
+{%endblock%}

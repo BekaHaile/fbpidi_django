@@ -116,17 +116,17 @@
 					<div class="card-body">
 						<div class="media">
 							<div class="mr-3">
-								<a href="#">{%if user.profile_image != ""%}
+								<a href="#">{%if user.get_company.logo%}
 									<!-- /static/admin/global_assets/images/demo/users/face11.jpg -->
-									<img src="{{user.profile_image.url}}" class="rounded-circle mr-2" height="34" alt="">
+									<img src="{{user.get_company.logo.url}}" class="rounded-circle mr-2" height="34" alt="">
 									{%endif%}</a>
 							</div>
 
 							<div class="media-body">
 								<div class="media-title font-weight-semibold">
-									{% firstof user.get_short_name user.get_username %}</div>
+									{{user.get_company.name}}</div>
 								<div class="font-size-xs opacity-50">
-									<i class="icon-pin font-size-sm"></i> &nbsp;Santa Ana, CA
+									<i class="icon-pin font-size-sm"></i> &nbsp;{{user.get_company.get_company_address.city_town}}
 								</div>
 							</div>
 
@@ -170,35 +170,31 @@
 							<a href="#" class="nav-link"><i class="icon-cabinet"></i> <span>Categories</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
 								<li class="nav-item">
-									<a href="{%url 'admin:p_categories' option='category'%}" class="nav-link"><i class="icon-drawer"></i>
+									<a href="{%url 'admin:categories'%}" class="nav-link"><i class="icon-drawer"></i>
 										<span>Category</span></a>
 								</li>
-
+								{%if user.get_company.main_category != "Pharmaceuticals"%}
 								<li class="nav-item">
-									<a href="{%url 'admin:p_categories' option='sub_category'%}" class="nav-link"><i class="icon-folder6"></i>
-										<span>Sub-Category</span></a>
+									<a href="{%url 'admin:sub_categories'%}" class="nav-link"><i class="icon-folder6"></i>
+										<span>Product Type</span></a>
+								</li>
+								<li class="nav-item">
+									<a href="{%url 'admin:brands'%}" class="nav-link"><i class="mi-branding-watermark"></i>
+										<span>Product Brands</span></a>
 								</li> 
+								{%endif%}
 							</ul>
 						</li>
-						
 						<li class="nav-item">
-							{%if user.is_superuser%}
-							<a href="{%url 'admin:admin_products' user_type='admin'%}" class="nav-link"><i
+							<a href="{%url 'admin:admin_products'%}" class="nav-link"><i
 									class="icon-stack"></i> <span>Products</span></a>
-							{%else%}
-							<a href="{%url 'admin:admin_products' user_type='provider'%}" class="nav-link"><i
-									class="icon-stack"></i> <span>Products</span></a>
-							{%endif%}
 						</li>
+						
 						<li class="nav-item nav-item-submenu">
 							<a href="#" class="nav-link"><i>R&D</i> 
 								<span>Project & Research</span></a>
 								<ul class="nav nav-group-sub" data-submenu-title="Form components">
-									<li class="nav-item">
-										<a href="{%url 'admin:project_list' %}" class="nav-link"><i>R</i>
-											<span>Project</span>
-										</a>
-									</li>
+									
 									<li class="nav-item">
 										<a href="{%url 'admin:research_list' %}" class="nav-link"><i>R</i>
 											<span>Research</span>
@@ -295,28 +291,14 @@
 							<a href = "{% url 'admin:list_document_by_category'  option='all' %}" class="nav-link"><i class="fa fa-folder "></i><span>Documents</span></a>
 						</li>
 						{%if user.is_superuser%}
-						<li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link"><i class="icon-office"></i> <span>Companies</span></a>
-							<ul class="nav nav-group-sub" data-submenu-title="Form components">
-								<li class="nav-item">
-									<a href="{%url 'admin:companies' option='supplier' %}" class="nav-link">
-										<i class="icon-truck"></i>
-										<span>Suppliers</span>
-										<span class="badge bg-blue-400 align-self-center ml-auto">
-											{{'supplier'|company_count}}
-										</span>
-									</a>
-								</li>
-								<li class="nav-item">
-									<a href="{%url 'admin:companies' option='manufacturer' %}" class="nav-link">
-										<i class="icon-cogs"></i>
-										<span>Manufacturers</span>
-										<span class="badge bg-blue-400 align-self-center ml-auto">
-											{{'manufacturer'|company_count}}
-										</span>
-									</a>
-								</li>
-							</ul>
+						<li class="nav-item">
+							<a href="{%url 'admin:companies'%}" class="nav-link">
+								<i class="icon-office"></i>
+								<span>Indistries</span>
+								<span class="badge bg-blue-400 align-self-center ml-auto">
+									{{user|company_count}}
+								</span>
+							</a>
 						</li>
 						 
 											 
@@ -324,11 +306,14 @@
 						
 						
 						<li class="nav-item">
-							<a href="{{user|my_company_link}}" class="nav-link"><i class="icon-coins"></i><span>My Company</span></a>
+							<a href="{%url 'admin:update_company_info' pk=user|get_company_id%}" class="nav-link">
+								<i class="icon-coins"></i><span>My Company</span></a>
 						</li>
-              			  
-
-						 {%endif%}
+						{%endif%}
+						<li class="nav-item">
+							<a href="{%url 'admin:project_list' %}" class="nav-link">
+								<i class="icon-task "></i><span>Projects</span></a>
+						</li>
 						 <li class="nav-item-header">
 							<div class="text-uppercase font-size-xs line-height-xs">Account</div> <i class="icon-menu"
 								title="Forms"></i>

@@ -8,23 +8,25 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 
 def sendEmailVerification(request,user):
-    current_site = get_current_site(request)
-    mail_subject = 'Email Verification Required.'
-    message = get_template('email/acct_activate_email.html').render({
-        'user': user,
-        'domain': current_site.domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': default_token_generator.make_token(user),
-    })
+    try:
+        current_site = get_current_site(request)
+        mail_subject = 'Email Verification Required.'
+        message = get_template('email/acct_activate_email.html').render({
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': default_token_generator.make_token(user),
+        })
 
-    to_email = user.email
-    email = EmailMessage(
-    mail_subject, message, to=[to_email]
-    )
-    email.content_subtype = "html"
-    email.send()
-    return email
-
+        to_email = user.email
+        email = EmailMessage(
+        mail_subject, message, to=[to_email]
+        )
+        email.content_subtype = "html"
+        email.send()
+        return email
+    except Exception:
+        return
 
 def sendWelcomeEmail(request,user):
     current_site = get_current_site(request)

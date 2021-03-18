@@ -1,7 +1,13 @@
 {%extends 'frontpages/layout.html'%}
 {%load i18n%}
 {%load core_template_tags%}
+{%block extrastyle%}
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBr_bmUNgUmX-vKrwfmvNzkAVPh3fiV9Dg&callback=initMap&libraries=&v=weekly" async ></script> -->
+
+{%endblock%}
 {%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+
 		<!--Sliders Section-->
 		<div>
 			<div class="relative sptb-12 pattern2 bg-background">
@@ -10,7 +16,7 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class="mb-2"><span class="font-weight-semibold">{{product.company.company_name|title}}</span></h1>
+									<h1 class="mb-2"><span class="font-weight-semibold">{{product.company.name|title}}</span></h1>
 									<div class="rating-stars mx-auto mb-2 mt-3 d-flex banner-ratings">
 										<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
 										<div class="rating-stars-container mr-2">
@@ -29,7 +35,7 @@
 											<div class="rating-star sm">
 												<i class="fa fa-star"></i>
 											</div>
-										</div> <a class="text-white" href="#">4 reviews</a>
+										</div> <a class="text-white" href="#">{{product.review.count}} reviews</a>
 									</div>
 									<ul class="social-icons mb-4 ml-auto">
 										<li>
@@ -62,8 +68,9 @@
 				</div><!-- /header-text -->
 				<div class="details-absolute">
 					<div class="d-sm-flex container">
-						<div><a href="#" class="text-white d-inline-block mr-4 "><i class="icon icon-location-pin text-white mr-2"></i>Mp-214, New York, NY 10012, US-52014</a></div>
-						<div class="ml-auto"><a href="#" class="text-white d-inline-block mt-2 mt-sm-0 fs-18"><i class="icon icon-phone text-white mr-2 fs-14"></i>+154 256-635-654</a></div>
+						<div><a href="#" class="text-white d-inline-block mr-4 ">
+							<i class="icon icon-location-pin text-white mr-2"></i>{{product.company.get_company_address.city_town}} {{product.company.get_company_address.local_area}}, {{product.company.get_company_address.fax}}</a></div>
+						<div class="ml-auto"><a href="#" class="text-white d-inline-block mt-2 mt-sm-0 fs-18"><i class="icon icon-phone text-white mr-2 fs-14"></i>{{product.company.get_company_address.phone_number}}</a></div>
 					</div>
 				</div>
 			</div>
@@ -74,9 +81,9 @@
 		<div class="bg-white border-bottom">
 			<div class="container">
 				<div class="page-header">
-					<h4 class="page-title">{{product.company.company_type}}</h4>
+					<h4 class="page-title">{{product.company.main_category}} Proccesing Industry</h4>
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">Home</a></li>
+						<li class="breadcrumb-item"><a href="{%url 'index' %}">Home</a></li>
 						<li class="breadcrumb-item"><a href="#">Products</a></li>
 						<li class="breadcrumb-item active" aria-current="page">Detail</li>
 					</ol>
@@ -93,15 +100,20 @@
 
 						<!--Business Overview-->
 						<div class="card overflow-hidden">
-							<div class="ribbon ribbon-top-right text-danger"><span class="bg-danger">featured</span></div>
+							<!-- <div class="ribbon ribbon-top-right text-danger"><span class="bg-danger">featured</span></div> -->
 							<div class="card-body">
 								<div class="item-det mb-4">
-									<a href="#" class="text-dark"><h3>{{product.name}}</h3></a>
+									<a href="#" class="text-dark"><h3>{% print_translated product.name product.name_am LANGUAGE_CODE%}</h3></a>
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
-											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-briefcase text-muted mr-1"></i> {{product.category.category_name|title}}</a></li>
-											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i> {{product.company.location|title}}</a></li>
-											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-calendar text-muted mr-1"></i> 5 hours ago</a></li>
+											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-briefcase text-muted mr-1"></i>
+												{%if product.fandb_category%}
+												{{product.fandb_category.product_type.category_name.category_type}}
+												{%elif product.pharmacy_category%}
+												{{product.pharmacy_category.category_type}}
+												{%endif%}</a></li>
+											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i> {{product.company.get_company_address.city_town|title}}</a></li>
+											<!-- <li class="mr-5"><a href="#" class="icons"><i class="icon icon-calendar text-muted mr-1"></i> 5 hours ago</a></li> -->
 											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-eye text-muted mr-1"></i> 765</a></li>
 										</ul>
 										<div class="rating-stars d-flex mr-5">
@@ -135,20 +147,13 @@
 								</div>
 								<div class="product-slider">
 									<div id="carousel" class="carousel slide" data-ride="carousel">
-										<div class="arrow-ribbon bg-secondary">Open</div>
+										<div class="arrow-ribbon bg-secondary">ETB {{product.price}}</div>
 										<div class="carousel-inner">
 											<div class="carousel-item active"><img src="{{product.image.url}}" alt="img"> </div>
-											{%for image in images%}
+											{%for image in product.product_image.all%}
 											<div class="carousel-item"><img src="{{image.image.url}}" alt="img"> </div>
 											{%endfor%}
-											<!-- <div class="carousel-item"><img src="/static/frontpages/images/products/products/ed3.jpg" alt="img"> </div>
-											<div class="carousel-item"><img src="/static/frontpages/images/products/products/ed4.jpg" alt="img"> </div>
-											<div class="carousel-item"><img src="/static/frontpages/images/products/products/ed1.jpg" alt="img"> </div>
-											<div class="carousel-item"><img src="/static/frontpages/images/products/products/ed1.jpg" alt="img"> </div>
-											<div class="carousel-item"><img src="/static/frontpages/images/products/products/ed2.jpg" alt="img"> </div>
-											<div class="carousel-item"><img src="/static/frontpages/images/products/products/ed3.jpg" alt="img"> </div>
-											<div class="carousel-item"><img src="/static/frontpages/images/products/products/ed4.jpg" alt="img"> </div>
-											<div class="carousel-item"><img src="/static/frontpages/images/products/products/ed1.jpg" alt="img"> </div> -->
+											 
 										</div>
 										<a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
 											<i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -161,13 +166,13 @@
 										<div id="thumbcarousel" class="carousel slide" data-interval="false">
 											<div class="carousel-inner">
 												<div class="carousel-item active">
-													{%for image in images%}
+													{%for image in product.product_image.all%}
 													<div data-target="#carousel" data-slide-to="{{forloop.counter}}" class="thumb"><img src="{{image.image.url}}" alt="img"></div>
 													 {%endfor%}
 
 												</div>
 												<div class="carousel-item ">
-													{%for image in images%}
+													{%for image in product.product_image.all%}
 													<div data-target="#carousel" data-slide-to="{{forloop.counter}}" class="thumb"><img src="{{image.image.url}}" alt="img"></div>
 													{%endfor%}
 												</div>
@@ -195,12 +200,12 @@
 								<div class="item-user mt-3">
 									<div class="row">
 										<div class="col-md-6">
-											<h6 class="font-weight-normal"><span><i class="fa fa-map mr-3 mb-2"></i></span><a href="#" class="text-body">{{product.company.location|upper}}, {{product.company.city|upper}}</a></h6>
-											<h6 class="font-weight-normal"><span><i class="fa fa-envelope mr-3 mb-2"></i></span><a href="#" class="text-body">{{product.company.email}}</a></h6>
+											<h6 class="font-weight-normal"><span><i class="fa fa-map mr-3 mb-2"></i></span><a href="#" class="text-body">{{product.company.get_company_address.city_town|upper}}, {{product.company.get_company_address.local_area|upper}}</a></h6>
+											<h6 class="font-weight-normal"><span><i class="fa fa-envelope mr-3 mb-2"></i></span><a href="#" class="text-body">{{product.company.get_company_address.email}}</a></h6>
 										</div>
 										<div class="col-md-6">
-											<h6 class="font-weight-normal"><span><i class="fa fa-phone mr-3  mb-2"></i></span><a href="#" class="text-secondary"> {{product.company.phone_number}}</a></h6>
-											<h6 class="font-weight-normal"><span><i class="fa fa-link mr-3 "></i></span><a href="#" class="text-secondary">{{product.company.facebook_link}}</a></h6>
+											<h6 class="font-weight-normal"><span><i class="fa fa-phone mr-3  mb-2"></i></span><a href="#" class="text-secondary"> {{product.company.get_company_address.phone_number}}</a></h6>
+											<h6 class="font-weight-normal"><span><i class="fa fa-link mr-3 "></i></span><a href="#" class="text-secondary">{{product.company.get_company_address.fax}}</a></h6>
 										</div>
 									</div>
 								</div>
@@ -210,23 +215,23 @@
 										<tbody>
 											<tr>
 												<td class="font-weight-semibold px-0">Established Year</td>
-												<td class="px-0">{{product.company.established_year}}</td>
+												<td class="px-0">{{product.company.established_yr}}</td>
 											</tr>
 											<tr>
 												<td class="font-weight-semibold px-0">Services</td>
-												<td class="px-0">{{product.company.company_type|title}}</td>
-											</tr>
-											<tr>
-												<td class="font-weight-semibold px-0">Payment Methods</td>
-												<td class="px-0">{{product.company.terms_of_payment}}</td>
-											</tr>
-											<tr>
-												<td class="font-weight-semibold px-0">Postal Code</td>
-												<td class="px-0">{{product.company.postal_code}}</td>
+												<td class="px-0">
+													{%for cert in product.company.category.all%}
+													{{cert.category_name}}
+													{%endfor%}
+												</td>
 											</tr>
 											<tr>
 												<td class="font-weight-semibold px-0">Certification</td>
-												<td class="px-0">{{product.company.certification}}</td>
+												<td class="px-0">
+													{%for cert in product.company.certification.all%}
+													{{cert.name}}
+													{%endfor%}
+												</td>
 											</tr>
 										</tbody>
 									</table>
@@ -239,7 +244,7 @@
 											<a class="mb-0">Business ID : #8256358</a>
 										</div>
 										<div class="col col-auto">
-											Posted By <a class="mb-0 font-weight-bold">{{product.user.username}}</a> / {{product.timestamp|date}}
+											Posted By <a class="mb-0 font-weight-bold">{{product.created_by.username}}</a> / {{product.created_date|date}}
 										</div>
 									</div>
 								</div>
@@ -260,16 +265,20 @@
 						<!--Related Posts-->
 						<div id="myCarousel5" class="owl-carousel owl-carousel-icons3">
 							<!-- Wrapper for carousel items -->
-
+							{%for rp in related_products%}
 							<div class="item">
 								<div class="card">
-									<div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">Negotiable</span></div>
+									<!-- <div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">Negotiable</span></div> -->
 									<div class="item-card7-imgs">
-										<a href="{% url 'bs' %}"></a>
-										<img src="/static/frontpages/images/products/products/ed1.jpg" alt="img" class="cover-image">
+										<a href="{%url 'product_detail' pk=rp.id%}"></a>
+										<img src="{{rp.image.url}}" alt="img" class="cover-image">
 									</div>
 									<div class="item-card7-overlaytext">
-										<a href="{% url 'bs' %}" class="text-white"> Education</a>
+										<a href="{%url 'product_detail' pk=rp.id%}" class="text-white"> {%if product.fandb_category%}
+											{{product.fandb_category.product_type.category_name.category_type}}
+											{%elif product.pharmacy_category%}
+											{{product.pharmacy_category.category_type}}
+											{%endif%}</a>
 									</div>
 									<div class="item-card7-icons">
 										<a href="#" class="item-card7-icons-l"> <i class="fa fa-pencil"></i></a>
@@ -294,264 +303,23 @@
 												<div class="rating-star sm">
 													<i class="fa fa-star"></i>
 												</div>
-											</div> <a class="text-white" href="#">4 reviews</a>
+											</div> <a class="text-white" href="#">{{rp|review_count}} reviews</a>
 										</div>
 										<div class="item-card7-desc">
-											<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Record Writing <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
+											<a href="{%url 'product_detail' pk=rp.id%}" class="text-dark"><h4 class="font-weight-semibold">{%print_translated rp.name rp.name_am LANGUAGE_CODE %}<i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
 										</div>
 										<div class="item-card7-text">
 											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  USA</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 2 hours ago</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Clara Pixley</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 785 485 965</a></li>
+												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>{{rp.company.get_company_address.city_town}}</a></li>
+												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i>{{product.created_date|timesince}} ago.</a></li>
+												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{{rp.created_by.first_name}} {{rp.created_by.last_name }}</a></li>
+												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i>{{rp.company.get_company_address.phone_number}}</a></li>
 											</ul>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="item">
-								<div class="card">
-									<div class="ribbon ribbon-top-left text-secondary"><span class="bg-secondary">featured</span></div>
-									<div class="item-card7-imgs">
-										<a href="{% url 'bs' %}"></a>
-										<img src="/static/frontpages/images/products/products/ed2.jpg" alt="img" class="cover-image">
-									</div>
-									<div class="item-card7-overlaytext">
-										<a href="{% url 'bs' %}" class="text-white">Education </a>
-									</div>
-									<div class="item-card7-icons">
-										<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-										<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-									</div>
-									<div class="card-body">
-										<div class="rating-stars mb-1 mt-0 d-flex">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="5">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-											</div> <a class="text-white" href="#">14 reviews</a>
-										</div>
-										<div class="item-card7-desc">
-											<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Pg University <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
-										</div>
-										<div class="item-card7-text">
-											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  Los Angles</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 5 hours ago</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Sally Peake</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 567 987 608</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="card">
-									<div class="item-card7-imgs">
-										<a href="{% url 'bs' %}"></a>
-										<img src="/static/frontpages/images/products/products/ed3.jpg" alt="img" class="cover-image">
-									</div>
-									<div class="item-card7-overlaytext">
-										<a href="{% url 'bs' %}" class="text-white">Education</a>
-									</div>
-									<div class="item-card7-icons">
-										<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-										<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-									</div>
-									<div class="card-body">
-										<div class="rating-stars mb-1 mt-0 d-flex">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-											</div> <a class="text-white" href="#">25 reviews</a>
-										</div>
-										<div class="item-card7-desc">
-											<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Ug University</h4></a>
-										</div>
-										<div class="item-card7-text">
-											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  Los Angles</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 4 hours ago</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Julio Gutirrez</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 758 458 758</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="card">
-									<div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">Collection</span></div>
-									<div class="item-card7-imgs">
-										<a href="{% url 'bs' %}"></a>
-										<img src="/static/frontpages/images/products/products/ed4.jpg" alt="img" class="cover-image">
-									</div>
-									<div class="item-card7-overlaytext">
-										<a href="{% url 'bs' %}" class="text-white"> Coaching</a>
-									</div>
-									<div class="item-card7-icons">
-										<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-										<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-									</div>
-									<div class="card-body">
-										<div class="rating-stars mb-1 mt-0 d-flex">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-											</div> <a class="text-white" href="#">4 reviews</a>
-										</div>
-										<div class="item-card7-desc">
-											<a href="r{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Best Institutions <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
-										</div>
-										<div class="item-card7-text">
-											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  Spain</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 12 hours ago</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Clara Pixley</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 745 854 857</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="card">
-									<div class="item-card7-imgs">
-										<a href="{% url 'bs' %}"></a>
-										<img src="/static/frontpages/images/products/products/ed1.jpg" alt="img" class="cover-image">
-									</div>
-									<div class="item-card7-overlaytext">
-										<a href="{% url 'bs' %}" class="text-white"> Training</a>
-									</div>
-									<div class="item-card7-icons">
-										<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-										<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-									</div>
-									<div class="card-body">
-										<div class="rating-stars mb-1 mt-0 d-flex">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="5">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-											</div> <a class="text-white" href="#">No reviews</a>
-										</div>
-										<div class="item-card7-desc">
-											<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Care Brohzm</h4></a>
-										</div>
-										<div class="item-card7-text">
-											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  China</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 1 Day ago</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Nicol Bretz</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 485 965 854</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="card">
-									<div class="item-card7-imgs">
-										<a href="{% url 'bs' %}"></a>
-										<img src="/static/frontpages/images/products/products/ed2.jpg" alt="img" class="cover-image">
-									</div>
-									<div class="item-card7-overlaytext">
-										<a href="{% url 'bs' %}" class="text-white"> Education</a>
-									</div>
-									<div class="item-card7-icons">
-										<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-										<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-									</div>
-									<div class="card-body">
-										<div class="rating-stars mb-1 mt-0 d-flex">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-												<div class="rating-star sm">
-													<i class="fa fa-star"></i>
-												</div>
-											</div> <a class="text-white" href="#">34 reviews</a>
-										</div>
-										<div class="item-card7-desc">
-											<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Digital Marketing Training <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
-										</div>
-										<div class="item-card7-text">
-											<ul class="icon-card mb-0 mt-2">
-												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  Canada</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 2 days ago</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Sally Peake</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i>859 654 857</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
+							 {%endfor%}
 						</div>
 						<!--/Related Posts-->
 
@@ -631,8 +399,8 @@
 								<h3 class="card-title">Add a Review</h3>
 							</div>
 							<div class="card-body">
-								<form action="{% url 'product_detail' id=product.id %}" method="POST">{%csrf_token%}
-								<p class="mb-0">Add Your Rating for the Business</p>
+								<form action="{% url 'create_review' product=product.id %}" method="POST">{%csrf_token%}
+								<p class="mb-0">Add Your Rating for the Product</p>
 								<div class="rating-stars mb-4 mt-0 d-flex">
 									<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="2">
 									<div class="rating-stars-container mr-2">
@@ -681,16 +449,15 @@
 							<div class="card-body item-user">
 								<div class="profile-details">
 									<div class="profile-pic mb-0 mx-5">
-										{%if product.user.profile_image != ""%}
-										<img src="{{product.user.profile_image.url}}" class="brround w-150 h-150" alt="user">
+										{%if product.company.contact_person.profile_image%}
+										<img src="{{product.company.contact_person.profile_image.url}}" class="brround w-150 h-150" alt="user">
 										{%else%}
 										<img src="/static/frontpages/images/faces/male/25.jpg" class="brround w-150 h-150" alt="user">
 										{%endif%}
 									</div>
 								</div>
 								<div class="text-center mt-2">
-									<a href="{% url 'userprofile' %}" class="text-dark text-center"><h4 class="mt-0 mb-0 font-weight-semibold">{{product.user.first_name|title}} {{product.user.last_name|title}}</h4></a>
-									<span class="text-muted">Member Since November {{product.user.get_year}}</span>
+									<a href="{% url 'userprofile' %}" class="text-dark text-center"><h4 class="mt-0 mb-0 font-weight-semibold">{{product.company.contact_person.first_name|title}} {{product.company.contact_person.last_name|title}}</h4></a>
 									<!-- <div><small class="text-muted">Listing Id <b>365241</b></small></div> -->
 								</div>
 							</div>
@@ -698,8 +465,7 @@
 								<div class="tab-menu-heading border-0 p-0">
 									<div class="tabs-menu1">
 										<ul class="nav">
-											<li class=""><a href="#tab-contact" class="active" data-toggle="tab">Contat</a></li>
-											<li><a href="#tab-timings" data-toggle="tab">Timings</a></li>
+											<li class="w-100"><a href="#tab-contact" class="active" data-toggle="tab">Contact Information</a></li>
 										</ul>
 									</div>
 								</div>
@@ -707,54 +473,17 @@
 							<div class="tab-content border-0 bg-white">
 								<div class="tab-pane active" id="tab-contact">
 									<div class="card-body item-user">
-										<h4 class="mb-4">Contact Info</h4>
 										<div>
 											<!-- <h6><span class="font-weight-semibold"><i class="fa fa-map mr-3 mb-2"></i></span><a href="#" class="text-body">{{product.user.location}}</a></h6> -->
-											<h6><span class="font-weight-semibold"><i class="fa fa-envelope mr-3 mb-2"></i></span><a href="#" class="text-body">{{product.user.email}}</a></h6>
-											<h6><span class="font-weight-semibold"><i class="fa fa-phone mr-3 mb-2"></i></span><a href="#" class="text-secondary">{{product.user.phone_number}}</a></h6>
+											<h6><span class="font-weight-semibold"><i class="fa fa-envelope mr-3 mb-2"></i></span><a href="#" class="text-body">{{product.company.contact_person.email}}</a></h6>
+											<h6><span class="font-weight-semibold"><i class="fa fa-phone mr-3 mb-2"></i></span><a href="#" class="text-secondary">{{product.company.contact_person.phone_number}}</a></h6>
 										</div>
-									</div>
-								</div>
-								<div class="tab-pane" id="tab-timings">
-									<div class="table-responsive card-body">
-										<table class="table table-bordered border-top mb-0">
-											<tbody>
-												<tr>
-													<td>Monday</td>
-													<td class="font-weight-semibold">9.00am-9.00pm</td>
-												</tr>
-												<tr>
-													<td>Tuesday</td>
-													<td class="font-weight-semibold">9.00am-9.00pm</td>
-												</tr>
-												<tr>
-													<td>Wednesday</td>
-													<td class="font-weight-semibold">9.00am-9.00pm</td>
-												</tr>
-												<tr>
-													<td>Thursday</td>
-													<td class="font-weight-semibold">9.00am-9.00pm</td>
-												</tr>
-												<tr>
-													<td>Friday</td>
-													<td class="font-weight-semibold">9.00am-9.00pm</td>
-												</tr>
-												<tr>
-													<td>Saturday</td>
-													<td class="font-weight-semibold">9.00am-9.00pm</td>
-												</tr>
-												<tr>
-													<td>Sunday</td>
-													<td class="font-weight-semibold">9.00am-9.00pm</td>
-												</tr>
-											</tbody>
-										</table>
 									</div>
 								</div>
 								<div class="card-footer">
 									<div class="">
 										<a href="#" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> Chat</a>
-										<a href="#" class="btn btn-secondary mt-1 mb-1" data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> Contact Me</a>
+										<a href="mailto:{{product.company.contact_person.email}}" class="btn btn-secondary mt-1 mb-1" data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> Contact Me</a>
 										<a href="#" class="btn btn-light mt-1 mb-1"><i class="fa fa-eye"></i>Inquiry</a>
 									</div>
 								</div>
@@ -766,11 +495,13 @@
 							</div>
 							<div class="card-body">
 								<div class="map-header">
-									<div class="map-header-layer" id="map2"></div>
+									<div id="map2">
+										<iframe src="https://maps.google.com/maps?q='+{{product.company.geo_location.x}}+','+{{product.company.geo_location.y}}+'&hl=es&z=14&amp;output=embed" class="h-100 w-100 border-0"> </iframe>
+									</div>
 								</div>
 								<div class="item-user mt-5">
 									<div>
-										<h6><span class="font-weight-semibold"><i class="fa fa-map mr-3 mb-0"></i></span><a href="#" class="text-body"> Mp-214, New York, NY 10012, US-52014</a></h6>
+										<h6><span class="font-weight-semibold"><i class="fa fa-map mr-3 mb-0"></i></span><a href="#" class="text-body">{{product.company.get_company_address.city_town}} {{product.company.get_company_address.local_area}}, {{product.company.get_company_address.fax}}</a></h6>
 									</div>
 								</div>
 							</div>
@@ -802,11 +533,11 @@
 							</div>
 							<div class="card-body product-filter-desc">
 								<div class="product-filter-icons text-center">
-									<a href="{{product.company.facebook_link}}" class="facebook-bg"><i class="fa fa-facebook"></i></a>
-									<a href="{{product.company.twiter_link}}" class="twitter-bg"><i class="fa fa-twitter"></i></a>
-									<a href="{{product.company.google_link}}" class="google-bg"><i class="fa fa-google"></i></a>
-									<a href="{{product.company.instagram_link}}" class="dribbble-bg"><i class="fa fa-instagram"></i></a>
-									<a href="{{product.company.pintrest_link}}" class="pinterest-bg"><i class="fa fa-pinterest"></i></a>
+									<a href="{{product.company.get_company_address.facebooklink}}" class="facebook-bg"><i class="fa fa-facebook"></i></a>
+									<a href="{{product.company.get_company_address.twiterlink}}" class="twitter-bg"><i class="fa fa-twitter"></i></a>
+									<a href="{{product.company.get_company_address.googlelink}}" class="google-bg"><i class="fa fa-google"></i></a>
+									<a href="{{product.company.get_company_address.instagramlink}}" class="dribbble-bg"><i class="fa fa-instagram"></i></a>
+									<a href="{{product.company.get_company_address.linkedinlink}}" class="pinterest-bg"><i class="fa fa-linkedin"></i></a>
 								</div>
 							</div>
 						</div>
@@ -842,307 +573,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="card mb-0">
-							<div class="card-header">
-								<h3 class="card-title">Recent Business Posts</h3>
-							</div>
-							<div class="card-body">
-								<div id="myCarousel4" class="owl-carousel testimonial-owl-carousel2">
-									<!-- Wrapper for carousel items -->
-									<div class="item">
-										<div class="card mb-0">
-											<div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">Negotiable</span></div>
-											<div class="item-card7-imgs">
-												<a href="{% url 'bs' %}"></a>
-												<img src="/static/frontpages/images/products/products/ed1.jpg" alt="img" class="cover-image">
-											</div>
-											<div class="item-card7-overlaytext">
-												<a href="{% url 'bs' %}" class="text-white"> Education</a>
-											</div>
-											<div class="item-card7-icons">
-												<a href="#" class="item-card7-icons-l"> <i class="fa fa-pencil"></i></a>
-												<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-											</div>
-											<div class="card-body">
-												<div class="rating-stars mb-1 mt-0 d-flex">
-													<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
-													<div class="rating-stars-container mr-2">
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-													</div> <a class="text-white" href="#">4 reviews</a>
-												</div>
-												<div class="item-card7-desc">
-													<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Record Writing <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
-												</div>
-												<div class="item-card7-text">
-													<ul class="icon-card mb-0 mt-2">
-														<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  USA</a></li>
-														<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 2 hours ago</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Clara Pixley</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 785 485 965</a></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="card mb-0">
-											<div class="ribbon ribbon-top-left text-secondary"><span class="bg-secondary">featured</span></div>
-											<div class="item-card7-imgs">
-												<a href="{% url 'bs' %}"></a>
-												<img src="/static/frontpages/images/products/products/ed2.jpg" alt="img" class="cover-image">
-											</div>
-											<div class="item-card7-overlaytext">
-												<a href="{% url 'bs' %}" class="text-white">Education </a>
-											</div>
-											<div class="item-card7-icons">
-												<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-												<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-											</div>
-											<div class="card-body">
-												<div class="rating-stars mb-1 mt-0 d-flex">
-													<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="5">
-													<div class="rating-stars-container mr-2">
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-													</div> <a class="text-white" href="#">14 reviews</a>
-												</div>
-												<div class="item-card7-desc">
-													<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Pg University <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
-												</div>
-												<div class="item-card7-text">
-													<ul class="icon-card mb-0 mt-2">
-														<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  Los Angles</a></li>
-														<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 5 hours ago</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Sally Peake</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 567 987 608</a></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="card mb-0">
-											<div class="item-card7-imgs">
-												<a href="{% url 'bs' %}"></a>
-												<img src="/static/frontpages/images/products/products/ed3.jpg" alt="img" class="cover-image">
-											</div>
-											<div class="item-card7-overlaytext">
-												<a href="{% url 'bs' %}" class="text-white">Education</a>
-											</div>
-											<div class="item-card7-icons">
-												<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-												<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-											</div>
-											<div class="card-body">
-												<div class="rating-stars mb-1 mt-0 d-flex">
-													<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
-													<div class="rating-stars-container mr-2">
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-													</div> <a class="text-white" href="#">25 reviews</a>
-												</div>
-												<div class="item-card7-desc">
-													<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Ug University</h4></a>
-												</div>
-												<div class="item-card7-text">
-													<ul class="icon-card mb-0 mt-2">
-														<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  Los Angles</a></li>
-														<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 4 hours ago</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Julio Gutirrez</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 758 458 758</a></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="card mb-0">
-											<div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">Collection</span></div>
-											<div class="item-card7-imgs">
-												<a href="{% url 'bs' %}"></a>
-												<img src="/static/frontpages/images/products/products/ed4.jpg" alt="img" class="cover-image">
-											</div>
-											<div class="item-card7-overlaytext">
-												<a href="{% url 'bs' %}" class="text-white"> Coaching</a>
-											</div>
-											<div class="item-card7-icons">
-												<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-												<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-											</div>
-											<div class="card-body">
-												<div class="rating-stars mb-1 mt-0 d-flex">
-													<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
-													<div class="rating-stars-container mr-2">
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-													</div> <a class="text-white" href="#">4 reviews</a>
-												</div>
-												<div class="item-card7-desc">
-													<a href="r{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Best Institutions <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
-												</div>
-												<div class="item-card7-text">
-													<ul class="icon-card mb-0 mt-2">
-														<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  Spain</a></li>
-														<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 12 hours ago</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Clara Pixley</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 745 854 857</a></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="card mb-0">
-											<div class="item-card7-imgs">
-												<a href="{% url 'bs' %}"></a>
-												<img src="/static/frontpages/images/products/products/ed1.jpg" alt="img" class="cover-image">
-											</div>
-											<div class="item-card7-overlaytext">
-												<a href="{% url 'bs' %}" class="text-white"> Training</a>
-											</div>
-											<div class="item-card7-icons">
-												<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-												<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-											</div>
-											<div class="card-body">
-												<div class="rating-stars mb-1 mt-0 d-flex">
-													<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="5">
-													<div class="rating-stars-container mr-2">
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-													</div> <a class="text-white" href="#">No reviews</a>
-												</div>
-												<div class="item-card7-desc">
-													<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Care Brohzm</h4></a>
-												</div>
-												<div class="item-card7-text">
-													<ul class="icon-card mb-0 mt-2">
-														<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  China</a></li>
-														<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 1 Day ago</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Nicol Bretz</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 485 965 854</a></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item">
-										<div class="card mb-0">
-											<div class="item-card7-imgs">
-												<a href="{% url 'bs' %}"></a>
-												<img src="/static/frontpages/images/products/products/ed2.jpg" alt="img" class="cover-image">
-											</div>
-											<div class="item-card7-overlaytext">
-												<a href="{% url 'bs' %}" class="text-white"> Education</a>
-											</div>
-											<div class="item-card7-icons">
-												<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-												<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
-											</div>
-											<div class="card-body">
-												<div class="rating-stars mb-1 mt-0 d-flex">
-													<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
-													<div class="rating-stars-container mr-2">
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-													</div> <a class="text-white" href="#">34 reviews</a>
-												</div>
-												<div class="item-card7-desc">
-													<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold">Digital Marketing Training <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
-												</div>
-												<div class="item-card7-text">
-													<ul class="icon-card mb-0 mt-2">
-														<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  Canada</a></li>
-														<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 2 days ago</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Sally Peake</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i>859 654 857</a></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+						 
 					</div>
 					<!--/Right Side Content-->
 				</div>
@@ -1243,7 +674,8 @@
 					<div class="modal-body">
 						<div class="h-400">
 							<!--Map-->
-							<iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d2965.0824050173574!2d-93.63905729999999!3d41.998507000000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sWebFilings%2C+University+Boulevard%2C+Ames%2C+IA!5e0!3m2!1sen!2sus!4v1390839289319" class="h-100 w-100 border-0"></iframe>
+							<!-- <iframe src="https://maps.google.com/maps?q='+{{product.company.geo_location.x}}+','+{{product.company.geo_location.y}}+'&hl=es&z=14&amp;output=embed" class="h-100 w-100 border-0"> </iframe> -->
+							<iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d2965.0824050173574!2d-{{product.company.geo_location.y}}!3d{{product.company.geo_location.x}}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sWebFilings%2C+University+Boulevard%2C+Ames%2C+IA!5e0!3m2!1sen!2sus!4v1390839289319" class="h-100 w-100 border-0"></iframe>
 							<!--/Map-->
 						</div>
 					</div>
@@ -1290,7 +722,26 @@
 				</div>
 			</div>
 		</div>
+		<!-- <script
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBr_bmUNgUmX-vKrwfmvNzkAVPh3fiV9Dg&callback=initMap&libraries=&v=weekly"
+		async
+	  ></script> -->
 		<script>
+			// Initialize and add the map
+			// function initMap() {
+			//   // The location of Uluru
+			//   const uluru = { lat: "{{product.company.geo_location.x}}", lng: "{{product.company.geo_location.y}}" };
+			//   // The map, centered at Uluru
+			//   const map = new google.maps.Map(document.getElementById("map2"), {
+			// 	zoom: 4,
+			// 	center: uluru,
+			//   });
+			//   // The marker, positioned at Uluru
+			//   const marker = new google.maps.Marker({
+			// 	position: uluru,
+			// 	map: map,
+			//   });
+			// }
 			function addRating(value){
 				$("#id_rating").val(value);
 			}
