@@ -15,7 +15,7 @@ from django.core import serializers
 
 from company.models import *
 from accounts.models import CompanyAdmin,User
-from product.models import Order,OrderProduct
+from product.models import Order,OrderProduct,Product
 
 from company.forms import *
 from chat.models import ChatGroup, ChatMessage
@@ -461,6 +461,193 @@ class CheckYearField(LoginRequiredMixin,View):
             except MarketTarget.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
 
+class ListInvestmentProject(LoginRequiredMixin,ListView):
+    model = InvestmentProject
+    template_name = "admin/company/project_list.html"
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return InvestmentProject.objects.all()
+        elif self.request.user.is_company_admin:
+            return InvestmentProject.objects.filter(company=Company.objects.get(contact_person=self.request.user))
+        elif self.request.user.is_company_staff:
+            return InvestmentProject.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
+
+
+class CreateMyInvestmentProject(LoginRequiredMixin,CreateView):
+    model = InvestmentProject
+    form_class = InvestmentProjectForm
+    template_name = "admin/company/create_project_form.html"
+
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(CreateMyInvestmentProject,self).get_form_kwargs()
+        kwargs.update({'contact_person': UserProfile.objects.filter(created_by=self.request.user)})
+        return kwargs
+
+
+    def form_valid(self,form):
+        project = form.save(commit=False)
+        company = None
+        if self.request.user.is_company_admin:
+            company = Company.objects.get(contact_person=self.request.user)
+        elif self.request.user.is_company_staff:
+            company = CompanyStaff.objects.get(user=self.request.user).company
+        
+        project.company = company
+        project.created_by = self.request.user
+        project.save()
+        messages.success(self.request,'Investment Project Created,Please Complete The Following!')
+        return redirect("admin:create_project_detail",pk=project.id)
+
+
+
+class CreateInvestmentProject(LoginRequiredMixin,CreateView):
+    model = InvestmentProject
+    form_class = InvestmentProjectForm_ForSuperAdmin
+    template_name = "admin/company/create_project_form_admin.html"
+
+    def form_valid(self,form):
+        project = form.save(commit=False)
+        project.created_by = self.request.user
+        project.save()
+        messages.success(self.request,'Investment Project Created,Please Complete The Following!')
+        return redirect("admin:create_project_detail_admin",pk=project.id)
+
+class CreateInvestmentProjectDetail(LoginRequiredMixin,UpdateView):
+    model=InvestmentProject
+    form_class=InvestmentProjectDetailForm
+    template_name = "admin/company/create_project_detail.html"
+
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(CreateInvestmentProjectDetail,self).get_form_kwargs()
+        kwargs.update({'sector': InvestmentProject.objects.get(id=self.kwargs['pk']).sector})
+        return kwargs
+    
+    def form_valid(self,form):
+        project=form.save(commit=False)
+        project.product_type.set(form.cleaned_data.get('product_type'))
+        project.last_updated_by=self.request.user
+        project.last_updated_date = timezone.now()
+        project.save()
+        messages.success(self.request,"Project Detail Added Succesfully")
+        return redirect("admin:project_list")
+
+class CreateInvestmentProjectDetail_Admin(LoginRequiredMixin,UpdateView):
+    model=InvestmentProject
+    form_class=InvestmentProjectDetailForm_Admin
+    template_name = "admin/company/create_project_detail_admin.html"
+
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(CreateInvestmentProjectDetail_Admin,self).get_form_kwargs()
+        kwargs.update({'sector': InvestmentProject.objects.get(id=self.kwargs['pk']).sector})
+        kwargs.update({'contact_person': UserProfile.objects.filter(created_by=
+                InvestmentProject.objects.get(id=self.kwargs['pk']).company.contact_person
+                )})
+        return kwargs
+    
+    def form_valid(self,form):
+        project=form.save(commit=False)
+        project.product_type.set(form.cleaned_data.get('product_type'))
+        project.last_updated_by=self.request.user
+        project.last_updated_date = timezone.now()
+        project.save()
+        messages.success(self.request,"Project Detail Added Succesfully")
+        return redirect("admin:project_list")
+
+class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
+    model=InvestmentProject
+    form_class = ProjectUpdateForm
+    template_name = "admin/company/update_project_form.html"
+
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(UpdateInvestmentProject,self).get_form_kwargs()
+        kwargs.update({'sector': InvestmentProject.objects.get(id=self.kwargs['pk']).sector})
+        kwargs.update({'contact_person': UserProfile.objects.filter(created_by=
+                InvestmentProject.objects.get(id=self.kwargs['pk']).company.contact_person
+                )})
+        return kwargs
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['usage_form'] = LandUsageForm
+        context['pstate_form'] = ProjectStatusForm
+        context['product_form'] = ProjectProductForm
+        try:
+            context['land_usage_data'] = LandUsage.objects.get(project=self.kwargs['pk'])
+        except LandUsage.DoesNotExist:
+            context['land_usage_data']=None
+        
+        try:
+            context['project_state'] = ProjectState.objects.get(project=self.kwargs['pk'])
+        except ProjectState.DoesNotExist:
+            context['project_state'] = None
+        return context
+
+    def form_valid(self,form):
+        project=form.save(commit=False)
+        project.product_type.set(form.cleaned_data.get('product_type'))
+        project.last_updated_by=self.request.user
+        project.last_updated_date = timezone.now()
+        project.save()
+        messages.success(self.request,"Project Detail Added Succesfully")
+        return redirect("admin:project_list")
+
+class CreateLandUsage(LoginRequiredMixin,CreateView):
+    model=LandUsage
+    form_class = LandUsageForm
+
+    def form_valid(self,form):
+        lu = form.save(commit=False)
+        lu.project = InvestmentProject.objects.get(id=self.kwargs['project'])
+        lu.save()
+        return redirect("admin:update_project",pk=self.kwargs['project'])
+
+class UpdateLandUsage(LoginRequiredMixin,UpdateView):
+    model=LandUsage
+    form_class = LandUsageForm
+
+    def form_valid(self,form):
+        form.save()
+        return redirect("admin:update_project",pk=LandUsage.objects.get(id=self.kwargs['pk']).project.id)
+
+class CreateProductQty(LoginRequiredMixin,CreateView):
+    model=ProjectProductQuantity
+    form_class = ProjectProductForm
+
+    def form_valid(self,form):
+        pp = form.save(commit=False)
+        pp.project = InvestmentProject.objects.get(id=self.kwargs['project'])
+        pp.save()
+        return redirect("admin:update_project",pk=self.kwargs['project'])
+
+
+class UpdateProductQty(LoginRequiredMixin,UpdateView):
+    model=ProjectProductQuantity
+    form_class = ProjectProductForm
+
+    def form_valid(self,form):
+        form.save()
+        return redirect("admin:update_project",pk=ProjectProductQuantity.objects.get(id=self.kwargs['pk']).project.id)
+
+class CreateProjectState(LoginRequiredMixin,CreateView):
+    model=ProjectState
+    form_class = ProjectStatusForm
+
+    def form_valid(self,form):
+        ps = form.save(commit=False)
+        ps.project = InvestmentProject.objects.get(id=self.kwargs['project'])
+        ps.save()
+        return redirect("admin:update_project",pk=self.kwargs['project'])
+
+
+class UpdateProjectState(LoginRequiredMixin,UpdateView):
+    model=ProjectState
+    form_class = ProjectStatusForm
+
+
+    def form_valid(self,form):
+        form.save()
+        return redirect("admin:update_project",pk=ProjectState.objects.get(id=self.kwargs['pk']).project.id)
 
 class CreateCompanyEvent(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
@@ -684,6 +871,24 @@ class CompanyByMainCategory(ListView):
         elif self.kwargs['option'] == "all":
             return Company.objects.all()
 
-     
 
- 
+class CompanyHomePage(DetailView):
+    model = Company
+    template_name="frontpages/company/business-5.html"  
+
+class CompanyAbout(DetailView):
+    model=Company
+    template_name="frontpages/company/about.html"
+
+
+class CompanyContact(DetailView):
+    model=Company
+    template_name="frontpages/company/contact.html"
+
+class CompanyProductList(DetailView):
+    model= Company
+    template_name = "frontpages/company/blog-grid-center.html"
+
+class CompanyProjectList(DetailView):
+    model= Company
+    template_name = "frontpages/company/blog-grid-center.html"

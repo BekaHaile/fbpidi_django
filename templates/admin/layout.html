@@ -306,11 +306,14 @@
 						
 						
 						<li class="nav-item">
-							<a href="{%url 'admin:update_company_info' pk=user|get_company_id%}" class="nav-link"><i class="icon-coins"></i><span>My Company</span></a>
+							<a href="{%url 'admin:update_company_info' pk=user|get_company_id%}" class="nav-link">
+								<i class="icon-coins"></i><span>My Company</span></a>
 						</li>
-              			  
-
-						 {%endif%}
+						{%endif%}
+						<li class="nav-item">
+							<a href="{%url 'admin:project_list' %}" class="nav-link">
+								<i class="icon-task "></i><span>Projects</span></a>
+						</li>
 						 <li class="nav-item-header">
 							<div class="text-uppercase font-size-xs line-height-xs">Account</div> <i class="icon-menu"
 								title="Forms"></i>

@@ -481,19 +481,302 @@ class CompanyUpdateForm(forms.ModelForm):
                 resized_image.save(profile.logo.path)
                 return profile
 
-class CompanySolutionForm(forms.ModelForm):
+class ProjectProductForm(forms.ModelForm):
+    class Meta:
+        model=ProjectProductQuantity
+        fields = (
+            'product_tobe_produced','expected_normal_capacity','expected_anual_sales',
+            'local_share','export_share',
+        )
+        widgets = {
+            'product_tobe_produced':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Product To be Produced'}),
+            'expected_normal_capacity':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_expected_normal_capacity")'}),
+            'expected_anual_sales':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_expected_anual_sales")'}),
+            'local_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_local_share")'}),
+            'export_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_export_share")'}),
+        }
+
+
+class ProjectStatusForm(forms.ModelForm):
+    class Meta:
+        model=ProjectState
+        fields = (
+            'percentage_construction_performance','machinery_purchase_performance','factory_building_performance',
+            'machinery_installation','commissioning_work','rawmaterial_preparation','hremployment_training',
+            'testproduct','certification',
+        )
+        widgets = {
+            'percentage_construction_performance':forms.TextInput(
+                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_percentage_construction_performance")'}),
+            'machinery_purchase_performance':forms.TextInput(
+                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_machinery_purchase_performance")'}),
+            'factory_building_performance':forms.TextInput(
+                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_factory_building_performance")'}),
+            'machinery_installation':forms.TextInput(
+                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_machinery_installation")'}),
+            'commissioning_work':forms.TextInput(
+                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_commissioning_work")'}),
+            'rawmaterial_preparation':forms.TextInput(
+                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_rawmaterial_preparation")'}),
+            'hremployment_training':forms.TextInput(
+                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_hremployment_training")'}),
+            'testproduct':forms.TextInput(
+                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_testproduct")'}),
+            'certification':forms.TextInput(
+                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_certification")'}),
+        }
+
+class LandUsageForm(forms.ModelForm):
+    class Meta:
+        model=LandUsage
+        fields = (
+            'total_land_size','production_building','office_building','warehouse','other',
+        )
+        widgets = {
+            'total_land_size':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_total_land_size")'}),
+            'production_building':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_production_building")'}),
+            'office_building':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_office_building")'}),
+            'warehouse':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_warehouse")'}),
+            'other':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_other")'}),
+        }
+
+class InvestmentProjectForm(forms.ModelForm):
+    def __init__(self,*args,**kwargs):
+        self.contact_person = kwargs.pop('contact_person')
+        super(InvestmentProjectForm,self).__init__(*args,**kwargs)
+        self.fields['contact_person'].empty_label = "Select Project Contact Person"
+        self.fields['contact_person'].queryset = self.contact_person
+        self.fields['project_classification'].empty_label = "Select Project Classification"
+        self.fields['project_classification'].queryset = ProjectDropDownsMaster.objects.filter(dropdown_type="Project Classification")
 
     class Meta:
-        model = CompanySolution
-        fields = ('title','title_am','description','description_am','link','image',)
+        model=InvestmentProject
+        fields = ('project_name','project_name_am','owner_share','bank_share','capital_in_dollary',
+            'investment_license','issued_date','sector','project_classification',
+            'contact_person','description','description_am',
+            )
         widgets = {
-            'title':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title (English)'}),
-            'title_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title (Amharic)'}),
-            'description': forms.Textarea(attrs={'class': 'summernote'}),
-            'description_am': forms.Textarea(attrs={'class': 'summernote'}),
-            'image': forms.FileInput(attrs={'class': 'form-input-styled'}),
-            'link':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Required Link'}),
+            'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
+            'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),
+            'owner_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_owner_share")'}),
+            'bank_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_bank_share")'}),
+            'capital_in_dollary':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_capital_in_dollary")'}),
+            'investment_license':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment License Code'}),
+            'issued_date':forms.DateInput(attrs={'class':'form-control','type':'date'}),
+            'sector':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'project_classification':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'contact_person':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'description':forms.Textarea(attrs={'class':'summernote'}),
+            'description_am':forms.Textarea(attrs={'class':'summernote'}),
         }
+
+class InvestmentProjectForm_ForSuperAdmin(forms.ModelForm):
+    def __init__(self,*args,**kwargs):
+        super(InvestmentProjectForm_ForSuperAdmin,self).__init__(*args,**kwargs)
+        self.fields['company'].empty_label = "Select A Company"
+        self.fields['company'].queryset = Company.objects.all()
+        self.fields['project_classification'].empty_label = "Select Project Classification"
+        self.fields['project_classification'].queryset = ProjectDropDownsMaster.objects.filter(dropdown_type="Project Classification")
+
+    class Meta:
+        model=InvestmentProject
+        fields = ('company','project_name','project_name_am','owner_share','bank_share','capital_in_dollary',
+            'investment_license','issued_date','sector','project_classification',
+            'description','description_am',
+            )
+        widgets = {
+            'company':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
+            'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),
+            'owner_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_owner_share")'}),
+            'bank_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_bank_share")'}),
+            'capital_in_dollary':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_capital_in_dollar")'}),
+            'investment_license':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment License Code'}),
+            'issued_date':forms.DateInput(attrs={'class':'form-control','type':'date'}),
+            'sector':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'project_classification':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'description':forms.Textarea(attrs={'class':'summernote'}),
+            'description_am':forms.Textarea(attrs={'class':'summernote'}),
+        }
+
+
+
+class InvestmentProjectDetailForm(forms.ModelForm):
+    def __init__(self,*args,**kwargs):
+        self.sector = kwargs.pop("sector")
+        super(InvestmentProjectDetailForm,self).__init__(*args,**kwargs)
+        self.fields['product_type'].queryset = Category.objects.filter(category_type=self.sector)
+        self.fields['land_acquisition'].queryset = ProjectDropDownsMaster.objects.filter(dropdown_type="Land Acquisition")
+        self.fields['land_acquisition'].empty_label = "Select Land Acquisition"
+        self.fields['technology'].empty_label = "Select Technology to be Used"
+        self.fields['technology'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Technology")
+        self.fields['automation'].empty_label = "Select Automation"
+        self.fields['automation'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Automation")
+        self.fields['mode_of_project'].empty_label = "Select Mode of Project"
+        self.fields['mode_of_project'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Mode Of Project")
+        self.fields['facility_design'].empty_label = "Select Facility Design"
+        self.fields['facility_design'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Facility Design")
+
+    class Meta:
+        model = InvestmentProject
+        fields = (
+            'product_type','site_location_name',
+            'distance_f_strt','land_acquisition','remaining_work',
+            'remaining_work_am','major_problems','major_problems_am','operational_time','annual_raw_material',
+            'annual_raw_material_am','power_need','water_suply','cond_provided_for_wy',
+            'cond_provided_for_wy_am','target_market','env_impac_ass_doc','capital_utilization',
+            'technology','automation','mode_of_project','facility_design',
+        )
+        widgets = {
+            'product_type':forms.SelectMultiple(attrs={'class':'form-control form-control-uniform'}),
+            'site_location_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Site Location Name'}),
+            'distance_f_strt':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_distance_f_strt")'}),
+            'land_acquisition':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'remaining_work':forms.Textarea(attrs={'class':'summernote'}),
+            'remaining_work_am':forms.Textarea(attrs={'class':'summernote'}),
+            'major_problems':forms.Textarea(attrs={'class':'summernote'}),
+            'major_problems_am':forms.Textarea(attrs={'class':'summernote'}),
+            'operational_time':forms.DateInput(attrs={'class':'form-control','type':'date'}),
+            'annual_raw_material':forms.Textarea(attrs={'class':'summernote'}),
+            'annual_raw_material_am':forms.Textarea(attrs={'class':'summernote'}),
+            'power_need':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_power_need")'}),
+            'water_suply':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_water_suply")'}),
+            'cond_provided_for_wy':forms.Textarea(attrs={'class':'summernote'}),
+            'cond_provided_for_wy_am':forms.Textarea(attrs={'class':'summernote'}),
+            'target_market':forms.Textarea(attrs={'class':'summernote'}),
+            'env_impac_ass_doc':forms.FileInput(attrs={'class':'form-control'}),
+            'capital_utilization':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_capital_utilization")'}),
+            'technology':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'automation':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'mode_of_project':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'facility_design':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+        }
+
+class InvestmentProjectDetailForm_Admin(forms.ModelForm):
+    def __init__(self,*args,**kwargs):
+        self.sector = kwargs.pop("sector")
+        self.contact_person = kwargs.pop("contact_person")
+        super(InvestmentProjectDetailForm_Admin,self).__init__(*args,**kwargs)
+        self.fields['product_type'].queryset = Category.objects.filter(category_type=self.sector)
+        self.fields['land_acquisition'].queryset = ProjectDropDownsMaster.objects.filter(dropdown_type="Land Acquisition")
+        self.fields['land_acquisition'].empty_label = "Select Land Acquisition"
+        self.fields['technology'].empty_label = "Select Technology to be Used"
+        self.fields['technology'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Technology")
+        self.fields['automation'].empty_label = "Select Automation"
+        self.fields['automation'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Automation")
+        self.fields['mode_of_project'].empty_label = "Select Mode of Project"
+        self.fields['mode_of_project'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Mode Of Project")
+        self.fields['facility_design'].empty_label = "Select Facility Design"
+        self.fields['facility_design'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Facility Design")
+        self.fields['contact_person'].empty_label = "Select A Contact Person"
+        self.fields['contact_person'].queryset= self.contact_person
+
+    class Meta:
+        model = InvestmentProject
+        fields = (
+            'product_type','site_location_name','contact_person',
+            'distance_f_strt','land_acquisition','remaining_work',
+            'remaining_work_am','major_problems','major_problems_am','operational_time','annual_raw_material',
+            'annual_raw_material_am','power_need','water_suply','cond_provided_for_wy',
+            'cond_provided_for_wy_am','target_market','env_impac_ass_doc','capital_utilization',
+            'technology','automation','mode_of_project','facility_design',
+        )
+        widgets = {
+            'product_type':forms.SelectMultiple(attrs={'class':'form-control form-control-uniform'}),
+            'site_location_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Site Location Name'}),
+            'distance_f_strt':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_distance_f_strt")'}),
+            'land_acquisition':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'remaining_work':forms.Textarea(attrs={'class':'summernote'}),
+            'remaining_work_am':forms.Textarea(attrs={'class':'summernote'}),
+            'major_problems':forms.Textarea(attrs={'class':'summernote'}),
+            'major_problems_am':forms.Textarea(attrs={'class':'summernote'}),
+            'operational_time':forms.DateInput(attrs={'class':'form-control','type':'date'}),
+            'annual_raw_material':forms.Textarea(attrs={'class':'summernote'}),
+            'annual_raw_material_am':forms.Textarea(attrs={'class':'summernote'}),
+            'power_need':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_power_need")'}),
+            'water_suply':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_water_suply")'}),
+            'cond_provided_for_wy':forms.Textarea(attrs={'class':'summernote'}),
+            'cond_provided_for_wy_am':forms.Textarea(attrs={'class':'summernote'}),
+            'target_market':forms.Textarea(attrs={'class':'summernote'}),
+            'env_impac_ass_doc':forms.FileInput(attrs={'class':'form-control'}),
+            'capital_utilization':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_capital_utilization")'}),
+            'technology':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'automation':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'mode_of_project':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'facility_design':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'contact_person':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+        }
+
+
+class ProjectUpdateForm(forms.ModelForm):
+    def __init__(self,*args,**kwargs):
+        self.sector = kwargs.pop("sector")
+        self.contact_person = kwargs.pop('contact_person')
+        super(ProjectUpdateForm,self).__init__(*args,**kwargs)
+        self.fields['product_type'].queryset = Category.objects.filter(category_type=self.sector)
+        self.fields['land_acquisition'].queryset = ProjectDropDownsMaster.objects.filter(dropdown_type="Land Acquisition")
+        self.fields['land_acquisition'].empty_label = "Select Land Acquisition"
+        self.fields['technology'].empty_label = "Select Technology to be Used"
+        self.fields['technology'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Technology")
+        self.fields['automation'].empty_label = "Select Automation"
+        self.fields['automation'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Automation")
+        self.fields['mode_of_project'].empty_label = "Select Mode of Project"
+        self.fields['mode_of_project'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Mode Of Project")
+        self.fields['facility_design'].empty_label = "Select Facility Design"
+        self.fields['facility_design'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Facility Design")
+        self.fields['contact_person'].empty_label = "Select A Contact Person"
+        self.fields['contact_person'].queryset= self.contact_person
+        self.fields['project_classification'].empty_label = "Select Project Classification"
+        self.fields['project_classification'].queryset = ProjectDropDownsMaster.objects.filter(dropdown_type="Project Classification")
+
+    class Meta:
+        model = InvestmentProject
+        fields = ('project_name','project_name_am','owner_share','bank_share','capital_in_dollary',
+            'investment_license','issued_date','sector','project_classification',
+            'contact_person','description','description_am','product_type','site_location_name',
+            'distance_f_strt','land_acquisition','remaining_work',
+            'remaining_work_am','major_problems','major_problems_am','operational_time','annual_raw_material',
+            'annual_raw_material_am','power_need','water_suply','cond_provided_for_wy',
+            'cond_provided_for_wy_am','target_market','env_impac_ass_doc','capital_utilization',
+            'technology','automation','mode_of_project','facility_design',
+        )
+        widgets = {
+            'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
+            'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),
+            'owner_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_owner_share")'}),
+            'bank_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_bank_share")'}),
+            'capital_in_dollary':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_capital_in_dollary")'}),
+            'investment_license':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment License Code'}),
+            'issued_date':forms.DateInput(attrs={'class':'form-control','type':'date'}),
+            'sector':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'project_classification':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'contact_person':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'description':forms.Textarea(attrs={'class':'summernote'}),
+            'description_am':forms.Textarea(attrs={'class':'summernote'}),
+            'product_type':forms.SelectMultiple(attrs={'class':'form-control form-control-uniform'}),
+            'site_location_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Site Location Name'}),
+            'distance_f_strt':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_distance_f_strt")'}),
+            'land_acquisition':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'remaining_work':forms.Textarea(attrs={'class':'summernote'}),
+            'remaining_work_am':forms.Textarea(attrs={'class':'summernote'}),
+            'major_problems':forms.Textarea(attrs={'class':'summernote'}),
+            'major_problems_am':forms.Textarea(attrs={'class':'summernote'}),
+            'operational_time':forms.DateInput(attrs={'class':'form-control','type':'date'}),
+            'annual_raw_material':forms.Textarea(attrs={'class':'summernote'}),
+            'annual_raw_material_am':forms.Textarea(attrs={'class':'summernote'}),
+            'power_need':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_power_need")'}),
+            'water_suply':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_water_suply")'}),
+            'cond_provided_for_wy':forms.Textarea(attrs={'class':'summernote'}),
+            'cond_provided_for_wy_am':forms.Textarea(attrs={'class':'summernote'}),
+            'target_market':forms.Textarea(attrs={'class':'summernote'}),
+            'env_impac_ass_doc':forms.FileInput(attrs={'class':'form-control'}),
+            'capital_utilization':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_capital_utilization")'}),
+            'technology':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'automation':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'mode_of_project':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'facility_design':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+        }
+        
 
 class CompanyEventForm(forms.ModelForm):
     STATUS_CHOICE = [ ('Upcoming', 'Upcoming'),('Open', 'Open' )]

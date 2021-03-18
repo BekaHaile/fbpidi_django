@@ -1,0 +1,247 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags%}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/wizards/steps.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/inputs/inputmask.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/validation/validate.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/extensions/cookie.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_wizard.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+{% endblock %}
+{%block pagename%}Investment Project Form for: {{object.company.name}}{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+	<!-- Starting step -->
+	<div class="card">
+		<div class="card-header bg-white header-elements-inline">
+			<h6 class="card-title">Complete the form in each tab</span></h6>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a class="list-icons-item" data-action="collapse"></a>
+					<a class="list-icons-item" data-action="reload"></a>
+					<a class="list-icons-item" data-action="remove"></a>
+				</div>
+			</div>
+		</div>
+		<div class="card-body">
+			<form id="project_detail_form" class="wizard-form steps-enable-all" 
+				action="{%url 'admin:create_project_detail' pk=object.id%}"
+				method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
+				<!-- {{form.errors}} -->
+				<!-- {{form|crispy}} -->
+				<h6>Project Information</h6>
+				<fieldset>
+					<hr>
+						
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">{{form.product_type.label}}</label>
+							{{form.product_type}}
+							<span class="form-text text-warning">{{form.product_type.errors}}</span>
+						</div>
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">{{form.site_location_name.label}}</label>
+							{{form.site_location_name}}
+							<span class="form-text text-warning">{{form.site_location_name.errors}}</span>
+						</div>
+						
+					</div>
+					<hr>
+					<div class="form-group row">
+							<div class="col-md-6">
+								<label>{{form.distance_f_strt.label}}</label>
+									{{form.distance_f_strt}}
+									<span class="form-text text-warning">{{form.distance_f_strt.errors}}</span>
+							</div>
+							<div class="col-md-6">
+								<label>{{form.land_acquisition.label}}</label>
+									{{form.land_acquisition}}
+									<span class="form-text text-warning">{{form.land_acquisition.errors}}</span>
+							</div>					
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-12">
+							<label class="font-weight-semibold" for="">{{form.remaining_work.label}}</label>
+							{{form.remaining_work}}
+							<span class="form-text text-warning">{{form.remaining_work.errors}}</span>
+						</div>
+						<div class="col-md-12">
+							<label class="font-weight-semibold" for="">{{form.remaining_work_am.label}}</label>
+							{{form.remaining_work_am}}
+							<span class="form-text text-warning">{{form.remaining_work_am.errors}}</span>
+						</div>
+						
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-12">
+							<label class="font-weight-semibold" for="">{{form.major_problems.label}}</label>
+							{{form.major_problems}}
+							<span class="form-text text-warning">{{form.major_problems.errors}}</span>
+						</div>
+						<div class="col-md-12">
+							<label class="font-weight-semibold" for="">{{form.major_problems_am.label}}</label>
+							{{form.major_problems_am}}
+							<span class="form-text text-warning">{{form.major_problems_am.errors}}</span>
+						</div>
+						
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-4">
+							<label class="font-weight-semibold" for="">{{form.operational_time.label}}</label>
+							{{form.operational_time}}
+							<span class="form-text text-warning">{{form.operational_time.errors}}</span>
+						</div>
+						<div class="col-md-4">
+							<label class="font-weight-semibold" for="">{{form.power_need.label}}</label>
+							{{form.power_need}}
+							<span class="form-text text-warning">{{form.power_need.errors}}</span>
+						</div>
+						<div class="col-md-4">
+							<label class="font-weight-semibold" for="">{{form.water_suply.label}}</label>
+							{{form.water_suply}}
+							<span class="form-text text-warning">{{form.water_suply.errors}}</span>
+						</div>
+						
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-12">
+							<label class="font-weight-semibold" for="">{{form.annual_raw_material.label}}</label>
+							{{form.annual_raw_material}}
+							<span class="form-text text-warning">{{form.annual_raw_material.errors}}</span>
+						</div>
+						<div class="col-md-12">
+							<label class="font-weight-semibold" for="">{{form.annual_raw_material_am.label}}</label>
+							{{form.annual_raw_material_am}}
+							<span class="form-text text-warning">{{form.annual_raw_material_am.errors}}</span>
+						</div>
+						
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-12">
+							<label class="font-weight-semibold" for="">{{form.cond_provided_for_wy.label}}</label>
+							{{form.cond_provided_for_wy}}
+							<span class="form-text text-warning">{{form.cond_provided_for_wy.errors}}</span>
+						</div>
+						<div class="col-md-12">
+							<label class="font-weight-semibold" for="">{{form.cond_provided_for_wy_am.label}}</label>
+							{{form.cond_provided_for_wy_am}}
+							<span class="form-text text-warning">{{form.cond_provided_for_wy_am.errors}}</span>
+						</div>
+						
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-12">
+							<label class="font-weight-semibold" for="">{{form.target_market.label}}</label>
+							{{form.target_market}}
+							<span class="form-text text-warning">{{form.target_market.errors}}</span>
+						</div>
+							
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">{{form.capital_utilization.label}}</label>
+							{{form.capital_utilization}}
+							<span class="form-text text-warning">{{form.capital_utilization.errors}}</span>
+						</div>
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">{{form.env_impac_ass_doc.label}}</label>
+							<div class="uniform-uploader">
+								{{form.env_impac_ass_doc}}
+								<span class="filename" style="user-select: none;">No file selected</span>
+								<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+							</div>
+							<span class="form-text text-muted">{{form.env_impac_ass_doc.help_text}}</span>
+							<span class="form-text text-warning">{{form.env_impac_ass_doc.errors}}</span>
+						</div>
+						
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">{{form.technology.label}}</label>
+							{{form.technology}}
+							<span class="form-text text-warning">{{form.technology.errors}}</span>
+						</div>
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">{{form.automation.label}}</label>
+							{{form.automation}}
+							<span class="form-text text-warning">{{form.automation.errors}}</span>
+						</div>
+						
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">{{form.mode_of_project.label}}</label>
+							{{form.mode_of_project}}
+							<span class="form-text text-warning">{{form.mode_of_project.errors}}</span>
+						</div>
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">{{form.facility_design.label}}</label>
+							{{form.facility_design}}
+							<span class="form-text text-warning">{{form.facility_design.errors}}</span>
+						</div>
+						
+					</div>
+					<hr>
+					</fieldset>
+						
+			</form>
+		</div>
+		 
+	</div>
+	<!-- /starting step -->
+
+</div>
+<!-- /content area -->
+<!-- MOdal Area Start -->
+ 
+ <script>
+	 $(document).ready(function(){
+		 $('.summernote').summernote();
+	 });
+		// $("#company_detail_form").submit(function(e){
+        //             e.preventDefault();
+        //             $form = $(this);
+        //             var formData = new FormData(this);
+        //             console.log(formData);
+                    
+        //             $.ajax({
+        //             	url:"{%url 'admin:create_company_detail' pk=object.id%}",
+        //             	type:"POST",
+        //             	headers: { "X-CSRFToken": my_token },
+        //             	data:formData,
+        //             	processData: false,
+        //             	contentType: false,
+        //             	success:function(result){
+		// 					console.log(result);
+        //             		if(result['error'] == false){
+        //             			// $("#power_consumption_form_modal").modal("hide");
+        //             			$("#errors_powerc").html(result['message']);
+        //             		}else{
+        //             			$("#errors_powerc").html(result['message']);
+                                
+        //             		}
+        //             	},
+        //             	error:function(error){
+        
+        //             	}
+        //             });
+         
+        //         });
+		
+
+</script>
+{%endblock%}

@@ -6,7 +6,7 @@ from admin_site.models import Category
 from company.models import Company,SubCategory,Brand
 
 class Product(models.Model):
-    company = models.ForeignKey(Company,on_delete=models.CASCADE)
+    company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_product")
     name = models.CharField(max_length=255,verbose_name="Product Name(English)")
     name_am = models.CharField(max_length=255,verbose_name="Product Name(Amharic)")
     fandb_category = models.ForeignKey(Brand,on_delete=models.CASCADE, blank=True,null=True,

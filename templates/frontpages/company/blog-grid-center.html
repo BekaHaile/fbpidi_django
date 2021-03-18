@@ -1,0 +1,117 @@
+{%extends 'frontpages/company/company_layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+
+{%block title%}{{object.name}}-Contact{%endblock%}
+{%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+		<!--Breadcrumb-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white">
+							<h1 class="">{{object.name}} Products</h1>
+							<ol class="breadcrumb text-center">
+								<li class="breadcrumb-item"><a href="{%url 'company_home' pk=object.id%}">Home</a></li>
+								<li class="breadcrumb-item"><a href="#">Products</a></li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Breadcrumb-->
+
+		<!--Add listing-->
+		<section class="sptb">
+			<div class="container">
+				<div class="row">
+					<div class="col-xl-12 col-lg-12 col-md-12">
+						<div class="row">
+							{%for product in object.company_product.all%}
+							<div class="col-xl-4 col-lg-6 col-md-12">
+								<div class="card">
+									<div class="item7-card-img">
+										<a href="#"></a>
+										<img src="{{product.image.url}}" alt="img" class="cover-image">
+										<div class="item7-card-text">
+											<span class="badge badge-success">{%if product.fandb_category%}
+												{{product.fandb_category.product_type.category_name.category_type}}
+												{%elif product.pharmacy_category%}
+												{{product.pharmacy_category.category_type}}
+												{%endif%}</span>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="item7-card-desc d-flex mb-2">
+											<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>ETB {{product.price}}</a>
+											<div class="ml-auto">
+												<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>4 Comments</a>
+											</div>
+										</div>
+										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{{product.name}}</h4></a>
+										<p>{{product.description|truncatechars_html:100|safe}}</p>
+										<a target="_blank" href="{%url 'product_detail' pk=product.id%}" class="btn btn-secondary btn-sm">Read More</a>
+									</div>
+								</div>
+							</div>
+							{%endfor%}
+						</div>
+						<div class="d-sm-flex">
+							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>
+							<ul class="pagination mb-lg-0 mb-5 ml-auto">
+								<li class="page-item page-prev disabled">
+									<a class="page-link" href="#" tabindex="-1">Prev</a>
+								</li>
+								<li class="page-item active"><a class="page-link" href="#">1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item page-next">
+									<a class="page-link" href="#">Next</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Add listing-->
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Subscribe To Our Newsletter</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+						<div class="input-group sub-input mt-0">
+							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Newsletter-->
+
+		<!-- Home Video Modal -->
+		<div class="modal fade" id="homeVideo" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="pauseVid()"><i class="fa fa-times" aria-hidden="true"></i></button>
+					<div class="embed-responsive embed-responsive-16by9">
+						<video id="gossVideo" class="embed-responsive-item" controls="controls">
+							<source src="/static/frontpages/video/300052515.mp4" type="video/mp4">
+						</video>
+					</div>
+				</div>
+			</div>
+		</div>
+		{%endblock%}

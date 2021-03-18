@@ -122,6 +122,9 @@ class Company(models.Model):
 	last_updated_date	= models.DateTimeField(null=True)
 	expired	= models.BooleanField(default=False)
 
+	def __str__(self):
+		return self.name
+
 	class Meta:
 		ordering = ('-created_date',)
 
@@ -183,8 +186,12 @@ class SourceAmountIputs(models.Model):
 
 # Employees information/statistics
 class Employees(models.Model):
-	EMP_TYPE= [('','Select Employment Type'),('Permanent Employee','Permanent Employee'),('Temporary Employee','Temporary Employee'),('Foreign Employee','Foreign Employee')]
-	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="employees")
+	EMP_TYPE= [('','Select Employment Type'),
+				('Permanent Employee','Permanent Employee'),
+				('Temporary Employee','Temporary Employee'),
+				('Foreign Employee','Foreign Employee')]
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="employees",null=True,blank=True)
+	projct = models.ForeignKey('InvestmentProject',on_delete=models.CASCADE,related_name="project_employees",null=True,blank=True)
 	year	= models.IntegerField(default=0,)
 	employment_type	= models.CharField(max_length=200,verbose_name="The Employment Type", choices=EMP_TYPE)	
 	male	= models.IntegerField(default=0,verbose_name="Number Of Male Employees")	
@@ -194,7 +201,8 @@ class Employees(models.Model):
 # New Jobs Created Every Year
 class JobOpportunities(models.Model):
 	JOB_TYPE = [ ('','Select Job Type'),('Permanent','Permanent'),('Temporary','Temporary'),]
-	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="job_oportunities")
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="job_oportunities",null=True,blank=True)
+	project = models.ForeignKey('InvestmentProject',on_delete=models.CASCADE,related_name="project_jobs",null=True,blank=True)
 	year	= models.IntegerField(default=0,)
 	job_type = models.CharField(max_length=20,verbose_name="Types Of Job", choices=JOB_TYPE)
 	male	= models.IntegerField(default=0)
@@ -205,7 +213,8 @@ class JobOpportunities(models.Model):
 # Employees Educational Status
 class EducationalStatus(models.Model):
 	EDUCATION_TYP = (('','Select Education Type'),('12th Graduate below','12th Graduate below'),('Deploma TVET','Deploma TVET'),('Degree','Degree'),('Masters','Masters'),('PhD','PhD'),)
-	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="educational_status")
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="educational_status",null=True,blank=True)
+	project = models.ForeignKey('InvestmentProject',on_delete=models.CASCADE,related_name="project_edu_stat",null=True,blank=True)
 	year = models.IntegerField()
 	education_type	= models.CharField(verbose_name="Education Level ",choices=EDUCATION_TYP, max_length=2000)		
 	male	= models.IntegerField(default=0)		
@@ -270,70 +279,82 @@ class CompanyStaff(models.Model):
         return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None
 
 class InvestmentProject(models.Model):
- 	company	= models.ForeignKey(Company, on_delete=models.CASCADE,related_name="project")
- 	owner_share	= models.FloatField(default=0)
- 	bank_share	= models.FloatField(default=0)
- 	capital_in_dollary	= models.FloatField(default=0)
- 	investment_license	= models.CharField(max_length=2000, verbose_name="Investment License Code")
- 	issued_date	= models.DateField()
- 	sector	= models.ForeignKey(Category,on_delete=models.RESTRICT,related_name="sector", verbose_name="Sector")
- 	product_type = models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="product_type")
- 	site_location_name = models.CharField(verbose_name="Site location street name", max_length=2000)
- 	distance_f_strt	= models.FloatField(default=0)
- 	land_acquisition = models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT, verbose_name="Land Acquisition")
- 	project_classification	= models.ForeignKey(ProjectDropDownsMaster, on_delete=models.CASCADE)
- 	contact_person	=  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT)
- 	remaining_work	= models.TextField(verbose_name="Remaining Work To be done")
- 	remaining_work_am	= models.TextField(verbose_name="Remaining Work To be done in amharic")
- 	major_problems	= models.TextField(verbose_name="Major Problems")
- 	major_problems_am	= models.TextField(verbose_name="Major Problems in amharic")
- 	operational_time =  models.DateField()
- 	annual_raw_material =	models.TextField(verbose_name="Annual Raw material demand and type in English")
- 	annual_raw_material_am =	models.TextField(verbose_name="Annual Raw material demand and type in Amharic")
- 	power_need	= models.FloatField(default=0,verbose_name="power Need in kwh")
- 	water_suply	= models.FloatField(default=0,verbose_name="Water Supply")
- 	product_quantity = models.TextField(verbose_name="Product Quantity")
- 	product_quantity_am = models.TextField(verbose_name="Product Quantity in amharic")
- 	cond_provided_for_wy = models.TextField(verbose_name="Special Conditions Provided for women and youth")
- 	cond_provided_for_wy_am = models.TextField(verbose_name="Special Conditions Provided for women and youth in amharic")
- 	job_plan_recruited	= models.ForeignKey(JobOpportunities, on_delete=models.CASCADE)
- 	education_stat	= models.ForeignKey(EducationalStatus, on_delete=models.CASCADE)
- 	target_market =	models.CharField(verbose_name="Market Destination",choices=MarketDestination)
- 	env_impac_ass_doc =	models.FileField( max_length=254, verbose_name="Environmental Impact assessment document",help_text="pdf, Max size 3MB", blank=True)
- 	capital_utilization	= models.IntegerField(default=0)
- 	technology	= models.CharField(verbose_name="Technology going to be applied", max_length=2000)
- 	automation	= models.CharField(verbose_name="Automation", max_length=2000)
- 	mode_of_project	= models.CharField(verbose_name="Mode of Project", max_length=2000)
- 	facility_design	= models.CharField(verbose_name="Facility design", max_length=2000)
- 	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_created_by')
- 	created_date	= models.DateTimeField(auto_now_add=True)
-	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_updated_by')
- 	last_updated_date	= models.DateTimeField(null=True)
- 	expired	= models.BooleanField(default=False)
+	company	= models.ForeignKey(Company, on_delete=models.CASCADE,related_name="company_project")
+	project_name = models.CharField(max_length=255,default="",verbose_name="Investment Company Name All Capital Letters")
+	project_name_am = models.CharField(max_length=255,default="",verbose_name="Investment Company Name in amharic")
+	owner_share	= models.FloatField(default=0,verbose_name="Owners Equity Share in %")
+	bank_share	= models.FloatField(default=0,verbose_name="Bank Equity Share in %")
+	capital_in_dollary	= models.FloatField(default=0,verbose_name="Capital required In Dollar")
+	investment_license	= models.CharField(max_length=200, verbose_name="Investment License Code")
+	issued_date	= models.DateField()
+	description = models.TextField(verbose_name="Investment Project Description in English",null=True)
+	description_am = models.TextField(verbose_name="Investment Project Description in amharic",null=True)
+	sector	= models.CharField(choices=CAT_LIST,max_length=50, verbose_name="Project Sector")
+	product_type = models.ManyToManyField(Category,related_name="project_product_types")
+	site_location_name = models.CharField(verbose_name="Site location street name", max_length=200,null=True,blank=True)
+	distance_f_strt	= models.FloatField(default=0,verbose_name="Distance of the Site from the Street")
+	land_acquisition = models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT, related_name="land_aquisition", verbose_name="Land Acquisition",null=True,blank=True)
+	project_classification	= models.ForeignKey(ProjectDropDownsMaster, on_delete=models.CASCADE,related_name="project_classification",verbose_name="Project Classification",null=True,blank=True)
+	contact_person	=  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT,null=True,blank=True)
+	remaining_work	= models.TextField(verbose_name="Remaining Work To be done in English ",null=True,blank=True)
+	remaining_work_am	= models.TextField(verbose_name="Remaining Work To be done in amharic",null=True,blank=True)
+	major_problems	= models.TextField(verbose_name="List Major Problems that need to be addressed in English",null=True,blank=True)
+	major_problems_am	= models.TextField(verbose_name="List Major Problems that need to be addressed in amharic",null=True,blank=True)
+	operational_time =  models.DateField(verbose_name="Planned Tme to be Operational",null=True,blank=True)
+	annual_raw_material =	models.TextField(verbose_name="Annual Raw material demand and type in English",null=True,blank=True)
+	annual_raw_material_am =	models.TextField(verbose_name="Annual Raw material demand and type in Amharic",null=True,blank=True)
+	power_need	= models.FloatField(default=0,verbose_name="power Need in kwh",null=True,blank=True)
+	water_suply	= models.FloatField(default=0,verbose_name="Water Supply",null=True,blank=True)
+	cond_provided_for_wy = models.TextField(verbose_name="Special Conditions Provided for women and youth in english",null=True,blank=True)
+	cond_provided_for_wy_am = models.TextField(verbose_name="Special Conditions Provided for women and youth in amharic",null=True,blank=True)
+	target_market =	models.TextField(verbose_name="If  you have export  write target market (Destination)",null=True)
+	env_impac_ass_doc =	models.FileField(max_length=254, verbose_name="Environmental Impact assessment document",
+													help_text="Images and Pdf files less than 10MB", 
+													validators=[FileExtensionValidator(allowed_extensions=allowed_file_extensions)],
+													upload_to="company/project/",
+													blank=True)
+	capital_utilization	= models.FloatField(default=0,verbose_name="Capital Utilization")
+	technology	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="technology",null=True,blank=True, verbose_name="Technology going to be applied")
+	automation	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="automation",null=True,blank=True, verbose_name="Automation",)
+	mode_of_project	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="project_mode",null=True,blank=True,verbose_name="Mode of Project")
+	facility_design	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="facility",null=True,blank=True,verbose_name="Facility design")
+	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='project_created_by')
+	created_date	= models.DateTimeField(auto_now_add=True)
+	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='project_updated_by',null=True,blank=True)
+	last_updated_date	= models.DateTimeField(null=True)
+	expired	= models.BooleanField(default=False)
 
 
-# class LandUsage(models.Model):
-# 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="land_usage")
-# 	total_land_size = models.FloatField(verbose_name="Total land size in meter square", max_length=2000)	 
-# 	production_building = models.FloatField(verbose_name="production building in meter square", max_length=2000)	 
-# 	office_building = models.FloatField(verbose_name="production building in meter square", max_length=2000)	 
-# 	warehouse = models.FloatField(verbose_name="Ware house in meter square", max_length=2000)	 
-# 	other = models.FloatField(verbose_name="production building in meter square", max_length=2000)
-# 	timestamp = models.DateTimeField(auto_now_add=True)	 
+class LandUsage(models.Model):
+	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="land_usage")
+	total_land_size = models.FloatField(verbose_name="Total land size in meter square")	 
+	production_building = models.FloatField(verbose_name="production building in meter square")	 
+	office_building = models.FloatField(verbose_name="production building in meter square")	 
+	warehouse = models.FloatField(verbose_name="Ware house in meter square")	 
+	other = models.FloatField(verbose_name="production building in meter square")
+	timestamp = models.DateTimeField(auto_now_add=True)	 
 
-# class ProjectState(models.Model):
-# 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="project_state")
-# 	percentage_construction_performance = models.FloatField(verbose_name="percentage of construction performance" )	
-# 	machinery_purchase_performance = models.FloatField(verbose_name="machinery Purchase Performance" )	
-# 	factory_building_performance = models.FloatField(verbose_name="factory Building Performance")	
-# 	machinery_installation = models.FloatField(verbose_name="machinery Installation" )	
-# 	commissioning_work = models.FloatField(verbose_name="commissioning Work" )	
-# 	rawmaterial_preparation = models.FloatField(verbose_name="raw Material Preparation" )	
-# 	hremployment_training = models.FloatField(verbose_name="HR Employment Training" )	
-# 	testproduct = models.FloatField(verbose_name="Test Product")	
-# 	certification = models.FloatField(verbose_name="certification")	
-# 	timestamp	= models.DateTimeField(auto_now_add=True)
+class ProjectState(models.Model):
+	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="project_state")
+	percentage_construction_performance = models.FloatField(verbose_name="percentage of construction performance" )	
+	machinery_purchase_performance = models.FloatField(verbose_name="machinery Purchase Performance" )	
+	factory_building_performance = models.FloatField(verbose_name="factory Building Performance")	
+	machinery_installation = models.FloatField(verbose_name="machinery Installation" )	
+	commissioning_work = models.FloatField(verbose_name="commissioning Work" )	
+	rawmaterial_preparation = models.FloatField(verbose_name="raw Material Preparation" )	
+	hremployment_training = models.FloatField(verbose_name="HR Employment Training" )	
+	testproduct = models.FloatField(verbose_name="Test Product")	
+	certification = models.FloatField(verbose_name="certification")	
+	timestamp	= models.DateTimeField(auto_now_add=True)
 
+class ProjectProductQuantity(models.Model):
+	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="project_product_qty")
+	product_tobe_produced = models.CharField(max_length=255,verbose_name="Product to be Produced (after implementation)")
+	expected_normal_capacity = models.FloatField(default=0,verbose_name="Expected Normal Capacity (installed)")
+	expected_anual_sales = models.FloatField(default=0,verbose_name="Expected Anual Sales USD (After Investment)")
+	local_share = models.FloatField(default=0,verbose_name=" %\ Local Share")
+	export_share = models.FloatField(default=0,verbose_name=" %\ Export Share ")
+	timestamp = models.DateTimeField(auto_now_add=True)
 
 
 class CompanySolution(models.Model):

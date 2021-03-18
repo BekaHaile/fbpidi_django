@@ -342,18 +342,18 @@
 						<div class="card mb-0 overflow-hidden">
 							<!-- <div class="arrow-ribbon bg-success">Open</div> -->
 							<div class="item-card7-imgs">
-								<a href="{% url 'bs' %}" class="absolute-link"></a>
+								<a target="__blank" href="{% url 'company_home' pk=company.id %}" class="absolute-link"></a>
 								<img src="{{company.logo.url}}" style="height: 280px;" alt="img" class="cover-image">
 							</div>
 
 							<div class="item-card7-overlaytext">
-								<a href="{% url 'bs' %}" class="text-white">{%print_translated company.main_category company.main_category LANGUAGE_CODE%}</a>
+								<a href="{% url 'company_home' pk=company.id %}" class="text-white">{%print_translated company.main_category company.main_category LANGUAGE_CODE%}</a>
 							</div>
 
 							<div class="card-body">
 								<div class="item-card7-desc">
 									<div class="item-card7-text">
-										<a href="{% url 'bs' %}" class="text-dark">
+										<a href="{% url 'company_home' pk=company.id %}" class="text-dark">
 											<h4 class=""> {%print_translated company.name company.name_am LANGUAGE_CODE%}</h4>
 										</a>
 									</div>

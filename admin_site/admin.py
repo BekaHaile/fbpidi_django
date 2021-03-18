@@ -218,10 +218,20 @@ class CustomAdminSite(admin.AdminSite):
             path("company_list/",wrap(CompaniesView.as_view()),name="companies"),
             path("company_detail/<pk>/",wrap(CompaniesDetailView.as_view()),name="company_detail"),
             path("rate_company_status/<pk>/",wrap(RateCompany.as_view()),name="rate_company"),
-            # path("create_company_profile_al/",wrap(CreateCompanyProfileAfterSignUp.as_view()) ,name='complete_company_profile'),
-            # path("view_company_profile/",wrap(ViewCompanyProfile.as_view()) ,name='view_company_profile'),
-            # path("view_company_profile/<active_tab>/",wrap(ViewCompanyProfile.as_view()) ,name='view_company_profile_active_tab'),
+            path("investment-project-list/",wrap(ListInvestmentProject.as_view()) ,name='project_list'),
+            path("create-investment-project-company/",wrap(CreateMyInvestmentProject.as_view()),name="create_my_project"),
+            path("create-investment-project-admin/",wrap(CreateInvestmentProject.as_view()),name="create_project"),
+            path("complete-company-project-detail/<pk>/",wrap(CreateInvestmentProjectDetail.as_view()) ,name='create_project_detail'),
+            path("complete-company-project-detail-admin/<pk>/",wrap(CreateInvestmentProjectDetail_Admin.as_view()) ,name='create_project_detail_admin'),
+            path("update_investment_project/<pk>/",wrap(UpdateInvestmentProject.as_view()) ,name='update_project'),
             
+            path("craete_land-usage/<project>/",wrap(CreateLandUsage.as_view()) ,name='create_land_use'),
+            path("create_product_quantity/<project>/",wrap(CreateProductQty.as_view()) ,name='create_product_qty'),
+            path("create_project_state/<project>/",wrap(CreateProjectState.as_view()) ,name='create_project_state'),
+
+            path("update_land-usage/<pk>/",wrap(UpdateLandUsage.as_view()) ,name='update_land_use'),
+            path("update_product_quantity/<pk>/",wrap(UpdateProductQty.as_view()) ,name='update_product_qty'),
+            path("update_project_state/<pk>/",wrap(UpdateProjectState.as_view()) ,name='update_project_state'),
 
             # path("edit_company_profile/<id>/",wrap(ViewCompanyProfile.as_view()),name="edit_company_profile"),
             # path("create_company_solution/<company_id>",wrap(CreateCompanySolution.as_view()),name="create_company_solution"),

@@ -94,5 +94,8 @@ class ProjectDropDownsMaster(models.Model):
                                     related_name='pl_updated_by')
     expired = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.name
+        
     class Meta:
         ordering = ('-created_date',)
