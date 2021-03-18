@@ -149,7 +149,7 @@
 <section class="categories">
 	<div class="container">
 		<div id="small-categories" class="owl-carousel owl-carousel-icons2">
-			{%for category in sub_categories%}
+			{%for category in categories%}
 			<div class="item">
 				<div class="card mb-0 overflow-hidden">
 					<div class="card-body">
@@ -158,11 +158,11 @@
 							<div class="cat-img category-svg">
 
 								<!--Real-Estate Icon Svg --->
-								<img src="{{category.image.url}}" alt="" srcset="">
+								<img src="{{category.icons.url}}" alt="" srcset="">
 								<!--Real-Estate Icon Svg --->
 							</div>
 							<div class="cat-desc">
-								<h5 class="mb-0">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</h5>
+								<h5 class="mb-0">{% print_translated category.category_name category.category_name_am LANGUAGE_CODE%}</h5>
 							</div>
 						</div>
 					</div>
@@ -202,32 +202,36 @@
 					<div class="power-ribbon power-ribbon-top-left text-warning"><span class="bg-warning"><i
 								class="fa fa-bolt"></i></span></div>
 					<div class="item-card2-img">
-						<a href="{%url 'product_detail' id=product.id %}" class="absolute-link"></a>
+						<a href="{%url 'product_detail' pk=product.id %}" class="absolute-link"></a>
 						<img src="{{product.image.url}}" style="height: 300px;" alt="img" class="cover-image">
 						<div class="item-card2-icons">
-							<a href="{%url 'product_detail' id=product.id %}" class="item-card2-icons-l"><i class="fa fa-cutlery"></i></a>
+							<a href="{%url 'product_detail' pk=product.id %}" class="item-card2-icons-l"><i class="fa fa-cutlery"></i></a>
 
 						</div>
-						<div class="blog--category">{% print_translated product.category.category_name.category_name product.category.category_name.category_name_am LANGUAGE_CODE%}</div>
+						{%if product.company.main_category == "Pharmaceuticals"%}
+						<div class="blog--category">{% print_translated product.pharmacy_category.category_name product.pharmacy_category.category_name_am LANGUAGE_CODE%}</div>
+						{%else%}
+						<div class="blog--category">{% print_translated product.fandb_category.product_type.category_name.category_name product.fandb_category.product_type.category_name.category_name_am LANGUAGE_CODE%}</div>
+						{%endif%}
 					</div>
 					<div class="card-body pb-0">
 						<div class="item-card2">
 							<div class="item-card2-desc">
 								<div class="item-card2-text">
-									<a href="{%url 'product_detail' id=product.id %}" class="text-dark">
+									<a href="{%url 'product_detail' pk=product.id %}" class="text-dark">
 										<h4 class="mb-0">{%print_translated product.name product.name_am LANGUAGE_CODE%}</h4>
 									</a>
 								</div>
 								<div class="pt-3">
 									<a href="mb-1">
-										<p class="pb-0 pt-0 mb-2 mt-2"><i class="fa fa-map-marker mr-2"></i>{{product.company.location}}</p>
+										<p class="pb-0 pt-0 mb-2 mt-2"><i class="fa fa-map-marker mr-2"></i>{{product.company.get_company_address.city_town}}</p>
 									</a>
 									<a href="mb-1">
 										<p class="pb-0 pt-0 mb-2 mt-2"><i
-												class="fa fa-phone mr-2"></i>{{product.user.phone_number}}</p>
+												class="fa fa-phone mr-2"></i>{{product.company.get_company_address.phone_number}}</p>
 									</a>
-									<p class="pb-0 pt-0 mb-2 mt-2"><i class="fa fa-clock-o mr-2"></i>10am - 9pm<a> <span
-												class="badge badge-success ml-2 fs-13">Open Now</span></a></p>
+									<p class="pb-0 pt-0 mb-2 mt-2"><i class="fa fa-clock-o mr-2"></i><a> <span
+												class="badge badge-success ml-2 fs-13">ETB  {{product.price.price}}</span></a></p>
 								</div>
 								<!-- <p class="">{{product.description|truncatechars_html:4}}</p> -->
 							</div>
@@ -256,7 +260,7 @@
 											<div class="rating-star sm">
 												<i class="fa fa-star"></i>
 											</div>
-										</div> (25 Reviews)
+										</div> ({{product|review_count}} Reviews)
 									</div>
 								</div>
 							</div>
@@ -334,35 +338,34 @@
 			<!-- Wrapper for carousel items -->
 
 			{%for company in companies%}
-				{%if company.company_type == "manufacturer"%}
 					<div class="item">
 						<div class="card mb-0 overflow-hidden">
 							<!-- <div class="arrow-ribbon bg-success">Open</div> -->
 							<div class="item-card7-imgs">
-								<a href="{% url 'bs' %}" class="absolute-link"></a>
-								<img src="{{company.company_logo.url}}" alt="img" class="cover-image">
+								<a target="__blank" href="{% url 'company_home' pk=company.id %}" class="absolute-link"></a>
+								<img src="{{company.logo.url}}" style="height: 280px;" alt="img" class="cover-image">
 							</div>
 
 							<div class="item-card7-overlaytext">
-								<a href="{% url 'bs' %}" class="text-white">{%print_translated company.company_type company.company_type_am LANGUAGE_CODE%}</a>
+								<a href="{% url 'company_home' pk=company.id %}" class="text-white">{%print_translated company.main_category company.main_category LANGUAGE_CODE%}</a>
 							</div>
 
 							<div class="card-body">
 								<div class="item-card7-desc">
 									<div class="item-card7-text">
-										<a href="{% url 'bs' %}" class="text-dark">
-											<h4 class=""> {%print_translated company.company_name company.company_name_am LANGUAGE_CODE%}</h4>
+										<a href="{% url 'company_home' pk=company.id %}" class="text-dark">
+											<h4 class=""> {%print_translated company.name company.name_am LANGUAGE_CODE%}</h4>
 										</a>
 									</div>
 									<ul class="item-cards7-ic mb-0">
-										<li><a href="#"><span class=""><i class="icon icon-eye mr-1"></i> 12 Views</span></a>
+										<li><a href="#"><span class=""><i class="icon icon-eye mr-1"></i> {{company|company_product_count}} products</span></a>
 										</li>
 										<li><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>
-												{{company.location}}</a></li>
+												{{company.get_company_address.city_town}}</a></li>
 										<li class="mb-md-0"><a href="#" class="icons"><i
 													class="icon icon-event text-muted mr-1"></i> 1 hour ago</a></li>
 										<li class="mb-0"><a href="#" class="icons"><i
-													class="icon icon-phone text-muted mr-1"></i>{{company.phone_number}}</a>
+													class="icon icon-phone text-muted mr-1"></i>{{company.get_company_address.phone_number}}</a>
 										</li>
 									</ul>
 									<!-- <p class="mb-0">{{company.detail|safe|truncatechars_html:4}}</p> -->
@@ -371,8 +374,8 @@
 							<div class="card-footer">
 								<div class="footerimg d-flex mt-0 mb-0">
 									<div class="d-flex footerimg-l mb-0">
-										<img src="{{company.company_logo.url}}" alt="image" class="avatar brround  mr-2">
-										<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">{{company.location}}<i
+										<img src="{{company.logo.url}}" alt="image" class="avatar brround  mr-2">
+										<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">{{company.get_company_address.city_town}}<i
 												class="icon icon-check text-success fs-12 ml-1" data-toggle="tooltip"
 												data-placement="top" title="verified"></i></h5>
 									</div>
@@ -384,8 +387,6 @@
 							</div>
 						</div>
 					</div>
-
-				{%endif%}
 			{%endfor%}
 
 		</div>
@@ -790,12 +791,13 @@
 					</div>
 					<div class="card-body p-0">
 						<ul class="list-group widget-spec">
-							{%for category in sub_categories%}
-							{%if category.category_name.category_type == "Food"%}
+							{%for category in categories%}
+							{%if category.category_type == "Food"%}
 							<li class="">
-								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
-								<span
-									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_bycategory}}</span>
+								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">
+									{% print_translated category.category_name category.category_name_am LANGUAGE_CODE%}</a>
+								<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">
+									{{category.id|count_food_and_beverage_products}}</span>
 							</li>
 							{%endif%}
 							{%endfor%}
@@ -815,12 +817,12 @@
 					</div>
 					<div class="card-body p-0">
 						<ul class="list-unstyled widget-spec">
-							{%for category in sub_categories%}
-							{%if category.category_name.category_type == "Beverage"%}
+							{%for category in categories%}
+							{%if category.category_type == "Beverage"%}
 							<li class="">
-								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
+								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.category_name category.category_name_am LANGUAGE_CODE%}</a>
 								<span
-									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_bycategory}}</span>
+									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|count_food_and_beverage_products}}</span>
 							</li>
 							{%endif%}
 							{%endfor%}
@@ -840,12 +842,12 @@
 					</div>
 					<div class="card-body p-0">
 						<ul class="list-unstyled widget-spec">
-							{%for category in sub_categories%}
-							{%if category.category_name.category_type == "Pharmaceuticals"%}
+							{%for category in categories%}
+							{%if category.category_type == "Pharmaceuticals"%}
 							<li class="">
-								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
+								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.category_name category.category_name_am LANGUAGE_CODE%}</a>
 								<span
-									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_bycategory}}</span>
+									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|pharmacy_product_count}}</span>
 							</li>
 							{%endif%}
 							{%endfor%}

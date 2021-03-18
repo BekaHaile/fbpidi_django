@@ -1,13 +1,13 @@
 from django.db import models
-from accounts.models import User
+from django.conf import settings
 from django.db.models import Q
 from datetime import datetime
 
     
         
 class ChatMessages(models.Model):
-    sender = models.ForeignKey(User, related_name = "sent_messages", on_delete= models.CASCADE)
-    receiver = models.ForeignKey(User, related_name = "recieved_messages", on_delete= models.CASCADE)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, related_name = "sent_messages", on_delete= models.CASCADE)
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, related_name = "recieved_messages", on_delete= models.CASCADE)
     message = models.TextField()
     seen = models.BooleanField(default = False)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -33,7 +33,7 @@ class ChatGroup(models.Model):
     """
     group_name = models.CharField(max_length=200, verbose_name="chat group name", unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    connected_users = models.ManyToManyField(User, related_name="connected")
+    connected_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="connected")
 
 
     def __str__(self):
@@ -57,7 +57,7 @@ class ChatGroup(models.Model):
 
 class ChatMessage(models.Model):
     chat_group = models.ForeignKey( ChatGroup, on_delete = models.CASCADE)
-    sender = models.ForeignKey(User, on_delete= models.CASCADE)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
     read = models.BooleanField(default=False)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)

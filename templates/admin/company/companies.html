@@ -6,22 +6,34 @@
 
 			<!-- Content area -->
 			<div class="content">
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Registered Industries List</h5>
+						<div class="header-elements">
+							<div class="list-icons">
+								<a href="{%url 'admin:create_company_profile'%}" class="btn bg-teal btn-sm rounded-round"><i
+										class="icon-add mr-2"></i>Add Company</a>
+							</div>
 
+						</div>
+					</div>
+				</div>
 				<!-- Form inputs -->
 				<div class="row">
-					{%for company in companies%}
+					
+					{%for company in object_list%}
 					<div class="col-xl-3 col-sm-6">
-						<div class="card">
+						<div class="card" style="height: 350px;">
 							<div class="card-body text-center">
 								<div class="card-img-actions d-inline-block mb-3">
-									<img class="img-fluid rounded-circle" src="{{company.company_logo.url}}" style="width: 200px;height: 200px;" alt="">
-									<a href="{%url 'admin:company_detail' id=company.id%}"><div class="card-img-actions-overlay card-img rounded-circle">
+									<img class="img-fluid rounded-circle" src="{%if company.logo%}{{company.logo.url}}{%endif%}" style="width: 200px;height: 200px;" alt="">
+									<a href="{%url 'admin:company_detail' pk=company.id%}"><div class="card-img-actions-overlay card-img rounded-circle">
 										
 									</div></a>
 								</div>
 
-					    		<h6 class="font-weight-semibold mb-0">{{company.company_name}}</h6>
-					    		<span class="d-block text-muted">{{company.email|title}}</span>
+					    		<h6 class="font-weight-semibold mb-0">{{company.name}}</h6>
+					    		<span class="d-block text-muted">{{company.get_company_address.email|title}}</span>
 
 				    			<div class="list-icons list-icons-extended mt-3">
 			                    	<a href="#" class="list-icons-item" data-popup="tooltip" title="Google Drive" data-container="body"><i class="icon-google-drive"></i></a>

@@ -12,7 +12,7 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class=""><span class="font-weight-bold">{{count}}</span> Products available</h1>
+									<h1 class=""><span class="font-weight-bold">{{object_list.count}}</span> Products available</h1>
 								</div>
 								<div class="search-background px-4 py-3 mt-4">
 									<div class="form row row-sm">
@@ -53,10 +53,9 @@
 		<div class="bg-white border-bottom">
 			<div class="container">
 				<div class="page-header">
-					<h4 class="page-title">Business list</h4>
+					<h4 class="page-title">Products</h4>
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">Home</a></li>
-						<li class="breadcrumb-item"><a href="#">Pages</a></li>
+						<li class="breadcrumb-item"><a href="{%url 'index'%}">Home</a></li>
 						<li class="breadcrumb-item active" aria-current="page">Product list</li>
 					</ol>
 				</div>
@@ -75,7 +74,7 @@
 								<div class="item2-gl business-list-01">
 									<div class="">
 										<div class="bg-white p-5 item2-gl-nav d-flex">
-											<h6 class="mb-0 mt-3">Showing 1 to 10 of 30 entries</h6>
+											<h6 class="mb-0 mt-3">Showing {{object_list.count}} entries</h6>
 											<ul class="nav item2-gl-menu ml-auto mt-1">
 												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
@@ -105,25 +104,31 @@
 									</div>
 									<div class="tab-content">
 										<div class="tab-pane active" id="tab-11">
-											{%for product in products%}
+											{%for product in object_list%}
 											<div class="card overflow-hidden">
-												<div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">New</span></div>
+												<!-- <div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">New</span></div> -->
 												<div class="d-md-flex">
 													<div class="item-card9-img">
 														<div class="item-card9-imgs">
-															<a href="{%url 'product_detail' id=product.id%}"></a>
+															<a href="{%url 'product_detail' pk=product.id%}"></a>
 															<img src="{{product.image.url}}" alt="img" class="cover-image">
 															<!-- /media/Images/News%20Images/wp2234690.png -->
 														</div>
 														<div class="item-card9-icons">
 															<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
 														</div>
-														<div class="item-cardreview-absolute bg-secondary">{% print_translated product.category.sub_category_name product.category.sub_category_name_am LANGUAGE_CODE%}</div>
+														<div class="item-cardreview-absolute bg-secondary">
+															{%if product.fandb_category%}
+															{{product.fandb_category.product_type.category_name.category_type}}
+															{%elif product.pharmacy_category%}
+															{{product.pharmacy_category.category_type}}
+															{%endif%}
+														</div>
 													</div>
 													<div class="card border-0 mb-0">
 														<div class="card-body h-100">
 															<div class="item-card9">
-																<a href="{%url 'product_detail' id=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
+																<a href="{%url 'product_detail' pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
 																<div class="rating-stars d-flex mr-5">
 																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
 																	<div class="rating-stars-container mr-2">
@@ -142,22 +147,22 @@
 																		<div class="rating-star sm">
 																			<i class="fa fa-star"></i>
 																		</div>
-																	</div> <a class="fs-13 leading-tight mt-1" href="#">13 Reviews</a>
+																	</div> <a class="fs-13 leading-tight mt-1" href="#">{{product|review_count}} Reviews</a>
 																</div>
 																<div class="mt-2 mb-2">
-																	<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i>{{product.company.city}}</a>
-																	<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{product.company.location}}</a>
+																	<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i>{{product.company.get_company_address.city_town}}</a>
+																	<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{product.company.get_company_address.local_area}}, {{product.company.get_company_address.fax}}</a>
 																</div>
-																<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Timings : </span>  10am - 10pm</p>
+																<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark">ETB {{product.price}}</span> </p>
 															</div>
 														</div>
 														<div class="card-footer pt-2 pb-2">
 															<div class="item-card9-footer d-sm-flex">
 																<div class="item-card9-cost">
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																		<a class="" href="#" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="458-965-856"><i class="fa fa-phone"></i></a>
-																		<a class="" href="https://spruko.com" data-toggle="tooltip" data-placement="top" title="" data-original-title="https://spruko.com"><i class="fa fa-globe"></i></a>
+																		<a class="" href="mailto:{{product.company.get_company_address.email}}" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
+																		<a class="" href="{{product.get_company_address.fax}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.get_company_address.fax}}"><i class="fa fa-globe"></i></a>
 																		<a class="" href="/chat/with/{{product.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 																		
 																		<a class="" href="#"><i class="fa fa-share-alt"></i></a>
@@ -174,25 +179,32 @@
 											{%endfor%}
 										</div>
 										<div class="tab-pane" id="tab-12">
+											
 											<div class="row">
+												{%for product in object_list%}
 												<div class="col-lg-6 col-md-6 col-xl-6">
 													<div class="card overflow-hidden">
-														<div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">New</span></div>
+														<!-- <div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">New</span></div> -->
 														<div class="h-100">
 															<div class="item-card9-img">
 																<div class="item-card9-imgs">
-																	<a href="{% url 'bs_2' %}"></a>
-																	<img src="/static/frontpages/images/products/products/h4.jpg" alt="img" class="cover-image">
+																	<a href="{%url 'product_detail' pk=product.id%}"></a>
+																	<img src="{{product.image.url}}" alt="img" class="cover-image">
 																</div>
 																<div class="item-card9-icons">
 																	<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
 																</div>
-																<div class="item-cardreview-absolute bg-secondary">RealEstate</div>
+																<div class="item-cardreview-absolute bg-secondary">
+																	{%if product.fandb_category%}
+																	{{product.fandb_category.product_type.category_name.category_type}}
+																	{%elif product.pharmacy_category%}
+																	{{product.pharmacy_category.category_type}}
+																	{%endif%}</div>
 															</div>
 															<div class="card border-0 mb-0">
 																<div class="card-body">
 																	<div class="item-card9">
-																		<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">2BK Modren flat <i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
+																		<a href="{%url 'product_detail' pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
 																		<div class="rating-stars d-flex mr-5">
 																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
 																			<div class="rating-stars-container mr-2">
@@ -211,22 +223,24 @@
 																				<div class="rating-star sm">
 																					<i class="fa fa-star"></i>
 																				</div>
-																			</div> <a class="fs-13 leading-tight mt-1" href="#">13 Reviews</a>
+																			</div> <a class="fs-13 leading-tight mt-1" href="#">{{product|review_count}} Reviews</a>
 																		</div>
 																		<div class="mt-2 mb-2">
-																			<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i> New York</a>
-																			<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i> Mig-213 Modern Colorny, NY 10012</a>
+																			<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i> {{product.company.get_company_address.city_town}}</a>
+																			<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{product.company.get_company_address.local_area}}, {{product.company.get_company_address.fax}}</a>
 																		</div>
-																		<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Timings : </span>  10am - 10pm</p>
+																		<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark">ETB {{product.price}}</span></p>
 																	</div>
 																</div>
 																<div class="card-footer pt-2 pb-2">
 																	<div class="item-card9-footer d-sm-flex">
 																		<div class="item-card9-cost">
 																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																				<a class="" href="#" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
-																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="458-965-856"><i class="fa fa-phone"></i></a>
-																				<a class="" href="https://spruko.com" data-toggle="tooltip" data-placement="top" title="" data-original-title="https://spruko.com"><i class="fa fa-globe"></i></a>
+																				<a class="" href="mailto:{{product.company.get_company_address.email}}" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
+																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
+																				<a class="" href="{{product.get_company_address.fax}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.get_company_address.fax}}"><i class="fa fa-globe"></i></a>
+																				<a class="" href="/chat/with/{{product.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+																				
 																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
 																			</div>
 																		</div>
@@ -239,367 +253,26 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-lg-6 col-md-6 col-xl-6">
-													<div class="card overflow-hidden">
-														<div class="h-100">
-															<div class="item-card9-img">
-																<div id="image-slider1" class="carousel" data-ride="carousel">
-																	<div class="carousel-inner">
-																		<div class="carousel-item active">
-																			<img src="/static/frontpages/images/products/products/j2.jpg" alt="img" class="cover-image">
-																		</div>
-																		<div class="carousel-item">
-																			<img src="/static/frontpages/images/products/products/j1.jpg" alt="img" class="cover-image">
-																		</div>
-																		<div class="carousel-item">
-																			<img src="/static/frontpages/images/products/products/h1.jpg" alt="img" class="cover-image">
-																		</div>
-																		<div class="carousel-item">
-																			<img src="/static/frontpages/images/products/products/h2.jpg" alt="img" class="cover-image">
-																		</div>
-																		<div class="carousel-item">
-																			<img src="/static/frontpages/images/products/products/h3.jpg" alt="img" class="cover-image">
-																		</div>
-																	</div>
-																	<a class="carousel-control-prev left-0" href="#image-slider1" role="button" data-slide="prev">
-																		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-																		<span class="sr-only">Previous</span>
-																	</a>
-																	<a class="carousel-control-next right-0" href="#image-slider1" role="button" data-slide="next">
-																		<span class="carousel-control-next-icon" aria-hidden="true"></span>
-																		<span class="sr-only">Next</span>
-																	</a>
-																</div>
-																<div class="item-card9-icons">
-																	<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
-																</div>
-																<div class="item7-card-text">
-																	<span class="badge badge-info">Jobs</span>
-																</div>
-																<div class="item-card2-icons left-10">
-																	<span class="br-2 p-1 px-2 br-2 bg-dark-transparent text-white"><i class="fa fa-picture-o"></i> 5</span>
-																</div>
-															</div>
-															<div class="card border-0 mb-0">
-																<div class="card-body">
-																	<div class="item-card9">
-																		<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">Horbica Consulting <i class="ion-checkmark-circled text-success ml-1"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Verified"></i></h4></a>
-																		<div class="rating-stars d-flex mr-5">
-																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
-																			<div class="rating-stars-container mr-2">
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																			</div> <a class="fs-13 leading-tight mt-1" href="#">77 Reviews</a>
-																		</div>
-																		<div class="mt-2 mb-2">
-																			<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i> China</a>
-																			<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i> LPN-21y,Spanic COlony CH10012</a>
-																		</div>
-																		<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Timings : </span>  9am - 10pm</p>
-																	</div>
-																</div>
-																<div class="card-footer pt-2 pb-2">
-																	<div class="item-card9-footer d-sm-flex">
-																		<div class="item-card9-cost">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																				<a class="" href="#" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
-																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="458-965-856"><i class="fa fa-phone"></i></a>
-																				<a class="" href="https://spruko.com" data-toggle="tooltip" data-placement="top" title="" data-original-title="https://spruko.com"><i class="fa fa-globe"></i></a>
-																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
-																			</div>
-																		</div>
-																		<div class="ml-auto mt-3 mt-sm-0">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="col-lg-6 col-md-6 col-xl-6">
-													<div class="card overflow-hidden">
-														<div class="power-ribbon power-ribbon-top-left text-warning"><span class="bg-warning"><i class="fa fa-bolt"></i></span></div>
-														<div class="h-100">
-															<div class="item-card9-img">
-																<div class="item-card9-imgs">
-																	<a href="{% url 'bs_2' %}"></a>
-																	<img src="/static/frontpages/images/products/products/pe1.jpg" alt="img" class="cover-image">
-																</div>
-																<div class="item-card9-icons">
-																	<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
-																</div>
-																<div class="item-cardreview-absolute bg-pink">Animals</div>
-															</div>
-															<div class="card border-0 mb-0">
-																<div class="card-body">
-																	<div class="item-card9">
-																		<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">Kenco petcenter <i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
-																		<div class="rating-stars d-flex mr-5">
-																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="5">
-																			<div class="rating-stars-container mr-2">
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																			</div> <a class="fs-13 leading-tight mt-1" href="#">43 Reviews</a>
-																		</div>
-																		<div class="mt-2 mb-2">
-																			<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i> Uk</a>
-																			<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i> NY-100, Modern Colorny, UK-52014</a>
-																		</div>
-																		<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Timings : </span>  7am - 9pm</p>
-																	</div>
-																</div>
-																<div class="card-footer pt-2 pb-2">
-																	<div class="item-card9-footer d-sm-flex">
-																		<div class="item-card9-cost">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																				<a class="" href="#" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
-																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="458-965-856"><i class="fa fa-phone"></i></a>
-																				<a class="" href="https://spruko.com" data-toggle="tooltip" data-placement="top" title="" data-original-title="https://spruko.com"><i class="fa fa-globe"></i></a>
-																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
-																			</div>
-																		</div>
-																		<div class="ml-auto mt-3 mt-sm-0">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="col-lg-6 col-md-6 col-xl-6">
-													<div class="card overflow-hidden">
-														<div class="h-100">
-															<div class="item-card9-img">
-																<div class="item-card9-imgs">
-																	<a href="#" data-toggle="modal" data-target="#homeVideo"><i class="mdi mdi-arrow-right-drop-circle-outline" aria-hidden="true"></i></a>
-																	<img src="/static/frontpages/images/products/products/b3.jpg" alt="img" class="cover-image">
-																</div>
-																<div class="item-card9-icons">
-																	<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
-																</div>
-																<div class="item-cardreview-absolute bg-success">Beauty & Spa</div>
-															</div>
-															<div class="card border-0 mb-0">
-																<div class="card-body">
-																	<div class="item-card9">
-																		<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">Gozer Beauty & Spa <i class="ion-checkmark-circled text-success ml-1"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Verified"></i></h4></a>
-																		<div class="rating-stars d-flex mr-5">
-																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
-																			<div class="rating-stars-container mr-2">
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																			</div> <a class="fs-13 leading-tight mt-1" href="#">55 Reviews</a>
-																		</div>
-																		<div class="mt-2 mb-2">
-																			<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i> Canada</a>
-																			<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i> PNX-124, Mortain Street, CA-65478</a>
-																		</div>
-																		<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Timings : </span>  8am - 10pm</p>
-																	</div>
-																</div>
-																<div class="card-footer pt-2 pb-2">
-																	<div class="item-card9-footer d-sm-flex">
-																		<div class="item-card9-cost">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																				<a class="" href="#" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
-																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="458-965-856"><i class="fa fa-phone"></i></a>
-																				<a class="" href="https://spruko.com" data-toggle="tooltip" data-placement="top" title="" data-original-title="https://spruko.com"><i class="fa fa-globe"></i></a>
-																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
-																			</div>
-																		</div>
-																		<div class="ml-auto mt-3 mt-sm-0">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="col-lg-6 col-md-6 col-xl-6">
-													<div class="card overflow-hidden">
-														<div class="h-100">
-															<div class="item-card9-img">
-																<div class="item-card9-imgs">
-																	<a href="{% url 'bs_2' %}"></a>
-																	<img src="/static/frontpages/images/products/products/f4.jpg" alt="img" class="cover-image">
-																</div>
-																<div class="item-card9-icons">
-																	<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
-																</div>
-																<div class="item-cardreview-absolute bg-secondary">Restaurant</div>
-															</div>
-															<div class="card border-0 mb-0">
-																<div class="card-body">
-																	<div class="item-card9">
-																		<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">GilkonStar Hotel <i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
-																		<div class="rating-stars d-flex mr-5">
-																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
-																			<div class="rating-stars-container mr-2">
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																			</div> <a class="fs-13 leading-tight mt-1" href="#">64 Reviews</a>
-																		</div>
-																		<div class="mt-2 mb-2">
-																			<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i> Germany</a>
-																			<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i> PN-1-152 Peace Street, GN-96875</a>
-																		</div>
-																		<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Timings : </span>  7am - 4pm</p>
-																	</div>
-																</div>
-																<div class="card-footer pt-2 pb-2">
-																	<div class="item-card9-footer d-sm-flex">
-																		<div class="item-card9-cost">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																				<a class="" href="#" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
-																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="458-965-856"><i class="fa fa-phone"></i></a>
-																				<a class="" href="https://spruko.com" data-toggle="tooltip" data-placement="top" title="" data-original-title="https://spruko.com"><i class="fa fa-globe"></i></a>
-																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
-																			</div>
-																		</div>
-																		<div class="ml-auto mt-3 mt-sm-0">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="col-lg-6 col-md-6 col-xl-6">
-													<div class="card overflow-hidden">
-														<div class="h-100">
-															<div class="item-card9-img">
-																<div class="item-card9-imgs">
-																	<a href="{% url 'bs_2' %}"></a>
-																	<img src="/static/frontpages/images/products/products/v1.jpg" alt="img" class="cover-image">
-																</div>
-																<div class="item-card9-icons">
-																	<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
-																</div>
-																<div class="item-cardreview-absolute bg-primary">AutoMobiles</div>
-															</div>
-															<div class="card border-0 mb-0">
-																<div class="card-body">
-																	<div class="item-card9">
-																		<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">Seep Automobiles <i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
-																		<div class="rating-stars d-flex mr-5">
-																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="5">
-																			<div class="rating-stars-container mr-2">
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																			</div> <a class="fs-13 leading-tight mt-1" href="#">121 Reviews</a>
-																		</div>
-																		<div class="mt-2 mb-2">
-																			<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i> Australia</a>
-																			<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i> H-85-87/2, Multiple Street, AS-14578</a>
-																		</div>
-																		<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> Timings : </span>  7am - 8pm</p>
-																	</div>
-																</div>
-																<div class="card-footer pt-2 pb-2">
-																	<div class="item-card9-footer d-sm-flex">
-																		<div class="item-card9-cost">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																				<a class="" href="#" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
-																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="458-965-856"><i class="fa fa-phone"></i></a>
-																				<a class="" href="https://spruko.com" data-toggle="tooltip" data-placement="top" title="" data-original-title="https://spruko.com"><i class="fa fa-globe"></i></a>
-																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
-																			</div>
-																		</div>
-																		<div class="ml-auto mt-3 mt-sm-0">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
+												{%endfor%}
 											</div>
 										</div>
 									</div>
 								</div>
 								<div class="center-block text-center">
 									<ul class="pagination mb-5">
-										<li class="page-item page-prev disabled">
-											<a class="page-link" href="#" tabindex="-1">Prev</a>
-										</li>
-										<li class="page-item active"><a class="page-link" href="#">1</a></li>
-										<li class="page-item"><a class="page-link" href="#">2</a></li>
-										<li class="page-item"><a class="page-link" href="#">3</a></li>
-										<li class="page-item page-next">
-											<a class="page-link" href="#">Next</a>
-										</li>
-									</ul>
-								</div>
+									   {% if page_obj.has_previous %}
+									   <li class="page-item page-prev ">
+										   <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Prev</a>
+									   </li>
+									   {%endif%}
+									   <li class="page-item active"><a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a></li>
+									   {% if page_obj.has_next %}
+									   <li class="page-item page-next">
+										   <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+									   </li>
+									   {%endif%}
+								   </ul>
+							   </div>
 							</div>
 						</div>
 						<!--/Add lists-->

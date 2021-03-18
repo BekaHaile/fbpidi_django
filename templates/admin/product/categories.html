@@ -8,20 +8,20 @@
 	<!-- /theme JS files -->
  
 {% endblock %}
-{%block pagename%}Product Categories{%endblock%}
+{%block pagename%}{%if category == True%}Product Categories{%elif sub_category == True %}Product Sub-Categories{%elif brand == True%}Produt Brand{%endif%}{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
 			<div class="content">
-				{%if option == 'category'%}
+				{%if category == True%}
 				<!-- Page length options main category -->
 				<div class="card">
 					<div class="card-header header-elements-inline">
 						<h5 class="card-title">Categories</h5>
 						<div class="header-elements">
-							{%if perms.admin_site.add_category%}
+							{%if user.is_superuser%}
 							<div class="list-icons">
-								<a href="{%url 'admin:create_category' option='category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
+								<a href="{%url 'admin:create_category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Category</a>
 							</div>
 							{%endif%}
 						</div>
@@ -39,13 +39,13 @@
 							</tr>
 						</thead>
 						<tbody>
-							{%for cat in categories%}
+							{%for cat in object_list%}
 							<tr>
 								<td>{{cat.category_name}}</td>
 								<td>{{cat.category_type}}</td>
-								<td><div class="summernote">{{cat.description|safe|truncatechars_html:5}}</div></td>
-								<td>{{cat.user.username}}</td>
-								<td><span class="badge badge-success">{{cat.timestamp}}</span></td>
+								<td><div class="summernote">{{cat.description|safe|truncatechars_html:10}}</div></td>
+								<td>{{cat.created_by.username}}</td>
+								<td><span class="badge badge-success">{{cat.created_date}}</span></td>
 								<td class="text-center">
 									<div class="list-icons">
 										<div class="dropdown">
@@ -56,7 +56,7 @@
 											<div class="dropdown-menu dropdown-menu-right">
 												{%if user.is_superuser%}
 												<a href="{%url 'admin:delete' model_name='category' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Category</a>
-												<a href="{%url 'admin:edit_category' option='category' cat_id=cat.id%}" class="dropdown-item">
+												<a href="{%url 'admin:edit_category' pk=cat.id%}" class="dropdown-item">
 													<i class="icon-pencil"></i>Edit Category</a>
 													{%endif%}
 												<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
@@ -72,15 +72,15 @@
 					</table>
 				</div>
 				<!-- /page length options -->
-				{%elif option == 'sub_category'%}
+				{%elif sub_category == True%}
 					<!-- Page length options sub-category-->
 					<div class="card">
 						<div class="card-header header-elements-inline">
 							<h5 class="card-title">Sub Categories</h5>
-							{%if perms.admin_site.add_sub_category%}
+							{%if not user.is_superuser%}
 							<div class="header-elements">
 								<div class="list-icons">
-									<a href="{%url 'admin:create_category' option='sub_category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
+									<a href="{%url 'admin:create_subcategory'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Sub-Category</a>
 								</div>
 							</div>
 							{%endif%}
@@ -98,13 +98,13 @@
 								</tr>
 							</thead>
 							<tbody>
-								{%for cat in sub_categories%}
+								{%for cat in object_list%}
 							<tr>
 								<td>{{cat.category_name}}</td>
 								<td>{{cat.sub_category_name}}</td>
-								<td><div class="summernote">{{cat.description|safe|truncatechars_html:5}}</div></td>
-								<td>{{cat.user.username}}</td>
-								<td><span class="badge badge-success">{{cat.timestamp}}</span></td>
+								<td><div class="summernote">{{cat.description|safe|truncatechars_html:10}}</div></td>
+								<td>{{cat.created_by.username}}</td>
+								<td><span class="badge badge-success">{{cat.created_date}}</span></td>
 								<td class="text-center">
 									<div class="list-icons">
 										<div class="dropdown">
@@ -113,15 +113,68 @@
 											</a>
 
 											<div class="dropdown-menu dropdown-menu-right">
-												{%if user.is_superuser%}
 												<a href="{%url 'admin:delete' model_name='sub_category' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Sub-Category</a>
-												<a href="{%url 'admin:edit_category' option='sub_category' cat_id=cat.id%}" class="dropdown-item">
+												<a href="{%url 'admin:edit_subcategory' pk=cat.id%}" class="dropdown-item">
 													<i class="icon-pencil"></i>Edit Sub-Category</a>
-													{%endif%}
 												<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
 												<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
 												<a href="#" class="dropdown-item"><i class="icon-file-word"></i> Export to .doc</a> -->
 												
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+							{%endfor%}
+							</tbody>
+						</table>
+					</div>
+					<!-- /page length options -->
+					{%elif brand == True%}
+					<!-- Page length options sub-category-->
+					<div class="card">
+						<div class="card-header header-elements-inline">
+							<h5 class="card-title">Product Brands</h5>
+							{%if not user.is_superuser%}
+							<div class="header-elements">
+								<div class="list-icons">
+									<a href="{%url 'admin:create_brand'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New Brand</a>
+								</div>
+							</div>
+							{%endif%}
+						</div>
+	
+						<table class="table datatable-show-all">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Brand Name</th>
+									<th>Product Type</th>
+									<th>Created By</th>
+									<th>Created Date</th>
+									<th class="text-center">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for cat in object_list%}
+							<tr>
+								<td>{{forloop.counter}}</td>
+								<td>{{cat.brand_name}}</td>
+								<td>{{cat.product_type.sub_category_name}}</td>
+								<td>{{cat.created_by.username}}</td>
+								<td><span class="badge badge-success">{{cat.created_date|date}}</span></td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="{%url 'admin:delete' model_name='sub_category' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Sub-Category</a>
+												<a href="{%url 'admin:edit_brand' pk=cat.id%}" class="dropdown-item">
+													<i class="icon-pencil"></i>Edit</a>
+												 
 											</div>
 										</div>
 									</div>

@@ -1,0 +1,314 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+<!-- /theme JS files -->
+
+{% endblock %}
+{%block pagename%}
+{%if flag == "production_capacity"%}
+Production Capacity Data
+{%elif flag == "anual_input_need"%}
+Product Anual Input Need Data
+{%elif flag == "demand_supply"%}
+Anual Input Demand and Supply Data
+{%elif flag == "sales_performance"%}
+Product Production and Sales Performance Data
+{%elif flag == "packaging"%}
+Product Packaging Data
+{%endif%}
+{%endblock%}
+
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	<!-- Page length options main category -->
+	
+	{%if flag == "production_capacity"%}
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">Daily Production Capacity data</h5>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a href="{%url 'admin:create_production_capacity' product=product.id%}" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Data</a>
+				</div>
+			</div>
+		</div>
+
+		<table class="table datatable-show-all">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Installed Cp</th>
+					<th>Attainable</th>
+					<th>Actuall</th>
+					<th>Created Date</th>
+					<th class="text-center">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for cat in object_list%}
+				<tr>
+					<td>{{cat.p_date|date}}</td>
+					<td>{{cat.install_prdn_capacity}}</td>
+					<td>
+						{{cat.atnbl_prdn_capacity}}
+					</td>
+					<td>{{cat.actual_prdn_capacity}}</td>
+					<td>
+						{{cat.created_date|date}}
+					</td>
+					<td class="text-center">
+						<div class="list-icons">
+							<div class="dropdown">
+								<a href="#" class="list-icons-item" data-toggle="dropdown">
+									<i class="icon-menu9"></i>
+								</a>
+
+								<div class="dropdown-menu dropdown-menu-right">
+									<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+									<a href="{%url 'admin:update_production_capacity' pk=cat.id%}" class="dropdown-item">
+										<i class="icon-pencil"></i>Edit</a>
+									
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				 
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+	{%elif flag == "anual_input_need"%}
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">Annual Input Need data</h5>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a href="{%url 'admin:create_anual_inp_need' product=product.id%}" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Data</a>
+				</div>
+			</div>
+		</div>
+
+		<table class="table datatable-show-all">
+			<thead>
+				<tr>
+					<th>Year</th>
+					<th>Input Name</th>
+					<th>Amount</th>
+					<th>Local Input</th>
+					<th>Imported Input</th>
+					<th class="text-center">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for cat in object_list%}
+				<tr>
+					<td>{{cat.year}}</td>
+					<td>{{cat.input_name}}</td>
+					<td>
+						{{cat.amount}}
+					</td>
+					<td>{{cat.local_input}}%</td>
+					<td>{{cat.import_input}}%</td>
+					<td class="text-center">
+						<div class="list-icons">
+							<div class="dropdown">
+								<a href="#" class="list-icons-item" data-toggle="dropdown">
+									<i class="icon-menu9"></i>
+								</a>
+
+								<div class="dropdown-menu dropdown-menu-right">
+									<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+									<a href="{%url 'admin:update_anual_inp_need' pk=cat.id%}" class="dropdown-item">
+										<i class="icon-pencil"></i>Edit</a>
+									
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				 
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+	{%elif flag == "demand_supply"%}
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">Anual Product Input Demand and Supply Data</h5>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a href="{%url 'admin:create_demand_supply' product=product.id%}" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Data</a>
+				</div>
+			</div>
+		</div>
+
+		<table class="table datatable-show-all">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Input Type</th>
+					<th>Year</th>
+					<th>Demand</th>
+					<th>Supply</th>
+					<th class="text-center">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for cat in object_list%}
+				<tr>
+					<td>{{forloop.counter}}</td>
+					<td>{{cat.input_type.input_name}}</td>
+					<td>{{cat.year}}</td>
+					<td>{{cat.demand}}%</td>
+					<td>{{cat.supply}}</td>
+					<td class="text-center">
+						<div class="list-icons">
+							<div class="dropdown">
+								<a href="#" class="list-icons-item" data-toggle="dropdown">
+									<i class="icon-menu9"></i>
+								</a>
+
+								<div class="dropdown-menu dropdown-menu-right">
+									<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+									<a href="{%url 'admin:update_demand_supply' pk=cat.id%}" class="dropdown-item">
+										<i class="icon-pencil"></i>Edit</a>
+									
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				 
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+	{%elif flag == "sales_performance"%}
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">Product Production & Sales Performance</h5>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a href="{%url 'admin:create_sales_performance' product=product.id%}" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Data</a>
+				</div>
+			</div>
+		</div>
+
+		<table class="table datatable-show-all">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Year</th>
+					<th>Production</th>
+					<th>Sales Amount</th>
+					<th>Sales Value</th>
+					<th class="text-center">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for cat in object_list%}
+				<tr>
+					<td>{{forloop.counter}}</td>
+					<td>{{cat.activity_year}}</td>
+					<td>{{cat.production_amount}}</td>
+					<td>{{cat.sales_amount}}</td>
+					<td>{{cat.sales_value}}</td>
+					<td class="text-center">
+						<div class="list-icons">
+							<div class="dropdown">
+								<a href="#" class="list-icons-item" data-toggle="dropdown">
+									<i class="icon-menu9"></i>
+								</a>
+
+								<div class="dropdown-menu dropdown-menu-right">
+									<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+									<a href="{%url 'admin:update_sales_performance' pk=cat.id%}" class="dropdown-item">
+										<i class="icon-pencil"></i>Edit</a>
+									
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				 
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+	{%elif flag == "packaging" %}
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">Product Packaging Data</h5>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a href="{%url 'admin:create_packaging' product=product.id%}" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Data</a>
+				</div>
+			</div>
+		</div>
+
+		<table class="table datatable-show-all">
+			<thead>
+				<tr>
+					<th>Packaging Type</th>
+					<th>Packaging Category</th>
+					<th>Amount</th>
+					<th>Source Of Inputs</th>
+					<th>Wastage %</th>
+					<th class="text-center">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for cat in object_list%}
+				<tr>
+					<td>{{cat.packaging}}</td>
+					<td>{{cat.category}}</td>
+					<td>{{cat.amount}}</td>
+					<td>
+						Local: {{cat.local_input}}
+						Import: {{cat.import_input}}
+					</td>
+					<td>
+						{{cat.wastage}}
+					</td>
+					<td class="text-center">
+						<div class="list-icons">
+							<div class="dropdown">
+								<a href="#" class="list-icons-item" data-toggle="dropdown">
+									<i class="icon-menu9"></i>
+								</a>
+
+								<div class="dropdown-menu dropdown-menu-right">
+									<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+									<a href="{%url 'admin:update_packaging' pk=cat.id%}" class="dropdown-item">
+										<i class="icon-pencil"></i>Edit</a>
+									
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				 
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+	{%endif%}
+	<!-- /page length options -->
+
+
+</div>
+<!-- /content area -->
+{%endblock%}

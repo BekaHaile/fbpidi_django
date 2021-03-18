@@ -1,20 +1,22 @@
+import random
+import string
+
 from django.shortcuts import render,redirect,get_object_or_404
-from django.views.generic import View
+from django.views.generic import View,ListView,UpdateView,CreateView,DetailView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
+from django.db.models import Q
 
-from admin_site.models import Category, SubCategory
-from product.models import Product,Review,ProductImage,ProductPrice,Order,OrderProduct,InvoiceRecord
-from product.forms import SubCategoryForm,ProductCreationForm,CategoryForm,CheckoutForm,ReviewForm
-from accounts.models import User
-from company.models import Company
+from admin_site.models import Category
+from product.models import *
+from product.forms import *
+from company.models import *
 
-import random
-import string
+
 
 def create_ref_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits,k=30))
@@ -23,234 +25,631 @@ def create_invoice(invoice,user):
     return '#INV-'.join(random.choices(string.ascii_uppercase + (invoice.join(user.id))))
 
 # This is class/view is crated for displaying all categories and sub categories 
-class CategoryView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        context = {}
-        if self.kwargs['option'] == 'category':
-            categories = Category.objects.all()
-            context = {'categories':categories,'option':'category'}
-        elif self.kwargs['option'] == 'sub_category':
-            sub_categories = SubCategory.objects.all()
-            context = {
-                "sub_categories":sub_categories,'option':'sub_category'
-            }
-        return render(self.request,"admin/product/categories.html",context)
+class CategoryView(LoginRequiredMixin,ListView):
+    model = Category
+    template_name = "admin/product/categories.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = True
+        return context
 
 # This class/view is created for displaying category and sub category detail and editing
-class CategoryDetail(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        context = {}
-        if self.kwargs['option'] == "category":
-            category = Category.objects.get(id=self.kwargs['cat_id'])
-            context = {
-                'category':category,
-                'edit':'edit'
-            }
-        elif self.kwargs['option'] == "sub_category":
-            sub_category = SubCategory.objects.get(id=self.kwargs['cat_id'])
-            cat_types = Category.objects.all().distinct('category_name')
-            context = {
-                'sub_category':sub_category,
-                'categories_name':cat_types,
-                'edit':'edit'
-            }
-        return render(self.request,"admin/product/category_form.html",context)
-    
-    def post(self,*args,**kwargs):
-        context = {}
-        message = ""
-        option = ""
-        if self.kwargs['option'] == "category":
-            
-            category = Category.objects.get(id=self.kwargs['cat_id'])
-            category.category_name = self.request.POST['category_name']
-            category.category_type = self.request.POST['category_type']
-            category.description = self.request.POST['description']
-            category.category_name_am = self.request.POST['category_name_am']
-            category.category_type_am = self.request.POST['category_type']
-            category.description_am = self.request.POST['description_am']
-            if self.request.FILES.get('image') != None:
-                category.image = self.request.FILES.get('image')
-            category.save()
-            message = "Category Updated Successfully"
-            option = "category"
-        elif self.kwargs['option'] == "sub_category":
-            sub_category = SubCategory.objects.get(id=self.kwargs['cat_id'])
-            sub_category.category_name = Category.objects.get(id=self.request.POST['category_name'])
-            sub_category.sub_category_name = self.request.POST['sub_category_name']
-            sub_category.description = self.request.POST['description']
-            sub_category.sub_category_name_am = self.request.POST['sub_category_name_am']
-            sub_category.description_am = self.request.POST['description_am']
-            if self.request.FILES.get('image') != None:
-                sub_category.image = self.request.FILES.get('image')
-            sub_category.save()
-            message = "Sub-Category Updated Successfully"
-            option = "sub_category"
-        messages.success(self.request,message)
-        return redirect("admin:p_categories",option=option)
+class CategoryDetail(LoginRequiredMixin,UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = "admin/product/category_form_update.html"
+    success_url = "/admin/categories/"
+
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = True
+        return context
 
 # This class/view is created for creating new categories
-class CreateCategories(LoginRequiredMixin,View):
+class CreateCategories(LoginRequiredMixin,CreateView):
     cat_list_am = { "Food":'ምግብ',"Beverage":'መጠጥ',"Pharmaceuticals":'መድሃኒት' }
-     
-    def get(self,*args,**kwargs):
-        context = {}
-        if self.kwargs['option'] == "category":
-            form = CategoryForm()
-            context = {
-                'category':"category",
-                 'form':form,
-            }
-        elif self.kwargs['option'] == "sub_category":
-            form = SubCategoryForm()
-            context = {
-                'sub_category':'sub_category',
-                'form':form,
-            }
-        return render(self.request,"admin/product/category_form.html",context)
+    model = Category
+    form_class = CategoryForm
+    template_name = "admin/product/category_form_create.html"
     
-    def post(self,*args,**kwargs):
-        if self.kwargs['option'] == "category":
-            form = CategoryForm(self.request.POST,self.request.FILES)
-            context = {
-                'category':"category",
-                 'form':form,
-            }
-            if form.is_valid():
-                category = form.save(commit=False)
-                category.user = self.request.user
-                category.category_type_am=self.cat_list_am[form.cleaned_data.get('category_type')],
-                category.save()
-                messages.success(self.request,"You Created a New Category")
-                return redirect("admin:p_categories",option='category')
-            else:
-                return render(self.request,"admin/product/category_form.html",context)
-        elif self.kwargs['option'] == "sub_category":
-            form = SubCategoryForm(self.request.POST,self.request.FILES)
-            context = {
-                'sub_category':'sub_category',
-                'form':form,
-            }
-            if form.is_valid():
-                sub_category = form.save(commit=False)
-                sub_category.user=self.request.user
-                sub_category.category_name=form.cleaned_data.get('category_name')
-                sub_category.save()
-                messages.success(self.request,"You Created a New Sub Category")
-                return redirect("admin:p_categories", option='sub_category')
-            else:
-                return render(self.request,"admin/product/category_form.html",context)
+    def form_valid(self,form):
+        category = form.save(commit=False)
+        category.created_by = self.request.user
+        category.category_type_am=self.cat_list_am[form.cleaned_data.get('category_type')],
+        category.save()
+        messages.success(self.request,"You Created a New Category")
+        return redirect("admin:categories")
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = True
+        return context
+
+class SubCategoryView(LoginRequiredMixin,ListView):
+    model = SubCategory
+    template_name = "admin/product/categories.html"
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return SubCategory.objects.all()
+        elif self.request.user.is_company_admin:
+            return SubCategory.objects.filter(company=Company.objects.get(contact_person=self.request.user))
+        elif self.request.user.is_company_staff:
+            return SubCategory.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
+            
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sub_category'] = True
+        return context
+
+# This class/view is created for displaying category and sub category detail and editing
+class SubCategoryDetail(LoginRequiredMixin,UpdateView):
+    model = SubCategory
+    form_class = SubCategoryForm
+    template_name = "admin/product/category_form_update.html"
+    success_url = "/admin/sub_categories/"
+
+    def get_form_kwargs(self):
+        kwargs = super(SubCategoryDetail,self).get_form_kwargs()
+        if self.request.user.is_company_admin:
+            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
+        return kwargs
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sub_category'] = True
+        return context
+
+# This class/view is created for creating new categories
+class CreateSubCategories(LoginRequiredMixin,CreateView):
+    model = SubCategory
+    form_class = SubCategoryForm
+    template_name = "admin/product/category_form_create.html"
+    
+    def get_form_kwargs(self):
+        kwargs = super(CreateSubCategories,self).get_form_kwargs()
+        if self.request.user.is_company_admin:
+            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
+        return kwargs
+
+    def form_valid(self,form):        
+        sub_category = form.save(commit=False)
+        sub_category.created_by = self.request.user
+        if self.request.user.is_company_admin:
+            sub_category.company = Company.objects.get(contact_person=self.request.user)
+        elif self.request.user.is_company_staff:
+            sub_category.company = CompanyStaff.objects.get(user=self.request.user).company        
+        sub_category.save()
+        messages.success(self.request,"You Created a New Sub Category")
+        return redirect("admin:sub_categories")
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sub_category'] = True
+        return context
 
 
 
-class AdminProductListView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        products = ""
-        if self.kwargs['user_type'] == 'admin':
-            products = Product.objects.all()
-            company = Company.objects.all()
-            context = {'products':products,'companies':company}
-        elif self.kwargs['user_type'] == 'provider':
-            products = Product.objects.filter(user=self.request.user)
-            company = Company.objects.filter(user=self.request.user)
-            context = {'products':products,'companies':company}
-        else:
-            company = Company.objects.get(id=self.kwargs['user_type'])
-            products = Product.objects.filter(user=company.user)
-            context = {'products':products,'company':company}
-        return render(self.request,"admin/product/product_list.html",context)
+class BrandView(LoginRequiredMixin,ListView):
+    model = Brand
+    template_name = "admin/product/categories.html"
 
-class ProductDetailView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        product = get_object_or_404(Product,id=self.kwargs['id'])
-        company = ""
-        try:
-            company = Company.objects.get(user=product.user)
-        except ObjectDoesNotExist:
-            company = None
-        product_image = ProductImage.objects.filter(product=product)
-        product_price = ProductPrice.objects.filter(product=product)
-        if self.kwargs['option'] == 'edit':
-            pcats = SubCategory.objects.all().exclude(id=product.category.id)
-            return render(self.request,"admin/product/product_form.html",{'product':product,'pcats':pcats,'company':company,'edit':'edit'})    
-        elif self.kwargs['option'] == 'view':
-            return render(self.request,"admin/product/product_detail.html",{'product':product,'company':company,'product_imgs':product_image,'product_price':product_price})
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return Brand.objects.all()
+        elif self.request.user.is_company_admin:
+            return Brand.objects.filter(company=Company.objects.get(contact_person=self.request.user))
+        elif self.request.user.is_company_staff:
+            return Brand.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
+            
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['brand'] = True
+        return context
 
-    def post(self,*args,**kwargs):
-        product = Product.objects.get(id=self.kwargs['id'])
-        if self.kwargs['option'] == 'edit_all':
-            category = SubCategory.objects.get(id=self.request.POST['category'])
-            product.name=self.request.POST['name']
-            product.name_am = self.request.POST['name_am']
-            product.category=category
-            product.description = self.request.POST['description']
-            product.description_am = self.request.POST['description_am']
-            if self.request.FILES.get('image') == None:
-                pass
-            elif self.request.FILES.get('image') != None:
-                product.image = self.request.FILES.get('image')
-            product.save()
-            messages.success(self.request,"Successfully Edited Product")
-            return redirect("admin:product_detail",id=product.id,option='view')
-        else:
-            product.description = self.request.POST['description']
-            product.save()
-            messages.success(self.request,"Successfully Edited Product")
-            return redirect("admin:product_detail",id=product.id,option='view')
+# This class/view is created for displaying category and sub category detail and editing
+class BrandDetail(LoginRequiredMixin,UpdateView):
+    model = Brand
+    form_class = BrandForm
+    template_name = "admin/product/category_form_update.html"
+    success_url = "/admin/brands/"
 
-class AddProductImage(LoginRequiredMixin,View):
-    def post(self,*args,**kwargs):
-        item = self.request.POST['product']
-        image = self.request.FILES['image']
-        product = Product.objects.get(id=item)
-        product_image = ProductImage(
-            product=product,image=image
-        )
-        product_image.save()
+    def get_form_kwargs(self):
+        kwargs = super(BrandDetail,self).get_form_kwargs()
+        if self.request.user.is_company_admin:
+            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
+        return kwargs
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['brand'] = True
+        return context
+
+# This class/view is created for creating new brands
+class CreateBrand(LoginRequiredMixin,CreateView):
+    model = Brand
+    form_class = BrandForm
+    template_name = "admin/product/category_form_create.html"
+    
+    def get_form_kwargs(self):
+        kwargs = super(CreateBrand,self).get_form_kwargs()
+        if self.request.user.is_company_admin:
+            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
+        return kwargs
+
+    def form_valid(self,form):        
+        brand = form.save(commit=False)
+        brand.created_by = self.request.user
+        if self.request.user.is_company_admin:
+            brand.company = Company.objects.get(contact_person=self.request.user)
+        elif self.request.user.is_company_staff:
+            brand.company = CompanyStaff.objects.get(user=self.request.user).company
+        brand.save()
+        messages.success(self.request,"You Created a New Brand")
+        return redirect("admin:brands")
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['brand'] = True
+        return context
+
+
+
+class AdminProductListView(LoginRequiredMixin,ListView):
+    model = Product
+    template_name = "admin/product/product_list.html"
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return Product.objects.all()
+        elif self.request.user.is_company_admin:
+            return Product.objects.filter(company=self.request.user.get_company())
+        elif self.request.user.is_company_staff:
+            return Product.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
+
+class CreateProductView(LoginRequiredMixin,CreateView):
+    model=Product
+    form_class = ProductCreationForm
+    template_name = "admin/product/product_form.html"
+
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(CreateProductView,self).get_form_kwargs()
+        if self.request.user.is_company_admin:
+            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
+        return kwargs
+
+    def form_valid(self,form):
+        product = form.save(commit=False)
+        product.company = self.request.user.get_company()
+        product.created_by = self.request.user
+        product.save()    
+        messages.success(self.request,"Product Created Successfully!")
+        return redirect("admin:admin_products")
+    
+
+
+class ProductUpdateView(LoginRequiredMixin,UpdateView):
+    model = Product
+    form_class = ProductCreationForm
+    template_name = "admin/product/product_form_update.html"
+
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(ProductUpdateView,self).get_form_kwargs()
+        kwargs.update({'company':Product.objects.get(id=self.kwargs['pk']).company})
+        return kwargs
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['image_form'] = ProductImageForm
+        context['price_form'] = ProductPriceForm
+        return context
+    
+    def form_valid(self,form):
+        product = form.save(commit=False)
+        product.last_updated_by = self.request.user
+        product.last_updated_date = timezone.now()
+        product.save()    
+        messages.success(self.request,"Product Update Successfully!")
+        return redirect("admin:admin_products")
+
+class AddProductImage(LoginRequiredMixin,CreateView):
+    model=ProductImage
+    form_class = ProductImageForm
+
+    def form_valid(self,form):
+        image = form.save(commit=False)
+        product = Product.objects.get(id=self.kwargs['pk'])
+        image.product = product
+        image.save()
         messages.success(self.request,"Image Added Successfully!")
-        return redirect("admin:product_detail",id=product.id,option='view')
+        return redirect("admin:product_detail",pk=product.id)
 
-class CreateProductView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        form = ProductCreationForm()
-        context = {'form':form}
-        return render(self.request,'admin/product/product_form.html',context)
+
+class CreatePrice(LoginRequiredMixin,CreateView):
+    model = ProductPrice
+    form_class = ProductPriceForm
+
+    def form_valid(self,form):
+        price = form.save(commit=False)
+        product = Product.objects.get(id=self.kwargs['pk'])
+        price.product = product
+        price.save()
+        messages.success(self.request,"New Product Price Added Successfully!")
+        return redirect("admin:product_detail",pk=product.id)
+
+
+class CreateDose(LoginRequiredMixin,CreateView):
+    model = Dose
+    form_class = DoseForm
+
+    def form_valid(self,form):
+        data = form.save(commit=False)
+        data.created_by = self.request.user
+        data.save()
+        messages.success(self.request,"Product Dose Created Successfully!")
+        return redirect("admin:settings")
+
+ 
+class UpdateDose(LoginRequiredMixin,UpdateView):
+    model = Dose
+    form_class = DoseForm
+    template_name = "admin/accounts/check_list_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['flag'] = "product_dose"
+        return context
+
+    def form_valid(self,form):
+        data = form.save(commit=False)
+        data.last_updated_by = self.request.user
+        data.last_updated_date = timezone.now()
+        data.save()
+        messages.success(self.request,"Product Dose Updated Successfully!")
+        return redirect("admin:settings")
+
+class CreateDosageForm(LoginRequiredMixin,CreateView):
+    model = DosageForm
+    form_class = DosageFormForm
+
+    def form_valid(self,form):
+        data = form.save(commit=False)
+        data.created_by = self.request.user
+        data.save()
+        messages.success(self.request,"Product Dosage Form Created Successfully!")
+        return redirect("admin:settings")
+
+
+class UpdateDosageForm(LoginRequiredMixin,UpdateView):
+    model = DosageForm
+    form_class = DosageFormForm
+    template_name = "admin/accounts/check_list_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['flag'] = "product_dosage"
+        return context
+
+    def form_valid(self,form):
+        data = form.save(commit=False)
+        data.last_updated_by = self.request.user
+        data.last_updated_date = timezone.now()
+        data.save()
+        messages.success(self.request,"Product Dosage Form Updated Successfully!")
+        return redirect("admin:settings")
+
+
+class ListProductionCapacity(LoginRequiredMixin,ListView):
+    model = ProductionCapacity
+    template_name = "admin/product/product_data_list.html"
+
+    def get_queryset(self):
+        return ProductionCapacity.objects.filter(product=Product.objects.get(id=self.kwargs['product']))
     
-    def post(self,*args,**kwargs):
-        form = ProductCreationForm(self.request.POST,self.request.FILES)
-        if form.is_valid():
-            product = form.save(commit=False)
-            product.user = self.request.user
-            product.company = Company.objects.get(user=self.request.user)
-            product.category = form.cleaned_data.get("category")
-            product.save()
-            messages.success(self.request,"Product Created Successfully!")
-            return redirect("admin:index")
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=Product.objects.get(id=self.kwargs['product'])
+        context['flag'] = "production_capacity"
+        return context
+
+class CreateProductionCapacity(LoginRequiredMixin,CreateView):
+    model=ProductionCapacity
+    form_class=ProductionCapacityForm
+    template_name = "admin/product/product_data_create.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=Product.objects.get(id=self.kwargs['product'])
+        context['flag'] = "production_capacity"
+        return context
+
+    def form_valid(self,form):
+        if ProductionCapacity.objects.filter(
+            product=Product.objects.get(id=self.kwargs['product']),p_date=form.cleaned_data.get('p_date')).exists():
+            messages.warning(self.request,"Data For this Day already exists")
+            return redirect("admin:create_production_capacity",product=self.kwargs['product'])
         else:
-            return render(self.request,'admin/product/product_form.html',{'form':form})
-
-class CreatePrice(LoginRequiredMixin,View):
-    def post(self,*args,**kwargs):
-        pid = self.request.POST['product']
-        price = self.request.POST['price']
-        start_date = self.request.POST['start_date']
-        end_date = self.request.POST['end_date']
-        product = Product.objects.get(id=pid)
-        if self.request.POST['option'] == 'change':
-            old_price = ProductPrice.objects.get(id=self.request.POST['priceid'])
-            old_price.price = float(price)
-            old_price.save()
-        elif self.request.POST['option'] == 'new':
-            price_obj = ProductPrice(
-                user=self.request.user,
-                product=product,
-                price=float(price)
-            )
-            price_obj.save()
-        messages.success(self.request,"Price Added Successfully!")
-        return redirect("admin:product_detail", id=product.id,option='view')
+            pc = form.save(commit=False)
+            pc.product = Product.objects.get(id=self.kwargs['product'])
+            pc.created_by = self.request.user
+            pc.save()
+            messages.success(self.request,"Production Capacity Created")
+            return redirect("admin:production_capacity",product=self.kwargs['product'])
 
 
+class UpdateProductionCapacity(LoginRequiredMixin,UpdateView):
+    model=ProductionCapacity
+    form_class = ProductionCapacityForm
+    template_name = "admin/product/product_data_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=ProductionCapacity.objects.get(id=self.kwargs['pk']).product
+        context['flag'] = "production_capacity"
+        return context
+
+    def form_valid(self,form):
+        pc = form.save(commit=False)
+        pc.last_updated_by = self.request.user
+        pc.last_updated_date = timezone.now()
+        pc.save()
+        messages.success(self.request,"Production Capacity Updated")
+        return redirect("admin:production_capacity",product=pc.product.id)
+
+
+class ListSalesPerformance(LoginRequiredMixin,ListView):
+    model = ProductionAndSalesPerformance
+    template_name = "admin/product/product_data_list.html"
+
+    def get_queryset(self):
+        return ProductionAndSalesPerformance.objects.filter(product=Product.objects.get(id=self.kwargs['product']))
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=Product.objects.get(id=self.kwargs['product'])
+        context['flag'] = "sales_performance"
+        return context
+
+class CreateSalesPerformance(LoginRequiredMixin,CreateView):
+    model=ProductionAndSalesPerformance
+    form_class=SalesPerformanceForm
+    template_name = "admin/product/product_data_create.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=Product.objects.get(id=self.kwargs['product'])
+        context['flag'] = "sales_performance"
+        return context
+
+    def form_valid(self,form):
+        if ProductionAndSalesPerformance.objects.filter(
+            product=Product.objects.get(id=self.kwargs['product']),activity_year=form.cleaned_data.get('activity_year')).exists():
+            messages.warning(self.request,"Data For this Year already exists")
+            return redirect("admin:create_sales_performance",product=self.kwargs['product'])
+        else:
+            sp = form.save(commit=False)
+            sp.product = Product.objects.get(id=self.kwargs['product'])
+            sp.created_by = self.request.user
+            sp.save()
+            messages.success(self.request,"Production Sales Performance Created")
+            return redirect("admin:sales_performance",product=self.kwargs['product'])
+
+
+class UpdateSalesPerformance(LoginRequiredMixin,UpdateView):
+    model=ProductionAndSalesPerformance
+    form_class = SalesPerformanceForm
+    template_name = "admin/product/product_data_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=ProductionAndSalesPerformance.objects.get(id=self.kwargs['pk']).product
+        context['flag'] = "sales_performance"
+        return context
+
+    def form_valid(self,form):
+        sp = form.save(commit=False)
+        sp.last_updated_by = self.request.user
+        sp.last_updated_date = timezone.now()
+        sp.save()
+        messages.success(self.request,"Sales Performance Updated")
+        return redirect("admin:sales_performance",product=pc.product.id)
+
+
+class ListPackaging(LoginRequiredMixin,ListView):
+    model = ProductPackaging
+    template_name = "admin/product/product_data_list.html"
+
+    def get_queryset(self):
+        return ProductPackaging.objects.filter(product=Product.objects.get(id=self.kwargs['product']))
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=Product.objects.get(id=self.kwargs['product'])
+        context['flag'] = "packaging"
+        return context
+
+class CreatePackaging(LoginRequiredMixin,CreateView):
+    model=ProductPackaging
+    form_class=ProductPackagingForm
+    template_name = "admin/product/product_data_create.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=Product.objects.get(id=self.kwargs['product'])
+        context['flag'] = "packaging"
+        return context
+
+    def form_valid(self,form):
+        if Packaging.objects.filter(product=Product.objects.get(id=self.kwargs['product'])).exists():
+            messages.warning(self.request,"Data For this Product already exists")
+            return redirect("admin:create_packaging",product=self.kwargs['product'])
+        else:
+            sp = form.save(commit=False)
+            sp.product = Product.objects.get(id=self.kwargs['product'])
+            sp.created_by = self.request.user
+            sp.save()
+            messages.success(self.request,"Product Packaging Created")
+            return redirect("admin:packaging",product=self.kwargs['product'])
+
+
+class UpdatePackaging(LoginRequiredMixin,UpdateView):
+    model=ProductPackaging
+    form_class = ProductPackagingForm
+    template_name = "admin/product/product_data_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=ProductPackagingForm.objects.get(id=self.kwargs['pk']).product
+        context['flag'] = "packaging"
+        return context
+
+    def form_valid(self,form):
+        sp = form.save(commit=False)
+        sp.last_updated_by = self.request.user
+        sp.last_updated_date = timezone.now()
+        sp.save()
+        messages.success(self.request,"Packaging Data Updated")
+        return redirect("admin:packaging",product=pc.product.id)
+
+class ListAnualInputNeed(LoginRequiredMixin,ListView):
+    model = AnnualInputNeed
+    template_name = "admin/product/product_data_list.html"
+
+    def get_queryset(self):
+        return AnnualInputNeed.objects.filter(product=Product.objects.get(id=self.kwargs['product']))
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=Product.objects.get(id=self.kwargs['product'])
+        context['flag'] = "anual_input_need"
+        return context
+
+class CreateAnualInputNeed(LoginRequiredMixin,CreateView):
+    model=AnnualInputNeed
+    form_class=AnualInputNeedForm
+    template_name = "admin/product/product_data_create.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=Product.objects.get(id=self.kwargs['product'])
+        context['flag'] = "anual_input_need"
+        return context
+
+    def form_valid(self,form):
+        if AnnualInputNeed.objects.filter(
+            product=Product.objects.get(id=self.kwargs['product']),year=form.cleaned_data.get('year'),
+            input_name__icontains =form.cleaned_data.get("input_type")).exists():
+            messages.warning(self.request,"Data For this Year already exists")
+            return redirect("admin:create_anual_inp_need",product=self.kwargs['product'])
+        else:
+            ain = form.save(commit=False)
+            ain.product = Product.objects.get(id=self.kwargs['product'])
+            ain.created_by = self.request.user
+            ain.save()
+            messages.success(self.request,"Anual Input Need Created")
+            return redirect("admin:anual_input_need",product=self.kwargs['product'])
+
+
+class UpdateAnualInputNeed(LoginRequiredMixin,UpdateView):
+    model=AnnualInputNeed
+    form_class = AnualInputNeedForm
+    template_name = "admin/product/product_data_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=AnnualInputNeed.objects.get(id=self.kwargs['pk']).product
+        context['flag'] = "anual_input_need"
+        return context
+
+    def form_valid(self,form):
+        ain = form.save(commit=False)
+        ain.last_updated_by = self.request.user
+        ain.last_updated_date = timezone.now()
+        ain.save()
+        messages.success(self.request,"Product Anual Input Need Updated")
+        return redirect("admin:anual_input_need",product=ain.product.id)
+
+
+
+class ListInputDemandSupply(LoginRequiredMixin,ListView):
+    model = InputDemandSupply
+    template_name = "admin/product/product_data_list.html"
+
+    def get_queryset(self):
+        return InputDemandSupply.objects.filter(product=Product.objects.get(id=self.kwargs['product']))
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=Product.objects.get(id=self.kwargs['product'])
+        context['flag'] = "demand_supply"
+        return context
+
+class CreateInputDemandSupply(LoginRequiredMixin,CreateView):
+    model=InputDemandSupply
+    form_class=InputDemandSupplyForm
+    template_name = "admin/product/product_data_create.html"
+
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(CreateInputDemandSupply,self).get_form_kwargs()
+        kwargs.update({'product': Product.objects.get(id=self.kwargs['product'])})
+        return kwargs
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=Product.objects.get(id=self.kwargs['product'])
+        context['flag'] = "demand_supply"
+        return context
+
+    def form_valid(self,form):
+        if InputDemandSupply.objects.filter(
+                            product=Product.objects.get(id=self.kwargs['product']),
+                            year=form.cleaned_data.get('year'),input_type=form.cleaned_data.get('input_type')).exists():
+            messages.warning(self.request,"Data For this Year already exists")
+            return redirect("admin:create_demand_supply",product=self.kwargs['product'])
+        else:
+            ds = form.save(commit=False)
+            ds.product = Product.objects.get(id=self.kwargs['product'])
+            ds.created_by = self.request.user
+            ds.save()
+            messages.success(self.request,"Input Demand and Supply data added")
+            return redirect("admin:demand_supply_list",product=self.kwargs['product'])
+
+
+class UpdateInputDemandSupply(LoginRequiredMixin,UpdateView):
+    model=InputDemandSupply
+    form_class = InputDemandSupplyForm
+    template_name = "admin/product/product_data_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product']=InputDemandSupply.objects.get(id=self.kwargs['pk']).product
+        context['flag'] = "demand_supply"
+        return context
+
+    def form_valid(self,form):
+        ds = form.save(commit=False)
+        ds.last_updated_by = self.request.user
+        ds.last_updated_date = timezone.now()
+        ds.save()
+        messages.success(self.request,"Product Input Demand and supply data Updated")
+        return redirect("admin:demand_supply_list",product=ds.product.id)
+
+
+
+
+# 
 class AddToCartView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         product = get_object_or_404(Product,id=kwargs['id'])
@@ -358,30 +757,33 @@ class ProductByCategoryView(View):
         return render(self.request,"frontpages/product/product_category.html",context)
 
 
-class ProductByMainCategory(View):
-    def get(self,*args,**kwargs):
-        products = Product.objects.all()
-        product_list = []
-        context = {}
+class ProductByMainCategory(ListView):
+    model=Product
+    template_name="frontpages/product/product_category.html"
+    paginate_by = 3
+    
+    def get_queryset(self):
+        brands = []
         if self.kwargs['option'] == "Beverage":
-            for product in products:
-                if product.category.category_name.category_type == "Beverage":
-                    product_list.append(product)
+            categories = Category.objects.filter(category_type="Beverage")
+            for category in categories:
+                for sub_cat in category.sub_category.all():
+                    for brand in sub_cat.product_category.all():
+                        brands.append(brand)
+            return Product.objects.filter(fandb_category__in=brands)
         elif self.kwargs['option'] == "Food":
-            for product in products:
-                if product.category.category_name.category_type == "Food":
-                    product_list.append(product)
+            categories = Category.objects.filter(category_type="Food")
+            for category in categories:
+                for sub_cat in category.sub_category.all():
+                    for brand in sub_cat.product_category.all():
+                        brands.append(brand)
+            return Product.objects.filter(fandb_category__in=brands)
         elif self.kwargs['option'] == "Pharmaceuticals":
-            for product in products:
-                if product.category.category_name.category_type == "Pharmaceuticals":
-                    product_list.append(product)
+            return Product.objects.filter(pharmacy_category__in=Category.objects.filter(category_type="Pharmaceuticals"))
         elif self.kwargs['option'] == "all":
-            for product in products:
-                product_list.append(product)
-        context['products'] = product_list
-        context['count'] = len(product_list)
-        return render(self.request,"frontpages/product/product_category.html",context)
+            return Product.objects.all()
 
+<<<<<<< HEAD
 class ProductDetailView(View):
     def get(self,*args,**kwargs):
         try:
@@ -404,3 +806,26 @@ class ProductDetailView(View):
             return redirect('product_detail',id=self.kwargs['id'])
         else:
             return redirect("product_detail",id=self.kwargs['id'])
+=======
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = "frontpages/product/product_detail.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['related_products'] = Product.objects.filter(fandb_category=Product.objects.get(id=self.kwargs['pk']).fandb_category)[:6]
+        context['reviews'] = Review.objects.filter(product=Product.objects.get(id=self.kwargs['pk']))
+        context['form'] = ReviewForm
+        return context
+
+class CreateReview(CreateView):
+    model=Review
+    form_class = ReviewForm
+
+    def form_valid(self, form):
+        review = form.save(commit=False)
+        review.product = Product.objects.get(id=self.kwargs['product'])
+        review.save()
+        return redirect('product_detail',pk=self.kwargs['product'])
+        
+>>>>>>> d0409167f35f5128314003ec9d54af09a5102775

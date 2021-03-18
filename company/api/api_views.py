@@ -8,13 +8,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 
-from admin_site.models import Category,SubCategory
+from admin_site.models import Category
 from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
 
 from collaborations.models import News
 from collaborations.api.serializers import NewsListSerializer
 
-from company.models import Company
+from company.models import Company,SubCategory
 from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer
 
 from product.models import Product, ProductImage, ProductPrice

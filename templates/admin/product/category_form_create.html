@@ -1,0 +1,73 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+{% endblock %}
+{%block pagename%}{%if category == True%}Product Categories{%elif sub_category == True%}Product Sub Category{%elif brand == True%}Product Brand{%endif%}{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Form inputs -->
+				{%if category == True%}
+					 
+					<div class="card">
+						
+						<div class="card-body">
+							
+							<form action="{%url 'admin:create_category'%}" method="POST" enctype="multipart/form-data">{%csrf_token%}
+								 
+								{{form|crispy}}
+
+								<div class="text-right">
+									<button style="padding-left: 10%; padding-right: 10%;" type="submit" class="btn btn-primary rounded-round">Submit </button>
+								</div>
+							</form>
+						</div>
+					</div>
+				 
+				{%elif sub_category == True%}
+					 	<div class="card">
+						
+							<div class="card-body">
+								
+								<form action="{%url 'admin:create_subcategory' %}" method="POST" enctype="multipart/form-data">
+										{%csrf_token%}
+										 {{form|crispy}}
+		
+									<div class="text-right">
+										<button style="padding-left: 10%; padding-right: 10%;" type="submit" class="btn btn-primary rounded-round">Submit </button>
+									</div>
+								</form>
+							</div>
+						</div>
+				{%elif brand == True%}
+						<div class="card">
+					   
+						   <div class="card-body">
+							   
+							   <form action="{%url 'admin:create_brand' %}" method="POST" enctype="multipart/form-data">
+									   {%csrf_token%}
+										{{form|crispy}}
+	   
+								   <div class="text-right">
+									   <button style="padding-left: 10%; padding-right: 10%;" type="submit" class="btn btn-primary rounded-round">Submit </button>
+								   </div>
+							   </form>
+						   </div>
+					   </div>
+				{%endif%}
+				<!-- /form inputs -->
+
+			</div>
+			<!-- /content area -->
+			<script>
+				$(document).ready(function() {
+					$('#summernote').summernote();
+					$('.summernote').summernote();
+				});
+			  </script>
+{%endblock%}
+
