@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-13 21:35+0300\n"
+"POT-Creation-Date: 2021-03-18 01:49+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,13 +32,16 @@ msgstr "የፈለጉት ገጽ የለም"
 
 #: .\templates\admin\404.html:10
 msgid "We’re sorry, but the requested page could not be found."
-msgstr ""
+msgstr "የጠየቁትን ግጽ ማግኘት አልቻልንም"
 
 #: .\templates\admin\500.html:6 .\templates\admin\base.html:65
 #: .\templates\frontpages\announcement\customer_announcement.html:44
 #: .\templates\frontpages\announcement\customer_announcement_detail.html:22
 #: .\templates\frontpages\layout.html:280
+#: .\templates\frontpages\news\customer_event_detail.html:56
 #: .\templates\frontpages\news\customer_event_list.html:43
+#: .\templates\frontpages\news\customer_news_detail.html:22
+#: .\templates\frontpages\news\customer_news_detail.html:57
 #: .\templates\frontpages\news\customer_news_list.html:67
 #: .\templates\frontpages\poll\poll_detail.html:20
 #: .\templates\frontpages\poll\polls-list.html:44
@@ -98,13 +101,13 @@ msgid "Ecommerce - Product Detail"
 msgstr ""
 
 #: .\templates\frontpages\announcement\customer_announcement.html:25
-#: .\templates\frontpages\announcement\customer_announcement.html:186
+#: .\templates\frontpages\announcement\customer_announcement.html:187
 #: .\templates\frontpages\blog-details-right.html:38
 #: .\templates\frontpages\blog-grid-right.html:37
 #: .\templates\frontpages\news\customer_event_list.html:24
-#: .\templates\frontpages\news\customer_event_list.html:220
+#: .\templates\frontpages\news\customer_event_list.html:218
 #: .\templates\frontpages\news\customer_news_list.html:47
-#: .\templates\frontpages\news\customer_news_list.html:613
+#: .\templates\frontpages\news\customer_news_list.html:611
 #: .\templates\frontpages\poll\polls-list.html:25
 #: .\templates\frontpages\poll\polls-list.html:209
 #: .\templates\frontpages\project\project_list.html:39
@@ -114,7 +117,7 @@ msgstr ""
 #: .\templates\frontpages\research\research_list.html:51
 #: .\templates\frontpages\tender\customer_tender_detail.html:198
 #: .\templates\frontpages\tender\customer_tender_list.html:24
-#: .\templates\frontpages\tender\customer_tender_list.html:226
+#: .\templates\frontpages\tender\customer_tender_list.html:224
 #, fuzzy
 #| msgid "Search Now"
 msgid "Search"
@@ -126,37 +129,86 @@ msgstr "ፈልግ"
 msgid "Announcement List"
 msgstr "ማስታወቂያ"
 
+#: .\templates\frontpages\announcement\customer_announcement.html:63
+#: .\templates\frontpages\news\customer_event_list.html:62
+#: .\templates\frontpages\news\customer_news_list.html:88
+#: .\templates\frontpages\poll\polls-list.html:63
+#: .\templates\frontpages\tender\customer_tender_list.html:61
+#, fuzzy
+#| msgid "Pages"
+msgid "Page"
+msgstr "ገጾች"
+
+#: .\templates\frontpages\announcement\customer_announcement.html:63
+#: .\templates\frontpages\news\customer_event_list.html:62
+#: .\templates\frontpages\news\customer_news_list.html:88
+#: .\templates\frontpages\poll\polls-list.html:63
+#: .\templates\frontpages\tender\customer_tender_list.html:61
+msgid "of"
+msgstr "ከ"
+
 #: .\templates\frontpages\announcement\customer_announcement.html:74
-#: .\templates\frontpages\news\customer_event_list.html:74
-#: .\templates\frontpages\news\customer_news_list.html:98
+#: .\templates\frontpages\news\customer_event_list.html:73
+#: .\templates\frontpages\news\customer_news_list.html:99
 #: .\templates\frontpages\poll\polls-list.html:74
 #: .\templates\frontpages\tender\customer_tender_list.html:72
 msgid "All"
 msgstr "ሁሉም"
 
-#: .\templates\frontpages\announcement\customer_announcement.html:129
+#: .\templates\frontpages\announcement\customer_announcement.html:130
+#: .\templates\frontpages\news\customer_event_list.html:163
 #: .\templates\frontpages\poll\polls-list.html:152
 msgid "At"
 msgstr "በ"
 
-#: .\templates\frontpages\announcement\customer_announcement.html:200
+#: .\templates\frontpages\announcement\customer_announcement.html:151
+#: .\templates\frontpages\announcement\customer_announcement.html:153
+#: .\templates\frontpages\news\customer_event_list.html:180
+#: .\templates\frontpages\news\customer_event_list.html:182
+#: .\templates\frontpages\news\customer_news_list.html:574
+#: .\templates\frontpages\news\customer_news_list.html:576
+#: .\templates\frontpages\poll\polls-list.html:173
+#: .\templates\frontpages\poll\polls-list.html:175
+#: .\templates\frontpages\tender\customer_tender_list.html:189
+#: .\templates\frontpages\tender\customer_tender_list.html:191
+msgid "Prev"
+msgstr "የበፈቱን"
+
+#: .\templates\frontpages\announcement\customer_announcement.html:165
+#: .\templates\frontpages\announcement\customer_announcement.html:167
+#: .\templates\frontpages\news\customer_event_list.html:194
+#: .\templates\frontpages\news\customer_event_list.html:196
+#: .\templates\frontpages\news\customer_news_list.html:588
+#: .\templates\frontpages\news\customer_news_list.html:590
+#: .\templates\frontpages\poll\polls-list.html:187
+#: .\templates\frontpages\poll\polls-list.html:189
+#: .\templates\frontpages\tender\customer_tender_list.html:203
+#: .\templates\frontpages\tender\customer_tender_list.html:205
+msgid "Next"
+msgstr "ቀጣይ"
+
+#: .\templates\frontpages\announcement\customer_announcement.html:201
+#: .\templates\frontpages\news\customer_event_list.html:230
+#: .\templates\frontpages\news\customer_news_detail.html:231
 #: .\templates\frontpages\poll\polls-list.html:223
+#: .\templates\frontpages\tender\customer_tender_list.html:234
 msgid "Filter by company"
 msgstr "በድርጅት አጣራ"
 
-#: .\templates\frontpages\announcement\customer_announcement.html:215
-#: .\templates\frontpages\news\customer_event_detail.html:251
-#: .\templates\frontpages\news\customer_event_list.html:248
-#: .\templates\frontpages\news\customer_news_detail.html:246
-#: .\templates\frontpages\news\customer_news_list.html:662
+#: .\templates\frontpages\announcement\customer_announcement.html:216
+#: .\templates\frontpages\news\customer_event_detail.html:250
+#: .\templates\frontpages\news\customer_event_list.html:246
+#: .\templates\frontpages\news\customer_news_detail.html:247
+#: .\templates\frontpages\news\customer_news_list.html:660
 #: .\templates\frontpages\poll\polls-list.html:238
-#: .\templates\frontpages\tender\customer_tender_list.html:252
+#: .\templates\frontpages\tender\customer_tender_list.html:250
 msgid "Apply Filter"
 msgstr "አጣራ"
 
 #: .\templates\frontpages\announcement\customer_announcement_detail.html:18
 #: .\templates\frontpages\announcement\customer_announcement_detail.html:24
 #: .\templates\frontpages\layout.html:307
+#: .\templates\frontpages\layout.html:309
 msgid "Announcement"
 msgstr "ማስታወቂያ"
 
@@ -183,6 +235,10 @@ msgstr "አስተያየት ያክሉ"
 msgid "Submit"
 msgstr "አስገባ"
 
+#: .\templates\frontpages\chat\customer_chat_layout.html:85
+msgid "Your Chats with "
+msgstr "የእርሶ ውይይት ከ"
+
 #: .\templates\frontpages\company\about.html:12
 #, fuzzy
 #| msgid "About Us"
@@ -191,7 +247,7 @@ msgstr "ስለ እኛ"
 
 #: .\templates\frontpages\company\company_list.html:15
 msgid "listings available"
-msgstr ""
+msgstr "የተገኙ ውጤቶች"
 
 #: .\templates\frontpages\faq.html:15
 msgid "FAQ"
@@ -258,8 +314,8 @@ msgstr "አዲስ ምርቶች"
 
 #: .\templates\frontpages\index.html:196 .\templates\frontpages\index.html:331
 #: .\templates\frontpages\index.html:402 .\templates\frontpages\index.html:531
-#: .\templates\frontpages\index.html:631 .\templates\frontpages\index.html:784
-#: .\templates\frontpages\index.html:872
+#: .\templates\frontpages\index.html:631 .\templates\frontpages\index.html:781
+#: .\templates\frontpages\index.html:869
 msgid "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula"
 msgstr "ሞርቢ አሥራ አንድ ፣ ሊጉላ በሴሴቲተር ተሸከርካሪ ላይ ሞርቢ አሥራ አንድ ፣ ሊጉላ በሴሴቲተር ተሸከርካሪ ላይ"
 
@@ -359,33 +415,34 @@ msgstr "አቅራቢዎች"
 
 #: .\templates\frontpages\index.html:699
 msgid "In Ethiopian Food, Beverage and Pharmaceutical Industry."
-msgstr ""
+msgstr "በኢትዮጵያ የምግብ፣ መጠጥ እና መድሃኒቶች ኢንዱስትሪ"
 
-#: .\templates\frontpages\index.html:783
+#: .\templates\frontpages\index.html:780
 msgid "Categories List"
 msgstr "የምርት አይነቶች"
 
-#: .\templates\frontpages\index.html:791
+#: .\templates\frontpages\index.html:788
 msgid "Food Sectors"
 msgstr "መግብ"
 
-#: .\templates\frontpages\index.html:816
+#: .\templates\frontpages\index.html:813
 msgid "Beverage Sectors"
 msgstr "መጠጥ"
 
-#: .\templates\frontpages\index.html:841
+#: .\templates\frontpages\index.html:838
 msgid "Pharmaceutical Sectors"
 msgstr "መድሃኒት"
 
-#: .\templates\frontpages\index.html:871
+#: .\templates\frontpages\index.html:868
 msgid "Download App"
 msgstr "መተግበሪያ አዉርድ"
 
 #: .\templates\frontpages\job_apply.html:10
 msgid "Appying to"
-msgstr ""
+msgstr "ማመልከቻ"
 
 #: .\templates\frontpages\job_apply.html:26
+#: .\templates\frontpages\news\customer_news_list.html:623
 #: .\templates\frontpages\project\project_detail.html:49
 #: .\templates\frontpages\project\project_list.html:48
 #: .\templates\frontpages\research\research_detail.html:60
@@ -399,39 +456,39 @@ msgstr "ምድቦች"
 
 #: .\templates\frontpages\job_apply.html:51
 msgid "Job application form"
-msgstr ""
+msgstr "የማምልከቻ ቅጽ"
 
 #: .\templates\frontpages\job_apply.html:62
 msgid "Status"
-msgstr ""
+msgstr "ወቅታዊ ሁኔታ"
 
 #: .\templates\frontpages\job_apply.html:72
 msgid "The institute you learned in"
-msgstr ""
+msgstr "የተማሩበት የት/ት ተቋም"
 
 #: .\templates\frontpages\job_apply.html:79
 msgid "The field you are an expert in"
-msgstr ""
+msgstr "የሙያ አይነት"
 
 #: .\templates\frontpages\job_apply.html:86
 msgid "Grade"
-msgstr ""
+msgstr "ውጤት"
 
 #: .\templates\frontpages\job_apply.html:94
 msgid "experiance (in years)"
-msgstr ""
+msgstr "የስራ ልምድ (አመት)"
 
 #: .\templates\frontpages\job_apply.html:102
 msgid "Introduce your self"
-msgstr ""
+msgstr "እራሶን ያስተዋውቁ"
 
 #: .\templates\frontpages\job_apply.html:110
 msgid "Upload your CV"
-msgstr ""
+msgstr "CV አያይዝ"
 
 #: .\templates\frontpages\job_apply.html:119
 msgid "Upload your Documents (This is for certifivates and other documents)"
-msgstr ""
+msgstr "ተያያዥ ማስረጃዎችን ያያይዙ"
 
 #: .\templates\frontpages\layout.html:140
 msgid "My Cart"
@@ -441,6 +498,18 @@ msgstr "ዘንቢል"
 #: .\templates\frontpages\layout.html:182
 msgid "My Profile"
 msgstr "የራስ አካውንት"
+
+#: .\templates\frontpages\layout.html:153
+
+#| msgid "Pages"
+msgid "My Messages"
+msgstr "መልዕክቶች"
+
+#: .\templates\frontpages\layout.html:160
+
+#| msgid "Pages"
+msgid " List of Messages"
+msgstr "የመልክዕት ዝርዝር"
 
 #: .\templates\frontpages\layout.html:212
 msgid "Logout"
@@ -500,18 +569,16 @@ msgstr "ምርምር"
 msgid "Project"
 msgstr "ፕሮጀክት"
 
-#: .\templates\frontpages\layout.html:309
-#, fuzzy
-#| msgid "Announcement"
-msgid "Announcements"
-msgstr "ማስታወቂያ"
-
 #: .\templates\frontpages\layout.html:310
+#: .\templates\frontpages\news\customer_event_detail.html:57
 #: .\templates\frontpages\news\customer_event_list.html:44
 msgid "Events"
 msgstr "ዝግጅቶች"
 
 #: .\templates\frontpages\layout.html:311
+#: .\templates\frontpages\news\customer_news_detail.html:23
+#: .\templates\frontpages\news\customer_news_detail.html:55
+#: .\templates\frontpages\news\customer_news_detail.html:58
 msgid "News"
 msgstr "ዜና"
 
@@ -549,8 +616,71 @@ msgstr "ተየጥ"
 msgid "Contact Us"
 msgstr "ተገናኙን"
 
-#: .\templates\frontpages\news\customer_event_detail.html:235
-#: .\templates\frontpages\tender\customer_tender_list.html:236
+#: .\templates\frontpages\news\customer_event_detail.html:20
+#: .\templates\frontpages\news\customer_event_detail.html:59
+#: .\templates\frontpages\news\customer_event_list.html:148
+msgid "Event Detail"
+msgstr "የዝግጅቱ ዝርዝር"
+
+#: .\templates\frontpages\news\customer_event_detail.html:30
+#: .\templates\frontpages\news\customer_news_detail.html:35
+#, fuzzy
+#| msgid "Company Name"
+msgid "Company Address"
+msgstr "ድርጅት ስም"
+
+#: .\templates\frontpages\news\customer_event_detail.html:79
+#: .\templates\frontpages\news\customer_event_list.html:138
+#: .\templates\frontpages\news\customer_news_detail.html:78
+#: .\templates\frontpages\news\customer_news_list.html:134
+#: .\templates\frontpages\news\customer_news_list.html:141
+#: .\templates\frontpages\tender\customer_tender_detail.html:50
+#: .\templates\frontpages\tender\customer_tender_list.html:148
+msgid "By"
+msgstr "በ"
+
+#: .\templates\frontpages\news\customer_event_detail.html:81
+#: .\templates\frontpages\tender\customer_tender_detail.html:43
+msgid "Start Date"
+msgstr "የሚደምርበት ቀን"
+
+#: .\templates\frontpages\news\customer_event_detail.html:82
+#: .\templates\frontpages\tender\customer_tender_detail.html:44
+msgid "End Date"
+msgstr "የሚያልቅበት ቀን"
+
+#: .\templates\frontpages\news\customer_event_detail.html:107
+msgid "From"
+msgstr "ከ"
+
+#: .\templates\frontpages\news\customer_event_detail.html:128
+msgid "Remind Me"
+msgstr "የማስታወሻ መልዕክት ላክ"
+
+#: .\templates\frontpages\news\customer_event_detail.html:137
+#, fuzzy
+#| msgid "Tender description"
+msgid "Event Description"
+msgstr "ጨረታ መግለጫ"
+
+#: .\templates\frontpages\news\customer_event_detail.html:197
+#: .\templates\frontpages\news\customer_news_detail.html:181
+#, fuzzy
+#| msgid "Shipping Information"
+msgid "Company Information"
+msgstr "የግብይት መረጃ"
+
+#: .\templates\frontpages\news\customer_event_detail.html:214
+#: .\templates\frontpages\news\customer_news_detail.html:207
+msgid "Company Contact Info"
+msgstr "የድርጅቱ አድራሻ"
+
+#: .\templates\frontpages\news\customer_event_detail.html:225
+#: .\templates\frontpages\news\customer_news_detail.html:219
+msgid "Chat"
+msgstr "ንግግር"
+
+#: .\templates\frontpages\news\customer_event_detail.html:234
 msgid "Filter by company "
 msgstr "ብድርጅት ለይ"
 
@@ -558,25 +688,21 @@ msgstr "ብድርጅት ለይ"
 msgid "Events list"
 msgstr "የዝግጅቶች ዝርዝር"
 
-#: .\templates\frontpages\news\customer_event_list.html:68
-msgid "Sort By"
-msgstr "ደርድር"
-
-#: .\templates\frontpages\news\customer_event_list.html:81
+#: .\templates\frontpages\news\customer_event_list.html:80
 msgid "Upcoming Events"
 msgstr "መጪ የዝግጅቶች"
 
-#: .\templates\frontpages\news\customer_event_list.html:88
+#: .\templates\frontpages\news\customer_event_list.html:87
 msgid "Open Events"
 msgstr "ክፈት ዝግጅቶች"
 
-#: .\templates\frontpages\news\customer_event_list.html:125
+#: .\templates\frontpages\news\customer_event_list.html:123
 #: .\templates\frontpages\tender\customer_tender_detail.html:64
 #: .\templates\frontpages\tender\customer_tender_list.html:134
 msgid "Open"
 msgstr "ክፈት"
 
-#: .\templates\frontpages\news\customer_event_list.html:127
+#: .\templates\frontpages\news\customer_event_list.html:125
 #: .\templates\frontpages\tender\customer_tender_detail.html:66
 #: .\templates\frontpages\tender\customer_tender_list.html:136
 #, fuzzy
@@ -584,27 +710,43 @@ msgstr "ክፈት"
 msgid "Upcoming"
 msgstr "መጪ የዝግጅቶች"
 
-#: .\templates\frontpages\news\customer_event_list.html:129
+#: .\templates\frontpages\news\customer_event_list.html:127
 #: .\templates\frontpages\tender\customer_tender_detail.html:68
 #: .\templates\frontpages\tender\customer_tender_list.html:138
 msgid "Closed"
 msgstr "ዝግ"
 
-#: .\templates\frontpages\news\customer_event_list.html:131
+#: .\templates\frontpages\news\customer_event_list.html:129
 #: .\templates\frontpages\tender\customer_tender_detail.html:70
-#: .\templates\frontpages\tender\customer_tender_list.html:140
 msgid "Suspended"
 msgstr "ታግዷል"
 
-#: .\templates\frontpages\news\customer_event_list.html:232
-msgid "Filter by Company "
-msgstr ""
+#: .\templates\frontpages\news\customer_news_detail.html:18
+#: .\templates\frontpages\news\customer_news_list.html:153
+msgid "News Detail"
+msgstr "የዜና ዝርዝር"
 
-#: .\templates\frontpages\news\customer_news_detail.html:230
+#: .\templates\frontpages\news\customer_news_detail.html:24
 #, fuzzy
-#| msgid "Posted By"
-msgid "Posted By "
-msgstr "በ"
+#| msgid "News Detail"
+msgid "News Details"
+msgstr "የዜና ዝርዝር"
+
+#: .\templates\frontpages\news\customer_news_detail.html:128
+#, fuzzy
+#| msgid "Research Description"
+msgid "News Description"
+msgstr "የምርምር መግለጫ"
+
+#: .\templates\frontpages\news\customer_news_detail.html:198
+#, fuzzy
+#| msgid "Contact Us"
+msgid "Contat"
+msgstr "ተገናኙን"
+
+#: .\templates\frontpages\news\customer_news_detail.html:221
+msgid "All Listings"
+msgstr "ሁሉም"
 
 #: .\templates\frontpages\news\customer_news_list.html:65
 #: .\templates\frontpages\news\customer_news_list.html:69
@@ -615,19 +757,24 @@ msgstr "የዜናዎች"
 msgid "Pages"
 msgstr "ገጾች"
 
-#: .\templates\frontpages\news\customer_news_list.html:140
-#: .\templates\frontpages\tender\customer_tender_list.html:150
-msgid "By"
-msgstr "በ"
+#: .\templates\frontpages\news\customer_news_list.html:151
+msgid "Chat with staff"
+msgstr "ከሰራተኞች ጋር ይወያዩ"
 
-#: .\templates\frontpages\news\customer_news_list.html:702
+#: .\templates\frontpages\news\customer_news_list.html:700
 msgid "Send Message"
-msgstr ""
+msgstr "መልዕክቱን ላክ"
 
 #: .\templates\frontpages\poll\poll_detail.html:18
 #: .\templates\frontpages\poll\poll_detail.html:22
 msgid "Poll-Details"
 msgstr "የምርጫ ዝርዝርው"
+
+#: .\templates\frontpages\poll\poll_detail.html:55
+#, fuzzy
+#| msgid "Poll Detail"
+msgid "Poll title"
+msgstr "የምርጫ ዝርዝር"
 
 #: .\templates\frontpages\poll\poll_detail.html:117
 msgid "Any Remarks"
@@ -635,7 +782,7 @@ msgstr "ማንኛውም አስተያየት"
 
 #: .\templates\frontpages\poll\polls-list.html:80
 msgid "Highest votes"
-msgstr ""
+msgstr "በመራጮች ድምጽ ብዛት"
 
 #: .\templates\frontpages\poll\polls-list.html:114
 msgid "Choices"
@@ -652,6 +799,10 @@ msgstr "ድምጾች"
 #: .\templates\frontpages\poll\polls-list.html:126
 msgid "Vote"
 msgstr "ድምጽ"
+
+#: .\templates\frontpages\poll\polls-list.html:144
+msgid "Poll Detail"
+msgstr "የምርጫ ዝርዝር"
 
 #: .\templates\frontpages\product\carts.html:45
 msgid "Proceed To Checkout"
@@ -791,17 +942,19 @@ msgstr "ጨረታ"
 msgid "Title"
 msgstr "ርዕስ"
 
-#: .\templates\frontpages\tender\customer_tender_detail.html:43
-msgid "Start Date"
-msgstr "የሚደምርበት ቀን"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:44
-msgid "End Date"
-msgstr "የሚያልቅበት ቀን"
+#: .\templates\frontpages\tender\customer_tender_detail.html:53
+msgid "Type"
+msgstr "አይነት"
 
 #: .\templates\frontpages\tender\customer_tender_detail.html:56
 msgid "Price"
 msgstr "ዋጋ"
+
+#: .\templates\frontpages\tender\customer_tender_detail.html:59
+#, fuzzy
+#| msgid "Applicant Form"
+msgid "Total Applications"
+msgstr "የአመልካች ቅጽ"
 
 #: .\templates\frontpages\tender\customer_tender_detail.html:81
 #: .\templates\frontpages\tender\customer_tender_detail.html:93
@@ -872,19 +1025,18 @@ msgstr "ነፃ ብቻ"
 
 #: .\templates\frontpages\tender\customer_tender_list.html:86
 msgid "Paid Only"
-msgstr ""
+msgstr "የሚያስከፍሉ ብቻ"
 
 #: .\templates\frontpages\tender\customer_tender_list.html:94
-#, fuzzy
-#| msgid "Closed"
-msgid "Closed Only"
-msgstr "ዝግ"
-
 #: .\templates\frontpages\tender\customer_tender_list.html:97
 msgid "Open Only"
 msgstr "ክፈት ብቻ"
 
-#: .\templates\frontpages\tender\customer_tender_list.html:170
+#: .\templates\frontpages\tender\customer_tender_list.html:159
+msgid "Tender Detail"
+msgstr "የጨረታ ዝርዝር"
+
+#: .\templates\frontpages\tender\customer_tender_list.html:168
 #, fuzzy
 #| msgid "Posted By"
 msgid "Posted"
@@ -910,11 +1062,11 @@ msgstr "መልክት"
 
 #: .\templates\frontpages\vacancy_detail.html:77
 msgid "Salary"
-msgstr ""
+msgstr "ደሞዝ"
 
 #: .\templates\frontpages\vacancy_detail.html:82
 msgid "Requirement"
-msgstr ""
+msgstr "ቅድመ-ሁኔታ"
 
 #: .\templates\frontpages\vacancy_detail.html:87
 #, fuzzy
@@ -928,24 +1080,24 @@ msgstr "የሚያልቅበት ቀን"
 
 #: .\templates\frontpages\vacancy_detail.html:95
 msgid "Description"
-msgstr ""
+msgstr "መግለጫ"
 
 #: .\templates\frontpages\vacancy_detail.html:101
 #: .\templates\frontpages\vacancy_list.html:103
 msgid "Apply"
-msgstr ""
+msgstr "አመልክት"
 
 #: .\templates\frontpages\vacancy_list.html:87
 msgid "cateory"
-msgstr ""
+msgstr "ምድብ"
 
 #: .\templates\frontpages\vacancy_list.html:90
 msgid "Employee Type"
-msgstr ""
+msgstr "የቅጥር አይነት"
 
 #: .\templates\frontpages\vacancy_list.html:102
 msgid "View job details"
-msgstr ""
+msgstr "የስራው መግለጫ"
 
 #: .\templates\registration\logged_out.html:10
 msgid "Thanks for spending some quality time with the Web site today."
@@ -2400,6 +2552,24 @@ msgstr ""
 msgid "There are no authorized tokens yet."
 msgstr ""
 
+#, fuzzy
+#~| msgid "Announcement"
+#~ msgid "Announcements"
+#~ msgstr "ማስታወቂያ"
+
+#~ msgid "Sort By"
+#~ msgstr "ደርድር"
+
+#, fuzzy
+#~| msgid "Posted By"
+#~ msgid "Posted By "
+#~ msgstr "በ"
+
+#, fuzzy
+#~| msgid "Closed"
+#~ msgid "Closed Only"
+#~ msgstr "ዝግ"
+
 #~ msgid "Announcement By companys"
 #~ msgstr "ማስታወቂያ በ ኩባንያ"
 
@@ -2418,9 +2588,6 @@ msgstr ""
 #~ msgid "Suppliers"
 #~ msgstr "አቅራቢዎች"
 
-#~ msgid "Event Detail"
-#~ msgstr "የዝግጅቱ ዝርዝር"
-
 #~ msgid "Dealer"
 #~ msgstr "ሻጭ"
 
@@ -2429,9 +2596,6 @@ msgstr ""
 
 #~ msgid "Reseller"
 #~ msgstr "ሻጭ"
-
-#~ msgid "News Detail"
-#~ msgstr "የዜና ዝርዝር"
 
 #~ msgid "Total votes"
 #~ msgstr "ጠቅላላ መራጮች"
@@ -2457,9 +2621,6 @@ msgstr ""
 #~ msgid "Number of votes"
 #~ msgstr "የድምፅዎች ብዛት"
 
-#~ msgid "Poll Detail"
-#~ msgstr "የምርጫ ዝርዝር"
-
 #, fuzzy
 #~| msgid "Suppliers"
 #~ msgid "Supplier"
@@ -2468,14 +2629,8 @@ msgstr ""
 #~ msgid "Manufacturer"
 #~ msgstr "አምራቾች"
 
-#~ msgid "Type"
-#~ msgstr "አይነት"
-
 #~ msgid "Pending"
 #~ msgstr "በመጠባበቅ ላይ"
-
-#~ msgid "Tender Detail"
-#~ msgstr "የጨረታ ዝርዝር"
 
 #~ msgid "Manufacturing"
 #~ msgstr "አምራቾች"

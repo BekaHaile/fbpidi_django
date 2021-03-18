@@ -59,11 +59,11 @@
 								<div class="dropdown-menu dropdown-menu-right">
 								{% if user.is_superuser or user.get_company == Announcement.created_by.get_company %}
 								
-									{% if perms.collaborations.change_announcements %}
+									{% if perms.collaborations.change_announcement %}
 										<a href="{%url 'admin:anounce_Detail'   id=Announcement.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Item</a>	
 									{% endif %}
 
-									{% if perms.collaborations.delete_announcements %}
+									{% if perms.collaborations.delete_announcement %}
 										<a href="{%url 'admin:delete' model_name='Announcement' id=Announcement.id%}" class="dropdown-item" onclick="return confirm ('Are you sure you want to delete this Announcement?')"><i class="icon-trash"></i>Delete Item</a>
 									{% endif %}		
 									

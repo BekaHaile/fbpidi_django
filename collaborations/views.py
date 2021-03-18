@@ -61,7 +61,7 @@ def related_company_title(model_name, obj):
     model = models[model_name]
     result = FilterByCompanyname( [obj.company], model.objects.exclude(id =obj.id)  )
     if result['query'].count() != 0:
-        return {'query':result['query'], 'message':f"Other {model_name}s from {obj.company.company_name} ", 'message_am': f"ሌሎቸ በ{obj.company.company_name_am} ድርጅት የተለቀቁ {obj.model_am()}" }
+        return {'query':result['query'], 'message':f"Other {model_name}s from {obj.company.company_name} ", 'message_am': f"ሌሎቸ በ{obj.company.company_name_am} ድርጅት የተለቀቁ {model.model_am}" }
     else:
         result = search_title_related_objs(  obj, model.objects.exclude(id =obj.id)  )
         if result['query'].count() != 0:
@@ -100,9 +100,10 @@ def SearchByTitle_All(model_name, request ):
     """   
     try:
         model= models[model_name]
+        print("#################################",model.model_am)
         if not 'by_title' in request.GET: #not searching, just displaying latest news 
             query  = model.objects.all()
-            return { 'query': query, 'message': f" {model_name} ",  'message_am': f" {query.first().model_am()} "} # 3 Polls Found!
+            return { 'query': query, 'message': f" {model_name} ",  'message_am': f" {model.model_am} "} # 3 Polls Found!
         else:   #if there is a filter_key list
             filter_key = request.GET['by_title']
             query = model.objects.filter( Q(title__icontains = filter_key) | Q(title_am__icontains = filter_key) |Q(description__icontains = filter_key ) | Q(description_am__icontains = filter_key) ).distinct() 
@@ -166,36 +167,43 @@ def filter_by(field_name, field_values, query):
 def get_paginated_data(request, query):
     page_number = request.GET.get('page', 1)
     try:
-        return Paginator(query, 1).page(page_number)
-    except EmptyPage:
-        return Paginator(query, 1).page(1)
+        return Paginator(query, 2).page(page_number)
+    except Exception as e:
+        print("exception at get_paginate_data ",e)
+        return Paginator(query, 2).page(1)
 
 
 class CustomerPollList(View):
     def get(self, *args, **kwargs):
         result ={}
-        if 'by_company' in self.request.GET:
-            result = FilterByCompanyname(self.request.GET.getlist('by_company'), PollsQuestion.objects.all())
-        elif 'by_no_vote' in self.request.GET:
-            result['query'] = PollsQuestion.objects.annotate(num_vote=Count('pollsresult')).order_by('-num_vote')
-            if result['query'].count() > 0:
-                result['message'] = "Polls in order of number of votes!"
+        try:
+            if 'by_company' in self.request.GET:
+                result = FilterByCompanyname(self.request.GET.getlist('by_company'), PollsQuestion.objects.all())
+            elif 'by_no_vote' in self.request.GET:
+                result['query'] = PollsQuestion.objects.annotate(num_vote=Count('pollsresult')).order_by('-num_vote')
+                print("###################",result['query'])
+                if result['query'].count() > 0:
+                    result['message'] = "Polls in order of number of votes!"
+                    result['message_am'] = "በመራጮች ብዛት ቅደም ተከተል"
+                else:
+                    result['message'] = "No result Found!"
+                    result['message_am'] = "ምንም ውጤት አልተገኘም"
             else:
-                result['message'] = "No result Found!"
-        else:
-            result = SearchByTitle_All('Polls', self.request) # this returns all if there is no search key or filter by search
-        
-        companies = []
-        for comp in Company.objects.all():
-            if comp.pollsquestion_set.count()>0:
-                companies.append(comp)
-        if result['query']==0:
-            result['query'] = PollsQuestion.objects.all()
-            result['message'] = 'No Result Found!'
-        data = get_paginated_data(self.request, result['query'])
-        return render(self.request, "frontpages/poll/polls-list.html", { 'polls':data, 'message' : result['message'], 'message_am':result['message_am'],'companies':companies})
+                result = SearchByTitle_All('Polls', self.request) # this returns all if there is no search key or filter by search
+            
+            companies = []
+            for comp in Company.objects.all():
+                if comp.pollsquestion_set.count()>0:
+                    companies.append(comp)
+            if result['query']==0:
+                result['query'] = PollsQuestion.objects.all()
+                result['message'] = 'No Result Found!'
+            data = get_paginated_data(self.request, result['query'])
+            return render(self.request, "frontpages/poll/polls-list.html", { 'polls':data, 'message' : result['message'], 'message_am':result['message_am'],'companies':companies})
 
-
+        except Exception as e:
+            print("exceptio at polls list ",e)
+            return redirect('index')
 #only visible to logged in and never voted before
 class PollDetail(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):
@@ -552,6 +560,7 @@ class AdminNewsList(LoginRequiredMixin, ListView):
                 print("Exception while trying to fetch news objects")
                 return redirect("admin:index")
 
+
 class NewsDetail(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):         
         if self.kwargs['id']:
@@ -584,23 +593,29 @@ def Ajax(request):
 class CustomerNewsList(View):
     def get(self, *args, **kwargs):
         result = []
-        if 'by_category' in self.request.GET and 'by_title' in self.request.GET:
-            result = SearchCategory_Title('News', self.request)
-            return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':result['query'], 'message':result['message'],  'message_am':result['message_am'],'NEWS_CATAGORY':News.NEWS_CATAGORY,
-                                                                'searched_category':result['searched_category'], 'searched_name':result['searched_name']})
-        elif 'by_category' in self.request.GET:
-            result = filter_by('catagory', self.request.GET.getlist('by_category'), News.objects.all())
-        elif 'by_company' in self.request.GET:
-            result = FilterByCompanyname(self.request.GET.getlist('by_company'), News.objects.all())
-        else: 
-            result = SearchByTitle_All('News', self.request)
+        try:
+            if 'by_category' in self.request.GET and 'by_title' in self.request.GET:
+                result = SearchCategory_Title('News', self.request)
+                data = get_paginated_data(self.request, result['query'])
+                return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':data, 'message':result['message'],  'message_am':result['message_am'],'NEWS_CATAGORY':News.NEWS_CATAGORY,
+                                                                    'searched_category':result['searched_category'], 'searched_name':result['searched_name']})
+            elif 'by_category' in self.request.GET:
+                result = filter_by('catagory', self.request.GET.getlist('by_category'), News.objects.all())
+            elif 'by_company' in self.request.GET:
+                result = FilterByCompanyname(self.request.GET.getlist('by_company'), News.objects.all())
+            else: 
+                result = SearchByTitle_All('News', self.request)
 
-        if result['query'].count()==0:
-            result['query'] = News.objects.all()
-        data = get_paginated_data(self.request, result['query'])
-       
-        return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':data, 'message':result['message'],  'message_am':result['message_am'], 'NEWS_CATAGORY':News.NEWS_CATAGORY})
-       
+            if result['query'].count()==0:
+                result['query'] = News.objects.all()
+            data = get_paginated_data(self.request, result['query'])
+        
+            return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':data, 'message':result['message'],  'message_am':result['message_am'], 'NEWS_CATAGORY':News.NEWS_CATAGORY})
+        
+        except Exception as e:
+            print("exceptio at news list ",e)
+            return redirect('index')
+
 
 class CustomerNewsDetail(View):
     def get(self, *args, **kwargs): 
@@ -644,6 +659,7 @@ def check_event_enddate(request, open_events):
 
 class CustomerEventList(View):
 	def get(self, *agrs, **kwargs):
+ 
             result ={}
             if 'by_status' in self.request.GET:
                 result = filter_by('status',[self.request.GET['by_status']], CompanyEvent.objects.all())
@@ -686,6 +702,7 @@ class EventParticipation(LoginRequiredMixin, View):
     def post(self, *args, **kwargs):   
                 try:  
                     event = get_object_or_404( CompanyEvent, id = self.kwargs['id'])
+                    print(self.request.POST["notify_on"])
                     older = EventParticipants.objects.filter(event = event, patricipant_email = self.request.POST['patricipant_email']).first()
                     if older:
                         older.notify_on = self.request.POST["notify_on"]
@@ -749,13 +766,17 @@ class EditDocument(LoginRequiredMixin, View):
 class DocumentListing(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         documents = []
-        if check_user_has_company(self.request):
-            if self.kwargs['option'] != 'all':
-                documents =  Document.objects.filter( category = self.kwargs['option'] , company=self.request.user.get_company())
-                if documents.count() != 0:
-                    return render(self.request, "admin/document/list_document_by_category.html", {'documents':documents, 'categories':Document.DOC_CATEGORY})
-                else:
-                    messages.warning(self.request, f"No documents for {self.kwargs['option']}")
-            return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})
-        else:        
-            return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})
+        try:
+            if check_user_has_company(self.request):
+                if self.kwargs['option'] != 'all':
+                    documents =  Document.objects.filter( category = self.kwargs['option'] , company=self.request.user.get_company())
+                    if documents.count() != 0:
+                        return render(self.request, "admin/document/list_document_by_category.html", {'documents':documents, 'categories':Document.DOC_CATEGORY})
+                    else:
+                        messages.warning(self.request, f"No documents for {self.kwargs['option']}")
+                return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})
+            else:        
+                return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})
+        except Exception as e:
+            print("exceptio at document list ",e)
+            return redirect('admin:index')
