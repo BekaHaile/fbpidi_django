@@ -237,85 +237,85 @@
 			$('#summernote').summernote();
 			$('.summernote').summernote();
 			var cropper;
-		var imageFile;
-		var baseb4ImageString;
-		var cropX;
-		var cropY;
-		var cropWidth;
-		var cropHeight;
+			var imageFile;
+			var baseb4ImageString;
+			var cropX;
+			var cropY;
+			var cropWidth;
+			var cropHeight;
 
-		var imageField = document.getElementById('#id_logo')
-		var modalCropEdit = document.getElementById('image')
-		var force = document.getElementById('force')
-		$("#id_logo").change(function () {
-			if (this.files && this.files[0]) {
+			var imageField = document.getElementById('#id_logo')
+			var modalCropEdit = document.getElementById('image')
+			var force = document.getElementById('force')
+			$("#id_logo").change(function () {
+				if (this.files && this.files[0]) {
 
-				var reader = new FileReader();
-				reader.onload = function (e) {
+					var reader = new FileReader();
+					reader.onload = function (e) {
 
-					$("#image").attr("src", e.target.result);
-					$("#modalCrop").modal("show");
+						$("#image").attr("src", e.target.result);
+						$("#modalCrop").modal("show");
+					}
+					reader.readAsDataURL(this.files[0])
+
 				}
-				reader.readAsDataURL(this.files[0])
+			});
+			
+			$("#modalCrop").on("shown.bs.modal", function () {
+				modalCropEdit = document.getElementById('image')
+				cropper = new Cropper(modalCropEdit, {
+					viewMode: 1,
+					aspectRatio: 1 / 1,
+					minCropBoxWidth: 200,
+					minCropBoxHeight: 200,
+					built: function () {
+						$("#image").cropper('setCropBoxData', { width: 640 });
+					},
+					cropmove: function () {
+						$("#image").cropper('setCropBoxData', { width: 640 });
+					},
 
-			}
-		});
-         
-		$("#modalCrop").on("shown.bs.modal", function () {
-			modalCropEdit = document.getElementById('image')
-			cropper = new Cropper(modalCropEdit, {
-				viewMode: 1,
-				aspectRatio: 1 / 1,
-				minCropBoxWidth: 200,
-				minCropBoxHeight: 200,
-				built: function () {
-            		$("#image").cropper('setCropBoxData', { width: 640 });
-				},
-				cropmove: function () {
-					$("#image").cropper('setCropBoxData', { width: 640 });
-				},
-
-				crop(event) {
-					setImageCropProperties(
-						image,
-						event.detail.x,
-						event.detail.y,
-						event.detail.width,
-						event.detail.height)
-				}
+					crop(event) {
+						setImageCropProperties(
+							image,
+							event.detail.x,
+							event.detail.y,
+							event.detail.width,
+							event.detail.height)
+					}
+				})
 			})
-		})
 
 
-		function setImageCropProperties(image, x, y, width, height) {
-			imageFile = image;
-			// console.log(imageFile)
-			cropX = x;
-			cropY = y;
-			cropWidth = width;
-			cropHeight = height;
-		}
-		function cropImage(x, y, width, height) {
-			var x = document.getElementById("id_x")
-			x.value = cropX
+			function setImageCropProperties(image, x, y, width, height) {
+				imageFile = image;
+				// console.log(imageFile)
+				cropX = x;
+				cropY = y;
+				cropWidth = width;
+				cropHeight = height;
+			}
+			function cropImage(x, y, width, height) {
+				var x = document.getElementById("id_x")
+				x.value = cropX
 
-			var y = document.getElementById("id_y")
-			y.value = cropY
+				var y = document.getElementById("id_y")
+				y.value = cropY
 
-			var width = document.getElementById("id_width")
-			width.value = cropWidth
+				var width = document.getElementById("id_width")
+				width.value = cropWidth
 
-			var height = document.getElementById("id_height")
-			height.value = cropHeight
-		
-		}
-		var confirm = document.getElementById("js-crop-and-upload-button")
-		confirm.addEventListener("click", function (event) {
+				var height = document.getElementById("id_height")
+				height.value = cropHeight
+			
+			}
+			var confirm = document.getElementById("js-crop-and-upload-button")
+			confirm.addEventListener("click", function (event) {
 
-			cropImage(cropX, cropY, cropWidth, cropHeight)
-			$("#modalCrop").modal("hide");
+				cropImage(cropX, cropY, cropWidth, cropHeight)
+				$("#modalCrop").modal("hide");
 
-		});
+			});
 		});
 	</script>
 

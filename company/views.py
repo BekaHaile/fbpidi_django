@@ -29,14 +29,7 @@ class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         return context
-        
-    def get(self,*args,**kwargs):
-        if self.request.user.get_company() != None:
-            messages.warning(self.request,"You Have A Company Profile")
-            return redirect("admin:index")
-        else:
-            return redirect("admin:create_company_profile")
-
+    
     def form_valid(self,form):
         company = form.save(commit=False)
         company.contact_person = self.request.user
