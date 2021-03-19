@@ -76,7 +76,7 @@
 									<a href="#" class="text-dark"><h3>{%print_translated event.title event.title_am LANGUAGE_CODE%}</h3></a>
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
-											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">{% trans "By" %}: </i><b>{% print_translated event.company.company_name event.company.company_name_am LANGUAGE_CODE %}</b></a></li>
+											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">{% trans "By" %}: </i><b>{% print_translated event.company.name event.company.name_am LANGUAGE_CODE %}</b></a></li>
                                           
 											<li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b> {% trans "Start Date" %}: {{event.start_date.date}}</b> </a></li>                                       
 										    <li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>{% trans "End Date" %}: {{event.end_date.date}}</b> </a></li>
@@ -174,7 +174,7 @@
 											<ul class="icon-card mb-0 mt-2">
 												<li ><a href="{% url 'customer_event_detail' id=obj.id %}" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>{{obj.company.location}}</a></li>
 												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{obj.start_date.date}}</a></li>
-												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{% print_translated obj.company.company_name obj.company.company_name_am LANGUAGE_CODE %} </a></li>
+												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{% print_translated obj.company.name obj.company.name_am LANGUAGE_CODE %} </a></li>
 												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> {{obj.company.phone_number}}</a></li>
 											</ul>
 										</div>
@@ -203,7 +203,7 @@
 									</div>
 								</div>
 								<div class="text-center mt-2">
-									<a href="{% url 'userprofile' %}" class="text-dark text-center"><h4 class="mt-0 mb-0 font-weight-semibold">{% print_translated event.company.company_name event.company.company_name_am LANGUAGE_CODE %} </h4></a>
+									<a href="{% url 'userprofile' %}" class="text-dark text-center"><h4 class="mt-0 mb-0 font-weight-semibold">{% print_translated event.company.name event.company.name_am LANGUAGE_CODE %} </h4></a>
 									
 								</div>
 							</div>
@@ -222,7 +222,7 @@
 							
 								<div class="card-footer">
 									<div class="">
-										<a href="/chat/with/{{event.get_company_admin.username}}/" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> {% trans "Chat" %}</a>
+										<a href="/chat/with/{{event.get_company_admin}}/" target = "blank" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> {% trans "Chat" %}</a>
 									</div>
 								</div>
 							</div>
@@ -237,9 +237,9 @@
 								<div class="filter-product-checkboxs">
 									{% for comp in event_companies %}
 									<label class="custom-control custom-checkbox mb-2">
-										<input type="checkbox" class="custom-control-input" name="by_company" value="{{comp.company_name}}">
+										<input type="checkbox" class="custom-control-input" name="by_company" value="{{comp.name}}">
 										<span class="custom-control-label">
-											{% print_translated comp.company_name comp.company_name_am LANGUAGE_CODE %}
+											{% print_translated comp.name comp.name_am LANGUAGE_CODE %}
 										</span>
 									</label>
 									{% endfor %}

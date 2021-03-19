@@ -61,7 +61,7 @@ def related_company_title(model_name, obj):
     model = models[model_name]
     result = FilterByCompanyname( [obj.company], model.objects.exclude(id =obj.id)  )
     if result['query'].count() != 0:
-        return {'query':result['query'], 'message':f"Other {model_name}s from {obj.company.company_name} ", 'message_am': f"ሌሎቸ በ{obj.company.company_name_am} ድርጅት የተለቀቁ {model.model_am}" }
+        return {'query':result['query'], 'message':f"Other {model_name}s from {obj.company.name} ", 'message_am': f"ሌሎቸ በ{obj.company.name_am} ድርጅት የተለቀቁ {model.model_am}" }
     else:
         result = search_title_related_objs(  obj, model.objects.exclude(id =obj.id)  )
         if result['query'].count() != 0:
@@ -77,7 +77,7 @@ def related_company_title_status(model_name, obj):
     """
     model = models[model_name]
     q =  Q(   Q(status = 'Open') | Q(status = 'Upcoming')  )
-    c =  Q(   Q(company__company_name__contains = obj.company.company_name ) | Q(company__company_name_am__contains = obj.company.company_name_am ) ) 
+    c =  Q(   Q(company__name__contains = obj.company.name ) | Q(company__name_am__contains = obj.company.name_am ) ) 
     result = model.objects.filter(c , q).exclude(id = obj.id)
     if result.count() == 0:
         t = Q (  Q(title__icontains = obj.title) | Q(title_am__icontains = obj.title_am )  )
@@ -87,7 +87,7 @@ def related_company_title_status(model_name, obj):
         else:
             return {'query': result, 'message':f'Other {model_name}s with related content', 'message_am':'ሌሎች ተቀራራቢ ውጤቶቸ'  }
     else:
-        return {'query': result, 'message':f"Other {model_name}s from {obj.company.company_name} ", 'message_am': f"ሌሎቸ በ{obj.company.company_name_am} ድርጅት የተለቀቁ" }
+        return {'query': result, 'message':f"Other {model_name}s from {obj.company.name} ", 'message_am': f"ሌሎቸ በ{obj.company.name_am} ድርጅት የተለቀቁ" }
 
 
 def search_title_related_objs( obj, query_list):
@@ -100,7 +100,6 @@ def SearchByTitle_All(model_name, request ):
     """   
     try:
         model= models[model_name]
-        print("#################################",model.model_am)
         if not 'by_title' in request.GET: #not searching, just displaying latest news 
             query  = model.objects.all()
             return { 'query': query, 'message': f" {model_name} ",  'message_am': f" {model.model_am} "} # 3 Polls Found!
@@ -121,8 +120,8 @@ def FilterByCompanyname(company_list,  query_set):
     try:
         q_object = Q()
         for company_name in company_list:
-            q_object.add( Q(company__company_name = company_name ), Q.OR )
-            q_object.add( Q(company__company_name_am = company_name ), Q.OR )
+            q_object.add( Q(company__name = company_name ), Q.OR )
+            q_object.add( Q(company__name_am = company_name ), Q.OR )
         query = query_set.filter(q_object).distinct()
         return {'query':query, 'message':f'{query.count()} result Found!', 'message_am': f" {query.count()} ውጤት ተገኝቷል" }
     except Exception as e:
@@ -181,7 +180,6 @@ class CustomerPollList(View):
                 result = FilterByCompanyname(self.request.GET.getlist('by_company'), PollsQuestion.objects.all())
             elif 'by_no_vote' in self.request.GET:
                 result['query'] = PollsQuestion.objects.annotate(num_vote=Count('pollsresult')).order_by('-num_vote')
-                print("###################",result['query'])
                 if result['query'].count() > 0:
                     result['message'] = "Polls in order of number of votes!"
                     result['message_am'] = "በመራጮች ብዛት ቅደም ተከተል"
@@ -204,6 +202,15 @@ class CustomerPollList(View):
         except Exception as e:
             print("exceptio at polls list ",e)
             return redirect('index')
+
+# class CompanyPollList(Listview):
+#     model = PollsQuestion
+#     template_name = "admin/collaborations/tenders.html"
+#     context_object_name = 'polls'  
+
+#     def get_queryset(self):            
+#             return PollsQuestion.objects.filter(company = Compnay.objects.get(id = self.request.GET['id']) )
+
 #only visible to logged in and never voted before
 class PollDetail(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):
@@ -255,8 +262,7 @@ class CreateTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:    
             company = self.request.user.get_company()
-            company_bank_accounts = company.get_bank_accounts()
-            return render(self.request,'admin/collaborations/create_tender.html',{'form':TenderForm, 'company_bank_accounts':company_bank_accounts})
+            return render(self.request,'admin/collaborations/create_tender.html',{'form':TenderForm})
         except Exception as e: 
             print("execption at createtender ", str(e))
             return redirect("admin:index")
@@ -281,9 +287,7 @@ class CreateTender(LoginRequiredMixin,View):
                     tender.status = "Open"
                 else:
                     tender.status = "Closed"
-                tender.save()    
-                if 'company_bank_account' in self.request.POST:
-                    tender.bank_account.add(self.request.POST['company_bank_account'])                
+                tender.save()                  
                 messages.success(self.request,"Tender Successfully Created")
                 return redirect("admin:tenders")   
             else:
@@ -352,7 +356,6 @@ class TenderDetail(LoginRequiredMixin, DetailView):
     template_name = 'admin/collaborations/tender_detail.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company_bank_accounts'] = context['tender'].company.get_bank_accounts()
         context['form'] = TenderForm
         return context
 
@@ -391,9 +394,8 @@ class EditTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
             tender = Tender.objects.get(id =self.kwargs['id'] )
-            company_bank_accounts = tender.company.get_bank_accounts()
             banks= Bank.objects.all() # if there will be a scenario where the admin needs to add register new bank account
-            return render(self.request,'admin/collaborations/create_tender.html', {'form':TenderEditForm(),'tender':tender,'edit':True, 'banks':banks, 'company_bank_accounts':company_bank_accounts})
+            return render(self.request,'admin/collaborations/create_tender.html', {'form':TenderEditForm(),'tender':tender,'edit':True})
         except Exception as e:
             print("Exception at Edit Tender,get ", e)
             return redirect("admin:tenders")

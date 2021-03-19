@@ -189,90 +189,9 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 					</form>
 					
 					<br>
-					<br><br><br>
+					<br>
 
 
-					<h3 class= "text-center">Manage Bank Accounts</h3>
-					<div class="row">
-
-
-						<div class="col-md-6">
-							<div class="form-group ">
-								<form action="{%url 'admin:manage_bank_account'  option='remove' id=tender.id %}" method="POST" enctype="multipart/form-data">
-									{%csrf_token%}
-									{% if tender.get_bank_accounts.count > 0 %}
-											<label class="col-form-label " style="margin-left: 10px;">Remove a bank account</label>
-											<div class="form-group ">
-												<div style="width: 100%;">
-													<div class="col-lg-9" style="width: 95%; display: inline-block;">			
-														<select name="remove_bank_account"  class="form-control form-control-uniform" data-fouc>
-															{% for bank_account in tender.get_bank_accounts %}
-																<option  value="{{bank_account.id}}">{{bank_account.bank.bank_name}}'s account {{bank_account.account_number}}</option>
-																<div class="list-icons" style="width: 3%; display: inline-block;" >
-																	<div class="dropdown">
-																		<a href="#" class="list-icons-item" data-toggle="dropdown">
-																		</a>									
-																	</div>
-																</div>
-															{%endfor%}
-														</select>
-													</div>
-												</div>
-											</div>
-											
-												<div class="text-center">
-													<button style="padding-left: 2%; padding-right: 2%; background-color: #ef5350;" type="submit"
-														class="btn btn-primary col-lg-6" onclick="return confirm ('Are you sure you want to Remove this bank account from this tender?')">Remove bank Account  </button>
-												</div>
-											
-									{% else %}
-									<h3>No Related Bank Account For this tender</h3>
-									{% endif %}
-								</form>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group ">
-								<form action="{%url 'admin:manage_bank_account' option='relate'  id=tender.id %}" method="POST" enctype="multipart/form-data">
-									{%csrf_token%}
-									{% if tender.get_unrelated_bank_accounts %}
-										<label class="col-form-label col-lg-8">Relate new bank account</label>
-										<div class="form-group ">
-											<div style="width: 100%;">
-												<div class="col-lg-9" style="width: 95%; display: inline-block;">							
-													<select name="relate_bank_account"  class="form-control form-control-uniform" data-fouc>
-														{% for bank_account in tender.get_unrelated_bank_accounts %}
-															<!-- if the bank account was not previously related to the tender -->
-															<option  value="{{bank_account.id}}">{{bank_account.bank.bank_name}}'s account ({{bank_account.account_number}})</option>
-															<div class="list-icons" style="width: 3%; display: inline-block;" >
-																<div class="dropdown">
-																	<a href="#" class="list-icons-item" data-toggle="dropdown">
-																	</a>
-																</div>
-															</div>
-														{%endfor%}
-													</select>
-												</div>
-											</div>
-										</div>
-
-										<div class="text-center">
-											<button style="padding-left: 2%; padding-right: 2%;  background-color: #66bb6a;" type="submit"
-												class="btn btn-primary col-lg-6" onclick="return confirm ('Are you sure you want to Relate this bank account to this tender?')">Relate this bank Account  </button>
-										</div>
-									{%else%}
-									{{tender.get_unrelated_bank_accounts}}
-										<div class="text-center">
-											<button style="padding-left: 2%; padding-right: 2%;  background-color: #66bb6a;" 
-												class="btn btn-primary col-lg-6" disabled onclick="return confirm ('Are you sure you want to Relate this bank account to this tender?')">Relate this bank Account  </button>
-										</div>
-									{% endif %}
-
-								</form>
-								
-							</div>
-						</div>
-					</div>
 					
 
 
@@ -387,53 +306,9 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 									</div>
 								</div>
 
-								
 
 							</div>
 							
-							{% if company_bank_accounts.count > 0 %}
-
-								<div class="form-group row" >
-									<div style="width: 100%;">
-										<div class="col-lg-9" style="width: 95%; display: inline-block;">
-											<label>Choose your bank account</label>
-											<select required name="company_bank_account" class="form-control form-control-uniform" data-fouc>
-												
-												<label class="col-form-label ">Choose your main bank account for this tender.</label>
-													
-													{%for bank_account in company_bank_accounts %}
-														<option  value="{{bank_account.id}}">{{bank_account.bank.bank_name}} {{bank_account.account_number}} </option>
-														<div class="list-icons" style="width: 3%; display: inline-block;" >
-															<div class="dropdown">
-																<a href="#" class="list-icons-item" data-toggle="dropdown">
-																	<i class="icon-menu9"></i>
-																</a>
-									
-																
-															</div>
-														</div>
-													
-													{%endfor%}
-												
-											</select>
-										</div>
-									
-										
-									</div>
-
-								</div>
-							{% else %}
-											
-								<label class="col-form-label ">You don't have any registered bank accounts. Go to your company profile/ Bank Accounts to Add new bank</label>
-							
-							
-							<!-- <div class="text-left">
-									<button style="padding-left: 10%; padding-right: 10%;" 
-										class="btn btn-primary rounded-round" onclick="return confirm ('I am working on this part')">Register new bank account </button>
-							</div>	 -->
-							
-
-							{% endif %}
 							
 						</fieldset>
 

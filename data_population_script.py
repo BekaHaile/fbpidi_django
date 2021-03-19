@@ -165,8 +165,8 @@ def with_out():
 
 
 if __name__ == '__main__':    
-   u = User.objects.get(id = 1)
-   c = ChatMessages.objects.filter( Q(sender = u)| )
+   u = Company.objects.get(name__icontains = "coca")
+   print(u.phone_number())
 
 
     
