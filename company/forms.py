@@ -163,6 +163,21 @@ class PowerConsumptionForm(forms.ModelForm):
             'current_supply':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_current_supply")'}),
         }
 
+class InistituteForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = (
+            'name','name_am','logo','detail','detail_am'
+        )
+        widgets = {
+            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Name Of the Inistitute'}),
+            'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Name Of the Inistitute'}),
+            'logo':forms.FileInput(attrs={'class':'form-control'}),
+            'detail':forms.TextInput(attrs={'class':'summernote'}),
+            'detail_am':forms.TextInput(attrs={'class':'summernote'}),
+        }
+
+
 class MyCompanyDetailForm(forms.ModelForm):
     
     # company_condition = forms.ModelChoiceField(

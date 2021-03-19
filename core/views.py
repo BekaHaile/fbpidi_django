@@ -9,7 +9,7 @@ from product.models import Product, ProductImage,Review
 from admin_site.models import Category
 from company.models import Company,SubCategory
 # 
-from accounts.models import User,Company,Customer
+from accounts.models import UserProfile,Company,Customer
 from product.forms import ReviewForm
 #
 from collaborations.models import News, NewsImages
@@ -37,7 +37,7 @@ class ProfileView(LoginRequiredMixin, View):
 
     def post(self,*args,**kwargs):
         user_detail = Customer.objects.get(user=self.request.user)
-        user = User.objects.get(id=self.request.user.id)
+        user = UserProfile.objects.get(id=self.request.user.id)
 
         
         if self.request.POST['first_name'] != None:

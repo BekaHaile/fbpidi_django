@@ -644,6 +644,9 @@ class UpdateProjectState(LoginRequiredMixin,UpdateView):
         form.save()
         return redirect("admin:update_project",pk=ProjectState.objects.get(id=self.kwargs['pk']).project.id)
 
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:update_project")
 
 class AdminCompanyEventList(LoginRequiredMixin, ListView):
     model = CompanyEvent
@@ -678,44 +681,6 @@ class CreateCompanyEvent(LoginRequiredMixin, CreateView):
         def form_invalid(self,form):
             messages.warning(self.request,form.errors)
             return redirect('admin:create_companyevent')
-
-
-# class EditCompanyEvent(LoginRequiredMixin, UpdateView):
-#         model = CompanyEvent
-#         form_class = CompanyEventForm
-#         template_name = "admin/collaborations/create_events.html"
-
-#         # def get_context_data(self,**kwargs):
-#         #     context = super().get_context_data(**kwargs)
-#         #     context['edit'] = True
-           
-
-#         def form_valid(self,form):
-#             event = form.save(commit=False)
-#             event.title.set (self.request.POST['title'])
-#             event.title_am.set(self.request.POST['title_am'])
-#             event.description.set(self.request.POST['description'])
-#             event.description_am.set( self.request.POST['description_am'])
-#             event.start_date.set( change_to_datetime(self.request.POST['start_date']))
-#             event.end_date.set(change_to_datetime(self.request.POST['end_date']))
-#             if event.start_date.date() > timezone.now().date():
-#                 event.status.set("Upcoming")
-#             elif event.start_date.date() == timezone.now().date():
-#                  event.status.set('Open')
-#             else:
-#                 event.status.set( 'Closed' )
-#             if self.request.FILES:
-#                 event.image.set(self.request.FILES['image'])
-#             event.last_updated_by = self.request.user
-#             event.last_updated_date = timezone.now()
-#             event.save() 
-#             messages.success(self.request,"Event Edited Successfully")
-#             return redirect("admin:admin_companyevent_list")
-
-
-#         def form_invalid(self,form):
-#             messages.warning(self.request,form.errors)
-#             return redirect("admin:admin_companyevent_list")
 
 def change_to_datetime(calender_date):
     str_date = datetime.datetime.strptime(calender_date, '%m/%d/%Y').strftime('%Y-%m-%d')
@@ -753,117 +718,40 @@ class EditCompanyEvent(LoginRequiredMixin,View):
             messages.warning(self.request,form.errors)
             return redirect('admin:admin_companyevent_list')
 
-class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        form = FbpidiCompanyForm()
-        return render(self.request,"admin/company/company_form_fbpidi.html",{'form':form})
-
-    def post(self,*args,**kwargs):
-        form = FbpidiCompanyForm(self.request.POST,self.request.FILES)
-        if form.is_valid():
-            fbpidi = form.save(commit=False)
-            fbpidi.company_type = "fbpidi"
-            fbpidi.company_type_am = "fbpidi"
-            fbpidi.user=self.request.user
-            fbpidi.save()
-            return redirect('admin:index')
-        else:
-            return render(self.request,"admin/company/company_form_fbpidi.html",{'form':form})
-
-
-class ViewFbpidiCompany(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        fbpidi = Company.objects.get(company_type="fbpidi")
-        events = CompanyEvent.objects.all()
-        event_form = CompanyEventForm
-        banks = Bank.objects.all()
-        company_bank_accounts = CompanyBankAccount.objects.filter(company=fbpidi)
-        account_form = CompanyBankAccountForm()
-        context = {'company':fbpidi,'events':events,'event_form':event_form, 'banks':banks, 'company_bank_accounts': company_bank_accounts,'chat_list':get_grouped_chats(self.request.user), 'account_form':account_form}
-        context['active_tab'] = 'inbox'
-        # if 'active_tab' in self.kwargs:
-            # print("########## Active tab is", self.kwargs['active_tab'])
-            # context['active_tab'] = self.kwargs['active_tab']
-
-        return render(self.request,"admin/company/company_profile_fbpidi.html",context)
+class CreateFbpidiCompanyProfile(LoginRequiredMixin,CreateView):
+    model=Company
+    form_class=InistituteForm
+    template_name = "admin/company/company_form_fbpidi.html"
     
-    def post(self,*args,**kwargs):
-        company = Company.objects.get(id=self.kwargs['id'])
-        try:
-            if self.request.POST['flag'] == "profile":
-                company.company_name = self.request.POST['company_name']
-                company.company_name_am = self.request.POST['company_name_am']
-                company.location = self.request.POST['location']
-                company.city = self.request.POST['city']
-                company.phone_number = self.request.POST['phone_number']
-                company.postal_code = self.request.POST['postal_code']
-                company.established_year = self.request.POST['established_year']
-                company.detail = self.request.POST['detail']
-                company.detail_am = self.request.POST['detail_am']
-            elif self.request.POST['flag'] == "aditional":
-                company.facebook_link = self.request.POST['facebook_link']
-                company.twiter_link = self.request.POST['twiter_link']
-                company.linkedin_link = self.request.POST['linkedin_link']
-                company.google_link = self.request.POST['google_link']
-                company.instagram_link = self.request.POST['instagram_link']
-                company.pintrest_link = self.request.POST['pintrest_link']
-                if self.request.FILES.get('company_logo') != None:
-                    company.company_logo = self.request.FILES.get('company_logo')
-                if self.request.FILES.get('company_intro') != None:
-                    company.company_intro = self.request.FILES.get('company_intro')
-            company.save()
-            messages.success(self.request,"Company Updated")
-            return redirect("admin:view_fbpidi_company")
-        except ObjectDoesNotExist:
-            messages.warning(self.request,"Company Does Not Exist")
-            return redirect("admin:view_fbpidi_company")
+
+    def form_valid(self,form):
+        fbpidi = form.save(commit=False)
+        fbpidi.main_category = "FBPIDI"
+        fbpidi.contact_person = self.request.user
+        fbpidi.save()
+        return redirect("admin:index")
+
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:create_fbpidi_company")
 
 
-class CreateCompanyBankAccount(LoginRequiredMixin, View):
-        def post(self, *ags, **kwargs):
-            form  = CompanyBankAccountForm(self.request.POST)
-            if form.is_valid:
-                    account = form.save(commit=False)
-                    company = Company.objects.get(id = self.kwargs['id'])
-                    account.company = company
-                    account.save()
-                    messages.success(self.request, "New Bank Account Successfully Added!")
-                    if company.company_type == "fbpidi":
-                        return redirect("admin:view_fbpidi_company")
-                    else:
-                        return redirect("admin:view_company_profile")
-            else:   
-                messages.warning(self.request, "Error While Adding New Bank Account!")  
-                company = Company.objects.get(id = self.kwargs['id'])
-                if company.company_type == "fbpidi":
-                        return redirect("admin:view_fbpidi_company")
-                else:
-                        return redirect("admin:view_company_profile")      
+class ViewFbpidiCompany(LoginRequiredMixin,UpdateView):
+    model=Company
+    form_class = InistituteForm
+    template_name="admin/company/company_profile_fbpidi.html"
 
-
-class EditCompanyBankAccount(LoginRequiredMixin, View):
-       
-        def post(self, *ags, **kwargs):
-            form  = CompanyBankAccountForm(self.request.POST)
-            if form.is_valid:     
-                bank_account = CompanyBankAccount.objects.get(id = self.kwargs['id'])
-                bank_account.bank = Bank.objects.get(id =self.request.POST['bank'])
-                bank_account.account_number = self.request.POST['account_number']
-                bank_account.save()
-                messages.success(self.request, "Bank Account Successfully Edited!")
-                
-                if bank_account.company.company_type == "fbpidi":
-                        return redirect("admin:view_fbpidi_company")
-                else:
-                        return redirect("admin:view_company_profile")      
-
-            else:   
-                messages.warning(self.request, "Error While Adding New Bank Account!")  
-                company = Company.objects.get(id = self.kwargs['id'])
-                if company.company_type == "fbpidi":
-                        return redirect("admin:view_fbpidi_company")
-                else:
-                        return redirect("admin:view_company_profile")      
+    def form_valid(self,form):
+        fbpidi = form.save(commit=False)
+        fbpidi.last_updated_by=self.request.user
+        fbpidi.last_updated_date=timezone.now()
+        fbpidi.save()
+        messages.success(self.request,"Company Updated")
+        return redirect("admin:view_fbpidi_company")
+    
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:view_fbpidi_company")
 
 
 class DeleteCompanyBankAccount(LoginRequiredMixin, View):

@@ -22,3 +22,4 @@ core/templatetags/__pycache__
 fbpims/__pycache__
 product/__pycache__
 logs
+apache.custom.log
