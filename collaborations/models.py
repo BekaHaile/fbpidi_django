@@ -178,20 +178,7 @@ class Tender(models.Model):
     def get_company(self):
         return self.company
     
-    def get_bank_accounts(self):
-        return self.bank_account.all()
-    
-    def get_unrelated_bank_accounts(self):
-        company = self.get_company()
-        if company:
-            company_bank_accounts = CompanyBankAccount.objects.filter(company=company)
-            related_bank_accounts = self.get_bank_accounts()
-            unrelated_bank_accounts = []
-            for account in company_bank_accounts:
-                if not account in related_bank_accounts:
-                    unrelated_bank_accounts.append(account)
-            return unrelated_bank_accounts
-        return None  
+   
 
     model_am = "ጨረታዎች"
         

@@ -1,0 +1,219 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{%load core_template_tags %}
+{% block extrastyle %}
+
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/anytime.min.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.date.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.time.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/legacy.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/notifications/jgrowl.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/picker_date.js"></script>
+	
+{% endblock %}
+{%block pagename%}News Form{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+		
+	{% if edit  %}        
+    <div class="card">
+        <div class="card-body">
+            <form action="{%url 'admin:edit_companyevent' pk=event.id%}" method="POST" enctype="multipart/form-data">
+                {%csrf_token%}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>{{form.title.label|title}}</label>
+                                <input type="text" name = "title" class='form-control' placeholder= "Event Name (English)" value="{{event.title}}"/>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>{{form.title_am.label|title}}</label>
+                                <input type="text" name = "title_am" class='form-control' placeholder= "Event Name (Amharic)" value="{{event.title_am}}"/>	
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label>{{form.description.label}}</label>
+                                <textarea required name="description" class="summernote" cols="30" rows="10">{{event.description|safe}}</textarea>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <label>{{form.description_am.label}}</label>
+                                <textarea required name="description_am" cols="30" class = "summernote"  rows="10">{{event.description_am|safe}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
+                 <!-- Date Fields -->
+                    <div class = "row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-lg-9">
+                                    <span class="input-group-prepend" >
+                                                    <span class="input-group-text"><i class="icon-calendar22">	Start Date </i></span>
+                                                </span>
+                                        <input type="text" name="start_date" class="form-control daterange-single" value="{% change_end_date event.start_date %}">
+                                </div>
+                                    
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-lg-9">
+                                    <span class="input-group-prepend" >
+                                                    <span class="input-group-text"><i class="icon-calendar22">	End Date </i></span>
+                                                </span>
+                                                
+                                        <input type="text" name ="end_date" class="form-control daterange-single" value="{% change_end_date event.end_date %}">
+                                </div>
+                                    
+                            </div>
+                        </div>
+                    </div>
+                 <!-- Date Fields End Here -->
+                    
+
+
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label>Currently saved image is: <a href="{{event.get_image}}" target="blank">{{event.image.name}}</a></label>
+                                <input type= "file" name="image" class = "form-input-styled"  placeholder="{{event.get_image}}"  />																</div>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                    <button type="submit" onclick="return confirm ('Are you sure you want to Edit this Event?')" class="btn bg-primary">Submit form</button>
+                </div>
+            </form>
+
+           
+                
+        </div>
+
+    </div>
+
+			
+	{%else%}
+		
+			<div class="card">
+
+				<div class="card-body">
+
+					<form action="{%url 'admin:create_companyevent' %}" method="POST" enctype="multipart/form-data">
+                        {%csrf_token%}
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label>{{form.title.label|title}}</label>
+                                        {{form.title}}
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label>{{form.title_am.label|title}}</label>
+                                        {{form.title_am}}
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label>{{form.description.label}}</label>
+                                        {{form.description}}
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <label>{{form.description_am.label}}</label>
+                                        {{form.description_am}}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            
+                        <!-- Date Fields -->
+                            <div class = "row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-lg-9">
+                                            <span class="input-group-prepend" >
+                                                            <span class="input-group-text"><i class="icon-calendar22">	Start Date *</i></span>
+                                                        </span>
+                                                <input type="text" name="start_date" class="form-control daterange-single" value="">
+                                        </div>
+                                            
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-lg-9">
+                                            <span class="input-group-prepend" >
+                                                            <span class="input-group-text"><i class="icon-calendar22">	End Date *</i></span>
+                                                        </span>
+                                                <input type="text" name ="end_date" class="form-control daterange-single" value="">
+                                        </div>
+                                            
+                                    </div>
+                                </div>
+                        </div>
+                        <!-- Date Fields End Here -->
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label>{{form.image.label}}</label>
+                                        {{form.image}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn bg-primary">Submit form</button>
+                        </div>
+                    </form>
+				</div>
+			</div>
+		
+		
+		
+	{%endif%}
+</div>
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+	});
+</script>
+{%endblock%}

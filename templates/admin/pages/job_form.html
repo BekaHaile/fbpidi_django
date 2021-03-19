@@ -102,7 +102,7 @@
 					</div>
 
 					<div id='alart' class="alert alert-danger"  role="alert" > 
-					  <p  > End date is before Start date </p>
+					  <p id="alart_message" >   </p>
 					</div>
 					
 					  <div class="form-group row">
@@ -150,8 +150,32 @@
 		$('.summernote').summernote();
 
 	});
+	let today = new Date();
+	// function get_formated_date(){
+	// 	var dd = String(today.getDate()).padStart(2, '0');
+	// var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	// var yyyy = today.getFullYear();
 
-	document.getElementById("alart").style.display = "none"; 
+	// today = mm + '/' + dd + '/' + yyyy;
+
+	// }
+	// var dd = String(today.getDate()).padStart(2, '0');
+	// var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	// var yyyy = today.getFullYear();
+
+	// today = mm + '/' + dd + '/' + yyyy;
+	 
+	// console.log("------Date-------");
+	// console.log(today);
+
+
+
+	set_alert_message("")
+	document. getElementById("alart").style.display = "none";
+	function set_alert_message(text){
+		document. getElementById("alart_message").innerHTML = text; 
+	}
+ 
 
 	function isNumber(kkk)
   	{    
@@ -160,37 +184,40 @@
 
 	$("#EndDate").change(function () {
 
-		var g1 = new Date($('#StartDate').val()); 
-	    var g2 = new Date($('#EndDate').val()); 
+		var start_date = new Date($('#StartDate').val()); 
+	    var end_date = new Date($('#EndDate').val()); 
 
-	    if (g1.getTime() < g2.getTime()){ 
-	        console.log("g1 is lesser than g2"); 
-	    	
+	    if (start_date.getTime() < end_date.getTime()){ 
 	    	document. getElementById("alart").style.display = "none"; //hide.
 	    }
 
-	    else if (g1.getTime() > g2.getTime()) {
-	        console.log("g1 is greater than g2"); 
-	    	
+	    else if (start_date.getTime() > end_date.getTime()) {
 	    	document. getElementById("alart").style.display = "block"; //show
+			set_alert_message("End date must be greater than or equal to start date!!")
 	    }
 	})
 
 	$("#StartDate").change(function () {
 
-		var g1 = new Date($('#StartDate').val()); 
-	    var g2 = new Date($('#EndDate').val()); 
+		var start_date = new Date($('#StartDate').val()); 
+	    var end_date = new Date($('#EndDate').val()); 
 
-	    if (g1.getTime() < g2.getTime()){ 
-	        console.log("g1 is lesser than g2"); 
-	    	
+		console.log("start date le today");
+			
+		if(start_date < today){
+			document. getElementById("alart").style.display = "block"; //show
+			set_alert_message("start date must be greater than or equal to today!!")
+			
+		}
+
+
+	    if (start_date.getTime() <= end_date.getTime()){ 
 	    	document. getElementById("alart").style.display = "none"; //hide.
 	    }
 
-	    else if (g1.getTime() > g2.getTime()) {
-	        console.log("g1 is greater than g2"); 
-	    	
-	    	document. getElementById("alart").style.display = "block"; //show
+	    else if (start_date.getTime() > end_date.getTime()) {
+	      	document. getElementById("alart").style.display = "block"; //show
+			set_alert_message("End date must be greater than or equal to start date!!")
 	    }
 	})
 

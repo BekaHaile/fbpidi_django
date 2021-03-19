@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
-from accounts.models import User
+from accounts.models import UserProfile
 from django.contrib import messages
 from chat.models import ChatMessages
 from chat.serializer import ChatMessagesSerializer
@@ -16,10 +16,10 @@ from chat.serializer import ChatMessagesSerializer
 @login_required
 def check_username(request, username):
     try:
-        u = get_object_or_404(User, username = username)
+        u = get_object_or_404(UserProfile, username = username)
         return JsonResponse({'result':True}, safe =False, )
     except Http404:
-        related = User.objects.filter(username__icontains = username)[:3]
+        related = UserProfile.objects.filter(username__icontains = username)[:3]
         result = {'result':False,'related':[]}
         for u in related:
             result['related'].append( u.username )
@@ -31,7 +31,7 @@ def chat_ajax_handler(request, id):
     messages = []
     if request.method == 'GET': #get all unread messages(only), these are new unread messages other than those that are loaded when the user opens the chat layout page. like online chats from the other user
         print (" a get request from",request.user)
-        other_user = User.objects.get(id = id)
+        other_user = UserProfile.objects.get(id = id)
         q = Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False)  ) 
         unread_messages = ChatMessages.objects.filter(q)
         for m in unread_messages:
@@ -40,7 +40,7 @@ def chat_ajax_handler(request, id):
         messages.append(ChatMessagesSerializer( unread_messages, many = True).data)
     elif request.method == 'POST':  #save the message and send it back for the sender to be displayed
         data = json.loads(request.body)
-        m = ChatMessages(sender = request.user, receiver = User.objects.get(id = id), message = data['message'])
+        m = ChatMessages(sender = request.user, receiver = UserProfile.objects.get(id = id), message = data['message'])
         m.save()
         messages.append( ChatMessagesSerializer( m).data)
     return JsonResponse(messages, safe = False)
@@ -50,7 +50,7 @@ def chat_ajax_handler(request, id):
 @login_required
 def chat_with(request, reciever_name):
     try:
-        other_user= User.objects.get(username=reciever_name)
+        other_user= UserProfile.objects.get(username=reciever_name)
     except Exception as e:
         print("Exception at chat with ",e)
         if request.user.is_customer:

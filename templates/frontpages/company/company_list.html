@@ -110,7 +110,7 @@
 												<div class="d-md-flex">
 													<div class="item-card9-img">
 														<div class="item-card9-imgs">
-															<a href="#"></a>
+															<a href="{% url 'company_home' pk=company.id %}" target = "black"></a>
 															<img src="{{company.logo.url}}" alt="img" class="cover-image">
 															<!-- /media/Images/News%20Images/wp2234690.png -->
 														</div>
@@ -122,7 +122,7 @@
 													<div class="card border-0 mb-0">
 														<div class="card-body h-100">
 															<div class="item-card9">
-																<a href="#" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.name company.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
+																<a href="{% url 'company_home' pk=company.id %}" target = "black" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.name company.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
 																<div class="rating-stars d-flex mr-5">
 																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
 																	<a class="fs-13 leading-tight mt-1" href="#">{{company|company_product_count}} Products</a>
@@ -315,19 +315,19 @@
 										<label class="custom-control custom-checkbox mb-3">
 											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
 											<span class="custom-control-label">
-												<a href="#" class="text-dark">Food<span class="label label-primary float-right">14</span></a>
+												<a href="#" class="text-dark">Food<span class="label label-primary float-right"></span></a>
 											</span>
 										</label>
 										<label class="custom-control custom-checkbox mb-3">
 											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
 											<span class="custom-control-label">
-												<a href="#" class="text-dark">Beverage<span class="label label-primary float-right">14</span></a>
+												<a href="#" class="text-dark">Beverage</a>
 											</span>
 										</label>
 										<label class="custom-control custom-checkbox mb-3">
 											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
 											<span class="custom-control-label">
-												<a href="#" class="text-dark">Pharmaceutical<span class="label label-primary float-right">14</span></a>
+												<a href="#" class="text-dark">Pharmaceutical</a>
 											</span>
 										</label>
 										

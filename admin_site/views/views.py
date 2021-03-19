@@ -321,7 +321,7 @@ class DeleteView(LoginRequiredMixin,View):
                     company = event.company
                     event.delete()
                     messages.success(self.request,"Event Deleted Successfully!")
-                    return redirect("admin:view_fbpidi_company") if self.request.user.is_superuser  else redirect("admin:view_company_profile")
+                    return redirect("admin:admin_companyevent_list") 
             elif self.kwargs['model_name'] == "Document":
                     document = Document.objects.get(id= self.kwargs['id'])
                     category =document.category

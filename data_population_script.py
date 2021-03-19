@@ -164,6 +164,9 @@ def with_out():
 
 
 
+if __name__ == '__main__':    
+   u = Company.objects.get(name__icontains = "coca")
+   print(u.phone_number())
 if __name__ == '__main__':
     add_banks()  
     # n = CompanyEvent.objects.first()
