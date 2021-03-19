@@ -18,7 +18,6 @@ from django.views.generic import CreateView, UpdateView, DeleteView, DetailView,
 from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
 
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
-from company.forms import EventParticipantForm
 from accounts.models import User, CompanyAdmin, Company
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -30,12 +29,13 @@ from accounts.email_messages import sendEventNotification, sendEventClosedNotifi
 from wsgiref.util import FileWrapper
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from collaborations.forms import (BlogsForm, BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm,ForumQuestionForm,CommentForm,CommentReplayForm,NewsForm, 
+from collaborations.forms import (BlogsForm, BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm,ForumQuestionForm,CommentForm,CommentReplayForm,NewsForm, CompanyEventForm, EventParticipantForm, 
 								AnnouncementForm,ResearchForm,ResearchProjectCategoryForm, TenderApplicantForm, PollsForm, CreatePollForm, CreateChoiceForm, DocumentForm )
 
 from collaborations.models import ( PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, Blog, BlogComment,Faqs, Vacancy,JobApplication, 
 									JobCategory,ForumQuestion, Faqs, Vacancy, JobApplication, JobCategory, News, NewsImages, ForumComments, 
 									CommentReplay,Announcement,AnnouncementImages,Research,ResearchProjectCategory, Document)
+
 from collaborations.api.serializers import NewsListSerializer
 
 from django.http import JsonResponse
@@ -632,9 +632,89 @@ class CustomerNewsDetail(View):
             return redirect('customer_news_list')
         related_news = related_company_title('News', news)
         return render(self.request, "frontpages/news/customer_news_detail.html", {'news':news,'related_news':related_news['query'], 'related_message':related_news['message'], 'related_message_am':related_news['message_am'], 'companies':companies, "NEWS_CATEGORY": News.NEWS_CATAGORY})
-    
 
-##### Customer Events
+############ Event
+###Admin side
+class AdminCompanyEventList(LoginRequiredMixin, ListView):
+    model = CompanyEvent
+    template_name = "admin/collaborations/admin_companyevent_list.html"
+    context_object_name = "events"
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return CompanyEventForm.objects.all()
+        else: 
+            return CompanyEvent.objects.filter(company =  self.request.user.get_company())
+
+
+class CreateCompanyEvent(LoginRequiredMixin, CreateView):
+        model = CompanyEvent
+        form_class = CompanyEventForm
+        template_name = "admin/collaborations/create_events.html"
+
+        def form_valid(self,form):
+            event = form.save(commit=False)
+            if event.start_date.date() > timezone.now().date():
+                event.status = "Upcoming"
+            elif event.start_date.date() == timezone.now().date():
+                 event.status = 'Open'
+            else:
+                event.status = 'Closed' 
+            event.company = self.request.user.get_company()
+            event.created_by = self.request.user               
+            event.save()
+            messages.success(self.request,"Event Created Successfully")
+            return redirect('admin:admin_companyevent_list')
+
+        def form_invalid(self,form):
+            messages.warning(self.request,form.errors)
+            return redirect('admin:create_companyevent')
+
+
+def change_to_datetime(calender_date):
+    str_date = datetime.datetime.strptime(calender_date, '%m/%d/%Y').strftime('%Y-%m-%d')
+    return datetime.datetime.strptime(str_date,'%Y-%m-%d' )
+
+class EditCompanyEvent(LoginRequiredMixin,View):
+    def get(self, *args, **kwargs):
+        return render(self.request, "admin/collaborations/create_events.html",{'edit':True,'event':CompanyEvent.objects.get(id = self.kwargs['pk'])})
+
+    def post(self,*args,**kwargs):
+        form = CompanyEventForm(self.request.POST,self.request.FILES)
+        event = CompanyEvent.objects.get(id=self.kwargs['pk']) 
+        if form.is_valid():
+            form.save(commit=False)
+            event.title = self.request.POST['title']
+            event.title_am = self.request.POST['title_am']
+            event.description = self.request.POST['description']
+            event.description_am = self.request.POST['description_am']
+            event.start_date = change_to_datetime(self.request.POST['start_date'])
+            event.end_date = change_to_datetime(self.request.POST['end_date'])
+            if event.start_date.date() > timezone.now().date():
+                event.status = "Upcoming"
+            elif event.start_date.date() == timezone.now().date():
+                 event.status = 'Open'
+            else:
+                event.status = 'Closed' 
+            if self.request.FILES:
+                event.image = self.request.FILES['image']
+            event.last_updated_by = self.request.user
+            event.last_updated_date = timezone.now()
+            event.save() 
+            messages.success(self.request,"Event Edited Successfully")
+            return redirect('admin:admin_companyevent_list')
+        else:
+            messages.warning(self.request,form.errors)
+            return redirect('admin:admin_companyevent_list')
+
+
+
+
+
+
+
+
+####### Event customer side
 def check_event_participation(request, event_participants):
         today = timezone.now().date()
         for participant in event_participants:
@@ -657,7 +737,6 @@ def check_event_enddate(request, open_events):
                 event.save()        
             else:
                 print("Couldn't send Email to close event")
-
 
 class CustomerEventList(View):
 	def get(self, *agrs, **kwargs):
