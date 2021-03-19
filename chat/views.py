@@ -99,7 +99,10 @@ def list_unread_messages(request):
 class CustomerChatList( LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         return render(self.request, 'frontpages/chat/chat_list.html', {'chat_list':get_grouped_chats(self.request.user, None)})
-   
+
+class AdminChatList( LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        return render(self.request, 'admin/chat/admin_chat_list.html', {'chat_list':get_grouped_chats(self.request.user, None)})
 
 def get_grouped_chats(user, excluded_user = None):
         if excluded_user !=None:

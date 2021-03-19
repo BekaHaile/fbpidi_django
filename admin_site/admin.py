@@ -63,6 +63,7 @@ from product.views import *
 from company.views import *
 
 from accounts.forms import AdminLoginForm
+from chat.views import AdminChatList
  
 class CustomAdminSite(admin.AdminSite):
     login_form = AdminLoginForm
@@ -226,6 +227,8 @@ class CustomAdminSite(admin.AdminSite):
             
 
             # path("",include("company.urls")),
+            path("admin_chat_list/", wrap(AdminChatList.as_view()), name = "admin_chat_list"),
+
             
 
             # Company Paths
