@@ -783,6 +783,30 @@ class ProductByMainCategory(ListView):
         elif self.kwargs['option'] == "all":
             return Product.objects.all()
 
+<<<<<<< HEAD
+class ProductDetailView(View):
+    def get(self,*args,**kwargs):
+        try:
+            form = ReviewForm()
+            product = Product.objects.get(id=self.kwargs['id'])
+            #reviews = Review.objects.filter(product=product)
+            images = ProductImage.objects.filter(product=product)
+            #context = {'product':product,'images':images,'form':form,'reviews':reviews}
+            context = {'product':product,'images':images,'form':form}
+            return render(self.request,'frontpages/product/product_detail.html',context)
+        except ObjectDoesNotExist:
+            return redirect("index")
+    
+    def post(self, *args,**kwargs):
+        form = ReviewForm(self.request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = Product.objects.get(id=self.kwargs['id'])
+            review.save()
+            return redirect('product_detail',id=self.kwargs['id'])
+        else:
+            return redirect("product_detail",id=self.kwargs['id'])
+=======
 class ProductDetailView(DetailView):
     model = Product
     template_name = "frontpages/product/product_detail.html"
@@ -804,3 +828,4 @@ class CreateReview(CreateView):
         review.save()
         return redirect('product_detail',pk=self.kwargs['product'])
         
+>>>>>>> d0409167f35f5128314003ec9d54af09a5102775

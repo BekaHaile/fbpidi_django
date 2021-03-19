@@ -35,7 +35,7 @@
 					<th>Forum question</th>
 					<th>User</th>
 					<th>Comment</th>
-					<th>Attachements</th>
+					<th>Replays</th>
 					<th>Timestamp</th>
 					
 					<th class="text-center">Actions</th>
@@ -48,16 +48,8 @@
 					<td>{{researchprojectcategory.forum_question|safe|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.user}}</td>
 					<td>{{researchprojectcategory.comment|safe|truncatechars_html:20}}</td>
-					<td>
-						{%if researchprojectcategory.attachements%}
-						 <a href="{{researchprojectcategory.attachements.url}}" download="{{researchprojectcategory.attachements.url}}"> 
-						 <b>Attachment</b>
-						 </a>
-						 {%else%}
-						 <b>No Attachment</b>
-						 {%endif%}
-                                   		
-                    </td>
+					<td><a class="mr-0" href="{%url 'admin:Comment_replays' id=researchprojectcategory.id%}"><i class="fa fa-comment-o text-muted mr-2"></i>{{researchprojectcategory.count_comment_replays}}
+					</a></td>
 					<td>{{researchprojectcategory.timestamp}}</td>
 					
 					<td class="text-center">
@@ -69,12 +61,19 @@
 									
 								<div class="dropdown-menu dropdown-menu-right">
 									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
+
+									{% if perms.collaborations.delete_forumcomments %} 
 									<a href="{%url 'admin:delete' model_name='ForumCommentsAdmin' id=researchprojectcategory.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Comment</a>
 									{%endif%}
+									{%endif%}
 									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
+									
+									{% if perms.collaborations.change_forumcomments %} 
 									<a href="{%url 'admin:forum_comment_detail' model_name='ForumCommentsAdmin' id=researchprojectcategory.id%}" class="dropdown-item"  >
 										<i class="icon-pencil"></i>Edit Comment</a>
 										{%endif%}
+									
+									{%endif%}
 								</div>
 							</div>
 						</div>

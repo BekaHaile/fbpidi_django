@@ -5,19 +5,46 @@
 {% get_current_language as LANGUAGE_CODE %}
 		<!--Breadcrumb-->
 		<section>
-			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
-				<div class="header-text mb-0">
+			<div class="cover-image sptb-1 bg-background" data-image-src="/static/frontpages/images/banners/banner1.jpg">
+				<div class="header-text1 mb-0">
 					<div class="container">
-						<div class="text-center text-white">
-							<h1 class="">{% trans "Research" %} </h1>
-							
+						<div class="row">
+							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
+								<div class="text-center text-white ">
+									<h1 class=""><span class="font-weight-bold"></span>{{message}}</h1>
+								</div> 
+								<form action  = "{%url 'research_list' %}" method="GET">
+									<div class="search-background px-4 py-3 mt-4">
+										<div class="form row row-sm">
+											<div class="form-group  col-xl-10 col-lg-9 col-md-12 mb-0">
+												<input type="text" name = 'by_title' class="form-control input-lg border-white" id="text" placeholder="Search research by title">
+											</div>
+											
+											<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
+												<button href="#" type = "submit" class="btn btn-lg btn-block btn-secondary">{% trans "Search" %}</button>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
 						</div>
 					</div>
-				</div>
+				</div><!-- /header-text -->
 			</div>
 		</section>
+		
 		<!--/Breadcrumb-->
-
+		<div class="bg-white border-bottom">
+			<div class="container">
+				<div class="page-header">
+					<h4 class="page-title">{% trans "Research List" %}</h4>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="#">{% trans "Home" %}</a></li>
+						<li class="breadcrumb-item active" aria-current="page">{% trans "Research List" %}</li>
+					</ol>
+				</div>
+			</div>
+		</div>
 		<!--Add listing-->
 		<section class="sptb">
 			<div class="container">
@@ -37,75 +64,47 @@
 							</div>
 						</div>
 
-						 <div class="card">
-						 <form action="{%url 'research_search' %}" method="POST" enctype="multipart/form-data">
-						 	{%csrf_token%}
-						 	
-							<div class="card-body">
-								<div class="input-group">
-									<input type="text" name="search" class="form-control br-tl-3  br-bl-3" placeholder="Search" required>
-									<div class="input-group-append ">
-										
-										<button type="submit" class="btn btn-secondary br-tr-3  br-br-3">
-											{% trans "Search" %}
-										</button></a>
-									</div>
+						<div class="card mb-0">
+							<form action="{%url 'research_list' %}" method = "GET">		
+								<div class="card-header border-top">
+									<h3 class="card-title">{% trans "Filter by Category" %}</h3>
 								</div>
-							</div>
-						</form>
-						</div>
-
-						<div class="card">
-							<div class="card-header">
-								<h3 class="card-title">{% trans "Categories" %}</h3>
-							</div>
-							{%for cat in category%}
-							<div class="card-body p-0">
-								<div class="list-catergory">
-									<div class="item-list">
-										<ul class="list-group mb-0">
-											<li class="list-group-item">
-												<a href="{%url 'researchcategory_search' id=cat.id%}" class="text-dark">
-													 {{cat}}
-													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">{{cat.countResearch}}</span>
-												</a>
-											</li>
-										</ul>
-									</div>
+								<div class="card-body">
+										<div class="filter-product-checkboxs">
+											{%for cat in category%}
+											<label class="custom-control custom-checkbox mb-2">
+												<input type="checkbox" class="custom-control-input" name="by_category" value="{{cat.cateoryname}}">
+												<span class="custom-control-label">
+													{% print_translated cat.cateoryname cat.cateoryname_am LANGUAGE_CODE %}
+												</span>
+											</label>
+											{% endfor %}
+										</div>
 								</div>
-							</div>
-							{%endfor%}
-							
+								<div class="card-footer">
+									<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</button>
+								</div>
+							</form>
 						</div>
-						{%if user.is_authenticated %}
-						<div class="card">
+						<div class="card ">
 							<div class="card-header">
-                                    <h3 class="card-title">{% trans "Research you Posted" %} </h3> 
+                                    <h3 class="card-title">{% trans "Related Researches" %} </h3> 
 							</div>
 							<div class="card-body p-0">
 								<div class="list-catergory">
 									<div class="item-list">
 										<ul class="list-group mb-0">
 
-											{%for forum in usercreated%}
+											{%for research in related%}
 											
 											<li class="list-group-item border-bottom-0">
-												<a href="{%url 'research_detail' id=forum.id %}" class="text-dark">
-													 {{forum.title|safe|truncatechars_html:20}}
+												<a href="{%url 'research_detail' id=research.id %}" class="text-dark">
+													 {{research.title|safe|truncatechars_html:40}}
 													
 												</a>
 
 											</li>
-											<li>
-												<span class="badgetext badge badge-pill badge-light mb-0 mt-1">
-												<a href="{%url 'admin:delete' model_name='ResearchClient' id=forum.id%}" class = "btn btn-secondary btn-sm mt-4" onclick="return confirm('are you sure you want to delete this')"><i class="icon-trash"></i> </a>
-
-												<a href="{%url 'research_edit' id=forum.id%} "style = "padding:5px; margin-left: 10px;" class = "btn btn-secondary btn-sm mt-4"  >
-												<i class="icon-pencil" style="margin-right: 5px;" ></i> 
-											</a></span>
-											</li>
-											 
-
+											
 											{%endfor%}
 
 										</ul>
@@ -113,7 +112,6 @@
 								</div>
 							</div>
                         </div>
-                        {%endif%}
 
 						
 					</div>
@@ -130,31 +128,103 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">{{research.title}}</h3> 
-								
-									</div>
-									<div class="card-header">
-									{% trans "User" %}:{{research.user}} 
-									
-									<div>{{research.timestamp}}</div>
-									<br/>
-									<div>
-										<p>status:{{research.status}}</p>
-									</div>
-									{% trans "Category" %}:{{research.category}}
-									</div> 
-
+                                    
+                                    	 <span class="badgetext badge badge-pill badge-light mb-0 mt-1"><i class="fa fa-user text-muted mr-2"></i>  {{research.user}}{{" "}}
+													 {{research.timestamp}}</span>
+                                		 
+                                		 
+									 
+								</div>
+									 
                                 <div class="card-body">
-                                    <div class="mb-0">
-                                       {% trans "Detail" %}:<p>{{research.detail|safe}}</p>
-                                    </div>
+                                	
+									 
+									<p>
+									{%if LANGUAGE_CODE == 'en' %}
+											<b>{% trans "status" %}</b>: {{research.status}}
+									{%elif LANGUAGE_CODE == 'am' and research.status == "Complited"%} 
+											<b>{% trans "status" %}</b>: ተጠናቋል
+									{%elif LANGUAGE_CODE == 'am' and research.status == "inprogress"%} 
+											<b>{% trans "status" %}: በሂደት ላይ</b>
+									{%else%}
+										<b>{% trans "status" %} </b>: {{research.status}}
+										{%endif%}
+											</p>
+										
+									<p> <b>{% trans "Category" %}: </b>
+										{{LANGUAGE_CODE}}
+									{% print_translated research.category.cateoryname research.category.cateoryname_am LANGUAGE_CODE%}</p>
+                                     <p>
+                                     <b>By</b>: &nbsp 
+										<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.user}}">
+											{% if research.user.get_company %}
+											 	 {{research.user.get_company}} 
+											{% elif research.user %}
+												 {{research.user}} 
+												{%endif%}
+										</a>
+									</p>
+
+                                    <p><b>{% trans "Detail" %}</b>:{{research.description|safe}} </p>
+                                   
                                     {%if research.attachements%}
                                     <div class="mb-0">
                                        <a href="{{research.attachements.url}}" download="{{research.attachements.url}}"> 
-                                   		<div class="mb-3"><b>{% trans "Attachments" %}</b></div>
-                                   	</a>
+                                   		<div > {% trans "Attachments" %} </div>
+                                   		</a>
                                     </div>
                                     {%endif%}
                                 </div>
+ 
+                                {% if research.researchfiles%}
+                                <div class="card">
+						<label class="col-form-label col-lg-3"> Researched Files </label>
+		                
+		                <div class="card-body" >    
+		                        <div class="media-body">
+		                        	<div class="mt-4 mb-3 row">
+		                                {%for file in research.researchfiles%}
+					                <div class="col-sm-6 col-lg-3">
+					                	
+					                    <div class="card">
+					                        <div class="card-img-actions m-1">
+					                        	
+					                            <a href="{{file.attachement.url}}" download="{{file.attachement.url}}">
+
+										{% file_type file.attachement.url as file_type%}
+										{% if file_type  == 'image' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-image fa-4x"></i>
+										{% elif file_type  == 'video' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-play-circle fa-4x"></i>
+										{% elif file_type == 'audio' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-music fa-4x"></i>
+										{% elif file_type == 'word' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-word-o fa-4x"></i>
+										{% elif file_type == 'pdf'  %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-pdf-o fa-4x"></i>
+										{% elif file_type == 'excel'%}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-excel-o fa-4x"></i>
+										{% elif file_type == 'exe' %}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "icon-cogs fa-4x"></i>
+										{% else %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file fa-4x"></i>
+										{% endif %}
+										{{file.attachement.name}}
+									</a>
+					                        </div>
+					                    </div>
+					                </div>
+
+					                {%endfor%}
+            					</div>
+		                            
+		                            
+		                        </div>
+		                    
+		                </div>
+		                      
+		            </div> 
+		            {%endif%} 
                              </div>
 
 
@@ -167,7 +237,7 @@
 						</div>
 					</div>
 						<div class="d-sm-flex">
-							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>
+							
 							<ul class="pagination mb-lg-0 mb-5 ml-auto">
 								<li class="page-item page-prev disabled">
 									<a class="page-link" href="#" tabindex="-1">Prev</a>

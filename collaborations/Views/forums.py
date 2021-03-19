@@ -115,6 +115,20 @@ class ListForumCommentAdmin(LoginRequiredMixin ,View):
 		context = {'researchprojectcategorys':form}
 		return render(self.request, template_name,context)
 
+class ListForumCommentByIdAdmin(LoginRequiredMixin ,View): 
+	def get(self,*args,**kwargs):
+		form = ForumComments.objects.filter(forum_question=self.kwargs['id'])
+		template_name = "admin/forum/ForumComments/list.html"
+		context = {'researchprojectcategorys':form}
+		return render(self.request, template_name,context)
+
+class ListCommentReplayByIdAdmin(LoginRequiredMixin ,View):
+	def get(self,*args,**kwargs):
+		form = CommentReplay.objects.filter(comment=self.kwargs['id'])
+		template_name = "admin/forum/CommentReplay/list.html"
+		context = {'researchprojectcategorys':form}
+		return render(self.request, template_name,context)
+
 class ForumCommentsDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = ForumComments.objects.get(id=self.kwargs['id'])
@@ -128,8 +142,7 @@ class ForumCommentsDetail(LoginRequiredMixin,View):
 		if form.is_valid():
 			research = ForumComments.objects.get(id=self.kwargs['id'])
 			research.comment=form.cleaned_data.get('comment')
-			if form.cleaned_data.get("attachements"):
-				research.attachements = form.cleaned_data.get("attachements")
+			
 			#research.user = self.request.user 
 			research.save()
 			messages.success(self.request, "Edited a Forum Comment Successfully")
@@ -156,8 +169,7 @@ class CommentReplayDetail(LoginRequiredMixin,View):
 		if form.is_valid():
 			research = CommentReplay.objects.get(id=self.kwargs['id'])
 			research.content=form.cleaned_data.get('content')
-			if form.cleaned_data.get("attachements"):
-				research.attachements = form.cleaned_data.get("attachements")
+			
 			research.user = self.request.user 
 			research.save()
 			messages.success(self.request, "Edited a Forum Comment Successfully")
@@ -165,22 +177,18 @@ class CommentReplayDetail(LoginRequiredMixin,View):
 		return render(self.request, template_name,context)
 
 
-class EditCommentForum(View):
+class EditCommentForum(LoginRequiredMixin,View):
 	def post(self,*args,**kwargs):
 		if(self.kwargs['type']=="ForumComments"):
 			forum = CommentForm(self.request.POST,self.request.FILES)
 			comment = ForumComments.objects.get(id=self.kwargs['id'])
-			comment.comment =  forum.cleaned_data.get("content")
-			if forum.cleaned_data.get("attachements"):
-				comment.attachements = forum.cleaned_data.get("attachements")
+			comment.comment =  self.request.POST.get("content")
 			comment.save()
 			return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
 		if(self.kwargs['type']=="CommentReplay"):
 			forum = CommentReplayForm(self.request.POST,self.request.FILES)
 			comment = CommentReplay.objects.get(id=self.kwargs['id'])
-			comment.content =  self.request.POST["content"]
-			if forum.cleaned_data.get("attachements"):
-				comment.attachements = forum.cleaned_data.get("attachements")
+			comment.content =  self.request.POST.get("content")
 			comment.save()
 			return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
 			
@@ -197,11 +205,8 @@ class CreateCommentReplay(LoginRequiredMixin,View):
 			form = CommentReplay()
 			form = comment.save(commit=False)
 			form.comment = main
-			if comment.cleaned_data.get("attachements"):
-				form.attachements = comment.cleaned_data.get("attachements")
 			form.user = self.request.user
 			form.save()
-			print(str(comment.cleaned_data.get("attachements")))
 			print("this worked")
 			return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
 		print("it didn't worked")
@@ -225,8 +230,6 @@ class CreateForumQuestion(LoginRequiredMixin,View):
             forum = ForumQuestion()
             forum = form.save(commit=False)
             forum.user = self.request.user
-            if form.cleaned_data.get("attachements"):
-            	forum.attachements = form.cleaned_data.get("attachements")
             print("one")
             forum.save()
             forum = ForumQuestionForm()
@@ -266,8 +269,6 @@ class EditForumQuestions(View):
 			forum = ForumQuestion.objects.get(id=self.kwargs['id'])
 			forum.title = form.cleaned_data.get('title')
 			forum.description = form.cleaned_data.get('description')
-			if forum.attachements:
-				forum.attachements = self.request.POST['attachements']
 			forum.save() 
 			return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
 		return render(self.request, template_name,context)
@@ -308,12 +309,7 @@ class ForumQuestionsDetail(View):
 			forum = form.save(commit=False)
 			question = ForumQuestion.objects.get(id=self.kwargs['id'])
 			forum.forum_question = question
-			print(form.cleaned_data.get('attachements'))
-			if form.cleaned_data.get('attachements'):
-				forum.attachements = form.cleaned_data.get('attachements')
 			forum.user = self.request.user
-			print("Force - x")
-			print(str(form.cleaned_data.get('attachements')))
 			forum.save()
 			return redirect(reverse("forum_detail",kwargs={'id':question.id}))
 		return render(self.request, template_name,context)

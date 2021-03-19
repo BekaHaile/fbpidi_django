@@ -55,7 +55,8 @@ from collaborations.Views.research import(
                         )
 from collaborations.Views.forums import(ListForumQuestionAdmin,CreateForumQuestionAdmin,ForumQuestionDetail,
                                           ListForumCommentAdmin,ForumCommentsDetail,
-                                          ListCommentReplayAdmin,CommentReplayDetail, )
+                                          ListCommentReplayAdmin,CommentReplayDetail,
+                                          ListForumCommentByIdAdmin,ListCommentReplayByIdAdmin )
 
 from product.views import *
                             
@@ -75,6 +76,33 @@ class CustomAdminSite(admin.AdminSite):
             return update_wrapper(wrapper, view)
 
         my_urls = [
+            path('forum-list',wrap(ListForumQuestionAdmin.as_view()),name="forum_list"),
+            path('forum-form',wrap(CreateForumQuestionAdmin.as_view()),name="forum_form"),
+            path('forum-detail/<model_name>/<id>',wrap(ForumQuestionDetail.as_view()),name="forum_detail"),
+            
+            path('Comment_replays/<id>',wrap(ListCommentReplayByIdAdmin.as_view()),name="Comment_replays"),
+            path('Forum_comment/<id>',wrap(ListForumCommentByIdAdmin.as_view()),name="Forum_Comments"),
+            path('forum-comment-list',wrap(ListForumCommentAdmin.as_view()),name="forum_comment_list"),
+            path('forum-comment-detail/<model_name>/<id>',wrap(ForumCommentsDetail.as_view()),name="forum_comment_detail"),
+
+            path('comment-replay-list',wrap(ListCommentReplayAdmin.as_view()),name="comment_replay_list"),
+            path('comment-replay-detail/<model_name>/<id>',wrap(CommentReplayDetail.as_view()),name="comment_replay_detail"),
+
+            # #admin project 
+            # path('project-form',wrap(CreateProjectAdmin.as_view()),name="project_form"),
+            # path('project-list',wrap(ListProjectAdmin.as_view()),name="project_list"),
+            # path('project-detail/<model_name>/<id>',wrap(ProjectDetailAdmin.as_view()),name="project_detail"),
+
+            path('research-view/<id>',wrap(ResearchDetailView.as_view()),name='research_view'),
+            path('research-approve/<id>',wrap(ResearchApprove.as_view()),name="research_approve"),
+            path('pedning-research-list',wrap(ListPendingResearchAdmin.as_view()),name="pedning_research_list"),
+            path('research-list',wrap(ListResearchAdmin.as_view()),name="research_list"),
+            path('research-form',wrap(CreateResearchAdmin.as_view()),name="research_form"),
+            path('research-detail/<model_name>/<id>',wrap(ResearchDetailAdmin.as_view()),name="research_detail"),
+
+            path('researchprojectcategorys-detail/<id>/',wrap(ResearchProjectCategoryDetail.as_view()),name='researchprojectcategory_detail'),
+            path('researchprojectcategorys-form/',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
+            path('researchprojectcategorys-list/',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
             
            
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
@@ -98,7 +126,7 @@ class CustomAdminSite(admin.AdminSite):
             path("faq-detail/<model_name>/<id>",wrap(FaqsView.as_view()),name="faqs_detail"),
             path("faq-form/",wrap(CreateFaqs.as_view()),name="admin_Faqsform"),
             path("faq-list/",wrap(FaqsList.as_view()),name="admin_Faqs"),  
-            path("faq-pendding-list/",wrap(FaqApprovdList.as_view()),name="admin_approved_Faqs"),
+            path("faq-approved-list/",wrap(FaqApprovdList.as_view()),name="admin_approved_Faqs"),
             path("faq-pendding-list/",wrap(FaqPendingList.as_view()),name="admin_pendding_Faqs"),
             path("faq-approve/<id>",wrap(FaqApprove.as_view()),name="approve_Faqs"),
             path("faq-view/<model_name>/<id>",wrap(FaqsDetail.as_view()),name="view_Faqs"),

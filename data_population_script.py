@@ -164,9 +164,18 @@ def with_out():
 
 
 
-if __name__ == '__main__':    
-   u = User.objects.get(id = 1)
-   c = ChatMessages.objects.filter( Q(sender = u)| )
+if __name__ == '__main__':
+    add_banks()  
+    # n = CompanyEvent.objects.first()
+    # d = n.start_date - timedelta(days=1)
+    # print(Company.objects.get(id =1))
+
+    # for n in EventParticipants.objects.all():
+    #    print(n.patricipant_email, " on ", n.event, n.timestamp)
+
+    # u = User.objects.get(id = 1)
+    # c = ChatMessages.objects.filter( Q(sender = u)| )
+    
 
 
     

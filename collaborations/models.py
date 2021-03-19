@@ -210,7 +210,7 @@ class TenderApplicant(models.Model):
     phone_number = models.CharField(max_length=20,blank=True,null=True)
     email = models.EmailField(verbose_name="applicant email", max_length=255)
     company_name = models.CharField(verbose_name="first_name", max_length=50)
-    company_tin_number = models.CharField(verbose_name="first_name", max_length=50)
+    company_tin_numbe = models.CharField(verbose_name="first_name", max_length=50)
     tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -376,7 +376,6 @@ class ForumComments(models.Model):
     forum_question=models.ForeignKey(ForumQuestion,on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     comment = models.TextField(null=False)
-    attachements = models.FileField(upload_to="Attachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -397,7 +396,6 @@ class CommentReplay(models.Model):
     comment = models.ForeignKey(ForumComments,on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(null=False)
-    attachements = models.FileField(upload_to="Attachements/", null=True,max_length=254,help_text="only pdf files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -477,21 +475,27 @@ class ResearchProjectCategory(models.Model):
 class Research(models.Model):
     title = models.CharField(max_length=500,null=False)
     description = models.TextField(null=False)
-    detail = models.TextField(null=False)
     status = models.CharField(max_length=100,null=False)
     accepted = models.CharField(max_length=100,null=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(ResearchProjectCategory, on_delete = models.CASCADE)
-    attachements = models.FileField(upload_to="ResearchAttachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
-
+    
     class Meta:
         ordering = ['-timestamp',]
+
+    def researchfiles(self):
+        return self.researchattachment_set.all()
     
     def get_category_name(self):
         return self.category.cateoryname
     
     model_am = "ምርምር"
+
+class ResearchAttachment(models.Model):
+    research = models.ForeignKey(Research, on_delete=models.CASCADE)
+    attachement = models.FileField(upload_to="ResearchAttachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
+    timestamp = models.DateTimeField(auto_now_add=True)
 
 
 class Project(models.Model):
@@ -528,7 +532,7 @@ class Document_Category(models.Model):
 
 
 class Document(models.Model):
-    DOC_CATEGORY = [ ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'), ('Finance','Finance')]
+    DOC_CATEGORY = [ ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'),]
 
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(verbose_name="upload time", auto_now_add=True)

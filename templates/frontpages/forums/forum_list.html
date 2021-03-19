@@ -113,8 +113,7 @@
 								{%for forum in forums%}
 								<div class="card">
 									<div class="card-head">
-										<h3>{{forum.title}}</h3>
-										<div>{{forum.status}}</div>
+										<h3 style = "margin-left:20px;margin-top:20px; ">{{forum.title}}</h3>
 									</div>
 									<div class="card-body">
 										<div class="item7-card-desc d-flex mb-2">
@@ -126,7 +125,7 @@
 
 
 
-										<h4 class="font-weight-semibold" >{{forum.description|safe|truncatewords:30}}</h4>
+										<h4 class="font-weight-semibold" >{{forum.description|safe|truncatechars_html:30}}</h4>
 										{% if forum.user != user %}
 										<a class="mr2" href="/chat/with/{{forum.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with forum creator"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 										{% endif %}

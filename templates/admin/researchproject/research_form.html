@@ -50,18 +50,17 @@
 							{{forms.description}}
 						</div>
 					</div> 
+					
+					
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Research Detail*</label>
+						<label class="col-form-label col-lg-3">Upload your attchment (if you have one):</label>
 						<div class="col-lg-9">
-							{{forms.detail}}
-						</div>
-					</div>
-					<div class="form-group">
-							<label class="form-label">Upload your attchment (if you have one)</label>
-							<div class="col-lg-10">
-									{{forms.attachements}}
-								
+							<div class="uniform-uploader">
+								<input type="file" id="files" name="files" class="form-input-styled" data-fouc="" multiple/>
+								<span class="filename" style="user-select: none;">No file selected</span>
+								<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
 							</div>
+						</div>
 					</div>
 					
 				</fieldset>

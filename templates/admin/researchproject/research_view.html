@@ -1,5 +1,6 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags %}
+{% load core_template_tags %}
 {% block extrastyle %}
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
@@ -38,7 +39,7 @@
 								</div>
 								<div class="col-xl-6 col-lg-6 col-md-6">
 								
-										<h3>Title:</h3> <h4>{{forms.title}}</h4>
+										<h2>{{forms.title}}</h2>
 										</div>
 									</div>
 							<div class="card-body">
@@ -57,22 +58,64 @@
 									<a href=""><i class="fa fa-calendar-o text-muted mr-2"></i>{{forms.timestamp}}</a>
 									<i class="fa fa-user text-muted mr-2">{{forms.user}}</i>
 									<div>
-										<label class="col-form-label col-lg-3"><h3> Description</h3> </label>
-										<p>{{forms.description|safe}}</p>
+										<label class="col-form-label col-lg-3"> </label>
+										<h5>{{forms.description|safe}}</h5>
 									</div>
-									<div>
-										<label class="col-form-label col-lg-3"><h3> Detail</h3> </label>
-										<p>{{forms.detail|safe}}</p>
-									</div>
-
 									
 									
-								</div>
+								</div> 
 								
 							</div>
 						</div>
+						{%if forms.researchfiles%}
+						<div class="card">
+						<label class="col-form-label col-lg-3"> Research Files*</label>
+		                
+		                <div class="card-body" >    
+		                        <div class="media-body">
+		                        	<div class="mt-4 mb-3 row">
+		                                {%for file in forms.researchfiles%}
+					                <div class="col-sm-6 col-lg-3">
+					                	
+					                    <div class="card">
+					                        <div class="card-img-actions m-1">
+					                        	
+					                            <a href="{{file.attachement.url}}" download="{{file.attachement.url}}">
 
-							
+										{% file_type file.attachement.url as file_type%}
+										{% if file_type  == 'image' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-image fa-4x"></i>
+										{% elif file_type  == 'video' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-play-circle fa-4x"></i>
+										{% elif file_type == 'audio' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-music fa-4x"></i>
+										{% elif file_type == 'word' %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-word-o fa-4x"></i>
+										{% elif file_type == 'pdf'  %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-pdf-o fa-4x"></i>
+										{% elif file_type == 'excel'%}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-excel-o fa-4x"></i>
+										{% elif file_type == 'exe' %}
+										<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "icon-cogs fa-4x"></i>
+										{% else %}
+											<i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file fa-4x"></i>
+										{% endif %}
+										{{file.attachement.name}}
+									</a>
+					                        </div>
+					                    </div>
+					                </div>
+
+					                {%endfor%}
+            					</div>
+		                            
+		                            
+		                        </div>
+		                    
+		                </div>
+		                      
+		            </div> 
+							{%endif%}
 						</div>
 					</div>
 	

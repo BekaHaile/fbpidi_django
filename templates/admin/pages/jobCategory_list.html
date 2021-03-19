@@ -60,11 +60,15 @@
 									
 								<div class="dropdown-menu dropdown-menu-right">
 									{% if user.is_superuser or user.get_company == form.user.get_company %}
+									{% if perms.collaborations.delete_jobcategory %}
 									<a href="{%url 'admin:delete' model_name='JobCategory' id=form.id%}" class="dropdown-item" onclick="return confirm('Warning:\n If You delete this the Vacanies under this will be deleted')"><i class="icon-trash"></i>Delete JobCategory</a>
 									{%endif%}
+									{%endif%}
 									{% if user.is_superuser or user.get_company == form.user.get_company %}
+									{% if perms.collaborations.change_jobcategory %}
 									<a href="{%url 'admin:Category_form'  model_name='JobCategory' id=form.id%}" class="dropdown-item" >
 										<i class="icon-pencil"></i>Edit JobCategory</a>
+										{%endif%}
 										{%endif%}
 									
 									
