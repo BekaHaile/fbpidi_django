@@ -79,11 +79,21 @@
 
                                         <div  >
                                             <!-- Main chats -->
-                                            <div class = "card">
+                                         
+                                            <div class = "card" >
                                                 <div class="card-header header-elements-inline">
-                                                        <h5 id =  "main-card-title" class="card-title">
-                                                            {% trans "Your Chats with " %}<b>{{other_user.username}}</b>
-                                                        </h5>
+                                                        <div id =  "main-card-title" class="card-title " style = "margin-right:7%" > 
+                                                            <a class="" href="{% url 'customer_chat_list' %}"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Back to Chat List"><i style = "color:blue;" class="fa fa-arrow-left "></i></a>
+                                                            {% trans "To Chat List" %}
+                                                            <br>
+                                                            <br>
+                                                            <div class="header-elements floa-right" >
+                                                                <h4>   {% trans "Your Chats with " %}<b>{{other_user.username}}</b></h4>
+                                                            </div>
+                                                           
+                                                            
+                                                        </div>
+                                                        
                                                            
                                                 </div>
                                                 

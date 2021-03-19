@@ -61,6 +61,7 @@
 																						
 																			<div style="margin-bottom: 10px;" class="row">
 																				<h5> Please enter username of the user you want to chat :</h5>
+																				<span style = "color: rgb(199, 89, 89);" id = "error-area"></span>
 																			</div>
 																			<div style="margin-right: 5px;" class="row">
 																				<input id = "chat_to" style = "padding: 5px;" type="text" name = "chat_to" value="">
@@ -211,11 +212,30 @@
 
 
 			<script>
-				function chat_with_user(){
-					var reciever = document.getElementById('chat_to');
-					console.log("user name is ", )
-					windown.location.pathname = '/chat/with/'+ reciever.value+'/';
-					// window.location.pathname = '/chat/' + user_name.value+"_"+ reciever.value+'/';
+				function chat_with_user()
+				{
+					var receiver = document.getElementById('chat_to').value;	
+					fetch( " /chat/check_user/"+receiver+"/").then(e=>e.json()).then(result =>
+					{   console.log(result)
+						if (result['result'] == true){
+							 window.location.pathname = '/chat/with/' + receiver+'/';
+						}
+						else{
+							error_message = "User with username '"+ receiver+"' does not exist!";
+							related = result.related
+							if( related.length > 0){
+								error_message +="<br> Other related user names... <br>"
+								related.forEach(n=>{
+								error_message += " - "+ n+"<br>";
+							}
+							);
+							}
+							document.getElementById("error-area").innerHTML = error_message
+
+						}
+						
+					});
+					
 				}
 				$(document).ready(function(){
 					$("#summernote").summernote();

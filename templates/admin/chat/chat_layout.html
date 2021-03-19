@@ -30,18 +30,13 @@
                     <div class="card col-md-8 fload-left " style = "margin-right:3%">
                         <div class="card-header header-elements-inline">
                                 <h5 id =  "main-card-title" class="card-title">
-                                    Your Chats with <b>{{other_user.username}}</b>
+                                    <a class="" href="{% url 'admin:admin_chat_list' %}"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Back to Chat List"><i style = "color:blue;" class="fa fa-arrow-left "></i></a>
+                                    To Chat List
                                 </h5>
                                
-                            
-                            
                             <span id = "online-item"></span>
                             <div class="header-elements">
-                                <div class="list-icons">
-                                    <a class="list-icons-item" data-action="collapse"></a>
-                                    <a class="list-icons-item" data-action="reload"></a>
-                                    <a class="list-icons-item" data-action="remove"></a>
-                                </div>
+                              <h5>  Your Chats with <b>{{other_user.username}}</b></h5>
                             </div>
                         </div>
                         <hr>
@@ -109,6 +104,7 @@
                             <h5 class="card-title"><b>Other Chats</b></h5>
                             <div class="header-elements">
                                 <div class="list-icons">
+                                  
                                     <a class="list-icons-item" data-action="collapse"></a>
                                     <a class="list-icons-item" data-action="reload"></a>
                                     <a class="list-icons-item" data-action="remove"></a>
