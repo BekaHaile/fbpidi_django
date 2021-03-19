@@ -19,7 +19,7 @@ from .Views.projects import (EditProject,ListProject,ProjectDetail,CreateProject
 from .Views.faq import FaqList
 
 from .Views.research import (EditResearch,ListResearch,ResearchDetail,CreateResearch,SearchResearch,
-                    ResearchCategorySearch,)  
+                    ResearchCategorySearch,CreateResearchAdmin)  
                     
 
 urlpatterns = [ 
@@ -31,9 +31,9 @@ urlpatterns = [
     path("project-category/<id>",ProjectCategorySearch.as_view(),name="projectcategory_search"),
 
     path("research-list",ListResearch.as_view(),name="research_list"),
+    path('research-form',CreateResearch.as_view(),name="research_form"),
     path("research-edit/<id>",EditResearch.as_view(),name="research_edit"),
     path('research-search',SearchResearch.as_view(),name='research_search'),
-    path("research-form",CreateResearch.as_view(),name="research_form"),
     path("research-detail/<id>",ResearchDetail.as_view(),name="research_detail"),
     path("research-category/<id>",ResearchCategorySearch.as_view(),name="researchcategory_search"),
 
@@ -60,7 +60,7 @@ urlpatterns = [
     path("search-tag/<name>",SearchBlogTag.as_view(),name="search_blogtag"),
     path("blog-list/",BlogList.as_view(),name="blog_grid_right"),
     path("blog-search/",SearchBlog.as_view(),name="blog_search"),
-    path("blog-details/<id>",BlogDetail.as_view(),name="blog_details"),
+    path("blog-detail/<id>",BlogDetail.as_view(),name="blog_details"),
     path("blog-comment/<id>",CreateBlogComment.as_view(),name="Comment"),
 
     path("vacancy-list/",VacancyList.as_view(),name="vacancy"),

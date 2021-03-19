@@ -16,9 +16,8 @@
 							<div class="list-icons">
 										{% if perms.collaborations.change_faqs and forms.status == "PENDDING" %} 
 										
-										{% if forms.status == "PENDDING" %}
-										 
-
+										{% if user.is_superuser %} 
+										  
 								<a href="{%url 'admin:approve_Faqs' id=forms.id %}" class="btn bg-teal btn-sm rounded-round" style = "margin-top: 20px; margin-right: 10px;"> APPROVE</a>
 										{%endif%}
 
@@ -27,15 +26,22 @@
 									</div>
 									<div class="list-icons">
 										{% if user.is_superuser or user.get_company == forms.user.get_company %}
+
+										{% if perms.collaborations.change_faq %}
 								<a href="{%url 'admin:faqs_detail'  model_name='Research' id=forms.id%}" class="btn bg-teal btn-sm rounded-round" style = "margin-top: 20px;margin-right: 10px;"> EDIT</a>
+									{%endif%}
+
 									{%endif%}
 									</div>
 									
 									<div class="list-icons">
 										{% if user.is_superuser or user.get_company == forms.user.get_company %}
+
+										{% if perms.collaborations.delete_faq %}
 								<a href="{%url 'admin:delete' model_name='Faqs' id=forms.id%}" class="btn bg-teal btn-sm rounded-round" onclick="return confirm('Are you sure you want to Delete this')" style = "margin-top: 20px; margin-right: 20px; ">DELETE</a>
 								{%endif%}
-                                    </div>
+								{%endif%}
+                                    </div> 
                                 
 					</div>
 								

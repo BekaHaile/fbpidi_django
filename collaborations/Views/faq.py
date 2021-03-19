@@ -123,14 +123,16 @@ class FaqsList(LoginRequiredMixin,View):
 class FaqPendingList(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		faqs=Faqs.objects.filter(status="PENDDING")
-		context = {'faqs':faqs}
+		pending = Faqs.objects.filter(status="PENDDING").count()
+		context = {'faqs':faqs,'pending':pending}
 		template_name = "admin/pages/faqs_list.html"
-		return render(self.request, template_name,context)
+		return render(self.request, template_name,context) 
 
 class FaqApprovdList(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		faqs=Faqs.objects.filter(status="APPROVED")
-		context = {'faqs':faqs}
+		pending = Faqs.objects.filter(status="PENDDING").count()
+		context = {'faqs':faqs,'pending':pending}
 		template_name = "admin/pages/faqs_list.html"
 		return render(self.request, template_name,context)
 

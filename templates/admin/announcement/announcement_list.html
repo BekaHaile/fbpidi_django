@@ -44,8 +44,8 @@
 				{%for Announcement in Announcements%}
 				<tr>
 					
-					<td>{{Announcement.title|truncatechars_html:20}}</td>
-					<td>{{Announcement.title_am|truncatechars_html:20}}</td>
+					<td>{{Announcement.title|safe|truncatechars_html:20}}</td>
+					<td>{{Announcement.title_am|safe|truncatechars_html:20}}</td>
 					<td>{{Announcement.company}}</td>
 					<td>{{Announcement.created_by.username|safe}}</td>
 					<td>{{Announcement.created_date}}</td>

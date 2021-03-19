@@ -38,6 +38,7 @@
 					<th>Title</th>
 					<th>Description</th>
 					<th>User</th>
+					<th>Comments</th>
 					<th>Attachements</th>
 					<th>Timestamp</th>
 					
@@ -51,6 +52,8 @@
 					<td>{{researchprojectcategory.title|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.description|safe|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.user}}</td>
+					<td><a class="mr-0" href="{%url 'admin:Forum_Comments' id=researchprojectcategory.id%}"><i class="fa fa-comment-o text-muted mr-2"></i>{{researchprojectcategory.countComment}}
+					</a></td>
 
 					<td>
 						{%if researchprojectcategory.attachements%}
@@ -73,12 +76,18 @@
 									
 								<div class="dropdown-menu dropdown-menu-right">
 									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
+
+									{% if perms.collaborations.delete_forumquestion %} 
 									<a href="{%url 'admin:delete' model_name='ForumQuestionAdmin' id=researchprojectcategory.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Question</a>
 									{% endif%}
+									{% endif%}
 									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
+									
+									{% if perms.collaborations.change_forumquestion %} 
 									<a href="{%url 'admin:forum_detail' model_name='ForumQuestion' id=researchprojectcategory.id%}" class="dropdown-item"  >
 										<i class="icon-pencil"></i>Edit Question</a>
-										{% endif%}
+									{% endif%}
+									{% endif%}
 								</div>
 							</div>
 						</div>

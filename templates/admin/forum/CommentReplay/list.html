@@ -1,4 +1,4 @@
-               {%extends 'admin/base_site.html'%}
+{%extends 'admin/base_site.html'%}
 {% block extrastyle %}
 
 <!-- Theme JS files -->
@@ -31,10 +31,10 @@
 			<thead>
 
 				<tr>
+					<th>Forum Question</th>
 					<th>Comment</th>
 					<th>Comment Replay</th>
 					<th>User</th>
-					<th>Attachements</th>
 					<th>Timestamp</th>
 					
 					<th class="text-center">Actions</th>
@@ -44,20 +44,10 @@
 			<tbody>
 				{%for researchprojectcategory in researchprojectcategorys%}
 				<tr>
-					
+					<td>{{researchprojectcategory.comment.forum_question|safe|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.comment|safe|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.content|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.user}}</td>
-					<td>
-						{%if researchprojectcategory.attachements%}
-						 <a href="{{researchprojectcategory.attachements.url}}" download="{{researchprojectcategory.attachements.url}}"> 
-						 <b>Attachment</b>
-						 </a>
-						 {%else%}
-						 <b>No Attachment</b>
-						 {%endif%}
-                                   		
-                    </td>
 					<td>{{researchprojectcategory.timestamp}}</td>
 					
 					<td class="text-center">
@@ -69,11 +59,19 @@
 									
 								<div class="dropdown-menu dropdown-menu-right">
 									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
+
+									{% if perms.collaborations.delete_commentreplay %} 
 									<a href="{%url 'admin:delete' model_name='CommentReplayAdmin' id=researchprojectcategory.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Comment Replay</a>
 									{%endif%}
+
+									{%endif%}
+
 									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
+
+									{% if perms.collaborations.change_commentreplay %} 
 									<a href="{%url 'admin:comment_replay_detail' model_name='CommentReplay' id=researchprojectcategory.id%}" class="dropdown-item"  >
 										<i class="icon-pencil"></i>Edit Comment Replay</a>
+										{%endif%}
 										{%endif%}
 								</div>
 							</div>

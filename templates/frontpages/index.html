@@ -752,7 +752,7 @@
 							</div>
 						</div>
 						<a href="{% url 'customer_news_detail' id=news.id %}" class="text-dark"><h4 class="font-weight-semibold">
-							{% print_translated news.title|truncatewords:18 news.title_am|truncatewords:18 LANGUAGE_CODE %}</h4></a>
+							{% print_translated news.title|truncatechars_html:18 news.title_am|truncatechars_html:18 LANGUAGE_CODE %}</h4></a>
                         <hr style="margin-top: 1rem;margin-bottom: 1rem"/>
 						<div class="d-flex align-items-center pt-2 mt-auto">
 							<img src="{{news.get_company.get_image}}" class="avatar brround avatar-md mr-3" alt="avatar-img">

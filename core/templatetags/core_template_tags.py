@@ -98,7 +98,7 @@ def change_end_date(end_date):
 @register.simple_tag()
 def file_type( file_url):
     name, file_extension = os.path.splitext(file_url) 
-    if file_extension == '.jpg' or file_extension == '.png' or file_extension == '.gif' or file_extension == '.tiff':
+    if file_extension == '.jpg' or file_extension == '.jpeg' or file_extension == '.png' or file_extension == '.gif' or file_extension == '.tiff':
         return "image"
     elif  file_extension == '.mp4' or file_extension == '.avi' or file_extension == '.mov' or file_extension == '.wmv':
         return "video"

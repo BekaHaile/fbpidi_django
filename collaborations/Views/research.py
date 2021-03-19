@@ -1,64 +1,28 @@
-
+#python,django,library,our pakages
 from django.urls import reverse
-import datetime
-from django.utils import timezone
 from django.views import View
-
-from django.http import HttpResponse, FileResponse
-from collaborations.models import Blog, BlogComment
-from collaborations.forms import FaqsForm
+from django.db.models import Q
 from django.shortcuts import render, redirect, reverse
 
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
-from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategory, News, NewsImages
 									 #redirect with context
-from django.http import HttpResponse, HttpResponseRedirect
-from django.views import View
+from django.http import HttpResponse, HttpResponseRedirect, FileResponse
+
 from django.contrib import messages
 
-from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
+from company.models import Company
 from accounts.models import User, CompanyAdmin, Company
 import os
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-
-from django.http import FileResponse, HttpResponse
-
-from accounts.models import User
 from accounts.email_messages import sendEventNotification
 
-from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
-from django.http import HttpResponse, FileResponse
-						 
-from wsgiref.util import FileWrapper
-
-
-
-from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
-
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
-from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
-								 VacancyForm,JobCategoryForm,
-								 ForumQuestionForm,CommentForm,CommentReplayForm,
-								 AnnouncementForm,ResearchForm,
-								 ResearchProjectCategoryForm
-								 )
-
-from collaborations.models import ( Blog, BlogComment,Faqs,
-									Vacancy,JobApplication, JobCategory,
-									ForumQuestion, ForumComments, CommentReplay,
-									Announcement,AnnouncementImages,
-									Research,
-									ResearchProjectCategory
-									
-									)
 from collaborations.forms import (ResearchForm,ResearchProjectCategoryForm)
+from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname
 
-from collaborations.models import ( Research, Project,
-									ResearchProjectCategory
-									)
+from collaborations.models import Research,ResearchAttachment,ResearchProjectCategory
+from django.utils import timezone
 
 
 class CreateResearchProjectCategoryAdmin(LoginRequiredMixin, View):
@@ -120,7 +84,7 @@ class ListResearchAdmin(LoginRequiredMixin ,View):
 		form = Research.objects.all()
 		pending = Research.objects.filter(status="PENDING").count()
 		template_name = "admin/researchproject/research_list.html"
-		context = {'researchs':form,"pending":pending}
+		context = {"researchs":form,"pending":pending}
 		return render(self.request, template_name,context)
 
 
@@ -147,7 +111,6 @@ class CreateResearchAdmin(LoginRequiredMixin, View):
 		context = {'forms':form}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
-		
 		form = ResearchForm(self.request.POST,self.request.FILES)
 		template_name = "admin/researchproject/research_form.html"
 		context = {'forms':form}
@@ -159,9 +122,14 @@ class CreateResearchAdmin(LoginRequiredMixin, View):
 			else:
 				research.accepted = "APPROVED"
 			research.user = self.request.user
-			if form.cleaned_data.get("attachements"):
-				research.attachements = form.cleaned_data.get("attachements")
 			research.save()
+			for file in self.request.FILES.getlist('files'):
+				print("file name:"+str(file.name))
+				researchattachment= ResearchAttachment()
+				researchattachment.research = research
+				researchattachment.attachement = file
+				researchattachment.save()
+
 			messages.success(self.request, "Added New Research Successfully")
 			return redirect("admin:research_form")
 		return render(self.request, template_name,context)
@@ -179,7 +147,8 @@ class ResearchDetailAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
 		template_name = "admin/researchproject/research_detil.html"
-		context = {'forms':form}
+		researchcategory=ResearchProjectCategory.objects.all()
+		context = {'forms':form,"category":researchcategory}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = ResearchForm(self.request.POST)
@@ -192,12 +161,36 @@ class ResearchDetailAdmin(LoginRequiredMixin, View):
 			research.detail = form.cleaned_data.get('detail')
 			research.status = form.cleaned_data.get('status')
 			research.category = form.cleaned_data.get('category')
-			if form.cleaned_data.get("attachements"):
-				research.attachements = form.cleaned_data.get("attachements")
-			research.user = self.request.user
 			research.save()
+			for file in self.request.FILES.getlist('files'):
+				print("file name:"+str(file.name))
+				researchattachment= ResearchAttachment()
+				researchattachment.research = research
+				researchattachment.attachement = file
+				researchattachment.save()
+			messages.success(self.request, "Edited Research Successfully")
 			return redirect("admin:research_list")
+		print("Not Really")
 		return render(self.request, template_name,context)
+
+class ListResearch(View):
+	def get(self,*args,**kwargs):
+		result = {}
+		if 'by_category' in self.request.GET:
+			result = filter_by("category__cateoryname",self.request.GET.getlist('by_category'), Research.objects.all())
+		elif 'by_title' in self.request.GET:
+			q = Research.objects.filter(Q(title__icontains = self.request.GET['by_title']))
+			print(q)
+			if q.count()>0:
+				result ={ 'query':q, 'message':f"{q.count()} Result found!"}
+			else:
+				result = {'query':Research.objects.all(),'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
+		else:
+			result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"Researchs",'message_am':"ምርምር"}
+		
+		print(self.request.path)
+		template_name="frontpages/research/research_list.html"
+		return render(self.request, template_name, {'researchs':result['query'],"category":ResearchProjectCategory.objects.all(), 'message':result['message'], 'message_am':result['message_am']})
 
 class SearchResearch(View):
 	def get(self,*args,**kwargs):
@@ -220,16 +213,16 @@ class SearchResearch(View):
 		# 	userCreated = ""
 		return render(self.request, template_name,context)
 
-class ListResearch(View):
-	def get(self,*args,**kwargs):
-		form = Research.objects.filter(accepted="APPROVED")
-		category = ResearchProjectCategory.objects.all()
-		if str(self.request.user) != "AnonymousUser":
-			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
-		else:
-			usercreated = ""
-		context = {'researchs':form,"usercreated":usercreated,"category":category}
-		template_name = "frontpages/research/research_list.html"
+# class ListResearch(View):
+# 	def get(self,*args,**kwargs):
+# 		form = Research.objects.filter(accepted="APPROVED")
+# 		category = ResearchProjectCategory.objects.all()
+# 		if str(self.request.user) != "AnonymousUser":
+# 			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
+# 		else:
+# 			usercreated = ""
+# 		context = {'researchs':form,"usercreated":usercreated,"category":category}
+# 		template_name = "frontpages/research/research_list.html"
 		
 		return render(self.request, template_name,context)
 class ResearchCategorySearch(View):
@@ -247,12 +240,9 @@ class ResearchCategorySearch(View):
 class ResearchDetail(View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
-		if str(self.request.user) != "AnonymousUser":
-			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
-		else:
-			usercreated = ""
+		related = Research.objects.filter(category=form.category)
 		category = ResearchProjectCategory.objects.all()
-		context = {'research':form,"usercreated":usercreated,"category":category}
+		context = {'research':form,"category":category,"related":related,"message":"Research"}
 		template_name = "frontpages/research/research_detail.html"
 		
 		return render(self.request, template_name,context)
@@ -293,7 +283,7 @@ class EditResearch(View):
 			return redirect("research_list")
 		return render(self.request, template_name,context)
 
-class CreateResearch(LoginRequiredMixin,View):
+class CreateResearch(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = ResearchForm()
 		if str(self.request.user) != "AnonymousUser":
@@ -301,19 +291,18 @@ class CreateResearch(LoginRequiredMixin,View):
 		else:
 			usercreated  = ""
 		category = ResearchProjectCategory.objects.all()
-		context = {'form':form,"usercreated":usercreated,"category":category}
+		context = {'form':form,"usercreated":usercreated,"category":ResearchProjectCategory.objects.all()}
 		template_name = "frontpages/research/research_form.html"
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
+		
 		form = ResearchForm(self.request.POST,self.request.FILES)
 		if str(self.request.user) != "AnonymousUser":
 			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
 		else:
-			usercreated = ""
-		category = ResearchProjectCategory.objects.all()
-		context = {'researchs':form,"usercreated":usercreated,"category":category}
-		template_name = "frontpages/research/research_form.html"
-		context = {'form':form}
+			redirect("research_list")
+		template_name = "admin/researchproject/research_form.html"
+		context = {'forms':form}
 		if form.is_valid():
 			research = Research()
 			research = form.save(commit=False)
@@ -321,14 +310,16 @@ class CreateResearch(LoginRequiredMixin,View):
 				research.accepted = "PENDING"
 			else:
 				research.accepted = "APPROVED"
-			research.user=self.request.user
-			#print("-----"+str(self.request.POST['attachements']))
-			if form.cleaned_data.get("attachements"):
-				research.attachements = form.cleaned_data.get("attachements")
-
+			research.user = self.request.user
 			research.save()
+			for file in self.request.FILES.getlist('files'):
+				print("file name:"+str(file.name))
+				researchattachment= ResearchAttachment()
+				researchattachment.research = research
+				researchattachment.attachement = file
+				researchattachment.save()
+
+ 
+			messages.success(self.request, "Added New Research Successfully")
 			return redirect("research_form")
 		return render(self.request, template_name,context)
-from company.forms import EventParticipantForm
-
-
