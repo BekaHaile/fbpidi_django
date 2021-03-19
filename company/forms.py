@@ -279,8 +279,8 @@ class CompanyProfileForm(forms.ModelForm):
             'main_category','trade_license','detail','detail_am',
             )
         widgets = {
-            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
-            'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
+            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English '}),
+            'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'logo':forms.FileInput(attrs={'class':''}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','placeholder':'Established Year'}),

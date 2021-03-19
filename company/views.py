@@ -34,8 +34,7 @@ class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
             messages.warning(self.request,"You Have A Company Profile")
             return redirect("admin:index")
         else:
-            pass
-
+            return redirect("admin:create_company_profile")
     def form_valid(self,form):
         company = form.save(commit=False)
         company.contact_person = self.request.user
