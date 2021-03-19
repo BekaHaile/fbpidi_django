@@ -131,7 +131,7 @@
 																</a>
 																<!--<p >{{news.description|truncatechars_html:12|safe}}</p>-->
 
-																 <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> {% trans "By" %}  </span>{% print_translated news.company.company_name news.company.company_name_am LANGUAGE_CODE %} </p>
+																 <p class="mb-0 leading-d"><span class="font-weight-semibold text-dark"> {% trans "By" %}  </span>{% print_translated news.company.name news.company.name_am LANGUAGE_CODE %} </p>
 															</div>
 														</div>
 														<div class="card-footer pt-2 pb-2">
@@ -139,7 +139,7 @@
 																<div class="item-card9-cost">
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
 																		<b>{% trans "By" %}: &nbsp</b>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.company.company_name}} ">
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.company.name}} ">
 																			<img src="{{news.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
 																		
 																		</a>

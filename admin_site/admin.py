@@ -216,6 +216,12 @@ class CustomAdminSite(admin.AdminSite):
             path('create_news/', wrap(CreateNews.as_view()), name = "create_news"),
             path('edit_news/<id>/', wrap(EditNews.as_view()), name = "edit_news"),
             path('news_detail/<id>/', wrap(NewsDetail.as_view()), name = "news_detail"),
+
+            path('admin_companyevent_list/', wrap(AdminCompanyEventList.as_view()), name = "admin_companyevent_list"),
+            path("create_companyevent/",wrap(CreateCompanyEvent.as_view()),name="create_companyevent"),
+            path("edit_companyevent/<pk>/",wrap(EditCompanyEvent.as_view()),name="edit_companyevent"),
+            
+
             
             
 
@@ -263,8 +269,6 @@ class CustomAdminSite(admin.AdminSite):
 
             # path("edit_company_profile/<id>/",wrap(ViewCompanyProfile.as_view()),name="edit_company_profile"),
             # path("create_company_solution/<company_id>",wrap(CreateCompanySolution.as_view()),name="create_company_solution"),
-            path("create_company_event/<company_id>",wrap(CreateCompanyEvent.as_view()),name="create_company_event"),
-            path("edit_company_event/<id>/",wrap(EditCompanyEvent.as_view()),name="edit_company_event"),
             path("create_fbpidi_company/",wrap(CreateFbpidiCompanyProfile.as_view()),name="create_fbpidi_company"),
             path("view_fbpidi_company/<str:active_tab/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company_active_tab"),
             path("view_fbpidi_company/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
@@ -308,7 +312,7 @@ class CustomAdminSite(admin.AdminSite):
             path('researchprojectcategorys-form',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
             path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
             
-            path('anounce-Detail/<model_name>/<id>',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
+            path('anounce-Detail/<id>/',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
             path('anounce-List',wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),
             path('anounce-form',wrap(CreatAnnouncementAdmin.as_view()),name="anounce_Create"),
             #path('JobCategory-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),

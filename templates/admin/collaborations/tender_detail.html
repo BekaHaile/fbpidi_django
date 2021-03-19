@@ -50,14 +50,14 @@
 								<a href="#" class="text-body"><h2 class="font-weight-semibold text-capitalize">Title: {{tender.title}}</h2></a>
 																<div class="item7-card-desc d-flex mb-2 mt-3">
                  
-									<p><i class="fa fa-calendar-o text-muted mr-2"></i><b>Created at :</b><a href="#"> {{tender.timestamp}}</a></p>
-                                    <p><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i><b>By</b> <a href="#">{{tender.get_company.company_name}}</a></p>
+									<p><i class="fa fa-calendar-o text-muted mr-2"></i><b>Created at :</b><a href="#"> {{tender.created_date}}</a></p>
+                                    <p><i class="fa fa-user text-muted mr-2" style="margin-left: 10px;" ></i><b>By</b> <a href="#">{{tender.get_company.name}}</a></p>
                                     <p><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i><b>Total applications : </b><a href="#">{{tender.get_applications.count}}</a></p>                                    
                                 </div>
                                 <div class="row" >
                                     <div class="col-md-6">
-                                        <p style="display: inline; margin-right: 10px;"><i class="fa fa-calendar-o text-muted mr-2"></i><b>Start date :</b><a href="#"  style="display: inline;" >{{tender.start_date}}</a></p> 
-                                        <p style="display: inline; "><i class="fa fa-calendar-o text-muted mr-2"></i><b>End date :</b><a href="#"  style="display: inline;" >{{tender.end_date}}</a></p> 
+                                        <p style="display: inline; margin-right: 10px;"><i class="fa fa-calendar-o text-muted mr-2"></i><b>Start date :</b><a href="#"  style="display: inline;" >{{tender.start_date.date}}</a></p> 
+                                        <p style="display: inline; "><i class="fa fa-calendar-o text-muted mr-2"></i><b>End date :</b><a href="#"  style="display: inline;" >{{tender.end_date.date}}</a></p> 
                                     </div>
                                 </div>
                                 <br>
@@ -85,29 +85,39 @@
                                 </div>                                 
 							</div>
 						</div>
+                       
+
 
                         <div class="card">
                             <div class="card-header">
-                                
-                                <h2>Related Bank Accounts</h2>
+                                <h2>Description</h2>
                             </div>
                             <div class="card-body">    
                                     <div class="media-body">
                                         
-                                            {%for bank_account in tender.get_bank_accounts%}
-                                                <p><b>{{bank_account.get_bank_name}}'s Account </b><br>{{bank_account.account_number}}</p>
-                                            {%endfor%}
-
+                                        <p class="font-13  mb-2 mt-2">{{tender.description|safe}}</p>
+                                        
                                     </div>
                                 
                             </div>           
                         </div>
-                      
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Description in Amharic</h2>
+                            </div>
+                            <div class="card-body">    
+                                    <div class="media-body">
+                                        
+                                        <p class="font-13  mb-2 mt-2">{{tender.description_am|safe}}</p>
+                                        
+                                    </div>
+                                
+                            </div>           
+                        </div>
+
                         
-                        
-                        
-                        {% if user == tender.user %}
-                         <div class="card">
+                        <div class="card">
                             <div class="card-header header-elements-inline">
                                 <h5 class="card-title">Tender Application Information </h5>
                                
@@ -139,37 +149,9 @@
                                 </tbody>
                             </table>
                         </div>
-                        {% endif %}
+                      
 
 
-
-                        <div class="card">
-                            <div class="card-header">
-                                <h2>Description</h2>
-                            </div>
-                            <div class="card-body">    
-                                    <div class="media-body">
-                                        
-                                        <p class="font-13  mb-2 mt-2">{{tender.description|safe}}</p>
-                                        
-                                    </div>
-                                
-                            </div>           
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header">
-                                <h2>Description in Amharic</h2>
-                            </div>
-                            <div class="card-body">    
-                                    <div class="media-body">
-                                        
-                                        <p class="font-13  mb-2 mt-2">{{tender.description_am|safe}}</p>
-                                        
-                                    </div>
-                                
-                            </div>           
-                        </div>
 					</div>
                 </div>
                 

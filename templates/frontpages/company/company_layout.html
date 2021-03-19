@@ -230,6 +230,32 @@
                     <li><a href="{%url 'company_about' pk=object.id%}">{% trans "About Us" %} </a></li>
                     <li><a href="{%url 'company_products' pk=object.id%}">{% trans "Products" %} </a></li>
 
+                    <li><a href="#">{% trans "Research" %} <span class="fa fa-caret-down m-0"></span></a>
+                        <ul class="sub-menu">
+                            <li><a href="{% url 'company_research' pk=object.id %}">{% trans "Research" %}</a></li>
+                            <!-- <li><a href="{% url 'project_list' %}">{% trans "Project" %}</a></li> -->
+                        </ul>
+                    </li>
+
+                    <li><a href="#">{% trans "Announcement" %} <span class="fa fa-caret-down m-0"></span></a>
+                        <ul class="sub-menu">
+                        <li><a href="{% url 'company_announcement' pk=object.id %}">{% trans "Announcement" %}</a></li>
+                        <li><a href="{% url 'company_event' pk=object.id %}">{% trans "Events" %}</a></li>
+                        <li><a href="{% url 'company_news' pk=object.id %}">{% trans "News" %}</a></li>
+                        <li><a href="{% url 'company_tender' pk=object.id %}">{% trans "Tenders" %}</a></li>
+                        <li><a href="{% url 'company_vacancy' pk=object.id  %}">{% trans "Vacancy" %}</a></li>
+
+                        </ul>
+                    </li>
+
+                    <li><a href="#">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
+                        <ul class="sub-menu">
+                            <li><a href="{% url 'company_blog' pk=object.id %}">{% trans "Blog" %}</a></li>
+                            <li><a href="{% url 'company_forum' pk=object.id %}">{% trans "Forums" %}</a></li>
+                            <li><a href="{% url 'company_poll' pk=object.id %}">{% trans "Polls" %}</a></li>
+                            <li><a href="{% url 'company_faq' pk=object.id %}">{% trans "Faqs" %}</a></li>
+                        </ul>
+                    </li>
                     <li><a href="{%url 'company_projects' pk=object.id%}">{% trans "Project" %}</a> </li>
                     <li><span></span><a href="{% url 'company_contact' pk=object.id %}"> {% trans "Contact Us" %}<span
                             class="wsarrow"></span></a></li>

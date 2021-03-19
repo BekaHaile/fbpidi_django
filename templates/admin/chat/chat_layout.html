@@ -126,7 +126,7 @@
                                                 <div class="mr-3"><a href="{{message_obj.receiver_image}}"><img src="{{message_obj.receiver_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
                                                 <div class="media-body">
                                                     <div class="media-title d-flex flex-nowrap">
-                                                        <a href="/chat/with/{{message_obj.receiver_name}}/" class="font-weight-semibold mr-3">{{message_obj.receiver_name}}</a>
+                                                        <a href="/chat/with/{{message_obj.receiver_name}}/" target = "blank" class="font-weight-semibold mr-3">{{message_obj.receiver_name}}</a>
                                                         <span class="font-size-sm text-muted text-nowrap ml-auto">{{message_obj.time}} <a href="#"><i class="icon-pin-alt font-size-base text-muted ml-2"></i></a></span>
                                                     </div>
                                                     <p> {{message_obj.message|truncatechars_html:20}}</p>
@@ -137,7 +137,7 @@
                                                 <div class="mr-3"><a href="{{message_obj.sender_image}}"><img src="{{message_obj.sender_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>
                                                 <div class="media-body">
                                                     <div class="media-title d-flex flex-nowrap">
-                                                        <a href="/chat/with/{{message_obj.sender_name}}/" class="font-weight-semibold "><p style = " display:inline;" class ="mr-3">{{message_obj.sender_name}}</p>
+                                                        <a href="/chat/with/{{message_obj.sender_name}}/" target = "blank" class="font-weight-semibold "><p style = " display:inline;" class ="mr-3">{{message_obj.sender_name}}</p>
                                                             {% if message_obj.seen == False %}
                                                             <span class="badge bg-danger badge-pill ml-auto">Unread message</span>
                                                             {% endif %}

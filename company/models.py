@@ -130,6 +130,17 @@ class Company(models.Model):
 
 	def get_company_address(self):
 		return CompanyAddress.objects.get(company=self)
+	
+	def get_image(self):
+		return self.logo.url
+	
+	def phone_number(self):
+		address = self.get_company_address()
+		return address.phone_number
+	
+	def location(self):
+		address = self.get_company_address()
+		return f"{address.city_town}"
 
 # Company Address Model
 class CompanyAddress(models.Model):
@@ -398,7 +409,7 @@ class CompanyEvent(models.Model):
         return self.image.url if self.image else self.company.get_image()
     
     def get_company_admin(self):
-        return self.company.get_compnay_admin()
+        return self.company.created_by.username
     
     model_am = "ዝግጅቶች"
 

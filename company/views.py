@@ -18,7 +18,8 @@ from accounts.models import CompanyAdmin,User
 from product.models import Order,OrderProduct,Product
 
 from company.forms import *
-from chat.models import ChatGroup, ChatMessage
+from collaborations.models import *
+from chat.models import ChatGroup, ChatMessage, ChatMessages
 
 class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
     model=Company
@@ -35,6 +36,7 @@ class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
             return redirect("admin:index")
         else:
             return redirect("admin:create_company_profile")
+
     def form_valid(self,form):
         company = form.save(commit=False)
         company.contact_person = self.request.user
@@ -58,6 +60,7 @@ class CreateCompanyProfile(LoginRequiredMixin,CreateView):
 
     def form_invalid(self,form):
         print(form.errors)
+        return redirect("admin:index")
 
 
 class CreateMyCompanyDetail(LoginRequiredMixin,UpdateView):
@@ -648,11 +651,24 @@ class UpdateProjectState(LoginRequiredMixin,UpdateView):
         form.save()
         return redirect("admin:update_project",pk=ProjectState.objects.get(id=self.kwargs['pk']).project.id)
 
-class CreateCompanyEvent(LoginRequiredMixin,View):
-    def post(self,*args,**kwargs):
-        form = CompanyEventForm(self.request.POST,self.request.FILES)
-        company = Company.objects.get(id=self.kwargs['company_id'])
-        if form.is_valid():
+
+class AdminCompanyEventList(LoginRequiredMixin, ListView):
+    model = CompanyEvent
+    template_name = "admin/collaborations/admin_companyevent_list.html"
+    context_object_name = "events"
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return CompanyEventForm.objects.all()
+        else: 
+            return CompanyEvent.objects.filter(company =  self.request.user.get_company())
+
+class CreateCompanyEvent(LoginRequiredMixin, CreateView):
+        model = CompanyEvent
+        form_class = CompanyEventForm
+        template_name = "admin/collaborations/create_events.html"
+
+        def form_valid(self,form):
             event = form.save(commit=False)
             if event.start_date.date() > timezone.now().date():
                 event.status = "Upcoming"
@@ -660,30 +676,65 @@ class CreateCompanyEvent(LoginRequiredMixin,View):
                  event.status = 'Open'
             else:
                 event.status = 'Closed' 
-            event.company = company
+            event.company = self.request.user.get_company()
             event.created_by = self.request.user               
             event.save()
             messages.success(self.request,"Event Created Successfully")
-            if company.company_type == "fbpidi":
-                return redirect("admin:view_fbpidi_company")
-            else:
-                return redirect("admin:view_company_profile")
-        else:
-            messages.warning(self.request,form.errors)
-            if company.company_type == "fbpidi":
-                return redirect("admin:view_fbpidi_company")
-            else:
-                return redirect("admin:view_company_profile")
+            return redirect('admin:admin_companyevent_list')
 
+        def form_invalid(self,form):
+            messages.warning(self.request,form.errors)
+            return redirect('admin:create_companyevent')
+
+
+# class EditCompanyEvent(LoginRequiredMixin, UpdateView):
+#         model = CompanyEvent
+#         form_class = CompanyEventForm
+#         template_name = "admin/collaborations/create_events.html"
+
+#         # def get_context_data(self,**kwargs):
+#         #     context = super().get_context_data(**kwargs)
+#         #     context['edit'] = True
+           
+
+#         def form_valid(self,form):
+#             event = form.save(commit=False)
+#             event.title.set (self.request.POST['title'])
+#             event.title_am.set(self.request.POST['title_am'])
+#             event.description.set(self.request.POST['description'])
+#             event.description_am.set( self.request.POST['description_am'])
+#             event.start_date.set( change_to_datetime(self.request.POST['start_date']))
+#             event.end_date.set(change_to_datetime(self.request.POST['end_date']))
+#             if event.start_date.date() > timezone.now().date():
+#                 event.status.set("Upcoming")
+#             elif event.start_date.date() == timezone.now().date():
+#                  event.status.set('Open')
+#             else:
+#                 event.status.set( 'Closed' )
+#             if self.request.FILES:
+#                 event.image.set(self.request.FILES['image'])
+#             event.last_updated_by = self.request.user
+#             event.last_updated_date = timezone.now()
+#             event.save() 
+#             messages.success(self.request,"Event Edited Successfully")
+#             return redirect("admin:admin_companyevent_list")
+
+
+#         def form_invalid(self,form):
+#             messages.warning(self.request,form.errors)
+#             return redirect("admin:admin_companyevent_list")
 
 def change_to_datetime(calender_date):
     str_date = datetime.datetime.strptime(calender_date, '%m/%d/%Y').strftime('%Y-%m-%d')
     return datetime.datetime.strptime(str_date,'%Y-%m-%d' )
 
 class EditCompanyEvent(LoginRequiredMixin,View):
+    def get(self, *args, **kwargs):
+        return render(self.request, "admin/collaborations/create_events.html",{'edit':True,'event':CompanyEvent.objects.get(id = self.kwargs['pk'])})
+
     def post(self,*args,**kwargs):
         form = CompanyEventForm(self.request.POST,self.request.FILES)
-        event = CompanyEvent.objects.get(id=self.kwargs['id']) 
+        event = CompanyEvent.objects.get(id=self.kwargs['pk']) 
         if form.is_valid():
             form.save(commit=False)
             event.title = self.request.POST['title']
@@ -704,12 +755,10 @@ class EditCompanyEvent(LoginRequiredMixin,View):
             event.last_updated_date = timezone.now()
             event.save() 
             messages.success(self.request,"Event Edited Successfully")
-            return redirect("admin:view_fbpidi_company") if self.request.user.is_superuser else redirect("admin:view_company_profile")
-            
+            return redirect('admin:admin_companyevent_list')
         else:
             messages.warning(self.request,form.errors)
-            return redirect("admin:view_fbpidi_company") if self.request.user.is_superuser else redirect("admin:view_company_profile")
-
+            return redirect('admin:admin_companyevent_list')
 
 class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -891,3 +940,18 @@ class CompanyProductList(DetailView):
 class CompanyProjectList(DetailView):
     model= Company
     template_name = "frontpages/company/blog-grid-center.html"
+
+class CompanyNewsList(ListView):
+    model = News
+    template_name = "frontpages/company/company_news.html"
+    context_object_name = "news_list"
+
+    def get_queryset(self):
+        try:
+            return News.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
+        except Exception as e:
+            print( "#######3 the excptio is ",e)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        context['object'] = Company.objects.get(id =self.kwargs['pk'])
+        return context
