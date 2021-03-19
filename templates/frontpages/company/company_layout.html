@@ -179,13 +179,13 @@
                                         {% csrf_token %}
                                         <input name="next" type="hidden" value="{{ redirect_to }}"/>
                                         <input type="hidden" name="language" value="en">
-                                        <input id="lan_btn" type="submit" value="{% trans " English" %}" />
+                                        <input id="lan_btn" type="submit" value='{% trans "English" %}' />
                                     </form>
                                     <form class="dropdown-item" action="{% url 'set_language' %}" method="post">
                                         {% csrf_token %}
                                         <input name="next" type="hidden" value="{{ redirect_to }}"/>
                                         <input type="hidden" name="language" value="am">
-                                        <input id="lan_btn" type="submit" value="{% trans " Amharic" %}" />
+                                        <input id="lan_btn" type="submit" value='{% trans " Amharic" %}' />
                                     </form>
                                 </div>
                             </li>
@@ -226,7 +226,9 @@
             <nav class="horizontalMenu clearfix d-md-flex">
 
                 <ul class="horizontalMenu-list">
-                    <li><a href="{%url 'company_home' pk=object.id %}">{% trans "Home" %} <span class="fa fa-caret m-0"></span></a></li>
+                    <li><a href="{%url 'index'  %}">{% trans "Home" %} <span class="fa fa-caret m-0"></span></a></li>
+                    <li><a href="{%url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} <span class="fa fa-caret m-0"></span></a></li>
+                    
                     <li><a href="{%url 'company_about' pk=object.id%}">{% trans "About Us" %} </a></li>
                     <li><a href="{%url 'company_products' pk=object.id%}">{% trans "Products" %} </a></li>
 
@@ -251,7 +253,6 @@
                     <li><a href="#">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
                         <ul class="sub-menu">
                             <li><a href="{% url 'company_blog' pk=object.id %}">{% trans "Blog" %}</a></li>
-                            <li><a href="{% url 'company_forum' pk=object.id %}">{% trans "Forums" %}</a></li>
                             <li><a href="{% url 'company_poll' pk=object.id %}">{% trans "Polls" %}</a></li>
                             <li><a href="{% url 'company_faq' pk=object.id %}">{% trans "Faqs" %}</a></li>
                         </ul>
