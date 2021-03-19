@@ -793,38 +793,7 @@ class ProjectUpdateForm(forms.ModelForm):
         }
         
 
-class CompanyEventForm(forms.ModelForm):
-    STATUS_CHOICE = [ ('Upcoming', 'Upcoming'),('Open', 'Open' )]
-    image = forms.FileField(allow_empty_file=True,  required=False, widget= forms.FileInput(attrs={'class': 'form-input-styled',}) )
-    class Meta:
-        model=CompanyEvent
-        fields = ('title','title_am','description','description_am','image', 'start_date', 'end_date')
-        widgets = {
-            'title':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (English)'}),
-            'title_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name (Amharic)'}),
-            'description': forms.Textarea(attrs={'class': 'summernote'}),
-            'description_am': forms.Textarea(attrs={'class': 'summernote'}),
-            'start_date': forms.DateTimeInput(attrs={'class':"form-control daterange-single"}),
-            'end_date': forms.DateTimeInput(attrs={'class':"form-control daterange-single"}),
-            'image': forms.FileInput(attrs={'class': 'form-input-styled', 'id': "blogImage" }),
-
-        }
-
-class EventParticipantForm(forms.ModelForm):
-    notify_on = forms.DateField(required=True, widget = forms.DateInput(attrs={'class':"form-control daterange-single", "name":"notify_on", "type":'date'}), )
-    participant_email = forms.EmailField(required=True)
-    class Meta:
-        model=EventParticipants
-        fields = ('patricipant_email', 'notify_on')
-        widgets = {
-        'patricipant_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address..'}),
-        }
-    # class Meta:
-    #     model=EventParticipants
-    #     fields = ('patricipant_email', 'notify_on')
-    #     widgets = {
-    #          'notify_on': forms.DateInput(attrs={'class':"form-control daterange-single", 'placeholder':"Remind me on -- days","type":'date'}),
-    #     }
+  
 
 class CompanyBankAccountForm(forms.ModelForm):
     bank = forms.ModelChoiceField(empty_label="Choose Bank", queryset=Bank.objects.all(),widget=forms.Select(attrs={'class':'form-control form-control-uniform'}),required=True)
