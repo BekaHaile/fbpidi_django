@@ -39,6 +39,9 @@ class FaqsForm(forms.ModelForm):
 
 class BlogsForm(forms.ModelForm):  
 
+    tag = forms.MultipleChoiceField(choices = [ ('Food', 'Food'), ('Beverage', 'Beverage'), ('Pharmaceutical', 'Pharmaceutical')], required=True,  widget=forms.SelectMultiple(attrs={'type': 'dropdown','class':'form-control'}),) 
+    tag_am = forms.MultipleChoiceField(choices = [ ('ምግብ', 'ምግብ'), ('መጠጥ', 'መጠጥ'), ('መድሀኒት', 'መድሀኒት')], required=True,widget=forms.SelectMultiple(attrs={'type': 'dropdown','class':'form-control'}),) 
+    
     class Meta:
         model = Blog
         fields = ('blogImage','title', 'tag', 'content','publish','title_am','tag_am','content_am')
@@ -47,15 +50,14 @@ class BlogsForm(forms.ModelForm):
                     'content': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in English'}),
                     'content_am': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in Amharic'}),
                     'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in English'}),
-                    'tag':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in English'}),
-                    'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in Amharic'}),
-                    'tag_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in Amharic'}),
-                    
+                    'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in Amharic'})
                             }
     
-    def save(self,user,x,y,w,h):
+    def save(self,user,x,y,w,h,tag_list,tag_list_am):
         blog = super(BlogsForm, self).save(commit=False)
         blog.user = user
+        blog.tag = tag_list
+        blog.tag_am = tag_list_am
         blog.save()
 
         ## if the image is not cropped 
@@ -63,7 +65,7 @@ class BlogsForm(forms.ModelForm):
             # just resize and save
             # change blog.blogImage with the image you want to resize 
             image = Image.open(blog.blogImage)
-            resized_image = image.resize((w1, h1), Image.ANTIALIAS)
+            resized_image = image.resize((600, 600), Image.ANTIALIAS)
             resized_image.save(blog.blogImage.path)
             return blog
 
@@ -83,17 +85,52 @@ class BlogsForm(forms.ModelForm):
 
 
 class BlogsEdit(forms.ModelForm):
-    
+
+    tag = forms.MultipleChoiceField(choices = [ ('Food', 'Food'), ('Beverage', 'Beverage'), ('Pharmaceutical', 'Pharmaceutical')], required=True,  widget=forms.SelectMultiple(attrs={'type': 'dropdown','class':'form-control'}),) 
+    tag_am = forms.MultipleChoiceField(choices = [ ('ምግብ', 'ምግብ'), ('መጠጥ', 'መጠጥ'), ('መድሀኒት', 'መድሀኒት')], required=True,widget=forms.SelectMultiple(attrs={'type': 'dropdown','class':'form-control'}),) 
+
     class Meta:
         model = Blog
         fields = ('title', 'tag', 'content','publish','title_am','tag_am','content_am')
         widgets = {'content': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in English'}),
                     'content_am': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in Amharic'}),
                     'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in English'}),
-                    'tag':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in English'}),
                     'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in Amharic'}),
-                    'tag_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Tag in Amharic'}),
-                            }
+                    }
+    def save(self,user,id,x,y,w,h,blog):
+        blog_update = Blog.objects.get(id=id)
+        blog_update.title = blog.title
+        blog_update.title_am = blog.title_am
+        blog_update.tag = blog.tag
+        blog_update.tag_am = blog.tag_am
+        blog_update.content =blog.content 
+        blog_update.content_am =blog.content_am
+        blog_update.publish = blog.publish
+        blog_update.blogImage = blog.blogImage
+        blog_update.save()
+
+         ## if the image is not cropped 
+        if (x == '' or y == '' or w == '' or h == ''):
+            # just resize and save
+            # change blog.blogImage with the image you want to resize 
+            image = Image.open(blog.blogImage)
+            resized_image = image.resize((600, 600), Image.ANTIALIAS)
+            resized_image.save(blog.blogImage.path)
+            return blog
+
+        x = float(x)
+        y = float(y)
+        w = float(w)
+        h = float(h)
+        # open the imaes about to be cropped
+        # change blog.blogImage with the image you want to resize 
+        image = Image.open(blog.blogImage)
+        cropped_image = image.crop((x, y, w+x, h+y))
+        #resized_image = cropped_image.resize((200, 200), Image.ANTIALIAS)
+
+        ## replace the image with the cropped one
+        cropped_image.save(blog.blogImage.path)
+        return blog
 
 
 class BlogCommentForm(forms.ModelForm):

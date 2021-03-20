@@ -1,19 +1,14 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags %}
+{%load admin_template_tags %}
 {% block extrastyle %}
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
-<!-- 
-<script  src="/static/admin/cropperjs/js/bootstrap.min.js" ></script>
-<script src="/static/admin/cropperjs/js/cropper.min.js"></script> -->
 
-<!-- <script  src="/static/admin/cropperjs/js/bootstrap.min.js" ></script>
-<script src="/static/admin/cropperjs/js/cropper.min.js"></script>
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.0/cropper.min.css" rel="stylesheet"/> -->
 
 <link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
-<script type="modeule" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
+<script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
 
 {% endblock %}
 {%block pagename%}Edit Blog{%endblock%}
@@ -47,23 +42,44 @@
 							<input type="text"required name="title_am" class="form-control" value="{{form.title_am}}" id="">
 						</div>
 							
-					</div> 
+					</div>  
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Blog Tag (English) *</label>
-						
-							<div class="col-lg-9">
-							<input type="text" required name="tag" class="form-control" value="{{form.tag}} " id="">
-						
-							
+						<label class="col-form-label col-lg-3">Blog Tag *</label>
+						<div class="col-lg-9">
+							<select required name="tag" class="form-control form-control-uniform" multiple="">
+									{%tag_edit form.tag as tags_list%}
+									 
+
+								{%for tag in tags_list%}
+									<option value="{{tag}}" selected>{{tag}}</option>{%endfor%} 
+
+								{%for tags in choices%}									
+									{%if not tags in tags_list %}
+									<option value="{{tags}}">{{tags}}</option>
+									{%endif%}
+								{%endfor%}
+								 
+							</select>
 						</div>
 					</div>
+					 
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3">Blog Tag (Amharic) *</label>
-						
-							<div class="col-lg-9">
-							<input type="text" required name="tag_am" class="form-control" value="{{form.tag_am}} " id="">
-						
-							
+						<div class="col-lg-9">
+							<select required name="tag_am" class="form-control form-control-uniform" multiple="">
+									{%tag_edit form.tag_am as tags_list_am%}
+									 
+
+								{%for tag in tags_list_am%}
+									<option value="{{tag}}" selected>{{tag}}</option>{%endfor%} 
+
+								{%for tags in choices_am%}									
+									{%if not tags in tags_list_am %}
+									<option value="{{tags}}">{{tags}}</option>
+									{%endif%}
+								{%endfor%}
+								 
+							</select>
 						</div>
 					</div>
 
@@ -122,13 +138,16 @@
 							
 				  	</div>
 				  		
-					
+					<input type="hidden" name="x" id="x" value="">
+					<input type="hidden" name="y" id="y" value="" >
+					<input type="hidden" name="width" id="width" value="">
+					<input type="hidden" name="height" id="height" value="">
 					 
 					<div class="form-group row">
 						<label class="col-form-label col-lg-2">Blog Image *</label>
 						<div class="col-lg-10">
 							<div class="uniform-uploader">
-								<input type="file" name="blogImage" class="form-input-styled" id="BlogImage" data-fouc="">
+								<input type="file" name="blogImage" class="form-input-styled" id="blogImage" data-fouc="">
 								<span class="filename" style="user-select: none;"></span>
 								<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
 							</div>
@@ -147,6 +166,27 @@
 		</div>
 	</div>
 </div>
+
+	<div class="modal fade" id="modalCrop">
+	    <div class="modal-dialog">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	            <span aria-hidden="true">&times;</span>
+	          </button>
+	        </div>
+	        <div class="modal-body">
+	          <img src="" id="modal_image_field" style="max-width: 100%;">
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" id= "cancel-btn" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	          <button type="button" id="js-crop-and-upload-button" class="btn btn-primary js-crop-and-upload">Done Croppping</button>
+	        </div>
+	      </div>
+	    </div>
+  	</div>
+
+
 <!-- /content area -->
 <script>
 	$(document).ready(function () {
@@ -154,26 +194,84 @@
 		$('.summernote').summernote();
 	});
 
-
-	var image = document.getElementById('image');
-	// image.addEventListener('change',()=>{
+	var cropX;
+	var cropY;
+	var cropWidth;
+	var cropHeight;
+	var modal_image  = document.getElementById("modal_image_field");
 	
-
-
-	var blogimagesource = document.getElementById('BlogImage')
-	var blogimageshow = document.getElementById('blogEditShow')
-	$("#BlogImage").change(function () {
-		console.log("log1")
+	$("#blogImage").change(function () {
+	
 		if (this.files && this.files[0]) {
-			
-			// blogimageshow.src = this.files[0]
 			var reader = new FileReader();
+			reader.readAsDataURL(this.files[0])
+			
 			reader.onload = function (e) {
-            $("#blogEditShow").attr("src", e.target.result);
-	          }
-	          reader.readAsDataURL(this.files[0]);
+							var c = document.getElementById('blogImage')
+							console.log("the e targe file is ", e.target.result);
+							modal_image.attributes['src'].value = ""	
+							
+							//console.log("the value of c src is "+ c.attributes['src'].value)
+							 $("#modal_image_field").attr("src", e.target.result);
+							$("#modalCrop").modal("show");
+							e.target.result = "";	
+						}
+
+			console.log("all files ", this.files)
+			console.log("Files of 0 ", this.files[0])
+
 			}
 		})
+
+	$("#modalCrop").on("shown.bs.modal", function () {
+		modalCropEdit = document.getElementById('modal_image_field')
+		cropper = new Cropper(modalCropEdit,{
+					viewMode: 1,
+					aspectRatio: 3/1,
+					minCropBoxWidth: 300,
+					minCropBoxHeight: 100,
+
+					crop(event){
+						
+						console.log("inside crop, the event is "+event)
+						setImageCropProperties(
+							modal_image_field,
+							event.detail.x,
+							event.detail.y,
+							event.detail.width,
+							event.detail.height)
+					}
+				})
+	})
+	var cancel = document.getElementById("cancel-btn")
+	cancel.addEventListener("click", function(e){
+		$("#modalCrop").modal("hide");
+	})
+	var confirm = document.getElementById("js-crop-and-upload-button")
+	confirm.addEventListener("click",function(event){
+
+		cropImage(cropX,cropY,cropWidth,cropHeight);
+		console.log("finished cropping");
+		$("#modalCrop").modal("hide");
+
+	})
+
+	function setImageCropProperties(image,x,y,width,height){
+		console.log("Set image cropper called!")
+		cropX = x;
+		cropY = y;
+		cropWidth = width;
+		cropHeight = height;  
+	}
+	
+	function cropImage(x,y,width,height){
+		document.getElementById("x").value = cropX;
+		document.getElementById("y").value = cropY;
+		document.getElementById("width").value = cropWidth;
+		document.getElementById("height").value = cropHeight;
+	}
+
+
 	// })
 // Get the Cropper.js instance after init
 </script>
