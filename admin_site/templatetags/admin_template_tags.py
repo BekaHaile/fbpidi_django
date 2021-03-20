@@ -48,6 +48,15 @@ def user_create_button(user):
 def count_unread_messages(user):
     return ChatMessages.count_unread_messages(user)
 
+@register.simple_tag
+def tag_edit(string):
+    tag_list = string.split(',')
+    return tag_list
+
+ 
+@register.simple_tag
+def printstr(string):
+    print(string) 
 
 
 @register.simple_tag
