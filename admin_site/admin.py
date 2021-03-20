@@ -81,7 +81,7 @@ class CustomAdminSite(admin.AdminSite):
             path('forum-detail/<model_name>/<id>',wrap(ForumQuestionDetail.as_view()),name="forum_detail"),
             
             path('Comment_replays/<id>',wrap(ListCommentReplayByIdAdmin.as_view()),name="Comment_replays"),
-            path('Forum_comment/<id>',wrap(ListForumCommentByIdAdmin.as_view()),name="Forum_Comments"),
+            path('forum_comment/<id>',wrap(ListForumCommentByIdAdmin.as_view()),name="Forum_Comments"),
             path('forum-comment-list',wrap(ListForumCommentAdmin.as_view()),name="forum_comment_list"),
             path('forum-comment-detail/<model_name>/<id>',wrap(ForumCommentsDetail.as_view()),name="forum_comment_detail"),
 

@@ -60,29 +60,6 @@
 							
 						</div>
 
-						<div class="card mb-0">
-							<form action="{%url 'research_list' %}" method = "GET">		
-								<div class="card-header border-top">
-									<h3 class="card-title">{% trans "Filter by Category" %}</h3>
-								</div>
-								<div class="card-body">
-										<div class="filter-product-checkboxs">
-											{%for tag in tags%}
-											<label class="custom-control custom-checkbox mb-2">
-												<input type="checkbox" class="custom-control-input" name="by_category" value="{{tag}}">
-												<span class="custom-control-label">
-													{% print_translated tag tag LANGUAGE_CODE %}
-												</span>
-											</label>
-											{% endfor %}
-										</div>
-								</div>
-								<div class="card-footer">
-									<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</button>
-								</div>
-							</form>
-						</div>
-						
 					</div>
 					<!--/Left Side Content-->
 

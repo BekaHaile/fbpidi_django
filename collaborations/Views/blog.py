@@ -252,23 +252,19 @@ class CreateBlogComment(LoginRequiredMixin,View):
 		return render(self.request, template_name,context)
 
 class SearchBlog(View):
-	def get_tags(self,*args,**kwargs):
+	def get_tags(self,lang):
 		blog = Blog.objects.filter(publish=True) 
-		stringlist = []
-		truestring = []
-		for b in blog:
-			splited = b.tag.split(" ");
-			for split in splited:
-				stringlist.append(split)
-
-		taglist = set(stringlist)
-		taglist = list(taglist)
-
-		for string in taglist:
-			if string == '':
-				continue
-			truestring.append(string)
-		return truestring
+		string = ""
+		if(lang=="amharic"):
+			for b in blog:
+				string+=b.tag_am+','
+		if(lang=="english"):
+			for b in blog:
+				string+=b.tag+','
+		string = string[:-1]
+		tag_list = string.split(',')
+		tag_list = set(tag_list)
+		return tag_list
 
 	def get(self,*args,**kwargs):
 		return redirect(reverse("blog_grid_right"))
@@ -277,57 +273,56 @@ class SearchBlog(View):
 		blog = Blog.objects.filter(title__contains=self.request.POST['search'])
 		template_name = "frontpages/blog-grid-right.html"
 		print(blog)
-		context = {'blogs':blog,'tags':self.get_tags()}
+		tags=self.get_tags("english")
+		tags_am=self.get_tags("amharic")
+		context = {'blogs':blog,'tags':tags,'tags_am':tags_am}
 		return render(self.request, template_name,context)
 
 class SearchBlogTag(View):
-	def get_tags(self,*args,**kwargs):
+	def get_tags(self,lang):
 		blog = Blog.objects.filter(publish=True) 
-		stringlist = []
-		truestring = []
-		for b in blog:
-			splited = b.tag.split(" ");
-			for split in splited:
-				stringlist.append(split)
-
-		taglist = set(stringlist)
-		taglist = list(taglist)
-
-		for string in taglist:
-			if string == '':
-				continue
-			truestring.append(string)
-		return truestring
+		string = ""
+		if(lang=="amharic"):
+			for b in blog:
+				string+=b.tag_am+','
+		if(lang=="english"):
+			for b in blog:
+				string+=b.tag+','
+		string = string[:-1]
+		tag_list = string.split(',')
+		tag_list = set(tag_list)
+		return tag_list
 
 
 	def get(self,*args,**kwargs):
 		blog = Blog.objects.filter(tag__contains=self.kwargs['name'])
 		template_name = "frontpages/blog-grid-right.html"
 		print(blog)
-		context = {'blogs':blog,'tags':self.get_tags()}
+		tags=self.get_tags("english")
+		tags_am=self.get_tags("amharic")
+		context = {'blogs':blog,'tags':tags,'tags_am':tags_am}
 		return render(self.request, template_name,context)
 
 class BlogDetail(View):
-	def get_tags(self,*args,**kwargs):
+	def get_tags(self,lang):
 		blog = Blog.objects.filter(publish=True) 
-		stringlist = []
-		truestring = []
-		for b in blog:
-			splited = b.tag.split(" ");
-			for split in splited:
-				stringlist.append(split)
-		taglist = set(stringlist)
-		taglist = list(taglist)
-
-		for string in taglist:
-			if string == '':
-				continue
-			truestring.append(string)
-		return truestring
+		string = ""
+		if(lang=="amharic"):
+			for b in blog:
+				string+=b.tag_am+','
+		if(lang=="english"):
+			for b in blog:
+				string+=b.tag+','
+		string = string[:-1]
+		tag_list = string.split(',')
+		tag_list = set(tag_list)
+		return tag_list
 
 	def get(self,*args,**kwargs):
 		blog = Blog.objects.get(id=self.kwargs['id'])
 		comment = BlogCommentForm()
+		tags=self.get_tags("english")
+		tags_am=self.get_tags("amharic")
 		template_name="frontpages/blog-details-right.html" 
-		context = {'blog':blog,'comment':comment,'tags':self.get_tags()}
+		context = {'blog':blog,'comment':comment,'tags':tags,'tags_am':tags_am}
 		return render(self.request, template_name,context)
