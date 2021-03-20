@@ -650,19 +650,24 @@ class UpdateProjectState(LoginRequiredMixin,UpdateView):
 
 class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        form = FbpidiCompanyForm()
-        return render(self.request,"admin/company/company_form_fbpidi.html",{'form':form})
+        context = {}
+        context['form'] = InistituteForm
+        if self.request.user.is_superuser:
+            return render(self.request,"admin/company/company_form_fbpidi.html",context)
+        else:
+            return redirect("admin:index")
 
-    def form_valid(self,form):
-        fbpidi = form.save(commit=False)
-        fbpidi.main_category = "FBPIDI"
-        fbpidi.contact_person = self.request.user
-        fbpidi.save()
-        return redirect("admin:index")
-
-    def form_invalid(self,form):
-        messages.success(self.request,form.errors)
-        return redirect("admin:create_fbpidi_company")
+    def post(self,form):
+        form = InistituteForm(self.request.POST,self.request.FILES)
+        if form.is_valid():
+            fbpidi = form.save(commit=False)
+            fbpidi.main_category = "FBPIDI"
+            fbpidi.contact_person = self.request.user
+            fbpidi.save()
+            return redirect("admin:index")
+        else:
+            messages.success(self.request,form.errors)
+            return redirect("admin:create_fbpidi_company")
 
 
 class ViewFbpidiCompany(LoginRequiredMixin,UpdateView):
@@ -670,48 +675,29 @@ class ViewFbpidiCompany(LoginRequiredMixin,UpdateView):
     form_class = InistituteForm
     template_name="admin/company/company_profile_fbpidi.html"
 
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['address_form'] = CompanyAddressForm
+        try:
+            context['address'] = CompanyAddress.objects.get(company=Company.objects.get(id=self.kwargs['pk']))
+        except CompanyAddress.DoesNotExist:
+            context['address'] = None
+        return context
+
     def form_valid(self,form):
         fbpidi = form.save(commit=False)
         fbpidi.last_updated_by=self.request.user
         fbpidi.last_updated_date=timezone.now()
         fbpidi.save()
         messages.success(self.request,"Company Updated")
-        return redirect("admin:view_fbpidi_company")
+        return redirect("admin:view_fbpidi_company",pk=fbpidi.id)
     
     def form_invalid(self,form):
         messages.success(self.request,form.errors)
-        return redirect("admin:view_fbpidi_company")
+        return redirect("admin:view_fbpidi_company",self.kwargs['pk'])
 
 
-class DeleteCompanyBankAccount(LoginRequiredMixin, View):
-    def get(self, *args, **kwargs):
-        message = ""
-        redirect_url = ""
-        if self.request.user.is_superuser:
-            redirect_url = "admin:view_fbpidi_company"
-        else:
-            redirect_url = "admin:view_company_profile"
-
-        if self.kwargs['id'] :
-            bank_account = CompanyBankAccount.objects.filter(id = self.kwargs['id']  ).first()
-            
-            if bank_account:
-                bank_account.delete()
-                message = "Bank Account Deleted Successfully"
-                messages.success(self.request,message)
-                
-                return redirect(redirect_url)
-            else:
-                messages.warning(self.request, "NO such tender was found!")
-                return redirect(redirect_url)
-
-
-        else:
-            messages.warning(self.request, "Nothing selected!")
-            return redirect(redirect_url)
-
-
-
+ 
 ############## newly added, delete this commet after everything has worked right
 
 class CompanyByMainCategory(ListView):

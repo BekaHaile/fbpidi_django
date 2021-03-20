@@ -228,6 +228,8 @@ class CreateProductView(LoginRequiredMixin,CreateView):
             kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
         elif self.request.user.is_company_staff:
             kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
+        elif self.request.user.is_superuser:
+            kwargs.update({'company':Company.objects.get(main_category="FBPIDI")})
         return kwargs
 
     def form_valid(self,form):

@@ -1,16 +1,11 @@
 {%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags%}
 {% block extrastyle %}
-<script src="/static/admin/global_assets/js/plugins/forms/wizards/steps.min.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/inputs/inputmask.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/validation/validate.min.js"></script>
-<script src="/static/admin/global_assets/js/plugins/extensions/cookie.js"></script>
-<script src="/static/admin/global_assets/js/demo_pages/form_wizard.js"></script>
-
-<script src="/static/admin/global_assets/js/plugins/pickers/color/spectrum.js"></script>
-    <script src="/static/admin/global_assets/js/plugins/forms/styling/switchery.min.js"></script>
-    <script src="/static/admin/global_assets/js/demo_pages/picker_color.js"></script>
+{{form.media}}
 {% endblock %}
 {%block pagename%}Company Form {%endblock%}
 {%block content%}
@@ -30,167 +25,13 @@
 			</div>
 		</div>
 
-		<form id="companyform" class="wizard-form steps-enable-all" action="{%url 'admin:create_fbpidi_company'%}"
-			method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
-			<h6>Company Profile</h6>
-			<fieldset>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="col-form-label">{{form.company_name.label|title}}</label>
-							{{form.company_name}}
-							<span class="form-text text-warning">{{form.company_name.errors}}</span>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="col-form-label">{{form.company_name_am.label|title}}</label>
-							{{form.company_name_am}}
-							<span class="form-text text-warning">{{form.company_name_am.errors}}</span>
-						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group ">
-							<label class="col-form-label ">{{form.email.label|title}}</label>
-							{{form.email}}
-							<span class="form-text text-warning">{{form.email.errors}}</span>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group ">
-							<label class="col-form-label ">{{form.phone_number.label|title}}</label>
-							{{form.phone_number}}
-							<span class="form-text text-warning">{{form.phone_number.errors}}</span>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-4">
-						<div class="form-group row">
-							<label class="col-form-label ">Company Address</label>
-								{{form.location}}
-								<span class="form-text text-warning">{{form.location.errors}}</span>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<label class="col-form-label ">{{form.city.label|title}}</label>
-								{{form.city}}
-								<span class="form-text text-warning">{{form.city.errors}}</span>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<label class="col-form-label ">{{form.postal_code.label|title}}</label>
-								{{form.postal_code}}
-								<span class="form-text text-warning">{{form.postal_code.errors}}</span>
-						</div>
-					</div>
-				</div>
-				
-				
-				<div class="row">
-					 
-					<div class="col-md-12">
-						<div class="form-group">
-							<label class="col-form-label ">{{form.established_year.label|title}}</label>
-								{{form.established_year}}
-								<span class="form-text text-warning">{{form.established_year.errors}}</span>
-						</div>
-					</div>
-					 
-				</div>
-				
-				<div class="form-group">
-					<label class="col-form-label ">{{form.detail.label|title}}</label>
-						{{form.detail|safe}}
-						<span class="form-text text-warning">{{form.detail.errors}}</span>
-				</div>
-				<div class="form-group">
-					<label class="col-form-label ">{{form.detail_am.label|title}}</label>
-						{{form.detail_am|safe}}
-						<span class="form-text text-warning">{{form.detail_am.errors}}</span>
-				</div>
-			</fieldset>
-
-			<h6>Additional Information</h6>
-			<fieldset>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group ">
-							<label class="col-form-label ">{{form.company_logo.label|title}}</label>
-								{{form.company_logo}}
-								<span class="form-text text-muted">Accepted formats:{{form.company_logo.help_text}}</span>
-								<span class="form-text text-warning">{{form.company_logo.errors}}</span>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="col-form-label ">{{form.company_intro.label|title}}</label>
-								{{form.company_intro}}
-								<span class="form-text text-muted">Accepted formats:{{form.company_intro.help_text}}</span>
-								<span class="form-text text-warning">{{form.company_intro.errors}}</span>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>{{form.facebook_link.label|title}}</label>
-							{{form.facebook_link}}
-							<span class="form-text text-warning">{{form.facebook_link.errors}}</span>
-						</div>
-					</div>
-
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>{{form.google_link.label|title}}</label>
-							{{form.google_link}}
-							<span class="form-text text-warning">{{form.google_link.errors}}</span>
-						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>{{form.pintrest_link.label|title}}</label>
-							{{form.pintrest_link}}
-							<span class="form-text text-warning">{{form.pintrest_link.errors}}</span>
-						</div>
-					</div>
-
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>{{form.twiter_link.label|title}}</label>
-							{{form.twiter_link}}
-							<span class="form-text text-warning">{{form.twiter_link.errors}}</span>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="col-form-label ">{{form.linkedin_link.label|title}}</label>
-								{{form.linkedin_link}}
-								<span class="form-text text-warning">{{form.linkedin_link.errors}}</span>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="col-form-label ">{{form.instagram_link.label|title}}</label>
-								{{form.instagram_link}}
-								<span class="form-text text-warning">{{form.instagram_link.errors}}</span>
-						</div>
-					</div>					
-				</div>
-				 
-			</fieldset>
- 
+		<div class="card-body">
+		<form id="fbpidiform" action="{%url 'admin:create_fbpidi_company'%}"
+			method="POST" enctype="multipart/form-data">{%csrf_token%}			
+			{{form|crispy}}
+			<input id="submit" type="submit" class="btn btn-primary" value="Submit changes">
 		</form>
+		</div>
 	</div>
 	<!-- /starting step -->
 
@@ -199,13 +40,16 @@
 <script>
 	$(document).ready(function () {
 		$(".summernote").summernote();
+
+		$("#submit").click(function(){
+			console.log("Hello There");
+			$("#fbpidiform").submit();
+		});
 	});
-	<script >
 	function isNumber(kkk)
   {
     
      $("#"+kkk).val($("#"+kkk).val().replace(/[^\d.]/g, ''));  
   }
-</script>
 </script>
 {%endblock%}

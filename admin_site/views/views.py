@@ -36,7 +36,6 @@ class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         user = self.request.user
         if user.is_company_admin:
-            print(user.get_company(),"get_company()")
             if user.get_company() == None:
                 messages.warning(self.request, "Please Create Your Company Profile")
                 return redirect("admin:create_my_company")

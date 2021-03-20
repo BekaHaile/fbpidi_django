@@ -173,8 +173,8 @@ class InistituteForm(forms.ModelForm):
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Name Of the Inistitute'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Name Of the Inistitute'}),
             'logo':forms.FileInput(attrs={'class':'form-control'}),
-            'detail':forms.TextInput(attrs={'class':'summernote'}),
-            'detail_am':forms.TextInput(attrs={'class':'summernote'}),
+            'detail':forms.Textarea(attrs={'class':'summernote'}),
+            'detail_am':forms.Textarea(attrs={'class':'summernote'}),
         }
 
 

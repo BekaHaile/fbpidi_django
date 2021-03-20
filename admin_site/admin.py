@@ -263,16 +263,10 @@ class CustomAdminSite(admin.AdminSite):
             path("update_product_quantity/<pk>/",wrap(UpdateProductQty.as_view()) ,name='update_product_qty'),
             path("update_project_state/<pk>/",wrap(UpdateProjectState.as_view()) ,name='update_project_state'),
 
-            # path("edit_company_profile/<id>/",wrap(ViewCompanyProfile.as_view()),name="edit_company_profile"),
-            # path("create_company_solution/<company_id>",wrap(CreateCompanySolution.as_view()),name="create_company_solution"),
             path("create_fbpidi_company/",wrap(CreateFbpidiCompanyProfile.as_view()),name="create_fbpidi_company"),
-            path("view_fbpidi_company/<str:active_tab/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company_active_tab"),
-            path("view_fbpidi_company/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
+            path("view_fbpidi_company/<pk>/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
             
             path("edit_fbpidi_profile/<id>/",wrap(ViewFbpidiCompany.as_view()),name="edit_fbpidi_profile"),
-            path("create_company_bank_account/<id>/", wrap(CreateCompanyBankAccount.as_view()), name = "create_company_bank_account"),
-            path("edit_company_bank_account/<id>/", wrap( EditCompanyBankAccount.as_view()), name = "edit_company_bank_account"),
-            path("delete_company_bank_account/<id>/", wrap(DeleteCompanyBankAccount.as_view()), name = "delete_company_bank_account"),
 
             ### Document
              path('create_document/', wrap(CreateDocument.as_view()), name='create_document'),
