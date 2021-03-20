@@ -150,7 +150,7 @@
 
                             </li>
 
-                            <!-- <li  class="nav-item dropdown">
+                            <li  class="nav-item dropdown">
                                 <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
                                 
                                     <a href = "{% url 'customer_chat_list' %} "><i class="fa fa-envelope" ></i><span>{% trans "My Messages" %}</span></a>
@@ -173,7 +173,7 @@
                                    
                                 </div>
                             </li>
-                            -->
+                           
 
                            
                               
@@ -187,17 +187,14 @@
 
                             </li>
                             
-
-                            <!--  -->
-                            <!-- <li  class="nav-item dropdown">
-                                {%comment%}
-
+                            <li  class="nav-item dropdown">
                                 <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
-                                    <a href = "{% url 'admin:view_company_profile_active_tab' active_tab='inbox' %}"><i class="fa fa-envelope" ></i><span>My Messages</span></a>
-                                    <span id = "unread_messages_list" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
+                                
+                                    <a href = "{% url 'admin:index' %} "><i class="fa fa-envelope" ></i><span>{% trans "My Messages" %}</span></a>
+                                    <span id = "num_unread_messages" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
                                 </a>
                                 
-                                {%endcomment%}
+                                
                                 <div style = "padding: 10px;   width: 300px;" class = "dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
                                     <div class="dropdown-content-header">
                                         <span class="font-weight-semibold">{% trans " List of Messages" %}</span>
@@ -212,7 +209,8 @@
                     
                                    
                                 </div>
-                            </li> -->
+                            </li>
+                           
                             {%endif%}
                             <li>
                                 <a href="{%url 'logout' %}?next={%url 'cm_login'%}" class="text-dark"><i

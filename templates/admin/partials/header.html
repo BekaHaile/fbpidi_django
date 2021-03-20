@@ -143,7 +143,7 @@
       
       
         <li class="nav-item dropdown">
-            <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
+            <a href="{% url 'admin:admin_chat_list' %}" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
                 <i class="icon-bubbles4"></i>
                 <span class="d-md-none ml-2">Messages</span>
                 
@@ -153,7 +153,7 @@
             
             <div class="dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
                 <div class="dropdown-content-header">
-                    <span class="font-weight-semibold">Messages</span>
+                    <span class="font-weight-semibold">List of Messages</span>
                     <a href="#" class="text-default"><i class="icon-compose"></i></a>
                 </div>
                 <div class="dropdown-content-body dropdown-scrollable">
@@ -184,12 +184,12 @@
                 {%if not user.is_superuser%}
                <a href="{%url 'admin:update_company_info' pk=user|get_company_id%}" class="dropdown-item"><i class="icon-coins"></i> My Company</a>
                {%endif%}
-                {% if user.is_superuser %}
-                 <a href="{% url 'admin:view_fbpidi_company' %}" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span id = "num_unread_messages" class="badge badge-pill bg-blue ml-auto"></span></a>
+               
+                <a href="{% url 'admin:admin_chat_list' %}" class="dropdown-item"><i class="icon-comment-discussion"></i> My Messages  <span id = "num_unread_messages" class="badge badge-pill bg-blue ml-auto"></span></a>
               
-                {%else%}
-               <a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span id = "unread_messages" class="badge badge-pill bg-blue ml-auto">{{unread_messages_count}}</span></a>
-               {%endif%}
+                
+               <!-- <a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span id = "unread_messages" class="badge badge-pill bg-blue ml-auto">{{unread_messages_count}}</span></a> -->
+            
                <div class="dropdown-divider"></div>
                 <a href="{% url 'admin:password_change' %}" class="dropdown-item"><i class="icon-cog5"></i>Change Password</a>
                  <a href="{% url 'admin:logout' %}?next={%url 'admin:login'%}" class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
