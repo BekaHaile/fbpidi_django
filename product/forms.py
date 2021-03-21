@@ -1,7 +1,10 @@
 import datetime
 
 from django import forms
+from django.db.transaction import atomic
+
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
+from PIL import Image
 
 from product.models import *
 from admin_site.models import Category
@@ -62,6 +65,25 @@ class SubCategoryForm(forms.ModelForm):
         } 
 
 class ProductCreationForm(forms.ModelForm):
+    x = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(),required=False)
+
+    def __init__(self,*args,**kwargs):
+        self.company = kwargs.pop('company')
+        super(ProductCreationForm,self).__init__(*args,**kwargs)
+        self.fields['fandb_category'].queryset = Brand.objects.filter(company=self.company)
+        if self.company.main_category == 'FBPIDI':
+             self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type="Pharmaceuticals")
+        else:
+            self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type=self.company.main_category)
+        self.fields['dose'].queryset = Dose.objects.all()
+        self.fields['dosage_form'].queryset = DosageForm.objects.all()
+        self.fields['dose'].empty_label = "Select Prodect Dose"
+        self.fields['dosage_form'].empty_label = "Select Product Dosage Form"
+        self.fields['fandb_category'].empty_label = "Select Product Brand"
+        self.fields['pharmacy_category'].empty_label = "Select Product Category"
      
     class Meta:
         model = Product
@@ -83,17 +105,29 @@ class ProductCreationForm(forms.ModelForm):
             'quantity':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_quantity")'}),
         } 
 
-    def __init__(self,*args,**kwargs):
-        self.company = kwargs.pop('company')
-        super(ProductCreationForm,self).__init__(*args,**kwargs)
-        self.fields['fandb_category'].queryset = Brand.objects.filter(company=self.company)
-        self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type=self.company.main_category)
-        self.fields['dose'].queryset = Dose.objects.all()
-        self.fields['dosage_form'].queryset = DosageForm.objects.all()
-        self.fields['dose'].empty_label = "Select Prodect Dose"
-        self.fields['dosage_form'].empty_label = "Select Product Dosage Form"
-        self.fields['fandb_category'].empty_label = "Select Product Brand"
-        self.fields['pharmacy_category'].empty_label = "Select Product Category"
+    @atomic
+    def save(self,commit=True):
+        product = super(ProductCreationForm, self).save(commit=commit)
+
+        x = self.cleaned_data.get('x')
+        y = self.cleaned_data.get('y')
+        w = self.cleaned_data.get('width')
+        h = self.cleaned_data.get('height')
+
+        if (x or y or w or h ):
+                image = Image.open(product.image)
+                cropped_image = image.crop((x, y, w+x, h+y))
+                resized_image = cropped_image.resize((1280, 720), Image.ANTIALIAS)
+                resized_image.save(product.image.path)
+
+                return product
+                
+        else:
+                image = Image.open(product.image)
+                resized_image = image.resize((1280, 720), Image.ANTIALIAS)
+                resized_image.save(product.image.path)
+                return product
+    
 
 
 class DosageFormForm(forms.ModelForm):
@@ -221,9 +255,9 @@ class ProductPriceForm(forms.ModelForm):
 class ProductImageForm(forms.ModelForm):
     class Meta:
         model = ProductImage
-        fields = ('image',)
+        fields = ('product_image',)
         widgets = {
-            'image':forms.FileInput(attrs={'class':'form-control'})
+            'product_image':forms.FileInput(attrs={'class':'form-control'})
         }
 
 class ReviewForm(forms.ModelForm):

@@ -190,25 +190,12 @@
 									class="icon-stack"></i> <span>Products</span></a>
 						</li>
 						
-						<li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link"><i>R&D</i> 
+						<li class="nav-item nav-item">
+							<a href="{%url 'admin:research_list' %}" class="nav-link"><i class="mi-youtube-searched-for"></i> 
 								<span>Research</span></a>
-								<ul class="nav nav-group-sub" data-submenu-title="Form components">
-									
-									<li class="nav-item">
-										<a href="{%url 'admin:research_list' %}" class="nav-link"><i>R</i>
-											<span>Research</span>
-										</a>
-									</li>
-									<li class="nav-item">
-									<a href="{%url 'admin:research_project_category_list' %}" class="nav-link"><i class="icon-clock">P</i>
-										<span>Research & Project Category </span>
-									</a>
-									</li>
-								</ul> 
-
+								
 						</li> 
-
+						 
 						{% if user.is_superuser %}
 						<li class="nav-item nav-item-submenu">
 							<a href="" class="nav-link"><i >F</i> <span>Forums</span></a>
@@ -275,12 +262,7 @@
 										<span>Tenders</span></a>
 
 								</li>
-								<li class="nav-item">
-									<a href="{%url 'admin:admin_JobCategory' %}" class="nav-link"><i class="fa fa-list-alt"></i>
-										<span>Job category</span></a>
-								</li>
-								
-							
+								   
 								<li class="nav-item">
 
 									<a href="{%url 'admin:Job_list' %}" class="nav-link"><i class="icon-eye"></i>

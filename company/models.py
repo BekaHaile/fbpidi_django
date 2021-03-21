@@ -144,21 +144,21 @@ class Company(models.Model):
 
 # Company Address Model
 class CompanyAddress(models.Model):
-	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_address")
-	region = models.CharField(max_length=255, verbose_name="Rigion")
-	city_town = models.CharField(max_length=255, verbose_name="City Town")
-	subcity_zone = models.CharField(max_length=255, verbose_name="Subcity zone")
-	woreda = models.CharField(max_length=255, verbose_name="Woreda")
-	kebele = models.CharField(max_length=255, verbose_name="Kebele")
-	local_area = models.CharField(max_length=255, verbose_name="Local Area")
-	phone_number = models.CharField(max_length=255, verbose_name="Phone Number")
-	fax = models.CharField(max_length=255, verbose_name="Fax")
-	email = models.EmailField(verbose_name="Email Link", max_length=255)
-	facebooklink = models.CharField(verbose_name="Facebook Link", max_length=255)
-	twiterlink = models.CharField(verbose_name="Twiter Link", max_length=255)
-	instagramlink = models.CharField(verbose_name="Instagram Link", max_length=255)
-	linkedinlink = models.CharField(verbose_name="Linkedin Link", max_length=255)
-	googlelink = models.CharField(verbose_name="Google Link", max_length=255)
+	company = models.OneToOneField(Company,on_delete=models.CASCADE,related_name="company_address")
+	region = models.CharField(max_length=255, verbose_name="Rigion",null=True,blank=True)
+	city_town = models.CharField(max_length=255, verbose_name="City Town",null=True,blank=True)
+	subcity_zone = models.CharField(max_length=255, verbose_name="Subcity zone",null=True,blank=True)
+	woreda = models.CharField(max_length=255, verbose_name="Woreda",null=True,blank=True)
+	kebele = models.CharField(max_length=255, verbose_name="Kebele",null=True,blank=True)
+	local_area = models.CharField(max_length=255, verbose_name="Local Area",null=True,blank=True)
+	phone_number = models.CharField(max_length=255, verbose_name="Phone Number",null=True,blank=True)
+	fax = models.CharField(max_length=255, verbose_name="Fax",null=True,blank=True)
+	email = models.EmailField(verbose_name="Email Link", max_length=255,null=True,blank=True)
+	facebooklink = models.CharField(verbose_name="Facebook Link", max_length=255,null=True,blank=True)
+	twiterlink = models.CharField(verbose_name="Twiter Link", max_length=255,null=True,blank=True)
+	instagramlink = models.CharField(verbose_name="Instagram Link", max_length=255,null=True,blank=True)
+	linkedinlink = models.CharField(verbose_name="Linkedin Link", max_length=255,null=True,blank=True)
+	googlelink = models.CharField(verbose_name="Google Link", max_length=255,null=True,blank=True)
 	timestamp = models.DateField(auto_now_add=True)
 
 # Company current Investment capital based on the following attributes.
@@ -291,6 +291,7 @@ class CompanyStaff(models.Model):
 
 class InvestmentProject(models.Model):
 	company	= models.ForeignKey(Company, on_delete=models.CASCADE,related_name="company_project")
+	image = models.ImageField(verbose_name="Project Image",blank=True,null=True)
 	project_name = models.CharField(max_length=255,default="",verbose_name="Investment Company Name All Capital Letters")
 	project_name_am = models.CharField(max_length=255,default="",verbose_name="Investment Company Name in amharic")
 	owner_share	= models.FloatField(default=0,verbose_name="Owners Equity Share in %")

@@ -1,7 +1,7 @@
 
-from django.urls import reverse
 import datetime
-from django.views import View
+
+from django.urls import reverse
 
 from django.http import HttpResponse, FileResponse
 from collaborations.models import Blog, BlogComment
@@ -14,6 +14,7 @@ from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogCo
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
 from django.contrib import messages
+from django.utils import timezone
 
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
 from accounts.models import User, CompanyAdmin, Company
@@ -120,50 +121,37 @@ class ApplicantListDetail(LoginRequiredMixin,View):
 		template_name = "admin/pages/applicant_detail.html"
 		return render(self.request, template_name,context)
 
-class JobCategoryList(LoginRequiredMixin,View):
+
+class CreateVacancyCategory(LoginRequiredMixin,CreateView):
+	model = JobCategory
+	form_class = JobCategoryForm
 	
-	def get(self,*args,**kwargs):
-		jobCategory=JobCategory.objects.all()
-		context = {'forms':jobCategory}
-		template_name = "admin/pages/jobCategory_list.html"
-		return render(self.request, template_name,context)
+	def form_valid(self,form):
+		catagory = form.save(commit=False)
+		catagory.created_by = self.request.user
+		catagory.save()
+		messages.success(self.request, "Vacancy category Added Successfully")
+		return redirect("admin:settings")
 
-class JobcategoryFormView(LoginRequiredMixin,View):
-	def get(self,*args,**kwargs):
-		form = JobCategoryForm()
-		context = {'form':form}
-		template = "admin/pages/jobCategory_form.html"
-		return render(self.request,template,context)
-	def post(self,*args,**kwargs):
-		form = JobCategoryForm(self.request.POST)
-		if form.is_valid():
-			catagory = form.save(commit=False)
-			catagory.user = self.request.user
-			catagory.save()
-			messages.success(self.request, "New Job category Added Successfully")
-			form = JobCategoryForm()
-			context = {'form':form}
-		return render(self.request,"admin/pages/jobCategory_form.html",context)
+	def form_invalid(self,form):
+		messages.warning(self.request,form.errors)
+		return redirect("admin:settings")
 
+class JobCategoryDetail(LoginRequiredMixin,UpdateView):
+	model = JobCategory
+	form_class = JobCategoryForm
+	template_name = "admin/pages/jobCategory_detail.html"
 
-class JobCategoryDetail(LoginRequiredMixin,View):
-	def get(self,*args,**kwargs):
-		form = JobCategory.objects.get(id=self.kwargs['id'])
-		context = {'form':form}
-		return render(self.request,"admin/pages/jobCategory_detail.html",context)
-	def post(self,*args,**kwarges):
-		form = JobCategoryForm(self.request.POST)
-		if form.is_valid():
-			category = JobCategory.objects.get(id=self.kwargs['id'])
-			category.categoryName_am=self.request.POST['categoryName_am']
-			category.categoryName = self.request.POST['categoryName']
-			category.save()
-			messages.success(self.request, "Job category Edited Successfully")
-			form = JobCategory()
-			context = {'form':form}
-			return redirect("admin:admin_JobCategory")
-		return render(self.request,"admin/pages/jobCategory_list.html",context)
+	def form_valid(self,form):
+		form.save()
+		messages.success(self.request, "Vacancy category Updated Successfully")
+		return redirect("admin:settings")
 
+	def form_invalid(self,form):
+		messages.warning(self.request,form.errors)
+		return redirect("admin:settings")
+	
+	
 class VacancyDetail(LoginRequiredMixin,View):
 	def company_admin(self,*args,**kwarges):
 		force = Company.objects.get(user=self.request.user)

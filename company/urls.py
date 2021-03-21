@@ -1,10 +1,13 @@
 from django.urls import path
 from company.views import (
     CompaniesDetailView,CompaniesView,CreateCompanyProfile,
-    CreateFbpidiCompanyProfile, CompanyByMainCategory    
+    CreateFbpidiCompanyProfile, CompanyByMainCategory,
+    ProjectList,ProjectDetail
 )
-from company.company_views import (CompanyHomePage, CompanyAbout, CompanyContact,CompanyProductList,
-                                    CompanyProjectList, CompanyNewsList,CompanyNewsDetail
+from company.company_views import (CompanyHomePage, CompanyAbout, 
+                                    CompanyContact,CompanyProductList,
+                                    CompanyProjectList, CompanyNewsList,
+                                    CompanyNewsDetail
 )
 
 
@@ -29,7 +32,8 @@ urlpatterns = [
     path("company_blog/<pk>/",CompanyProductList.as_view(),name="company_blog"),
     path("company_poll/<pk>/",CompanyProductList.as_view(),name="company_poll"),
     path("company_faq/<pk>/",CompanyProductList.as_view(),name="company_faq"),
-
+    path("project_list/",ProjectList.as_view(),name="project_list"),
+    path("project_detail/<pk>/",ProjectDetail.as_view(),name="project_detail"),
 ]
 
 

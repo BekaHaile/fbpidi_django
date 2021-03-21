@@ -1,0 +1,111 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags%}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+{% endblock %}
+{%block pagename%}
+{%if flag == "inv_capital"%}
+Investment Capital Data
+{%elif flag == "employees"%}
+Company Employees Data
+{%elif flag == "job_oportunity"%}
+Yearly Jobs Created Data
+{%elif flag == "education"%}
+Employees Education Status Data
+{%elif flag == "females_in_posn"%}
+Female Employees In Position levels Data
+{%elif flag == "src_amnt_inpts"%}
+Source & Ammount of Inputs Data
+{%elif flag == "power_consumption"%}
+Power Consumption Data
+{%elif flag == "market_target"%}
+Target Market Data
+{%elif flag == "market_destination"%}
+Market Destination Data
+{%elif flag == "certificate"%}
+Company Certificates Data
+{%endif%}
+{%endblock%}
+{%block content%}
+
+	<!-- Content area -->
+	<div class="content">
+		<!-- Starting step -->
+		<div class="card">
+			<div class="card-header bg-white header-elements-inline">
+				<h6 class="card-title">
+					{%if flag == "inv_capital"%}
+					Update Company Investment Capital
+					{%elif flag == "employees"%}
+					Company Employees Data
+					{%elif flag == "job_oportunity"%}
+					Update Yearly Jobs Created Data
+					{%elif flag == "education"%}
+					Update Employees Education Status Data
+					{%elif flag == "females_in_posn"%}
+					Update Female Employees In Position levels Data
+					{%elif flag == "src_amnt_inpts"%}
+					Update Source & Ammount of Inputs Data
+					{%elif flag == "power_consumption"%}
+					Update Power Consumption Data
+					{%elif flag == "market_target"%}
+					Update Target Market Data
+					{%elif flag == "market_destination"%}
+					Update Market Destination Data
+					{%elif flag == "certificate"%}
+					Update Company Certificates Data
+					{%endif%}
+
+
+				</h6>
+				<div class="header-elements">
+					<div class="list-icons">
+						<a class="list-icons-item" data-action="collapse"></a>
+						<a class="list-icons-item" data-action="reload"></a>
+						<a class="list-icons-item" data-action="remove"></a>
+					</div>
+				</div>
+			</div>
+	
+			<div class="card-body">
+				<form  {%if flag == "inv_capital"%}
+						action="{%url 'admin:update_inv_capital' pk=object.id%}"
+						{%elif flag == "employees"%}
+						action="{%url 'admin:update_employees' pk=object.id%}"
+						{%elif flag == "job_oportunity"%}
+						action="{%url 'admin:update_jobs_created' pk=object.id%}"
+						{%elif flag == "education"%}
+						action="{%url 'admin:update_education_status' pk=object.id%}"
+						{%elif flag == "females_in_posn"%}
+						action="{%url 'admin:update_female_posn' pk=object.id%}"
+						{%elif flag == "src_amnt_inpts"%}
+						action="{%url 'admin:update_srcamnt_inputs' pk=object.id%}"
+						{%elif flag == "power_consumption"%}
+						action="{%url 'admin:update_power_consumed' pk=object.id%}"
+						{%elif flag == "market_target"%}
+						action="{%url 'admin:update_target' pk=object.id%}"
+						{%elif flag == "market_destination"%}
+						action="{%url 'admin:create_destination' pk=object.id%}"
+						{%elif flag == "certificate"%}
+						action="{%url 'admin:update_comp_certificate' pk=object.id%}"
+						{%endif%} method="POST" enctype="multipart/form-data" data-fouc>
+					{%csrf_token%}
+				 	{{form|crispy}}
+				<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
+			</form>
+			</div>
+		</div>
+		<!-- /starting step -->
+	
+	</div>
+	 
+
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$(".summernote").summernote();
+	});
+</script>
+{%endblock%}

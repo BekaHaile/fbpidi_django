@@ -7,15 +7,12 @@
 	var address_id = "{{object.get_company_address.id}}";
 </script>
 <!-- Theme JS files -->
-<script src="/static/admin/global_assets/js/plugins/visualization/echarts/echarts.min.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
-<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
-<script src="/static/admin/global_assets/js/plugins/ui/fullcalendar/fullcalendar.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/user_pages_profile.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 <script src="/static/admin/assets/js/company_detail.js"></script>
-
+ 
 <link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
 <script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
 <!-- /theme JS files -->
@@ -32,89 +29,32 @@
 				<div class="d-flex align-items-start flex-column flex-md-row">
 
 					<!-- Left content -->
-					<div class="tab-content w-100 overflow-auto order-2 order-md-1">
+					<div class="tab-content w-100 overflow-auto order-2 order-md-1" 
+						style="min-height: calc(120vh + 110px); max-height: calc(120vh + 140px);overflow-y: scroll;">
 
-						<div class="tab-pane fade active show" id="activity">
-
-							<!-- Timeline -->
-							<div class="timeline timeline-left">
-								<div class="timeline-container">
-									<div class="timeline-row" style="min-height: calc(120vh + 110px); max-height: calc(120vh + 140px);overflow-y: scroll;">
-										<!-- <div class="timeline-icon">
-											<img src="/static/admin/global_assets/images/demo/users/face12.jpg" alt="">
-										</div> -->
-
-										<div class="card">
-											<div class="card-header header-elements-sm-inline">
-												<h6 class="card-title">You Can Edit/Update Your Company Profile Here</h6>
-											</div>
-
-											<div class="card-body">
-												 <form id='update_company_info' action="#" enctype="multipart/form-data" method="post">
-													{%csrf_token%}
-													{{form|crispy}}
-													<div>
-														<button id="submit_update" type="submit" class="btn btn-success btn-md">Save Chages <i class="fa fa-mark"></i></button>
-													</div>
-												</form>
-											</div>
-											<div class="card-footer">
-												 
-											</div>
-										</div>
-									</div>
-									<!-- /blog post -->
-									
+						<div class="tab-pane fade active show" id="profile">
+							<div class="card">
+								<div class="card-header header-elements-sm-inline">
+									<h6 class="card-title">You Can Edit/Update Your Company Profile Here</h6>
 								</div>
-						    </div>
-						    <!-- /timeline -->
+
+								<div class="card-body">
+									 <form id='update_company_info' action="#" enctype="multipart/form-data" method="post">
+										{%csrf_token%}
+										{{form|crispy}}
+										<div>
+											<button id="submit_update" type="submit" class="btn btn-success btn-md">Save Chages <i class="fa fa-mark"></i></button>
+										</div>
+									</form>
+								</div>
+								<div class="card-footer">
+									 
+								</div>
+							</div>
 
 					    </div>
-
-					    <div class="tab-pane fade" id="schedule">
-
-				    		<!-- Available hours -->
-							<div class="card">
-								<div class="card-header header-elements-inline">
-									<h6 class="card-title">Available hours</h6>
-									<div class="header-elements">
-										<div class="list-icons">
-					                		<a class="list-icons-item" data-action="collapse"></a>
-					                		<a class="list-icons-item" data-action="reload"></a>
-					                		<a class="list-icons-item" data-action="remove"></a>
-					                	</div>
-				                	</div>
-								</div>
-
-								<div class="card-body">
-									<div class="chart-container">
-										<div class="chart has-fixed-height" id="available_hours"></div>
-									</div>
-								</div>
-							</div>
-							<!-- /available hours -->
-
-
-							<!-- Schedule -->
-							<div class="card">
-								<div class="card-header header-elements-inline">
-									<h5 class="card-title">My schedule</h5>
-									<div class="header-elements">
-										<div class="list-icons">
-					                		<a class="list-icons-item" data-action="collapse"></a>
-					                		<a class="list-icons-item" data-action="reload"></a>
-					                		<a class="list-icons-item" data-action="remove"></a>
-					                	</div>
-				                	</div>
-								</div>
-
-								<div class="card-body">
-									<div class="my-schedule"></div>
-								</div>
-							</div>
-							<!-- /schedule -->
-
-				    	</div>
+						{%include 'admin/company/company_form_tabs.html'%}
+					    
 
 					</div>
 					<!-- /left content -->
@@ -125,7 +65,7 @@
 
 						<!-- Sidebar content -->
 						<div class="sidebar-content">
-							<div class="card">
+							<!-- <div class="card">
 								<div class="card-body bg-indigo-400 text-center card-img-top" style=" background-size: contain;">
 									<div class="card-img-actions d-inline-block mb-3">
 										<img class="img-fluid rounded-circle" src="{{object.logo.url}}" width="170" height="170" alt="">
@@ -135,7 +75,7 @@
 									</div>
 
 						    		<h6 class="font-weight-semibold mb-0">{{object.name}}</h6>
-						    		<!-- <span class="d-block opacity-75">{{company.products.all}}</span> -->
+						    		  <span class="d-block opacity-75">{{company.products.all}}</span>  
 
 					    			<div class="list-icons list-icons-extended mt-3">
 				                    	<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Google Drive"><i class="icon-google-drive"></i></a>
@@ -143,7 +83,7 @@
 				                    	<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Github"><i class="icon-github"></i></a>
 			                    	</div>
 						    	</div>
-								</div>
+								</div> -->
 					    	<!-- /user card -->
 							<div class="card">
 								<div class="card-header bg-transparent header-elements-inline">
@@ -158,88 +98,91 @@
 								<div class="card-body p-0">
 									<ul class="nav nav-sidebar my-2">
 										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#profile" class="nav-link">
+												<i class="icon-office"></i>
+												Company Information
+											</a>
+										</li>
+										<li class="nav-item">
 											{%if object.get_company_address%}
-											<a href="#" id="edit_address" data-toggle="modal" data-target="#address_form_modal" class="nav-link">
+											<a href="#" id="edit_address" data-toggle="tab" data-target="#address" class="nav-link">
 												<i class="icon-phone"></i>
 												 Company Address 
-												 <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-pencil"></i>edit</span>
 											</a>
 											{%else%}
-											<a href="#" data-toggle="modal" data-target="#address_form_modal" class="nav-link">
+											<a href="#" data-toggle="tab" data-target="#address" class="nav-link">
 												<i class="icon-phone"></i>
 												 Company Address
-												 <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
 											</a>
 											{%endif%}
 										</li>
 										<li class="nav-item">
-											<a href="#" data-toggle="modal" data-target="#inv_capital_form_modal" class="nav-link">
+											<a href="#" data-toggle="tab" data-target="#inv_capital_form_tab" class="nav-link">
 												<i class="icon-cash3"></i>
 												Investment Capital
-												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" data-toggle="modal" data-target="#certificate_form_modal" class="nav-link">
+											<a href="#" data-toggle="tab" data-target="#certificate_form_tab" class="nav-link">
 												<i class="icon-certificate"></i>
 												Certificate
-												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" data-toggle="modal" data-target="#employees_form_modal" class="nav-link">
+											<a href="#" data-toggle="tab" data-target="#employees_form_tab" class="nav-link">
 												<i class="icon-users4"></i>
 												Employees
-												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" data-toggle="modal" data-target="#createdjob_form_modal" class="nav-link">
+											<a href="#" data-toggle="tab" data-target="#createdjob_form_tab" class="nav-link">
 												<i class="icon-task"></i>
 												Created Jobs
-												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" data-toggle="modal" data-target="#education_status_form_modal" class="nav-link">
+											<a href="#" data-toggle="tab" data-target="#education_status_form_tab" class="nav-link">
 												<i class="icon-user-tie"></i>
 												Employee Education Status
-												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" data-toggle="modal" data-target="#femaleposn_form_modal" class="nav-link">
+											<a href="#" data-toggle="tab" data-target="#femaleposn_form_tab" class="nav-link">
 												<i class="icon-users4"></i>
 												Females Employees
-												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" data-toggle="modal" data-target="#srcamnt_input_form_modal" class="nav-link">
+											<a href="#" data-toggle="tab" data-target="#srcamnt_input_form_tab" class="nav-link">
 												<i class="icon-stack2"></i>
 												Source & Ammount of inputs
-												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" data-toggle="modal" data-target="#power_consumption_form_modal" class="nav-link">
+											<a href="#" data-toggle="tab" data-target="#power_consumption_form_tab" class="nav-link">
 												<i class="icon-power2"></i>
 												Daily Power Consumption
-												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" data-toggle="modal" data-target="#destination_form_modal" class="nav-link">
+											<a href="#" data-toggle="tab" data-target="#destination_form_tab" class="nav-link">
 												<i class="icon-location3"></i>
 												Market Destination
-												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" data-toggle="modal" data-target="#target_form_modal" class="nav-link">
+											<a href="#" data-toggle="tab" data-target="#target_form_tab" class="nav-link">
 												<i class="icon-target "></i>
 												Target Market
-												<span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span>
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
 											</a>
 										</li>
 										

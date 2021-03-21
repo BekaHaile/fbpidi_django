@@ -1,0 +1,708 @@
+
+<div class="tab-pane fade" id="address">
+
+	<!-- Available hours -->
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h6 class="card-title">Company Address</h6>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a class="list-icons-item" data-action="collapse"></a>
+					<a class="list-icons-item" data-action="reload"></a>
+					<a class="list-icons-item" data-action="remove"></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="card-body">
+			<form {%if object.get_company_address%} id="address_form_update"{%else%}id="company_address_form"{%endif%} action="#" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<span class="form-text text-warning" id="error_span"></span>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-4">
+								<label for="">{{address_form.region.label}}</label>
+								 {{address_form.region}}
+							</div>
+							<div class="col-sm-4">
+								<label for="">{{address_form.city_town.label}}</label>
+								 {{address_form.city_town}}
+								 <span class="form-text text-muted">{{address_form.city_town.help_text}}</span>
+							</div>
+
+							<div class="col-md-4">
+								<label>{{address_form.subcity_zone.label}}</label>
+									{{address_form.subcity_zone}}
+									<span class="form-text text-muted">{{address_form.subcity_zone.help_text}}</span>									
+							</div>		
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-4">
+								<label for="">{{address_form.woreda.label}}</label>
+								 {{address_form.woreda}}
+							</div>
+							<div class="col-sm-4">
+								<label for="">{{address_form.kebele.label}}</label>
+								 {{address_form.kebele}}
+								 <span class="form-text text-muted">{{address_form.kebele.help_text}}</span>
+							</div>
+
+							<div class="col-md-4">
+								<label>{{address_form.local_area.label}}</label>
+									{{address_form.local_area}}
+									<span class="form-text text-muted">{{address_form.local_area.help_text}}</span>									
+							</div>		
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-4">
+								<label for="">{{address_form.phone_number.label}}</label>
+								 {{address_form.phone_number}}
+							</div>
+							<div class="col-sm-4">
+								<label for="">{{address_form.fax.label}}</label>
+								 {{address_form.fax}}
+								 <span class="form-text text-muted">{{address_form.fax.help_text}}</span>
+							</div>
+
+							<div class="col-md-4">
+								<label>{{address_form.email.label}}</label>
+									{{address_form.email}}
+									<span class="form-text text-muted">{{address_form.email.help_text}}</span>									
+							</div>		
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-4">
+								<label for="">{{address_form.facebooklink.label}}</label>
+								 {{address_form.facebooklink}}
+							</div>
+							<div class="col-sm-4">
+								<label for="">{{address_form.twiterlink.label}}</label>
+								 {{address_form.twiterlink}}
+								 <span class="form-text text-muted">{{address_form.twiterlink.help_text}}</span>
+							</div>
+
+							<div class="col-md-4">
+								<label>{{address_form.instagramlink.label}}</label>
+									{{address_form.instagramlink}}
+									<span class="form-text text-muted">{{address_form.instagramlink.help_text}}</span>									
+							</div>		
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-6">
+								<label for="">{{address_form.linkedinlink.label}}</label>
+								 {{address_form.linkedinlink}}
+							</div>
+							<div class="col-sm-6">
+								<label for="">{{address_form.googlelink.label}}</label>
+								 {{address_form.googlelink}}
+								 <span class="form-text text-muted">{{address_form.googlelink.help_text}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_address" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<!-- /available hours -->
+
+</div>
+<div class="tab-pane fade show" id="inv_capital_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Yearly Investment Capital Data</h6>
+			<div class="list-icons">
+				<a href="#" data-toggle="modal" data-target="#inv_capital_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover ">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Year</th>
+						<th>Machinery Cost</th>
+						<th>Building Cost</th>
+						<th>Working Capital</th>
+						<th>created Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for inv_cap in object.investment_capital.all%}
+					<tr>
+						<td>{{forloop.counter}}</td>
+						<td>{{inv_cap.year}}</td>
+						<td>{{inv_cap.machinery_cost}}</td>
+						<td>{{inv_cap.building_cost}}</td>
+						<td>{{inv_cap.working_capital}}</td>
+						<td>{{inv_cap.timestamp|date}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										<a href="{%url 'admin:update_inv_capital' pk=inv_cap.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+ 
+<div class="tab-pane fade show" id="certificate_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Competency Certificate Data</h6>
+			<div class="list-icons">
+				<a href="#" data-toggle="modal" data-target="#certificate_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+			</div>
+		</div>
+
+		<div class="card-body">
+			<table class="table table-hover">
+			   <thead>
+				   <tr>
+					   <th>#</th>
+					   <th>Certificate Name</th>
+					   <th>Certificate</th>
+					   <th>created Date</th>
+					   <th>Action</th>
+				   </tr>
+			   </thead>
+			   <tbody>
+				   {%for cert in object.certificates.all%}
+				   <tr>
+					   <td>{{forloop.counter}}</td>
+					   <td>{{cert.name}}</td>
+					   <td><a target="_blank" href="{{cert.certificate.url}}" class="link">Open File</a></td>
+					   <td>{{cert.timestamp|date}}</td>
+					   <td class="text-center">
+						<div class="list-icons">
+							<div class="dropdown">
+								<a href="#" class="list-icons-item" data-toggle="dropdown">
+									<i class="icon-menu9"></i>
+								</a>
+
+								<div class="dropdown-menu dropdown-menu-right">
+									<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+									<a href="{%url 'admin:update_comp_certificate' pk=cert.id%}" class="dropdown-item">
+										<i class="icon-pencil"></i>Edit</a>
+									 
+								</div>
+							</div>
+						</div>
+					</td>
+				   </tr>
+				   {%endfor%}
+			   </tbody>
+			</table>
+	   </div>		 
+	</div>
+
+</div>
+
+
+<div class="tab-pane fade show" id="employees_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Yearly Number Of Employees Based on their Employment Type</h6>
+			<div class="list-icons">
+				<a href="#" data-toggle="modal" data-target="#employees_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Year</th>
+						<th>Employement Type</th>
+						<th>Females</th>
+						<th>Male</th>
+						<th>created Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for emp in object.employees.all%}
+					<tr>
+						<td>{{emp.year}}</td>
+						<td>{{emp.employment_type}}</td>
+						<td>{{emp.female}}</td>
+						<td>{{emp.male}}</td>
+						<td>{{emp.timestamp|date}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										<a href="{%url 'admin:update_employees' pk=emp.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+ 
+
+<div class="tab-pane fade show" id="createdjob_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Jobs Created Each Year</h6>
+			<div class="list-icons">
+				<a href="#" data-toggle="modal" data-target="#createdjob_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Year</th>
+						<th>Employement Type</th>
+						<th>Females</th>
+						<th>Male</th>
+						<th>created Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for job in object.job_oportunities.all%}
+					<tr>
+						<td>{{job.year}}</td>
+						<td>{{job.job_type}}</td>
+						<td>{{job.female}}</td>
+						<td>{{job.male}}</td>
+						<td>{{job.timestamp|date}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										<a href="{%url 'admin:update_jobs_created' pk=job.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+
+
+
+<div class="tab-pane fade show" id="education_status_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Employees Educational Status</h6>
+			<div class="list-icons">
+				<a href="#" data-toggle="modal" data-target="#education_status_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Year</th>
+						<th>Education Type</th>
+						<th>Females</th>
+						<th>Male</th>
+						<th>created Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for edu in object.educational_status.all%}
+					<tr>
+						<td>{{edu.year}}</td>
+						<td>{{edu.education_type}}</td>
+						<td>{{edu.female}}</td>
+						<td>{{edu.male}}</td>
+						<td>{{edu.timestamp|date}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										<a href="{%url 'admin:update_education_status' pk=edu.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+
+
+<div class="tab-pane fade show" id="femaleposn_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Number of females employees in position levels</h6>
+			<div class="list-icons">
+				<a href="#" data-toggle="modal" data-target="#femaleposn_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Year</th>
+						<th>High Level Position</th>
+						<th>Med Level Position</th>
+						<th>Created Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for fem in object.females_high_positions.all%}
+					<tr>
+						<td>{{forloop.counter}}</td>
+						<td>{{fem.year}}</td>
+						<td>{{fem.high_position}}</td>
+						<td>{{fem.med_position}}</td>
+						<td>{{fem.timestamp|date}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										<a href="{%url 'admin:update_female_posn' pk=fem.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+
+
+
+
+<div class="tab-pane fade show" id="srcamnt_input_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Sources and amount of your inputs per Year</h6>
+			<div class="list-icons">
+				<a href="#" data-toggle="modal" data-target="#srcamnt_input_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Year</th>
+						<th>Imported by Company</th>
+						<th>Govt. supplied</th>
+						<th>Direct purchase</th>
+						<th>Purchase from Cooperative Union</th>
+						<th>Purchase from Commision agents</th>
+						<th>Others</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for srcamnt in object.source_amount_inputs.all%}
+					<tr>
+						<td>{{forloop.counter}}</td>
+						<td>{{srcamnt.year}}</td>
+						<td>{{srcamnt.import_company}}</td>
+						<td>{{srcamnt.govt_suplied}}</td>
+						<td>{{srcamnt.purchase_from_farmer}}</td>
+						<td>{{srcamnt.purchase_from_union}}</td>
+						<td>{{srcamnt.purchase_from_agents}}</td>
+						<td>{{srcamnt.purchase_from_other}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										<a href="{%url 'admin:update_srcamnt_inputs' pk=srcamnt.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+
+
+<div class="tab-pane fade show" id="target_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Target market in percent (%) </h6>
+			<div class="list-icons">
+				<a href="#" data-toggle="modal" data-target="#target_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+			</div>
+		</div>
+
+		<div class="card-body table-responsive">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Year</th>
+						<th>Further Proccesing Factors</th>
+						<th>Final Consumers</th>
+						<th>Restaurant & Hotels</th>
+						<th>Inistitutions</th>
+						<th>EPSA</th>
+						<th>Hospitals</th>
+						<th>Agents</th>
+						<th>Wholesaler/Distributor</th>
+						<th>Retailor</th>
+						<th>Other</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for mt in object.market_target.all%}
+					<tr>
+						<td>{{forloop.counter}}</td>
+						<td>{{mt.year}}</td>
+						<td>{{mt.further_proc_power}}</td>
+						<td>{{mt.final_consumer}}</td>
+						<td>{{mt.restaurant_and_hotels}}</td>
+						<td>{{mt.institutions}}</td>
+						<td>{{mt.epsa}}</td>
+						<td>{{mt.hospitals}}</td>
+						<td>{{mt.agents}}</td>
+						<td>{{mt.wholesaler_distributor}}</td>
+						<td>{{mt.retailer}}</td>
+						<td>{{mt.other}}</td>
+						<td>{{mt.timestamp|date}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										<a href="{%url 'admin:update_target' pk=mt.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+
+
+<div class="tab-pane fade show" id="destination_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Market destination Data</h6>
+			<div class="list-icons">
+				<a href="#" data-toggle="modal" data-target="#destination_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Year</th>
+						<th>Domestic</th>
+						<th>Export</th>
+						<th>Created Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for md in object.market_destination.all%}
+					<tr>
+						<td>{{forloop.counter}}</td>
+						<td>{{md.year}}</td>
+						<td>{{md.domesitc}}</td>
+						<td>{{md.export}}</td>
+						<td>{{md.timestamp|date}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										<a href="{%url 'admin:update_destination' pk=md.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+ 
+
+
+<div class="tab-pane fade show" id="power_consumption_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Daily Power Consumption data</h6>
+			<div class="list-icons">
+				<a href="#" data-toggle="modal" data-target="#power_consumption_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Date</th>
+						<th>Installed Capacity</th>
+						<th>Current Supply</th>
+						<th>Created Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for pc in object.power_consumption.all%}
+					<tr>
+						<td>{{forloop.counter}}</td>
+						<td>{{pc.day}}</td>
+						<td>{{pc.installed_capacity}}</td>
+						<td>{{pc.current_supply}}</td>
+						<td>{{pc.timestamp|date}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										<a href="{%url 'admin:update_power_consumed' pk=pc.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+ 
