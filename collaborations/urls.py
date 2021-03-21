@@ -1,9 +1,9 @@
 from django.urls import path,include
 
-from .views import (CustomerPollList, PollDetail, Ajax,
+from .views import (CustomerPollList, PollDetail, 
                     CustomerTenderList, CustomerTenderDetail,
 
-                    ApplyForTender,CustomerNewsList,
+                    ApplyForTender,ApplyForCompanyTender, CustomerNewsList, AjaxEventParticipation,AjaxApplyForTender,
                     CustomerNewsDetail,CustomerEventList, CustomerEventDetail, EventParticipation
                     )
 from .Views.forums import (CreateForumQuestion , ListForumQuestions,
@@ -54,6 +54,7 @@ urlpatterns = [
     path("customer_tender_detail/<id>/", CustomerTenderDetail.as_view(), name = "customer_tender_detail"),
     path("tender_application/<id>/", ApplyForTender.as_view(), name= "tender_application"),
     path("tender-list/", CustomerTenderList.as_view(), name = "tender_list"),
+    path("apply_company_tender/<id>/", ApplyForCompanyTender.as_view(), name = "apply_company_tender"),
 
     path("faq/",FaqList.as_view(),name="faq"),
     
@@ -76,6 +77,7 @@ urlpatterns = [
     path("customer_event_list/", CustomerEventList.as_view(), name = "customer_event_list"),
     path("customer_event_detail/<id>/", CustomerEventDetail.as_view(), name = "customer_event_detail"),
     path("event_participation/<id>/", EventParticipation.as_view(), name="event_participation"),
+    path("ajax_event_participation/<id>/", AjaxEventParticipation, name = "ajax_event_participation"),
 
   
 

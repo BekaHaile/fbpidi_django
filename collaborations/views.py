@@ -1,9 +1,11 @@
 
 import os
+import json
 import datetime
 from django.utils import timezone
  
 from django.shortcuts import get_object_or_404
+
 from django.http import Http404
 from django.urls import reverse
 from django.views import View
@@ -19,12 +21,12 @@ from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationFo
 
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
 from accounts.models import User, CompanyAdmin, Company
-
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator
-from django.http import FileResponse, HttpResponse, HttpResponseRedirect
+from django.http import FileResponse, HttpResponse, HttpResponseRedirect, JsonResponse
 from accounts.email_messages import sendEventNotification, sendEventClosedNotification, sendTenderEmailNotification
 from wsgiref.util import FileWrapper
 from django.contrib.sites.shortcuts import get_current_site
@@ -281,11 +283,11 @@ class CreateTender(LoginRequiredMixin,View):
                 tender.start_date = change_to_datetime(self.request.POST['start_date'])
                 tender.end_date = change_to_datetime(self.request.POST['end_date'])
                 today = datetime.datetime.now().date()
-                if tender.start_date.date() > today:
+                if today < tender.start_date.date():
                     tender.status = "Upcoming"
-                elif tender.start_date.date() <= today  :
+                elif tender.start_date.date() <= today and today <=tender.end_date.date():
                     tender.status = "Open"
-                else:
+                elif today > tender.end_date.date():
                     tender.status = "Closed"
                 tender.save()                  
                 messages.success(self.request,"Tender Successfully Created")
@@ -332,23 +334,6 @@ class TenderList(LoginRequiredMixin, ListView):
         else:
             return Tender.objects.filter(company = self.request.user.get_company()) if check_user_has_company(self.request) else []
 
-    # def get(self, *args, **kwargs):           
-    #     try:
-    #         if self.request.user.is_superuser:
-    #             tenders = Tender.objects.all()
-    #             return render(self.request, "admin/collaborations/tenders.html", {'tenders':tenders,})
-    #         else: 
-    #             tenders = Tender.objects.filter(company = self.request.user.get_company())
-    #             if not tenders:
-    #                 messages.warning(self.request, "You have no tenders to control!!")
-    #                 return render(self.request, "admin/collaborations/tenders.html")
-    #             check_tender_enddate(self.request, tenders)       
-    #             return render(self.request, "admin/collaborations/tenders.html", {'tenders':tenders,})
-    #     except Exception as e:
-    #             messages.warning(self.request, "Error while getting tenders",)
-    #             print("Exception at tenderList get",str(e))
-    #             return redirect("admin:index") 
-
 
 class TenderDetail(LoginRequiredMixin, DetailView):
     model = Tender
@@ -359,23 +344,7 @@ class TenderDetail(LoginRequiredMixin, DetailView):
         context['form'] = TenderForm
         return context
 
- # def get(self, *args, **kwargs):         
-    #     form = TenderForm()
-    #     if 'id' in self.kwargs:
-    #         try:
-    #             tender = Tender.objects.get(id =self.kwargs['id'] )
-    #             company_bank_accounts = tender.company.get_bank_accounts()
-    #             context = {'form':form, 'company_bank_accounts':company_bank_accounts, 'tender':tender}
-    #             return render(self.request,'admin/collaborations/tender_detail.html',context)
-    #         except Exception as e:
-    #             print("tender error", str(e))
-    #             messages.warning(self.request,"Tender edit error")
-    #             return redirect("admin:tenders")
-
-    #     print("error at tenderDetail for admin")
-    #     return redirect("admin:admin_polls")
-
-
+ 
 class ManageBankAccount(LoginRequiredMixin,View):
 	def post(self,*args,**kwargs):
 		tender = Tender.objects.get(id =self.kwargs['id'])
@@ -420,12 +389,13 @@ class EditTender(LoginRequiredMixin,View):
                     tender.document = self.request.FILES['document'] 
 
                 today = datetime.datetime.now().date()
-                if tender.start_date.date() > today:
+                if today < tender.start_date.date():
                     tender.status = "Upcoming"
-                elif tender.start_date.date() <= today :
+                elif tender.start_date.date() <= today and today <=tender.end_date.date():
                     tender.status = "Open"
-                else:
+                elif today > tender.end_date.date():
                     tender.status = "Closed"
+               
                 tender.last_updated_by = self.request.user
                 tender.last_updated_date = timezone.now()
                 tender.save()
@@ -479,6 +449,29 @@ class CustomerTenderDetail(View):
             print("Exception at customerTenderDetail :", str(e))
             messages.warning(self.request, "tender not found")
             return redirect("tender_list")
+
+@login_required
+def AjaxApplyForTender(request, id):
+    data = json.loads(request.body) 
+    try:  
+        tender= Tender.objects.get(id = id) 
+        applicant = TenderApplicant(first_name = data['first_name'], last_name = data['last_name'],email = data['email'],phone_number = data['phone_number'],company_name = data['company_name'],company_tin_number=data['company_tin_number'],tender = tender)
+        applicant.save()
+        print("saved at ", applicant.id)
+        return JsonResponse({'error':False,"message":"Application Successfully Completed", 'count':tender.get_applications().count()}, safe = False)
+
+    except Exception as e:
+        print("Exception occured while trying to paricipate in event", e)
+        return JsonResponse({'error':True,"message":f"Exception occured while registering, "}, safe = False)
+
+
+class ApplyForCompanyTender(View):
+	def post(self, *args, **kwargs):
+            tender= Tender.objects.get(id = self.kwargs['id']) 
+            applicant = TenderApplicant(first_name = self.request.POST['first_name'], last_name = self.request.POST['last_name'],email = self.request.POST['email'],phone_number = self.request.POST['phone_number'],company_name = self.request.POST['company_name'],company_tin_number=self.request.POST['company_tin_number'],tender = tender)
+            applicant.save()
+            return render(self.request, "frontpages/company/company_tender_detail.html", {'obj':tender,'object':tender.company, 'applied':True})
+
 
 
 class ApplyForTender(View):
@@ -654,12 +647,13 @@ class CreateCompanyEvent(LoginRequiredMixin, CreateView):
 
         def form_valid(self,form):
             event = form.save(commit=False)
-            if event.start_date.date() > timezone.now().date():
+            today = datetime.datetime.now().date()
+            if today < event.start_date.date():
                 event.status = "Upcoming"
-            elif event.start_date.date() == timezone.now().date():
-                 event.status = 'Open'
-            else:
-                event.status = 'Closed' 
+            elif event.start_date.date() <= today and today <=event.end_date.date():
+                event.status = "Open"
+            elif today > teeventnder.end_date.date():
+                event.status = "Closed"
             event.company = self.request.user.get_company()
             event.created_by = self.request.user               
             event.save()
@@ -690,12 +684,13 @@ class EditCompanyEvent(LoginRequiredMixin,View):
             event.description_am = self.request.POST['description_am']
             event.start_date = change_to_datetime(self.request.POST['start_date'])
             event.end_date = change_to_datetime(self.request.POST['end_date'])
-            if event.start_date.date() > timezone.now().date():
+            today = datetime.datetime.now().date()
+            if today < event.start_date.date():
                 event.status = "Upcoming"
-            elif event.start_date.date() == timezone.now().date():
-                 event.status = 'Open'
-            else:
-                event.status = 'Closed' 
+            elif event.start_date.date() <= today and today <=event.end_date.date():
+                event.status = "Open"
+            elif today > event.end_date.date():
+                event.status = "Closed" 
             if self.request.FILES:
                 event.image = self.request.FILES['image']
             event.last_updated_by = self.request.user
@@ -778,12 +773,33 @@ class CustomerEventDetail(View):
             result = SearchByTitle_All('Event', self.request)
             return redirect('customer_event_list')
 
+@login_required
+def AjaxEventParticipation(request, id):
+    messages = []
+    data = json.loads(request.body) 
+    try:  
+        event = get_object_or_404( CompanyEvent, id = id)
+        older = EventParticipants.objects.filter(event = event, patricipant_email = data['participant_email']).first()
+        if older:
+            older.notify_on = data["notify_on"]
+            older.notified = False
+            older.save()
+        else:
+            participant = EventParticipants(user = request.user, event= event, patricipant_email=data['participant_email'], notify_on=data[ "notify_on"])
+            participant.save()
+        return JsonResponse({'error':False,"message":f"Reminder saved! \n The system will remind you on {data['notify_on']}"}, safe = False)
+
+    except Exception as e:
+        print("Exception occured while trying to paricipate in event", e)
+        return JsonResponse({'error':True,"message":f"Exception occured while registering, "}, safe = False)
+
+    
+
 #12345  use ajax for event participation.
 class EventParticipation(LoginRequiredMixin, View):
     def post(self, *args, **kwargs):   
                 try:  
                     event = get_object_or_404( CompanyEvent, id = self.kwargs['id'])
-                    print(self.request.POST["notify_on"])
                     older = EventParticipants.objects.filter(event = event, patricipant_email = self.request.POST['patricipant_email']).first()
                     if older:
                         older.notify_on = self.request.POST["notify_on"]

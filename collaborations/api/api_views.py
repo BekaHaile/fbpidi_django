@@ -20,7 +20,7 @@ from company.models import Company, CompanyEvent, EventParticipants
 
 from collaborations.api.serializers import (PollListSerializer, PollDetailSerializer, ChoiceSerializer, NewsListSerializer, NewsDetailSerializer, 
                                             EventListSerializer, BlogSerializer, BlogCommentSerializer, AnnouncementSerializer, AnnouncementDetailSerializer, 
-                                            TenderSerializer,TenderApplicantSerializer, VacancyListSerializer,VacancyDetailSerializer, JobCategorySerializer,
+                                            TenderSerializer,TenderApplicantSerializer, VacancyListSerializer, JobCategorySerializer,
                                             ResearchProjectCategorySerializer, ProjectSerializer, ResearchSerializer, 
                                             ForumQuestionSerializer, ForumDetailSerializer, ForumCommentSerializer, CommentReplay, FaqSerializer, JobApplicationSerializer
                                             )
@@ -274,7 +274,7 @@ class ApiVacancyDetail(APIView):
         except Http404:
             return Response(data = {'error': True , 'message':'Vacancy object does not exist!'})
         
-        return Response(data = {'error':False, 'vacancy':VacancyDetailSerializer(vacancy).data, 'jobcategory': JobCategorySerializer(jobcategory, many = True).data} )
+        return Response(data = {'error':False, 'vacancy':VacancyListSerializer(vacancy).data, 'jobcategory': JobCategorySerializer(jobcategory, many = True).data} )
     
     #12345 applying for vacancy can be handled here , first z front end will make the user to login to apply
     def post(self, request):

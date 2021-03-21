@@ -169,8 +169,6 @@ class Tender(models.Model):
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="tender_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
-
-    
     
     def get_applications(self):
         return TenderApplicant.objects.filter( tender = self )
@@ -178,8 +176,6 @@ class Tender(models.Model):
     def get_company(self):
         return self.company
     
-   
-
     model_am = "ጨረታዎች"
         
     def save(self):
@@ -197,7 +193,7 @@ class TenderApplicant(models.Model):
     phone_number = models.CharField(max_length=20,blank=True,null=True)
     email = models.EmailField(verbose_name="applicant email", max_length=255)
     company_name = models.CharField(verbose_name="first_name", max_length=50)
-    company_tin_numbe = models.CharField(verbose_name="first_name", max_length=50)
+    company_tin_number = models.CharField(verbose_name="first_name", max_length=50)
     tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -257,7 +253,7 @@ class Vacancy(models.Model):
     def get_company(self):
         return self.company
 
-    model_am = "ክፍት የስራ ቦቶች"
+    model_am = "ክፍት የስራ ቦታዎች"
 
 
 class JobApplication(models.Model):
@@ -334,8 +330,6 @@ class NewsImages(models.Model):
     class Meta:
         ordering = ['-created_date',]
 
-
-# This can be created automatically if we use a manytomanyrelation, that's why I commented this table and added a tender_applications
 class ForumQuestion(models.Model):
     title = models.CharField(max_length=500,null=False)
     description = models.TextField()

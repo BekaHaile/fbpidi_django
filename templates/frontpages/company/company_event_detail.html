@@ -2,7 +2,7 @@
 {%load i18n%}
 {%load core_template_tags%}
 
-{%block title%}{{object.name}} -Contact{%endblock%}
+{%block title%}{{object.name}} - Event Detail{%endblock%}
 {%block content%}
 {% get_current_language as LANGUAGE_CODE %}
 		<!--Breadcrumb-->
@@ -11,11 +11,11 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">{% trans "News Detail" %}</h1>
+							<h1 class="">{% trans "Event Detail" %}</h1>
 							<ol class="breadcrumb" >
                                 <li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} </a></li>
-								<li class="breadcrumb-item"><a href="{% url 'company_news' pk=object.id %}">{% trans "Company News List" %} </a> </li>
-                                <li class="breadcrumb-item active text-white" aria-current="page">{% trans "News Details" %}</li>
+								<li class="breadcrumb-item"><a href="{% url 'company_event' pk=object.id %}">{% trans "Company Events List" %} </a> </li>
+                                <li class="breadcrumb-item active text-white" aria-current="page">{% trans "Event Details" %}</li>
                             </ol>
 						</div>
 					</div>
@@ -32,28 +32,51 @@
 						<div class="card">
 							<div class="card-body">
 								<a href="#" class="text-body"><h3 class="font-weight-semibold text-capitalize">{%print_translated obj.title obj.title_am LANGUAGE_CODE%}</h3></a>
-								<div class="demo-gallery">
-									<ul id="lightgallery" class="owl-carousel owl-carousel-icons">
-                                        
-                                       {% for im in obj.get_images %}
-										<li class="item" data-responsive="{{im.image.url}}" data-src="{{im.image.url}}" data-sub-html="" >
-											<a href="">
-												<img class="img-responsive" width = "290px" height = "250" src="{{im.image.url}}" alt="{{img.image.name}}">
-											</a>
-										</li>
-                                        {% endfor %}
-                                       
+							
+								<a href="">
+									<img class="img-responsive" width = "290px" height = "250" src="{{obj.company.get_image}}" alt="{{img.image.name}}">
+								</a>
 										
+										
+								
+								<div class="item7-card-desc d-flex mb-2 mt-3">
+									<ul class="d-flex mb-0">
+										<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">{% trans "By" %}: </i><b>{% print_translated obj.company.name obj.company.name_am LANGUAGE_CODE %}</b></a></li>
+											
+										<li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b> {% trans "Start Date" %}: {{obj.start_date.date}}</b> </a></li>                                       
+										<li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>{% trans "End Date" %}: {{obj.end_date.date}}</b> </a></li>
+									
+										<!-- <div class="ml-auto">
+											<a href="#" class="mr-0"><i class="fa fa-comment-o text-muted mr-2"></i>2 Comments</a>
+										</div> -->
 									</ul>
 								</div>
-								<div class="item7-card-desc d-flex mb-2 mt-3">
-									<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{obj.created_date.date}}</a>
-									<a href="#"><i class="fa fa-user text-muted mr-2"></i>{{obj.created_by.username}}</a>
-									<!-- <div class="ml-auto">
-										<a href="#" class="mr-0"><i class="fa fa-comment-o text-muted mr-2"></i>2 Comments</a>
-									</div> -->
-								</div>
-                                <br>
+                                <hr>
+
+								{%if obj.status == "Upcoming" %}
+									
+									
+									<div class="col-md-6">
+										<label class="col-form-label "><b>Remind me on</b> <p class = "text-muted">{% trans "From"%} {{ obj.start_date.date }} - {{obj.end_date.date}} </p></label>
+										<div >
+											{{event_participant_form.notify_on}}
+										</div>
+				
+									</div>
+									<br>
+									
+									<div class="col-md-8">
+										<label class="col-form-label "><b>Your email</b></label>
+										<div >
+											{{event_participant_form.patricipant_email}}
+										</div>
+				
+									</div>
+									<br>						
+									<div class="col-sm-4">
+										<button id="remind_me_button" type="submit" class="btn bg-primary" class="badge badge-secondary" style="margin-right: 20px; color:white;">{% trans "Remind Me" %}</button>
+									</div>
+								{%endif%}
 								
 							</div>
 						</div>
@@ -61,7 +84,7 @@
 						<!--Comments-->
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">{% trans "News Description" %}</h3>
+								<h3 class="card-title">{% trans "Event Description" %}</h3>
 							</div>
 							<div class="card-body">
 
@@ -185,5 +208,50 @@
 				</div>
 			</div>
 		</section>
+
 		<!--/Newsletter-->
+
+		<script>
+
+			document.querySelector('#remind_me_button').onclick = function(e) {
+
+				console.log("clicked")
+                            var participant_email = document.querySelector('#participant_email');
+                            var notify_on = document.querySelector("#notify_on");
+                            if (participant_email.value == "" || participant_email.value == null || notify_on.value == "" ){
+                                window.alert("Fill the form first!");
+                            }
+                           else{
+                                
+                               fetch("{% url 'ajax_event_participation' id=obj.id %}",
+                                {
+                                    method:"POST",
+                                    credentials: 'same-origin',
+                                    headers:{
+                                        "content-Type":'application/json',
+                                        'X-CSRFToken':'{{csrf_token}}'
+                                    },
+                                    body:JSON.stringify({
+                                        'notify_on': notify_on.value,
+										'participant_email':participant_email.value
+
+									})
+                                }
+                               ).then(e => e.json()).then(result=>{
+								   if (result['error'] == false)
+									{
+										window.alert(result['message']);  
+									}
+								   else{
+											window.alert("Error occured while trying to register your reminder. Wrong Form filled!");
+										}
+									notify_on.value = new Date()
+									participant_email.value = ""
+                                             
+                                    });   
+                                    
+                            }
+                        };
+        
+		</script>
 {%endblock%}

@@ -19,6 +19,7 @@ from product.models import Order,OrderProduct,Product
 
 from company.forms import *
 from collaborations.models import *
+from collaborations.forms import EventParticipantForm,TenderApplicantForm
 from chat.models import ChatMessages
 class CompanyHomePage(DetailView):
     model = Company
@@ -55,21 +56,6 @@ class CompanyNewsList(ListView):
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
         return context
 
-class CompanyNewsList(ListView):
-    model = News
-    template_name = "frontpages/company/company_news.html"
-    paginate_by = 2
-    def get_queryset(self):
-        try:
-            return News.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
-        except Exception as e:
-            print( "#######3 the excptio is ",e)
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) 
-        context['object'] = Company.objects.get(id =self.kwargs['pk'])
-        return context
-
-
 
 class CompanyNewsDetail(DetailView):
     model = News
@@ -89,19 +75,23 @@ class CompanyEventList(ListView):
         try:
             return CompanyEvent.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
         except Exception as e:
-            print( "####### Exception while gettng company events ",e)
+            print( "####### while listing company events ",e)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
         return context
 
+
 class CompanyEventDetail(DetailView):
     model = CompanyEvent
-    template_name = "frontpages/company/company_events_detail.html"
+    template_name = "frontpages/company/company_event_detail.html"
+    context_object_name = "obj"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['company_pk'])
+        context['event_participant_form'] = EventParticipantForm
         return context
+
 
 class CompanyAnnouncementList(ListView):
     model = Announcement
@@ -115,6 +105,15 @@ class CompanyAnnouncementList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
+        return context
+
+class CompanyAnnouncementDetail(DetailView):
+    model = Announcement
+    template_name = "frontpages/company/company_announcement_detail.html"
+    context_object_name = "obj"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        context['object'] = Company.objects.get(id =self.kwargs['company_pk'])
         return context
 
 
@@ -141,11 +140,22 @@ class CompanyTenderList(ListView):
         try:
             return Tender.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
         except Exception as e:
-            print( "####### Exception while gettng company events ",e)
+            print( "####### Exception while gettng company tender ",e)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
         return context
+
+class CompanyTenderDetail(DetailView):
+    model = Tender
+    template_name = "frontpages/company/company_tender_detail.html"
+    context_object_name = "obj"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        context['object'] = Company.objects.get(id =self.kwargs['company_pk'])
+        context['applicant_form'] = TenderApplicantForm
+        return context
+
 
 
 class CompanyVacancyList(ListView):
@@ -160,6 +170,17 @@ class CompanyVacancyList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
+        return context
+
+
+class CompanyVacancyDetail(DetailView):
+    model = CompanyEvent
+    template_name = "frontpages/company/company_event_detail.html"
+    context_object_name = "obj"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        context['object'] = Company.objects.get(id =self.kwargs['company_pk'])
+        context['event_participant_form'] = EventParticipantForm
         return context
 
 
@@ -178,6 +199,17 @@ class CompanyBlogList(ListView):
         return context
 
 
+class CompanyBlogDetail(DetailView):
+    model = CompanyEvent
+    template_name = "frontpages/company/company_event_detail.html"
+    context_object_name = "obj"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        context['object'] = Company.objects.get(id =self.kwargs['company_pk'])
+        context['event_participant_form'] = EventParticipantForm
+        return context
+
+
 class CompanyPollList(ListView):
     model = PollsQuestion
     template_name = "frontpages/company/company_poll.html"
@@ -190,5 +222,15 @@ class CompanyPollList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
+        return context
+
+class CompanyPollDetail(DetailView):
+    model = CompanyEvent
+    template_name = "frontpages/company/company_event_detail.html"
+    context_object_name = "obj"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        context['object'] = Company.objects.get(id =self.kwargs['company_pk'])
+        context['event_participant_form'] = EventParticipantForm
         return context
 

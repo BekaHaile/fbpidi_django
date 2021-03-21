@@ -50,7 +50,7 @@
 								<a href="#"><i class="fa fa-user text-muted mr-2"  ></i>{% trans "By" %}:- <b> {% print_translated tender.get_company.name tender.get_company.name_am LANGUAGE_CODE %}</b></a>					
 								<a class="mr-2" style = "  margin-right: 10px;" href="/chat/with/{{tender.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 										
-								<a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>{% trans "Type" %}:-<b> {{tender.tender_type}}</b></a>
+								<a href="#">{% trans "Type" %}:-<b> {{tender.tender_type}}</b></a>
 
 								{% if tender.tender_type == "Paid" %}
 								<a href="#"><i class="fa fa-star text-muted mr-2" style="margin-left: 10px;"></i>{% trans "Price" %}:- <b> {{tender.document_price}} Birr</b></a>
@@ -86,14 +86,9 @@
 										
 										
 										{% if tender.status == "Open"%}
-											{%if tender.get_company.name == user.get_name %}
-												<h3>{% trans "Users from tender company can't participate in their own tender!" %}</h3>
-												<div class = "choice-btn-group" class="badge badge-secondary" style="margin-right: 20px; margin-left: 15px; ">
-													<span class="badge badge-secondary" style="padding: 10px;">
-															<a id = "download" href="{{tender.document.url}}" download="{{tender.document.url}}" style="color: white;">{% trans "Download Document" %}</a>							
-													</span>
-											</div>
-
+											{%if tender.get_company.name == user.get_company.name %}
+												<h3 style="color:orangered;">{% trans "Users from tender company can't participate in their own tender!" %}</h3>
+													
 											{%elif not applied %}
 												
 												<div class = "choice-btn-group" class="badge badge-secondary" style="margin-right: 20px;">
@@ -106,7 +101,7 @@
 										{%else%}
 											<br>
 											<div style = "display: block;">
-												<label style="margin-left: 10px; background-color:orangered; color: white; display: block;">This tender is now in {{tender.status}} status. So, you can't participate in this tender. </label>
+												<b style="margin-left: 10px;  color:orangered; padding: 3px;  display: block;">This tender is now in {{tender.status}} status. So, you can't participate in this tender. </b>
 												
 											</div>
 										{%endif%}
@@ -115,9 +110,9 @@
 								{%else%}
 								<br>
 								<div style = "display: block;">
-									<label style="margin-left: 10px; padding:5px; background-color:orangered; color: white; display: block;">
+									<b style="margin-left: 10px; padding:5px; color:orangered; color:  block;">
 										<h4>{% trans "This Tender is not Free, You can read the description below and attend the tender in person!" %}</h4> 
-									</label>
+									</b>
 									
 								</div>
 								

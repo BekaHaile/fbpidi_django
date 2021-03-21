@@ -4,19 +4,19 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 
 from django.contrib.auth.models import Group, Permission
-from accounts.models import User, CompanyAdmin, CompanyStaff, Customer
+from accounts.models import UserProfile, CompanyAdmin, CompanyStaff, Customer
 from django.db import transaction
 
 class UserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type':'password'}, write_only=True)
     class Meta:
-        model = User
+        model = UserProfile
         fields = ('id', 'username', 'first_name','last_name', 'email', 'password', 
                     'password2', 'phone_number', 'profile_image',)
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = User(email=validated_data['email'],  username=validated_data['username'],
+        user = UserProfile(email=validated_data['email'],  username=validated_data['username'],
                     first_name=validated_data['first_name'], last_name=validated_data['last_name'],
                     phone_number=validated_data['phone_number'], profile_image=validated_data['profile_image'])
         
@@ -27,12 +27,16 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()#####
         return user
 
-
+class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ('first_name', 'last_name', 'username')
+ 
 class CompanyAdminSerializer(serializers.ModelSerializer):
-    user = UserSerializer(required=False) 
+    user = UserInfoSerializer(required=False) 
     class Meta:
         model = CompanyAdmin
-        fields = ('user','is_suplier', 'is_manufacturer' )
+        fields = ('user', )
 
 
 class CustomerCreationSerializer(serializers.ModelSerializer):

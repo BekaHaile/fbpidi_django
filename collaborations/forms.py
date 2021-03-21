@@ -174,12 +174,12 @@ class TenderEditForm(forms.ModelForm):
 
 
 class TenderApplicantForm(forms.Form):
-    first_name= forms.CharField( max_length=30, widget=forms.TextInput(attrs={ "class":"form-control","placeholder": "First Name", },)    )
-    last_name=forms.CharField( max_length=30, widget=forms.TextInput(attrs={ "class":"form-control","placeholder": "Last Name", },)    )
-    company_name= forms.CharField( max_length=30, widget=forms.TextInput(attrs={ "class":"form-control","placeholder": "Company Name", },)    )
-    company_tin_number=forms.CharField( max_length=30, widget=forms.TextInput(attrs={ "class":"form-control","placeholder": "Company tin Number", },)    )
-    email = forms.EmailField(widget=forms.EmailInput(attrs={ "class":"form-control","placeholder": "Email Address", },))   
-    phone_number =  forms.IntegerField(widget=forms.TextInput(attrs={"class":"form-control","placeholder": "Phone Number", "data-mask": "+251-99999-9999"},),)
+    first_name= forms.CharField( max_length=30, widget=forms.TextInput(attrs={"id":"first_name", "class":"form-control","placeholder": "First Name", },)    )
+    last_name=forms.CharField( max_length=30, widget=forms.TextInput(attrs={ "id":"last_name", "class":"form-control","placeholder": "Last Name", },)    )
+    company_name= forms.CharField( max_length=30, widget=forms.TextInput(attrs={ "id":"company_name", "class":"form-control","placeholder": "Company Name", },)    )
+    company_tin_number=forms.CharField( max_length=30, widget=forms.TextInput(attrs={"id":"company_tin_number",  "class":"form-control","placeholder": "Company tin Number", },)    )
+    email = forms.EmailField(widget=forms.EmailInput(attrs={ "id":"email", "class":"form-control","placeholder": "Email Address", },))   
+    phone_number =  forms.IntegerField(widget=forms.TextInput(attrs={"id":"phone_number", "class":"form-control","placeholder": "Phone Number", "data-mask": "+251-99999-9999"},),)
             
 '''
 class DateForm(forms.Form):
@@ -276,13 +276,13 @@ class CompanyEventForm(forms.ModelForm):
         }
 
 class EventParticipantForm(forms.ModelForm):
-    notify_on = forms.DateField(required=True, widget = forms.DateInput(attrs={'class':"form-control daterange-single", "name":"notify_on", "type":'date'}), )
+    notify_on = forms.DateField(required=True, widget = forms.DateInput(attrs={'id':'notify_on', 'class':"form-control daterange-single", "name":"notify_on", "type":'date'}), )
     participant_email = forms.EmailField(required=True)
     class Meta:
         model=EventParticipants
         fields = ('patricipant_email', 'notify_on')
         widgets = {
-        'patricipant_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address..'}),
+        'patricipant_email': forms.EmailInput(attrs={'id':'participant_email', 'class': 'form-control', 'placeholder': 'Email Address..'}),
         }
 
 

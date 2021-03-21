@@ -11,11 +11,11 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">{% trans "News Detail" %}</h1>
+							<h1 class="">{% trans "Announcement" %}</h1>
 							<ol class="breadcrumb" >
                                 <li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} </a></li>
-								<li class="breadcrumb-item"><a href="{% url 'company_news' pk=object.id %}">{% trans "Company News List" %} </a> </li>
-                                <li class="breadcrumb-item active text-white" aria-current="page">{% trans "News Details" %}</li>
+								<li class="breadcrumb-item"><a href="{% url 'company_announcement' pk=object.id %}">{% trans "Company Announcement List" %} </a> </li>
+                                <li class="breadcrumb-item active text-white" aria-current="page">{% trans "Announcement Detail Details" %}</li>
                             </ol>
 						</div>
 					</div>
@@ -35,7 +35,7 @@
 								<div class="demo-gallery">
 									<ul id="lightgallery" class="owl-carousel owl-carousel-icons">
                                         
-                                       {% for im in obj.get_images %}
+                                       {% for im in obj.announcementimages %}
 										<li class="item" data-responsive="{{im.image.url}}" data-src="{{im.image.url}}" data-sub-html="" >
 											<a href="">
 												<img class="img-responsive" width = "290px" height = "250" src="{{im.image.url}}" alt="{{img.image.name}}">
@@ -54,14 +54,14 @@
 									</div> -->
 								</div>
                                 <br>
-								
+							
 							</div>
 						</div>
 
 						<!--Comments-->
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">{% trans "News Description" %}</h3>
+								<h3 class="card-title">{% trans "Annnouncement Description" %}</h3>
 							</div>
 							<div class="card-body">
 

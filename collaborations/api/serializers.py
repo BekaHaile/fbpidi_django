@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from accounts.api.serializers import UserSerializer
+from accounts.api.serializers import UserSerializer, UserInfoSerializer
 from collaborations.models import (PollsQuestion, PollsResult, Choices, News, NewsImages, Blog, BlogComment,
                                     Announcement, AnnouncementImages, Tender, TenderApplicant, Faqs, JobApplication, 
                                     JobCategory, Project, Research, ResearchProjectCategory, Vacancy, ForumQuestion,
                                     ForumComments, CommentReplay)
 from company.models import Company, CompanyEvent
-from company.api.serializers import CompanyFullSerializer, CompanyInfoSerializer, CompanyDataSerializer
+from company.api.serializers import CompanyFullSerializer, CompanyInfoSerializer
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -132,14 +132,11 @@ class AnnouncementDetailSerializer(serializers.ModelSerializer):
 
 
 class TenderSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    company_info = serializers.SerializerMethodField('get_company_info')
+    created_by = UserInfoSerializer(read_only=True)
+    company = CompanyInfoSerializer(read_only=True)
     class Meta:
         model = Tender
         fields = "__all__"
-    def get_company_info(self, tender):
-        company = tender.get_company()
-        return CompanyDataSerializer(company).data
 
 
 class TenderApplicantSerializer(serializers.ModelSerializer):
@@ -156,26 +153,13 @@ class JobCategorySerializer(serializers.ModelSerializer):
 
 
 class VacancyListSerializer(serializers.ModelSerializer):
-    company_info = serializers.SerializerMethodField('get_company_info')
+    company = CompanyInfoSerializer(read_only =True)
     category_name = serializers.CharField(source='get_category_name')
     class Meta:
         model = Vacancy
-        fields = ('id', 'location', 'salary', 'category_name', 'category', 'employement_type', 'starting_date', 'ending_date',
-                    'timestamp', 'job_title', 'job_title_am', 'closed', 'company_info' )
-    def get_company_info(self, vacancy):
-        return CompanyDataSerializer( vacancy.get_company()).data
- 
+        fields = '__all__'
+    
 
-class VacancyDetailSerializer(serializers.ModelSerializer):
-    company_info = serializers.SerializerMethodField('get_company_info')
-    category_name = serializers.CharField(source='get_category_name')
-    class Meta:
-        model = Vacancy()
-        fields ="__all__"
-
-    def get_company_info(self, vacancy):
-        return CompanyDataSerializer( vacancy.get_company()).data
- 
 
 class ResearchSerializer(serializers.ModelSerializer):
         category_name = serializers.CharField(source = 'get_category_name')

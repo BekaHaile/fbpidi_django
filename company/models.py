@@ -35,6 +35,7 @@ class SubCategory(models.Model):
     def __str__(self):
         return self.sub_category_name
 
+
 class Brand(models.Model):
 	company = models.ForeignKey('Company',on_delete=models.CASCADE,related_name="company_brand",choices=CAT_LIST)
 	product_type = models.ForeignKey(SubCategory,on_delete=models.CASCADE, verbose_name="Product Type", related_name="product_category")
@@ -48,6 +49,7 @@ class Brand(models.Model):
 
 	def __str__(self):
 		return self.brand_name			
+
 
 class Company(models.Model):
 	main_category = models.CharField(max_length=100,verbose_name="Company Type",choices=CAT_LIST)
@@ -129,8 +131,19 @@ class Company(models.Model):
 		ordering = ('-created_date',)
 
 	def get_company_address(self):
-		return CompanyAddress.objects.get(company=self)
-	
+		try:
+			return CompanyAddress.objects.get(company=self)
+		except Exception as e:
+			return []
+
+	# These 2 methods r used for Company serialization
+	def get_company_certificates(self): 
+		return Certificates.objects.filter(company =self)
+
+	def get_company_category(self):
+		return self.category.all()
+
+	# I will delete these three methods once I have finished the main tasks and used the get_company_address for all templates
 	def get_image(self):
 		return self.logo.url
 	
@@ -141,6 +154,7 @@ class Company(models.Model):
 	def location(self):
 		address = self.get_company_address()
 		return f"{address.city_town}"
+	
 
 # Company Address Model
 class CompanyAddress(models.Model):
@@ -160,6 +174,7 @@ class CompanyAddress(models.Model):
 	linkedinlink = models.CharField(verbose_name="Linkedin Link", max_length=255)
 	googlelink = models.CharField(verbose_name="Google Link", max_length=255)
 	timestamp = models.DateField(auto_now_add=True)
+
 
 # Company current Investment capital based on the following attributes.
 class InvestmentCapital(models.Model):
@@ -392,7 +407,7 @@ class CompanyEvent(models.Model):
     image = models.ImageField(blank = True, null = True)
     start_date = models.DateTimeField(verbose_name="Event start date")
     end_date = models.DateTimeField(verbose_name="Event end date")
-    status = models.CharField(max_length=10, verbose_name="Tender status", choices=EVENT_STATUS)
+    status = models.CharField(max_length=10, verbose_name="Event status", choices=EVENT_STATUS)
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True)
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)

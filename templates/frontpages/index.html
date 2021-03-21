@@ -715,14 +715,9 @@
 											<div class="card mb-xl-0">
 												<div class="item-card8-img  br-tr-4 br-tl-4">
 													<!-- <img src="/static/frontpages/images/products/products/f2.jpg" alt="img" -->
-													<a href=" {% url 'customer_news_detail' id=news.id %}"><img src="{{news.get_images.0.image.url}}" width="300px" height="250px" alt="img"
-													
-														class="cover-image">
-													</a>
+													<a href=" {% url 'customer_news_detail' id=news.id %}"><img src="{{news.get_images.0.image.url}}" width="300px" height="250px" alt="img" class="cover-image"></a>
 												</div>
-												<div class="item-card8-overlaytext">
-													<h6 class="mb-0">{% print_translated news.get_company.company_type news.get_company.company_type_am LANGUAGE_CODE %}</h6>
-												</div>
+												
 												<div class="card-body">
 													<div class="item-card8-desc">
 														<p class="text-muted mb-2">{{news.timestamp}}</p>
@@ -745,10 +740,8 @@
 													</div>
 												</div>
 											</div>
-										
+			
 									</div>
-									 
-								
 							</div>
 						</div>
 						<a href="{% url 'customer_news_detail' id=news.id %}" class="text-dark"><h4 class="font-weight-semibold">

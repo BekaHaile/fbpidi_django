@@ -1,0 +1,226 @@
+{%extends 'frontpages/company/company_layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+
+{%block title%}{{object.name}} - Tender Detail{%endblock%}
+{%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+		<!--Breadcrumb-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white">
+							<h1 class="">{% trans "Tender-Details" %}</h1>
+							<ol class="breadcrumb" >
+                                <li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} </a></li>
+								<li class="breadcrumb-item"><a href="{% url 'company_tender' pk=object.id %}">{% trans "Company Tender List" %} </a> </li>
+                                <li class="breadcrumb-item active text-white" aria-current="page">{% trans "Tender-Details" %}</li>
+                            </ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Breadcrumb-->
+
+		<!--Add listing-->
+		<section class="sptb">
+			<div class="container">
+				<div class="row">
+					<div class="d-block mx-auto col-lg-10 col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<a href="#" class="text-body"><h3 class="font-weight-semibold text-capitalize">{%print_translated obj.title obj.title_am LANGUAGE_CODE%}</h3></a>
+							
+								<a href="">
+									<img class="img-responsive" width = "290px" height = "250" src="{{obj.company.get_image}}" alt="{{img.image.name}}">
+								</a>
+			
+								<div class="item7-card-desc d-flex mb-2 mt-3">
+									<ul class="d-flex mb-0">
+										<li ><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">{% trans "By" %}: </i><b>{% print_translated obj.company.name obj.company.name_am LANGUAGE_CODE %}</b></a></li>
+                                        <a class="mr-2" style = "  margin-right: 10px;" href="/chat/with/{{obj.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa- mr-5"></i></a>
+										
+										<li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b> {% trans "Start Date" %}: {{obj.start_date.date}}</b> </a></li>                                       
+										<li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>{% trans "End Date" %}: {{obj.end_date.date}}</b> </a></li>
+									
+									</ul>
+								</div>
+                            
+                                <div class="item7-card-desc d-flex mb-2 mt-3">
+                                    {% if obj.status == 'Open' %}
+                                    <div  class = "mr-4" style="background-color: #66bb6a;; color:white; width: fit-content; padding: 5px; " >{% trans "Open" %}</div>
+                                    {%elif obj.status == 'Upcoming' %}
+                                    <div class = "mr-4"  style="background-color: yellow; color:black; width: fit-content; padding: 5px;" >{% trans "Upcoming" %}</div>
+                                    {%elif obj.status == 'Closed' %}
+                                    <div class = "mr-4"  style="background-color: #ef5350; color:white; width: fit-content; padding: 5px;" >{% trans "Closed" %}</div>
+                                    {%endif%}
+
+
+
+                                    <a href="#">{% trans "Type" %}:-<b> {{obj.tender_type}}</b></a>
+
+									{% if obj.tender_type == "Paid" %}
+                                    <a href="#" class = "mr-3 ml-5">{% trans "Price" %}:- <b> {{obj.document_price}} Birr</b></a>
+                                    {%endif%}
+
+							    	<a href="#"><i class="icon-users " style="margin-left: 10px;"></i>{% trans "Total Applications" %}:-<b id="total_count" class = "mr-5"> {{obj.get_applications.count}}</b></a>
+                                    <br>
+                                </div>
+
+
+								
+								{% if obj.tender_type == "Free" %}
+									<div style = "margin-top: 10px;" class = "row">
+										{% if applied == True %}
+											<div class = "choice-btn-group" class="badge badge-secondary" style="margin-right: 20px; margin-left: 15px; ">
+													<span class="badge badge-secondary" style="padding: 10px;">
+															<a id = "download" href="{{obj.document.url}}" download="{{obj.document.url}}" style="color: white;">{% trans "Download Document" %}</a>							
+													</span>
+											</div>
+										{% endif %}
+
+										
+										
+										{% if obj.status == "Open"%}
+											{%if obj.get_company.name == user.get_company.name %}
+												<h3 style="color:orangered;">{% trans "Users from tender company can't participate in their own tender!" %}</h3>
+													
+											{%elif not applied %}
+												
+												<div class = "choice-btn-group" class="badge badge-secondary" style="margin-right: 20px;">
+													<span class="badge badge-secondary" style="padding: 10px;">
+															<a  href="#"  data-toggle="modal" data-target="#participate" style="color: white;">{% trans "Participate in tender" %}</a>							
+													</span>
+												</div>
+											{%endif%}
+
+										{%else%}
+											<br>
+											<div style = "display: block;">
+												<b style="margin-left: 10px;  color:orangered; padding: 3px;  display: block;">This tender is now in {{tender.status}} status. So, you can't participate in this tender. </b>
+												
+											</div>
+										{%endif%}
+									</div>
+
+								{%else%}
+								<br>
+								<div style = "display: block;">
+									<b style="margin-left: 10px; padding:5px; color:orangered; color:  block;">
+										<h4>{% trans "This Tender is not Free, You can read the description below and attend the tender in person!" %}</h4> 
+									</b>
+									
+								</div>
+							
+								
+								{% endif %}			
+							</div>
+						</div>
+
+
+
+						<!--Comments-->
+						<div class="card">
+							<div class="card-header">
+								<h3 class="card-title">{% trans "Tender description" %}</h3>
+							</div>
+							<div class="card-body">
+                                <p>
+                                    {% print_translated obj.description|safe obj.description_am|safe LANGUAGE_CODE%}
+                                </p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Add listing-->
+
+			<!-- Free participant Form -->
+			<div class="modal fade" id="participate" tabindex="-1" role="dialog"  aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+							<form action="{% url 'apply_company_tender' id=obj.id %}" method="POST" enctype="multipart/form-data">
+								{%csrf_token%}
+								<div class="modal-header">
+									<h5 class="modal-title" id="examplecontactLongTitle">{% trans "Applicant Form" %}</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+
+								
+								<div class="modal-body">
+
+									<div class="form-group">
+										<label>{% trans "First Name" %}: </label>
+										{{applicant_form.first_name}}
+									</div>
+									<div class="form-group">
+										<label>{% trans "Last Name" %}: </label>
+										{{applicant_form.last_name}}
+									</div>
+									<div class="form-group">
+										
+										<label>{% trans "Company Name" %}: </label>
+										{{applicant_form.company_name}}
+									</div>
+									<div class="form-group">
+										<label>{% trans "Company Tin Number" %}: </label>
+										{{applicant_form.company_tin_number}}
+									</div>
+									<div class="form-group">
+										<label>{% trans "Email" %}: </label>
+										{{applicant_form.email}}																			</div>
+									<div class="form-group">
+										<label>{% trans "Phone Number" %}: </label>
+										{{applicant_form.phone_number}}	
+									</div>
+
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-danger" data-dismiss="modal">{% trans "Cancel" %}</button>
+									<button type="submit" class="btn btn-success">{% trans "Submit" %}</button>
+								</div>
+							</form>
+					</div>
+				</div>
+			</div>
+			
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Subscribe To Our Newsletter</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+						<div class="input-group sub-input mt-0">
+							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!--/Newsletter-->
+
+		<script>
+			
+			
+			
+			
+			
+        
+		</script>
+{%endblock%}

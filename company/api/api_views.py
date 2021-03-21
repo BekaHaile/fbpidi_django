@@ -24,15 +24,20 @@ from accounts.models import User, Customer, CompanyAdmin
 from accounts.api.serializers import CustomerCreationSerializer, CustomerDetailSerializer
 
 
-
 #client/comp-by-main-category/
 class ApiCompanyByMainCategoryList(APIView):   
     #  request.query_params['company_type'] should be = manufacturer or supplier, request[product_category = "Beverage", "Food", "Pharmaceuticals", "all"]
     def get(self,request): 
         product_category = request.query_params['product_category']
-        companies = Company.objects.filter(company_type= request.query_params['company_type']) #all companies with 
+        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",product_category)
+        companies = []
+        # companies = Company.objects.filter(company_type= request.query_params['company_type']) #all companies with 
         if product_category != "all": # if it is "Beverage" or "Food" or "Pharmaceuticals"
-            companies = companies.filter(product_category__category_name__category_type = product_category)
+            companies = Company.objects.filter(category__category_type = product_category  )
+            print("##############################",companies)
+        else:
+            companies = Company.objects.all()
+            # companies = companies.filter(product_category__category_name__category_type = product_category)
         return Response(
             data = {'error':False, 'count' : companies.count(), 'companies': CompanyInfoSerializer(companies, many =True).data},
             status= status.HTTP_200_OK)
@@ -42,7 +47,6 @@ class ApiCompanyDetailView(APIView):
     @permission_classes((IsAuthenticated))
     def get(self, request):
         try:
-            print("^^^^^^^^^^^^^^^^^^^^",request.query_params['id'])
             company = get_object_or_404(Company, id = request.query_params['id'])
             return Response(data= CompanyFullSerializer( company ).data)
         except Http404:
