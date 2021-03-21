@@ -237,10 +237,10 @@ class CreateJobApplicationForm(forms.ModelForm):
 class JobCategoryForm(forms.ModelForm):
     class Meta:
         model = JobCategory
-        fields = ('categoryName','categoryName_am')
+        fields = ('category_name','category_name_am')
         widgets ={
-            'categoryName':forms.TextInput(attrs={'class':'form-control','placeholder':'Cateory in English'}),
-             'categoryName_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Category in Amharic'}),
+            'category_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Category in English'}),
+             'category_name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Category in Amharic'}),
         }
 
 class NewsForm(forms.ModelForm):

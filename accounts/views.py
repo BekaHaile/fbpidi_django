@@ -156,15 +156,20 @@ class UserDetailView(LoginRequiredMixin, UpdateView):
         form.save()
         return redirect("admin:user_detail",pk=self.kwargs['pk'])
 
-# class SuspendUser(LoginRequiredMixin,View):
-#     def get(self,*args,**kwargs):
-#         user = UserProfile.objects.get(id=self.kwargs['pk'])
-#         if user.is_active == True:
-#             user.is_active = False
-#         elif user.is_active == False:
-#             user.is_active = True
-#         user.save()
-#     re
+class SuspendUser(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        try:
+            user = UserProfile.objects.get(id=self.kwargs['pk'])
+            if self.kwargs['option'] == "suspend":
+                user.is_active = False
+            elif self.kwargs['option'] == 'enable':
+                user.is_active = True
+            user.save()
+            messages.success(self.request,"User Suspended")
+            return redirect("admin:users_list")
+        except UserProfile.DoesNotExist:
+            messages.success(self.request,"The User Does Not Exist")
+            return redirect("admin:users_list")
 
 
 class CreateCompanyStaff(LoginRequiredMixin,CreateView):

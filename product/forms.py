@@ -74,7 +74,10 @@ class ProductCreationForm(forms.ModelForm):
         self.company = kwargs.pop('company')
         super(ProductCreationForm,self).__init__(*args,**kwargs)
         self.fields['fandb_category'].queryset = Brand.objects.filter(company=self.company)
-        self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type=self.company.main_category)
+        if self.company.main_category == 'FBPIDI':
+             self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type="Pharmaceuticals")
+        else:
+            self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type=self.company.main_category)
         self.fields['dose'].queryset = Dose.objects.all()
         self.fields['dosage_form'].queryset = DosageForm.objects.all()
         self.fields['dose'].empty_label = "Select Prodect Dose"

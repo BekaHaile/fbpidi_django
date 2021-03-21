@@ -722,6 +722,134 @@
 						</div>
 					</div>
 				</div>
+
+				<!-- Research,Job Categories, -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Vacancy and Research Categories</h5>
+						<div class="header-elements">
+							
+						</div>
+					</div>
+
+					<div class="card-body">
+						<ul class="nav nav-tabs">
+							<li class="nav-item"><a href="#basic-tab1e" class="nav-link active" data-toggle="tab">Vacancy Category</a></li>
+							<li class="nav-item"><a href="#basic-tab2e" class="nav-link" data-toggle="tab">Research Category</a></li>
+						</ul>
+
+						<div class="tab-content">
+							<div class="tab-pane fade show active" id="basic-tab1e">
+								<p class="card-title">Vacancy Category Lookups</p>
+								<a  href="#" data-toggle="modal" data-target="#jobcat_form_modal" class="float-right btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Vacancy Category</a>
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Category Name</th>
+											<th>Category Name in Amharic</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for cat in job_categories%}
+										<tr>
+											<td>{{forloop.counter}}</td>
+											<td>{{cat.category_name}}</td>
+											<td>{{cat.category_name_am}}</td>
+											<td>{{cat.created_by.username}}</td>
+											<td>{{cat.timestamp|date}}</td>
+											<td class="text-center">
+												<div class="list-icons">
+													<div class="dropdown">
+														<a href="#" class="list-icons-item" data-toggle="dropdown">
+															<i class="icon-menu9"></i>
+														</a>
+															
+														<div class="dropdown-menu dropdown-menu-right">
+															{% if user.is_superuser or user == cat.created_by %}
+															{% if perms.collaborations.delete_jobcategory %}
+															<a href="{%url 'admin:delete' model_name='JobCategory' id=cat.id%}" class="dropdown-item" onclick="return confirm('Warning:\n If You delete this the Vacanies under this will be deleted')"><i class="icon-trash"></i>Delete JobCategory</a>
+															{%endif%}
+															{%endif%}
+															{% if user.is_superuser or user == cat.created_by%}
+															{% if perms.collaborations.change_jobcategory %}
+															<a href="{%url 'admin:update_vacancy_category' pk=cat.id%}" class="dropdown-item" >
+																<i class="icon-pencil"></i>Edit JobCategory</a>
+															{%endif%}
+															{%endif%}
+															
+															
+														</div>
+													</div>
+												</div>
+											</td>
+										</tr>
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+
+							<div class="tab-pane fade " id="basic-tab2e">
+								<p class="card-title">Research category Lookups</p>
+								<a  href="#" data-toggle="modal" data-target="#research_form_modal" class="float-right btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Research Category</a>
+
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Name</th>
+											<th>Description</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in research_categories%}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.cateoryname}}</td>
+												<td>{{chklist.detail|truncatechars_html:20|safe}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+																{% if user.is_superuser or user == chklist.created_by%}
+							
+																{% if perms.collaborations.delete_researchprojectcategory %}
+																<a href="{%url 'admin:delete' model_name='ResearchProjectCategory' id=chklist.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Category</a>
+																{%endif%}
+																
+																{%endif%}
+																{% if user.is_superuser or user == chklist.created_by %}
+							
+																{% if perms.collaborations.Change_researchprojectcategory %}
+																<a href="{%url 'admin:researchprojectcategory_detail' pk=chklist.id%}" class="dropdown-item"  >
+																	<i class="icon-pencil"></i>Edit Category</a>
+																	{%endif%}
+							
+																	{%endif%}
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<!-- /content area -->
 			<div id="dose_form_modal" class="modal fade" tabindex="-1">
@@ -771,6 +899,53 @@
 					</div>
 				</div>
 			</div>
+			<div id="jobcat_form_modal" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Vacancy Category Form</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+
+						<form action="{%url 'admin:create_vacancy_category' %}" method="POST">
+							{%csrf_token%}
+							<div class="modal-body">
+								{{job_category_form|crispy}}
+
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn bg-primary">Submit form</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div id="research_form_modal" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Research Category Form</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+
+						<form action="{%url 'admin:researchprojectcategory_form' %}" method="POST">
+							{%csrf_token%}
+							<div class="modal-body">
+								{{research_category_form|crispy}}
+
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn bg-primary">Submit form</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
 			<div id="chklist_form" class="modal fade" tabindex="-1">
 				<div class="modal-dialog">
 					<div class="modal-content">

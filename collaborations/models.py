@@ -1,23 +1,21 @@
-from django.db import models
-from django.contrib.auth.models import Permission, Group
-from django.urls import reverse
-
-
-from django.conf import settings
 import datetime
+from django.db import models
+from django.conf import settings
+from django.core.validators import FileExtensionValidator
+
+
 from company.models import Company,CompanyBankAccount
-from PIL import Image
 
 
 class PollsQuestion(models.Model):
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    created_date = models.DateTimeField(auto_now_add=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=2000, verbose_name="Poll title (English)")
     title_am = models.CharField(max_length=2000, verbose_name="Poll title(Amharic)")
     description = models.TextField(verbose_name="Poll Description(English)")
     description_am = models.TextField(verbose_name="Poll Description(Amharic)")
     choices = models.ManyToManyField('Choices',related_name='choices',default="")
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="poll_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
@@ -210,9 +208,9 @@ class TenderApplicant(models.Model):
 
 ## Vacancy
 class JobCategory(models.Model):
-    categoryName = models.CharField(max_length=500,null=False)
-    categoryName_am = models.CharField(max_length=500,null=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    category_name = models.CharField(max_length=500,null=False)
+    category_name_am = models.CharField(max_length=500,null=False)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
@@ -225,25 +223,28 @@ class JobCategory(models.Model):
     
 class Vacancy(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    #company = models.CharField(max_length=100,null=False)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    location = models.CharField(max_length=10000,null=False)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE,related_name="company_vacancy")
+    location = models.CharField(max_length=1000)
     salary = models.IntegerField(null=True,default=0)
     category = models.ForeignKey(JobCategory, on_delete=models.CASCADE)
     employement_type = models.CharField(max_length=10000,null=False)
     starting_date = models.DateTimeField()
     ending_date = models.DateTimeField()
-    timestamp = models.DateTimeField(auto_now_add=True)
     job_title = models.CharField(max_length=10000,null=False)
     description = models.TextField(null=False)
     requirement = models.TextField(null=False)
     job_title_am = models.CharField(max_length=10000,null=False)
     description_am = models.TextField(null=False)
     requirement_am = models.TextField(null=False)
-    closed = models.BooleanField(null=False,default=False)
+    closed = models.BooleanField(default=False)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="vacancy_created_by")
+    created_date = models.DateTimeField(auto_now_add=True,editable=False)
+    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="vacancy_updated_by")
+    last_updated_date = models.DateTimeField(null=True)
+    expired = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['-timestamp',]
+        ordering = ['-created_date',]
 
     def __str__(self):
         return self.job_title
@@ -261,7 +262,7 @@ class Vacancy(models.Model):
 
 
 class JobApplication(models.Model):
-    CURRENT_STATUS = [('JUST GRADUATED','JUST GRADUATED'),('WORKING','WORKING'),
+    CURRENT_STATUS = [(('','Select Current Status'),'JUST GRADUATED','JUST GRADUATED'),('WORKING','WORKING'),
                 ('LOOKING FOR JOB','LOOKING FOR JOB')]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -272,8 +273,11 @@ class JobApplication(models.Model):
     status = models.CharField(max_length=500,null=False)
     bio = models.TextField(null=False)
     experiance = models.IntegerField(null=False)
-    cv = models.FileField(upload_to="cv/", max_length=254,help_text="only pdf files, Max size 10MB")
-    documents = models.FileField(upload_to="documents/", max_length=254,help_text="pdf, jpeg files, Max size 10MB")
+    cv = models.FileField(upload_to="cv/", max_length=254,help_text="only pdf,jpg,doc,docx files, Max size 10MB",
+            validators=[FileExtensionValidator(allowed_extensions=['pdf','jpg,doc,docx'])]
+            )
+    documents = models.FileField(upload_to="documents/", max_length=254,help_text="pdf, jpg,doc,docx files, Max size 10MB",
+                                validators=[FileExtensionValidator(allowed_extensions=['pdf','jpg,doc,docx'])])
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:

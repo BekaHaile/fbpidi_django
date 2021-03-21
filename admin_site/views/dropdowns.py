@@ -10,6 +10,8 @@ from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster
 from admin_site.forms import CompanyDropdownsMasterForm,ProjectDropdownsMasterForm
 from product.models import Dose,DosageForm
 from product.forms import DoseForm,DosageFormForm
+from collaborations.models import JobCategory,ResearchProjectCategory
+from collaborations.forms import JobCategoryForm,ResearchProjectCategoryForm
 
 
 class CreateCompanyDropdownsMaster(LoginRequiredMixin,CreateView):
@@ -55,6 +57,11 @@ class AllSettingsPage(LoginRequiredMixin,ListView):
         context['doses'] = Dose.objects.all()
         context['dosage_forms'] = DosageForm.objects.all()
         context['dosage_form_form'] = DosageFormForm()
+        context['job_category_form'] = JobCategoryForm()
+        context['job_categories'] = JobCategory.objects.all()
+        context['research_categories'] = ResearchProjectCategory.objects.all()
+        context['research_category_form'] = ResearchProjectCategoryForm()
+
         context['flag'] = "company_dropdown"
         return context
 

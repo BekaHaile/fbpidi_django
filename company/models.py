@@ -291,6 +291,7 @@ class CompanyStaff(models.Model):
 
 class InvestmentProject(models.Model):
 	company	= models.ForeignKey(Company, on_delete=models.CASCADE,related_name="company_project")
+	image = models.ImageField(verbose_name="Project Image",blank=True,null=True)
 	project_name = models.CharField(max_length=255,default="",verbose_name="Investment Company Name All Capital Letters")
 	project_name_am = models.CharField(max_length=255,default="",verbose_name="Investment Company Name in amharic")
 	owner_share	= models.FloatField(default=0,verbose_name="Owners Equity Share in %")

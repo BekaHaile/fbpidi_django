@@ -25,13 +25,21 @@ from company.models import *
 #             'company_condition',
 # )
 
+def return_years(company):
+    YEAR_CHOICES=[('','Select Year'),]
+    YEAR_CHOICES += [(r,r) for r in range(company.established_year, datetime.date.today().year+1)]
+    return YEAR_CHOICES
 
 YEAR_CHOICES=[('','Select Year'),]
 YEAR_CHOICES += [(r,r) for r in range(2000, datetime.date.today().year+1)]
 
 class InvestmentCapitalForm(forms.ModelForm):
-    year_inv = forms.IntegerField(label="Year",widget=forms.Select(choices=YEAR_CHOICES,
+     
+
+    year_inv = forms.IntegerField(label="Year",widget=forms.Select( 
+        choices=YEAR_CHOICES,
                 attrs={'class':'form-control form-control-uniform'}))
+
     class Meta:
         model = InvestmentCapital
         fields = (
@@ -294,8 +302,8 @@ class CompanyProfileForm(forms.ModelForm):
             'main_category','trade_license','detail','detail_am',
             )
         widgets = {
-            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
-            'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
+            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
+            'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'logo':forms.FileInput(attrs={'class':''}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','placeholder':'Established Year'}),
@@ -566,11 +574,12 @@ class InvestmentProjectForm(forms.ModelForm):
 
     class Meta:
         model=InvestmentProject
-        fields = ('project_name','project_name_am','owner_share','bank_share','capital_in_dollary',
+        fields = ('project_name','project_name_am','image','owner_share','bank_share','capital_in_dollary',
             'investment_license','issued_date','sector','project_classification',
             'contact_person','description','description_am',
             )
         widgets = {
+            'image':forms.FileInput(attrs={}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
             'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),
             'owner_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_owner_share")'}),
@@ -595,12 +604,13 @@ class InvestmentProjectForm_ForSuperAdmin(forms.ModelForm):
 
     class Meta:
         model=InvestmentProject
-        fields = ('company','project_name','project_name_am','owner_share','bank_share','capital_in_dollary',
+        fields = ('company','project_name','project_name_am','image','owner_share','bank_share','capital_in_dollary',
             'investment_license','issued_date','sector','project_classification',
             'description','description_am',
             )
         widgets = {
             'company':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'image':forms.FileInput(),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
             'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),
             'owner_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_owner_share")'}),
@@ -746,7 +756,7 @@ class ProjectUpdateForm(forms.ModelForm):
 
     class Meta:
         model = InvestmentProject
-        fields = ('project_name','project_name_am','owner_share','bank_share','capital_in_dollary',
+        fields = ('project_name','project_name_am','image','owner_share','bank_share','capital_in_dollary',
             'investment_license','issued_date','sector','project_classification',
             'contact_person','description','description_am','product_type','site_location_name',
             'distance_f_strt','land_acquisition','remaining_work',
@@ -756,6 +766,7 @@ class ProjectUpdateForm(forms.ModelForm):
             'technology','automation','mode_of_project','facility_design',
         )
         widgets = {
+            'image':forms.FileInput(),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
             'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),
             'owner_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_owner_share")'}),
