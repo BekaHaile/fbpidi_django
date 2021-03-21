@@ -112,7 +112,6 @@ class Blog(models.Model):
 
     def comments(self):
         return self.blogcomment_set.all()
-    
 
 class BlogComment(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE,null=False)
