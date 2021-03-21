@@ -119,9 +119,20 @@ class MyProfileView(LoginRequiredMixin,UpdateView):
     fields = ('first_name', 'last_name','username', 'email', 'phone_number','profile_image')
     template_name = "admin/accounts/user_profile.html"
 
+    def get(self,*args,**kwargs):
+        if self.request.user.is_company_admin:
+            if self.request.user.get_company() == None:
+                return redirect("admin:create_my_company")
+            else:
+                pass 
+        else:
+            pass
+
+
     def form_valid(self,form):
         form.save()
         return redirect("admin:my_profile",pk=self.request.user.id)
+
 
 # to list all users in the admin page
 class UserListView(LoginRequiredMixin, ListView):
@@ -144,6 +155,22 @@ class UserDetailView(LoginRequiredMixin, UpdateView):
     def form_valid(self,form):
         form.save()
         return redirect("admin:user_detail",pk=self.kwargs['pk'])
+
+class SuspendUser(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        try:
+            user = UserProfile.objects.get(id=self.kwargs['pk'])
+            if self.kwargs['option'] == "suspend":
+                user.is_active = False
+            elif self.kwargs['option'] == 'enable':
+                user.is_active = True
+            user.save()
+            messages.success(self.request,"User Suspended")
+            return redirect("admin:users_list")
+        except UserProfile.DoesNotExist:
+            messages.success(self.request,"The User Does Not Exist")
+            return redirect("admin:users_list")
+
 
 class CreateCompanyStaff(LoginRequiredMixin,CreateView):
     model=UserProfile

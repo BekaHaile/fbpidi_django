@@ -6,9 +6,11 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
 # from accounts.forms import UserCreationForm 
 # views from accounts app
-from accounts.views import (CompanyAdminSignUpView,UserListView,UserLogView,
-                        UserDetailView,MyProfileView,CreateUserView,CreateCompanyStaff,
-                        GroupView,GroupList)
+from accounts.views import (CompanyAdminSignUpView,UserListView,
+                            UserLogView,SuspendUser,
+                            UserDetailView,MyProfileView,
+                            CreateUserView,CreateCompanyStaff,
+                            GroupView,GroupList)
 # views from admin_site app
 from admin_site.views.views import (AdminIndex,DeleteView,  Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice,  DetailPoll)
@@ -26,7 +28,7 @@ from collaborations.views import (  CreateNews, EditNews, NewsDetail,AdminNewsLi
 from collaborations.Views.faq import(CreateFaqs,FaqsView,FaqsList,FaqPendingList,FaqApprovdList,
                                     FaqApprove,FaqsDetail)
 
-from collaborations.Views.vacancy import(CreateVacancy,AdminVacancyList,VacancyDetail,JobcategoryFormView,JobCategoryList,
+from collaborations.Views.vacancy import(CreateVacancy,AdminVacancyList,VacancyDetail,CreateVacancyCategory,
                         JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
                         SuperAdminVacancyList,ApplicantListDetail,)
 from collaborations.Views.projects import(
@@ -48,7 +50,7 @@ from collaborations.Views.research import(
 
                         ListResearchAdmin,CreateResearchAdmin,ResearchDetailAdmin,
                         ListPendingResearchAdmin,ResearchDetailView,ResearchApprove,
-                        ListResearchProjectCategoryAdmin,CreateResearchProjectCategoryAdmin,ResearchProjectCategoryDetail,
+                        CreateResearchCategory,ResearchCategoryDetail,
                         
 
                         )
@@ -81,7 +83,7 @@ class CustomAdminSite(admin.AdminSite):
             path('forum-detail/<model_name>/<id>',wrap(ForumQuestionDetail.as_view()),name="forum_detail"),
             
             path('Comment_replays/<id>',wrap(ListCommentReplayByIdAdmin.as_view()),name="Comment_replays"),
-            path('Forum_comment/<id>',wrap(ListForumCommentByIdAdmin.as_view()),name="Forum_Comments"),
+            path('forum_comment/<id>',wrap(ListForumCommentByIdAdmin.as_view()),name="Forum_Comments"),
             path('forum-comment-list',wrap(ListForumCommentAdmin.as_view()),name="forum_comment_list"),
             path('forum-comment-detail/<model_name>/<id>',wrap(ForumCommentsDetail.as_view()),name="forum_comment_detail"),
 
@@ -100,9 +102,8 @@ class CustomAdminSite(admin.AdminSite):
             path('research-form',wrap(CreateResearchAdmin.as_view()),name="research_form"),
             path('research-detail/<model_name>/<id>',wrap(ResearchDetailAdmin.as_view()),name="research_detail"),
 
-            path('researchprojectcategorys-detail/<id>/',wrap(ResearchProjectCategoryDetail.as_view()),name='researchprojectcategory_detail'),
-            path('researchprojectcategorys-form/',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
-            path('researchprojectcategorys-list/',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
+            path('research-categorys-detail/<pk>/',wrap(ResearchCategoryDetail.as_view()),name='researchprojectcategory_detail'),
+            path('research-categorys-form/',wrap(CreateResearchCategory.as_view()),name='researchprojectcategory_form'), 
             
            
             path('', wrap(AdminIndex.as_view()),name="admin_home"),
@@ -113,9 +114,8 @@ class CustomAdminSite(admin.AdminSite):
             path('applicant-list',wrap(ApplicantList.as_view()),name="Applicant_list"),
             
 
-            path('JobCategory-form',wrap(JobcategoryFormView.as_view()),name="JobCategory_form"),
-            path('JobCategory-list',wrap(JobCategoryList.as_view()),name="admin_JobCategory"),
-            path('JobCategory-detail/<model_name>/<id>',wrap(JobCategoryDetail.as_view()),name='Category_form'),
+            path('JobCategory-form',wrap(CreateVacancyCategory.as_view()),name="create_vacancy_category"),
+            path('vacancy-Category-detail/<pk>/',wrap(JobCategoryDetail.as_view()),name='update_vacancy_category'),
            
             path("Vacancy-form/",wrap(CreateVacancy.as_view()),name="Job_form"),
             path("Vacancy-list/",wrap(AdminVacancyList.as_view()),name="Job_list"),
@@ -143,6 +143,7 @@ class CustomAdminSite(admin.AdminSite):
             path("create_user/",wrap(CreateUserView.as_view()),name="create_user"),
             path("create-my-staff/",wrap(CreateCompanyStaff.as_view()),name="create_my_staff"),
             path("users_list/",wrap(UserListView.as_view()),name="users_list"),
+            path("suspend_user/<pk>/<option>/",wrap(SuspendUser.as_view()),name="suspend_user"),
 
             path("user_detail/<pk>/",wrap(UserDetailView.as_view()),name="user_detail"),
             path("update_my_profile/<pk>/",wrap(MyProfileView.as_view()),name="my_profile"),
@@ -231,15 +232,25 @@ class CustomAdminSite(admin.AdminSite):
             path("create_mycompany_detail/<pk>/",wrap(CreateMyCompanyDetail.as_view()),name="create_mycompany_detail"),
             path("create_company_detail_info/<pk>/",wrap(CreateCompanyDetail.as_view()),name="create_company_detail"),
             path("create_investment_capital/<company>/",wrap(CreateInvestmentCapital.as_view()),name="create_inv_capital"),
-            path("create_company_certificates/<company>",wrap(CreateCertificates.as_view()),name="create_comp_certificate"),
+            path("update_investment_capital/<pk>/",wrap(UpdateInvestmentCapital.as_view()),name="update_inv_capital"),
+            path("create_company_certificates/<company>/",wrap(CreateCertificates.as_view()),name="create_comp_certificate"),
+            path("update_company_certificates/<pk>/",wrap(UpdateCertificate.as_view()),name="update_comp_certificate"),
             path("create_employees/<company>/",wrap(CreateEmployees.as_view()),name="create_employees"),
+            path("update_employees/<pk>/",wrap(UpdateEmployees.as_view()),name="update_employees"),
             path("create_jobs_created/<company>/",wrap(CreateJobsCreatedYearly.as_view()),name="create_jobs_created"),
+            path("update_jobs_created/<pk>/",wrap(UpdateJobsCreated.as_view()),name="update_jobs_created"),
             path("create_education_status/<company>/",wrap(CreateEducationStatus.as_view()),name="create_education_status"),
+            path("update_education_status/<pk>/",wrap(UpdateEducationStatus.as_view()),name="update_education_status"),
             path("create_femalein_posn/<company>/",wrap(CreateFemaleinPosition.as_view()),name="create_female_posn"),
+            path("update_femalein_posn/<pk>/",wrap(UpdateFemalesInPosn.as_view()),name="update_female_posn"),
             path("create_srcamnt_inputs/<company>/",wrap(CreateAnualSourceofInputs.as_view()),name="create_srcamnt_inputs"),
+            path("update_srcamnt_inputs/<pk>/",wrap(UpdateSrcAmntInputs.as_view()),name="update_srcamnt_inputs"),
             path("create_market_destination/<company>/",wrap(CreateMarketDestination.as_view()),name="create_destination"),
+            path("update_market_destination/<pk>/",wrap(UpdateMarketDestination.as_view()),name="update_destination"),
             path("create_market_target/<company>/",wrap(CreateMarketTarget.as_view()),name="create_target"),
+            path("update_market_target/<pk>/",wrap(UpdateMarketTarget.as_view()),name="update_target"),
             path("create_power_consumption/<company>/",wrap(CreatePowerConsumption.as_view()),name="create_power_consumed"),
+            path("update_power_consumption/<pk>/",wrap(UpdatePowerConsumption.as_view()),name="update_power_consumed"),
             path("create_company_address/<company>/",wrap(CreateCompanyAddress.as_view()),name="create_company_address"),
             path("update_company_address/<pk>/",wrap(UpdateCompanyAddress.as_view()),name="update_company_address"),
             path("update_company_info/<pk>",wrap(ViewMyCompanyProfile.as_view()),name="update_company_info"),
@@ -263,16 +274,10 @@ class CustomAdminSite(admin.AdminSite):
             path("update_product_quantity/<pk>/",wrap(UpdateProductQty.as_view()) ,name='update_product_qty'),
             path("update_project_state/<pk>/",wrap(UpdateProjectState.as_view()) ,name='update_project_state'),
 
-            # path("edit_company_profile/<id>/",wrap(ViewCompanyProfile.as_view()),name="edit_company_profile"),
-            # path("create_company_solution/<company_id>",wrap(CreateCompanySolution.as_view()),name="create_company_solution"),
             path("create_fbpidi_company/",wrap(CreateFbpidiCompanyProfile.as_view()),name="create_fbpidi_company"),
-            path("view_fbpidi_company/<str:active_tab/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company_active_tab"),
-            path("view_fbpidi_company/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
+            path("view_fbpidi_company/<pk>/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
             
             path("edit_fbpidi_profile/<id>/",wrap(ViewFbpidiCompany.as_view()),name="edit_fbpidi_profile"),
-            path("create_company_bank_account/<id>/", wrap(CreateCompanyBankAccount.as_view()), name = "create_company_bank_account"),
-            path("edit_company_bank_account/<id>/", wrap( EditCompanyBankAccount.as_view()), name = "edit_company_bank_account"),
-            path("delete_company_bank_account/<id>/", wrap(DeleteCompanyBankAccount.as_view()), name = "delete_company_bank_account"),
 
             ### Document
              path('create_document/', wrap(CreateDocument.as_view()), name='create_document'),
@@ -304,14 +309,13 @@ class CustomAdminSite(admin.AdminSite):
             path('research-form',wrap(CreateResearchAdmin.as_view()),name="research_form"),
             path('research-detail/<model_name>/<id>',wrap(ResearchDetailAdmin.as_view()),name="research_detail"),
 
-            path('researchprojectcategorys-detail/<model_name>/<id>',wrap(ResearchProjectCategoryDetail.as_view()),name='researchprojectcategory_detail'),
-            path('researchprojectcategorys-form',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
-            path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
+            # path('researchprojectcategorys-detail/<model_name>/<id>',wrap(ResearchCategoryDetail.as_view()),name='researchprojectcategory_detail'),
+            # path('researchprojectcategorys-form',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
+            # path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
             
             path('anounce-Detail/<id>/',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
             path('anounce-List',wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),
             path('anounce-form',wrap(CreatAnnouncementAdmin.as_view()),name="anounce_Create"),
-            #path('JobCategory-detail/<model_name>/<id>',JobCategoryDetail.as_view(),name='Category_form'),
         ]
         return my_urls + urls
 

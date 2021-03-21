@@ -1,4 +1,5 @@
 media
+static
 venv
 .vscode
 db.sqlite3
@@ -20,3 +21,5 @@ core/__pycache__
 core/templatetags/__pycache__
 fbpims/__pycache__
 product/__pycache__
+logs
+apache.custom.log

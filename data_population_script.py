@@ -22,6 +22,7 @@ from datetime import datetime, timedelta
 from company.api.serializers import *
 from collaborations.api.serializers import *
 
+from collaborations.models import Faqs, Vacancy, Blog
 
 from django.db import connection, reset_queries
 import time
@@ -68,7 +69,13 @@ def with_out():
         for m in n:
             print(m.title, " ", m.company.company_name),'\n'
 
-
+def tags():
+    b = Blog.objects.all()
+    tags = b[0]
+    print(list(tags.tag))
+    for tag in tags.tag:
+        print(tag)
+    string= ""
 
 if __name__ == '__main__':    
    u = Company.objects.get(name__icontains = "coca")
@@ -81,6 +88,18 @@ if __name__ == '__main__':
 #    print(CompanyInfoSerializer(u).data)
 
 
+   # u = Company.objects.get(name__icontains = "coca")
+   # print(u.phone_number())
+   # add_banks()  
+   #tags()
+   one =['Beverage']
+   two = ['Food', 'Beverage', 'Pharmaceutical']
+   for tag in two:
+    if not tag in one:
+        print("Done")
+
+
+ 
     # n = CompanyEvent.objects.first()
     # d = n.start_date - timedelta(days=1)
     # print(Company.objects.get(id =1))

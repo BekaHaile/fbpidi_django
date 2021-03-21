@@ -52,7 +52,7 @@ class UserProfile(AbstractUser):
             elif self.is_company_staff:
                 return CompanyStaff.objects.get(user=self).company
             elif self.is_superuser:
-                return Company.objects.get(name="FBPIDI")
+                return Company.objects.get(main_category="FBPIDI")
         except Company.DoesNotExist:
             return None
 

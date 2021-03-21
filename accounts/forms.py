@@ -33,7 +33,7 @@ class AdminLoginForm(AdminAuthenticationForm):
     )
 
 # Abstract User Sign Up Form where the other forms extend this form.
-class AbstractUserCreationForm(forms.ModelForm):
+class AbstractUserCreationForm(UserCreationForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput(
         attrs={"placeholder": "Password"},
     ))
@@ -41,7 +41,7 @@ class AbstractUserCreationForm(forms.ModelForm):
         attrs={"placeholder": "Re-Type Password"},
     ))
 
-    class Meta:
+    class Meta(UserCreationForm.Meta):
         model = get_user_model()
         fields = ('first_name', 'last_name',
                   'username', 'email', 'phone_number')
