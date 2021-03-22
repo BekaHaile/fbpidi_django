@@ -35,11 +35,15 @@ class ChatMessagesSerializer(serializers.ModelSerializer):
         if user.profile_image:
             return user.profile_image.url
         else:
-            if user.is_staff  :
-                return user.get_company().get_image() 
-            else:
-                return '/static/frontpages/images/clients/unkonwn_user_icon.png'
-                # frontpages\images\clients
+            return '/static/frontpages/images/clients/unkonwn_user_icon.png'
+
+        #12345 This is the right way to return profile image, once the get_company() is resolved.
+        # else:
+        #     if user.is_staff  :
+        #         return user.get_company().get_image() 
+        #     else:
+        #         return '/static/frontpages/images/clients/unkonwn_user_icon.png'
+             
 
         
     def get_sender_image(self, chatmessages):

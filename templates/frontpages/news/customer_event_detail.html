@@ -97,8 +97,7 @@
 										</div>
                                     </div>
                                 </div>
-								 
-								{%if event.status == "upcomming" %}
+								{%if event.status == "Upcoming" %}
 								<form action="{% url 'event_participation' id=event.id %}" method="POST">
 									{%csrf_token%}
 									<br>

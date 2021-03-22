@@ -2,7 +2,7 @@
 {%load i18n%}
 {%load core_template_tags%}
 
-{%block title%}{{object.name}} -Contact{%endblock%}
+{%block title%}{{object.name}} - News{%endblock%}
 {%block content%}
 {% get_current_language as LANGUAGE_CODE %}
 
@@ -14,8 +14,7 @@
 						<div class="text-center text-white">
 							<h1 class="">{% print_translated object.name object.name_am LANGUAGE_CODE %} {% trans "News" %}</h1>
 							<ol class="breadcrumb text-center">
-								<li class="breadcrumb-item"><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
-							
+								
 								<li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} </a></li>
 								
 								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Company News List" %} </li>

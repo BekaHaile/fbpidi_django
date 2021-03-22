@@ -10,12 +10,20 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, CompanyAdminSerializer, CustomerCreationSerializer
 from rest_framework.authtoken.models import Token
 
+
+###### for the api social auth, from https://github.com/coriolinus/oauth2-article/blob/master/views.py
+from django.conf import settings
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny
+from requests.exceptions import HTTPError
+from social_django.utils import psa
+
 class CustomerSignUpView(APIView):
     def post(self, request):
             data = {}
             user_serializer = UserSerializer (data = request.data)
             if user_serializer.is_valid():
-                #before saving the user object check if the company_admin data is valid
                 customer_serializer = CustomerCreationSerializer(data = request.data)
             
                 if customer_serializer.is_valid():
@@ -35,18 +43,6 @@ class CustomerSignUpView(APIView):
             return Response(data=data)
 
 
-###### for the api social auth, from https://github.com/coriolinus/oauth2-article/blob/master/views.py
-from django.conf import settings
-from rest_framework import serializers
-from rest_framework import status
-from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-
-from requests.exceptions import HTTPError
-
-from social_django.utils import psa
 
 
 class SocialSerializer(serializers.Serializer):

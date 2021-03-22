@@ -18,9 +18,9 @@ from collaborations.forms import CreateJobApplicationForm, ForumQuestionForm, Co
 from company.models import Company, CompanyEvent, EventParticipants
 
 
-from collaborations.api.serializers import (PollListSerializer, PollDetailSerializer, ChoiceSerializer, NewsListSerializer, NewsDetailSerializer, 
+from collaborations.api.serializers import (PollListSerializer,  ChoiceSerializer, NewsListSerializer, NewsDetailSerializer, 
                                             EventListSerializer, BlogSerializer, BlogCommentSerializer, AnnouncementSerializer, AnnouncementDetailSerializer, 
-                                            TenderSerializer,TenderApplicantSerializer, VacancyListSerializer,VacancyDetailSerializer, JobCategorySerializer,
+                                            TenderSerializer,TenderApplicantSerializer, VacancyListSerializer, JobCategorySerializer,
                                             ResearchProjectCategorySerializer, ProjectSerializer, ResearchSerializer, 
                                             ForumQuestionSerializer, ForumDetailSerializer, ForumCommentSerializer, CommentReplay, FaqSerializer, JobApplicationSerializer
                                             )
@@ -44,8 +44,8 @@ class PollDetailApiView( APIView):
             poll = get_object_or_404(PollsQuestion, id = id)
         except Http404:
             return Response(data = {'error':True, 'message':"Poll object not Found!"})
-        data = {'data': PollDetailSerializer(poll).data}
-        if user == poll.user:
+        data = {'data': PollListSerializer(poll).data}
+        if user == poll.created_by:
             data['error'] = True
             data['message'] = "You can not vote on this poll, since you are the creator of the poll."
             return Response(data)
@@ -66,7 +66,7 @@ class PollDetailApiView( APIView):
             except Http404:
                 return Response(data={'error':True, 'message':'poll or selected choice not Found'})
             try:
-                result = PollsResult(user = request.user, poll=poll, choice=selected_choice, remark= request.data['remark'])
+                result = PollsResult(created_by = request.user, poll=poll, choice=selected_choice, remark= request.data['remark'])
                 result.save()
                 data['message'] = 'Successfully Voted!'
                 return Response(data = data)
@@ -274,7 +274,7 @@ class ApiVacancyDetail(APIView):
         except Http404:
             return Response(data = {'error': True , 'message':'Vacancy object does not exist!'})
         
-        return Response(data = {'error':False, 'vacancy':VacancyDetailSerializer(vacancy).data, 'jobcategory': JobCategorySerializer(jobcategory, many = True).data} )
+        return Response(data = {'error':False, 'vacancy':VacancyListSerializer(vacancy).data, 'jobcategory': JobCategorySerializer(jobcategory, many = True).data} )
     
     #12345 applying for vacancy can be handled here , first z front end will make the user to login to apply
     def post(self, request):

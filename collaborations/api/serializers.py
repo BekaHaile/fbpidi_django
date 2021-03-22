@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from accounts.api.serializers import UserSerializer
+from accounts.api.serializers import UserSerializer, UserInfoSerializer
 from collaborations.models import (PollsQuestion, PollsResult, Choices, News, NewsImages, Blog, BlogComment,
                                     Announcement, AnnouncementImages, Tender, TenderApplicant, Faqs, JobApplication, 
                                     JobCategory, Project, Research, ResearchProjectCategory, Vacancy, ForumQuestion,
                                     ForumComments, CommentReplay)
 from company.models import Company, CompanyEvent
-from company.api.serializers import CompanyFullSerializer, CompanyInfoSerializer, CompanyDataSerializer
+from company.api.serializers import CompanyFullSerializer, CompanyInfoSerializer
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -22,44 +22,35 @@ class ChoiceSerializer(serializers.ModelSerializer):
 class PollListSerializer(serializers.ModelSerializer):
     no_of_choices = serializers.IntegerField(source='count_choices') # count_votes is an attribute in the model
     no_of_votes = serializers.IntegerField(source='count_votes')
-    company_info = serializers.SerializerMethodField('get_company_info') 
-    
+    company = CompanyInfoSerializer(read_only = True) 
+    created_by = UserInfoSerializer(read_only = True)
     class Meta:
         model = PollsQuestion()
-        fields = ('id','title', 'title_am', 'no_of_votes', 'no_of_choices' ,'company_info', 'user', 'timestamp',  )
+        fields = "__all__"
+        
     
-    def get_company_info(self, poll):
-        company = poll.get_company()
-        return {'company_name':company.company_name, 'image':company.get_image(), 'phone_number':company.phone_number, 'location': company.location}
-
     
 class PollDetailSerializer(serializers.ModelSerializer):
     no_of_choices = serializers.IntegerField(source='count_choices') # count_votes is an attribute in the model
     no_of_votes = serializers.IntegerField(source='count_votes')
-    company_info = serializers.SerializerMethodField('get_company_info')     
+    company = CompanyInfoSerializer(read_only = True)    
     choices = ChoiceSerializer(many = True, read_only=True, required=False)
     
     class Meta:
         model = PollsQuestion
         fields = '__all__'
     
-    def get_company_info(self, poll):
-        company = poll.get_company()
-        return {'company_name':company.company_name, 'image':company.get_image(), 'phone_number':company.phone_number, 'location': company.location}
-
+    
 
 class NewsListSerializer(serializers.ModelSerializer):
     images = serializers.CharField(source='get_single_image')  
-    company_info = serializers.SerializerMethodField('get_company_info') 
+    company = CompanyInfoSerializer(read_only = True)  
    
     class Meta:
         model = News
         fields = '__all__'
           
-    def get_company_info(self, news):
-        company = news.get_company()
-        return {'company_name':company.company_name, 'image':company.get_image(), 'phone_number':company.phone_number, 'location': company.location}
-
+    
 
 class NewsImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -69,7 +60,7 @@ class NewsImageSerializer(serializers.ModelSerializer):
 
 class NewsDetailSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField('get_images')
-    company_info = serializers.SerializerMethodField('get_company_info') 
+    company = CompanyInfoSerializer(read_only = True) 
    
     class Meta:
         model = News
@@ -82,21 +73,15 @@ class NewsDetailSerializer(serializers.ModelSerializer):
         
         return images
         
-    def get_company_info(self, news):
-        company = news.get_company()
-        return {'company_name':company.company_name, 'image':company.get_image(), 'phone_number':company.phone_number, 'location': company.location}
-
+    
 
 class EventListSerializer(serializers.ModelSerializer):
     image = serializers.CharField(source='get_image')  
-    company_info = serializers.SerializerMethodField('get_company_info') 
+    company = CompanyInfoSerializer(read_only = True)  
    
     class Meta:
         model = CompanyEvent
         fields = "__all__"
-    def get_company_info(self, event):
-        company = event.company
-        return {'company_name':company.company_name, 'image':company.get_image(), 'phone_number':company.phone_number, 'location': company.location}
 
 
 class BlogSerializer(serializers.ModelSerializer):
@@ -112,14 +97,17 @@ class BlogCommentSerializer(serializers.ModelSerializer):
 
 
 class AnnouncementSerializer(serializers.ModelSerializer):
+    company = CompanyInfoSerializer(read_only = True)  
+
     class Meta:
         model = Announcement
         fields = "__all__"
 
 
 class AnnouncementDetailSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    created_by = UserInfoSerializer(read_only=True)
     images = serializers.SerializerMethodField('get_images')
+    company = CompanyInfoSerializer(read_only = True)  
     class Meta:
         model = Announcement
         fields = "__all__"
@@ -132,14 +120,11 @@ class AnnouncementDetailSerializer(serializers.ModelSerializer):
 
 
 class TenderSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    company_info = serializers.SerializerMethodField('get_company_info')
+    created_by = UserInfoSerializer(read_only=True)
+    company = CompanyInfoSerializer(read_only=True)
     class Meta:
         model = Tender
         fields = "__all__"
-    def get_company_info(self, tender):
-        company = tender.get_company()
-        return CompanyDataSerializer(company).data
 
 
 class TenderApplicantSerializer(serializers.ModelSerializer):
@@ -152,30 +137,17 @@ class TenderApplicantSerializer(serializers.ModelSerializer):
 class JobCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = JobCategory
-        fields = ("id", "categoryName", "categoryName_am")
+        fields = ("id", "category_name", "category_name_am")
 
 
 class VacancyListSerializer(serializers.ModelSerializer):
-    company_info = serializers.SerializerMethodField('get_company_info')
+    company = CompanyInfoSerializer(read_only =True)
     category_name = serializers.CharField(source='get_category_name')
     class Meta:
         model = Vacancy
-        fields = ('id', 'location', 'salary', 'category_name', 'category', 'employement_type', 'starting_date', 'ending_date',
-                    'timestamp', 'job_title', 'job_title_am', 'closed', 'company_info' )
-    def get_company_info(self, vacancy):
-        return CompanyDataSerializer( vacancy.get_company()).data
- 
+        fields = '__all__'
+    
 
-class VacancyDetailSerializer(serializers.ModelSerializer):
-    company_info = serializers.SerializerMethodField('get_company_info')
-    category_name = serializers.CharField(source='get_category_name')
-    class Meta:
-        model = Vacancy()
-        fields ="__all__"
-
-    def get_company_info(self, vacancy):
-        return CompanyDataSerializer( vacancy.get_company()).data
- 
 
 class ResearchSerializer(serializers.ModelSerializer):
         category_name = serializers.CharField(source = 'get_category_name')

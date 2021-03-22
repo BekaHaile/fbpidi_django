@@ -4,10 +4,12 @@ from company.views import (
     CreateFbpidiCompanyProfile, CompanyByMainCategory,
     ProjectList,ProjectDetail
 )
-from company.company_views import (CompanyHomePage, CompanyAbout, 
-                                    CompanyContact,CompanyProductList,
-                                    CompanyProjectList, CompanyNewsList,
-                                    CompanyNewsDetail
+from company.company_views import (CompanyHomePage, CompanyAbout, CompanyContact,CompanyProductList,
+                                    CompanyProjectList, CompanyNewsList,CompanyNewsDetail,CompanyEventList,CompanyEventDetail,
+                                    CompanyAnnouncementList, CompanyAnnouncementDetail, CompanyResearchList,CompanyTenderList,CompanyVacancyList,CompanyBlogList,
+                                    CompanyPollList, CompanyTenderDetail,CompanyVacancyDetail, CompanyBlogDetail, CompanyPollDetail,
+
+
 )
 
 
@@ -20,17 +22,28 @@ urlpatterns = [
     path("company-projects/<pk>/",CompanyProjectList.as_view(),name="company_projects"),
 
     path("company_research/<pk>/",CompanyProductList.as_view(),name="company_research"),
-    path("company_announcement/<pk>/",CompanyProductList.as_view(),name="company_announcement"),
+    
+    path("company_announcement/<pk>/",CompanyAnnouncementList.as_view(),name="company_announcement"),
+    # path("company_announcement_detail/<pk>/<company_pk>/",CompanyAnnouncementDetail.as_view(), name = "company_announcemnet_detail"),
 
-    path("company_event/<pk>/",CompanyProductList.as_view(),name="company_event"),
+    path("company_event/<pk>/",CompanyEventList.as_view(),name="company_event"),
+    path("company_event/<pk>/<company_pk>/",CompanyEventDetail.as_view(),name="company_event_detail"),
     
     path("company_news/<pk>/",CompanyNewsList.as_view(),name="company_news"),
     path("company_news_detail/<pk>/<company_pk>/",CompanyNewsDetail.as_view(),name="company_news_detail"),
     
-    path("company_tender/<pk>/",CompanyProductList.as_view(),name="company_tender"),
-    path("company_vacancy/<pk>/",CompanyProductList.as_view(),name="company_vacancy"),
+    path("company_tender/<pk>/",CompanyTenderList.as_view(),name="company_tender"),
+    path("company_tender_detail/<pk>/<company_pk>/",CompanyTenderDetail.as_view(),name="company_tender_detail"),
+    
+    path("company_vacancy/<pk>/",CompanyVacancyList.as_view(),name="company_vacancy"),
+    path("company_vacancy_detail/<pk>/<company_pk>/",CompanyVacancyDetail.as_view(),name="company_vacancy_detail"),
+    
     path("company_blog/<pk>/",CompanyProductList.as_view(),name="company_blog"),
+    path("company_blog_detail/<pk>/<company_pk>/",CompanyBlogDetail.as_view(),name="company_blog_detail"),
+    
     path("company_poll/<pk>/",CompanyProductList.as_view(),name="company_poll"),
+    path("company_poll_detail/<pk>/<company_pk>/",CompanyPollDetail.as_view(),name="company_poll_detail"),
+    
     path("company_faq/<pk>/",CompanyProductList.as_view(),name="company_faq"),
     path("project_list/",ProjectList.as_view(),name="project_list"),
     path("project_detail/<pk>/",ProjectDetail.as_view(),name="project_detail"),

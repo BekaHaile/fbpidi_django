@@ -698,82 +698,534 @@
 		<div class="section-title center-block text-center">
 			<h2>{% trans "Latest News" %}</h2>
 			<p>{% trans "In Ethiopian Food, Beverage and Pharmaceutical Industry." %}</p>
-
 		</div>
-		<div id="defaultCarousel" class="owl-carousel Card-owlcarousel owl-carousel-icons">
-			{%for news in news_list%}
-			<div class="item">
-				<div class="card mb-0" style="min-height: 400px">
-					<div class="item7-card-img">
-						<a href="{% url 'customer_news_detail' id=news.id %}"></a>
-						<img src="{{news.get_images.0.image.url}}" alt="img" class="cover-image">
-					</div>
-					<div class="card-body p-4">
-						<div class="item7-card-desc d-flex mb-2">
-							<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{news.timestamp}}</a>
-
-											<div class="card mb-xl-0">
-												<div class="item-card8-img  br-tr-4 br-tl-4">
-													<!-- <img src="/static/frontpages/images/products/products/f2.jpg" alt="img" -->
-													<a href=" {% url 'customer_news_detail' id=news.id %}"><img src="{{news.get_images.0.image.url}}" width="300px" height="250px" alt="img"
-													
-														class="cover-image">
-													</a>
-												</div>
-												<div class="item-card8-overlaytext">
-													<h6 class="mb-0">{% print_translated news.get_company.company_type news.get_company.company_type_am LANGUAGE_CODE %}</h6>
-												</div>
-												<div class="card-body">
-													<div class="item-card8-desc">
-														<p class="text-muted mb-2">{{news.timestamp}}</p>
-														<h4 class="font-weight-semibold" >{% print_translated news.title news.title_am LANGUAGE_CODE %}</h4>
-														<p class="mb-0" class="text-muted mb-2">{% print_translated news.description|truncatechars_html:10 news.description_am|truncatechars_html:10 LANGUAGE_CODE %}</p>
-													</div>
-												</div>
-												<div class="card-footer">
-													<div class="footerimg d-flex mt-0 mb-0">
-														<div class="d-flex footerimg-l mb-0">
-															<a href="#" ><img src="{{news.get_company.get_image}}" alt="image"
-																class="avatar brround  mr-2">
-															</a>
-															<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-																{% print_translated news.get_company.name news.get_company.name_am LANGUAGE_CODE%} {{news.catagory}}<i class="icon icon-check text-success fs-12 ml-1"
-																	data-toggle="tooltip" data-placement="top" title=""
-																	data-original-title="verified"></i></h5>
-														</div>
-														
-													</div>
-												</div>
-											</div>
-										
-									</div>
-									 
+		<div>
+			<div class="items-gallery">
+				<div class="items-blog-tab text-center">
+					<div class="items-blog-tab-heading row mb-0">
+						<div class="col-12">
+							<ul class="nav items-blog-tab-menu">
+								<li class=""><a href="#tab-1" class="active show" data-toggle="tab">All</a></li>
+								{% for cat in NEWS_CATAGORY %}
+								<li><a href="#{{cat.0}}" data-toggle="tab" class="mt-2">{{cat.0}}</a></li>
+								{% endfor %}
 								
+							</ul>
+						</div>
+					</div>
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab-1">
+							<div class="row">
+								{% for news in news_list %}
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-xl-0">
+										<div class="item-card8-img  br-tr-4 br-tl-4">
+											<img src="{{news.get_single_image}}" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="mb-0">{{news.catagory}}</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">{{news.created_date}}</p>
+												<h4 class="font-weight-semibold">{% print_translated news.title news.title_am LANGUAGE_CODE %} </h4>
+												<!-- <p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p> -->
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													
+													<img src="{{news.company.logo.url}}" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
+														{% print_translated news.company.name news.company.name_am LANGUAGE_CODE %}<i class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="{{news.created_by.username}}"></i></h5>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+								{% endfor %}
+
+								
+
 							</div>
 						</div>
-						<a href="{% url 'customer_news_detail' id=news.id %}" class="text-dark"><h4 class="font-weight-semibold">
-							{% print_translated news.title|truncatechars_html:18 news.title_am|truncatechars_html:18 LANGUAGE_CODE %}</h4></a>
-                        <hr style="margin-top: 1rem;margin-bottom: 1rem"/>
-						<div class="d-flex align-items-center pt-2 mt-auto">
-							<img src="{{news.get_company.get_image}}" class="avatar brround avatar-md mr-3" alt="avatar-img">
-							<div>
-								<a href="#" class="text-default">{% print_translated news.get_company.company_type news.get_company.company_type_am LANGUAGE_CODE %}</a>
-								<small class="d-block text-muted">1 day ago</small>
+						<div class="tab-pane" id="tab-2">
+							<div class="row">
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-xl-0">
+										<div class="item-card8-img  br-tr-4 br-tl-4">
+											<img src="/static/frontpages/images/products/products/f1.jpg" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="bg-primary mb-0">Business</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">6 Aug 2019.</p>
+												<h4 class="font-weight-semibold">Business Analysis</h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													<img src="/static/frontpages/images/faces/female/2.jpg" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">Thu
+														Astudillo<i class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="verified"></i></h5>
+												</div>
+												<div class="mt-2 footerimg-r ml-auto">
+													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
+														data-placement="top" title=""
+														data-original-title="Add Wishlist"><i
+															class="fa fa-heart"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-xl-0">
+										<div class="item-card8-img">
+											<img src="/static/frontpages/images/products/products/j2.jpg" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="bg-secondary mb-0">Business</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">7 July 2019.</p>
+												<h4 class="font-weight-semibold">Business Styles</h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													<img src="/static/frontpages/images/faces/male/2.jpg" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
+														Shelton Vause <i class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="verified"></i></h5>
+												</div>
+												<div class="mt-2 footerimg-r ml-auto">
+													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
+														data-placement="top" title=""
+														data-original-title="Add Wishlist"><i
+															class="fa fa-heart"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-0">
+										<div class="item-card8-img">
+											<img src="/static/frontpages/images/products/products/j3.jpg" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="bg-info mb-0">Business</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">16 April 2019.</p>
+												<h4 class="font-weight-semibold">Categorized Business</h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													<img src="/static/frontpages/images/faces/female/3.jpg" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
+														Ellena Beachy <i class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="verified"></i></h5>
+												</div>
+												<div class="mt-2 footerimg-r ml-auto">
+													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
+														data-placement="top" title=""
+														data-original-title="Add Wishlist"><i
+															class="fa fa-heart"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div class="ml-auto text-muted">
-								<a href="javascript:void(0)" class="icon d-none d-md-inline-block ml-3"><i class="fe fe-heart mr-1"></i></a>
-								<a href="javascript:void(0)" class="icon d-none d-md-inline-block ml-3"><i class="fa fa-thumbs-o-up"></i></a>
+						</div>
+						<div class="tab-pane" id="tab-3">
+							<div class="row">
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-xl-0">
+										<div class="item-card8-img  br-tr-4 br-tl-4">
+											<img src="/static/frontpages/images/products/products/b1.jpg" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="bg-info mb-0">Spa</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">16 May 2019.</p>
+												<h4 class="font-weight-semibold">Spanish Spa</h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													<img src="/static/frontpages/images/faces/female/5.jpg" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">Vania
+														Pease <i class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="verified"></i></h5>
+												</div>
+												<div class="mt-2 footerimg-r ml-auto">
+													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
+														data-placement="top" title=""
+														data-original-title="Add Wishlist"><i
+															class="fa fa-heart"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-0">
+										<div class="item-card8-img">
+											<img src="/static/frontpages/images/products/products/b2.jpg" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="bg-primary mb-0">Spa</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">15 May 2019.</p>
+												<h4 class="font-weight-semibold">Beauty Saloon</h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													<img src="/static/frontpages/images/faces/male/5.jpg" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">Chery
+														Fogle <i class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="verified"></i></h5>
+												</div>
+												<div class="mt-2 footerimg-r ml-auto">
+													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
+														data-placement="top" title=""
+														data-original-title="Add Wishlist"><i
+															class="fa fa-heart"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-lg-0">
+										<div class="item-card8-img  br-tr-4 br-tl-4">
+											<img src="/static/frontpages/images/products/products/j1.jpg" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="bg-secondary mb-0">Spa</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">16 Feb 2019.</p>
+												<h4 class="font-weight-semibold">Hiar Spa</h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													<img src="/static/frontpages/images/faces/female/6.jpg" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
+														Leonila Payson <i
+															class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="verified"></i></h5>
+												</div>
+												<div class="mt-2 footerimg-r ml-auto">
+													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
+														data-placement="top" title=""
+														data-original-title="Add Wishlist"><i
+															class="fa fa-heart"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab-4">
+							<div class="row">
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-xl-0">
+										<div class="item-card8-img  br-tr-4 br-tl-4">
+											<img src="/static/frontpages/images/products/products/h4.jpg" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="bg-primary mb-0">Real Estate</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">22 November 2019.</p>
+												<h4 class="font-weight-semibold">Building RealEstate</h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													<img src="/static/frontpages/images/faces/male/7.jpg" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
+														Margarita Franklin <i
+															class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="verified"></i></h5>
+												</div>
+												<div class="mt-2 footerimg-r ml-auto">
+													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
+														data-placement="top" title=""
+														data-original-title="Add Wishlist"><i
+															class="fa fa-heart"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-xl-0">
+										<div class="item-card8-img">
+											<img src="/static/frontpages/images/products/products/h2.jpg" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="bg-info mb-0">Real Estate</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">28 December 2019.</p>
+												<h4 class="font-weight-semibold">Modern Ventures</h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													<img src="/static/frontpages/images/faces/male/8.jpg" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
+														Hobert Dillon <i class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="verified"></i></h5>
+												</div>
+												<div class="mt-2 footerimg-r ml-auto">
+													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
+														data-placement="top" title=""
+														data-original-title="Add Wishlist"><i
+															class="fa fa-heart"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-0">
+										<div class="item-card8-img">
+											<img src="/static/frontpages/images/products/products/h3.jpg" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="bg-secondary mb-0">Real Estate</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">14 December 2019.</p>
+												<h4 class="font-weight-semibold">Consultancy Pvt Ltd</h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													<img src="/static/frontpages/images/faces/female/10.jpg" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
+														Angele Vorpahl <i
+															class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="verified"></i></h5>
+												</div>
+												<div class="mt-2 footerimg-r ml-auto">
+													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
+														data-placement="top" title=""
+														data-original-title="Add Wishlist"><i
+															class="fa fa-heart"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab-5">
+							<div class="row">
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-xl-0">
+										<div class="item-card8-img  br-tr-4 br-tl-4">
+											<img src="/static/frontpages/images/products/products/f4.jpg" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="bg-info mb-0">Restaurant</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">16 November 2019.</p>
+												<h4 class="font-weight-semibold">Food Courts</h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													<img src="/static/frontpages/images/faces/female/19.jpg" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
+														Elizabeth<i class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="verified"></i></h5>
+												</div>
+												<div class="mt-2 footerimg-r ml-auto">
+													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
+														data-placement="top" title=""
+														data-original-title="Add Wishlist"><i
+															class="fa fa-heart"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-xl-0">
+										<div class="item-card8-img">
+											<img src="/static/frontpages/images/products/products/f3.jpg" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="bg-secondary mb-0">Restaurant</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">7 May 2019.</p>
+												<h4 class="font-weight-semibold">Healthy Homely Food</h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													<img src="/static/frontpages/images/faces/female/19.jpg" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
+														Elizabeth<i class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="verified"></i></h5>
+												</div>
+												<div class="mt-2 footerimg-r ml-auto">
+													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
+														data-placement="top" title=""
+														data-original-title="Add Wishlist"><i
+															class="fa fa-heart"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-12">
+									<div class="card mb-0">
+										<div class="item-card8-img">
+											<img src="/static/frontpages/images/products/products/f2.jpg" alt="img"
+												class="cover-image">
+										</div>
+										<div class="item-card8-overlaytext">
+											<h6 class="bg-primary mb-0">Restaurant</h6>
+										</div>
+										<div class="card-body">
+											<div class="item-card8-desc">
+												<p class="text-muted mb-2">18 June 2019.</p>
+												<h4 class="font-weight-semibold">Spanish Styles</h4>
+												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
+													ullam corporis suscipit laboriosam</p>
+											</div>
+										</div>
+										<div class="card-footer">
+											<div class="footerimg d-flex mt-0 mb-0">
+												<div class="d-flex footerimg-l mb-0">
+													<img src="/static/frontpages/images/faces/female/19.jpg" alt="image"
+														class="avatar brround  mr-2">
+													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
+														Elizabeth<i class="icon icon-check text-success fs-12 ml-1"
+															data-toggle="tooltip" data-placement="top" title=""
+															data-original-title="verified"></i></h5>
+												</div>
+												<div class="mt-2 footerimg-r ml-auto">
+													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
+														data-placement="top" title=""
+														data-original-title="Add Wishlist"><i
+															class="fa fa-heart"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			{%endfor%}
 		</div>
-
 	</div>
 </section>
-<!--/Latest News-->
+<!--/Latest News--><!--/Latest News-->
 <!--Sub Categories-->
 <section class="sptb bg-white">
 	<div class="container">

@@ -240,14 +240,11 @@ class CreateVacancy(LoginRequiredMixin, View):
 		template = "admin/pages/job_form.html"
 		if form.is_valid():
 			category = JobCategory.objects.get(id=self.request.POST['category'],)
-			print("======")
-			print(self.request.POST['starting_date'])
-			print("======")
-			print(self.request.POST['ending_date'])
 			vacancy=form.save(commit=False)
 			vacancy.employement_type = form.cleaned_data.get('employement_type')
 			vacancy.user=self.request.user
-			vacancy.company=self.company_admin()
+			print("#######################################",self.request.user, " ",self.request.user.is_company_admin)
+			vacancy.company=self.request.user.get_company()
 			vacancy.category=category
 			da1 = self.request.POST['starting_date']
 			da2 = self.request.POST['ending_date']
@@ -308,13 +305,14 @@ class CategoryBasedSearch(View):
 		return render(self.request, template_name,context)
 
 class VacancyList(View):
-	def get(self,*args,**kwargs): 
-		vacancy = Vacancy.objects.filter(closed=False)
-		jobcategory = JobCategory.objects.all()
-		template_name="frontpages/vacancy_list.html" 
-		context = {'vacancys':vacancy,'category':jobcategory,'message':'All Vacancys '}
-		return render(self.request, template_name,context)
-
+	def get(self,*args,**kwargs):
+		 
+			jobcategory = JobCategory.objects.all()
+			vacancy = Vacancy.objects.filter(closed=False)
+			template_name="frontpages/vacancy_list.html" 
+			context = {'vacancys':vacancy,'category':jobcategory,'message':'All Vacancys '}
+			return render(self.request, template_name,context)
+		
 class VacancyMoreDetail(View):
 	def get(self,*args,**kwargs):
 		vac = Vacancy.objects.get(id=self.kwargs['id'],closed=False)

@@ -21,7 +21,7 @@ from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer
 from product.models import Product, ProductImage, ProductPrice
 from product.api.serializer import ProducteFullSerializer, ProductInfoSerializer, ProductImageSerializer
 
-from accounts.models import User, Customer, CompanyAdmin
+from accounts.models import User,UserProfile, Customer, CompanyAdmin
 from accounts.api.serializers import CustomerCreationSerializer, CustomerDetailSerializer
 
 class ApiIndexView(APIView):
@@ -47,7 +47,7 @@ class ApiProfileView(APIView):
             return Response(data = {"error": True, 'message':"Customer Not Found!"})
     def post(self, request ):
         user_detail = Customer.objects.get(user=request.user)
-        user = User.objects.get(id=request.user.id)
+        user = UserProfile.objects.get(id=request.user.id)
         
         if request.data['first_name'] != None:
             user.first_name = request.data['first_name']
