@@ -97,6 +97,8 @@ class BlogCommentDetailAdmin(LoginRequiredMixin,View):
 		if form.is_valid():
 			blog = BlogComment.objects.get(id=self.kwargs['id'])
 			blog.content=form.cleaned_data.get('content')
+			blog.last_updated_by = self.request.user
+			blog.last_updated_date = timezone.now()
 			blog.save()
 			messages.success(self.request, "Edited a Blog Comment Successfully")
 			return redirect("admin:blogComment_list")

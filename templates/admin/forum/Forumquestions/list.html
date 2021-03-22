@@ -51,7 +51,7 @@
 					
 					<td>{{researchprojectcategory.title|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.description|safe|truncatechars_html:20}}</td>
-					<td>{{researchprojectcategory.user}}</td>
+					<td>{{researchprojectcategory.created_by}}</td>
 					<td><a class="mr-0" href="{%url 'admin:Forum_Comments' id=researchprojectcategory.id%}"><i class="fa fa-comment-o text-muted mr-2"></i>{{researchprojectcategory.countComment}}
 					</a></td>
 
@@ -65,7 +65,7 @@
 						 {%endif%}
                                    		
                     </td>
-					<td>{{researchprojectcategory.timestamp}}</td>
+					<td>{{researchprojectcategory.created_date}}</td>
 					
 					<td class="text-center">
 						<div class="list-icons">
@@ -75,13 +75,13 @@
 								</a>
 									
 								<div class="dropdown-menu dropdown-menu-right">
-									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
+									{% if user.is_superuser or user.get_company == researchprojectcategory.created_by.get_company %}
 
 									{% if perms.collaborations.delete_forumquestion %} 
 									<a href="{%url 'admin:delete' model_name='ForumQuestionAdmin' id=researchprojectcategory.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Question</a>
 									{% endif%}
 									{% endif%}
-									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
+									{% if user.is_superuser or user.get_company == researchprojectcategory.created_by.get_company %}
 									
 									{% if perms.collaborations.change_forumquestion %} 
 									<a href="{%url 'admin:forum_detail' model_name='ForumQuestion' id=researchprojectcategory.id%}" class="dropdown-item"  >

@@ -230,7 +230,6 @@ class JobCategory(models.Model):
 
     
 class Vacancy(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE,related_name="company_vacancy")
     location = models.CharField(max_length=1000)
     salary = models.IntegerField(null=True,default=0)
@@ -273,7 +272,10 @@ class JobApplication(models.Model):
     CURRENT_STATUS = [(('','Select Current Status'),'JUST GRADUATED','JUST GRADUATED'),('WORKING','WORKING'),
                 ('LOOKING FOR JOB','LOOKING FOR JOB')]
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="jobapplication_created_by")
+    created_date = models.DateTimeField(auto_now_add=True,editable=False)
+    expired = models.BooleanField(default=False)
+    
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
     institiute = models.CharField(max_length=500,null=False)
     grade = models.FloatField()
@@ -281,16 +283,12 @@ class JobApplication(models.Model):
     status = models.CharField(max_length=500,null=False)
     bio = models.TextField(null=False)
     experiance = models.IntegerField(null=False)
-    cv = models.FileField(upload_to="cv/", max_length=254,help_text="only pdf,jpg,doc,docx files, Max size 10MB",
-            validators=[FileExtensionValidator(allowed_extensions=['pdf','jpg,doc,docx'])]
-            )
-    documents = models.FileField(upload_to="documents/", max_length=254,help_text="pdf, jpg,doc,docx files, Max size 10MB",
-                                validators=[FileExtensionValidator(allowed_extensions=['pdf','jpg,doc,docx'])])
-    timestamp = models.DateTimeField(auto_now_add=True)
+    cv = models.FileField(upload_to="cv/", max_length=254,help_text="only pdf,jpg,doc,docx files, Max size 10MB")
+    documents = models.FileField(null=True,upload_to="documents/", max_length=254,help_text="pdf, jpg,doc,docx files, Max size 10MB")
 
     class Meta:
-        ordering = ['-timestamp',]
-        unique_together = (('vacancy','user'))
+        ordering = ['-created_date',]
+        unique_together = (('vacancy','created_by'))
     
 
 ## News and Events
@@ -349,16 +347,19 @@ class NewsImages(models.Model):
 class ForumQuestion(models.Model):
     title = models.CharField(max_length=500,null=False)
     description = models.TextField()
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     attachements = models.FileField(upload_to="Attachements/", null=True,max_length=254,help_text="only pdf files, Max size 10MB")
-    timestamp = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="forum_question_updated_by")
+    last_updated_date = models.DateTimeField(null=True)
+    expired = models.BooleanField(default=False)
 
 
     def __str__(self):
         return self.title
 
     class Meta:
-        ordering = ['-timestamp',]
+        ordering = ['-created_date',]
 
     def countComment(self):
         return self.forumcomments_set.all().count()
@@ -371,15 +372,18 @@ class ForumQuestion(models.Model):
 
 class ForumComments(models.Model):
     forum_question=models.ForeignKey(ForumQuestion,on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     comment = models.TextField(null=False)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="forum_comments_updated_by")
+    last_updated_date = models.DateTimeField(null=True)
+    expired = models.BooleanField(default=False)
 
     def __str__(self):
         return self.comment
 
     class Meta:
-        ordering = ['-timestamp',]
+        ordering = ['-created_by',]
 
     def count_comment_replays(self):
         return self.commentreplay_set.all().count()
@@ -391,15 +395,18 @@ class ForumComments(models.Model):
 
 class CommentReplay(models.Model):
     comment = models.ForeignKey(ForumComments,on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(null=False)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="comment_replay_updated_by")
+    last_updated_date = models.DateTimeField(null=True)
+    expired = models.BooleanField(default=False)
 
     def __str__(self):
         return self.content
 
     class Meta:
-        ordering = ['-timestamp',]
+        ordering = ['-created_by',]
     
 
 class Announcement(models.Model):

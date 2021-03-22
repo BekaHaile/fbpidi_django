@@ -116,14 +116,14 @@ class CustomAdminSite(admin.AdminSite):
             path('applicant-list',wrap(ApplicantList.as_view()),name="Applicant_list"),
             
 
-            path('JobCategory-form',wrap(CreateVacancyCategory.as_view()),name="create_vacancy_category"),
+            path('jobcategory-form',wrap(CreateVacancyCategory.as_view()),name="create_vacancy_category"),
             path('vacancy-Category-detail/<pk>/',wrap(JobCategoryDetail.as_view()),name='update_vacancy_category'),
            
-            path("Vacancy-form/",wrap(CreateVacancy.as_view()),name="Job_form"),
-            path("Vacancy-list/",wrap(AdminVacancyList.as_view()),name="Job_list"),
-            path("Vacancy-list-super/",wrap(SuperAdminVacancyList.as_view()),name="super_Job_list"),
-            path("Vacancy-applicant-info/<id>",wrap(ApplicantListDetail.as_view()),name="applicant_detail"),
-            path("Vacancy-detail/<model_name>/<id>",wrap(VacancyDetail.as_view()),name="job_detail"),
+            path("vacancy-form/",wrap(CreateVacancy.as_view()),name="Job_form"),
+            path("vacancy-list/",wrap(AdminVacancyList.as_view()),name="Job_list"),
+            path("vacancy-list-super/",wrap(SuperAdminVacancyList.as_view()),name="super_Job_list"),
+            path("vacancy-applicant-info/<id>",wrap(ApplicantListDetail.as_view()),name="applicant_detail"),
+            path("vacancy-detail/<model_name>/<id>",wrap(VacancyDetail.as_view()),name="job_detail"),
            
             path("faq-detail/<model_name>/<id>",wrap(FaqsView.as_view()),name="faqs_detail"),
             path("faq-form/",wrap(CreateFaqs.as_view()),name="admin_Faqsform"),
@@ -287,30 +287,12 @@ class CustomAdminSite(admin.AdminSite):
              path('edit_document/<id>/', wrap(EditDocument.as_view()), name='edit_document'),
              path('list_document_by_category/<option>/', wrap(DocumentListing.as_view()), name = "list_document_by_category"),
 
-
-            path('forum-list',wrap(ListForumQuestionAdmin.as_view()),name="forum_list"),
-            path('forum-form',wrap(CreateForumQuestionAdmin.as_view()),name="forum_form"),
-            path('forum-detail/<model_name>/<id>',wrap(ForumQuestionDetail.as_view()),name="forum_detail"),
-
-            path('forum-comment-list',wrap(ListForumCommentAdmin.as_view()),name="forum_comment_list"),
-            path('forum-comment-detail/<model_name>/<id>',wrap(ForumCommentsDetail.as_view()),name="forum_comment_detail"),
-
-            path('comment-replay-list',wrap(ListCommentReplayAdmin.as_view()),name="comment_replay_list"),
-            path('comment-replay-detail/<model_name>/<id>',wrap(CommentReplayDetail.as_view()),name="comment_replay_detail"),
-
             # path('project-view/<id>',wrap(ProjectDetailView.as_view()),name='project_view'),
             # path('project-approve/<id>',wrap(ProjectApprove.as_view()),name="project_approve"),
             # path('pedning-project-list',wrap(ListPendingProjectAdmin.as_view()),name="pedning_project_list"),
             # path('project-list',wrap(ListProjectAdmin.as_view()),name="project_list"),
             # path('project-form',wrap(CreateProjectAdmin.as_view()),name="project_form"),
             # path('project-detail/<model_name>/<id>',wrap(ProjectDetailAdmin.as_view()),name="project_detail"),
-
-            path('research-view/<id>',wrap(ResearchDetailView.as_view()),name='research_view'),
-            path('research-approve/<id>',wrap(ResearchApprove.as_view()),name="research_approve"),
-            path('pedning-research-list',wrap(ListPendingResearchAdmin.as_view()),name="pedning_research_list"),
-            path('research-list',wrap(ListResearchAdmin.as_view()),name="research_list"),
-            path('research-form',wrap(CreateResearchAdmin.as_view()),name="research_form"),
-            path('research-detail/<model_name>/<id>',wrap(ResearchDetailAdmin.as_view()),name="research_detail"),
 
             # path('researchprojectcategorys-detail/<model_name>/<id>',wrap(ResearchCategoryDetail.as_view()),name='researchprojectcategory_detail'),
             # path('researchprojectcategorys-form',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
