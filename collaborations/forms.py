@@ -256,7 +256,7 @@ class VacancyForm(forms.ModelForm):
 class CreateJobApplicationForm(forms.ModelForm):
 
     status = forms.ChoiceField(choices = CURRENT_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
-
+    
     class Meta:
         model = JobApplication
         fields = ('status', 'bio',

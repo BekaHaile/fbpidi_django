@@ -7,7 +7,7 @@ from company.views import (
 from company.company_views import (CompanyHomePage, CompanyAbout, CompanyContact,CompanyProductList,
                                     CompanyProjectList, CompanyNewsList,CompanyNewsDetail,CompanyEventList,CompanyEventDetail,
                                     CompanyAnnouncementList, CompanyAnnouncementDetail, CompanyResearchList,CompanyTenderList,CompanyVacancyList,CompanyBlogList,
-                                    CompanyPollList, CompanyTenderDetail,CompanyVacancyDetail, CompanyBlogDetail, CompanyPollDetail,
+                                    CompanyPollList, CompanyTenderDetail,CompanyVacancyDetail, CompanyVacancyApply,CompanyBlogDetail, CompanyPollDetail,
 
 
 )
@@ -22,7 +22,6 @@ urlpatterns = [
     path("company-projects/<pk>/",CompanyProjectList.as_view(),name="company_projects"),
 
     path("company_research/<pk>/",CompanyProductList.as_view(),name="company_research"),
-    
     path("company_announcement/<pk>/",CompanyAnnouncementList.as_view(),name="company_announcement"),
     # path("company_announcement_detail/<pk>/<company_pk>/",CompanyAnnouncementDetail.as_view(), name = "company_announcemnet_detail"),
 
@@ -37,12 +36,13 @@ urlpatterns = [
     
     path("company_vacancy/<pk>/",CompanyVacancyList.as_view(),name="company_vacancy"),
     path("company_vacancy_detail/<pk>/<company_pk>/",CompanyVacancyDetail.as_view(),name="company_vacancy_detail"),
+    path("company_vacancy_apply/<vacancy_pk>/", CompanyVacancyApply.as_view(), name = 'company_vacancy_apply'),
     
-    path("company_blog/<pk>/",CompanyProductList.as_view(),name="company_blog"),
+    path("company_blog/<pk>/",CompanyBlogList.as_view(),name="company_blog"),
     path("company_blog_detail/<pk>/<company_pk>/",CompanyBlogDetail.as_view(),name="company_blog_detail"),
     
-    path("company_poll/<pk>/",CompanyProductList.as_view(),name="company_poll"),
-    path("company_poll_detail/<pk>/<company_pk>/",CompanyPollDetail.as_view(),name="company_poll_detail"),
+    path("company_poll/<pk>/",CompanyPollList.as_view(),name="company_poll"),
+    path("company_poll_detail/<id>/",CompanyPollDetail.as_view(),name="company_poll_detail"),
     
     path("company_faq/<pk>/",CompanyProductList.as_view(),name="company_faq"),
     path("project_list/",ProjectList.as_view(),name="project_list"),

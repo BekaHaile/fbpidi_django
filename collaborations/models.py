@@ -269,10 +269,10 @@ class JobApplication(models.Model):
     bio = models.TextField(null=False)
     experiance = models.IntegerField(null=False)
     cv = models.FileField(upload_to="cv/", max_length=254,help_text="only pdf,jpg,doc,docx files, Max size 10MB",
-            validators=[FileExtensionValidator(allowed_extensions=['pdf','jpg,doc,docx'])]
+            validators=[FileExtensionValidator(allowed_extensions=['pdf','jpg','doc','docx'])]
             )
     documents = models.FileField(upload_to="documents/", max_length=254,help_text="pdf, jpg,doc,docx files, Max size 10MB",
-                                validators=[FileExtensionValidator(allowed_extensions=['pdf','jpg,doc,docx'])])
+                                validators=[FileExtensionValidator(allowed_extensions=['pdf','jpg','doc','docx'])])
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:

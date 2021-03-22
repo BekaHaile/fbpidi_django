@@ -294,7 +294,9 @@ class CreateApplication(LoginRequiredMixin,View):
 			job.vacancy = Vacancy.objects.get(id=self.kwargs['id'])
 			job.save()
 			return redirect("vacancy")
-
+		else:
+			print("##### incorrect form ", form.errors)
+			return redirect("vacancy")
 class CategoryBasedSearch(View):
 	def get(self,*args,**kwargs):
 		vacancy = Vacancy.objects.filter(category=self.kwargs['id'],closed=False) 

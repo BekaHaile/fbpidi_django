@@ -12,13 +12,13 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">{% print_translated object.name object.name_am LANGUAGE_CODE %} {% trans "News" %}</h1>
+							<h1 class="">{% print_translated object.name object.name_am LANGUAGE_CODE %} {% trans "Polls" %}</h1>
 							<ol class="breadcrumb text-center">
 					
 							
 								<li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} </a></li>
 								
-								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Company News List" %} </li>
+								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Company Polls List" %} </li>
 							</ol>
 						</div>
 					</div>
@@ -40,27 +40,46 @@
 								<div class="card">
 									<div class="item7-card-img">
 										<a href="/collaborations/customer_news_detail/{{news.id}}/"></a>
-															{% if obj.get_images.0.image.url %}
-															<img src="{{obj.get_images.0.image.url}}" width = "370px" height= "200px" alt="img" class="cover-image">
-															{% elif obj.get_company.get_image %}
-															<img src="{{obj.get_company.get_image}}"  width = "370px" height= "200px" alt="img" class="cover-image">
+															{% if object.get_image %}
+															<img src="{{object.get_image}}" width = "370px" height= "200px" alt="img" class="cover-image">
 															{% else %}
-															<img src="/static/frontpages/images/products/products/v1.jpg" width = "370px" height= "200px"  alt="img" class="cover-image">
+															
+															<img src="/static/frontpages/images/products/products/v1.jpg" width = "370px" height= "200px" alt="img" class="cover-image">
 															{% endif %}
-										<div class="item7-card-text">
-											<span class="badge badge-success">{{obj.catagory}}</span>
-										</div>
+
+															
 									</div>
 									<div class="card-body">
 										<div class="item7-card-desc d-flex mb-2">
+											<a href="#"><i class="fa fa-cman mr-2"></i><b>{% trans "By" %}: {% print_translated object.name object.name_am LANGUAGE_CODE%}</b></a>
 											<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{obj.created_date}}</a>
 											<!-- <div class="ml-auto">
 												<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>4 Comments</a>
 											</div> -->
 										</div>
-										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{% print_translated obj.title obj.title_am LANGUAGE_CODE %}</h4></a>
-										<p>{% print_translated obj.description|truncatechars_html:50|safe obj.description_am|truncatechars_html:50|safe LANGUAGE_CODE %}</p>
-										<a target="_blank" href="#" class="btn btn-secondary btn-sm">{% trans "News Detail" %}</a>
+										<a href="#" class="text-dark">
+											<h4 class="font-weight-semibold">
+																{% if obj.count_choices > 1 %}
+																		{{obj.count_choices}} {% trans "Choices" %}
+																{% else %}
+																		{{obj.count_choices}} {% trans "Choice" %}
+																{%endif%}
+
+											</h4>
+										</a>
+										{% if obj.count_choices > 0 %}
+										<p class="mr-0" style="display: block;">
+												{% if obj.count_votes > 1 %}
+													{{obj.count_votes}} 
+													{% trans "Votes" %}
+												{% else %}
+													{{obj.count_votes}} 
+													{% trans "Vote" %}
+												{%endif%}
+												<i class="fa fa-hand-stop-o text-muted mr-2"></i>
+										</p>
+										{% endif %}
+										<a target="_blank" href="{% url 'company_poll_detail' id=obj.id %}" class="btn btn-secondary btn-sm">{% trans "Poll Detail" %}</a>
 									</div>
 								</div>
 							</div>

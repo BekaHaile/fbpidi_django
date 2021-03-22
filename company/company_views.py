@@ -176,7 +176,7 @@ class CompanyVacancyList(ListView):
 
 
 class CompanyVacancyDetail(DetailView):
-    model = CompanyEvent
+    model = Vacancy
     template_name = "frontpages/company/company_vacancy_detail.html"
     context_object_name = "obj"
     def get_context_data(self, **kwargs):
@@ -186,13 +186,69 @@ class CompanyVacancyDetail(DetailView):
         return context
 
 
+# class CompanyVacancyApply(LoginRequiredMixin,View):
+#     def post(self, *args, **kwargs):
+        
+#         form = CreateJobApplicationForm(self.request.POST,self.request.FILES)
+#         if form.is_valid(self)
+#         job= form.save(commit=False)
+#         job.user = self.request.user
+#         job.vacancy = Vacancy.objects.get(id=self.kwargs['vacancy_pk'])
+#         job.save()
+#         return redirect("vacancy")
+
+#     def get(self,*args,**kwargs):
+#         vacancy=Vacancy.objects.get(id=self.kwargs['vacancy_pk'] )
+#         applicants=JobApplication.objects.filter(vacancy=vacancy.id)
+#         for applicant in applicants:
+#             if(applicant.user == self.request.user):
+#                 messages.warning(self.request, "You can't apply to the same vacancy Twice")
+#                 return redirect(f"/company/company_vacancy/{vacancy.company.id}/")
+                
+#         job = CreateJobApplicationForm
+#         jobcategory = JobCategory.objects.all()
+#         template_name = "frontpages/company/company_vacancy_apply.html"
+#         context={'form':job,'obj':vacancy,'category':jobcategory, 'object':vacancy.company}
+#         return render(self.request, template_name,context) 
+
+    
+
+
+
+class CompanyVacancyApply(LoginRequiredMixin,CreateView):
+    model = JobApplication
+    template_name = "frontpages/company/company_vacancy_apply.html"
+    form_class = CreateJobApplicationForm
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        vacancy =  Vacancy.objects.get(id=self.kwargs['vacancy_pk'] )
+        context['obj'] = vacancy
+        context['object'] = vacancy.company
+        context['category'] = JobCategory.objects.all()
+        return context
+
+    def form_valid(self,form):
+        job=form.save(commit=False)
+        job.user=self.request.user
+        job.vacancy = Vacancy.objects.get(id=self.kwargs['vacancy_pk'])
+        job.save()
+        print("############### object saved on ", job.id)
+        return redirect(f"/company/company_vacancy_detail/{job.vacancy.id}")
+    def form_invalid(self,form):
+        print("###########333 form incorrect ", form.errors)
+        vacancy=Vacancy.objects.get(id = self.kwargs['vacancy_id'])
+     
+        return redirect(f"/company/company_vacancy/{vacancy.id}/")
+
+
 class CompanyBlogList(ListView):
     model = Blog
     template_name = "frontpages/company/company_blog.html"
     paginate_by = 2
     def get_queryset(self):
         try:
-            return Blog.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
+            return Blog.objects.filter(company = Company.objects.filter(id = self.kwargs['pk']))
         except Exception as e:
             print( "####### Exception while gettng company events ",e)
     def get_context_data(self, **kwargs):
@@ -226,13 +282,33 @@ class CompanyPollList(ListView):
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
         return context
 
-class CompanyPollDetail(DetailView):
-    model = CompanyEvent
-    template_name = "frontpages/company/company_event_detail.html"
-    context_object_name = "obj"
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) 
-        context['object'] = Company.objects.get(id =self.kwargs['company_pk'])
-        context['event_participant_form'] = EventParticipantForm
-        return context
+
+class CompanyPollDetail(LoginRequiredMixin,View):
+    def get(self, *args, **kwargs):
+        message = ""
+        context = {}        
+        try:
+                poll = PollsQuestion.objects.get(id = self.kwargs['id']  )
+                context ['obj'] = poll
+                context ['object'] = poll.company
+                if poll.pollsresult_set.filter(user = self.request.user).count() > 0:
+                    context ['has_voted'] = True
+                return render(self.request, "frontpages/company/company_poll_detail.html", context)
+        except Exception as e:
+                print( "Poll not found ",e)
+                return redirect("polls") 
+        
+    def post(self,*args,**kwargs):
+            try:
+                poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
+                vote = PollsResult(poll = poll,user = self.request.user,choice = Choices.objects.get(id = self.request.POST['selected_choice']),
+                    remark=self.request.POST['remark'] )
+                vote.save()
+                print( "Successfully voted!")
+                return redirect(f"/company/company_poll/{poll.company.id}/") 
+            except Exception as e:
+                messages.warning(self.request, "Poll not found!",e)
+                return redirect("polls") 
+        
+
 
