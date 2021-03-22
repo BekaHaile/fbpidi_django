@@ -19,7 +19,7 @@ from product.models import Order,OrderProduct,Product
 
 from company.forms import *
 from collaborations.models import *
-from collaborations.forms import EventParticipantForm,TenderApplicantForm
+from collaborations.forms import EventParticipantForm,TenderApplicantForm,CreateJobApplicationForm
 from chat.models import ChatMessages
 class CompanyHomePage(DetailView):
     model = Company
@@ -171,17 +171,18 @@ class CompanyVacancyList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
+        context['application_form'] = CreateJobApplicationForm
         return context
 
 
 class CompanyVacancyDetail(DetailView):
     model = CompanyEvent
-    template_name = "frontpages/company/company_event_detail.html"
+    template_name = "frontpages/company/company_vacancy_detail.html"
     context_object_name = "obj"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['company_pk'])
-        context['event_participant_form'] = EventParticipantForm
+        context['application_form'] = CreateJobApplicationForm
         return context
 
 

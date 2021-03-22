@@ -21,10 +21,9 @@
 						<div class="header-elements">
 							
 
-							{% if  perms.collaborations.add_tender and user.get_company %}
+							{% if  perms.collaborations.add_tender %}
 								<a href="{% url 'admin:create_tender' %}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
-							{% elif perms.collaborations.add_tender and not user.get_company %}
-								<a href="{% url 'admin:create_company_profile' %}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>You are not related with any registered company, click here to register a company!  </a>
+							
 							{%endif%}
 							
 						</div>
