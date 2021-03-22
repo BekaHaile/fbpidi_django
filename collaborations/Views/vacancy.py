@@ -305,13 +305,14 @@ class CategoryBasedSearch(View):
 		return render(self.request, template_name,context)
 
 class VacancyList(View):
-	def get(self,*args,**kwargs): 
-		vacancy = Vacancy.objects.filter(closed=False)
-		jobcategory = JobCategory.objects.all()
-		template_name="frontpages/vacancy_list.html" 
-		context = {'vacancys':vacancy,'category':jobcategory,'message':'All Vacancys '}
-		return render(self.request, template_name,context)
-
+	def get(self,*args,**kwargs):
+		 
+			jobcategory = JobCategory.objects.all()
+			vacancy = Vacancy.objects.filter(closed=False)
+			template_name="frontpages/vacancy_list.html" 
+			context = {'vacancys':vacancy,'category':jobcategory,'message':'All Vacancys '}
+			return render(self.request, template_name,context)
+		
 class VacancyMoreDetail(View):
 	def get(self,*args,**kwargs):
 		vac = Vacancy.objects.get(id=self.kwargs['id'],closed=False)

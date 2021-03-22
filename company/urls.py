@@ -24,7 +24,7 @@ urlpatterns = [
     path("company_research/<pk>/",CompanyProductList.as_view(),name="company_research"),
     
     path("company_announcement/<pk>/",CompanyAnnouncementList.as_view(),name="company_announcement"),
-    path("company_announcement_detail/<pk>/<company_pk>/",CompanyAnnouncementDetail.as_view(), name = "company_announcemnet_detail"),
+    # path("company_announcement_detail/<pk>/<company_pk>/",CompanyAnnouncementDetail.as_view(), name = "company_announcemnet_detail"),
 
     path("company_event/<pk>/",CompanyEventList.as_view(),name="company_event"),
     path("company_event/<pk>/<company_pk>/",CompanyEventDetail.as_view(),name="company_event_detail"),
@@ -35,7 +35,7 @@ urlpatterns = [
     path("company_tender/<pk>/",CompanyTenderList.as_view(),name="company_tender"),
     path("company_tender_detail/<pk>/<company_pk>/",CompanyTenderDetail.as_view(),name="company_tender_detail"),
     
-    path("company_vacancy/<pk>/",CompanyProductList.as_view(),name="company_vacancy"),
+    path("company_vacancy/<pk>/",CompanyVacancyList.as_view(),name="company_vacancy"),
     path("company_vacancy_detail/<pk>/<company_pk>/",CompanyVacancyDetail.as_view(),name="company_vacancy_detail"),
     
     path("company_blog/<pk>/",CompanyProductList.as_view(),name="company_blog"),

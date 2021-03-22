@@ -137,11 +137,13 @@
                     <!-- if the current user is the receiver of the message -->
 
                     {% if user.username == message.receiver_name %} 
+                    
                         {% if message.seen == False %}
                             <tr class = "unread" > 
                         {% else %}
                             <tr style="background-color: rgb(228, 228, 228);"> 
                         {% endif %}
+                        <a href = "/chat/with/{{message.sender_name}}/" target = "blank" >
                             
                                 <td class="table-inbox-checkbox rowlink-skip">
                                     <a href="/chat/with/{{message.sender_name}}/" target = "blank" ></a>
@@ -158,12 +160,12 @@
                                 </td>
                                 <td class="table-inbox-name">
                                     <a href="/chat/with/{{message.sender_name}}/" target = "blank" >
-                                        <div class="letter-icon-title text-default"><b></b>{{message.sender_name}}</b></div>
+                                        <div class="letter-icon-title text-default"><b>{{message.sender_name}}</b></div>
                                     </a>
                                 </td>
                                 <!-- the rest is the same whether the user is a receiver or a sender -->
                                 <td class="table-inbox-message">
-                                    <div class="table-inbox-subject">{{message.message|truncatechars_html:20}}/div>
+                                    <div class="table-inbox-subject">{{message.message|truncatechars_html:20}}</div>
                                     <!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
                                 </td>
                                 <td class="table-inbox-attachment">
@@ -173,6 +175,7 @@
                                     {{message.time}}
                                 </td>
                             </tr>
+                        
                     {% else %}
                     <!-- this means the current user is the sender of this message -->
                                 
@@ -210,10 +213,12 @@
                                     <td class="table-inbox-time">
                                         {{message.time}}
                                     </td>
+                                </a>
                                 </tr>
 
                         
                     {% endif %}
+                
                     
                     
                 {% endfor%}

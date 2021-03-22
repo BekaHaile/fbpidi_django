@@ -12,13 +12,13 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">{% print_translated object.name object.name_am LANGUAGE_CODE %} {% trans "News" %}</h1>
+							<h1 class="">{% print_translated object.name object.name_am LANGUAGE_CODE %} {% trans "Vacancy" %}</h1>
 							<ol class="breadcrumb text-center">
 								<li class="breadcrumb-item"><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
 							
 								<li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} </a></li>
 								
-								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Company News List" %} </li>
+								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Company Vacancy List" %} </li>
 							</ol>
 						</div>
 					</div>
@@ -39,16 +39,13 @@
 							<div class="col-xl-4 col-lg-6 col-md-12">
 								<div class="card">
 									<div class="item7-card-img">
-										<a href="/collaborations/customer_news_detail/{{news.id}}/"></a>
-															{% if obj.get_images.0.image.url %}
-															<img src="{{obj.get_images.0.image.url}}" width = "370px" height= "200px" alt="img" class="cover-image">
-															{% elif obj.get_company.get_image %}
-															<img src="{{obj.get_company.get_image}}"  width = "370px" height= "200px" alt="img" class="cover-image">
-															{% else %}
-															<img src="/static/frontpages/images/products/products/v1.jpg" width = "370px" height= "200px"  alt="img" class="cover-image">
-															{% endif %}
+										<a href="{% url 'company_vacancy_detail' pk=obj.id company_pk=object.id %}"></a>
+															
+															<img src="{{object.get_image}}" width = "370px" height= "200px" alt="img" class="cover-image">
+															
 										<div class="item7-card-text">
-											<span class="badge badge-success">{{obj.catagory}}</span>
+											
+											<span class="badge badge-success">{% trans "By" %} {% print_translated obj.category.category_name obj.category.category_name_am LANGUAGE_CODE %}</span>
 										</div>
 									</div>
 									<div class="card-body">
@@ -58,9 +55,11 @@
 												<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>4 Comments</a>
 											</div> -->
 										</div>
-										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{% print_translated obj.title obj.title_am LANGUAGE_CODE %}</h4></a>
-										<p>{% print_translated obj.description|truncatechars_html:50|safe obj.description_am|truncatechars_html:50|safe LANGUAGE_CODE %}</p>
-										<a target="_blank" href="#" class="btn btn-secondary btn-sm">{% trans "News Detail" %}</a>
+										<a href="#" class="text-dark"><h4 class="font-weight-semibold"><b>{% print_translated obj.job_title obj.job_title_am LANGUAGE_CODE %}</b></h4></a>
+										
+										<a href="{% url 'company_vacancy_detail' pk=obj.id company_pk=object.id %}" target="_blank" href="#" class="btn btn-secondary btn-sm">{% trans "View job details" %}</a>
+										<a target="_blank" href="#" class="btn btn-secondary btn-sm">{% trans "Apply" %}</a>
+									
 									</div>
 								</div>
 							</div>

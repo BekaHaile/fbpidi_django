@@ -106,6 +106,7 @@ class CompanyAnnouncementList(ListView):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
         return context
+        
 
 class CompanyAnnouncementDetail(DetailView):
     model = Announcement

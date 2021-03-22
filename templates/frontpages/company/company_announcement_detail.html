@@ -49,25 +49,27 @@
 								<div class="item7-card-desc d-flex mb-2 mt-3">
 									<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{obj.created_date.date}}</a>
 									<a href="#"><i class="fa fa-user text-muted mr-2"></i>{{obj.created_by.username}}</a>
+									
 									<!-- <div class="ml-auto">
 										<a href="#" class="mr-0"><i class="fa fa-comment-o text-muted mr-2"></i>2 Comments</a>
 									</div> -->
 								</div>
                                 <br>
+								<p class = "mr-5">
+									{% print_translated obj.description obj.description_am LANGUAGE_CODE %}
+								</p>
 							
 							</div>
 						</div>
 
 						<!--Comments-->
 						<div class="card">
-							<div class="card-header">
+							<!-- <div class="card-header">
 								<h3 class="card-title">{% trans "Annnouncement Description" %}</h3>
-							</div>
-							<div class="card-body">
+							</div> -->
+							<!-- <div class="card-body"> -->
 
-                                <p>
-                                    {% print_translated obj.description obj.description_am LANGUAGE_CODE %}
-                                </p>
+                               
 								<!-- <div class="d-sm-flex mt-0 p-5 sub-review-section border border-bottom-0 br-bl-0 br-br-0">
                                     <div class="d-flex mr-3">
                                         <a href="#"><img class="media-object brround avatar-md" alt="64x64" src="/static/frontpages/images/faces/male/1.jpg"> </a>
@@ -89,7 +91,7 @@
 											<button class="btn btn-light" type="button"><i class="fa fa-thumbs-down"></i></button>
 										</div>
 									</div> -->
-								</div>
+								<!-- </div> -->
 
 								<!-- <div class="d-sm-flex p-5 sub-review-section border subsection-color br-tl-0 br-tr-0">
 									<div class="d-flex mr-3">
@@ -131,7 +133,7 @@
 										</div>
 									</div>
 								</div> -->
-							</div>
+							<!-- </div> -->
 
                             
 						</div>

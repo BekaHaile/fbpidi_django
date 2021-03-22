@@ -213,7 +213,7 @@ class JobCategory(models.Model):
         return self.vacancy_set.filter(closed=False).count()
 
     def __str__(self):
-        return self.categoryName
+        return self.category_name
 
     
 class Vacancy(models.Model):
@@ -248,7 +248,7 @@ class Vacancy(models.Model):
         return self.jobapplication_set.all().count()
     
     def get_category_name(self):
-        return self.category.categoryName
+        return self.category.category_name
 
     def get_company(self):
         return self.company

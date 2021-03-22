@@ -14,7 +14,6 @@
 						<div class="text-center text-white">
 							<h1 class="">{% print_translated object.name object.name_am LANGUAGE_CODE %} {% trans "Events" %}</h1>
 							<ol class="breadcrumb text-center">
-								<li class="breadcrumb-item"><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
 							
 								<li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} </a></li>
 								

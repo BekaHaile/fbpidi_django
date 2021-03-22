@@ -32,10 +32,8 @@
 						<div class="card">
 							<div class="card-body">
 								<a href="#" class="text-body"><h3 class="font-weight-semibold text-capitalize">{%print_translated obj.title obj.title_am LANGUAGE_CODE%}</h3></a>
-							
-								<a href="">
-									<img class="img-responsive" width = "290px" height = "250" src="{{obj.company.get_image}}" alt="{{img.image.name}}">
-								</a>
+									<img class="img-responsive mr-10 ml-10" width = "100%" height = "400" src="{{obj.company.get_image}}" alt="">
+								
 			
 								<div class="item7-card-desc d-flex mb-2 mt-3">
 									<ul class="d-flex mb-0">
@@ -99,7 +97,7 @@
 										{%else%}
 											<br>
 											<div style = "display: block;">
-												<b style="margin-left: 10px;  color:orangered; padding: 3px;  display: block;">This tender is now in {{tender.status}} status. So, you can't participate in this tender. </b>
+												<b style="margin-left: 10px;  color:orangered; padding: 3px;  display: block;">This tender is now in {{obj.status}} status. So, you can't participate in this tender. </b>
 												
 											</div>
 										{%endif%}
