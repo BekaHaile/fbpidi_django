@@ -102,7 +102,7 @@ class CreateResearchAdmin(LoginRequiredMixin, View):
 				research.accepted = "PENDING"
 			else:
 				research.accepted = "APPROVED"
-			research.user = self.request.user
+			research.created_by = self.request.user
 			research.save()
 			for file in self.request.FILES.getlist('files'):
 				print("file name:"+str(file.name))
@@ -115,14 +115,21 @@ class CreateResearchAdmin(LoginRequiredMixin, View):
 			return redirect("admin:research_form")
 		return render(self.request, template_name,context)
 
-
 class ResearchApprove(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
 		form.accepted = "APPROVED"
 		form.save()
 		messages.success(self.request, "Changed Status to APPROVED Successfully")
-		return redirect("admin:pedning_project_list")
+		return redirect("admin:research_view",id=self.kwargs['id'])
+
+class ResearchPending(LoginRequiredMixin, View):
+	def get(self,*args,**kwargs):
+		form = Research.objects.get(id=self.kwargs['id'])
+		form.accepted = "PENDING"
+		form.save()
+		messages.success(self.request, "Changed Status to PENDING Successfully")
+		return redirect("admin:research_view",id=self.kwargs['id'])
 
 class ResearchDetailAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
@@ -142,6 +149,8 @@ class ResearchDetailAdmin(LoginRequiredMixin, View):
 			research.detail = form.cleaned_data.get('detail')
 			research.status = form.cleaned_data.get('status')
 			research.category = form.cleaned_data.get('category')
+			research.last_updated_by = self.request.user
+			research.last_updated_date = timezone.now()
 			research.save()
 			for file in self.request.FILES.getlist('files'):
 				print("file name:"+str(file.name))
@@ -182,7 +191,7 @@ class SearchResearch(View):
 
 		form = Research.objects.filter(title__contains=self.request.POST['search'])
 		if str(self.request.user) != "AnonymousUser":
-			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
+			usercreated = Research.objects.filter(created_by=self.request.user,accepted="APPROVED")
 		else:
 			usercreated = ""
 		category = ResearchProjectCategory.objects.all()
@@ -210,7 +219,7 @@ class ResearchCategorySearch(View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.filter(accepted="APPROVED",category=self.kwargs['id'])
 		if str(self.request.user) != "AnonymousUser":
-			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
+			usercreated = Research.objects.filter(created_by=self.request.user,accepted="APPROVED")
 		else:
 			usercreated = ""
 		category = ResearchProjectCategory.objects.all()
@@ -233,7 +242,7 @@ class EditResearch(View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
 		if str(self.request.user) != "AnonymousUser":
-			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
+			usercreated = Research.objects.filter(created_by=self.request.user,accepted="APPROVED")
 		else:
 			usercreated = ""
 		category = ResearchProjectCategory.objects.all()
@@ -243,7 +252,7 @@ class EditResearch(View):
 	def post(self,*args,**kwargs):
 		form =  ResearchForm(self.request.POST,self.request.FILES)
 		if str(self.request.user) != "AnonymousUser":
-			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
+			usercreated = Research.objects.filter(created_by=self.request.user,accepted="APPROVED")
 		else:
 			usercreated = ""
 		category = ResearchProjectCategory.objects.all()
@@ -257,9 +266,11 @@ class EditResearch(View):
 			research.detail = form.cleaned_data.get('detail')
 			research.status = form.cleaned_data.get('status')
 			research.category = form.cleaned_data.get('category')
+			research.last_updated_by = self.request.user
+			research.last_updated_date = timezone.now()
 			if form.cleaned_data.get("attachements"):
 				research.attachements = form.cleaned_data.get("attachements")
-			research.user = self.request.user
+			research.created_by = self.request.user
 			research.save()
 			return redirect("research_list")
 		return render(self.request, template_name,context)
@@ -268,7 +279,7 @@ class CreateResearch(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = ResearchForm()
 		if str(self.request.user) != "AnonymousUser":
-			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
+			usercreated = Research.objects.filter(created_by=self.request.user,accepted="APPROVED")
 		else:
 			usercreated  = ""
 		category = ResearchProjectCategory.objects.all()
@@ -279,7 +290,7 @@ class CreateResearch(LoginRequiredMixin, View):
 		
 		form = ResearchForm(self.request.POST,self.request.FILES)
 		if str(self.request.user) != "AnonymousUser":
-			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
+			usercreated = Research.objects.filter(created_by=self.request.user,accepted="APPROVED")
 		else:
 			redirect("research_list")
 		template_name = "admin/researchproject/research_form.html"
@@ -291,7 +302,7 @@ class CreateResearch(LoginRequiredMixin, View):
 				research.accepted = "PENDING"
 			else:
 				research.accepted = "APPROVED"
-			research.user = self.request.user
+			research.created_by = self.request.user
 			research.save()
 			for file in self.request.FILES.getlist('files'):
 				print("file name:"+str(file.name))

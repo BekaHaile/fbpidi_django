@@ -26,7 +26,7 @@ from collaborations.views import (  CreateNews, EditNews, NewsDetail,AdminNewsLi
                                     EditTender,  ManageBankAccount,CreateDocument, DocumentListing, EditDocument, 
                         )
 from collaborations.Views.faq import(CreateFaqs,FaqsView,FaqsList,FaqPendingList,FaqApprovdList,
-                                    FaqApprove,FaqsDetail)
+                                    FaqApprove,FaqPending,FaqsDetail)
 
 from collaborations.Views.vacancy import(CreateVacancy,AdminVacancyList,VacancyDetail,CreateVacancyCategory,
                         JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
@@ -51,6 +51,7 @@ from collaborations.Views.research import(
                         ListResearchAdmin,CreateResearchAdmin,ResearchDetailAdmin,
                         ListPendingResearchAdmin,ResearchDetailView,ResearchApprove,
                         CreateResearchCategory,ResearchCategoryDetail,
+                        ResearchPending
                         
 
                         )
@@ -97,6 +98,7 @@ class CustomAdminSite(admin.AdminSite):
 
             path('research-view/<id>',wrap(ResearchDetailView.as_view()),name='research_view'),
             path('research-approve/<id>',wrap(ResearchApprove.as_view()),name="research_approve"),
+            path('research-pending/<id>',wrap(ResearchPending.as_view()),name="research_pending"),
             path('pedning-research-list',wrap(ListPendingResearchAdmin.as_view()),name="pedning_research_list"),
             path('research-list',wrap(ListResearchAdmin.as_view()),name="research_list"),
             path('research-form',wrap(CreateResearchAdmin.as_view()),name="research_form"),
@@ -128,7 +130,8 @@ class CustomAdminSite(admin.AdminSite):
             path("faq-list/",wrap(FaqsList.as_view()),name="admin_Faqs"),  
             path("faq-approved-list/",wrap(FaqApprovdList.as_view()),name="admin_approved_Faqs"),
             path("faq-pendding-list/",wrap(FaqPendingList.as_view()),name="admin_pendding_Faqs"),
-            path("faq-approve/<id>",wrap(FaqApprove.as_view()),name="approve_Faqs"),
+            path("faq-approve/<id>",wrap(FaqApprove.as_view()),name="approve_Faqs"), 
+            path("faq-pending/<id>",wrap(FaqPending.as_view()),name="pending_Faqs"),
             path("faq-view/<model_name>/<id>",wrap(FaqsDetail.as_view()),name="view_Faqs"),
 
             

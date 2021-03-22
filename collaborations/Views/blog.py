@@ -60,6 +60,7 @@ from collaborations.models import ( Blog, BlogComment,Faqs,
 from collaborations.forms import (BlogsForm,BlogsEdit,BlogCommentForm)
 
 # --------------------------------------------
+from django.utils import timezone
 from django.conf import settings
 from django.core.files.storage import default_storage, FileSystemStorage
 from django.core import files
@@ -132,7 +133,8 @@ class CreatBlog(LoginRequiredMixin,View):
 				print(t)
 				tag_list_am+=t+","
 			tag_list_am = tag_list_am[:-1]
-			blog = form.save(self.request.user,x,y,w,h,tag_list,tag_list_am)
+			company = self.request.user.get_company()
+			blog = form.save(self.request.user,company,x,y,w,h,tag_list,tag_list_am)
 			messages.success(self.request, "Added New Blog Successfully")
 			return redirect("admin:admin_Blogs")
 		return render(self.request, "admin/pages/blog_form.html",context)
@@ -145,7 +147,7 @@ class AdminBlogList(LoginRequiredMixin, ListView):
 		if self.request.user.is_superuser:
 			return Blog.objects.all()
 		else:
-			return Blog.objects.filter(user = self.request.user)
+			return Blog.objects.filter(created_by = self.request.user)
 	# def get(self,*args,**kwargs):
 		# if self.request.user.is_superuser:
 		# 	blogs = Blog.objects.all()
@@ -196,6 +198,10 @@ class BlogView(LoginRequiredMixin,View):
 			blog.content_am = self.request.POST['content_am']
 			publ = 'publish' in self.request.POST
 			blog.publish = publ
+			# -----------------
+			blog.last_updated_by = self.request.user
+			blog.last_updated_date = timezone.now()
+			# -----------------
 			if self.request.FILES.get('blogImage') == None:
 				blog.save()
 				messages.success(self.request, "Edited Blogs Successfully")
@@ -246,7 +252,7 @@ class CreateBlogComment(LoginRequiredMixin,View):
 		blog = Blog.objects.get(id=self.kwargs['id'])
 		template_name="frontpages/blog-details-right.html" 
 		if form.is_valid():
-			blogComment=BlogComment(blog=blog,sender=self.request.user,content=form.cleaned_data.get('content'))
+			blogComment=BlogComment(blog=blog,created_by=self.request.user,content=form.cleaned_data.get('content'))
 			blogComment.save()
 			return redirect(reverse("blog_details",kwargs={'id':str(self.kwargs['id'])}))
 		return render(self.request, template_name,context)

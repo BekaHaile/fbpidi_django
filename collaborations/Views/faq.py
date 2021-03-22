@@ -80,7 +80,8 @@ class CreateFaqs(LoginRequiredMixin,View):
 				faqs.status = "PENDDING"
 			if self.request.user.is_superuser:
 				faqs.status = "APPROVED"
-			faqs.user = self.request.user
+			faqs.created_by = self.request.user
+			faqs.company = self.request.user.get_company()
 			faqs.save()
 			form = FaqsForm()
 			context = {'form':form}
@@ -103,6 +104,8 @@ class FaqsView(LoginRequiredMixin,View):
 			faq.questions_am = self.request.POST['questions_am']
 			faq.answers = self.request.POST['answers']
 			faq.answers_am = self.request.POST['answers_am']
+			faq.last_updated_date = timezone.now()
+			faq.last_updated_by = self.request.user
 			faq.save()
 		messages.success(self.request, "Edited Faqs Successfully")
 		return redirect("admin:admin_Faqs") 
@@ -114,7 +117,7 @@ class FaqsList(LoginRequiredMixin,View):
 			pending = Faqs.objects.filter(status="PENDDING").count()
 			
 		if self.request.user.is_company_admin:
-			faqs=Faqs.objects.filter(user=self.request.user)
+			faqs=Faqs.objects.filter(created_by=self.request.user)
 			pending = ""
 		context = {'faqs':faqs,'pending':pending}
 		template_name = "admin/pages/faqs_list.html"
@@ -142,6 +145,13 @@ class FaqApprove(LoginRequiredMixin, View):
 		faq.status = "APPROVED"
 		faq.save()
 		messages.success(self.request, "Changed Status to APPROVED Successfully")
+		return redirect("admin:admin_Faqs")
+class FaqPending(LoginRequiredMixin, View):
+	def get(self,*args,**kwargs):
+		faq = Faqs.objects.get(id=self.kwargs['id'])
+		faq.status = "PENDDING"
+		faq.save()
+		messages.success(self.request, "Changed Status to PENDDING Successfully")
 		return redirect("admin:admin_Faqs")
 class FaqsDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
