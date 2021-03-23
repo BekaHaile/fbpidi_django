@@ -38,6 +38,7 @@ from wsgiref.util import FileWrapper
 from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
 
 from django.contrib.sites.shortcuts import get_current_site
+from django.utils import timezone
 from django.core.mail import EmailMessage
 from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
 								 VacancyForm,JobCategoryForm,
@@ -82,6 +83,8 @@ class CloseVacancy(LoginRequiredMixin,View):
 		if status== "True":
 			vacancy.closed = False
 			print("iii")
+			vacancy.last_updated_by = self.request.user
+			vacancy.last_updated_date = timezone.now()
 			messages.success(self.request, "Vacancy Opened Successfully")
 			vacancy.save()
 			if self.request.user.is_superuser:
@@ -89,7 +92,9 @@ class CloseVacancy(LoginRequiredMixin,View):
 		else:
 			vacancy.closed = True
 			print("lll")
-			messages.success(self.request, "Vacancy Closed Successfully")    
+			vacancy.last_updated_by = self.request.user
+			vacancy.last_updated_date = timezone.now()
+			messages.success(self.request, "Vacancy Closed Successfully")
 			vacancy.save()
 			if self.request.user.is_superuser:
 				return redirect("admin:super_Job_list")
@@ -99,7 +104,7 @@ class CloseVacancy(LoginRequiredMixin,View):
 class ApplicantList(LoginRequiredMixin,View):
 	
 	def get(self,*args,**kwargs):
-		vacancy=Vacancy.objects.filter(user=self.request.user)
+		vacancy=Vacancy.objects.filter(created_by=self.request.user)
 		context = {'vacancy':vacancy}
 		template_name = "admin/pages/vacancy_list.html"
 		return render(self.request, template_name,context)
@@ -154,7 +159,7 @@ class JobCategoryDetail(LoginRequiredMixin,UpdateView):
 	
 class VacancyDetail(LoginRequiredMixin,View):
 	def company_admin(self,*args,**kwarges):
-		force = Company.objects.get(user=self.request.user)
+		force = Company.objects.get(created_by=self.request.user)
 		print("----------------"+str(force))
 		return force
 	def get(self,*args,**kwargs):
@@ -175,9 +180,10 @@ class VacancyDetail(LoginRequiredMixin,View):
 		context = {'form':form}
 		if form.is_valid():
 			vacancy = Vacancy.objects.get(id=self.kwargs['id'])
-			vacancy.user=self.request.user
+			vacancy.last_updated_by=self.request.user
 			print("-----+++++-------"+str(form.cleaned_data.get('employement_type')))
-			vacancy.company=self.company_admin()
+			vacancy.company=self.request.user.get_company()
+			vacancy.last_updated_date = timezone.now()
 			vacancy.location=form.cleaned_data.get('location')
 			vacancy.salary=form.cleaned_data.get('salary')
 			vacancy.job_title=form.cleaned_data.get('job_title')
@@ -217,7 +223,7 @@ class AdminVacancyList(LoginRequiredMixin,View):
 			context={'vacancy':vacancy}
 			return render(self.request, template_name,context)
 		else:
-			vacancy=Vacancy.objects.filter(user=self.request.user)
+			vacancy=Vacancy.objects.filter(created_by=self.request.user)
 			context = {'vacancy':vacancy}
 			template_name = "admin/pages/job_list.html"
 			return render(self.request, template_name,context)
@@ -226,7 +232,7 @@ class AdminVacancyList(LoginRequiredMixin,View):
 class CreateVacancy(LoginRequiredMixin, View):
 
 	def company_admin(self,*args,**kwarges):
-		force = Company.objects.get(user=self.request.user)
+		force = Company.objects.get(created_by=self.request.user)
 		return force
 	
 	def get(self,*args,**kwargs):
@@ -242,7 +248,7 @@ class CreateVacancy(LoginRequiredMixin, View):
 			category = JobCategory.objects.get(id=self.request.POST['category'],)
 			vacancy=form.save(commit=False)
 			vacancy.employement_type = form.cleaned_data.get('employement_type')
-			vacancy.user=self.request.user
+			vacancy.created_by=self.request.user
 			print("#######################################",self.request.user, " ",self.request.user.is_company_admin)
 			vacancy.company=self.request.user.get_company()
 			vacancy.category=category
@@ -276,7 +282,7 @@ class CreateApplication(LoginRequiredMixin,View):
 		vacancy=Vacancy.objects.get(id=self.kwargs['id'] ,closed=False)
 		applicants=JobApplication.objects.filter(vacancy=vacancy.id)
 		for applicant in applicants:
-			if(applicant.user == self.request.user):
+			if(applicant.created_by == self.request.user):
 				messages.warning(self.request, "You can't apply to the same vacancy Twice")
 				return redirect("vacancy")
 				
@@ -290,11 +296,14 @@ class CreateApplication(LoginRequiredMixin,View):
 		form = CreateJobApplicationForm(self.request.POST,self.request.FILES)
 		if form.is_valid():
 			job=form.save(commit=False)
-			job.user=self.request.user
+			job.created_by=self.request.user
 			job.vacancy = Vacancy.objects.get(id=self.kwargs['id'])
 			job.save()
 			return redirect("vacancy")
-
+		else:
+			messages.warning(self.request, "Unsupported file type detected, the supported files are pdf, jpg, png, doc and docx! ")
+			return redirect("vacancy")
+				
 class CategoryBasedSearch(View):
 	def get(self,*args,**kwargs):
 		vacancy = Vacancy.objects.filter(category=self.kwargs['id'],closed=False) 

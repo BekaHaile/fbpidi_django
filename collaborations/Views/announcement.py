@@ -76,19 +76,6 @@ class ListAnnouncementAdmin(LoginRequiredMixin, ListView):
 			else:
 				return Announcement.objects.filter(company=self.request.user.get_company()) if check_user_has_company(self.request) else []
 		
-	# def get(self,*args,**kwargs):
-	# 	announcements = []
-	# 	try:
-	# 		if self.request.user.is_superuser:
-	# 			announcements = Announcement.objects.all()
-	# 		else:
-	# 			announcements = Announcement.objects.filter(company=self.request.user.get_company())
-	# 		return render(self.request, "admin/announcement/announcement_list.html", {'Announcements':announcements})
-	# 	except Exception as e:
-	# 		print("Exception at List announcement admin ", e)
-	# 		return redirect("admin:anounce_list")
-		
-
 class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		try:

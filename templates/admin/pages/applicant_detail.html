@@ -33,7 +33,7 @@
                                     <div class="mb-3">
                                     <b>Grade</b>:{{applicant.grade}}</div>
                                     <div class="mb-4">
-                                    	<b>User</b>:{{applicant.user}} 
+                                    	<b>User</b>:{{applicant.created_by}} 
                                     </div>
                                     <div class="mb-4">
                                     	<b>Status</b>:{{applicant.status}} 
@@ -42,19 +42,24 @@
                                     	<b>Bio</b>:{{applicant.bio}} 
                                     </div>
                                     <div class="mb-4">
-                                    	<b>Time stamp</b>:{{applicant.timestamp}} 
+                                    	<b>Time stamp</b>:{{applicant.created_date}} 
                                     </div>
+                                    {%if applicant.documents%}
                                     <div class="mb-4">
                                     	<a href="{{applicant.documents.url}}" download="{{applicant.documents.url}}"> 
                                    			
                                    			<b>Documents</b>
                      					</a>
                                     </div>
+                                    {%endif%}
+                                    
+                                    {%if applicant.documents%}
                                     <div class="mb-4">
                                     	<a href="{{applicant.cv.url}}" download="{{applicant.cv.url}}"> 
                                    			<b>CV</b>
                      					</a>
                                     </div>
+                                    {%endif%}
                                     
 								</div>
 								

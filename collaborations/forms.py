@@ -53,9 +53,10 @@ class BlogsForm(forms.ModelForm):
                     'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in Amharic'})
                             }
     
-    def save(self,user,x,y,w,h,tag_list,tag_list_am):
+    def save(self,user,company,x,y,w,h,tag_list,tag_list_am):
         blog = super(BlogsForm, self).save(commit=False)
-        blog.user = user
+        blog.created_by = user
+        blog.company = company
         blog.tag = tag_list
         blog.tag_am = tag_list_am
         blog.save()
@@ -107,6 +108,8 @@ class BlogsEdit(forms.ModelForm):
         blog_update.content_am =blog.content_am
         blog_update.publish = blog.publish
         blog_update.blogImage = blog.blogImage
+        blog.last_updated_by = user
+        blog.last_updated_date = timezone.now()
         blog_update.save()
 
          ## if the image is not cropped 
@@ -256,12 +259,10 @@ class VacancyForm(forms.ModelForm):
 class CreateJobApplicationForm(forms.ModelForm):
 
     status = forms.ChoiceField(choices = CURRENT_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
-
+    
     class Meta:
         model = JobApplication
-        fields = ('status', 'bio',
-                  'cv', 'documents','experiance',
-                  'grade','institiute','field') 
+        fields = ('status', 'bio','cv', 'documents','experiance','grade','institiute','field') 
         
         widgets = {
             'experiance':forms.TextInput(attrs={"placeholder": "2",'class':'form-control','onkeyup':'isNumber("experiance")','id':'experiance'},),
