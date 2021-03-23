@@ -209,7 +209,7 @@
 
     
     <script>
-        // setInterval(check_inbox, 2000);
+        setInterval(check_inbox, 2000);
         function check_inbox(){
               
                 fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>
