@@ -31,7 +31,7 @@ from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, Ne
 from django.http import HttpResponse, FileResponse
 						 
 from wsgiref.util import FileWrapper
-
+from django.utils import timezone
 
 
 from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
@@ -42,17 +42,14 @@ from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
 								 VacancyForm,JobCategoryForm,
 								 ForumQuestionForm,CommentForm,CommentReplayForm,
 								 AnnouncementForm,ResearchForm,
-								 ResearchProjectCategoryForm
-								 )
+								 ResearchProjectCategoryForm)
 
 from collaborations.models import ( Blog, BlogComment,Faqs,
 									Vacancy,JobApplication, JobCategory,
 									ForumQuestion, ForumComments, CommentReplay,
 									Announcement,AnnouncementImages,
 									Research,
-									ResearchProjectCategory
-									
-									)
+									ResearchProjectCategory)
 
 from collaborations.forms import (ForumQuestionForm,CommentForm,CommentReplayForm)
 
@@ -80,7 +77,7 @@ class CreateForumQuestionAdmin(LoginRequiredMixin, View):
 			forum = form.save(commit=False)
 			if form.cleaned_data.get("attachements"):
 				forum.attachements = form.cleaned_data.get("attachements")
-			forum.user = self.request.user
+			forum.created_by = self.request.user
 			forum.save()
 			messages.success(self.request, "Added New Forum Successfully")
 			return redirect("admin:forum_form")
@@ -97,13 +94,15 @@ class ForumQuestionDetail(LoginRequiredMixin,View):
 		emplate_name = "admin/forum/Forumquestions/detail.html"
 		context = {'forms':form}
 		if form.is_valid():
-			research = ForumQuestion.objects.get(id=self.kwargs['id'])
-			research.title=form.cleaned_data.get('title')
-			research.description=form.cleaned_data.get('description')
+			forum = ForumQuestion.objects.get(id=self.kwargs['id'])
+			forum.title=form.cleaned_data.get('title')
+			forum.description=form.cleaned_data.get('description')
 			if form.cleaned_data.get("attachements"):
-				research.attachements = form.cleaned_data.get("attachements")
+				forum.attachements = form.cleaned_data.get("attachements")
 			#research.user = self.request.user 
-			research.save()
+			forum.last_updated_by = self.request.user
+			forum.last_updated_date = timezone.now()
+			forum.save()
 			messages.success(self.request, "Edited a Forum Successfully")
 			return redirect("admin:forum_list")
 		return render(self.request, template_name,context)
@@ -140,11 +139,11 @@ class ForumCommentsDetail(LoginRequiredMixin,View):
 		emplate_name = "admin/forum/ForumComments/detail.html"
 		context = {'forms':form}
 		if form.is_valid():
-			research = ForumComments.objects.get(id=self.kwargs['id'])
-			research.comment=form.cleaned_data.get('comment')
-			
-			#research.user = self.request.user 
-			research.save()
+			forumcommnent = ForumComments.objects.get(id=self.kwargs['id'])
+			forumcommnent.comment=form.cleaned_data.get('comment')
+			forumcommnent.last_updated_by = self.request.user
+			forumcommnent.last_updated_date = timezone.now()
+			forumcommnent.save()
 			messages.success(self.request, "Edited a Forum Comment Successfully")
 			return redirect("admin:forum_comment_list")
 		return render(self.request, template_name,context)
@@ -167,11 +166,11 @@ class CommentReplayDetail(LoginRequiredMixin,View):
 		emplate_name = "admin/forum/CommentReplay/detail.html"
 		context = {'forms':form}
 		if form.is_valid():
-			research = CommentReplay.objects.get(id=self.kwargs['id'])
-			research.content=form.cleaned_data.get('content')
-			
-			research.user = self.request.user 
-			research.save()
+			commentreplay = CommentReplay.objects.get(id=self.kwargs['id'])
+			commentreplay.content=form.cleaned_data.get('content')
+			commentreplay.last_updated_by = self.request.user
+			commentreplay.last_updated_date = timezone.now()
+			commentreplay.save()
 			messages.success(self.request, "Edited a Forum Comment Successfully")
 			return redirect("admin:comment_replay_list")
 		return render(self.request, template_name,context)
@@ -189,6 +188,8 @@ class EditCommentForum(LoginRequiredMixin,View):
 			forum = CommentReplayForm(self.request.POST,self.request.FILES)
 			comment = CommentReplay.objects.get(id=self.kwargs['id'])
 			comment.content =  self.request.POST.get("content")
+			comment.last_updated_by = self.request.user
+			comment.last_updated_date = timezone.now()
 			comment.save()
 			return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
 			
@@ -205,7 +206,7 @@ class CreateCommentReplay(LoginRequiredMixin,View):
 			form = CommentReplay()
 			form = comment.save(commit=False)
 			form.comment = main
-			form.user = self.request.user
+			form.created_by = self.request.user
 			form.save()
 			print("this worked")
 			return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
@@ -218,18 +219,18 @@ class CreateForumQuestion(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         forum = ForumQuestionForm()
         template_name="frontpages/forums/forums_form.html" 
-        userCreated = ForumQuestion.objects.filter(user=self.request.user)
+        userCreated = ForumQuestion.objects.filter(created_by=self.request.user)
         context = {'form':forum,'usercreated':userCreated}
         return render(self.request,template_name,context)
     def post(self,*args,**kwargs):
         form = ForumQuestionForm(self.request.POST,self.request.FILES)
-        userCreated = ForumQuestion.objects.filter(user=self.request.user)
+        userCreated = ForumQuestion.objects.filter(created_by=self.request.user)
         context = {'form':form,'usercreated':userCreated}
         template_name="frontpages/forums/forums_form.html" 
         if form.is_valid():
             forum = ForumQuestion()
             forum = form.save(commit=False)
-            forum.user = self.request.user
+            forum.created_by = self.request.user
             print("one")
             forum.save()
             forum = ForumQuestionForm()
@@ -243,7 +244,7 @@ class ListForumQuestions(View):
 		print("-------"+str(self.request.user))
 		print(str(forum))
 		if str(self.request.user) != "AnonymousUser":
-			userCreated = ForumQuestion.objects.filter(user=self.request.user)
+			userCreated = ForumQuestion.objects.filter(created_by=self.request.user)
 		else:
 			userCreated = ""
 		template_name = "frontpages/forums/forum_list.html"
@@ -254,7 +255,7 @@ class EditForumQuestions(View):
 	def get(self,*args,**kwargs):
 		forum = ForumQuestion.objects.get(id=self.kwargs['id'])
 		if str(self.request.user) != "AnonymousUser":
-			userCreated = ForumQuestion.objects.filter(user=self.request.user)
+			userCreated = ForumQuestion.objects.filter(created_by=self.request.user)
 		else:
 			userCreated = ""
 		template_name = "frontpages/forums/forum_edit.html"
@@ -262,13 +263,15 @@ class EditForumQuestions(View):
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = ForumQuestionForm(self.request.POST,self.request.FILES)
-		userCreated = ForumQuestion.objects.filter(user=self.request.user)
+		userCreated = ForumQuestion.objects.filter(created_by=self.request.user)
 		template_name = "frontpages/forums/forum_edit.html"
 		context = {'forum':form,'usercreated':userCreated}
 		if form.is_valid():
 			forum = ForumQuestion.objects.get(id=self.kwargs['id'])
 			forum.title = form.cleaned_data.get('title')
 			forum.description = form.cleaned_data.get('description')
+			forum.last_updated_by = self.request.user
+			forum.last_updated_date = timezone.now()
 			forum.save() 
 			return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
 		return render(self.request, template_name,context)
@@ -282,7 +285,7 @@ class SearchForum(View):
 		forum = ForumQuestion.objects.filter(title__contains=self.request.POST['search'])
 		template_name = "frontpages/forums/forum_list.html"
 		if str(self.request.user) != "AnonymousUser":
-			userCreated = ForumQuestion.objects.filter(user=self.request.user)
+			userCreated = ForumQuestion.objects.filter(created_by=self.request.user)
 		else:
 			userCreated = ""
 		context = {'forums':forum,'usercreated':userCreated}
@@ -292,7 +295,7 @@ class ForumQuestionsDetail(View):
 	def get(self,*args,**kwargs):
 		forum = ForumQuestion.objects.get(id=self.kwargs['id'])
 		if str(self.request.user) != "AnonymousUser":
-			userCreated = ForumQuestion.objects.filter(user=self.request.user)
+			userCreated = ForumQuestion.objects.filter(created_by=self.request.user)
 		else:
 			userCreated = ""
 		comment = CommentForm()
@@ -309,7 +312,8 @@ class ForumQuestionsDetail(View):
 			forum = form.save(commit=False)
 			question = ForumQuestion.objects.get(id=self.kwargs['id'])
 			forum.forum_question = question
-			forum.user = self.request.user
+			forum.created_by = self.request.user
+			forum.last_updated_date = timezone.now()
 			forum.save()
 			return redirect(reverse("forum_detail",kwargs={'id':question.id}))
 		return render(self.request, template_name,context)

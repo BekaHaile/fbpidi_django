@@ -47,8 +47,8 @@
 					<td>{{researchprojectcategory.comment.forum_question|safe|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.comment|safe|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.content|truncatechars_html:20}}</td>
-					<td>{{researchprojectcategory.user}}</td>
-					<td>{{researchprojectcategory.timestamp}}</td>
+					<td>{{researchprojectcategory.created_by}}</td>
+					<td>{{researchprojectcategory.created_date}}</td>
 					
 					<td class="text-center">
 						<div class="list-icons">
@@ -58,7 +58,7 @@
 								</a>
 									
 								<div class="dropdown-menu dropdown-menu-right">
-									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
+									{% if user.is_superuser or user.get_company == researchprojectcategory.created_by.get_company %}
 
 									{% if perms.collaborations.delete_commentreplay %} 
 									<a href="{%url 'admin:delete' model_name='CommentReplayAdmin' id=researchprojectcategory.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Comment Replay</a>
@@ -66,7 +66,7 @@
 
 									{%endif%}
 
-									{% if user.is_superuser or user.get_company == researchprojectcategory.user.get_company %}
+									{% if user.is_superuser or user.get_company == researchprojectcategory.created_by.get_company %}
 
 									{% if perms.collaborations.change_commentreplay %} 
 									<a href="{%url 'admin:comment_replay_detail' model_name='CommentReplay' id=researchprojectcategory.id%}" class="dropdown-item"  >
