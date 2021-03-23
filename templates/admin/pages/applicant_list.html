@@ -43,7 +43,6 @@
 					<th>timestamp </th>
 					<th>User </th>
 					<th>institiute </th>
-					<th>timestamp </th>
 					<th>Action </th>
 					
 				</tr>
@@ -56,15 +55,12 @@
 					
 					<td>{{job.grade}}</td>
 					<td>{{job.experiance}}</td>
-					<td>{{job.timestamp}}</td>
+					<td>{{job.created_date}}</td>
 					<td>
-						{{job.user}}
+						{{job.created_by}}
 					</td>
 					<td>
 						{{job.institiute}}
-					</td>
-					<td>
-						{{job.timestamp}}
 					</td>
 					<td>
 						<a href="{%url 'admin:applicant_detail' id=job.id %}" class="btn bg-teal btn-sm rounded-round">Applicant information</a>

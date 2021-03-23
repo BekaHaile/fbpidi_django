@@ -129,7 +129,7 @@
                                 <div class="card-header">
                                     <h3 class="card-title">{{research.title}}</h3> 
                                     
-                                    	 <span class="badgetext badge badge-pill badge-light mb-0 mt-1"><i class="fa fa-user text-muted mr-2"></i>  {{research.user}}{{" "}}
+                                    	 <span class="badgetext badge badge-pill badge-light mb-0 mt-1"><i class="fa fa-user text-muted mr-2"></i>  {{research.created_by}}{{" "}}
 													 {{research.timestamp}}</span>
                                 		 
                                 		 
@@ -156,11 +156,11 @@
 									{% print_translated research.category.cateoryname research.category.cateoryname_am LANGUAGE_CODE%}</p>
                                      <p>
                                      <b>By</b>: &nbsp 
-										<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.user}}">
-											{% if research.user.get_company %}
-											 	 {{research.user.get_company}} 
-											{% elif research.user %}
-												 {{research.user}} 
+										<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by}}">
+											{% if research.created_by.get_company %}
+											 	 {{research.created_by.get_company}} 
+											{% elif research.created_by %}
+												 {{research.created_by}} 
 												{%endif%}
 										</a>
 									</p>

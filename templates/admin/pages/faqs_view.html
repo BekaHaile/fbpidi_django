@@ -13,12 +13,21 @@
 						<div class="card">
 							<div class="card-head">
 								<div class= "text-right" class="card-header header-elements-inline">	
-							<div class="list-icons">
+							<div class="list-icons"> 
 										{% if perms.collaborations.change_faqs and forms.status == "PENDDING" %} 
 										
 										{% if user.is_superuser %} 
 										  
 								<a href="{%url 'admin:approve_Faqs' id=forms.id %}" class="btn bg-teal btn-sm rounded-round" style = "margin-top: 20px; margin-right: 10px;"> APPROVE</a>
+										{%endif%}
+
+										{%endif%}
+
+										{% if perms.collaborations.change_faqs and forms.status == "APPROVE" %} 
+										
+										{% if user.is_superuser %} 
+										  
+								<a href="{%url 'admin:pending_Faqs' id=forms.id %}" class="btn bg-teal btn-sm rounded-round" style = "margin-top: 20px; margin-right: 10px;"> Back to Pendding</a>
 										{%endif%}
 
 										{%endif%}

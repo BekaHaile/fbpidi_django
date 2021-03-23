@@ -26,7 +26,7 @@
 			<div class="header-elements">
 				<div class="list-icons">
 					{% if user.is_superuser %} 
-					<a href="{% url 'admin:pedning_research_list'%}" class="badge-danger btn-sm rounded-round">{{pending}} in Pendding </a>
+					<a href="{% url 'admin:pedning_research_list'%}" class="badge-danger btn-sm rounded-round">Pendding </a>
 							{%endif%}
 				</div>
 				
@@ -55,7 +55,7 @@
 				<tr>
 					
 					<td>{{research.title|truncatechars_html:20}}</td>
-					<td>{{research.user|truncatechars_html:20}}</td>
+					<td>{{research.created_by|truncatechars_html:20}}</td>
 					<td>{{research.status}}</td>
 					<td>
 						{{research.accepted}}
@@ -71,18 +71,18 @@
 								</a>
 									
 								<div class="dropdown-menu dropdown-menu-right">
-									{% if user.is_superuser or user.get_company == research.user.get_company %}
+									{% if user.is_superuser or user.get_company == research.created_by.get_company %}
 										
 										{% if perms.collaborations.delete_research %}
 										<a href="{%url 'admin:delete' model_name='Research' id=research.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Research</a>
 										{%endif%}
 									{%endif%}
 									
-									{% if user.is_superuser or user.get_company == research.user.get_company %}
+									{% if user.is_superuser or user.get_company == research.created_by.get_company %}
 									<a href="{%url 'admin:research_view' id=research.id%}" class="dropdown-item"  >
 										<i class="icon-eye"></i>View Research</a>{%endif%}
 
-									{% if user.is_superuser or user.get_company == research.user.get_company %}
+									{% if user.is_superuser or user.get_company == research.created_by.get_company %}
 									
 									{% if perms.collaborations.change_research %}
 									<a href="{%url 'admin:research_detail'  model_name='Research' id=research.id%}" class="dropdown-item"  >
