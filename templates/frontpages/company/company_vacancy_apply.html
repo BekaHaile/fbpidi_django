@@ -1,7 +1,9 @@
 
-{%extends 'frontpages/layout.html'%}
+{%extends 'frontpages/company/company_layout.html'%}
 {%load i18n%}
-{%load core_template_tags%} 
+{%load core_template_tags%}
+
+{%block title%}{{object.name}} - Tender Detail{%endblock%}
 {%block content%}
 {% get_current_language as LANGUAGE_CODE %}
 		<!--Breadcrumb-->
@@ -10,7 +12,7 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h2>{% trans "Appying to" %} </h2><h4>{{vacancy.job_title|safe}}</h4> 
+							<h2>{% trans "Appying to" %} </h2><h4>{{obj.job_title|safe}}</h4> 
 							
 						</div>
 					</div>
@@ -18,41 +20,58 @@
 			</div>
 		</section>
 		<!--Breadcrumb-->
-
+ 
 		<!--User dashboard-->
 		<section class="sptb">
 			<div class="container">
 				<div class="row">
-					<div class="col-xl-3 col-lg-12 col-md-12">
-						<div class="card">
+					
+                    <div class="col-xl-3 col-lg-12 col-md-12">
+						<div class="card overflow-hidden">
 							<div class="card-header">
-								<h3 class="card-title">{% trans "Categories" %}</h3>
+								<h3 class="card-title">{% trans "Company Contact Info" %}</h3>
 							</div>
-							{%for cat in category%}
-							<div class="card-body p-0">
-								<div class="list-catergory">
-									<div class="item-list">
-										<ul class="list-group mb-0">
-											<li class="list-group-item">
-												<a href="{%url 'vacancy_search' id=cat.id%}" class="text-dark">
-													 {{cat}}
-													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">{{cat.countjobs}}</span>
-												</a>
-											</li>
-										</ul>
+							<div class="card-body item-user">
+								<div class="profile-details">
+									<div class="profile-pic mb-0 mx-5">
+										<img src="{{object.get_image}}" class="brround w-150 h-150" alt="user">
+									</div>
+								</div>
+								
+							</div>
+							
+							<div class="tab-content border-0 bg-white">
+								<div class="tab-pane active" id="tab-contact">
+									<div class="card-body item-user">
+										<h4 class="mb-4">{% trans "Company Contact Info" %}</h4>
+										<div>
+											<h6><span class="font-weight-semibold"><i class="fa fa-map mr-3 mb-2"></i></span><a href="#" class="text-body"> {{object.location}}</a></h6>
+											<h6><span class="font-weight-semibold"><i class="fa fa-envelope mr-3 mb-2"></i></span><a href="#" class="text-body"> {{object.created_by.email}}</a></h6>
+											<h6><span class="font-weight-semibold"><i class="fa fa-phone mr-3 mb-2"></i></span><a href="#" class="text-secondary"> {{object.phone_number}}</a></h6>
+											
+										</div>
+									</div>
+								</div>
+							
+								<div class="card-footer">
+									<div class="">
+										<a href="/chat/with/{{object.created_by.username}}/" target = "blank" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i>{% trans "Chat" %}</a>
 									</div>
 								</div>
 							</div>
-							{%endfor%}
 						</div>
+					
 						
-
+						
+						
 					</div>
+
+
+                    <!--  -->
 					<div class="col-xl-9 col-lg-12 col-md-12">
 						<div class="card">
 							<div class="card-header">
 								<h3 class="card-title">{% trans "Job application form" %}</h3>
-
 							</div>
 							{% if messages %}
 								{% for message in messages %}
@@ -66,7 +85,7 @@
 
 							<div class="card-body">
 								<div class="card-pay">
-								<form action="" method="POST" enctype="multipart/form-data">
+								<form action="{%url 'company_vacancy_apply'  vacancy_pk=obj.id%}" method="POST" enctype="multipart/form-data">
 									{%csrf_token%}
 									<div class="tab-content">
 										<div class="tab-pane active show" id="tab1">
@@ -75,7 +94,7 @@
 												<label class="col-form-label "> {% trans "Status" %} *</label>
 													<div class="input-group">
 
-													{{job.status}}
+													{{form.status}}
 													
 												</div>
 											</div>
@@ -84,21 +103,21 @@
 											<div class="form-group">
 												<label class="form-label">{% trans "The institute you learned in" %} *</label>
 												<div class="input-group">
-													{{job.institiute}}
+													{{form.institiute}}
 													
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="form-label">{% trans "The field you are an expert in" %} *</label>
 												<div class="input-group">
-													{{job.field}}
+													{{form.field}}
 													
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="form-label">{% trans "Grade" %} *</label>
 												<div class="input-group">
-													{{job.grade}}
+													{{form.grade}}
 													
 												</div>
 											</div>
@@ -106,7 +125,7 @@
 											<div class="form-group">
 												<label class="form-label">{% trans "experiance (in years)" %} *</label>
 												<div class="input-group">
-													{{job.experiance}}
+													{{form.experiance}}
 													
 												</div>
 											</div>
@@ -114,7 +133,7 @@
 											<div class="form-group">
 												<label class="form-label">{% trans "Introduce your self" %} *</label>
 												<div class="input-group">
-													{{job.bio}}
+													{{form.bio}}
 													
 												</div>
 											</div>
@@ -122,7 +141,7 @@
 											<div class="form-group">
 											<label class="form-label">{% trans "Upload your CV" %} *</label>
 											<div class="col-lg-10">
-													{{job.cv}}
+													{{form.cv}}
 												
 											</div>
 											</div>
@@ -131,7 +150,7 @@
 										<div class="form-group">
 									<label class="form-label">{% trans "Upload your Documents (This is for certifivates and other documents)" %}</label>
 											<div class="col-lg-10">
-												{{job.documents}}
+												{{form.documents}}
 												
 											</div>
 									</div>
