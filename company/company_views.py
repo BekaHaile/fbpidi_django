@@ -186,32 +186,6 @@ class CompanyVacancyDetail(DetailView):
         return context
 
 
-# class CompanyVacancyApply(LoginRequiredMixin,View):
-#     def post(self, *args, **kwargs):
-        
-#         form = CreateJobApplicationForm(self.request.POST,self.request.FILES)
-#         if form.is_valid(self)
-#         job= form.save(commit=False)
-#         job.user = self.request.user
-#         job.vacancy = Vacancy.objects.get(id=self.kwargs['vacancy_pk'])
-#         job.save()
-#         return redirect("vacancy")
-
-#     def get(self,*args,**kwargs):
-#         vacancy=Vacancy.objects.get(id=self.kwargs['vacancy_pk'] )
-#         applicants=JobApplication.objects.filter(vacancy=vacancy.id)
-#         for applicant in applicants:
-#             if(applicant.user == self.request.user):
-#                 messages.warning(self.request, "You can't apply to the same vacancy Twice")
-#                 return redirect(f"/company/company_vacancy/{vacancy.company.id}/")
-                
-#         job = CreateJobApplicationForm
-#         jobcategory = JobCategory.objects.all()
-#         template_name = "frontpages/company/company_vacancy_apply.html"
-#         context={'form':job,'obj':vacancy,'category':jobcategory, 'object':vacancy.company}
-#         return render(self.request, template_name,context) 
-
-    
 
 
 
@@ -236,10 +210,9 @@ class CompanyVacancyApply(LoginRequiredMixin,CreateView):
         print("############### object saved on ", job.id)
         return redirect(f"/company/company_vacancy_detail/{job.vacancy.id}")
     def form_invalid(self,form):
-        print("###########333 form incorrect ", form.errors)
-        vacancy=Vacancy.objects.get(id = self.kwargs['vacancy_id'])
-     
-        return redirect(f"/company/company_vacancy/{vacancy.id}/")
+        messages.warning(self.request, "Unsupported file type detected, the supported files are pdf, jpg, png, doc and docx! ")
+        vacancy=Vacancy.objects.get(id = self.kwargs['vacancy_pk'])
+        return redirect(f"/company/company_vacancy_apply/{vacancy.id}/")
 
 
 class CompanyBlogList(ListView):
