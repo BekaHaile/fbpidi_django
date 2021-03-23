@@ -63,7 +63,7 @@
 										</div>
 										<a href="{% url 'company_event_detail' pk=obj.id company_pk=object.id %}" class="text-dark"><h4 class="font-weight-semibold">{% print_translated obj.title obj.title_am LANGUAGE_CODE %}</h4></a>
 										<p>{% print_translated obj.description|truncatechars_html:50|safe obj.description_am|truncatechars_html:50|safe LANGUAGE_CODE %}</p>
-										<a target="_blank" href="{% url 'company_event_detail' pk=obj.id company_pk=object.id %}" class="btn btn-secondary btn-sm">{% trans "Event Detail" %}</a>
+										<a  href="{% url 'company_event_detail' pk=obj.id company_pk=object.id %}" class="btn btn-secondary btn-sm">{% trans "Event Detail" %}</a>
 									</div>
 								</div>
 							</div>

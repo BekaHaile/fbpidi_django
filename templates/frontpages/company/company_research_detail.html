@@ -1,0 +1,153 @@
+{%extends 'frontpages/company/company_layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+
+{%block title%}{{object.name}} - Research Detail{%endblock%}
+{%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+		<!--Breadcrumb-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white">
+							<h1 class="">{% trans "Research Detail" %}</h1>
+							<ol class="breadcrumb" >
+                                <li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} </a></li>
+								<li class="breadcrumb-item"><a href="{% url 'company_research' pk=object.id %}">{% trans "Company Research List" %} </a> </li>
+                                <li class="breadcrumb-item active text-white" aria-current="page">{% trans "Research Details" %}</li>
+                            </ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Breadcrumb-->
+
+		<!--Add listing-->
+		<section class="sptb">
+			<div class="container">
+				<div class="row">
+					<div class="d-block mx-auto col-lg-10 col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<a href="#" class="text-body"><h3 class="font-weight-semibold text-capitalize">{{obj.title}}</h3></a>
+							
+								<a href="">
+									<img class="img-responsive" width = "290px" height = "250" src="{{obj.company.get_image}}" alt="{{object.name}}">
+								</a>
+                               
+								<div class=" item7-card-desc d-flex mb-2 mt-3">
+									<ul  class="d-flex mb-0">
+										<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person mr-1"><b>{% trans "By" %} :</b> </i>{% print_translated object.name object.name_am LANGUAGE_CODE %}</a></li>
+										<li class="mr-5"><a><i class="fa fa-calendar-o mr-2"></i><b>{% trans "At" %} :</b> {{obj.created_date.date}} </a></li>                                       
+										<li class="mr-5">
+                                            <p>
+                                                {%if LANGUAGE_CODE == 'am' and obj.status == "Completed"%} 
+                                                        <b>{% trans "status" %}</b>: ተጠናቋል
+                                                {%elif LANGUAGE_CODE == 'am' and obj.status == "Inprogress"%} 
+                                                        <b>{% trans "status" %}: በሂደት ላይ</b>
+                                                {%else%}
+                                                    <b>{% trans "status" %} </b>: {{obj.status}}
+                                                {%endif%}
+                                            </p>
+                                        </li>
+                                        
+                                        <li> <span ><b>{% trans "Category" %} :</b> {% print_translated obj.category.cateoryname obj.category.cateoryname_am LANGUAGE_CODE %}</span></li>
+									</ul>
+								</div>
+                                <div class = "card">
+                                    <div class = "card-header">
+                                        <label class=" col-form-label col-lg-3"><b>{% trans "Research Files" %}</b> </label>
+                                    </div>
+                                    <div class="card-body mt-4 mb-3 row">
+                                        {%for file in obj.researchfiles%}
+                                            <div class="col-sm-6 col-lg-3">
+                                                <div class="card">
+                                                    <div class="card-img-actions m-1">
+                                                        
+                                                        <a href="{{file.attachement.url}}" download="{{file.attachement.url}}">
+                                                            {% file_type file.attachement.url as file_type%}
+                                                            {% if file_type  == 'image' %}
+                                                                <i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-image fa-4x"></i>
+                                                            {% elif file_type  == 'video' %}
+                                                                <i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-play-circle fa-4x"></i>
+                                                            {% elif file_type == 'audio' %}
+                                                                <i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-music fa-4x"></i>
+                                                            {% elif file_type == 'word' %}
+                                                                <i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-word-o fa-4x"></i>
+                                                            {% elif file_type == 'pdf'  %}
+                                                                <i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-pdf-o fa-4x"></i>
+                                                            {% elif file_type == 'excel'%}
+                                                            <i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file-excel-o fa-4x"></i>
+                                                            {% elif file_type == 'exe' %}
+                                                            <i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "icon-cogs fa-4x"></i>
+                                                            {% else %}
+                                                                <i  style = "color: rgb(86, 115, 132); border: hidden; size: 200px; " class = "fa fa-file fa-4x"></i>
+                                                            {% endif %}
+                                                            {{file.attachement.name}}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {%endfor%}
+
+                                    </div>   
+                                </div> 
+                               
+		                
+
+                                
+								
+							</div>
+						</div>
+
+						<!--Comments-->
+						<div class="card">
+							<div class="card-header">
+								<h3 class="card-title">{% trans "Research Description" %}</h3>
+							</div>
+							<div class="card-body">
+                                <p>{{ obj.description|safe}} </p>
+								
+							</div>
+
+							
+
+                            
+						</div>
+					
+
+
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Add listing-->
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Subscribe To Our Newsletter</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+						<div class="input-group sub-input mt-0">
+							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!--/Newsletter-->
+
+		
+{%endblock%}

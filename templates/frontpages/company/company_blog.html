@@ -2,54 +2,56 @@
 {%load i18n%}
 {%load core_template_tags%}
 
-{%block title%}{{object.name}} -Contact{%endblock%}
+{%block title%}{{object.name}} - Blogs{%endblock%}
 {%block content%}
 {% get_current_language as LANGUAGE_CODE %}
 
-        
-        
-     
 		<!--Breadcrumb-->
 		<section>
 			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">{% print_translated object.name object.name_am LANGUAGE_CODE %} {% trans "News" %}</h1>
+							<h1 class="">{% print_translated object.name object.name_am LANGUAGE_CODE %} {% trans "Blogs" %}</h1>
 							<ol class="breadcrumb text-center">
+								
 								<li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} </a></li>
-								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Company News List" %} </li>
+								
+								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Company Blog List" %} </li>
 							</ol>
+							
+							
 						</div>
+						
 					</div>
 				</div>
 			</div>
 		</section>
 		<!--/Breadcrumb-->
-
+		
 		<!--Add listing-->
 		<section class="sptb">
 			<div class="container">
+				{% if message %}
+					<div class="alert alert-warning" role="alert">
+						<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+						<span class="font-weight-semibold">{{message}}</span>
+					</div>
+
+				{% endif %}
 				<div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-12">
 						<div class="row">
-							
+						
 							{%for obj in object_list%}
 
 							<div class="col-xl-4 col-lg-6 col-md-12">
 								<div class="card">
 									<div class="item7-card-img">
-										<a href="/collaborations/customer_news_detail/{{news.id}}/"></a>
-															{% if obj.get_images.0.image.url %}
-															<img src="{{obj.get_images.0.image.url}}" width = "370px" height= "200px" alt="img" class="cover-image">
-															{% elif obj.get_company.get_image %}
-															<img src="{{obj.get_company.get_image}}"  width = "370px" height= "200px" alt="img" class="cover-image">
-															{% else %}
-															<img src="/static/frontpages/images/products/products/v1.jpg" width = "370px" height= "200px"  alt="img" class="cover-image">
-															{% endif %}
-										<div class="item7-card-text">
-											<span class="badge badge-success">{{obj.catagory}}</span>
-										</div>
+			
+										<a href="{% url 'company_blog_detail' pk=obj.id  %}">	</a>
+											<img src="{{obj.blogImage.url}}" width = "370px" height= "200px" alt="img" class="cover-image">
+									
 									</div>
 									<div class="card-body">
 										<div class="item7-card-desc d-flex mb-2">
@@ -58,9 +60,11 @@
 												<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>4 Comments</a>
 											</div> -->
 										</div>
-										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{% print_translated obj.title obj.title_am LANGUAGE_CODE %}</h4></a>
-										<p>{% print_translated obj.description|truncatechars_html:50|safe obj.description_am|truncatechars_html:50|safe LANGUAGE_CODE %}</p>
-										<a target="_blank" href="#" class="btn btn-secondary btn-sm">{% trans "News Detail" %}</a>
+										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{% print_translated  obj.title|safe  obj.title_am|safe  LANGUAGE_CODE %}</h4></a>
+										<div class="ml-auto">
+											<a href="#" class="mr-0"><i class="fa fa-comment-o text-muted mr-2"></i>{{obj.countComment}}</a>
+										</div>
+										<a  href="{% url 'company_blog_detail' pk=obj.id %}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
 									</div>
 								</div>
 							</div>
