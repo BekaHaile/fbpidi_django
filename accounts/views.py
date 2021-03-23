@@ -125,8 +125,15 @@ class MyProfileView(LoginRequiredMixin,UpdateView):
                 return redirect("admin:create_my_company")
             else:
                 pass 
+        elif self.request.user.is_superuser:
+            if self.request.user.get_company() == None:
+                return redirect("admin:create_fbpidi_company")
+            else:
+                pass
         else:
             pass
+        return super().get(self.request,*args,**kwargs)
+        
 
 
     def form_valid(self,form):
