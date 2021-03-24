@@ -114,6 +114,7 @@ def activate(request, uidb64, token):
         return render(request,'email/confirm_registration_message.html',
         {'message':"Activation link is invalid!"})
 
+
 class MyProfileView(LoginRequiredMixin,UpdateView):
     model = UserProfile
     fields = ('first_name', 'last_name','username', 'email', 'phone_number','profile_image')

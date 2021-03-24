@@ -45,9 +45,9 @@
 				<tr>
 					
 					<td>{{blogcomment.blog|safe|truncatechars_html:20}}</td>
-					<td>{{blogcomment.blog.user}}</td>
-					<td>{{blogcomment.sender|safe|truncatechars_html:20}}</td>
-					<td>{{blogcomment.content}}</td>
+					<td>{{blogcomment.blog.created_by.username}}</td>
+					<td>{{blogcomment.created_by.username}}</td>
+					<td>{{blogcomment.content|truncatechars_html:20}}</td>
 					
 					<td>{{blogcomment.created_date}}</td>
 					

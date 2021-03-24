@@ -31,13 +31,15 @@ class Product(models.Model):
         return self.name
 
     def price(self):
-        return ProductPrice.objects.filter(product=self).latest('created_date')
+        return ProductPrice.objects.filter(product=self).latest('created_date') if ProductPrice.objects.exists() else None
    
     def more_images(self):
         return ProductImage.objects.filter(product=self)
 
     def get_category(self):
-        return self.category.category_name.category_type
+        # is this like return self.company.category.category_name
+        return [self.pharmacy_category.category_name, self.pharmacy_category.category_name_am]
+        # return self.category.category_name.category_type
     
     class Meta:
         ordering = ('-created_date',)

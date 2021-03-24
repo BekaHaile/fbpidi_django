@@ -32,7 +32,7 @@ urlpatterns = [
     # path("accounts/",include("django.contrib.auth.urls")), 
     # path("chat/", include('chat.urls')),
     
-    path("test/",TemplateView.as_view(template_name="frontpages/date_piker.html"),name="Test"),
+    path("test_fake/",TemplateView.as_view(template_name="admin/pages/form_tag_inputs.html"),name="Test"),
     path("setting/",TemplateView.as_view(template_name="frontpages/settings.html"),name="setting"),
     # path("login/",TemplateView.as_view(template_name="frontpages/login.html"),name="login"),
 
