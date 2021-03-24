@@ -128,7 +128,7 @@ class AnnualInputNeed(models.Model):
 
 class InputDemandSupply(models.Model):
     product	= models.ForeignKey(Product, on_delete=models.CASCADE,related_name="product_input_demand_supply")
-    input_type	= models.ForeignKey(AnnualInputNeed, on_delete=models.CASCADE,related_name="input_demand_supply")
+    input_type	= models.CharField(max_length=255,verbose_name="Input Type")
     year = models.IntegerField()		
     demand	= models.FloatField(default=0,verbose_name="Input Demand")			
     supply	= models.FloatField(default=0,verbose_name="Input Supply")
@@ -150,7 +150,7 @@ class ProductImage(models.Model):
 
 
 class ProductPrice(models.Model):
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name="product_price")
     price = models.DecimalField(max_digits=10,decimal_places=2)
     startdate = models.DateField()
     end_date = models.DateField()

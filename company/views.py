@@ -170,6 +170,7 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
 class CompaniesView(LoginRequiredMixin,ListView):
     model = Company
     template_name = "admin/company/companies.html"
+    paginate_by = 8
 
 class CompaniesDetailView(LoginRequiredMixin,UpdateView):
     model = Company

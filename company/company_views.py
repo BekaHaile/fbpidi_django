@@ -39,12 +39,22 @@ class CompanyContact(DetailView):
 
 class CompanyProductList(DetailView):
     model= Company
-    template_name = "frontpages/company/blog-grid-center.html"
+    template_name = "frontpages/company/product_list.html"
 
+class CompanyProductdetail(DetailView):
+    model=Product
+    template_name = "frontpages/company/product_details.html"
+    context_object_name = "product"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object'] = Product.objects.get(id=self.kwargs['pk']).company
+        return context
 
 class CompanyProjectList(DetailView):
     model= Company
     template_name = "frontpages/company/blog-grid-center.html"
+
 
 
 class CompanyNewsList(ListView):

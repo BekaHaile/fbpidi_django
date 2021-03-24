@@ -179,6 +179,12 @@ class ProductPackagingForm(forms.ModelForm):
             'import_input':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_import_input")'}),
             'wastage':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_wastage")'}),
         }
+
+def return_year(start_year):
+    YEAR_CHOICES=[('','Select Year'),]
+    YEAR_CHOICES += [(r,r) for r in range(start_year, datetime.date.today().year+1)]
+    return YEAR_CHOICES
+
 YEAR_CHOICES=[('','Select Year'),]
 YEAR_CHOICES += [(r,r) for r in range(2000, datetime.date.today().year+1)]
 
@@ -221,20 +227,25 @@ class AnualInputNeedForm(forms.ModelForm):
         }
 
 class InputDemandSupplyForm(forms.ModelForm):
-    year = forms.IntegerField(label="Year",widget=forms.Select(choices=YEAR_CHOICES,
-                attrs={'class':'form-control form-control-uniform'}))
+    # year = forms.IntegerField(label="Year",widget=forms.Select(choices=return_year(),
+    #             attrs={'class':'form-control form-control-uniform'}))
+                # YEAR_CHOICES=[('','Select Year'),]
+                # YEAR_CHOICES += [(r,r) for r in range(2000, datetime.date.today().year+1)]
+
     def __init__(self,*args,**kwargs):
         self.product = kwargs.pop('product')
+        self.company = kwargs.pop('company')
         super(InputDemandSupplyForm,self).__init__(*args,**kwargs)
-        self.fields['year'].queryset = YEAR_CHOICES
-        self.fields['input_type'].queryset = AnnualInputNeed.objects.filter(product=self.product)
-        self.fields['input_type'].empty_label = "Select Input Type"
+        self.fields['year'].empty_label = "Select Year"
+        self.fields['year'].widget = forms.Select(choices=
+        return_year(self.company.established_yr)
+        )
 
     class Meta:
         model=InputDemandSupply
         fields = ('input_type','year','demand','supply')
         widgets = {
-            'input_type':forms.Select(attrs={'class':'form-control'}),
+            'input_type':forms.TextInput(attrs={'class':'form-control','placeholder':'Input Type '}),
             'year':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'demand':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_demand")'}),
             'supply':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_supply")'}),
