@@ -312,6 +312,31 @@ class SearchBlogTag(View):
 		context = {'blogs':blog,'tags':tags,'tags_am':tags_am}
 		return render(self.request, template_name,context)
 
+
+class SearchBlogTag_Am(View):
+	def get_tags(self,lang):
+		blog = Blog.objects.filter(publish=True) 
+		string = ""
+		if(lang=="amharic"):
+			for b in blog:
+				string+=b.tag_am+','
+		if(lang=="english"):
+			for b in blog:
+				string+=b.tag+','
+		string = string[:-1]
+		tag_list = string.split(',')
+		tag_list = set(tag_list)
+		return tag_list
+
+
+	def get(self,*args,**kwargs):
+		blog = Blog.objects.filter(tag_am__contains=self.kwargs['name'])
+		template_name = "frontpages/blog-grid-right.html"
+		print(blog)
+		tags=self.get_tags("english")
+		tags_am=self.get_tags("amharic")
+		context = {'blogs':blog,'tags':tags,'tags_am':tags_am}
+		return render(self.request, template_name,context)
 class BlogDetail(View):
 	def get_tags(self,lang):
 		blog = Blog.objects.filter(publish=True) 
