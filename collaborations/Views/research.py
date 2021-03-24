@@ -230,7 +230,7 @@ class ResearchCategorySearch(View):
 class ResearchDetail(View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
-		related = Research.objects.filter(category=form.category)
+		related = Research.objects.filter(category=form.category).exclude(id=self.kwargs['id'])
 		category = ResearchProjectCategory.objects.all()
 		context = {'research':form,"category":category,"related":related,"message":"Research"}
 		template_name = "frontpages/research/research_detail.html"

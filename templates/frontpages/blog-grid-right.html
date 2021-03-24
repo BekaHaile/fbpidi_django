@@ -46,17 +46,30 @@
 							<div class="card-header">
 								<h3 class="card-title">{% trans "Tags" %}</h3>
 							</div>
-							
+
+							{%if LANGUAGE_CODE == "en"%}
 							<div class="card-body">
 								<div class="product-tags clearfix">
 									{%for tag in tags%}
 									<ul class="list-unstyled mb-0">
-										<li><a href="{%url 'search_blogtag' name=tag%}">{{tag}}</a></li>
-										
+									<li><a href="{%url 'search_blogtag' name=tag%}">{{tag}}</a></li>
 									</ul>
 									{%endfor%}
 								</div>
 							</div>
+							{%endif%}
+
+							{%if LANGUAGE_CODE == "am"%}
+							<div class="card-body">
+								<div class="product-tags clearfix">
+									{%for tag in tags_am%}
+									<ul class="list-unstyled mb-0">
+									<li><a href="{%url 'search_blogtag_am' name=tag%}">{{tag}}</a></li>
+									</ul>
+									{%endfor%}
+								</div>
+							</div>
+							{%endif%}
 							
 						</div>
 
@@ -88,7 +101,7 @@
 												</a>
 												<div class="item7-card-desc d-flex mb-3">
 													<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{blog.created_date}}</a>
-													<a href="#"><i class="fa fa-user text-muted mr-2"></i>{{blog.created_by}}</a>
+													<a href="#"><i class="fa fa-user text-muted mr-2"></i>{{blog.created_by.username}}</a>
 													<div class="ml-auto">
 														<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>{{blog.countComment}}</a>
 													</div>
