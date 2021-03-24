@@ -51,7 +51,7 @@
 					
 					<td>{{researchprojectcategory.title|truncatechars_html:20}}</td>
 					<td>{{researchprojectcategory.description|safe|truncatechars_html:20}}</td>
-					<td>{{researchprojectcategory.created_by}}</td>
+					<td>{{researchprojectcategory.created_by.username}}</td>
 					<td><a class="mr-0" href="{%url 'admin:Forum_Comments' id=researchprojectcategory.id%}"><i class="fa fa-comment-o text-muted mr-2"></i>{{researchprojectcategory.countComment}}
 					</a></td>
 

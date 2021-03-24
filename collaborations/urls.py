@@ -9,7 +9,7 @@ from .views import (CustomerPollList, PollDetail,
 from .Views.forums import (CreateForumQuestion , ListForumQuestions,
                         ForumQuestionsDetail,SearchForum,
                     CreateCommentReplay,EditCommentForum,EditForumQuestions,)
-from .Views.blog import (SearchBlogTag,CreateBlogComment, SearchBlog,BlogList,BlogDetail,)
+from .Views.blog import (SearchBlogTag,SearchBlogTag_Am,CreateBlogComment, SearchBlog,BlogList,BlogDetail,)
 from .Views.vacancy import (VacancyMoreDetail, CreateApplication, VacancyList,
                     CategoryBasedSearch,)
 from .Views.announcement import (AnnouncementDetail,ListAnnouncement,)  
@@ -59,6 +59,7 @@ urlpatterns = [
     path("faq/",FaqList.as_view(),name="faq"),
     
     path("search-tag/<name>",SearchBlogTag.as_view(),name="search_blogtag"),
+    path("search-tag_am/<name>",SearchBlogTag_Am.as_view(),name="search_blogtag_am"),
     path("blog-list/",BlogList.as_view(),name="blog_grid_right"),
     path("blog-search/",SearchBlog.as_view(),name="blog_search"),
     path("blog-detail/<id>",BlogDetail.as_view(),name="blog_details"),

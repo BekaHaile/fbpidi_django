@@ -45,6 +45,9 @@ def product_count(non):
 def happy_customer(non):
     return UserProfile.objects.all().count()
 
+@register.simple_tag
+def printstr(string):
+    print(string) 
 
 @register.filter
 def company_count_bycategory(category):
