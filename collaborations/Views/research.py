@@ -62,10 +62,12 @@ class ResearchCategoryDetail(LoginRequiredMixin,UpdateView):
 
 class ListResearchAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
-		form = Research.objects.all()
-		pending = Research.objects.filter(status="PENDING").count()
+		context ={}
+		if self.request.user.is_superuser:
+			context['researchs'] = Research.objects.all()
+		else:
+			context['researchs'] = Research.objects.filter(company = self.request.user.get_company())
 		template_name = "admin/researchproject/research_list.html"
-		context = {"researchs":form,"pending":pending}
 		return render(self.request, template_name,context)
 
 
@@ -112,8 +114,10 @@ class CreateResearchAdmin(LoginRequiredMixin, View):
 				researchattachment.save()
 
 			messages.success(self.request, "Added New Research Successfully")
-			return redirect("admin:research_form")
-		return render(self.request, template_name,context)
+			return redirect("admin:research_list")
+		messages.warning(self.request, "Error occured while creating Research!")
+		return redirect("admin:settings")
+
 
 class ResearchApprove(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
@@ -123,6 +127,7 @@ class ResearchApprove(LoginRequiredMixin, View):
 		messages.success(self.request, "Changed Status to APPROVED Successfully")
 		return redirect("admin:research_view",id=self.kwargs['id'])
 
+
 class ResearchPending(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
@@ -130,6 +135,7 @@ class ResearchPending(LoginRequiredMixin, View):
 		form.save()
 		messages.success(self.request, "Changed Status to PENDING Successfully")
 		return redirect("admin:research_view",id=self.kwargs['id'])
+
 
 class ResearchDetailAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
@@ -163,6 +169,7 @@ class ResearchDetailAdmin(LoginRequiredMixin, View):
 		print("Not Really")
 		return render(self.request, template_name,context)
 
+
 class ListResearch(View):
 	def get(self,*args,**kwargs):
 		result = {}
@@ -170,15 +177,13 @@ class ListResearch(View):
 			result = filter_by("category__cateoryname",self.request.GET.getlist('by_category'), Research.objects.all())
 		elif 'by_title' in self.request.GET:
 			q = Research.objects.filter(Q(title__icontains = self.request.GET['by_title']))
-			print(q)
 			if q.count()>0:
 				result ={ 'query':q, 'message':f"{q.count()} Result found!"}
 			else:
 				result = {'query':Research.objects.all(),'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
 		else:
 			result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"Researchs",'message_am':"ምርምር"}
-		
-		print(self.request.path)
+	
 		template_name="frontpages/research/research_list.html"
 		return render(self.request, template_name, {'researchs':result['query'],"category":ResearchProjectCategory.objects.all(), 'message':result['message'], 'message_am':result['message_am']})
 

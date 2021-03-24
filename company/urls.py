@@ -4,9 +4,9 @@ from company.views import (
     CreateFbpidiCompanyProfile, CompanyByMainCategory,
     ProjectList,ProjectDetail
 )
-from company.company_views import (CompanyHomePage, CompanyAbout, CompanyContact,CompanyProductList,
-                                    CompanyProjectList, CompanyNewsList,CompanyNewsDetail,CompanyEventList,CompanyEventDetail,
-                                    CompanyAnnouncementList, CompanyAnnouncementDetail, CompanyResearchList,CompanyTenderList,CompanyVacancyList,CompanyBlogList,
+from company.company_views import (CompanyHomePage, CompanyAbout, CompanyContact,CompanyProductList,CompanyBlogCreateComment,CompanyFaq,
+                                    CompanyProjectList, CompanyNewsList,CompanyNewsDetail,CompanyEventList,CompanyEventDetail,CompanyFaqDetail,
+                                    CompanyAnnouncementList, CompanyAnnouncementDetail, CompanyResearchList, CompanyResearchDetail, CompanyTenderList,CompanyVacancyList,CompanyBlogList,CompanyBlogSearch,
                                     CompanyPollList, CompanyTenderDetail,CompanyVacancyDetail, CompanyVacancyApply,CompanyBlogDetail, CompanyPollDetail,
 
 
@@ -18,12 +18,15 @@ urlpatterns = [
     path("company-home-page/<pk>/",CompanyHomePage.as_view(),name="company_home"),
     path("about/<pk>/",CompanyAbout.as_view(),name="company_about"),
     path("contact/<pk>/",CompanyContact.as_view(),name="company_contact"),
+
     path("company-products/<pk>/",CompanyProductList.as_view(),name="company_products"),
     path("company-projects/<pk>/",CompanyProjectList.as_view(),name="company_projects"),
 
-    path("company_research/<pk>/",CompanyProductList.as_view(),name="company_research"),
+    path("company_research/<pk>/",CompanyResearchList.as_view(),name="company_research"),
+    path("company_research_detail/<pk>/",CompanyResearchDetail.as_view(),name="company_research_detail"),
+    
     path("company_announcement/<pk>/",CompanyAnnouncementList.as_view(),name="company_announcement"),
-    # path("company_announcement_detail/<pk>/<company_pk>/",CompanyAnnouncementDetail.as_view(), name = "company_announcemnet_detail"),
+    path("company_announcement_detail/<pk>/<company_pk>/",CompanyAnnouncementDetail.as_view(), name = "company_announcemnet_detail"),
 
     path("company_event/<pk>/",CompanyEventList.as_view(),name="company_event"),
     path("company_event/<pk>/<company_pk>/",CompanyEventDetail.as_view(),name="company_event_detail"),
@@ -39,14 +42,19 @@ urlpatterns = [
     path("company_vacancy_apply/<vacancy_pk>/", CompanyVacancyApply.as_view(), name = 'company_vacancy_apply'),
     
     path("company_blog/<pk>/",CompanyBlogList.as_view(),name="company_blog"),
-    path("company_blog_detail/<pk>/<company_pk>/",CompanyBlogDetail.as_view(),name="company_blog_detail"),
+    path("company_blog_detail/<pk>/",CompanyBlogDetail.as_view(),name="company_blog_detail"),
+    path("search_company_blogtag/<pk>/<tag>/", CompanyBlogSearch.as_view(), name = "search_company_blogtag"),
+    path('company_blog_comment/<pk>/', CompanyBlogCreateComment.as_view(), name= "company_blog_comment"),
     
     path("company_poll/<pk>/",CompanyPollList.as_view(),name="company_poll"),
     path("company_poll_detail/<id>/",CompanyPollDetail.as_view(),name="company_poll_detail"),
     
-    path("company_faq/<pk>/",CompanyProductList.as_view(),name="company_faq"),
+    path("company_faq/<pk>/",CompanyFaq.as_view(),name="company_faq"),
+    path("company_faq_detail/<pk>/", CompanyFaqDetail.as_view(), name = "company_faq_detail"),
     path("project_list/",ProjectList.as_view(),name="project_list"),
     path("project_detail/<pk>/",ProjectDetail.as_view(),name="project_detail"),
+
+
 ]
 
 

@@ -50,10 +50,10 @@
 							<div class="card-body">
 								<div class="product-tags clearfix">
 									{%for tag in tags%}
-									<ul class="list-unstyled mb-0">
-										<li><a href="{%url 'search_blogtag' name=tag%}">{{tag}}</a></li>
-										
-									</ul>
+										<ul class="list-unstyled mb-0">
+											<li><a href="{%url 'search_blogtag' name=tag%}">{% print_translated tag tag_am LANGUAGE_CODE %}</a></li>
+						
+										</ul>
 									{%endfor%}
 								</div>
 							</div>

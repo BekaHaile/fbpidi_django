@@ -41,7 +41,7 @@
 									<div class="item7-card-img">
 										<a href="{% url 'company_vacancy_detail' pk=obj.id company_pk=object.id %}"></a>
 															
-															<img src="{{object.get_image}}" width = "370px" height= "200px" alt="img" class="cover-image">
+																		<img src="{{object.get_image}}" width = "370px" height= "200px" alt="img" class="cover-image">
 															
 										<div class="item7-card-text">
 											
@@ -58,7 +58,7 @@
 										<a href="#" class="text-dark"><h4 class="font-weight-semibold"><b>{% print_translated obj.job_title obj.job_title_am LANGUAGE_CODE %}</b></h4></a>
 										
 										<a href="{% url 'company_vacancy_detail' pk=obj.id company_pk=object.id %}" target="_blank" href="#" class="btn btn-secondary btn-sm">{% trans "View job details" %}</a>
-										<a target="_blank" href="#" class="btn btn-secondary btn-sm">{% trans "Apply" %}</a>
+										<a target="_blank" href="{%url 'company_vacancy_apply'  vacancy_pk=obj.id%}" class="btn btn-secondary btn-sm">{% trans "Apply" %}</a>
 									
 									</div>
 								</div>

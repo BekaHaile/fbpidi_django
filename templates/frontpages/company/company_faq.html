@@ -2,7 +2,7 @@
 {%load i18n%}
 {%load core_template_tags%}
 
-{%block title%}{{object.name}} - Researchs{%endblock%}
+{%block title%}{{object.name}} - Faqs{%endblock%}
 {%block content%}
 {% get_current_language as LANGUAGE_CODE %}
 
@@ -12,13 +12,13 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">{% print_translated object.name object.name_am LANGUAGE_CODE %} {% trans "Researchs" %}</h1>
+							<h1 class="">{% print_translated object.name object.name_am LANGUAGE_CODE %} {% trans "Faqs" %}</h1>
 							<ol class="breadcrumb text-center">
 							
 							
 								<li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} </a></li>
 								
-								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Company obj List" %} </li>
+								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Company Faq List" %} </li>
 							</ol>
 						</div>
 					</div>
@@ -39,18 +39,8 @@
 							<div class="col-xl-4 col-lg-6 col-md-12">
 								<div class="card">
 									<div class="item7-card-img">
-										<a href=""></a>
-										
-											{% if obj.company.get_image %}
-											<img src="{{obj.company.get_image}}"  alt="img1" class="cover-image">
-											{% elif obj.created_by.profile_image %}
-											<img src="{{obj.created_by.profile_image}}" alt="img2" class="cover-image">
-											{% else %}
-											<img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="cover-image">
-											{% endif %}
-										<!-- if the creator of the obj is customer -->
-								
-									
+										<a href="{% url 'company_faq_detail' pk=obj.id %}"></a>
+										<img src="{{object.get_image}}"  alt="img" class="cover-image">
 									</div>
 									<div class="card-body">
 										<div class="item7-card-desc d-flex mb-2">
@@ -59,9 +49,9 @@
 												<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>4 Comments</a>
 											</div> -->
 										</div>
-										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{{obj.title}}</h4></a>
-										<p> {{obj.description|truncatechars_html:50|safe}} </p>
-										<a  href="{% url 'company_research_detail' pk=obj.id %}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
+										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{% print_translated obj.questions obj.questions_am LANGUAGE_CODE %}</h4></a>
+										<p>{% print_translated obj.answers|truncatechars_html:50|safe obj.answers_am|truncatechars_html:50|safe LANGUAGE_CODE %}</p>
+										<a  href="{% url 'company_faq_detail' pk=obj.id  %}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
 									</div>
 								</div>
 							</div>

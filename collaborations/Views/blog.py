@@ -247,6 +247,7 @@ class BlogList(View):
 		context={'blogs':blog,'tags':tags,'tags_am':tags_am}
 		return render(self.request, template_name,context)
 
+
 class CreateBlogComment(LoginRequiredMixin,View):
 
 	def post(self,*args,**kwargs):
@@ -321,8 +322,10 @@ class BlogDetail(View):
 		if(lang=="english"):
 			for b in blog:
 				string+=b.tag+','
-		string = string[:-1]
+		# deleting the last ,
+		string = string[:-1] 
 		tag_list = string.split(',')
+		# making the list unique
 		tag_list = set(tag_list)
 		return tag_list
 

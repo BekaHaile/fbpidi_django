@@ -77,57 +77,75 @@
 									<div class="tab-content">
 										<div class="tab-pane active" id="tab-11">
 											{%for research in researchs%}
-											<div class="card overflow-hidden">
-												<div class="d-md-flex">
-													<div class="item-card9-img">
-														<div class="item-card9-imgs">
-															<a href="{%url 'research_detail' id=research.id %}"></a>
-															{% if research.user.get_company %}
-															<img src="{{research.user.get_company.get_image}}"  alt="img1" class="cover-image">
-															{% elif research.user %}
-															<img src="{{research.user.profile_image}}" alt="img2" class="cover-image">
-															{% else %}
-															<img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="cover-image">
-															{% endif %}
-														</div>
-														
-													</div>
-													<div class="card border-0 mb-0">
-														<div class="card-body h-100">
-															<div class="item-card9">
-																<a href="{%url 'research_detail' id=research.id %}" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated research.title research.title_am LANGUAGE_CODE%}</h4></a>
-															
+											
+												<div class="card overflow-hidden">
+													<div class="d-md-flex">
+														<div class="item-card9-img">
+															<div class="item-card9-imgs">
+																<a href="{%url 'research_detail' id=research.id %}"></a>
+																{% if research.created_by.get_company %}
+																<img src="{{research.created_by.get_company.get_image}}"  alt="img1" class="cover-image">
+																{% elif research.created_by %}
+																<img src="{{research.created_by.profile_image}}" alt="img2" class="cover-image">
+																{% else %}
+																<img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="cover-image">
+																{% endif %}
 															</div>
-
+															
 														</div>
-
-
-														<div class="card-footer pt-2 pb-2">
-															<div class="item-card9-footer d-sm-flex">
-																<div class="item-card9-cost">
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																		<b>By: &nbsp</b>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.user}}">
-																			<img src="{{research.user.profile_image}}" alt="image" class="avatar brround  mr-2">
-																		</a>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{post.user.phone_number}}"><i class="fa fa-phone"></i></a>	
-																		<a class="" href="/chat/with/{{post.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-																		<a class="" href="{%url 'research_detail' id=research.id %}" ><b class="btn btn-secondary btn-sm mt-1">Read More</b></a>
-													
-																		<br>
-																		
-																	</div>
+														<div class="card border-0 mb-0">
+															<div class="card-body h-100">
+																<div class="item-card9">
+																	<a href="{%url 'research_detail' id=research.id %}" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1"> {{research.title}}</h4></a>
+																
 																</div>
-																<div class="ml-auto mt-3 mt-sm-0">
-																	
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{research.timestamp}}</small></div> 
+
+															</div>
+															
+														
+
+															<div class="card-footer pt-2 pb-2">
+																<div class="item-card9-footer d-sm-flex">
+																	<div class="item-card9-cost">
+																		<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																			<b>By: &nbsp</b>
+																			<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by}}">
+																				{% if research.created_by.is_staff %} 
+																					{% if research.company.get_image %}
+																					<img src="{{research.company.get_image}}"  alt="img1" class="avatar brround  mr-2">
+																					{% elif research.created_by.profile_image %}
+																					<img src="{{research.created_by.profile_image}}" alt="img2" class="avatar brround  mr-2">
+																					{% else %}
+																					<img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="avatar brround  mr-2">
+																					{% endif %}
+																				<!-- if the creator of the research is customer -->
+																				{% else %}
+																					{% if research.created_by.profile_image %} 
+																						<img src="{{research.created_by.profile_image}}" alt="image" class="avatar brround  mr-2">
+																					{% else %}
+																						<img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="avatar brround  mr-2">
+																					{% endif %}
+																				{% endif %}
+																				
+																			</a>
+																			<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by.phone_number}}"><i class="fa fa-phone"></i></a>	
+																			<a class="" href="/chat/with/{{research.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+																			<a class="" href="{%url 'research_detail' id=research.id %}" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Read More" %}</b></a>
+														
+																			<br>
+																			
+																		</div>
+																	</div>
+																	<div class="ml-auto mt-3 mt-sm-0">
 																		
+																		<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{research.created_date.date}}</small></div> 
+																			
+																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
 												</div>
-											</div>
 											{%endfor%}
 										</div>
 
