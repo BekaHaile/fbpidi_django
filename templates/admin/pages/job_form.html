@@ -101,7 +101,7 @@
 						</div>
 					</div>
 
-					<div id='alart' class="alert alert-danger"  role="alert" > 
+					<div id='alart' style="display:none;" class="alert alert-danger"  role="alert" > 
 					  <p id="alart_message" >   </p>
 					</div>
 					
@@ -136,7 +136,7 @@
 
 				
 				<div class="text-right">
-					<input style="padding-left: 10%; padding-right: 10%;" type="submit"
+					<input id = "submit_btn" style="padding-left: 10%; padding-right: 10%;" type="submit"
 					class="btn btn-primary rounded-round" value="Submitt" />
 				</div>
 			</form>
@@ -148,79 +148,46 @@
 	$(document).ready(function () {
 		$('#summernote').summernote();
 		$('.summernote').summernote();
+		
+	
 
 	});
-	let today = new Date();
-	// function get_formated_date(){
-	// 	var dd = String(today.getDate()).padStart(2, '0');
-	// var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-	// var yyyy = today.getFullYear();
-
-	// today = mm + '/' + dd + '/' + yyyy;
-
-	// }
-	// var dd = String(today.getDate()).padStart(2, '0');
-	// var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-	// var yyyy = today.getFullYear();
-
-	// today = mm + '/' + dd + '/' + yyyy;
-	 
-	// console.log("------Date-------");
-	// console.log(today);
-
-
-
-	set_alert_message("")
-	document. getElementById("alart").style.display = "none";
-	function set_alert_message(text){
-		document. getElementById("alart_message").innerHTML = text; 
-	}
- 
-
 	function isNumber(kkk)
-  	{    
-     $("#"+kkk).val($("#"+kkk).val().replace(/[^\d.]/g, ''));  
-  		}
+  	{$("#"+kkk).val($("#"+kkk).val().replace(/[^\d.]/g, ''));  }
 
-	$("#EndDate").change(function () {
+	$("input[name = 'ending_date']").change(function () {check_date_input()})
+	$("input[name = 'starting_date']").change(function () {check_date_input()})
 
-		var start_date = new Date($('#StartDate').val()); 
-	    var end_date = new Date($('#EndDate').val()); 
+	function set_alert_message(text){
+			alert_box = document. getElementById("alart_message")
+			alert_box.innerHTML = text;
+			alert_box.style['display'] = 'block';
+			$("input[type = 'submit']").attr("disabled",  true);
 
-	    if (start_date.getTime() < end_date.getTime()){ 
-	    	document. getElementById("alart").style.display = "none"; //hide.
-	    }
-
-	    else if (start_date.getTime() > end_date.getTime()) {
-	    	document. getElementById("alart").style.display = "block"; //show
-			set_alert_message("End date must be greater than or equal to start date!!")
-	    }
-	})
-
-	$("#StartDate").change(function () {
-
-		var start_date = new Date($('#StartDate').val()); 
-	    var end_date = new Date($('#EndDate').val()); 
-
-		console.log("start date le today");
-			
-		if(start_date < today){
-			document. getElementById("alart").style.display = "block"; //show
-			set_alert_message("start date must be greater than or equal to today!!")
-			
+			// document.getElementById("submit_btn").disabled = true
 		}
+	
+	function check_date_input(){
+			
+			var start_date = new Date($("input[name = 'starting_date']").val()); 
+			var end_date = new Date($("input[name = 'ending_date']").val()); 
+			str_today = new Date().toDateString()
+			// new Date() is changed to DateString, inorder to cut of the timezone from the date, as the date from start date and end date is just the date field without time zone
+			today = new Date(str_today)
+			if(start_date < today){
+				document. getElementById("alart").style.display = "block"; //show
+				set_alert_message("start date must be greater than or equal to today!!")	
+			}
+			else if (start_date > end_date) {
+				document. getElementById("alart").style.display = "block"; //show
+				set_alert_message("End date must be greater than or equal to start date!!")
+			}
+			else{
+				document. getElementById("alart").style.display = "none"; //hide.
+				$("input[type = 'submit']").attr("disabled",  false);
 
-
-	    if (start_date.getTime() <= end_date.getTime()){ 
-	    	document. getElementById("alart").style.display = "none"; //hide.
-	    }
-
-	    else if (start_date.getTime() > end_date.getTime()) {
-	      	document. getElementById("alart").style.display = "block"; //show
-			set_alert_message("End date must be greater than or equal to start date!!")
-	    }
-	})
-
+	}
+}
 
 </script>
 {%endblock%}
