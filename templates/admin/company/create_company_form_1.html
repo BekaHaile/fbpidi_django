@@ -127,7 +127,7 @@
 </div>
 <!-- /content area -->
 <div class="modal fade" id="modalCrop">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-lg">
 	  <div class="modal-content">
 		<div class="modal-header">
 		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -154,27 +154,29 @@
 		var cropY;
 		var cropWidth;
 		var cropHeight;
+		var image_data = document.getElementById("#image");
 
-		var imageField = document.getElementById('#id_logo')
-		var modalCropEdit = document.getElementById('image')
-		var force = document.getElementById('force')
 		$("#id_logo").change(function () {
 			if (this.files && this.files[0]) {
 
 				var reader = new FileReader();
 				reader.onload = function (e) {
-
+  
 					$("#image").attr("src", e.target.result);
 					$("#modalCrop").modal("show");
+
 				}
 				reader.readAsDataURL(this.files[0])
 
 			}
+
+			 
 		});
          
 		$("#modalCrop").on("shown.bs.modal", function () {
-			modalCropEdit = document.getElementById('image')
-			cropper = new Cropper(modalCropEdit, {
+			var image_data = document.getElementById('image');
+		 
+			cropper = new Cropper(image_data, {
 				viewMode: 1,
 				aspectRatio: 1 / 1,
 				minCropBoxWidth: 200,
@@ -194,8 +196,8 @@
 						event.detail.width,
 						event.detail.height)
 				}
-			})
-		})
+			});
+		});
 
 
 		function setImageCropProperties(image, x, y, width, height) {
