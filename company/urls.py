@@ -22,6 +22,9 @@ urlpatterns = [
     path("company-products/<pk>/",CompanyProductList.as_view(),name="company_products"),
     path("company-projects/<pk>/",CompanyProjectList.as_view(),name="company_projects"),
 
+    path("project_list/",ProjectList.as_view(),name="project_list"),
+    path("project_detail/<pk>/",ProjectDetail.as_view(),name="project_detail"),
+
     path("company_research/<pk>/",CompanyResearchList.as_view(),name="company_research"),
     path("company_research_detail/<pk>/",CompanyResearchDetail.as_view(),name="company_research_detail"),
     
@@ -51,8 +54,6 @@ urlpatterns = [
     
     path("company_faq/<pk>/",CompanyFaq.as_view(),name="company_faq"),
     path("company_faq_detail/<pk>/", CompanyFaqDetail.as_view(), name = "company_faq_detail"),
-    path("project_list/",ProjectList.as_view(),name="project_list"),
-    path("project_detail/<pk>/",ProjectDetail.as_view(),name="project_detail"),
 
 
 ]

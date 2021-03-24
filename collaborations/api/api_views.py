@@ -314,25 +314,8 @@ class ApiVacancyApplication(APIView):
             return Response(data ={'error':True, 'message': form.errors}, )
 
 
-def get_user_created_projects(request):   
-        return [] if  request.user.is_anonymous else Project.objects.filter(user = request.user, accepted="APPROVED")
-
-
-class ApiProject(APIView):
-    def get(self, request):
-        projects = Project.objects.filter(accepted="APPROVED")
-        category = ResearchProjectCategory.objects.all()
-        user_created = get_user_created_projects(request)		
-        return Response(data = {'error':False, 'projects': ProjectSerializer(projects, many = True).data, "user_created": ProjectSerializer(user_created, many = True).data,
-                                'category':ResearchProjectCategorySerializer(category, many = True).data})
-
-class ApiProjectDetail(APIView):
-    def get(self, request):
-        project = Project.objects.get(id = request.query_params['id'])
-        category = ResearchProjectCategory.objects.all()
-        user_created = get_user_created_projects(request)		
-        return Response(data = {'error':False, 'project': ProjectSerializer(project).data, "user_created": ProjectSerializer(user_created, many = True).data,
-                                'category':ResearchProjectCategorySerializer(category, many = True).data})
+# def get_user_created_projects(request):   
+#         return [] if  request.user.is_anonymous else Project.objects.filter(user = request.user, accepted="APPROVED")
 
 
 def get_user_created_researchs(request):

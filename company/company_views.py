@@ -360,11 +360,13 @@ class CompanyFaq(ListView):
     template_name = "frontpages/company/company_faq.html"
     paginate_by = 2
     def get_queryset(self):
-        return Faqs.objects.filter( company = Company.objects.get(id = self.kwargs['pk']) )
+        return Faqs.objects.filter( company = Company.objects.get(id = self.kwargs['pk']), status='APPROVED' )
     
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object'] = Company.objects.get(id = self.kwargs['pk'])
+        if context['object_list'].count() == 0:
+            context['message']  = "No APPROVED Faqs found for this coompany!"
         return context
 
 

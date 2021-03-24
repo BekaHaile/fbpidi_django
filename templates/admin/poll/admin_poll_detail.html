@@ -94,18 +94,6 @@
                                                     <h4><b>Choice Description</b></h4>
                                                     <p class="font-13  mb-2 mt-2">{{choice.description|safe}}</p>
                                                     
-                                                    <!-- if the user is the creator or has voted hide the vote button -->
-
-                                                    {% if user.is_superuser == False and not user == poll.created_by and has_voted == False %}
-                                                        <div class = "choice-btn-group" class="badge badge-secondary">
-                                                            <span class="badge badge-secondary">
-                                                                <label for = "{{choice.pk}}"><span style="font-size: medium;">Vote</span></label>
-                                                                <input id = "{{choice.pk}}" type="radio" name="selected_choice" value="{{choice.pk}}" /> 
-                                                            </span>
-                                                        </div>
-                                                    {% endif %}
-                                                    
-                                                    
                                                     
                                                 </div>
                                             </div>

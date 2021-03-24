@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
-from company.models import Company, CompanyAddress, Certificates
-from accounts.api.serializers import CompanyAdminSerializer
+from company.models import Company, CompanyAddress, Certificates, Brand, SubCategory, InvestmentProject
+from accounts.api.serializers import CompanyAdminSerializer, UserInfoSerializer
 from admin_site.models import Category
-from admin_site.api.serializers import CategorySerializer
+from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
 # from product.api.serializer import ProductInfoSerializer
 class CompanyAddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,6 +41,15 @@ class CompanyInfoSerializer(serializers.ModelSerializer):
         fields = ('id','created_by','name','name_am','logo','geo_location','category', 'certification','established_yr', 'company_address','company_certificates')
 
 
+class InvestmentProjectserializer(serializers.ModelSerializer):
+    company =  CompanyInfoSerializer(read_only = True)
+    contact_person = UserInfoSerializer(read_only=True)
+    product_type = CategorySerializer(read_only = True, many =True)
+    class Meta:
+        model = InvestmentProject
+        fields = "__all__"
+
+
     
 
     
@@ -56,4 +65,11 @@ class CompanyInfoSerializer(serializers.ModelSerializer):
     # 'product_category_name',
     # 'product_category','color',
 
-    
+
+class BrandSerializer(serializers.ModelSerializer):
+    product_type = SubCategorySerializer
+    class Meta:
+        model = Brand
+        fields = ( 'product_type', 'brand_name','brand_name_am')
+
+

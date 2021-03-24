@@ -351,6 +351,7 @@ class InvestmentProject(models.Model):
 	last_updated_date	= models.DateTimeField(null=True)
 	expired	= models.BooleanField(default=False)
 
+	
 
 class LandUsage(models.Model):
 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="land_usage")

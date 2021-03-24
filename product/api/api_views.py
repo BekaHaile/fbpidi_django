@@ -194,16 +194,23 @@ class ApiProductDetailView(APIView):
 
 class ApiProductByMainCategory(APIView):
     def get(self, request):
-        category= request.query_params['category']
+        cat= request.query_params['category']
         products = []
-        if category == "all":
-            products=Product.objects.all()
-        else:
-            products = Product.objects.filter(category__category_name__category_type = category)
-        return Response( data = { 'error':False, 'count':len(products), 
-                                'products': ProductInfoSerializer(products, many = True).data},
-                                 status = status.HTTP_200_OK
-                        )
+        if cat == "Beverage" or cat == "Food" :
+            brands = []
+            categories = Category.objects.filter(category_type=cat)
+            for category in categories:
+                for sub_cat in category.sub_category.all():
+                    for brand in sub_cat.product_category.all():
+                        brands.append(brand)
+            products = Product.objects.filter(fandb_category__in=brands)
+        
+        elif cat == "Pharmaceuticals":
+            products= Product.objects.filter(pharmacy_category__in=Category.objects.filter(category_type="Pharmaceuticals"))
+        elif cat == "all":
+            products = Product.objects.all()
+        return Response( data = {'error': False, 'count':products.count(), 'products':ProductInfoSerializer(products, many = True).data})
+
 
 #client/comp-by-main-category/
 class ApiCompanyByMainCategoryList(APIView):   

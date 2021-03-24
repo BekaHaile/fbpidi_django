@@ -14,8 +14,8 @@ from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
 from collaborations.models import News
 from collaborations.api.serializers import NewsListSerializer
 
-from company.models import Company,SubCategory
-from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer
+from company.models import Company,SubCategory, InvestmentProject
+from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer, InvestmentProjectserializer
 
 from product.models import Product, ProductImage, ProductPrice
 from product.api.serializer import ProducteFullSerializer, ProductInfoSerializer, ProductImageSerializer
@@ -24,17 +24,15 @@ from accounts.models import User, Customer, CompanyAdmin
 from accounts.api.serializers import CustomerCreationSerializer, CustomerDetailSerializer
 
 
-#client/comp-by-main-category/
+#api/comp-by-main-category/
 class ApiCompanyByMainCategoryList(APIView):   
     #  request.query_params['company_type'] should be = manufacturer or supplier, request[product_category = "Beverage", "Food", "Pharmaceuticals", "all"]
     def get(self,request): 
-        product_category = request.query_params['product_category']
-        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",product_category)
+        product_category = request.query_params['product_category']    
         companies = []
         # companies = Company.objects.filter(company_type= request.query_params['company_type']) #all companies with 
         if product_category != "all": # if it is "Beverage" or "Food" or "Pharmaceuticals"
             companies = Company.objects.filter(category__category_type = product_category  )
-            print("##############################",companies)
         else:
             companies = Company.objects.all()
             # companies = companies.filter(product_category__category_name__category_type = product_category)
@@ -51,3 +49,20 @@ class ApiCompanyDetailView(APIView):
             return Response(data= CompanyFullSerializer( company ).data)
         except Http404:
             return Response(data = {"error":True, "message": "Company Not Found!"})
+
+
+class ApiProject(APIView):
+    def get(self, request):
+        try:
+            projects = InvestmentProject.objects.all()
+            return Response(data = {'error':False, 'projects': InvestmentProjectserializer(projects, many = True).data})
+        except Exception as e:
+            return Response(data ={'error':True, 'message':str(e)})
+
+class ApiProjectDetail(APIView):
+    def get(self, request):
+        try:
+            project = InvestmentProject.objects.get(id = request.query_params['id'])
+            return Response(data = {'error':False, 'project': InvestmentProjectserializer(project).data})
+        except Exception as e:
+            return Response(data ={'error':True, 'message':str(e)})

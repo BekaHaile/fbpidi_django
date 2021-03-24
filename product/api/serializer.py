@@ -3,20 +3,28 @@ from rest_framework import serializers
 from accounts.api.serializers import CompanyAdminSerializer, UserSerializer
 
 from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
-from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer
+from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer, BrandSerializer
 
 from product.models import Product, ProductImage, ProductPrice, Order, OrderProduct, ShippingAddress, InvoiceRecord
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
-        fields = "__all__"
+        fields = ('product_image',)
+
+
+class ProductPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductPrice
+        fields = ('price', 'start_date','end_date')
 
 
 class ProducteFullSerializer(serializers.ModelSerializer):
-    category = SubCategorySerializer(read_only=True)
-    company = CompanyFullSerializer(read_only=True)
+    company = CompanyInfoSerializer(read_only=True)
+    fandb_category = BrandSerializer(read_only=True)
+    pharmacy_category = CategorySerializer(read_only=True)
     more_images = serializers.SerializerMethodField('get_more_images')
+    latest_price = ProductPriceSerializer(source='price', many = False)
     class Meta:
         model = Product
         fields = "__all__"
@@ -29,11 +37,14 @@ class ProducteFullSerializer(serializers.ModelSerializer):
 
 
 class ProductInfoSerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(source='get_category')
     company = CompanyInfoSerializer(read_only=True)
+    fandb_category = BrandSerializer(read_only = True)
+    pharmacy_category = CategorySerializer
+    latest_price = ProductPriceSerializer(source='price', many = False)
     class Meta:
         model  = Product
-        fields = "__all__"
+        fields = ('company','name', 'name_am', 'fandb_category', 'pharmacy_category', 'latest_price', 'uom', 'quantity',
+                'therapeutic_group','dose','description','description_am', 'image')
 
 
 class OrderProductSerializer(serializers.ModelSerializer):
@@ -62,8 +73,6 @@ class ShippingAddressSerializer(serializers.ModelSerializer):
             shipping.save()
             return shipping
         
-
-
 
 class OrderSerializer(serializers.ModelSerializer):
     total_price = serializers.FloatField(source='get_total_price')
