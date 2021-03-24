@@ -194,6 +194,9 @@
 					  </button>
 					</div>
 					<div class="modal-body">
+						<div id="image-box">
+
+						</div>
 					  <img src="" id="image" style="max-width: 100%;">
 					</div>
 					<div class="modal-footer">
@@ -246,19 +249,22 @@
 
 			var imageField = document.getElementById('#id_logo')
 			var modalCropEdit = document.getElementById('image')
-			var force = document.getElementById('force')
+
 			$("#id_logo").change(function () {
-				if (this.files && this.files[0]) {
+				// if (this.files && this.files[0]) {
 
-					var reader = new FileReader();
-					reader.onload = function (e) {
+				// 	var reader = new FileReader();
+				// 	reader.onload = function (e) {
 
-						$("#image").attr("src", e.target.result);
-						$("#modalCrop").modal("show");
-					}
-					reader.readAsDataURL(this.files[0])
+				// 		$("#image").attr("src", e.target.result);
+				// 		$("#modalCrop").modal("show");
+				// 	}
+				// 	reader.readAsDataURL(this.files[0])
 
-				}
+				// }
+				const url = URL.createObjectURL($(this).files[0]);
+				$("#image").attr("src",url);
+
 			});
 			
 			$("#modalCrop").on("shown.bs.modal", function () {

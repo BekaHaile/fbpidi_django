@@ -704,11 +704,6 @@ class EditCompanyEvent(LoginRequiredMixin,View):
 
 
 
-
-
-
-
-
 ####### Event customer side
 def check_event_participation(request, event_participants):
         today = timezone.now().date()

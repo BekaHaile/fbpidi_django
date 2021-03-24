@@ -15,7 +15,7 @@
 							<ol class="breadcrumb" >
                                 <li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} </a></li>
 								<li class="breadcrumb-item"><a href="{% url 'company_announcement' pk=object.id %}">{% trans "Company Announcement List" %} </a> </li>
-                                <li class="breadcrumb-item active text-white" aria-current="page">{% trans "Announcement Detail Details" %}</li>
+                                <li class="breadcrumb-item active text-white" aria-current="page">{% trans "Announcement Details" %}</li>
                             </ol>
 						</div>
 					</div>
@@ -31,7 +31,6 @@
 					<div class="d-block mx-auto col-lg-10 col-md-12">
 						<div class="card">
 							<div class="card-body">
-								<a href="#" class="text-body"><h3 class="font-weight-semibold text-capitalize">{%print_translated obj.title obj.title_am LANGUAGE_CODE%}</h3></a>
 								<div class="demo-gallery">
 									<ul id="lightgallery" class="owl-carousel owl-carousel-icons">
                                         
@@ -55,6 +54,8 @@
 									</div> -->
 								</div>
                                 <br>
+								<a href="#" class="text-body"><h3 class="font-weight-semibold text-capitalize">{%print_translated obj.title obj.title_am LANGUAGE_CODE%}</h3></a>
+								
 								<p class = "mr-5">
 									{% print_translated obj.description obj.description_am LANGUAGE_CODE %}
 								</p>

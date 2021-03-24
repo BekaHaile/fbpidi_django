@@ -71,12 +71,80 @@
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#address" class="nav-link" data-toggle="tab">
+											<a id="address_tab" href="#address" class="nav-link" data-toggle="tab">
 												<i class="icon-phone"></i>
 												Company Address
 											</a>
 										</li>
-										
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#inv_capital_form_tab" class="nav-link">
+												<i class="icon-cash3"></i>
+												Investment Capital
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#certificate_form_tab" class="nav-link">
+												<i class="icon-certificate"></i>
+												Certificate
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#employees_form_tab" class="nav-link">
+												<i class="icon-users4"></i>
+												Employees
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#createdjob_form_tab" class="nav-link">
+												<i class="icon-task"></i>
+												Created Jobs
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#education_status_form_tab" class="nav-link">
+												<i class="icon-user-tie"></i>
+												Employee Education Status
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#femaleposn_form_tab" class="nav-link">
+												<i class="icon-users4"></i>
+												Females Employees
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#srcamnt_input_form_tab" class="nav-link">
+												<i class="icon-stack2"></i>
+												Source & Ammount of inputs
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#power_consumption_form_tab" class="nav-link">
+												<i class="icon-power2"></i>
+												Daily Power Consumption
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#destination_form_tab" class="nav-link">
+												<i class="icon-location3"></i>
+												Market Destination
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#target_form_tab" class="nav-link">
+												<i class="icon-target "></i>
+												Target Market
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
 										<li class="nav-item-divider"></li>
 										<li class="nav-item">
 											<a href="{%url 'admin:logout'%}" class="nav-link" data-toggle="tab">
@@ -140,12 +208,102 @@
 								</div>
 	
 								<div class="card-body">
+									
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-4">
+												<label for="">{{address_form.region.label}}</label>
+												 {{address_form.region}}
+											</div>
+											<div class="col-sm-4">
+												<label for="">{{address_form.city_town.label}}</label>
+												 {{address_form.city_town}}
+												 <span class="form-text text-muted">{{address_form.city_town.help_text}}</span>
+											</div>
+				
+											<div class="col-md-4">
+												<label>{{address_form.subcity_zone.label}}</label>
+													{{address_form.subcity_zone}}
+													<span class="form-text text-muted">{{address_form.subcity_zone.help_text}}</span>									
+											</div>		
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-4">
+												<label for="">{{address_form.woreda.label}}</label>
+												 {{address_form.woreda}}
+											</div>
+											<div class="col-sm-4">
+												<label for="">{{address_form.kebele.label}}</label>
+												 {{address_form.kebele}}
+												 <span class="form-text text-muted">{{address_form.kebele.help_text}}</span>
+											</div>
+				
+											<div class="col-md-4">
+												<label>{{address_form.local_area.label}}</label>
+													{{address_form.local_area}}
+													<span class="form-text text-muted">{{address_form.local_area.help_text}}</span>									
+											</div>		
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-4">
+												<label for="">{{address_form.phone_number.label}}</label>
+												 {{address_form.phone_number}}
+											</div>
+											<div class="col-sm-4">
+												<label for="">{{address_form.fax.label}}</label>
+												 {{address_form.fax}}
+												 <span class="form-text text-muted">{{address_form.fax.help_text}}</span>
+											</div>
+				
+											<div class="col-md-4">
+												<label>{{address_form.email.label}}</label>
+													{{address_form.email}}
+													<span class="form-text text-muted">{{address_form.email.help_text}}</span>									
+											</div>		
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-4">
+												<label for="">{{address_form.facebooklink.label}}</label>
+												 {{address_form.facebooklink}}
+											</div>
+											<div class="col-sm-4">
+												<label for="">{{address_form.twiterlink.label}}</label>
+												 {{address_form.twiterlink}}
+												 <span class="form-text text-muted">{{address_form.twiterlink.help_text}}</span>
+											</div>
+				
+											<div class="col-md-4">
+												<label>{{address_form.instagramlink.label}}</label>
+													{{address_form.instagramlink}}
+													<span class="form-text text-muted">{{address_form.instagramlink.help_text}}</span>									
+											</div>		
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6">
+												<label for="">{{address_form.linkedinlink.label}}</label>
+												 {{address_form.linkedinlink}}
+											</div>
+											<div class="col-sm-6">
+												<label for="">{{address_form.googlelink.label}}</label>
+												 {{address_form.googlelink}}
+												 <span class="form-text text-muted">{{address_form.googlelink.help_text}}</span>
+											</div>
+										</div>
+									</div>
  								</div>
 							</div>
 							<!-- /profile info -->
 							
 						</div>
-						  
+						{%include 'admin/company/company_form_tabs.html'%}
 					</div>
 					<!-- /right content -->
 
@@ -170,7 +328,7 @@
 									<h4>Current Company Condition:<span>&nbsp;</span>{{object.company_condition.name}}</h4>
 								</div>
 								{%endif%}
-								<div class="form-group row">
+								<div class="form-group">
 											<label>Update {{rating_form.company_condition.label}}</label>
 												{{rating_form.company_condition}}
 											<span class="form-text text-muted">{{rating_form.company_condition.help_text}}</span>
@@ -196,6 +354,24 @@
 					$('#summernote').summernote();
 					$('.summernote').summernote();
 				});
+
+				$("#address_tab").click(function(){
+						$("#id_region").val("{{object.get_company_address.region}}".toUpperCase());
+						$("#id_city_town").val("{{object.get_company_address.city_town}}".toUpperCase());
+						$("#id_subcity_zone").val("{{object.get_company_address.subcity_zone}}".toUpperCase());
+						$("#id_woreda").val("{{object.get_company_address.woreda}}".toUpperCase());
+						$("#id_kebele").val("{{object.get_company_address.kebele}}".toUpperCase());
+						$("#id_local_area").val("{{object.get_company_address.local_area}}".toUpperCase());
+						$("#id_phone_number").val("{{object.get_company_address.phone_number}}".toUpperCase());
+						$("#id_fax").val("{{object.get_company_address.fax}}".toUpperCase());
+						$("#id_email").val("{{object.get_company_address.email}}".toUpperCase());
+						$("#id_facebooklink").val("{{object.get_company_address.facebooklink}}".toUpperCase());
+						$("#id_twiterlink").val("{{object.get_company_address.twiterlink}}".toUpperCase());
+						$("#id_instagramlink").val("{{object.get_company_address.instagramlink}}".toUpperCase());
+						$("#id_linkedinlink").val("{{object.get_company_address.linkedinlink}}".toUpperCase());
+						$("#id_googlelink").val("{{object.get_company_address.googlelink}}".toUpperCase());
+					});
+
 				var cropX;
 				var cropY;
 				var cropWidth;

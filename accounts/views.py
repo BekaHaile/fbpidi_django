@@ -125,13 +125,25 @@ class MyProfileView(LoginRequiredMixin,UpdateView):
                 return redirect("admin:create_my_company")
             else:
                 pass 
+        elif self.request.user.is_superuser:
+            if self.request.user.get_company() == None:
+                return redirect("admin:create_fbpidi_company")
+            else:
+                pass
         else:
             pass
+        return super().get(self.request,*args,**kwargs)
+        
 
 
     def form_valid(self,form):
         form.save()
+        messages.success(self.request,"Your Profile Updated Successfully")
         return redirect("admin:my_profile",pk=self.request.user.id)
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:user_detail",pk=self.kwargs['pk'])
 
 
 # to list all users in the admin page
@@ -154,6 +166,11 @@ class UserDetailView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self,form):
         form.save()
+        messages.success(self.request,"User Info Updated Successfully")
+        return redirect("admin:user_detail",pk=self.kwargs['pk'])
+
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
         return redirect("admin:user_detail",pk=self.kwargs['pk'])
 
 class SuspendUser(LoginRequiredMixin,View):

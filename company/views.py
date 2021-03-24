@@ -1,7 +1,6 @@
 import datetime
 import json
 from django.db import IntegrityError
-from django.forms.models import model_to_dict
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
@@ -180,6 +179,7 @@ class CompaniesDetailView(LoginRequiredMixin,UpdateView):
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         context['rating_form'] = CompanyRatingForm
+        context['address_form'] = CompanyAddressForm
         return context
 
     def get_form_kwargs(self,*args,**kwargs):
@@ -425,7 +425,6 @@ class CheckYearField(LoginRequiredMixin,View):
         if self.kwargs['model'] == "investment":
             
             try:
-                # json.dumps(model_to_dict(investment))
                 investment=InvestmentCapital.objects.get(company=company,year=self.kwargs['year']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data': json.loads(serializers.serialize('json',[investment],ensure_ascii=False))[0] })

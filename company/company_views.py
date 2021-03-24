@@ -1,5 +1,6 @@
 import datetime
 import json
+from django.urls import reverse
 from django.db import IntegrityError
 from django.forms.models import model_to_dict
 from django.utils import timezone
@@ -19,11 +20,12 @@ from product.models import Order,OrderProduct,Product
 
 from company.forms import *
 from collaborations.models import *
-from collaborations.forms import EventParticipantForm,TenderApplicantForm,CreateJobApplicationForm
+from collaborations.forms import EventParticipantForm,TenderApplicantForm,CreateJobApplicationForm, BlogCommentForm
 from chat.models import ChatMessages
 class CompanyHomePage(DetailView):
     model = Company
     template_name="frontpages/company/business-5.html"  
+
 
 class CompanyAbout(DetailView):
     model=Company
@@ -34,13 +36,16 @@ class CompanyContact(DetailView):
     model=Company
     template_name="frontpages/company/contact.html"
 
+
 class CompanyProductList(DetailView):
     model= Company
     template_name = "frontpages/company/blog-grid-center.html"
 
+
 class CompanyProjectList(DetailView):
     model= Company
     template_name = "frontpages/company/blog-grid-center.html"
+
 
 class CompanyNewsList(ListView):
     model = News
@@ -50,7 +55,7 @@ class CompanyNewsList(ListView):
         try:
             return News.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
         except Exception as e:
-            print( "#######3 the excptio is ",e)
+            print( "#######3 the excption is ",e)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
@@ -102,6 +107,7 @@ class CompanyAnnouncementList(ListView):
             return Announcement.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
         except Exception as e:
             print( "####### Exception while gettng company Announcement ",e)
+            return []
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
@@ -127,9 +133,20 @@ class CompanyResearchList(ListView):
             return Research.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
         except Exception as e:
             print( "####### Exception while gettng company events ",e)
+            return []
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
+        return context
+
+
+class CompanyResearchDetail(DetailView):
+    model = Research
+    template_name = "frontpages/company/company_research_detail.html"
+    context_object_name = "obj"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        context['object'] = Research.objects.get(id = self.kwargs['pk'] ).company
         return context
 
 
@@ -142,10 +159,12 @@ class CompanyTenderList(ListView):
             return Tender.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
         except Exception as e:
             print( "####### Exception while gettng company tender ",e)
+            return []
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
         return context
+
 
 class CompanyTenderDetail(DetailView):
     model = Tender
@@ -158,7 +177,6 @@ class CompanyTenderDetail(DetailView):
         return context
 
 
-
 class CompanyVacancyList(ListView):
     model = Vacancy
     template_name = "frontpages/company/company_vacancy.html"
@@ -168,6 +186,7 @@ class CompanyVacancyList(ListView):
             return Vacancy.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
         except Exception as e:
             print( "####### Exception while gettng company events ",e)
+            return []
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
@@ -176,7 +195,7 @@ class CompanyVacancyList(ListView):
 
 
 class CompanyVacancyDetail(DetailView):
-    model = CompanyEvent
+    model = Vacancy
     template_name = "frontpages/company/company_vacancy_detail.html"
     context_object_name = "obj"
     def get_context_data(self, **kwargs):
@@ -186,30 +205,110 @@ class CompanyVacancyDetail(DetailView):
         return context
 
 
+class CompanyVacancyApply(LoginRequiredMixin,CreateView):
+    model = JobApplication
+    template_name = "frontpages/company/company_vacancy_apply.html"
+    form_class = CreateJobApplicationForm
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) 
+        vacancy =  Vacancy.objects.get(id=self.kwargs['vacancy_pk'] )
+        context['obj'] = vacancy
+        context['object'] = vacancy.company
+        context['category'] = JobCategory.objects.all()
+        return context
+
+    def form_valid(self,form):
+        job=form.save(commit=False)
+        job.user=self.request.user
+        job.vacancy = Vacancy.objects.get(id=self.kwargs['vacancy_pk'])
+        job.save()
+        return redirect(f"/company/company_vacancy_detail/{job.vacancy.id}")
+    def form_invalid(self,form):
+        messages.warning(self.request, "Unsupported file type detected, the supported files are pdf, jpg, png, doc and docx! ")
+        vacancy=Vacancy.objects.get(id = self.kwargs['vacancy_pk'])
+        return redirect(f"/company/company_vacancy_apply/{vacancy.id}/")
+
+
+# class CompanyBlogList(ListView):
+#     model = Blog
+#     template_name = "frontpages/company/company_blog.html"
+#     paginate_by = 2
+#     def get_queryset(self):
+#         try:
+#             return Blog.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
+#         except Exception as e:
+#             print( "####### Exception while gettng company blog ",e)
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs) 
+#         context['object'] = Company.objects.get(id =self.kwargs['pk'])
+        
+#         return context
+
+
 class CompanyBlogList(ListView):
-    model = Blog
-    template_name = "frontpages/company/company_blog.html"
-    paginate_by = 2
-    def get_queryset(self):
-        try:
-            return Blog.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
-        except Exception as e:
-            print( "####### Exception while gettng company events ",e)
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) 
-        context['object'] = Company.objects.get(id =self.kwargs['pk'])
-        return context
+        model = Blog
+        template_name="frontpages/company/company_blog.html"
+        paginate_by = 2
+        def get_queryset(self):
+            return Blog.objects.filter( company = Company.objects.get(id = self.kwargs['pk']) , publish=True)
+
+        def get_context_data(self, *args, **kwargs):
+            context = super().get_context_data(**kwargs)
+            context['object'] = Company.objects.get(id = self.kwargs['pk'])
+            return context
+
+        
+def get_tags(lang, company):
+        comp_blogs = Blog.objects.filter(company = company, publish=True)
+        string = ""
+        if(lang =="amharic"):
+            for b in comp_blogs:
+                string+=b.tag_am+","
+        else:
+            for b in comp_blogs:
+                string+=b.tag+","
+        string = string[:-1]
+        tag_list = string.split(',')
+        tag_list = set(tag_list)
+        return tag_list
+
+class CompanyBlogDetail(View):
+    def get(self, *args, **kwargs):
+        blog = Blog.objects.get(id = self.kwargs['pk'])
+        comment = BlogCommentForm
+        tags = get_tags("research", blog.company)
+        tags_am = get_tags("amharic", blog.company)
+        context = {'obj':blog, "comment":comment, 'tags':tags, 'tags_am':tags_am, 'object':blog.company}
+        return render(self.request, "frontpages/company/company_blog_detail.html", context)
 
 
-class CompanyBlogDetail(DetailView):
-    model = CompanyEvent
-    template_name = "frontpages/company/company_event_detail.html"
-    context_object_name = "obj"
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) 
-        context['object'] = Company.objects.get(id =self.kwargs['company_pk'])
-        context['event_participant_form'] = EventParticipantForm
-        return context
+class CompanyBlogSearch(ListView):
+        model = Blog
+        template_name = "frontpages/company/company_blog.html"
+        paginate_by = 2
+        def get_queryset(self):
+            return Blog.objects.filter( company = Company.objects.get(id = self.kwargs['pk']), tag__icontains = self.kwargs['tag'] , publish=True)
+        
+        def get_context_data(self, *args, **kwargs):
+            context = super().get_context_data(**kwargs)
+            context['object'] = Company.objects.get(id = self.kwargs['pk'])
+            if context['object_list'].count() == 0:
+                context['message'] = "No result Found for the tag"
+                context['object_list'] = Blog.objects.filter( company = Company.objects.get(id = self.kwargs['pk']))
+            return context
+
+
+class CompanyBlogCreateComment(View):
+    def post(self, *args, **kwargs):
+        form = BlogCommentForm(self.request.POST)
+        blog = Blog.objects.get(id = self.kwargs['pk'])
+        if form.is_valid():
+            blogComment = BlogComment(blog = blog, created_by = self.request.user, content=form.cleaned_data.get('content'))
+            blogComment.save()
+            return redirect(reverse("company_blog_detail", kwargs={'pk':blog.id}))
+        return redirect(reverse("company_blog_detail", kwargs={'pk':blog.id}))
+            
 
 
 class CompanyPollList(ListView):
@@ -221,18 +320,56 @@ class CompanyPollList(ListView):
             return PollsQuestion.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
         except Exception as e:
             print( "####### Exception while gettng company events ",e)
+            return []
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
         return context
 
-class CompanyPollDetail(DetailView):
-    model = CompanyEvent
-    template_name = "frontpages/company/company_event_detail.html"
-    context_object_name = "obj"
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) 
-        context['object'] = Company.objects.get(id =self.kwargs['company_pk'])
-        context['event_participant_form'] = EventParticipantForm
+
+class CompanyPollDetail(LoginRequiredMixin,View):
+    def get(self, *args, **kwargs):
+        message = ""
+        context = {}        
+        try:
+                poll = PollsQuestion.objects.get(id = self.kwargs['id']  )
+                context ['obj'] = poll
+                context ['object'] = poll.company
+                if poll.pollsresult_set.filter(user = self.request.user).count() > 0:
+                    context ['has_voted'] = True
+                return render(self.request, "frontpages/company/company_poll_detail.html", context)
+        except Exception as e:
+                print( "Poll not found ",e)
+                return redirect("polls") 
+        
+    def post(self,*args,**kwargs):
+            try:
+                poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
+                vote = PollsResult(poll = poll,user = self.request.user,choice = Choices.objects.get(id = self.request.POST['selected_choice']),
+                    remark=self.request.POST['remark'] )
+                vote.save()
+                print( "Successfully voted!")
+                return redirect(f"/company/company_poll/{poll.company.id}/") 
+            except Exception as e:
+                messages.warning(self.request, "Poll not found!",e)
+                return redirect("polls") 
+        
+
+class CompanyFaq(ListView):
+    model = Faqs
+    template_name = "frontpages/company/company_faq.html"
+    paginate_by = 2
+    def get_queryset(self):
+        return Faqs.objects.filter( company = Company.objects.get(id = self.kwargs['pk']) )
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object'] = Company.objects.get(id = self.kwargs['pk'])
         return context
 
+
+class CompanyFaqDetail(View):
+    def get(self, *args, **kwargs):
+        faq = Faqs.objects.get(id=self.kwargs['pk'])
+        return render(self.request, "frontpages/company/company_faq_detail.html", {'obj':faq, 'object':faq.company})
+    

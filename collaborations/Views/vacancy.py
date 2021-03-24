@@ -300,9 +300,10 @@ class CreateApplication(LoginRequiredMixin,View):
 			job.vacancy = Vacancy.objects.get(id=self.kwargs['id'])
 			job.save()
 			return redirect("vacancy")
-		return redirect("applications",model_name=self.kwargs['model_name'],id=self.kwargs['id'])
-
-
+		else:
+			messages.warning(self.request, "Unsupported file type detected, the supported files are pdf, jpg, png, doc and docx! ")
+			return redirect("vacancy")
+				
 class CategoryBasedSearch(View):
 	def get(self,*args,**kwargs):
 		vacancy = Vacancy.objects.filter(category=self.kwargs['id'],closed=False) 

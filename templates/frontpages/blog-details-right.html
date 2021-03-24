@@ -51,12 +51,8 @@
 							<div class="card-body">
 								<div class="product-tags clearfix">
 									{%for tag in tags%}
-
-
 									<ul class="list-unstyled mb-0">
 										<li><a href="{%url 'search_blogtag' name=tag%}">{{tag.title|safe}}</a></li>
-
-										
 									</ul>
 									{%endfor%}
 								</div>
@@ -96,7 +92,7 @@
 
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">{{blog.countComment}} Comments</h3>
+								<h3 class="card-title">{{blog.countComment}} {% trans "Comments" %}</h3>
 							</div>
 
 							<div class="card-body">
@@ -110,7 +106,7 @@
 												<span class="fs-14 ml-0" data-toggle="tooltip" data-placement="top" title="verified"><i class="fa fa-check-circle-o text-success"></i></span>
 												<span class="fs-14 ml-2"> </span>
 											</h5>
-											{{comment.created_date}}
+											{{comment.created_date.date}}
 											<p class="font-13  mb-2 mt-2">
 											   {{comment.content}}
 											</p>
