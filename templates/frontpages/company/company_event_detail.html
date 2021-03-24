@@ -51,10 +51,20 @@
 										</div> -->
 									</ul>
 								</div>
-                                <hr>
+								<div class="item7-card-text ml-2 mt-1">
+                                    {% if obj.status == 'Open' %}
+                                    <div style="background-color: green; color:white; width: fit-content; padding: 5px; " >{% trans "Open" %}</div>
+                                    {%elif obj.status == 'Upcoming' %}
+                                    <div style="background-color: yellow; color:black; width: fit-content; padding: 5px;" >{% trans "Upcoming" %}</div>
+                                    {%elif obj.status == 'Closed' %}
+                                    <div style="background-color: red; color:white; width: fit-content; padding: 5px;" >{% trans "Closed" %}</div>
+                                   {%endif%}
+                                </div>
+                               
 
 								{%if obj.status == "Upcoming" %}
-									
+								
+									<br>
 									
 									<div class="col-md-6">
 										<label class="col-form-label "><b>Remind me on</b> <p class = "text-muted">{% trans "From"%} {{ obj.start_date.date }} - {{obj.end_date.date}} </p></label>

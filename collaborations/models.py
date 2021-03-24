@@ -489,6 +489,14 @@ class Research(models.Model):
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="research_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
+    company = models.ForeignKey(Company, on_delete = models.CASCADE, blank=True, null = True)
+
+    def save(self):
+        if self.created_by.is_staff:
+            self.company = self.created_by.get_company()
+            print("##########################Research saved by ", self.company.name)
+        super(Research,self).save()
+        
     
     class Meta:
         ordering = ['-created_date',]
