@@ -1,11 +1,11 @@
 
-from django.contrib.gis.db import models as gis_models
-from django.utils import timezone
-from django.db import models
+from admin_site.models import (Category, CompanyDropdownsMaster,
+                               ProjectDropDownsMaster)
 from django.conf import settings
+from django.contrib.gis.db import models as gis_models
 from django.core.validators import FileExtensionValidator
-
-from admin_site.models import Category,CompanyDropdownsMaster,ProjectDropDownsMaster
+from django.db import models
+from django.utils import timezone
 
 allowed_file_extensions = ['pdf', 'doc', 'docx', 'jpg', 'png', 'xlsx', 'xls']
 allowed_image_extensions = ['png','jpg',]
@@ -352,7 +352,6 @@ class InvestmentProject(models.Model):
 	expired	= models.BooleanField(default=False)
 
 	
-
 class LandUsage(models.Model):
 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="land_usage")
 	total_land_size = models.FloatField(verbose_name="Total land size in meter square")	 
@@ -361,6 +360,7 @@ class LandUsage(models.Model):
 	warehouse = models.FloatField(verbose_name="Ware house in meter square")	 
 	other = models.FloatField(verbose_name="production building in meter square")
 	timestamp = models.DateTimeField(auto_now_add=True)	 
+
 
 class ProjectState(models.Model):
 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="project_state")
@@ -374,6 +374,7 @@ class ProjectState(models.Model):
 	testproduct = models.FloatField(verbose_name="Test Product")	
 	certification = models.FloatField(verbose_name="certification")	
 	timestamp	= models.DateTimeField(auto_now_add=True)
+
 
 class ProjectProductQuantity(models.Model):
 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="project_product_qty")

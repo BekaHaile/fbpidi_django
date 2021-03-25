@@ -11,15 +11,11 @@
 <div class="content">
 
 	{% if edit and perms.collaborations.change_pollsquestion %}
-	    	
 			<div class="card">
-
-				<div class="card-body">
-		
+				<div class="card-body">		
 					<form action="{%url 'admin:edit_poll'  id=poll.id %}" method="POST" enctype="multipart/form-data">
 						<fieldset class="mb-3 ml-3 mr-3">
-							<legend class="text-uppercase font-size-sm font-weight-bold">Edit "{{poll.title}}"  poll</legend>
-		
+							<legend class="text-uppercase font-size-sm font-weight-bold">Edit "{{poll.title}}"  poll</legend>	
 							{%csrf_token%}
 							<div class="form-group row">
 								<label class="col-form-label col-lg-3">Poll <Title></Title>(English) </label>
@@ -48,9 +44,7 @@
 									<textarea required name="description_am" class="summernote" cols="30"
 										rows="10">{{poll.description_am|safe}}</textarea>
 								</div>
-							</div>
-
-							
+							</div>	
 						</fieldset>
 		
 						<div class="text-right">
@@ -179,4 +173,5 @@
 		$('.summernote').summernote();
 	});
 </script>
+
 {%endblock%}

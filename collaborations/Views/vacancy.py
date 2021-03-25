@@ -249,7 +249,7 @@ class CreateVacancy(LoginRequiredMixin, View):
 			vacancy=form.save(commit=False)
 			vacancy.employement_type = form.cleaned_data.get('employement_type')
 			vacancy.created_by=self.request.user
-			print("#######################################",self.request.user, " ",self.request.user.is_company_admin)
+		
 			vacancy.company=self.request.user.get_company()
 			vacancy.category=category
 			da1 = self.request.POST['starting_date']
