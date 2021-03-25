@@ -1,5 +1,7 @@
 import datetime
 import json
+import csv
+
 from django.db import IntegrityError
 from django.utils import timezone
 from django.shortcuts import render, redirect
@@ -761,7 +763,9 @@ class CreateInvestmentProjectDetail_Admin(LoginRequiredMixin,UpdateView):
         kwargs.update({'sector': InvestmentProject.objects.get(id=self.kwargs['pk']).sector})
         kwargs.update({'contact_person': UserProfile.objects.filter(created_by=
                 InvestmentProject.objects.get(id=self.kwargs['pk']).company.contact_person
-                )})
+                )| UserProfile.objects.filter(id=
+                InvestmentProject.objects.get(id=self.kwargs['pk']).company.contact_person.id
+                ) })
         return kwargs
     
     def form_valid(self,form):
@@ -869,7 +873,7 @@ class UpdateProjectState(LoginRequiredMixin,UpdateView):
         return redirect("admin:update_project",pk=ProjectState.objects.get(id=self.kwargs['pk']).project.id)
 
     def form_invalid(self,form):
-        messages.success(self.request,form.errors)
+        messages.warning(self.request,form.errors)
         return redirect("admin:update_project")
 
 class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
@@ -890,7 +894,7 @@ class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
             fbpidi.save()
             return redirect("admin:index")
         else:
-            messages.success(self.request,form.errors)
+            messages.warning(self.request,form.errors)
             return redirect("admin:create_fbpidi_company")
 
 
@@ -917,7 +921,7 @@ class ViewFbpidiCompany(LoginRequiredMixin,UpdateView):
         return redirect("admin:view_fbpidi_company",pk=fbpidi.id)
     
     def form_invalid(self,form):
-        messages.success(self.request,form.errors)
+        messages.warning(self.request,form.errors)
         return redirect("admin:view_fbpidi_company",self.kwargs['pk'])
 
 
@@ -944,6 +948,10 @@ class CreateSliderImage(LoginRequiredMixin,CreateView):
         image.save()
         messages.success(self.request,"Image Uploaded Successfully")
         return redirect("admin:slider_list")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_slider",company=self.kwargs['company'])
 
 class UpdateSliderImage(LoginRequiredMixin,UpdateView):
     model=HomePageSlider
@@ -957,7 +965,96 @@ class UpdateSliderImage(LoginRequiredMixin,UpdateView):
         image.save()
         messages.success(self.request,"Image Updated Successfully")
         return redirect("admin:slider_list")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_slider",pk=self.kwargs['pk'])
  
+#  Company Report Views
+class CompanyListForReport(LoginRequiredMixin,ListView):
+    model=Company
+    template_name = "admin/company/companies_for_report.html"
+
+    def get_queryset(self):
+        return Company.objects.all().exclude(main_category="FBPIDI")
+
+class FilterCompanyByMainCategory(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        try:
+            company = Company.objects.all() 
+            category = Category.objects.all()
+            if self.kwargs['sector'] == "all":
+                company = Company.objects.select_related().all().exclude(main_category="FBPIDI")
+            else:
+                company = Company.objects.select_related().filter(main_category=self.kwargs['sector'])
+                category = Category.objects.filter(category_type=self.kwargs['sector'])
+
+            return JsonResponse(
+                {
+                    'error':False,
+                    'sector':self.kwargs['sector'],
+                    'sub_sector':json.loads(serializers.serialize('json',category,ensure_ascii=False,
+                                fields=('id','category_type','category_name','icon',),
+                                use_natural_foreign_keys=True,use_natural_primary_keys=True,)),
+                    'data':json.loads(serializers.serialize('json',company,indent=2,
+                            use_natural_foreign_keys=True,use_natural_primary_keys=True,ensure_ascii=False))
+                }
+            )
+        except Exception as e:
+            return JsonResponse({"error":True,"message":e})
+
+class FilterCompanyCategory(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        try:
+            company = Company.objects.filter(
+                category=Category.objects.get(category_name=self.kwargs['category'])
+            ) 
+
+            return JsonResponse(
+                {
+                    'error':False,
+                    'sub_sector':self.kwargs['category'],
+                    'data':json.loads(serializers.serialize('json',company,indent=2,
+                            use_natural_foreign_keys=True,use_natural_primary_keys=True,ensure_ascii=False))
+                }
+            )
+        except Exception as e:
+            return JsonResponse({"error":True,"message":e})
+
+class ExportCSV(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        try:
+            companies=""
+            if self.kwargs['option'] == "main_category":
+                if self.kwargs['category'] == "all":
+                    companies = Company.objects.select_related().all().exclude(main_category="FBPIDI")
+                else:
+                    companies = Company.objects.select_related().filter(main_category=self.kwargs['category'])
+            elif self.kwargs['option'] == "sub_category":
+                companies = Company.objects.filter(
+                    category=Category.objects.get(category_name=self.kwargs['category'])
+                )
+            response = HttpResponse(content_type='text/csv',charset="utf-8")  
+            response['Content-Disposition'] = 'attachment; filename="COMPANY_DATA.csv"'  
+            writer = csv.writer(response)
+            writer.writerow(['name','Sector','Category','Products','Ownership Form','Established Year'])
+            for company in companies:
+                writer.writerow([
+                    company.name,company.main_category,get_categories(company),company.company_product.all().count(),
+                    company.ownership_form.name,company.established_yr
+                ])
+            return response             
+        except Exception as e:
+            messages.warning(self.request,e)
+            return redirect("admin:company_list_report")
+
+def get_categories(company):
+    str_cat = ""
+    for cat in company.category.all():
+        str_cat+=cat.category_name+", "
+    return str_cat
+
+
 
 ############## newly added, delete this commet after everything has worked right
 

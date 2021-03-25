@@ -75,7 +75,7 @@ class Company(models.Model):
 									validators=[FileExtensionValidator(allowed_extensions=allowed_file_extensions)])
 	working_hours	= models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,related_name="working_hours",null=True)
 	orgn_strct	= models.FileField(max_length=254, verbose_name="Organizational Structure",
-							help_text="Image and pdf files less thatn 10MB", null=True,
+							help_text="Image and pdf files less thatn 10MB", null=True,blank=True,
 							upload_to="company/organization_structure/",
 							validators=[FileExtensionValidator(allowed_extensions=allowed_file_extensions)])
 	lab_test_analysis = models.TextField(verbose_name="Laboratory test analysis in english",null=True,blank=True)
