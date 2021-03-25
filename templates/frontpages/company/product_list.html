@@ -11,10 +11,10 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">{{object.name}} Products</h1>
+							<!-- <h1 class="">{{object.name}} Products</h1> -->
 							<ol class="breadcrumb text-center">
 								<li class="breadcrumb-item"><a href="{%url 'company_home' pk=object.id%}">Home</a></li>
-								<li class="breadcrumb-item"><a href="#">Products</a></li>
+								<li class="breadcrumb-item"><a href="{%url 'company_products' pk=object.id%}">Products</a></li>
 							</ol>
 						</div>
 					</div>
@@ -33,7 +33,7 @@
 							<div class="col-xl-4 col-lg-6 col-md-12">
 								<div class="card">
 									<div class="item7-card-img">
-										<a href="#"></a>
+										<a href="{%url 'company_product_detail' company=object.name pk=product.id%}"></a>
 										<img src="{{product.image.url}}" alt="img" class="cover-image">
 										<div class="item7-card-text">
 											<span class="badge badge-success">{%if product.fandb_category%}
@@ -47,12 +47,13 @@
 										<div class="item7-card-desc d-flex mb-2">
 											<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>ETB {{product.price}}</a>
 											<div class="ml-auto">
-												<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>4 Comments</a>
+												<a class="mr-0" href="#"><i class="fa fa-ship text-muted mr-2"></i>{{product.quantity|floatformat:0}} in Stock</a>
 											</div>
 										</div>
 										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{{product.name}}</h4></a>
 										<p>{{product.description|truncatechars_html:100|safe}}</p>
-										<a target="_blank" href="{%url 'product_detail' pk=product.id%}" class="btn btn-secondary btn-sm">Read More</a>
+										<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="btn btn-secondary btn-sm">Read More</a>
+										<a href="#" class="btn btn-primary btn-sm pull-right">Contact Supplier</a>
 									</div>
 								</div>
 							</div>

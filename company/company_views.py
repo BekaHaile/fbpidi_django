@@ -22,9 +22,11 @@ from company.forms import *
 from collaborations.models import *
 from collaborations.forms import EventParticipantForm,TenderApplicantForm,CreateJobApplicationForm, BlogCommentForm
 from chat.models import ChatMessages
+
+
 class CompanyHomePage(DetailView):
     model = Company
-    template_name="frontpages/company/business-5.html"  
+    template_name="frontpages/company/company_index.html"  
 
 
 class CompanyAbout(DetailView):
@@ -39,12 +41,31 @@ class CompanyContact(DetailView):
 
 class CompanyProductList(DetailView):
     model= Company
-    template_name = "frontpages/company/blog-grid-center.html"
+    template_name = "frontpages/company/product_list.html"
 
+class CompanyProductdetail(DetailView):
+    model=Product
+    template_name = "frontpages/company/product_details.html"
+    context_object_name = "product"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object'] = Product.objects.get(id=self.kwargs['pk']).company
+        return context
 
 class CompanyProjectList(DetailView):
     model= Company
-    template_name = "frontpages/company/blog-grid-center.html"
+    template_name = "frontpages/company/project_list.html"
+
+class CompanyProjectdetail(DetailView):
+    model=InvestmentProject
+    template_name = "frontpages/company/project_detail.html"
+    context_object_name = "project"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object'] = InvestmentProject.objects.get(id=self.kwargs['pk']).company
+        return context
 
 
 class CompanyNewsList(ListView):

@@ -494,7 +494,7 @@ class CreatePackaging(LoginRequiredMixin,CreateView):
         return context
 
     def form_valid(self,form):
-        if Packaging.objects.filter(product=Product.objects.get(id=self.kwargs['product'])).exists():
+        if ProductPackaging.objects.filter(product=Product.objects.get(id=self.kwargs['product'])).exists():
             messages.warning(self.request,"Data For this Product already exists")
             return redirect("admin:create_packaging",product=self.kwargs['product'])
         else:
@@ -552,8 +552,8 @@ class CreateAnualInputNeed(LoginRequiredMixin,CreateView):
     def form_valid(self,form):
         if AnnualInputNeed.objects.filter(
             product=Product.objects.get(id=self.kwargs['product']),year=form.cleaned_data.get('year'),
-            input_name__icontains =form.cleaned_data.get("input_type")).exists():
-            messages.warning(self.request,"Data For this Year already exists")
+            input_name__icontains =form.cleaned_data.get("input_name")).exists():
+            messages.warning(self.request,"Data For this Input and Year already exists")
             return redirect("admin:create_anual_inp_need",product=self.kwargs['product'])
         else:
             ain = form.save(commit=False)
@@ -605,7 +605,8 @@ class CreateInputDemandSupply(LoginRequiredMixin,CreateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreateInputDemandSupply,self).get_form_kwargs()
-        kwargs.update({'product': Product.objects.get(id=self.kwargs['product'])})
+        kwargs.update({'product': Product.objects.get(id=self.kwargs['product']),
+                    'company':Product.objects.get(id=self.kwargs['product']).company})
         return kwargs
 
     def get_context_data(self,**kwargs):
@@ -633,6 +634,12 @@ class UpdateInputDemandSupply(LoginRequiredMixin,UpdateView):
     model=InputDemandSupply
     form_class = InputDemandSupplyForm
     template_name = "admin/product/product_data_update.html"
+
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(UpdateInputDemandSupply,self).get_form_kwargs()
+        kwargs.update({'product': InputDemandSupply.objects.get(id=self.kwargs['pk']).product,
+                    'company':InputDemandSupply.objects.get(id=self.kwargs['pk']).product.company})
+        return kwargs
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
@@ -752,11 +759,23 @@ class CheckoutView(LoginRequiredMixin,View):
             return redirect("")
 
 ################### newly added , delete this comment
-class ProductByCategoryView(View):
-    def get(self,*args,**kwargs):
-        products = Product.objects.filter(category=self.kwargs['cat_id'])
-        context = {'products':products,'count':products.count()}
-        return render(self.request,"frontpages/product/product_category.html",context)
+class ProductByCategoryView(ListView):
+    model=Product
+    template_name="frontpages/product/product_category.html"
+    paginate_by = 3
+    
+    def get_queryset(self):
+        category = Category.objects.get(id=self.kwargs['cat_id'])
+        if category.category_type == "Pharmaceuticals":
+            return Product.objects.filter(
+                pharmacy_category=category)
+        elif category.category_type == "Food" or category.category_type == "Beverage":
+            brands = []
+            for sub_cat in category.sub_category.all():
+                for brand in sub_cat.product_category.all():
+                    brands.append(brand)
+            return Product.objects.filter(fandb_category__in=brands)
+
 
 
 class ProductByMainCategory(ListView):

@@ -170,6 +170,7 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
 class CompaniesView(LoginRequiredMixin,ListView):
     model = Company
     template_name = "admin/company/companies.html"
+    paginate_by = 8
 
 class CompaniesDetailView(LoginRequiredMixin,UpdateView):
     model = Company
@@ -920,7 +921,44 @@ class ViewFbpidiCompany(LoginRequiredMixin,UpdateView):
         return redirect("admin:view_fbpidi_company",self.kwargs['pk'])
 
 
+class SliderImageList(LoginRequiredMixin,ListView):
+    model=HomePageSlider
+    template_name = "admin/company/slider_list.html"
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return HomePageSlider.objects.all()
+        else:
+            return HomePageSlider.objects.filter(company=self.request.user.get_company())
+
+
+class CreateSliderImage(LoginRequiredMixin,CreateView):
+    model=HomePageSlider
+    form_class = SliderImageForm
+    template_name = "admin/company/slider_create_form.html"
+
+    def form_valid(self,form):
+        image = form.save(commit=False)
+        image.company = Company.objects.get(id=self.kwargs['company'])
+        image.created_by= self.request.user
+        image.save()
+        messages.success(self.request,"Image Uploaded Successfully")
+        return redirect("admin:slider_list")
+
+class UpdateSliderImage(LoginRequiredMixin,UpdateView):
+    model=HomePageSlider
+    form_class = SliderImageForm
+    template_name = "admin/company/slider_update_form.html"
+
+    def form_valid(self,form):
+        image = form.save(commit=False)
+        image.last_updated_by=self.request.user
+        image.last_updated_date = timezone.now()
+        image.save()
+        messages.success(self.request,"Image Updated Successfully")
+        return redirect("admin:slider_list")
  
+
 ############## newly added, delete this commet after everything has worked right
 
 class CompanyByMainCategory(ListView):

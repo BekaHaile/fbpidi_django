@@ -1,11 +1,11 @@
 
-from django.contrib.gis.db import models as gis_models
-from django.utils import timezone
-from django.db import models
+from admin_site.models import (Category, CompanyDropdownsMaster,
+                               ProjectDropDownsMaster)
 from django.conf import settings
+from django.contrib.gis.db import models as gis_models
 from django.core.validators import FileExtensionValidator
-
-from admin_site.models import Category,CompanyDropdownsMaster,ProjectDropDownsMaster
+from django.db import models
+from django.utils import timezone
 
 allowed_file_extensions = ['pdf', 'doc', 'docx', 'jpg', 'png', 'xlsx', 'xls']
 allowed_image_extensions = ['png','jpg',]
@@ -440,7 +440,26 @@ class EventParticipants(models.Model):
     notified = models.BooleanField(verbose_name="If notification is sent = True", default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-   
+
+class HomePageSlider(models.Model):
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_slider")
+	slider_image = models.FileField(verbose_name="Slider Image",
+				validators=[FileExtensionValidator(
+					allowed_extensions=['jpg','png','jpeg']
+				)],help_text="Upload images files with prefered, 1280x720px"
+				)
+	alt_text = models.CharField(max_length=255,verbose_name="Image Replacement Text")
+	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='slider_created_by')
+	created_date	= models.DateTimeField(auto_now_add=True)
+	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='slider_updated_by',null=True,blank=True)
+	last_updated_date	= models.DateTimeField(null=True)
+	expired	= models.BooleanField(default=False)
+
+	class Meta:
+		ordering = ('-created_date',)
+
+
+
 class Bank(models.Model):
     bank_name = models.CharField(verbose_name="bank name", max_length=255,)
     bank_name_am = models.CharField(verbose_name="bank name", max_length=255,default="")
