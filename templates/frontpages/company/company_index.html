@@ -10,51 +10,13 @@
 		<!--Sliders Section-->
 		<div class="demo-gallery">
 			<ul id="lightgallery" class="owl-carousel owl-carousel-icons-banner">
-				<li class="item" data-responsive="/static/frontpages/images/products/products/bakery1.jpg" data-src="/static/frontpages/images/products/products/bakery1.jpg" data-sub-html="<h4>Gallery Image 1</h4><p> Many desktop publishing packages and web page editors now use Lorem Ipsum</p>" >
+				{%for slider in object.company_slider.all%}
+				<li class="item" data-responsive="{{slider.slider_image.url}}" data-src="{{slider.slider_image.url}}"  >
 					<a href="">
-						<img class="img-responsive" src="/static/frontpages/images/products/products/bakery1.jpg" alt="Thumb-1">
+						<img class="img-responsive" src="{{slider.slider_image.url}}" alt="{{slider.alt_text}}">
 					</a>
 				</li>
-				<li class="item" data-responsive="/static/frontpages/images/products/products/bakery2.jpg" data-src="/static/frontpages/images/products/products/bakery2.jpg" data-sub-html="<h4>Gallery Image 2</h4><p> Many desktop publishing packages and web page editors now use Lorem Ipsum</p>" >
-					<a href="">
-						<img class="img-responsive" src="/static/frontpages/images/products/products/bakery2.jpg" alt="Thumb-1">
-					</a>
-				</li>
-				<li class="item" data-responsive="/static/frontpages/images/products/products/bakery3.jpg" data-src="/static/frontpages/images/products/products/bakery3.jpg" data-sub-html="<h4>Gallery Image 3</h4><p> Many desktop publishing packages and web page editors now use Lorem Ipsum</p>" >
-					<a href="">
-						<img class="img-responsive" src="/static/frontpages/images/products/products/bakery3.jpg" alt="Thumb-1">
-					</a>
-				</li>
-				<li class="item" data-responsive="/static/frontpages/images/products/products/bakery4.jpg" data-src="/static/frontpages/images/products/products/bakery4.jpg" data-sub-html="<h4>Gallery Image 4</h4><p> Many desktop publishing packages and web page editors now use Lorem Ipsum</p>" >
-					<a href="">
-						<img class="img-responsive" src="/static/frontpages/images/products/products/bakery4.jpg" alt="Thumb-1">
-					</a>
-				</li>
-				<li class="item" data-responsive="/static/frontpages/images/products/products/bakery5.jpg" data-src="/static/frontpages/images/products/products/bakery5.jpg" data-sub-html="<h4>Gallery Image 5</h4><p> Many desktop publishing packages and web page editors now use Lorem Ipsum</p>" >
-					<a href="">
-						<img class="img-responsive" src="/static/frontpages/images/products/products/bakery5.jpg" alt="Thumb-1">
-					</a>
-				</li>
-				<li class="item" data-responsive="/static/frontpages/images/products/products/bakery6.jpg" data-src="/static/frontpages/images/products/products/bakery6.jpg" data-sub-html="<h4>Gallery Image 6</h4><p> Many desktop publishing packages and web page editors now use Lorem Ipsum</p>" >
-					<a href="">
-						<img class="img-responsive" src="/static/frontpages/images/products/products/bakery6.jpg" alt="Thumb-1">
-					</a>
-				</li>
-				<li class="item" data-responsive="/static/frontpages/images/products/products/bakery7.jpg" data-src="/static/frontpages/images/products/products/bakery7.jpg" data-sub-html="<h4>Gallery Image 7</h4><p> Many desktop publishing packages and web page editors now use Lorem Ipsum</p>" >
-					<a href="">
-						<img class="img-responsive" src="/static/frontpages/images/products/products/bakery7.jpg" alt="Thumb-1">
-					</a>
-				</li>
-				<li class="item" data-responsive="/static/frontpages/images/products/products/bakery8.jpg" data-src="/static/frontpages/images/products/products/bakery8.jpg" data-sub-html="<h4>Gallery Image 8</h4><p> Many desktop publishing packages and web page editors now use Lorem Ipsum</p>" >
-					<a href="">
-						<img class="img-responsive" src="/static/frontpages/images/products/products/bakery8.jpg" alt="Thumb-1">
-					</a>
-				</li>
-				<li class="item" data-responsive="/static/frontpages/images/products/products/bakery9.jpg" data-src="/static/frontpages/images/products/products/bakery9.jpg" data-sub-html="<h4>Gallery Image 9</h4><p> Many desktop publishing packages and web page editors now use Lorem Ipsum</p>" >
-					<a href="">
-						<img class="img-responsive" src="/static/frontpages/images/products/products/bakery9.jpg" alt="Thumb-1">
-					</a>
-				</li>
+				{%endfor%}
 			</ul>
 		</div>
 		<!--/Sliders Section-->
@@ -96,17 +58,17 @@
 								<a href="#" class="bg-light"><i class="fa fa-dribbble"></i></a>
 							</div>
 						</div>
-						<a class="btn btn-info mb-1 mt-1" href="#"><i class="fa fa-bookmark"></i> Add Bookmark</a>
+						<!-- <a class="btn btn-info mb-1 mt-1" href="#"><i class="fa fa-bookmark"></i> Add Bookmark</a>
 						<a class="btn btn-success mb-1 mt-1" href="#"><i class="fa fa-star"></i> Write Review</a>
-						<a href="#" class="btn btn-danger icons mb-1 mt-1" data-toggle="modal" data-target="#report"><i class="icon icon-exclamation mr-1"></i> Report Abuse</a>
+						<a href="#" class="btn btn-danger icons mb-1 mt-1" data-toggle="modal" data-target="#report"><i class="icon icon-exclamation mr-1"></i> Report Abuse</a> -->
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="bg-white border-bottom py-3 item-user">
 			<div class="d-sm-flex container">
-				<div><a href="#" class="d-inline-block mr-4 font-weight-semibold"><span><i class="fa fa-map text-secondary d-inline-block mr-1"></i></span> Mp-214, New York, NY 10012, US-52014</a></div>
-				<div class="ml-auto"><a href="#" class="d-inline-block mt-2 mt-sm-0 font-weight-semibold fs-18"><span><i class="fa fa-phone text-secondary d-inline-block mr-1"></i></span> +154 256-635-654</a></div>
+				<div><a href="#" class="d-inline-block mr-4 font-weight-semibold"><span><i class="fa fa-map text-secondary d-inline-block mr-1"></i></span> {{object.get_company_address.region}}, {{object.get_company_address.city_town}}</a></div>
+				<div class="ml-auto"><a href="#" class="d-inline-block mt-2 mt-sm-0 font-weight-semibold fs-18"><span><i class="fa fa-phone text-secondary d-inline-block mr-1"></i></span> {{object.get_company_address.phone_number}}</a></div>
 			</div>
 		</div>
 		<!--/BreadCrumb-->
@@ -168,27 +130,8 @@
 									</table>
 								</div>
 							</div>
-							<div class="pt-4 pb-4 pl-5 pr-5 border-top border-top">
-								<div class="list-id">
-									<div class="row">
-										<div class="col">
-											<a class="mb-0">Business ID : #8256358</a>
-										</div>
-										<div class="col col-auto">
-											Posted By <a class="mb-0 font-weight-bold">Individual</a> / 21st Dec 2019
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="card-footer">
-								<div class="icons">
-									<a href="#" class="btn btn-light icons"><i class="icon icon-share mr-1"></i> Share Ad</a>
-									<a href="#" class="btn btn-light icons"><i class="icon icon-heart  mr-1"></i> 678</a>
-									<a href="#" class="btn btn-light icons"><i class="icon icon-printer  mr-1"></i> Print</a>
-									<a href="#" class="btn btn-light icons mb-1 mt-1" data-toggle="modal" data-target="#report"><i class="icon icon-exclamation mr-1"></i> Report Abuse</a>
-									<a href="#Map-modal" class="btn btn-success mt-1 mb-1 icons mr-1" data-toggle="modal" data-target="#Map-modal">Get Direction</a>
-								</div>
-							</div>
+							 
+							 
 						</div>
 						<!--Business Overview-->
 
@@ -206,11 +149,11 @@
 									<div class="item">
 										<div class="card mb-0">
 											<div class="item-card7-imgs">
-												<a href="{%url 'product_detail' pk=product.id%}"></a>
+												<a href="{%url 'company_product_detail' company=object.name pk=product.id%}"></a>
 												<img src="{{product.image.url}}" alt="img" class="cover-image">
 											</div>
 											<div class="item-card7-overlaytext">
-												<a href="{%url 'product_detail' pk=product.id%}" class="text-white"> {%if product.fandb_category%}
+												<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="text-white"> {%if product.fandb_category%}
 													{{product.fandb_category.product_type.category_name.category_type}}
 													{%elif product.pharmacy_category%}
 													{{product.pharmacy_category.category_type}}
@@ -242,14 +185,14 @@
 													</div> <a class="text-white" href="#">14 reviews</a>
 												</div>
 												<div class="item-card7-desc">
-													<a href="{% url 'bs_5' %}" class="text-dark"><h4 class="font-weight-semibold">{{product.name}} <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
+													<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold">{{product.name}} <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
 												</div>
 												<div class="item-card7-text">
 													<ul class="icon-card mb-0 mt-2">
-														<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>  USA</a></li>
-														<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> 2 hours ago</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i> Clara Pixley</a></li>
-														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> 785 485 965</a></li>
+														<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>{{product.company.get_company_address.city_town}}</a></li>
+														<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i>{{product.created_date|timesince}} ago.</a></li>
+														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{{product.created_by.first_name}} {{rp.created_by.last_name }}</a></li>
+														<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i>{{product.company.get_company_address.phone_number}}</a></li>
 													</ul>
 												</div>
 											</div>
@@ -266,7 +209,7 @@
 					<div class="col-xl-4 col-lg-4 col-md-12">
 						<div class="card overflow-hidden">
 							<div class="card-header">
-								<h3 class="card-title">Company User</h3>
+								<h3 class="card-title">Contact Manufacturer</h3>
 							</div>
 							<div class="card-body item-user">
 								<div class="profile-details">
@@ -285,7 +228,6 @@
 								</div>
 							</div>
 							<div class="card-body item-user">
-								<h4 class="mb-4">Contact Information</h4>
 								<div class="table-responsive">
 									<h6><span class="font-weight-semibold"><i class="fa fa-envelope mr-3 mb-2"></i></span><a href="#" class="text-body">{{company.contact_person.email}}</a></h6>
 											<h6><span class="font-weight-semibold"><i class="fa fa-phone mr-3 mb-2"></i></span><a href="#" class="text-secondary">{{company.contact_person.phone_number}}</a></h6>
@@ -300,47 +242,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="card">
-							<div class="card-header">
-								<h3 class="card-title">Menu Items</h3>
-							</div>
-							<div class="card-body">
-								<div class="table-responsive">
-									<table class="table table-striped mb-0 border">
-										<tbody>
-											<tr>
-												<td>Butterschoch cake (1kg)</td>
-												<td class="font-weight-semibold">$250</td>
-											</tr>
-											<tr>
-												<td>Chacolate cake (1kg)</td>
-												<td class="font-weight-semibold">$280</td>
-											</tr>
-											<tr>
-												<td>Pineapple cake (1kg)</td>
-												<td class="font-weight-semibold">$220</td>
-											</tr>
-											<tr>
-												<td>Blackforest cake (1kg)</td>
-												<td class="font-weight-semibold">$280</td>
-											</tr>
-											<tr>
-												<td>Butterschoch Ice creams</td>
-												<td class="font-weight-semibold">$150</td>
-											</tr>
-											<tr>
-												<td>Chacolate Ice Creams</td>
-												<td class="font-weight-semibold">$180</td>
-											</tr>
-											<tr>
-												<td>Venela Ice Creams</td>
-												<td class="font-weight-semibold">$160</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
+						 
 						<div class="card">
 							<div class="card-header">
 								<h3 class="card-title">Listing location</h3>
@@ -359,22 +261,7 @@
 								<a class="btn btn-secondary" href="#Map-modal" data-toggle="modal" data-target="#Map-modal">Get Direction</a>
 							</div>
 						</div>
-						<div class="card">
-							<div class="card-header">
-								<h3 class="card-title">Keywords</h3>
-							</div>
-							<div class="card-body product-filter-desc">
-								<div class="product-tags clearfix">
-									<ul class="list-unstyled mb-0">
-										<li><a href="#">Food</a></li>
-										<li><a href="#">Backery</a></li>
-										<li><a href="#">Cakes</a></li>
-										<li><a href="#">Ice Creams</a></li>
-										<li><a href="#">Deserts</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
+						 
 						 
 					</div>
 					<!--/Right Side Content-->

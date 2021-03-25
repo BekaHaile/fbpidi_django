@@ -16,6 +16,7 @@ urlpatterns = [
     path("company-products/<pk>/",CompanyProductList.as_view(),name="company_products"),
     path("company-product-detail/<str:company>/<pk>/",CompanyProductdetail.as_view(),name="company_product_detail"),
     path("company-projects/<pk>/",CompanyProjectList.as_view(),name="company_projects"),
+    path("company-project-detail/<str:company>/<pk>/",CompanyProjectdetail.as_view(),name="company_project_detail"),
 
     path("project_list/",ProjectList.as_view(),name="project_list"),
     path("project_detail/<pk>/",ProjectDetail.as_view(),name="project_detail"),

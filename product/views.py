@@ -759,11 +759,23 @@ class CheckoutView(LoginRequiredMixin,View):
             return redirect("")
 
 ################### newly added , delete this comment
-class ProductByCategoryView(View):
-    def get(self,*args,**kwargs):
-        products = Product.objects.filter(category=self.kwargs['cat_id'])
-        context = {'products':products,'count':products.count()}
-        return render(self.request,"frontpages/product/product_category.html",context)
+class ProductByCategoryView(ListView):
+    model=Product
+    template_name="frontpages/product/product_category.html"
+    paginate_by = 3
+    
+    def get_queryset(self):
+        category = Category.objects.get(id=self.kwargs['cat_id'])
+        if category.category_type == "Pharmaceuticals":
+            return Product.objects.filter(
+                pharmacy_category=category)
+        elif category.category_type == "Food" or category.category_type == "Beverage":
+            brands = []
+            for sub_cat in category.sub_category.all():
+                for brand in sub_cat.product_category.all():
+                    brands.append(brand)
+            return Product.objects.filter(fandb_category__in=brands)
+
 
 
 class ProductByMainCategory(ListView):

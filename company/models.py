@@ -439,7 +439,25 @@ class EventParticipants(models.Model):
     notified = models.BooleanField(verbose_name="If notification is sent = True", default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-   
+
+class HomePageSlider(models.Model):
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_slider")
+	slider_image = models.FileField(verbose_name="Slider Image",
+				validators=[FileExtensionValidator(
+					allowed_extensions=['jpg','png','jpeg']
+				)],help_text="Upload images files with prefered, 1280x720px"
+				)
+	alt_text = models.CharField(max_length=255,verbose_name="Image Replacement Text")
+	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='slider_created_by')
+	created_date	= models.DateTimeField(auto_now_add=True)
+	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='slider_updated_by',null=True,blank=True)
+	last_updated_date	= models.DateTimeField(null=True)
+	expired	= models.BooleanField(default=False)
+
+	class Meta:
+		ordering = ('-created_date',)
+
+
 
 class Bank(models.Model):
     bank_name = models.CharField(verbose_name="bank name", max_length=255,)
