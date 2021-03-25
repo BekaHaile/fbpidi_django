@@ -352,7 +352,6 @@ class InvestmentProject(models.Model):
 	expired	= models.BooleanField(default=False)
 
 	
-
 class LandUsage(models.Model):
 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="land_usage")
 	total_land_size = models.FloatField(verbose_name="Total land size in meter square")	 
@@ -361,6 +360,7 @@ class LandUsage(models.Model):
 	warehouse = models.FloatField(verbose_name="Ware house in meter square")	 
 	other = models.FloatField(verbose_name="production building in meter square")
 	timestamp = models.DateTimeField(auto_now_add=True)	 
+
 
 class ProjectState(models.Model):
 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="project_state")
@@ -374,6 +374,7 @@ class ProjectState(models.Model):
 	testproduct = models.FloatField(verbose_name="Test Product")	
 	certification = models.FloatField(verbose_name="certification")	
 	timestamp	= models.DateTimeField(auto_now_add=True)
+
 
 class ProjectProductQuantity(models.Model):
 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="project_product_qty")
@@ -440,7 +441,6 @@ class EventParticipants(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
    
-
 class Bank(models.Model):
     bank_name = models.CharField(verbose_name="bank name", max_length=255,)
     bank_name_am = models.CharField(verbose_name="bank name", max_length=255,default="")

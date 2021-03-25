@@ -14,6 +14,7 @@
 <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/legacy.js"></script>
 <script src="/static/admin/global_assets/js/plugins/notifications/jgrowl.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/picker_date.js"></script>
+
 <style>
 .reveal-if-active {
   opacity: 0;
@@ -133,7 +134,11 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 									</div>
 								</div>
 							</div>
-							<br><br><br>
+							<br><br>
+							
+							<div id='alart' style="display:none;" class="alert alert-danger"  role="alert" >
+								 <p id="alart_message" >   </p>
+							</div>
 							
 							
 							<div class = "row">
@@ -167,10 +172,6 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 									</div>
 								</div>
 
-
-							
-
-
 							</div>		
 						</fieldset>
 						<div class="text-right">
@@ -187,34 +188,22 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 								class="btn btn-primary rounded-round col-lg-2">Cancel </button>
 						</div>
 					</form>
-					
 					<br>
 					<br>
-
-
-					
-
-
 						
 				</div>
-
 			</div>
 
 	{%else%}
 		
 			<div class="card">
-
 				<div class="card-body">
-
 					<form action="{%url 'admin:create_tender'%}" method="POST" class="wizard-form steps-enable-all" enctype="multipart/form-data">
 						<fieldset class="mb-3 ml-3 mr-3">
 							<legend class="text-uppercase font-size-sm font-weight-bold">Create new Tender</legend>
 							<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
 							{{form.errors}}
-						
 							{%csrf_token%}
-						
-							
 							<div class="form-group row">
 								<label class="col-form-label col-lg-3">{{form.title.label|title}} *</label>
 								<div class="col-lg-9">
@@ -240,14 +229,10 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 									{{form.description_am|safe}}
 								</div>
 							</div>
-
 							<div class="row">
-								<div class="col-md-6">
-									
+								<div class="col-md-6">	
 									<div class="form-group ">
-										
 											<label class="col-form-label ">{{form.tender_type.label|title}}</label>
-											
 											<span class="form-text text-muted">If you set the type to be free, the document will be downloaded freely</span>
 											<input type="radio" name="tender_type" id="create_free" value="Free">
 											<label for="create_free">Free</label>
@@ -255,21 +240,12 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 											<input type="radio" name="tender_type" id="create_paid" value="Paid">
 											<label for="create_paid">Paid</label>
 											<br>
-
 											<div class="reveal-if-active">
 												<label style="margin-right: 10px;">Document Price:</label>
 												<input type="number" required name = "document_price" placeholder="document price" value="0"/>
 											</div>
-									
-								
 									</div>
-									
-
 								</div>
-								
-								
-
-							
 								<div class="col-md-6">
 									<div class="form-group ">
 										<label class="col-form-label ">Upload your tender document</label>
@@ -279,7 +255,9 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 									</div>
 								</div>
 							</div>
-							
+							<div id='alart' style="display:none;" class="alert alert-danger"  role="alert" >
+								<p id="alart_message" >   </p>
+						   </div>
 							<div class = "row">
 								<div class="col-md-6">
 									<div class="form-group row">
@@ -289,11 +267,8 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 														</span>
 												<input type="text" name="start_date" class="form-control daterange-single" value="">
 										</div>
-											
 									</div>
 								</div>
-
-
 								<div class="col-md-6">
 									<div class="form-group row">
 										<div class="col-lg-9">
@@ -301,17 +276,11 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 															<span class="input-group-text"><i class="icon-calendar22">	End Date *</i></span>
 														</span>
 												<input type="text" name ="end_date" class="form-control daterange-single" value="">
-										</div>
-											
+										</div>		
 									</div>
 								</div>
-
-
 							</div>
-							
-							
 						</fieldset>
-
 						<div class="text-right">
 							<button style="padding-left: 10%; padding-right: 10%;" type="submit"
 								class="btn btn-primary rounded-round">Create Tender </button>
@@ -328,5 +297,9 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 		$('#summernote').summernote();
 		$('.summernote').summernote();
 	});
+
+
+	
 </script>
+<script src="/static/admin/global_assets/js/custom_js/start_date_checker.js"></script>
 {%endblock%}

@@ -60,6 +60,9 @@
                     </div>
 
                      <!-- Date Fields -->
+                     <div id='alart' style="display:none;" class="alert alert-danger"  role="alert"> 
+                        <p id="alart_message" >   </p>
+                    </div>
                     
 							<div class = "row">
 								<!-- start date edit  -->
@@ -176,6 +179,10 @@
                     </div>
 
                    <!-- Date Fields -->
+                   
+                    <div id='alart' style="display:none;" class="alert alert-danger"  role="alert"> 
+                        <p id="alart_message" >   </p>
+                    </div>
                    <div class = "row">
                         <div class="col-md-6">
                             <div class="form-group row">
@@ -235,4 +242,5 @@
 		$('.summernote').summernote();
 	});
 </script>
+<script src="/static/admin/global_assets/js/custom_js/start_date_checker.js"></script>
 {%endblock%}
