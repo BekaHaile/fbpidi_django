@@ -21,7 +21,7 @@ from admin_site.views.dropdowns import (AllSettingsPage,
                                         CreateProjectDropdownsMaster,
                                         UpdateProjectDropdownsMaster)
 
-from collaborations.views import (  CreateNews, EditNews, NewsDetail,AdminNewsList,AdminCompanyEventList,
+from collaborations.views import (  CreateNews, EditNews, AdminNewsList,AdminCompanyEventList,
                                     CreateCompanyEvent,EditCompanyEvent, TenderList, CreateTender, TenderDetail, 
                                     EditTender,  ManageBankAccount,CreateDocument, DocumentListing, EditDocument, 
                         )
@@ -219,8 +219,7 @@ class CustomAdminSite(admin.AdminSite):
             path('news_list/', wrap(AdminNewsList.as_view()), name = "news_list"),
             path('create_news/', wrap(CreateNews.as_view()), name = "create_news"),
             path('edit_news/<id>/', wrap(EditNews.as_view()), name = "edit_news"),
-            path('news_detail/<id>/', wrap(NewsDetail.as_view()), name = "news_detail"),
-
+            
             path('admin_companyevent_list/', wrap(AdminCompanyEventList.as_view()), name = "admin_companyevent_list"),
             path("create_companyevent/",wrap(CreateCompanyEvent.as_view()),name="create_companyevent"),
             path("edit_companyevent/<pk>/",wrap(EditCompanyEvent.as_view()),name="edit_companyevent"),

@@ -163,12 +163,10 @@
 			alert_box.innerHTML = text;
 			alert_box.style['display'] = 'block';
 			$("input[type = 'submit']").attr("disabled",  true);
-
-			// document.getElementById("submit_btn").disabled = true
 		}
 	
-	function check_date_input(){
-			
+	function check_date_input()
+	{		
 			var start_date = new Date($("input[name = 'starting_date']").val()); 
 			var end_date = new Date($("input[name = 'ending_date']").val()); 
 			str_today = new Date().toDateString()
@@ -185,9 +183,8 @@
 			else{
 				document. getElementById("alart").style.display = "none"; //hide.
 				$("input[type = 'submit']").attr("disabled",  false);
-
+				}
 	}
-}
 
 </script>
 {%endblock%}

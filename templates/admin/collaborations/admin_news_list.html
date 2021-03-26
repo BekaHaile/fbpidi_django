@@ -46,9 +46,9 @@
 								{%for news in newslist%}
 									<tr>
 										{% if news.get_images %}
-										<td><a href="{% url 'admin:news_detail' id=news.id %}"><img src="{{news.get_single_image}}" alt="Image" width="100" height="70"></a></td>
+										<td><a href="#"><img src="{{news.get_single_image}}" alt="Image" width="100" height="70"></a></td>
 										{% else %}
-										<td><a href="{% url 'admin:news_detail' id=news.id %}"><img src="{{news.get_company.get_image}}" alt="Image" width="100" height="70"></a></td>
+										<td><a href="#"><img src="{{news.get_company.get_image}}" alt="Image" width="100" height="70"></a></td>
 										{% endif %} 
 										<td><b>{{news.title}}</b></td>
 										<td><b>{{news.title_am}}</b></td>
@@ -62,8 +62,7 @@
 														<i class="icon-menu9"></i>
 													</a>
 													<div class="dropdown-menu dropdown-menu-right">
-															<a href="{% url 'admin:news_detail' id=news.id %}" class="dropdown-item"><i class="icon-eye"></i>View News Detail</a>
-
+															
 														{% if user.is_superuser or user.get_company == news.get_company %}
 															{% if perms.collaborations.change_news %}		
 															<a href="{%url 'admin:edit_news' id=news.id%} " class="dropdown-item"><i class="icon-pencil"></i>Edit News</a>

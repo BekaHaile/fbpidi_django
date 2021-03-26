@@ -106,7 +106,7 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 											<label for="edit_paid">Paid</label><br>  
 											<div class="edit-reveal-if-active">
 												<label style="margin-right: 10px;">Document Price: </label>
-												<input type="number" required name = "document_price" placeholder="document price" value = "0"/>
+												<input type="number" class = "form form-control col-lg-6" required name = "document_price" placeholder="document price" value = "0"/>
 											</div>  
 											{% else %}
 
@@ -116,7 +116,7 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 											<label for="edit_paid">Paid</label><br>  
 											<div class="edit-reveal-if-active">
 												<label style="margin-right: 10px;">Document Price: {{tender.document_price}}</label>
-												<input type="number" required name = "document_price" placeholder="document price" value = "{{tender.document_price}}"/>
+												<input type="number" class = "form form-control col-lg-6" required name = "document_price" placeholder="document price" value = "{{tender.document_price}}"/>
 											</div>
 											{%endif%}
 									</div>
