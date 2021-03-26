@@ -536,7 +536,7 @@ class EditNews(LoginRequiredMixin, View):
                         imag = NewsImages(created_by=self.request.user, created_date=timezone.now(), news=news, name = image.name, image = image)
                         imag.save()
                 messages.success(self.request, "News Edited Successfully!")
-                return redirect(f"/admin/news_detail/{news.id}/") 
+                return redirect(f"/admin/news_list/") 
             else:
                 messages.warning(self.request, "Error! News not Edited!")
 
@@ -556,29 +556,7 @@ class AdminNewsList(LoginRequiredMixin, ListView):
                 return redirect("admin:index")
 
 
-class NewsDetail(LoginRequiredMixin, View):
-    def get(self, *args, **kwargs):         
-        if self.kwargs['id']:
-            try:
-                news = News.objects.get(id =self.kwargs['id'] )
-                context = {'form':NewsForm, 'news':news , "NEWS_CATEGORY": News.NEWS_CATAGORY}
-                return render(self.request,'admin/collaborations/news_detail.html',context)
-            except Exception as e:
-                return redirect("admin:news_list")
-        print("error at newsDetail for admin")
-        return redirect("admin:news_list")
 
-
-#just checking Ajax, not exactly working
-def Ajax(request):
-    if request.is_ajax and request.method == "GET":
-        selected_categories = request.GET["by_category"].split(",")
-        news= News.objects.filter(catagory = selected_categories[0] )
-        return JsonResponse ({'respo': NewsListSerializer(news, many = True).data})
-    else:
-        result = SearchByTitle_All('News', self.request)
-        return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':result['query'], 'message':result['message'], 'NEWS_CATAGORY':News.NEWS_CATAGORY})
-       
 
 ##### News, Customer
 # list all or by_category or by_title or description

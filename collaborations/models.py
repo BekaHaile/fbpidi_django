@@ -6,6 +6,11 @@ from django.core.validators import FileExtensionValidator
 
 from company.models import Company,CompanyBankAccount
 
+JOB_CHOICES=[ ('', 'Select Employment Type'),
+            ('Temporary','Temporary'),
+            ('Permanent','Permanent'),
+            ('Contract','Contract')]
+
 
 class PollsQuestion(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
@@ -227,6 +232,7 @@ class JobCategory(models.Model):
 
     def __str__(self):
         return self.category_name
+        
 
     
 class Vacancy(models.Model):
@@ -234,7 +240,7 @@ class Vacancy(models.Model):
     location = models.CharField(max_length=1000)
     salary = models.IntegerField(null=True,default=0)
     category = models.ForeignKey(JobCategory, on_delete=models.CASCADE)
-    employement_type = models.CharField(max_length=10000,null=False)
+    employement_type = models.CharField(choices = JOB_CHOICES, max_length=10000,null=False)
     starting_date = models.DateTimeField()
     ending_date = models.DateTimeField()
     job_title = models.CharField(max_length=10000,null=False)
@@ -307,7 +313,9 @@ class News(models.Model):
     title_am = models.CharField(max_length=500, null = False)
     description = models.TextField( verbose_name="News Description(English)" )
     description_am = models.TextField( verbose_name="News Description(Amharic)" )
-    catagory = models.TextField(verbose_name="News Catagory, the choices are ", choices=NEWS_CATAGORY)
+    catagory = models.CharField( max_length=30, choices = (('',"select Category"),
+        ('Bevearage','Bevearage'), ('Business','Business'), ('Food','Food'),('Job Related','Job Related'),
+    ), verbose_name="News Catagory, the choices are ")
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="news_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
