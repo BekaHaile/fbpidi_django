@@ -764,6 +764,11 @@ class ProductByCategoryView(ListView):
     template_name="frontpages/product/product_category.html"
     paginate_by = 3
     
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['cat_id']).category_type)
+        return context
+
     def get_queryset(self):
         category = Category.objects.get(id=self.kwargs['cat_id'])
         if category.category_type == "Pharmaceuticals":
@@ -782,7 +787,12 @@ class ProductByMainCategory(ListView):
     model=Product
     template_name="frontpages/product/product_category.html"
     paginate_by = 3
-    
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.filter(category_type=self.kwargs['option'])
+        return context
+
     def get_queryset(self):
         brands = []
         if self.kwargs['option'] == "Beverage":
