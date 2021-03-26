@@ -804,46 +804,39 @@ class ProjectUpdateForm(forms.ModelForm):
         }
         
 
-  
-
-class CompanyBankAccountForm(forms.ModelForm):
-    bank = forms.ModelChoiceField(empty_label="Choose Bank", queryset=Bank.objects.all(),widget=forms.Select(attrs={'class':'form-control form-control-uniform'}),required=True)
-
-    class Meta:
-        model = CompanyBankAccount
-        fields = ('bank', 'account_number')
-        widgets = {
-            'bank':forms.Select(),
-            'account_number':forms.TextInput( attrs = {'class': 'form-control', 'placeholder': 'Valid bank account (for the selected bank)'}),
-        }
-
-        
-# class FbpidiCompanyForm()
-class FbpidiCompanyForm(forms.ModelForm):
+class SliderImageForm(forms.ModelForm):
+    x = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(),required=False)
 
     class Meta:
-        model = Company
-        fields = ('__all__')
+        model = HomePageSlider
+        fields = ('slider_image','alt_text')
         widgets = {
-            # Profile
-            # 'company_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Company Name(English)'}),
-            # 'company_name_am': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Company Name(Amharic)'}),
-            # 'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address..'}),
-            # 'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number...', "data-mask": "+251-99999-9999"}),
-            # 'company_logo': forms.FileInput(attrs={'class': 'form-input-styled'}),
-            # 'company_intro': forms.FileInput(attrs={'class': 'form-input-styled'}),
-            # 'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address'}),
-            # 'established_year':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_year")','placeholder':'Year Of Establishement'}),
-            # 'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
-            # 'postal_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Postal Code'}),
-            # 'instagram_link':forms.TextInput(attrs={'class':'form-control','placeholder':'Main Products'}),
-            # 'linkedin_link':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_capital")','placeholder':'Capital'}),
-            # 'detail': forms.Textarea(attrs={'class': 'summernote'}),
-            # 'detail_am': forms.Textarea(attrs={'class': 'summernote'}),
-            # # 'color':forms.TextInput(attrs={'class':"form-control colorpicker-show-input",
-            # #     'data-preferred-format':"hex",'data-fouc':'data-fouc', 'type': 'text'}),
-            # 'facebook_link': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Facebook Link'}),
-            # 'twiter_link': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Twitter Link'}),
-            # 'google_link': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Google Link'}),
-            # 'pintrest_link': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Pintrest Link'}),
+            'slider_image':forms.FileInput(attrs={'class':'form-control'}),
+            'alt_text':forms.TextInput(attrs={'class':'form-control','placeholder':'Image Alt Text'})
         }
+    
+    @atomic
+    def save(self,commit=True):
+        slider = super(SliderImageForm, self).save()
+
+        x = self.cleaned_data.get('x')
+        y = self.cleaned_data.get('y')
+        w = self.cleaned_data.get('width')
+        h = self.cleaned_data.get('height')
+
+        if (x or y or w or h ):
+                image = Image.open(slider.slider_image)
+                cropped_image = image.crop((x, y, w+x, h+y))
+                resized_image = cropped_image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image.save(slider.slider_image.path)
+
+                return slider
+                
+        else:
+                image = Image.open(slider.slider_image)
+                resized_image = image.resize((1280, 720), Image.ANTIALIAS)
+                resized_image.save(slider.slider_image.path)
+                return slider

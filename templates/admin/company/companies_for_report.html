@@ -1,0 +1,204 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+
+	<!-- Theme JS files -->
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/datatables_basic.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+	<!-- /theme JS files -->
+ 
+{% endblock %}
+
+{%block pagename%}Companies{%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<ul class="list-inline list-inline-condensed mb-0">
+								<li class="list-inline-item">
+									
+									<select class="form-control form-control-uniform"  name="sector" id="sector">
+										<option value="all"><i class="icon-stack2 mr-2"></i>All Sectors</option>
+										<option value="Food"><i class="mi-cake mr-2"></i>Food</option>
+										<option value="Beverage"><i class="mi-local-drink mr-2"></i>Beverage</option>
+										<option value="Pharmaceuticals"><i class="mi-local-pharmacy mr-2"></i>Pharmaceuticals</option>
+									</select>
+									<!-- <a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										All Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="#" class="dropdown-item"><i class="mi-cake "></i>Food</a>
+										<a href="#" class="dropdown-item"><i class="mi-local-drink"></i> Beverage</a>
+										<a href="#" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
+									</div> -->
+								</li>
+								<li class="list-inline-item ">
+									<select class="form-control form-control-uniform" style="display: none;" id="sub_sector" >
+										 
+									</select>
+									<!-- <a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sub Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="#" class="dropdown-item"><i class="mi-cake "></i>Food</a>
+										<a href="#" class="dropdown-item"><i class="mi-local-drink"></i> Beverage</a>
+										<a href="#" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
+									</div> -->
+								</li>
+							</ul>
+
+							<ul class="list-inline mb-0 ml-md-auto">
+								<li class="list-inline-item dropdown"> <a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-file-text3 mr-2"></i> Export Data </a>
+
+									<div id="export_div" class="dropdown-menu">
+										<a href="#" id="export_pdf" class="dropdown-item"><i class="icon-file-pdf"></i>Export PDF</a>
+										<a href="#" id='export_csv' class="dropdown-item"><i class="icon-file-excel"></i>Export CSV</a>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header">
+
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company Name</th>
+									<th>Sector</th>
+									<th>Logo</th>
+									<th>Established Year</th>
+									<th>Trade License</th>
+								</tr>
+							</thead>
+							<tbody id="tbody">
+								{%for company in object_list%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{company.name}}</td>
+									<td><a href="#">{{company.main_category}}</a></td>
+									<td><a target="_blank" href="{{company.logo.url}}"><i class="icon-eye"></i>See Logo</a></td>
+									<td>{{company.established_yr}}</td>
+									<td><a target="_blank" href="{{company.trade_license.url}}">Open</a></td>
+								</tr>
+								 
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				 
+				
+			</div>
+			<!-- /content area -->
+			<script>
+				$(document).ready(function(){
+					csv_link = document.getElementById('export_csv');
+					csv_link.href = "/admin/export-csv-file/all/main_category/";
+					$("#sector").change(function(){
+
+						
+						var sector = $("#sector").val();
+						// Create anchor element.
+						csv_link = document.getElementById('export_csv')
+						csv_link.href = "/admin/export-csv-file/"+sector+"/main_category/"; 
+
+						if (sector == 'all'){
+							$("#sub_sector").css("display",'none');
+						}
+						$.ajax({
+							url: "/admin/company-filter-by-sector/"+sector+"/",
+							type: "GET",
+							success: function (result) {
+								var company_list =  result['data'];
+								var sub_sector = result['sub_sector'];
+								
+								if(result['sector'] != 'all'){
+									$("#sub_sector").css("display",'block');
+									if(sub_sector.length>0){
+										var sector_data = "<option value='all'>All "+sector+" Sectors</option>";
+										$.each(sub_sector, function(index) {
+											// console.log(sub_sector[index].fields)
+											sector_data+="<option value='"+sub_sector[index].fields.category_name+"'>"+sub_sector[index].fields.category_name+"</option>";
+									  	});
+									  $("#sub_sector").html(sector_data);
+									}
+								}
+								if(company_list.length > 0){
+									var table_data = "";
+									  $.each(company_list, function(index) {
+										//   console.log(company_list[index].fields)
+										table_data+="<tr><td>"+parseInt(index + 1)+"</td>"
+												+"<td>"+company_list[index].fields.name+"</td>"
+												+"<td><a href='#'>"+company_list[index].fields.main_category+"</a></td>"
+												+"<td><a target='_blank' href='/media/uploads/"+company_list[index].fields.logo+"/'><i class='icon-eye'></i>SeeLogo</a></td>"
+												+"<td>"+company_list[index].fields.established_yr+"</td>"
+												+"<td><a target='_blank' href='/media/uploads/"+company_list[index].fields.trade_license+"/'>Open</a></td>"
+												+"</tr>";
+
+									  });
+									  $("#tbody").html(table_data);
+									}
+							},
+							error: function (error) {
+							 console.log(error);
+							}
+						});
+					});
+					$("#sub_sector").change(function(){
+						
+						var sub_sector = $("#sub_sector").val();
+						
+						// Create anchor element.
+						csv_link = document.getElementById('export_csv')
+						csv_link.href = "/admin/export-csv-file/"+sub_sector+"/sub_category/"; 
+							
+					 
+						if (sub_sector != 'all'){
+							$.ajax({
+							url: "/admin/company-filter-by-sub_sector/"+sub_sector+"/",
+							type: "GET",
+							success: function (result) {
+								var company_list =  result['data'];
+								// console.log(result['sub_sector'])
+								if(company_list.length > 0){
+									var table_data = "";
+									  $.each(company_list, function(index) {
+										table_data+="<tr><td>"+index+"</td>"
+												+"<td>"+company_list[index].fields.name+"</td>"
+												+"<td><a href'#'>"+company_list[index].fields.main_category+"</a></td>"
+												+"<td><a target='_blank' href='/media/uploads/"+company_list[index].fields.logo+"/'><i class='icon-eye'></i>SeeLogo</a></td>"
+												+"<td>"+company_list[index].fields.established_yr+"</td>"
+												+"<td><a target='_blank' href='/media/uploads/"+company_list[index].fields.trade_license+"/'>Open</a></td>"
+												+"</tr>";
+
+									  });
+									  $("#tbody").html(table_data);
+									}
+							},
+							error: function (error) {
+							 console.log(error);
+							}
+						});
+						}
+						
+					});
+				});
+			</script>
+{%endblock%}

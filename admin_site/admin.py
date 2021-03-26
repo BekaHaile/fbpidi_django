@@ -258,6 +258,16 @@ class CustomAdminSite(admin.AdminSite):
             path("update_company_info/<pk>",wrap(ViewMyCompanyProfile.as_view()),name="update_company_info"),
             path("check_company_year_data/<model>/<company>/<year>/",wrap(CheckYearField.as_view()),name="check_year_data"),
 
+            path("create_slider_image/<company>/",wrap(CreateSliderImage.as_view()),name="create_slider"),
+            path("update_slider_image/<pk>/",wrap(UpdateSliderImage.as_view()),name="update_slider"),
+            path("slider-image-list/",wrap(SliderImageList.as_view()),name="slider_list"),
+
+            # Company Report Paths
+            path("company-list-for-generating-report/",wrap(CompanyListForReport.as_view()),name="company_list_report"),
+            path("company-filter-by-sector/<sector>/",wrap(FilterCompanyByMainCategory.as_view()),name="filter_company_sector"),
+            path("company-filter-by-sub_sector/<category>/",wrap(FilterCompanyCategory.as_view()),name="filter_company_sub_sector"),
+            path("export-csv-file/<category>/<option>/",wrap(ExportCSV.as_view()),name="export_csv_file"),
+
             path("company_list/",wrap(CompaniesView.as_view()),name="companies"),
             path("company_detail/<pk>/",wrap(CompaniesDetailView.as_view()),name="company_detail"),
             path("rate_company_status/<pk>/",wrap(RateCompany.as_view()),name="rate_company"),

@@ -1,8 +1,8 @@
-{%extends 'frontpages/layout.html'%}
+{%extends 'frontpages/company/company_layout.html'%}
 {%load i18n%}
 {%load core_template_tags%}
 
-{%block title%}Projects List{%endblock%}
+{%block title%}{{object.name}}-Project List{%endblock%}
 {%block content%}
 {% get_current_language as LANGUAGE_CODE %}
 		<!--Breadcrumb-->
@@ -11,10 +11,10 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Projects List</h1>
+							<!-- <h1 class="">{{object.name}} Products</h1> -->
 							<ol class="breadcrumb text-center">
-								<li class="breadcrumb-item"><a href="{%url 'index' %}">Home</a></li>
-								<li class="breadcrumb-item"><a href="#">Projects</a></li>
+								<li class="breadcrumb-item"><a href="{%url 'company_home' pk=object.id%}">Home</a></li>
+								<li class="breadcrumb-item"><a href="{%url 'company_projects' pk=object.id%}">Projects</a></li>
 							</ol>
 						</div>
 					</div>
@@ -29,11 +29,11 @@
 				<div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-12">
 						<div class="row">
-							{%for project in object_list%}
+							{%for project in object.company_project.all%}
 							<div class="col-xl-4 col-lg-6 col-md-12">
 								<div class="card">
 									<div class="item7-card-img">
-										<a href="#"></a>
+										<a href="{%url 'company_project_detail' company=object.name pk=project.id%}"></a>
 										{%if project.image%}
 										<img src="{{project.image.url}}" alt="img" class="cover-image">
 										{%endif%}
@@ -45,11 +45,13 @@
 										<div class="item7-card-desc d-flex mb-2">
 											<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{project.site_location_name}}</a>
 											<div class="ml-auto">
+												<a class="mr-0" href="#"><i class="fa fa-ship text-muted mr-2"></i>{{project.quantity|floatformat:0}} in Stock</a>
 											</div>
 										</div>
 										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{{project.project_name}}</h4></a>
 										<p>{{project.description|truncatechars_html:100|safe}}</p>
-										<a href="{%url 'project_detail' pk=project.id%}" class="btn btn-secondary btn-sm">Read More</a>
+										<a href="{%url 'company_project_detail' company=object.name pk=project.id%}" class="btn btn-secondary btn-sm">Read More</a>
+										<a href="#" class="btn btn-primary btn-sm pull-right">Contact Project Owner</a>
 									</div>
 								</div>
 							</div>

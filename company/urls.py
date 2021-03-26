@@ -4,13 +4,7 @@ from company.views import (
     CreateFbpidiCompanyProfile, CompanyByMainCategory,
     ProjectList,ProjectDetail
 )
-from company.company_views import (CompanyHomePage, CompanyAbout, CompanyContact,CompanyProductList,CompanyBlogCreateComment,CompanyFaq,
-                                    CompanyProjectList, CompanyNewsList,CompanyNewsDetail,CompanyEventList,CompanyEventDetail,CompanyFaqDetail,
-                                    CompanyAnnouncementList, CompanyAnnouncementDetail, CompanyResearchList, CompanyResearchDetail, CompanyTenderList,CompanyVacancyList,CompanyBlogList,CompanyBlogSearch,
-                                    CompanyPollList, CompanyTenderDetail,CompanyVacancyDetail, CompanyVacancyApply,CompanyBlogDetail, CompanyPollDetail,
-
-
-)
+from company.company_views import *
 
 
 urlpatterns = [
@@ -20,7 +14,9 @@ urlpatterns = [
     path("contact/<pk>/",CompanyContact.as_view(),name="company_contact"),
 
     path("company-products/<pk>/",CompanyProductList.as_view(),name="company_products"),
+    path("company-product-detail/<str:company>/<pk>/",CompanyProductdetail.as_view(),name="company_product_detail"),
     path("company-projects/<pk>/",CompanyProjectList.as_view(),name="company_projects"),
+    path("company-project-detail/<str:company>/<pk>/",CompanyProjectdetail.as_view(),name="company_project_detail"),
 
     path("project_list/",ProjectList.as_view(),name="project_list"),
     path("project_detail/<pk>/",ProjectDetail.as_view(),name="project_detail"),

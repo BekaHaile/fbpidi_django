@@ -1,0 +1,80 @@
+{%extends 'frontpages/company/company_layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+
+{%block title%}{{object.name}}-{{project.project_name}}{%endblock%}
+{%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+		<!--Breadcrumb-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white">
+							<!-- <h1 class="">Project-Details</h1> -->
+							<ol class="breadcrumb">
+								<li class="breadcrumb-item"><a href="{%url 'company_home' pk=project.id%}">Home</a></li>
+								<li class="breadcrumb-item"><a href="{%url 'company_projects' pk=project.id%}">Products</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">{{project.project_name}}</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Breadcrumb-->
+
+		<!--Add listing-->
+		<section class="sptb">
+			<div class="container">
+				<div class="row">
+					<div class="d-block mx-auto col-lg-10 col-md-12">
+						<div class="card">
+							<div class="card-body">
+								<a href="#" class="text-body"><h3 class="font-weight-semibold text-capitalize">{{project.project_name}}</h3></a>
+								<div class="demo-gallery">
+									<img class="img-responsive" src="{{project.image.url}}" alt="Thumb-1">
+
+								</div>
+								<div class="item7-card-desc d-flex mb-2 mt-3">
+									<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{project.created_date|date}}</a>									 
+								</div>
+								<div class="item7-card-desc d-flex mb-2 mt-3">
+									<a href="#"><i class="fa fa-user text-muted mr-2"></i>&nbsp;&nbsp;{{project.contact_person.first_name}} {{project.contact_person.last_name}}</a>	
+									<a href="#"><i class="fa fa-envelope text-muted mr-2"></i>&nbsp;&nbsp;{{project.contact_person.email}} </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<a href="#"><i class="fa fa-phone text-muted mr-2"></i><span> {{project.contact_person.phone_number}}</span></a>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<a href="#"><i class="fa fa-map text-muted mr-2"></i><span> {{project.site_location_name}}</span></a>										 
+								</div>
+								<p>{{project.description|safe}}</p>
+							</div>
+						</div>
+ 
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Add listing-->
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Subscribe To Our Newsletter</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+						<div class="input-group sub-input mt-0">
+							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Newsletter-->
+{%endblock%}

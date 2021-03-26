@@ -136,9 +136,9 @@
 				<div class="col-sm-6 col-lg-3">
 					<div class="card">
 						<div class="card-img-actions m-1">
-							<img class="card-img img-fluid" src="{{pd_img.image.url}}" alt="">
+							<img class="card-img img-fluid" src="{{pd_img.product_image.url}}" alt="">
 							<div class="card-img-actions-overlay card-img">
-								<a href="{{pd_img.image.url}}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round" data-popup="lightbox" rel="group">
+								<a href="{{pd_img.product_image.url}}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round" data-popup="lightbox" rel="group">
 									<i class="icon-plus3"></i>
 								</a>
 
@@ -174,7 +174,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{%for price in object.price.all%}
+						{%for price in object.product_price.all%}
 							<tr>
 								<td>{{forloop.counter}}</td>
 								<td>ETB {{price.price}}</td>
