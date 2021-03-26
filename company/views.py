@@ -68,8 +68,8 @@ class CreateCompanyProfile(LoginRequiredMixin,CreateView):
         return redirect("admin:create_company_detail",pk=company.id)
 
     def form_invalid(self,form):
-        print(form.errors)
-        return redirect("admin:index")
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_company_profile")
 
 
 class CreateMyCompanyDetail(LoginRequiredMixin,UpdateView):
@@ -102,12 +102,18 @@ class CreateMyCompanyDetail(LoginRequiredMixin,UpdateView):
         company = form.save(commit=False)
         company.category.set(form.cleaned_data.get('category'))
         company.management_tools.set(form.cleaned_data.get('management_tools'))
+        company.source_of_energy.set(form.cleaned_data.get('source_of_energy'))
+        company.support_required.set(form.cleaned_data.get('support_required'))
         company.certification.set(form.cleaned_data.get('certification'))
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
         company.save()
         messages.success(self.request,"Company Detail Information Added")
         return redirect("admin:update_company_info",pk=self.kwargs['pk'])
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_mycompany_detail",pk=self.kwargs['pk'])
 
 class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
     model = Company
@@ -139,12 +145,18 @@ class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
         company = form.save(commit=False)
         company.category.set(form.cleaned_data.get('category'))
         company.management_tools.set(form.cleaned_data.get('management_tools'))
+        company.source_of_energy.set(form.cleaned_data.get('source_of_energy'))
+        company.support_required.set(form.cleaned_data.get('support_required'))
         company.certification.set(form.cleaned_data.get('certification'))
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
         company.save()
         messages.success(self.request,"Company Detail Information Added")
         return redirect("admin:companies")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_company_detail",pk=self.kwargs['pk'])
 
 class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
     model = Company
@@ -176,18 +188,33 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
         company = form.save(commit=False)
         company.category.set(form.cleaned_data.get('category'))
         company.management_tools.set(form.cleaned_data.get('management_tools'))
+        company.source_of_energy.set(form.cleaned_data.get('source_of_energy'))
+        company.support_required.set(form.cleaned_data.get('support_required'))
         company.certification.set(form.cleaned_data.get('certification'))
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
         company.save()
         messages.success(self.request,"Company Detail Information Updated")
-        return redirect("admin:update_company_info",pk=self.kwargs['pk'])
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=self.kwargs['pk'])
+        else:
+            return redirect("admin:update_company_info",pk=self.kwargs['pk'])
 
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=self.kwargs['pk'])
+        else:
+            return redirect("admin:update_company_info",pk=self.kwargs['pk'])
     
 class CompaniesView(LoginRequiredMixin,ListView):
     model = Company
     template_name = "admin/company/companies.html"
     paginate_by = 8
+
+
+    def get_queryset(self):
+        return Company.objects.all().exclude(main_category="FBPIDI")
 
 class CompaniesDetailView(LoginRequiredMixin,UpdateView):
     model = Company
@@ -198,6 +225,17 @@ class CompaniesDetailView(LoginRequiredMixin,UpdateView):
         context = super().get_context_data(**kwargs)
         context['rating_form'] = CompanyRatingForm
         context['address_form'] = CompanyAddressForm
+        context['inv_capital_form'] = InvestmentCapitalForm
+        context['certificate_form'] = CertificateForm
+        context['employees_form'] = EmployeesForm
+        context['job_created_form'] = JobCreatedForm
+        context['edication_form'] = EducationStatusForm
+        context['female_posn_form'] = FemalesInPositionForm
+        context['src_amnt_input_form'] = SourceAmountIputsForm
+        context['destination_form'] = MarketDestinationForm
+        context['target_form'] = MarketTargetForm
+        context['consumption_form'] = PowerConsumptionForm
+        context['title'] = Company.objects.get(id=self.kwargs['pk']).name
         return context
 
     def get_form_kwargs(self,*args,**kwargs):
@@ -298,7 +336,7 @@ class CreateEmployees(LoginRequiredMixin,View):
         form = EmployeesForm(self.request.POST)
         if form.is_valid():
             try:
-                if Employees.objects.filter(year=form.cleaned_data.get("year_emp"),company=Company.objects.get(id=self.kwargs['company'])).exists():
+                if Employees.objects.filter(year=form.cleaned_data.get("year_emp"),employment_type=form.cleaned_data.get('employment_type'), company=Company.objects.get(id=self.kwargs['company'])).exists():
                     return JsonResponse({'error': True, 'message': 'Data For this Year Already Exists'})
                 else:
                     employee = form.save(commit=False)
@@ -318,7 +356,7 @@ class CreateJobsCreatedYearly(LoginRequiredMixin,View):
         form = JobCreatedForm(self.request.POST)
         if form.is_valid():
             try:
-                if JobOpportunities.objects.filter(year=form.cleaned_data.get("year_job"),company=Company.objects.get(id=self.kwargs['company'])).exists():
+                if JobOpportunities.objects.filter(year=form.cleaned_data.get("year_job"),job_type=form.cleaned_data.get('job_type'),company=Company.objects.get(id=self.kwargs['company'])).exists():
                     return JsonResponse({'error': True, 'message': 'Data For this Year Already Exists'})
                 else:
                     jobs = form.save(commit=False)
@@ -338,7 +376,7 @@ class CreateEducationStatus(LoginRequiredMixin,View):
         form = EducationStatusForm(self.request.POST)
         if form.is_valid():
             try:
-                if EducationalStatus.objects.filter(year=form.cleaned_data.get("year_edu"),company=Company.objects.get(id=self.kwargs['company'])).exists():
+                if EducationalStatus.objects.filter(year=form.cleaned_data.get("year_edu"),education_type=form.cleaned_data.get('education_type'),company=Company.objects.get(id=self.kwargs['company'])).exists():
                     return JsonResponse({'error': True, 'message': 'Data For this Year Already Exists'})
                 else:
                     education = form.save(commit=False)

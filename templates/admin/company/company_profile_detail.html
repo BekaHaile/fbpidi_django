@@ -7,6 +7,12 @@
 	<!-- links for image cropper -->
 	<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 	<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+	<script src="/static/admin/assets/js/company_detail.js"></script>
+	<script>
+		var my_token = "{{csrf_token}}";
+		var company_id = "{{object.id}}";
+		var address_id = "{{object.get_company_address.id}}";
+	</script>
 
 	<style>
 		.unread {
@@ -185,14 +191,20 @@
 								</div>
 	
 								<div class="card-body">
-									 {{form|crispy}}
+									<form id='update_company_info' action="{%url 'admin:update_company_info' pk=object.id%}" enctype="multipart/form-data" method="post">
+										{%csrf_token%}
+										{{form|crispy}}
+										<div>
+											<button id="submit_update" type="submit" class="btn btn-success btn-md">Save Chages <i class="fa fa-mark"></i></button>
+										</div>
+									</form>
 								</div>
 							</div>
 							<!-- /profile info -->
 							
 						</div>
 					     
-						<div class="tab-pane fade active show" id="address">
+						<div class="tab-pane fade show" id="address">
   
 							<!-- Profile info -->
 							<div class="card">
@@ -311,6 +323,7 @@
 				<!-- /inner container -->
 					
 			</div>
+			{%include 'admin/company/company_form_modals.html'%}
 			<div id="rating_form" class="modal fade" tabindex="-1">
 				<div class="modal-dialog">
 					<div class="modal-content">

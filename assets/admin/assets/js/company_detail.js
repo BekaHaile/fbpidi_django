@@ -222,6 +222,7 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             success: function (result) {
+                console.log(result);
                 if (result['error'] == false) {
                     // $("#srcamnt_input_form_modal").modal("hide");
                     $("#errors_input").html(result['message']);
@@ -230,7 +231,7 @@ $(document).ready(function () {
                 }
             },
             error: function (error) {
-
+                console.log(error)
             }
         });
 

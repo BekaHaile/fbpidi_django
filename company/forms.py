@@ -255,8 +255,8 @@ class MyCompanyDetailForm(forms.ModelForm):
                 'working_hours':forms.Select(attrs={'class':'form-control form-control-uniform'}),
                 'certification':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'management_tools':forms.SelectMultiple(attrs={'class':'form-control'}),
-                'source_of_energy':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-                'support_required':forms.Select(attrs={'class':'form-control from-control-uniform'}),
+                'source_of_energy':forms.SelectMultiple(attrs={'class':'form-control'}),
+                'support_required':forms.SelectMultiple(attrs={'class':'form-control'}),
             }
 
 
