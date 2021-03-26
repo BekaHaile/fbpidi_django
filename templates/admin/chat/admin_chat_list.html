@@ -36,7 +36,7 @@
 
 <div class="card">
     <div class="card-header bg-transparent header-elements-inline">
-        <h6 class="card-title">My inbox</h6>
+        <h6 class="card-title">{% trans "My inbox" %}</h6>
     </div>
 
 
@@ -180,57 +180,43 @@
                     <!-- this means the current user is the sender of this message -->
                                 
                                 <tr style="background-color: rgb(228, 228, 228);"> 
+                                    <a href="/chat/with/{{message.receiver_name}}/" target = "blank" >
+                                            <td class="table-inbox-checkbox rowlink-skip">
                                 
-                                    <td class="table-inbox-checkbox rowlink-skip">
-                                        <a href="/chat/with/{{message.receiver_name}}/" target = "blank" ></a>
-                                        <input type="checkbox" class="form-input-styled" data-fouc>
-                                    </td>
-                                    <td class="table-inbox-star rowlink-skip">
-                                        <a href="#">
-                                            <i class="icon-star-empty3 text-muted"></i>
-                                        </a>
-                                    </td>
-                                    <td class="table-inbox-image">
-                                        <img src="{{message.receiver_image}}" class="rounded-circle" width="32" height="32" alt="">
+                                                <input type="checkbox" class="form-input-styled" data-fouc>
+                                            </td>
+                                            <td class="table-inbox-star rowlink-skip">
+                                                <a href="#">
+                                                    <i class="icon-star-empty3 text-muted"></i>
+                                                </a>
+                                            </td>
+                                            <td class="table-inbox-image">
+                                                <img src="{{message.receiver_image}}" class="rounded-circle" width="32" height="32" alt="">
+                                                
+                                            </td>
+                                            <td class="table-inbox-name">
+                                                <a href="/chat/with/{{message.receiver_name}}/" target = "blank">
+                                                    <div class="letter-icon-title text-default"><b>{{message.receiver_name}}</b></div>
+                                                </a>
+                                            </td>
                                         
-                                    </td>
-                                    <td class="table-inbox-name">
-                                        <a href="/chat/with/{{message.receiver_name}}/" target = "blank">
-                                            <div class="letter-icon-title text-default"><b>{{message.receiver_name}}</b></div>
-                                        </a>
-                                    </td>
-                                
 
-                                    <!-- the rest is the same whether the user is a receiver or a sender -->
-                                    <td class="table-inbox-message">
-                                    
-                                        <div class="table-inbox-subject">{{message.message}} &nbsp;-&nbsp;</div>
-                                        <!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
-                                    </td>
-                                    <td class="table-inbox-attachment">
-                                        <i class="icon-attachment text-muted"></i>
-                                    </td>
-                                    <td class="table-inbox-time">
-                                        {{message.time}}
-                                    </td>
-                                </a>
-                                </tr>
-
-                        
+                                            <!-- the rest is the same whether the user is a receiver or a sender -->
+                                            <td class="table-inbox-message">
+                                            
+                                                <div class="table-inbox-subject">{{message.message}} &nbsp;-&nbsp;</div>
+                                                <!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
+                                            </td>
+                                            <td class="table-inbox-attachment">
+                                                <i class="icon-attachment text-muted"></i>
+                                            </td>
+                                            <td class="table-inbox-time">
+                                                {{message.time}}
+                                            </td>
+                                    </a>
+                                </tr>        
                     {% endif %}
-                
-                    
-                    
                 {% endfor%}
-                
-
-            
-
-                
-    
-
-                
-            
             </tbody>
         </table>
     </div>

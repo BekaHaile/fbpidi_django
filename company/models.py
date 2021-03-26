@@ -425,9 +425,7 @@ class CompanyEvent(models.Model):
 
     def get_image(self):
         return self.image.url if self.image else self.company.get_image()
-    
-    def get_company_admin(self):
-        return self.company.created_by.username
+   
     
     model_am = "ዝግጅቶች"
 

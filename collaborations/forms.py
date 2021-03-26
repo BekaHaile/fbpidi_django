@@ -16,7 +16,8 @@ from django.forms.widgets import SelectDateWidget
 
 from PIL import Image
 
-JOB_CHOICES=[('Temporary','Temporary'),
+JOB_CHOICES=[ ('', 'Select Category'),
+            ('Temporary','Temporary'),
             ('Permanent','Permanent'),
             ('Contract','Contract')]
 
@@ -234,17 +235,16 @@ class DateForm(forms.Form):
 
 class VacancyForm(forms.ModelForm):
     
-    employement_type = forms.ChoiceField(choices = JOB_CHOICES, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
-
+    # employement_type = forms.ChoiceField(choices = JOB_CHOICES, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
+    category= forms.ModelChoiceField(queryset = JobCategory.objects.all(), empty_label="Select Category", required = True, widget=forms.Select(attrs={'class':'form-control form-control-uniform'}))
     class Meta:
         model = Vacancy
         fields = ('location', 'salary', 'category'
                   ,'job_title', 'description','requirement',
-                  'job_title_am','description_am','requirement_am')
+                  'job_title_am','description_am','requirement_am', 'employement_type')
         
         widgets = {  
-            #'employement_type':forms.Select(attrs={'class':'form-control form-control-uniform','choices':JOB_CHOICES}),
-            'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'employement_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'location':forms.TextInput(attrs={'class':'form-control','placeholder':'Location'}),
             'salary':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("salary")','id':'salary','type':'number','placeholder':'Salary in Birr'}),
             'job_title':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Title in English'}),
@@ -282,9 +282,8 @@ class JobCategoryForm(forms.ModelForm):
         }
 
 class NewsForm(forms.ModelForm):
-    NEWS_CATAGORY = ( ('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),  
-    ('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological'))
-    catagory = forms.ChoiceField(choices = NEWS_CATAGORY, required=True, widget=forms.Select(attrs={'type': 'dropdown'}),)
+    # NEWS_CATAGORY = ( )
+    # catagory = forms.ChoiceField( required=True, )
 
     class Meta:
         model = News
@@ -294,6 +293,7 @@ class NewsForm(forms.ModelForm):
             'title_am' : forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'News Title (Amharic).'}),
             'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Detail description on the news.(English)'}),
             'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Detail description on the news.(Amharic)'}),  
+            'category':forms.Select(attrs={ 'class':'form-control form-control-uniform'})
         } 
 
 class CompanyEventForm(forms.ModelForm):

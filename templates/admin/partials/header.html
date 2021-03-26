@@ -161,8 +161,6 @@
                     
                     </ul>
                 </div>
-               
-
                 <div class="dropdown-content-footer justify-content-center p-0">
                     <a href="#" class="bg-light text-grey w-100 py-2" data-popup="tooltip" title="Load more"><i class="icon-menu7 d-block top-0"></i></a>
                 </div>
@@ -192,10 +190,7 @@
                {%endif%}
                
                 <a href="{% url 'admin:admin_chat_list' %}" class="dropdown-item"><i class="icon-comment-discussion"></i> My Messages  <span id = "num_unread_messages" class="badge badge-pill bg-blue ml-auto"></span></a>
-              
-                
                <!-- <a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span id = "unread_messages" class="badge badge-pill bg-blue ml-auto">{{unread_messages_count}}</span></a> -->
-            
                <div class="dropdown-divider"></div>
                 <a href="{% url 'admin:password_change' %}" class="dropdown-item"><i class="icon-cog5"></i>Change Password</a>
                  <a href="{% url 'admin:logout' %}?next={%url 'admin:login'%}" class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
@@ -211,11 +206,10 @@
     <script>
         setInterval(check_inbox, 2000);
         function check_inbox(){
-              
                 fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>
                 {   num_unread_messages = data['num']
-
-                    document.getElementById("num_unread_messages").innerHTML = num_unread_messages
+                    if (num_unread_messages > 0)
+                        document.getElementById("num_unread_messages").innerHTML = num_unread_messages
                      // first clear the list area 
                     document.getElementById('list_of_senders').innerHTML = "";
                     for (unread_message of data['unread_messages']){
@@ -226,8 +220,8 @@
                 });
             }
 
-            function append_unread_messages(message_obj){
-                console.log("from appende meesages"+message_obj)
+        function append_unread_messages(message_obj){
+            console.log("from appende meesages"+message_obj)
         
         var li_item = document.createElement('li');
         li_item.id = message_obj.content;
@@ -235,7 +229,6 @@
         li_card_item.className = "card card-body "
         li_card_item.style['padding']="5px";
         li_card_item.style['margin']="0px 0px 5px";
-        
             var img_div = document.createElement('div');
                 var image_anchor = document.createElement('a');
                     var image_item = document.createElement('img');
