@@ -67,7 +67,9 @@ class CompanyAdminCreationForm(AbstractUserCreationForm):
     """ A form is prepared for admin users to regster. Includes all the required
         fields, plus a repeated password.
     """
-    
+    designation = forms.CharField(max_length=255, widget=forms.TextInput(
+        attrs={'class':'form-control','placeholder':'Responsiblity'}
+    ))
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
@@ -87,7 +89,7 @@ class CompanyAdminCreationForm(AbstractUserCreationForm):
         
         user.user_permissions.set(admin_permisstion_list)
         user.save()
-        comp_admin = CompanyAdmin.objects.create(user=user)
+        comp_admin = CompanyAdmin.objects.create(user=user,designation=self.cleaned_data.get('designation'))
         return user
 
 
@@ -143,7 +145,9 @@ class AdminCreateUserForm(AbstractUserCreationForm):
                                             ('contact_person', 'Company Contact Person'),
                                             ('customer', 'Customer'),)
                                   )
-
+    designation = forms.CharField(max_length=255, widget=forms.TextInput(
+        attrs={'class':'form-control','placeholder':'Responsiblity'}
+    ))
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
@@ -165,7 +169,7 @@ class AdminCreateUserForm(AbstractUserCreationForm):
             )
             user.user_permissions.set(admin_permisstion_list)
             user.save()
-            comp_admin = CompanyAdmin.objects.create(user=user)
+            comp_admin = CompanyAdmin.objects.create(user=user,designation=self.cleaned_data.get('designation'))
             comp_admin.save()
         elif self.cleaned_data.get("user_type") == "customer":
             user.is_customer = True

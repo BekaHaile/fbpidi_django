@@ -21,10 +21,14 @@
 		<div class="card-header header-elements-inline">
 			<h5 class="card-title">Products</h5>
 			<div class="header-elements">
+				
 				<div class="list-icons">
+					{%if not user.is_superuser%}
 					<a href="{% url 'admin:create_product'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Product</a>
+					{%endif%}
 				</div>
+
 			</div>
 		</div>
 
