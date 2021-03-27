@@ -503,6 +503,13 @@ class CompanyUpdateForm(forms.ModelForm):
                 resized_image = image.resize((1280, 1280), Image.ANTIALIAS)
                 resized_image.save(profile.logo.path)
                 return profile
+            
+
+class CompanyMessageForm(forms.ModelForm):
+    class Meta:
+        model = CompanyMessage
+        fields = ('name', 'email', 'message')
+
 
 class ProjectProductForm(forms.ModelForm):
     class Meta:

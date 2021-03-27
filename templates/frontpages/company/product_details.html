@@ -181,7 +181,7 @@
 								</div>
 								<div class="card-footer">
 									<div class="">
-										<a href="#" class="btn btn-info mt-1 mb-1" title="Chat with Manufacturer"><i class="fa fa-envelope"></i></a>
+										<a href="{% url 'chat_with' reciever_name=product.created_by.username %}" target="blank" class="btn btn-info mt-1 mb-1" title="{% print_translated 'Chat with Manufacturer' 'አምራቹን አግኝ' LANGUAGE_CODE %} "><i class="fa fa-envelope"></i></a>
 										<a href="mailto:{{product.company.contact_person.email}}" title="Contact Manufacturer" class="btn btn-secondary"><i class="fa fa-user"></i></a>
 										<a href="#" class="btn btn-light mt-1 mb-1" title="Make Inquiry"><i class="fa fa-cart-plus"></i></a>
 										<a href="#" class="btn btn-info icons" title="Share Product"><i class="icon icon-share mr-1"></i></a>

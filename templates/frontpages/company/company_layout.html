@@ -179,14 +179,14 @@
                             <li  class="nav-item dropdown">
                                 <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
                                 
-                                    <a href = "{% url 'admin:index' %} "><i class="fa fa-envelope" ></i><span>{% trans "My Messages" %}</span></a>
+                                    <a href = "{% url 'admin:admin_chat_list' %} "><i class="fa fa-envelope" ></i><span>{% trans "My Messages" %}</span></a>
                                     <span id = "num_unread_messages" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
                                 </a>
                                 
                                 
                                 <div style = "padding: 10px;   width: 300px;" class = "dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
                                     <div class="dropdown-content-header">
-                                        <span class="font-weight-semibold">{% trans " List of Messages" %}</span>
+                                        <span class="font-weight-semibold">{% trans "List of Messages" %}</span>
                                         <a href="#" class="text-default"><i class="icon-compose"></i></a>
                                     </div>
                                     <div class="dropdown-content-body dropdown-scrollable">
@@ -452,13 +452,13 @@
         </div>
     </footer>
     <script>
-        // setInterval(check_inbox, 2000);
+        setInterval(check_inbox, 2000);
         function check_inbox(){
               
                 fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>
                 {   num_unread_messages = data['num']
-
-                    document.getElementById("num_unread_messages").innerHTML = num_unread_messages
+                    if (num_unread_messages > 0)
+                        document.getElementById("num_unread_messages").innerHTML = num_unread_messages
                      // first clear the list area 
                     document.getElementById('list_of_senders').innerHTML = "";
                     for (unread_message of data['unread_messages']){

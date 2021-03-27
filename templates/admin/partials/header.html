@@ -140,32 +140,45 @@
             </div>
 
         </li>
-      
-      
+         
         <li class="nav-item dropdown">
-            <a href="{% url 'admin:admin_chat_list' %}" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
-                <i class="icon-bubbles4"></i>
-                <span class="d-md-none ml-2">Messages</span>
-                
+            <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
+               <i class="icon-bubbles4"></i>
                 <span id = "num_unread_messages" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
             </a>
-            
-            
-            <div class="dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
+            <div style = "padding: 10px;   width: 300px;"  class="dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
                 <div class="dropdown-content-header">
-                    <span class="font-weight-semibold">List of Messages</span>
-                    <a href="#" class="text-default"><i class="icon-compose"></i></a>
+                    <span class="font-weight-semibold"><a href="{% url 'admin:admin_chat_list' %}"> List of Chats</a></span>
+                    <a href="{% url 'admin:admin_chat_list' %}" class="text-default"><i class="icon-compose"></i></a>
                 </div>
                 <div class="dropdown-content-body dropdown-scrollable">
-                    <ul id = "list_of_senders" class="media-list"> 
+                    <ul id = "list_of_senders" style = "width: 100%;" class="media-list"> 
                     
                     </ul>
                 </div>
-                <div class="dropdown-content-footer justify-content-center p-0">
-                    <a href="#" class="bg-light text-grey w-100 py-2" data-popup="tooltip" title="Load more"><i class="icon-menu7 d-block top-0"></i></a>
-                </div>
+                
             </div>
         </li>
+
+        <li class="nav-item dropdown">
+            <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
+               <i class="fa fa-envelope"></i>
+                <span id = "num_unread_inbox" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
+            </a>
+            <div style = "padding: 10px;   width: 300px;"  class="dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
+                <div class="dropdown-content-header">
+                    <span class="font-weight-semibold"><a href="{% url 'admin:admin_inbox_list' %}"> List of Messages </a></span>
+                    <a href="{% url 'admin:admin_inbox_list' %}" class="text-default"><i class="icon-compose"></i></a>
+                </div>
+                <div class="dropdown-content-body dropdown-scrollable">
+                    <ul id = "list_of_messages" style = "width: 100%;" class="media-list"> 
+                    
+                    </ul>
+                </div>
+                
+            </div>
+        </li>
+        
         {% block usertools %}
     {%comment%}    {% if has_permission %} {%endcomment%}
         <li class="nav-item dropdown dropdown-user">

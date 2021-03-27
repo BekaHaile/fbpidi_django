@@ -63,6 +63,7 @@ from collaborations.Views.forums import(ListForumQuestionAdmin,CreateForumQuesti
 from product.views import *
                             
 from company.views import *
+from company.company_views import CompanyInboxList, CompanyInboxDetail
 
 from accounts.forms import AdminLoginForm
 from chat.views import AdminChatList
@@ -79,6 +80,9 @@ class CustomAdminSite(admin.AdminSite):
             return update_wrapper(wrapper, view)
 
         my_urls = [
+            path('inbox_list/', CompanyInboxList.as_view(), name="admin_inbox_list"),
+            path('ibox_detail/<pk>/', CompanyInboxDetail.as_view(), name="admin_inbox_detail"),
+
             path('forum-list',wrap(ListForumQuestionAdmin.as_view()),name="forum_list"),
             path('forum-form',wrap(CreateForumQuestionAdmin.as_view()),name="forum_form"),
             path('forum-detail/<model_name>/<id>',wrap(ForumQuestionDetail.as_view()),name="forum_detail"),
