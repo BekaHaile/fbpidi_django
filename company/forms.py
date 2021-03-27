@@ -12,7 +12,7 @@ from company.models import *
 
 # fields=(
 #     'expansion_plan','expansion_plan_am','trade_license',
-#             'working_hours','orgn_strct','lab_test_analysis','lab_test_analysis_am','lab_equipment',
+#             'working_hours','orgn_strct','lab_test_analysis','lab_equipment',
 #             'lab_equipment_am','outsourced_test_param','outsourced_test_param_am','certification',
 #             'conducted_research','conducted_research_am','new_product_developed','new_product_developed_am',
 #             'management_tools','electric_power','water_supply','telecom','marketing_department',
@@ -71,7 +71,7 @@ class EmployeesForm(forms.ModelForm):
         model=Employees
         fields = ('employment_type','female','male',)
         widgets = {
-            'employment_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'employment_type':forms.Select(attrs={'class':'form-control form-control-uniform','disabled':'true'}),
             'male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_male")'}),
             'female':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_female")'}),
         }
@@ -83,7 +83,7 @@ class JobCreatedForm(forms.ModelForm):
         model=JobOpportunities
         fields = ('job_type','female','male',)
         widgets = {
-            'job_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'job_type':forms.Select(attrs={'class':'form-control form-control-uniform','disabled':'true'}),
             'male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_male")'}),
             'female':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_female")'}),
         }
@@ -95,7 +95,7 @@ class EducationStatusForm(forms.ModelForm):
         model=EducationalStatus
         fields = ('education_type','female','male',)
         widgets = {
-            'education_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'education_type':forms.Select(attrs={'class':'form-control form-control-uniform','disabled':'true'}),
             'male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_male")'}),
             'female':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_female")'}),
         }
@@ -205,16 +205,16 @@ class MyCompanyDetailForm(forms.ModelForm):
         self.fields['certification'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Certifications")
         self.fields['management_tools'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Management Tools")
         self.fields['source_of_energy'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Source of Energy")
-        self.fields['source_of_energy'].empty_label = "Select Source of Energy"
         self.fields['support_required'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Areas of Major Challenges")
-        self.fields['support_required'].empty_label = "Select One"
+        self.fields['lab_test_analysis'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Laboratory Test Analysis")
+        self.fields['lab_equipment'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Laboratory Equipment")
 
     class Meta:
         model=Company
         fields=(
             'expansion_plan','expansion_plan_am','category','working_hours','certification',
-            'orgn_strct','lab_test_analysis','lab_test_analysis_am','lab_equipment',
-            'lab_equipment_am','outsourced_test_param','outsourced_test_param_am',
+            'orgn_strct','lab_test_analysis','lab_equipment',
+            'outsourced_test_param','outsourced_test_param_am',
             'conducted_research','conducted_research_am','new_product_developed','new_product_developed_am',
             'electric_power','water_supply','telecom','marketing_department','support_required',
             'e_commerce','active_database','waste_trtmnt_system','waste_trtmnt_system_am',
@@ -230,10 +230,8 @@ class MyCompanyDetailForm(forms.ModelForm):
                 'expansion_plan_am':forms.Textarea(attrs={'class':'summernote'}),
                 'category':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'orgn_strct':forms.FileInput(),
-                'lab_test_analysis':forms.Textarea(attrs={'class':'summernote'}),
-                'lab_test_analysis_am':forms.Textarea(attrs={'class':'summernote'}),
-                'lab_equipment':forms.Textarea(attrs={'class':'summernote'}),
-                'lab_equipment_am':forms.Textarea(attrs={'class':'summernote'}),
+                'lab_test_analysis':forms.SelectMultiple(attrs={'class':'form-control'}),
+                'lab_equipment':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'outsourced_test_param':forms.Textarea(attrs={'class':'summernote'}),
                 'outsourced_test_param_am':forms.Textarea(attrs={'class':'summernote'}),
                 'conducted_research':forms.Textarea(attrs={'class':'summernote'}),
@@ -261,6 +259,11 @@ class MyCompanyDetailForm(forms.ModelForm):
 
 
 class CompanyAddressForm(forms.ModelForm):
+
+    def __init__(self,*args,**kwargs):
+        super(CompanyAddressForm,self).__init__(*args,**kwargs)
+        self.fields['region'].empty_label = "Select Region"
+
     class Meta:
         model=CompanyAddress
         fields = ('region','city_town','subcity_zone','woreda','kebele','local_area',
@@ -268,7 +271,7 @@ class CompanyAddressForm(forms.ModelForm):
                     'linkedinlink','googlelink')
         
         widgets = {
-            'region':forms.TextInput(attrs={'class':'form-control','placeholder':'Region'}),
+            'region':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'city_town':forms.TextInput(attrs={'class':'form-control','placeholder':'City/Town'}),
             'subcity_zone':forms.TextInput(attrs={'class':'form-control','placeholder':'Subcity/Zone'}),
             'woreda':forms.TextInput(attrs={'class':'form-control','placeholder':'Woreda'}),
@@ -427,8 +430,9 @@ class CompanyUpdateForm(forms.ModelForm):
         self.fields['support_required'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Areas of Major Challenges")
         self.fields['management_tools'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Management Tools")
         self.fields['working_hours'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Working hours")
-        self.fields['working_hours'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Working hours")
         self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
+        self.fields['lab_test_analysis'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Laboratory Test Analysis")
+        self.fields['lab_equipment'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Laboratory Equipment")
 
 
     class Meta:
@@ -437,8 +441,8 @@ class CompanyUpdateForm(forms.ModelForm):
             'expansion_plan','expansion_plan_am','geo_location',
             'detail','detail_am',
             'orgn_strct','certification','management_tools','working_hours',
-            'lab_test_analysis','lab_test_analysis_am','lab_equipment',
-            'lab_equipment_am','outsourced_test_param','outsourced_test_param_am',
+            'lab_test_analysis','lab_equipment',
+            'outsourced_test_param','outsourced_test_param_am',
             'conducted_research','conducted_research_am','new_product_developed','new_product_developed_am',
             'electric_power','water_supply','telecom','marketing_department','source_of_energy',
             'e_commerce','active_database','waste_trtmnt_system','waste_trtmnt_system_am',
@@ -454,10 +458,8 @@ class CompanyUpdateForm(forms.ModelForm):
                 'expansion_plan_am':forms.Textarea(attrs={'class':'summernote'}),
                 'orgn_strct':forms.FileInput(),
                 'geo_location':gis_form.OSMWidget(attrs={'map_width': 500, 'map_height': 250}),
-                'lab_test_analysis':forms.Textarea(attrs={'class':'summernote'}),
-                'lab_test_analysis_am':forms.Textarea(attrs={'class':'summernote'}),
-                'lab_equipment':forms.Textarea(attrs={'class':'summernote'}),
-                'lab_equipment_am':forms.Textarea(attrs={'class':'summernote'}),
+                'lab_test_analysis':forms.SelectMultiple(attrs={'class':'form-control'}),
+                'lab_equipment':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'outsourced_test_param':forms.Textarea(attrs={'class':'summernote'}),
                 'outsourced_test_param_am':forms.Textarea(attrs={'class':'summernote'}),
                 'conducted_research':forms.Textarea(attrs={'class':'summernote'}),

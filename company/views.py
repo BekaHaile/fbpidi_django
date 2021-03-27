@@ -104,6 +104,8 @@ class CreateMyCompanyDetail(LoginRequiredMixin,UpdateView):
         company.management_tools.set(form.cleaned_data.get('management_tools'))
         company.source_of_energy.set(form.cleaned_data.get('source_of_energy'))
         company.support_required.set(form.cleaned_data.get('support_required'))
+        company.lab_test_analysis.set(form.cleaned_data.get('lab_test_analysis'))
+        company.lab_equipment.set(form.cleaned_data.get('lab_equipment'))
         company.certification.set(form.cleaned_data.get('certification'))
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
@@ -147,6 +149,8 @@ class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
         company.management_tools.set(form.cleaned_data.get('management_tools'))
         company.source_of_energy.set(form.cleaned_data.get('source_of_energy'))
         company.support_required.set(form.cleaned_data.get('support_required'))
+        company.lab_test_analysis.set(form.cleaned_data.get('lab_test_analysis'))
+        company.lab_equipment.set(form.cleaned_data.get('lab_equipment'))
         company.certification.set(form.cleaned_data.get('certification'))
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
@@ -190,6 +194,8 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
         company.management_tools.set(form.cleaned_data.get('management_tools'))
         company.source_of_energy.set(form.cleaned_data.get('source_of_energy'))
         company.support_required.set(form.cleaned_data.get('support_required'))
+        company.lab_test_analysis.set(form.cleaned_data.get('lab_test_analysis'))
+        company.lab_equipment.set(form.cleaned_data.get('lab_equipment'))
         company.certification.set(form.cleaned_data.get('certification'))
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
@@ -488,21 +494,21 @@ class CheckYearField(LoginRequiredMixin,View):
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "employee":
             try:
-                employee = Employees.objects.get(company=company,year=self.kwargs['year']) 
+                employee = Employees.objects.get(company=company,year=self.kwargs['year'],employment_type=self.request.POST['emp_type']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[employee],ensure_ascii=False))[0]})
             except Employees.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "jobs_created":
             try:
-                jobs = JobOpportunities.objects.get(company=company,year=self.kwargs['year']) 
+                jobs = JobOpportunities.objects.get(company=company,year=self.kwargs['year'],job_type=self.request.POST['job_type']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[jobs],ensure_ascii=False))[0]})
             except JobOpportunities.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "education":
             try:
-                education = EducationalStatus.objects.get(company=company,year=self.kwargs['year']) 
+                education = EducationalStatus.objects.get(company=company,year=self.kwargs['year'],education_type=self.request.POST['edu_type']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[education],ensure_ascii=False))[0]})
             except EducationalStatus.DoesNotExist:
@@ -1031,48 +1037,69 @@ class CompanyListForReport(LoginRequiredMixin,ListView):
     def get_queryset(self):
         return Company.objects.all().exclude(main_category="FBPIDI")
 
-class FilterCompanyByMainCategory(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership").order_by('-id')
+        return context
+
+class FilterCompanyByMainCategory(LoginRequiredMixin,ListView):
+    model = Company
+    template_name = "admin/company/companies_for_report.html"
+
+    def get_queryset(self):
         try:
-            company = Company.objects.all() 
-            category = Category.objects.all()
             if self.kwargs['sector'] == "all":
-                company = Company.objects.select_related().all().exclude(main_category="FBPIDI")
+                return Company.objects.all().exclude(main_category="FBPIDI")
             else:
-                company = Company.objects.select_related().filter(main_category=self.kwargs['sector'])
-                category = Category.objects.filter(category_type=self.kwargs['sector'])
-
-            return JsonResponse(
-                {
-                    'error':False,
-                    'sector':self.kwargs['sector'],
-                    'sub_sector':json.loads(serializers.serialize('json',category,ensure_ascii=False,
-                                fields=('id','category_type','category_name','icon',),
-                                use_natural_foreign_keys=True,use_natural_primary_keys=True,)),
-                    'data':json.loads(serializers.serialize('json',company,indent=2,
-                            use_natural_foreign_keys=True,use_natural_primary_keys=True,ensure_ascii=False))
-                }
-            )
+                return Company.objects.filter(main_category=self.kwargs['sector'])
         except Exception as e:
-            return JsonResponse({"error":True,"message":e})
+            return None
 
-class FilterCompanyCategory(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.filter(category_type=self.kwargs['sector'])
+        context['sector'] = self.kwargs['sector']
+        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
+        return context
+
+class FilterCompanyCategory(LoginRequiredMixin,ListView):
+    model = Company
+    template_name = "admin/company/companies_for_report.html"
+
+    def get_queryset(self):
         try:
-            company = Company.objects.filter(
-                category=Category.objects.get(category_name=self.kwargs['category'])
-            ) 
-
-            return JsonResponse(
-                {
-                    'error':False,
-                    'sub_sector':self.kwargs['category'],
-                    'data':json.loads(serializers.serialize('json',company,indent=2,
-                            use_natural_foreign_keys=True,use_natural_primary_keys=True,ensure_ascii=False))
-                }
-            )
+            if self.kwargs['category'] == 'Food' or self.kwargs['category'] == 'Beverage' or self.kwargs['category'] == 'Pharmaceuticals':
+                return Company.objects.filter(main_category=self.kwargs['category'])
+            else:
+                return Company.objects.filter( category=Category.objects.get(id=self.kwargs['category']) ) 
         except Exception as e:
-            return JsonResponse({"error":True,"message":e})
+            return None
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            if self.kwargs['category'] == 'Food' or self.kwargs['category'] == 'Beverage' or self.kwargs['category'] == 'Pharmaceuticals':
+                context['categories'] = Category.objects.filter(category_type=self.kwargs['category'])
+            else:
+                context['categories'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['category']).category_type)
+        except Exception as e:
+            return None
+        context['sector'] = Category.objects.get(id=self.kwargs['category']).category_type
+        context['sub_sector'] = Category.objects.get(id=self.kwargs['category']).category_name
+        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
+        return context
+
+class FilterByOwnership(LoginRequiredMixin,ListView):
+    model = Company
+    template_name = "admin/company/companies_for_report.html"
+
+    def get_queryset(self):
+        return Company.objects.filter(ownership_form=self.kwargs['ownership_form'])
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
+        return context
 
 class ExportCSV(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):

@@ -220,96 +220,98 @@
 								</div>
 	
 								<div class="card-body">
-									
-									<div class="form-group">
-										<div class="row">
-											<div class="col-sm-4">
-												<label for="">{{address_form.region.label}}</label>
-												 {{address_form.region}}
-											</div>
-											<div class="col-sm-4">
-												<label for="">{{address_form.city_town.label}}</label>
-												 {{address_form.city_town}}
-												 <span class="form-text text-muted">{{address_form.city_town.help_text}}</span>
-											</div>
-				
-											<div class="col-md-4">
-												<label>{{address_form.subcity_zone.label}}</label>
-													{{address_form.subcity_zone}}
-													<span class="form-text text-muted">{{address_form.subcity_zone.help_text}}</span>									
-											</div>		
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="row">
-											<div class="col-sm-4">
-												<label for="">{{address_form.woreda.label}}</label>
-												 {{address_form.woreda}}
-											</div>
-											<div class="col-sm-4">
-												<label for="">{{address_form.kebele.label}}</label>
-												 {{address_form.kebele}}
-												 <span class="form-text text-muted">{{address_form.kebele.help_text}}</span>
-											</div>
-				
-											<div class="col-md-4">
-												<label>{{address_form.local_area.label}}</label>
-													{{address_form.local_area}}
-													<span class="form-text text-muted">{{address_form.local_area.help_text}}</span>									
-											</div>		
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="row">
-											<div class="col-sm-4">
-												<label for="">{{address_form.phone_number.label}}</label>
-												 {{address_form.phone_number}}
-											</div>
-											<div class="col-sm-4">
-												<label for="">{{address_form.fax.label}}</label>
-												 {{address_form.fax}}
-												 <span class="form-text text-muted">{{address_form.fax.help_text}}</span>
-											</div>
-				
-											<div class="col-md-4">
-												<label>{{address_form.email.label}}</label>
-													{{address_form.email}}
-													<span class="form-text text-muted">{{address_form.email.help_text}}</span>									
-											</div>		
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="row">
-											<div class="col-sm-4">
-												<label for="">{{address_form.facebooklink.label}}</label>
-												 {{address_form.facebooklink}}
-											</div>
-											<div class="col-sm-4">
-												<label for="">{{address_form.twiterlink.label}}</label>
-												 {{address_form.twiterlink}}
-												 <span class="form-text text-muted">{{address_form.twiterlink.help_text}}</span>
-											</div>
-				
-											<div class="col-md-4">
-												<label>{{address_form.instagramlink.label}}</label>
-													{{address_form.instagramlink}}
-													<span class="form-text text-muted">{{address_form.instagramlink.help_text}}</span>									
-											</div>		
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="row">
-											<div class="col-sm-6">
-												<label for="">{{address_form.linkedinlink.label}}</label>
-												 {{address_form.linkedinlink}}
-											</div>
-											<div class="col-sm-6">
-												<label for="">{{address_form.googlelink.label}}</label>
-												 {{address_form.googlelink}}
-												 <span class="form-text text-muted">{{address_form.googlelink.help_text}}</span>
+									<form {%if object.get_company_address%} id="address_form_update"{%else%}id="company_address_form"{%endif%} action="#" enctype="multipart/form-data" method="POST">
+										<div class="form-group">
+											<div class="row">
+												<div class="col-sm-4">
+													<label for="">{{address_form.region.label}}</label>
+													 {{address_form.region}}
+												</div>
+												<div class="col-sm-4">
+													<label for="">{{address_form.city_town.label}}</label>
+													 {{address_form.city_town}}
+													 <span class="form-text text-muted">{{address_form.city_town.help_text}}</span>
+												</div>
+					
+												<div class="col-md-4">
+													<label>{{address_form.subcity_zone.label}}</label>
+														{{address_form.subcity_zone}}
+														<span class="form-text text-muted">{{address_form.subcity_zone.help_text}}</span>									
+												</div>		
 											</div>
 										</div>
-									</div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-sm-4">
+													<label for="">{{address_form.woreda.label}}</label>
+													 {{address_form.woreda}}
+												</div>
+												<div class="col-sm-4">
+													<label for="">{{address_form.kebele.label}}</label>
+													 {{address_form.kebele}}
+													 <span class="form-text text-muted">{{address_form.kebele.help_text}}</span>
+												</div>
+					
+												<div class="col-md-4">
+													<label>{{address_form.local_area.label}}</label>
+														{{address_form.local_area}}
+														<span class="form-text text-muted">{{address_form.local_area.help_text}}</span>									
+												</div>		
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-sm-4">
+													<label for="">{{address_form.phone_number.label}}</label>
+													 {{address_form.phone_number}}
+												</div>
+												<div class="col-sm-4">
+													<label for="">{{address_form.fax.label}}</label>
+													 {{address_form.fax}}
+													 <span class="form-text text-muted">{{address_form.fax.help_text}}</span>
+												</div>
+					
+												<div class="col-md-4">
+													<label>{{address_form.email.label}}</label>
+														{{address_form.email}}
+														<span class="form-text text-muted">{{address_form.email.help_text}}</span>									
+												</div>		
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-sm-4">
+													<label for="">{{address_form.facebooklink.label}}</label>
+													 {{address_form.facebooklink}}
+												</div>
+												<div class="col-sm-4">
+													<label for="">{{address_form.twiterlink.label}}</label>
+													 {{address_form.twiterlink}}
+													 <span class="form-text text-muted">{{address_form.twiterlink.help_text}}</span>
+												</div>
+					
+												<div class="col-md-4">
+													<label>{{address_form.instagramlink.label}}</label>
+														{{address_form.instagramlink}}
+														<span class="form-text text-muted">{{address_form.instagramlink.help_text}}</span>									
+												</div>		
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-sm-6">
+													<label for="">{{address_form.linkedinlink.label}}</label>
+													 {{address_form.linkedinlink}}
+												</div>
+												<div class="col-sm-6">
+													<label for="">{{address_form.googlelink.label}}</label>
+													 {{address_form.googlelink}}
+													 <span class="form-text text-muted">{{address_form.googlelink.help_text}}</span>
+												</div>
+											</div>
+										</div>
+										<button type="submit" class="btn btn-primary">Submit Changes</button>
+									</form>
  								</div>
 							</div>
 							<!-- /profile info -->

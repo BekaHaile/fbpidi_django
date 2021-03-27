@@ -42,7 +42,12 @@ var DatatableBasic = function() {
         });
 
         // Basic datatable
-        $('.datatable-basic').DataTable();
+        $('.datatable-basic').DataTable(
+            {
+                dom: 'Bfrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+            }
+        );
 
         // Alternative pagination
         $('.datatable-pagination').DataTable({

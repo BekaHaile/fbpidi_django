@@ -6,8 +6,8 @@ from django.views.generic import (View,CreateView,ListView,UpdateView)
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster
-from admin_site.forms import CompanyDropdownsMasterForm,ProjectDropdownsMasterForm
+from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster,RegionMaster
+from admin_site.forms import CompanyDropdownsMasterForm,ProjectDropdownsMasterForm,RegionMasterForm
 from product.models import Dose,DosageForm
 from product.forms import DoseForm,DosageFormForm
 from collaborations.models import JobCategory,ResearchProjectCategory
@@ -61,7 +61,8 @@ class AllSettingsPage(LoginRequiredMixin,ListView):
         context['job_categories'] = JobCategory.objects.all()
         context['research_categories'] = ResearchProjectCategory.objects.all()
         context['research_category_form'] = ResearchProjectCategoryForm()
-
+        context['region_form'] = RegionMasterForm()
+        context['region_list'] = RegionMaster.objects.all()
         context['flag'] = "company_dropdown"
         return context
 
@@ -98,3 +99,35 @@ class UpdateProjectDropdownsMaster(LoginRequiredMixin,UpdateView):
         return redirect("admin:settings") 
 
 
+
+class CreateRegionMaster(LoginRequiredMixin,CreateView):
+    model = RegionMaster
+    form_class = RegionMasterForm
+
+    def form_valid(self,form):
+        form.save()
+        messages.success(self.request,"Region Master Added Successfully")
+        return redirect("admin:settings")
+    
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:create_region")
+
+class UpdateRegionMaster(LoginRequiredMixin,UpdateView):
+    model = RegionMaster
+    form_class = RegionMasterForm
+    template_name = "admin/accounts/check_list_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['flag'] = "region_dropdown"
+        return context
+
+    def form_valid(self,form):
+        form.save()
+        messages.success(self.request,"Region Master Updated Successfully")
+        return redirect("admin:settings")
+    
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:update_region",pk=self.kwargs['pk'])

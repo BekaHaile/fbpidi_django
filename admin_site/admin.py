@@ -15,11 +15,7 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,
 from admin_site.views.views import (AdminIndex,DeleteView,  Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice,  DetailPoll)
 
-from admin_site.views.dropdowns import (AllSettingsPage,
-                                       CreateCompanyDropdownsMaster,
-                                        UpdateCompanyDropdownsMaster,
-                                        CreateProjectDropdownsMaster,
-                                        UpdateProjectDropdownsMaster)
+from admin_site.views.dropdowns import *
 
 from collaborations.views import (  CreateNews, EditNews, AdminNewsList,AdminCompanyEventList,
                                     CreateCompanyEvent,EditCompanyEvent, TenderList, CreateTender, TenderDetail, 
@@ -63,6 +59,7 @@ from collaborations.Views.forums import(ListForumQuestionAdmin,CreateForumQuesti
 from product.views import *
                             
 from company.views import *
+from company.chart_views import *
 
 from accounts.forms import AdminLoginForm
 from chat.views import AdminChatList
@@ -158,6 +155,8 @@ class CustomAdminSite(admin.AdminSite):
             path('update-checklist/<pk>/',wrap(UpdateCompanyDropdownsMaster.as_view()),name='update_checklist'),
             path('create-project-lookup/',wrap(CreateProjectDropdownsMaster.as_view()),name='create_plookup'),
             path('update-project-lookup/<pk>/',wrap(UpdateProjectDropdownsMaster.as_view()),name='update_plookup'),
+            path('create-region-lookup/',wrap(CreateRegionMaster.as_view()),name='create_region'),
+            path('update-region-lookup/<pk>/',wrap(UpdateRegionMaster.as_view()),name='update_region'),
 
             path("categories/",wrap(CategoryView.as_view()),name="categories"),
             path("create_category/",wrap(CreateCategories.as_view()),name="create_category"),
@@ -262,11 +261,7 @@ class CustomAdminSite(admin.AdminSite):
             path("update_slider_image/<pk>/",wrap(UpdateSliderImage.as_view()),name="update_slider"),
             path("slider-image-list/",wrap(SliderImageList.as_view()),name="slider_list"),
 
-            # Company Report Paths
-            path("company-list-for-generating-report/",wrap(CompanyListForReport.as_view()),name="company_list_report"),
-            path("company-filter-by-sector/<sector>/",wrap(FilterCompanyByMainCategory.as_view()),name="filter_company_sector"),
-            path("company-filter-by-sub_sector/<category>/",wrap(FilterCompanyCategory.as_view()),name="filter_company_sub_sector"),
-            path("export-csv-file/<category>/<option>/",wrap(ExportCSV.as_view()),name="export_csv_file"),
+            
 
             path("company_list/",wrap(CompaniesView.as_view()),name="companies"),
             path("company_detail/<pk>/",wrap(CompaniesDetailView.as_view()),name="company_detail"),
@@ -296,6 +291,13 @@ class CustomAdminSite(admin.AdminSite):
              path('edit_document/<id>/', wrap(EditDocument.as_view()), name='edit_document'),
              path('list_document_by_category/<option>/', wrap(DocumentListing.as_view()), name = "list_document_by_category"),
 
+            # Company Report Paths
+            path("company-list-for-generating-report/",wrap(CompanyListForReport.as_view()),name="company_list_report"),
+            path("company-filter-by-sector/<sector>/",wrap(FilterCompanyByMainCategory.as_view()),name="filter_company_sector"),
+            path("company-filter-by-sub_sector/<category>/",wrap(FilterCompanyCategory.as_view()),name="filter_company_sub_sector"),
+            path("get-by-formof-ownership/<ownership_form>/",wrap(FilterByOwnership.as_view()),name='filter_by_ownership'),
+            path("export-csv-file/<category>/<option>/",wrap(ExportCSV.as_view()),name="export_csv_file"),
+            path("company_chart_category/",wrap(main_category_chart),name="category_chart"),
             # path('project-view/<id>',wrap(ProjectDetailView.as_view()),name='project_view'),
             # path('project-approve/<id>',wrap(ProjectApprove.as_view()),name="project_approve"),
             # path('pedning-project-list',wrap(ListPendingProjectAdmin.as_view()),name="pedning_project_list"),

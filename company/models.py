@@ -1,6 +1,6 @@
 
 from admin_site.models import (Category, CompanyDropdownsMaster,
-                               ProjectDropDownsMaster)
+                               ProjectDropDownsMaster,RegionMaster)
 from django.conf import settings
 from django.contrib.gis.db import models as gis_models
 from django.core.validators import FileExtensionValidator
@@ -78,10 +78,8 @@ class Company(models.Model):
 							help_text="Image and pdf files less thatn 10MB", null=True,blank=True,
 							upload_to="company/organization_structure/",
 							validators=[FileExtensionValidator(allowed_extensions=allowed_file_extensions)])
-	lab_test_analysis = models.TextField(verbose_name="Laboratory test analysis in english",null=True,blank=True)
-	lab_test_analysis_am = models.TextField(verbose_name="Laboratory test analysis in amharic",null=True,blank=True)
-	lab_equipment	= models.TextField(verbose_name="Laboratory equipment",null=True,blank=True)
-	lab_equipment_am	= models.TextField(verbose_name="Laboratory equipment in amharic",null=True,blank=True)
+	lab_test_analysis = models.ManyToManyField(CompanyDropdownsMaster,verbose_name="Laboratory test analysis in english",blank=True,related_name="lab_test_analysis") 
+	lab_equipment	= models.ManyToManyField(CompanyDropdownsMaster,verbose_name="Laboratory equipment",related_name="lab_equipment",blank=True) 
 	outsourced_test_param = models.TextField(verbose_name="Outsourced test parameters and contract agreements in english",null=True,blank=True)
 	outsourced_test_param_am = models.TextField(verbose_name="Outsourced test parameters and contract agreements in amharic", null=True,blank=True)
 	certification	= models.ManyToManyField(CompanyDropdownsMaster,related_name="certification",verbose_name="Which certificate have you received?")  
@@ -100,7 +98,7 @@ class Company(models.Model):
 	waste_trtmnt_system_am	= models.TextField(verbose_name="Waste Treatment and disposal system in amharic",null=True,blank=True)
 	efluent_treatment_plant = models.BooleanField(default=False,verbose_name="Do you have effluent treatment plant?")
 	env_mgmt_plan = models.BooleanField(default=False,verbose_name="Does the company have Environmental management plan?")
-	source_of_energy = models.ManyToManyField(CompanyDropdownsMaster,related_name="source_of_energy")
+	source_of_energy = models.ManyToManyField(CompanyDropdownsMaster,related_name="source_of_energy",blank=True)
 	gas_carb_emision = models.TextField(verbose_name="Measure of Gas/carbon emission to the environment in english",null=True,blank=True)
 	gas_carb_emision_am = models.TextField(verbose_name="Measure of Gas/carbon emission to the environment in amharic",null=True,blank=True)
 	compound_allot	= models.BooleanField(default=False,verbose_name="Does the company allot 5%\ of the compound for greenery?")
@@ -159,7 +157,7 @@ class Company(models.Model):
 # Company Address Model
 class CompanyAddress(models.Model):
 	company = models.OneToOneField(Company,on_delete=models.CASCADE,related_name="company_address")
-	region = models.CharField(max_length=255, verbose_name="Rigion",null=True,blank=True)
+	region = models.ForeignKey(RegionMaster, verbose_name="Rigion",on_delete=models.RESTRICT,null=True)
 	city_town = models.CharField(max_length=255, verbose_name="City Town",null=True,blank=True)
 	subcity_zone = models.CharField(max_length=255, verbose_name="Subcity zone",null=True,blank=True)
 	woreda = models.CharField(max_length=255, verbose_name="Woreda",null=True,blank=True)
