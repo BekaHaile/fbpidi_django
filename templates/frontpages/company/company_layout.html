@@ -303,7 +303,7 @@
                         </ul>
                     </li>
                     <li><a href="{%url 'company_projects' pk=object.id%}">{% trans "Project" %}</a> </li>
-                    <li><span></span><a href="{% url 'company_contact' pk=object.id %}"> {% trans "Contact Us" %}<span
+                    <li><span></span><a href="{% url 'contact_company' pk=object.id %}"> {% trans "Contact Us" %}<span
                             class="wsarrow"></span></a></li>
 
 
@@ -318,6 +318,31 @@
     </div>
 </div>
 {%block content%}{%endblock%}
+
+
+<!-- Newsletter-->
+<section class="sptb border-top bg-white mt-5">
+    <div class="container">
+        <div class="section-title center-block text-center">
+            <h2>Subscribe To Our Newsletter</h2>
+            <p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+                <div class="input-group sub-input mt-0">
+                    <input type="text" id="email_field" class="form-control input-lg " placeholder="Enter your Email">
+                    <div class="input-group-append ">
+                        <button type="button" onclick="subscribe()" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+                            {%  trans "Subscribe" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/Newsletter-->
+
 <section>
     <footer class="bg-dark-purple text-white">
         <div class="footer-main border-bottom">
@@ -534,6 +559,35 @@
 <!--Footer Section-->
 <!-- Back to top -->
 <a href="#top" id="back-to-top"><i class="fa fa-rocket"></i></a>
+
+
+
+<!-- subscribe script -->
+<script>
+    function subscribe()
+    {
+        fetch("{% url 'subscribe' %}",
+            {
+                method:"POST",
+                credentials: 'same-origin',
+                headers:{
+                    "content-Type":'application/json',
+                    'X-CSRFToken':'{{csrf_token}}'
+                },
+                body:JSON.stringify({
+                    'email': document.getElementById('email_field').value,
+                })
+            }
+            ).then(e => e.json()).then(result=>{
+                    window.alert(result['message'])
+                    console.log(result['message']) 
+                    document.getElementById('email_field').value = ""             
+                }); 
+    }
+    
+</script>
+
+
 
 <!-- JQuery js-->
 <script src="/static/frontpages/js/vendors/jquery-3.2.1.min.js"></script>

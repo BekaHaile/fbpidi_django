@@ -36,12 +36,6 @@ class CompanyAbout(DetailView):
     template_name="frontpages/company/about.html"
 
 
-# class CompanyContact(DetailView):
-#     model=Company
-#     template_name="frontpages/company/contact.html"
-
-
-
 class CompanyContact(CreateView):
     model = CompanyMessage
     template_name = "frontpages/company/contact.html"
@@ -74,24 +68,14 @@ class CompanyInboxList(ListView):
     template_name = "admin/company/inbox_list.html"
     context_object_name = "message_list"
     def get_queryset(self):
-        print(self.request)
         if 'replied_only' in self.request.GET:
-            print("inside replied_only")
             return CompanyMessage.objects.filter(company = self.request.user.get_company().id, replied =True)
         elif 'unreplied_only' in self.request.GET:
-            print("inside unreplied_only")
             return CompanyMessage.objects.filter(company = self.request.user.get_company().id, replied = False)
-        print("inside All")
         return CompanyMessage.objects.filter(company = self.request.user.get_company().id)
 
 
 class CompanyInboxDetail(View):
-    # def get(self, *args, **kwargs):
-    #     message = CompanyMessage.objects.get(id = self.kwargs['pk'])
-    #     message.seen = True
-    #     message.save()
-    #     return render(self.request, 'admin/company/admin_inbox_detail.html',{'message':message} )
-
     def post(self, *args, **kwargs):
         try:
             sender_message = CompanyMessage.objects.get(id = self.kwargs['pk'])
@@ -111,13 +95,24 @@ class CompanyInboxDetail(View):
             messages.warning(self.request, "########## Exception at CompanyInboxDetail post ",e)
             return redirect("admin:index")
 
-        
 
+def Subscribe(request):
+    if request.method=="POST":
+        try:
+            data = json.loads(request.body)
+            subscription = CompanySubscription( email=data['email'])
+            subscription.save()
+            print("inside the success function")
+            return JsonResponse(data={'error':False, 'message':'Successfull Subscription! '}, safe=False )
+        except Exception as e:
+            return JsonResponse(data={'error':True, 'message':f'The exception is {str(e)}'},  safe=False )
+                    
 
-
+    
 class CompanyProductList(DetailView):
     model= Company
     template_name = "frontpages/company/product_list.html"
+
 
 class CompanyProductdetail(DetailView):
     model=Product
@@ -129,9 +124,11 @@ class CompanyProductdetail(DetailView):
         context['object'] = Product.objects.get(id=self.kwargs['pk']).company
         return context
 
+
 class CompanyProjectList(DetailView):
     model= Company
     template_name = "frontpages/company/project_list.html"
+
 
 class CompanyProjectdetail(DetailView):
     model=InvestmentProject
