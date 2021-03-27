@@ -106,7 +106,7 @@
 									</div>
 									<div class="tab-content">
 										<div class="tab-pane active" id="tab-11">
-											{%for news in news_list%}
+											{% for news in news_list %}
 											<div class="card overflow-hidden">
 												<div class="d-md-flex">
 													<div class="item-card9-img">
@@ -602,18 +602,18 @@
 					<div class="col-xl-3 col-lg-3 col-md-12">
 						<form action = "/collaborations/customer_news_list/" method = "GET" >
 					
-						<div class="card">
-							<div class="card-body">
-								<div class="input-group">
-										<input type="text" id = "by_title" name = "by_title" class="form-control br-tl-3 br-bl-3" placeholder="Search">
-										<div class="input-group-append ">
-											<button type="submit" class="btn btn-secondary br-tr-3 br-br-3">
-												{% trans "Search" %}
-											</button>
-										</div>
+							<div class="card">
+								<div class="card-body">
+									<div class="input-group">
+											<input type="text" id = "by_title" name = "by_title" class="form-control br-tl-3 br-bl-3" placeholder="Search">
+											<div class="input-group-append ">
+												<button type="submit" class="btn btn-secondary br-tr-3 br-br-3">
+													{% trans "Search" %}
+												</button>
+											</div>
+									</div>
 								</div>
 							</div>
-						</div>
 						</form>
 
 
@@ -638,23 +638,23 @@
 								</div>
 							</div>
 							<!-- <div class="card-header border-top">
-								<h3 class="card-title">Posted By</h3>
-							</div>
-							<div class="card-body">
-								<div class="filter-product-checkboxs">
-									<label class="custom-control custom-checkbox mb-2">
-										<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
-										<span class="custom-control-label">
-											Manufacturer
-										</span>
-									</label>
-									<label class="custom-control custom-checkbox mb-2">
-										<input type="checkbox" class="custom-control-input" name="checkbox2" value="option2">
-										<span class="custom-control-label">
-											Supplier
-										</span>
-									</label>
+									<h3 class="card-title">Posted By</h3>
 								</div>
+								<div class="card-body">
+									<div class="filter-product-checkboxs">
+										<label class="custom-control custom-checkbox mb-2">
+											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
+											<span class="custom-control-label">
+												Manufacturer
+											</span>
+										</label>
+										<label class="custom-control custom-checkbox mb-2">
+											<input type="checkbox" class="custom-control-input" name="checkbox2" value="option2">
+											<span class="custom-control-label">
+												Supplier
+											</span>
+										</label>
+									</div>
 							</div> -->
 							<div class="card-footer">
 								<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>

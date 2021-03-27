@@ -12,7 +12,7 @@ urlpatterns = [
     path("company-home-page/<pk>/",CompanyHomePage.as_view(),name="company_home"),
     path("about/<pk>/",CompanyAbout.as_view(),name="company_about"),
     path("contact/<pk>/",CompanyContact.as_view(),name="company_contact"),
-
+    
     path("company-products/<pk>/",CompanyProductList.as_view(),name="company_products"),
     path("company-product-detail/<str:company>/<pk>/",CompanyProductdetail.as_view(),name="company_product_detail"),
     path("company-projects/<pk>/",CompanyProjectList.as_view(),name="company_projects"),

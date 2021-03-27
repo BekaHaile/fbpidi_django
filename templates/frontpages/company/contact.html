@@ -11,7 +11,7 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white ">
-							<h1 class="">Contact Us</h1>
+							<h1 class="">{% trans "Contact Us" %}</h1>
 							<ol class="breadcrumb text-center">
 								<li class="breadcrumb-item"><a href="#">Home</a></li>
 								<li class="breadcrumb-item active text-white" aria-current="page">Contact</li>
@@ -33,17 +33,18 @@
 								<div class="wrapper wrapper2">
 									<div class="card mb-0 overflow-hidden">
 										<div class="card-body">
-											<form>
+											<form action = "{% url 'company_contact' pk=object.id %}" method=POST enctype="multipart/form-data" >
+												{% csrf_token %}
 												<div class="form-group">
-													<input type="text" class="form-control" id="name1" placeholder="Your Name" required>
+													<input type="text" name = "name" class="form-control" id="name1" placeholder="Your Name" required>
 												</div>
 												<div class="form-group">
-													<input type="email" class="form-control" id="email" placeholder="Email Address" required>
+													<input type="email" name = "email" class="form-control" id="email" placeholder="Email Address" required>
 												</div>
 												<div class="form-group">
-													<textarea class="form-control" name="example-textarea-input" rows="6" placeholder="Message" required></textarea>
+													<textarea class="form-control" name="message" rows="7" placeholder="Message" required></textarea>
 												</div>
-												<button type="submit" class="btn btn-primary btn-block">Send Message</button>
+												<button type="submit" class="btn btn-primary btn-block">{%  trans "Send Message" %}</button>
 											</form>
 										</div>
 									</div>

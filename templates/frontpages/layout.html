@@ -1,3 +1,4 @@
+{%load core_template_tags%}
 {%load i18n%}
 <!doctype html>
 <html lang="en" dir="ltr">
@@ -331,8 +332,8 @@
                             <li><a href="{% url 'faq' %}">{% trans "Faqs" %}</a></li>
                         </ul>
                     </li>
-
-                    <li><span></span><a href="{% url 'contact' %}"> {% trans "Contact Us" %}<span
+                    {% get_fbpidi_id as fbpidi_id %}
+                    <li><span></span><a href="{% url 'company_contact' pk=fbpidi_id %}"> {% trans "Contact Us" %}<span
                             class="wsarrow"></span></a></li>
 
 
@@ -487,8 +488,8 @@
               
                 fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>
                 {   num_unread_messages = data['num']
-
-                    document.getElementById("num_unread_messages").innerHTML = num_unread_messages
+                    if (num_unread_messages > 0)
+                        document.getElementById("num_unread_messages").innerHTML = num_unread_messages
                      // first clear the list area 
                     document.getElementById('list_of_senders').innerHTML = "";
                     for (unread_message of data['unread_messages']){

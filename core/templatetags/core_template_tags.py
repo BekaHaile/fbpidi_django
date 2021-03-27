@@ -45,9 +45,11 @@ def product_count(non):
 def happy_customer(non):
     return UserProfile.objects.all().count()
 
+
 @register.simple_tag
 def printstr(string):
     print(string) 
+
 
 @register.filter
 def company_count_bycategory(category):
@@ -90,12 +92,13 @@ def print_translated(en_data,am_data,lan_code):
     elif lan_code == 'am':
         return mark_safe(am_data)
 
+
 @register.simple_tag
 def change_end_date(end_date):
-            end_date =str(end_date)
-            end_date = end_date[:19]
-            end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
-            return end_date 
+        end_date =str(end_date)
+        end_date = end_date[:19]
+        end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
+        return end_date 
 
 
 @register.simple_tag()
@@ -120,8 +123,15 @@ def file_type( file_url):
 
 # count all unread messages
 @register.simple_tag
-def count_unread_messages(user):
-    return ChatMessages.count_unread_messages(user)
+def count_unread_chats(user):
+    return ChatMessages.count_unread_chats(user)
+
+
+@register.simple_tag
+def get_fbpidi_id():
+    return Company.objects.get(main_category="FBPIDI").id 
+
+
 
 
 

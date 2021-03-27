@@ -14,7 +14,7 @@ class ChatMessages(models.Model):
 
     
 
-    def count_unread_messages(user):
+    def count_unread_chats(user):
         return ChatMessages.objects.filter(receiver = user, seen =False).count()
 
     def get_unread_from_sender(sender,user):
@@ -88,7 +88,7 @@ class ChatMessage(models.Model):
         return ChatMessage.objects.filter( Q(chat_group__group_name__contains = user.username) & ~Q(sender = user ) & Q(read = False) ).count()
 
     #no of unread messages from a specific sender
-    def count_unread_messages_from_sender(sender_name, user):
+    def count_unread_chats_from_sender(sender_name, user):
         q = Q( Q(chat_group__group_name__contains = sender.username) &  Q(chat_group__group_name__contains = user.username)& Q( read = False) & Q(sender = sender))
         return  ChatMessage.objects.filter(q).count()
 
