@@ -74,7 +74,7 @@ class CompanyInboxList(ListView):
     template_name = "admin/company/inbox_list.html"
     context_object_name = "message_list"
     def get_queryset(self):
-        print(self.request.GET)
+        print(self.request)
         if 'replied_only' in self.request.GET:
             print("inside replied_only")
             return CompanyMessage.objects.filter(company = self.request.user.get_company().id, replied =True)

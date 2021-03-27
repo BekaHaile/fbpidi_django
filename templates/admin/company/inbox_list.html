@@ -69,17 +69,17 @@
                     <div class="btn-group ml-3 mr-lg-3">
                         <form action = "{% url 'admin:admin_inbox_list' %} " method = "GET" >
                             
-                            <button type="button" class="btn btn-light"><a href="" class="dropdown-item"><span class="d-none d-lg-inline-block ml-2">All</span></a></button>
+                            <button type="submit" class="btn btn-light"><a href="" class="dropdown-item"><span class="d-none d-lg-inline-block ml-2">All</span></a></button>
                         </form>
 
                         <form action = "{% url 'admin:admin_inbox_list' %} " method = "GET" >
                             <input type="hidden" name= "unreplied_only"  value='unreplied_only'>
-                            <button  type="button" class="btn btn-light"><a href="" class="dropdown-item"><i class="icon-spam"></i> <span class="d-none d-lg-inline-block ml-2">Unreplied</span></a></button>
+                            <button  type="submit" class="btn btn-light"><a href="" class="dropdown-item"><i class="icon-spam"></i> <span class="d-none d-lg-inline-block ml-2">Unreplied</span></a></button>
                         </form>
 
                         <form action = "{% url 'admin:admin_inbox_list' %} " method = "GET" >
                             <input type="hidden" name= "replied_only"  value='replied_only'>
-                            <button  type="button" class="btn btn-light"><a href="" class="dropdown-item"> <span class="d-none d-lg-inline-block ml-2">Replied</span></a></button>
+                            <button  type="submit" class="btn btn-light"><a href="" class="dropdown-item"> <span class="d-none d-lg-inline-block ml-2">Replied</span></a></button>
                         </form>
                     </div>
 
