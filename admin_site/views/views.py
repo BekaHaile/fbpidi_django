@@ -41,6 +41,12 @@ class AdminIndex(LoginRequiredMixin,View):
                 return redirect("admin:create_my_company")
             else:
                 pass 
+        elif user.is_superuser:
+            if user.get_company() == None:
+                messages.warning(self.request,"Please Create Your Inistitute Profile")
+                return redirect("admin:create_fbpidi_company")
+            else:
+                pass
         else:
             pass
         return render(self.request,"admin/index.html",{})

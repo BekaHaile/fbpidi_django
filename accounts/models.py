@@ -38,12 +38,6 @@ class UserProfile(AbstractUser):
     class Meta(AbstractUser.Meta):
         ordering=('-created_date',)
 
-    def get_company_name(self):
-        return self.get_company().name if self.is_staff else None
-        # if self.is_company_admin:
-        #    return CompanyAdmin.objects.get(user = self).get_company_name()
-        # elif self.is_company_staff:
-        #     return CompanyStaff.objects.get(user = self).get_company_name()
 
     def get_company(self):
         try:

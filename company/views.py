@@ -27,6 +27,21 @@ class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
     form_class = CompanyProfileForm
     template_name = "admin/company/create_company_form.html"
 
+    def get(self,*args,**kwargs):
+        if self.request.user.is_company_admin:
+            if self.request.user.get_company() != None:
+                return redirect("admin:index")
+            else:
+                return super().get(*args,**kwargs)
+        elif self.request.user.is_superuser:
+            if self.request.user.get_company() != None:
+                return redirect("admin:index")
+            else:
+                return redirect("admin:create_fbpidi_company")
+        else:
+            return redirect("admin:index")
+
+
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         return context
