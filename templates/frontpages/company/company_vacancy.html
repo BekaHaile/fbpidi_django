@@ -55,7 +55,7 @@
 												<a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>4 Comments</a>
 											</div> -->
 										</div>
-										<a href="#" class="text-dark"><h4 class="font-weight-semibold"><b>{% print_translated obj.job_title obj.job_title_am LANGUAGE_CODE %}</b></h4></a>
+										<a href="#" class="text-dark"><h4 class="font-weight-semibold"><b>{% print_translated obj.title obj.title_am LANGUAGE_CODE %}</b></h4></a>
 										
 										<a href="{% url 'company_vacancy_detail' pk=obj.id company_pk=object.id %}" target="_blank" href="#" class="btn btn-secondary btn-sm">{% trans "View job details" %}</a>
 										<a target="_blank" href="{%url 'company_vacancy_apply'  vacancy_pk=obj.id%}" class="btn btn-secondary btn-sm">{% trans "Apply" %}</a>

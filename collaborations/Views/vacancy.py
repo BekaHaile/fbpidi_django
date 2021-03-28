@@ -32,7 +32,7 @@ from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, Ne
 from django.http import HttpResponse, FileResponse
 						 
 from wsgiref.util import FileWrapper
-
+from django.db.models import Q
 
 
 from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
@@ -58,6 +58,9 @@ from collaborations.models import ( Blog, BlogComment,Faqs,
 from collaborations.forms import (JobCategoryForm, VacancyForm, CreateJobApplicationForm)
 
 from collaborations.models import ( Vacancy,JobApplication,JobCategory )
+from collaborations.views import filter_by, SearchCategory_Title, get_paginated_data, FilterByCompanyname,SearchByTitle_All, models, search_title_related
+
+
 
 class Download(LoginRequiredMixin,View):
 	def get(self, *args, **kwargs):
@@ -186,10 +189,10 @@ class VacancyDetail(LoginRequiredMixin,View):
 			vacancy.last_updated_date = timezone.now()
 			vacancy.location=form.cleaned_data.get('location')
 			vacancy.salary=form.cleaned_data.get('salary')
-			vacancy.job_title=form.cleaned_data.get('job_title')
+			vacancy.title=form.cleaned_data.get('title')
 			vacancy.description=form.cleaned_data.get('description')
 			vacancy.requirement=form.cleaned_data.get('requirement')
-			vacancy.job_title_am=form.cleaned_data.get('job_title_am')
+			vacancy.title_am=form.cleaned_data.get('title_am')
 			vacancy.description_am=form.cleaned_data.get('description_am')
 			vacancy.requirement_am=form.cleaned_data.get('requirement_am')
 			starting_date=datetime.datetime.strptime(self.request.POST['starting_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
@@ -252,17 +255,6 @@ class CreateVacancy(LoginRequiredMixin, View):
 		
 			vacancy.company=self.request.user.get_company()
 			vacancy.category=category
-			da1 = self.request.POST['starting_date']
-			da2 = self.request.POST['ending_date']
-			if (da2<da1):
-				print(da1," is greater than ",da2)
-				context = {'vacancy':form}
-				template = "admin/pages/job_form.html"
-				messages.warning(self.request, "End Date is Before Start Date")
-				return render(self.request,template,context)
-			else:
-				print(da1," is less than ",da2)
-			print(" ---------- print is good for all ------------ ")
 			
 			starting_date=datetime.datetime.strptime(self.request.POST['starting_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
 			ending_date=datetime.datetime.strptime(self.request.POST['ending_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
@@ -303,7 +295,8 @@ class CreateApplication(LoginRequiredMixin,View):
 		else:
 			messages.warning(self.request, "Unsupported file type detected, the supported files are pdf, jpg, png, doc and docx! ")
 			return redirect("vacancy")
-				
+
+
 class CategoryBasedSearch(View):
 	def get(self,*args,**kwargs):
 		vacancy = Vacancy.objects.filter(category=self.kwargs['id'],closed=False) 
@@ -314,13 +307,43 @@ class CategoryBasedSearch(View):
 		return render(self.request, template_name,context)
 
 class VacancyList(View):
-	def get(self,*args,**kwargs):
-		 
-			jobcategory = JobCategory.objects.all()
-			vacancy = Vacancy.objects.filter(closed=False)
-			template_name="frontpages/vacancy_list.html" 
-			context = {'vacancys':vacancy,'category':jobcategory,'message':'All Vacancys '}
-			return render(self.request, template_name,context)
+	def get(self, *args, **kwargs):
+		result = []
+		category = JobCategory.objects.all()
+		companies = []
+		for comp in Company.objects.all():
+			if comp.vacancy_set.count()>0:
+				companies.append(comp)
+		
+		if 'by_category' in self.request.GET and 'by_title' in self.request.GET:
+			q= Q( Q(title__contains = self.request.GET['by_title']) | 
+				  Q(title_am__contains = self.request.GET['by_title']) )
+			query = Vacancy.objects.filter(q)# search by title then filter by category
+			result = filter_by('category__category_name',self.request.GET.getlist('by_category'), query)
+			# data = get_paginated_data(self.request, result['query'])
+			# return render(self.request, "frontpages/vacancy/vacancy_list.html", {'vacancys':data, 'message':result['message'],  'message_am':result['message_am'],'category':category})
+		elif 'by_category' in self.request.GET:
+			result = filter_by('category__category_name', self.request.GET.getlist('by_category'), Vacancy.objects.all())
+		elif 'by_company' in self.request.GET:
+			result = FilterByCompanyname(self.request.GET.getlist('by_company'), Vacancy.objects.all())
+		else: 
+			result = SearchByTitle_All('Vacancy', self.request)
+
+		if result['query'].count()==0:
+			result['query'] = Vacancy.objects.all()
+
+		#what ever the result is, paginate it and send
+		data = get_paginated_data(self.request, result['query'])
+		return render(self.request, "frontpages/vacancy/vacancy_list.html", {'vacancys':data, 'message':result['message'],  'message_am':result['message_am'], 'category':category, 'companies':companies})
+        
+        
+# class VacancyList(View):
+# 	def get(self,*args,**kwargs):
+# 			jobcategory = JobCategory.objects.all()
+# 			vacancy = Vacancy.objects.filter(closed=False)
+# 			template_name="frontpages/vacancy_list.html" 
+# 			context = {'vacancys':vacancy,'category':jobcategory,'message':'All Vacancys '}
+# 			return render(self.request, template_name,context)
 		
 class VacancyMoreDetail(View):
 	def get(self,*args,**kwargs):
