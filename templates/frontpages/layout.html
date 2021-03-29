@@ -326,17 +326,15 @@
 
                     <li><a href="#">{% trans "Collaborations" %} <span class="fa fa-caret-down m-0"></span></a>
                         <ul class="sub-menu">
-                            <li><a href="{% url 'blog_grid_right' %}">{% trans "Blog" %}</a></li>
+                            <li><a href="{% url 'customer_blog_list' %}">{% trans "Blog" %}</a></li>
                             <li><a href="{% url 'forum_list' %}">{% trans "Forums" %}</a></li>
                             <li><a href="{% url 'polls' %}">{% trans "Polls" %}</a></li>
                             <li><a href="{% url 'faq' %}">{% trans "Faqs" %}</a></li>
                         </ul>
                     </li>
                     {% get_fbpidi_id as fbpidi_id %}
-                    <li><span></span><a href="{% url 'company_contact' pk=fbpidi_id %}"> {% trans "Contact Us" %}<span
+                    <li><span></span><a href="{% url 'contact_company' pk=fbpidi_id %}"> {% trans "Contact Us" %}<span
                             class="wsarrow"></span></a></li>
-
-
                 </ul>
 
             </nav>
@@ -348,11 +346,37 @@
     </div>
 </div>
 {%block content%}{%endblock%}
+<!-- Newsletter-->
+<section class="sptb border-top bg-white mt-5">
+    <div class="container">
+        <div class="section-title center-block text-center">
+            <h2>Subscribe To Our Newsletter</h2>
+            <p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+                <div class="input-group sub-input mt-0">
+                    <input type="text" id="email_field" class="form-control input-lg " placeholder="Enter your Email">
+                    <div class="input-group-append ">
+                        <button type="button" onclick="subscribe()" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+                            {%  trans "Subscribe" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/Newsletter-->
+
 <section>
     <footer class="bg-dark-purple text-white">
         <div class="footer-main border-bottom">
+            
             <div class="container">
+                
                 <div class="row">
+
                     <div class="col-xl-3 col-lg-6 col-md-12">
                         <h6>Categories</h6>
                         <ul class="list-unstyled mb-0">
@@ -401,15 +425,15 @@
                         </ul>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-md-12">
-                        <h6 class="mb-2 mt-6 mt-xl-0">Subscribe</h6>
+                        <!-- <h6 class="mb-2 mt-6 mt-xl-0">Subscribe</h6>
                         <div class="input-group">
-                            <input type="text" class="form-control br-tl-3  br-bl-3" placeholder="Email">
+                            <input type="text" id="email_field2" class="form-control br-tl-3  br-bl-3" placeholder="Email">
                             <div class="input-group-append ">
-                                <button type="button" class="btn btn-secondary br-tr-3 br-br-3 pl-5 pr-5">
+                                <button type="button" onclick = "subscribe()" class="btn btn-secondary br-tr-3 br-br-3 pl-5 pr-5">
                                     Subscribe
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
                         <h6 class="mb-2 mt-5">Payments</h6>
                         <ul class="payments mb-0">
                             <li>
@@ -433,6 +457,9 @@
                 </div>
             </div>
         </div>
+
+        
+
         <div class="bg-dark-purple text-white p-0 border-bottom">
             <div class="container">
                 <div class="p-2 text-center footer-links">
@@ -565,6 +592,31 @@
 <!--Footer Section-->
 <!-- Back to top -->
 <a href="#top" id="back-to-top"><i class="fa fa-rocket"></i></a>
+
+<!-- subscribe script -->
+<script>
+    function subscribe()
+    {
+        fetch("{% url 'subscribe' %}",
+            {
+                method:"POST",
+                credentials: 'same-origin',
+                headers:{
+                    "content-Type":'application/json',
+                    'X-CSRFToken':'{{csrf_token}}'
+                },
+                body:JSON.stringify({
+                    'email': document.getElementById('email_field').value,
+                })
+            }
+            ).then(e => e.json()).then(result=>{
+                    window.alert(result['message'])
+                    console.log(result['message']) 
+                    document.getElementById('email_field').value = ""             
+                }); 
+    }
+    
+</script>
 
 <!-- JQuery js-->
 <script src="/static/frontpages/js/vendors/jquery-3.2.1.min.js"></script>

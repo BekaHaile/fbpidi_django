@@ -269,28 +269,7 @@
 			</div>
 		</section>
 
-		<!-- Newsletter-->
-		<section class="sptb border-top bg-white">
-			<div class="container">
-				<div class="section-title center-block text-center">
-					<h2>Subscribe To Our Newsletter</h2>
-					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
-				</div>
-				<div class="row">
-					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
-						<div class="input-group sub-input mt-0">
-							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
-							<div class="input-group-append ">
-								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
-									Subscribe
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<!--/Newsletter-->
+		
 
 		<!-- Message Modal -->
 		<div class="modal fade" id="contact" tabindex="-1" role="dialog"  aria-hidden="true">
@@ -425,4 +404,28 @@
 				</div>
 			</div>
 		</div>
+
+		<script>
+			function subscribe()
+			{
+				fetch("{% url 'subscribe' %}",
+					{
+						method:"POST",
+						credentials: 'same-origin',
+						headers:{
+							"content-Type":'application/json',
+							'X-CSRFToken':'{{csrf_token}}'
+						},
+						body:JSON.stringify({
+							'email': document.getElementById('email_field').value,
+						})
+					}
+					).then(e => e.json()).then(result=>{
+							window.alert(result['message'])
+							console.log(result['message']) 
+							document.getElementById('email_field').value = ""             
+						}); 
+			}
+			
+		</script>
 		{%endblock%}

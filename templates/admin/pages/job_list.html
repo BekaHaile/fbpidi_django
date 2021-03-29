@@ -43,7 +43,7 @@
 
 
 					<th>starting_date</th>
-					<th>job_title</th>
+					<th>title</th>
 					<th>Closed</th>
 					<th>Applicants</th>
 					<th class="text-center">Actions</th>
@@ -58,7 +58,7 @@
 					<td>{{vacancy.salary|safe}}</td>
 
 					<td>{{vacancy.starting_date|safe}}</td>
-					<td>{{vacancy.job_title|safe|truncatechars_html:10}}</td>
+					<td>{{vacancy.title|safe|truncatechars_html:10}}</td>
 					<td>{{vacancy.closed}}</td>
 					<th>{% if user.is_superuser or user == vacancy.user %}
 							<a href="{% url 'admin:Applicant_info' id=vacancy.id %}">

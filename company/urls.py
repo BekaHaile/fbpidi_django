@@ -11,7 +11,8 @@ urlpatterns = [
     path("man_comp-by-main-category/<option>/",CompanyByMainCategory.as_view(),name="manufac_category_main"),
     path("company-home-page/<pk>/",CompanyHomePage.as_view(),name="company_home"),
     path("about/<pk>/",CompanyAbout.as_view(),name="company_about"),
-    path("contact/<pk>/",CompanyContact.as_view(),name="company_contact"),
+    path("contact/<pk>/",CompanyContact.as_view(),name="contact_company"),
+    path("subscribe/", Subscribe, name="subscribe"),
     
     path("company-products/<pk>/",CompanyProductList.as_view(),name="company_products"),
     path("company-product-detail/<str:company>/<pk>/",CompanyProductdetail.as_view(),name="company_product_detail"),

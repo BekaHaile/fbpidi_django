@@ -58,7 +58,8 @@ from collaborations.models import ( Blog, BlogComment,Faqs,
 									)
 
 from collaborations.forms import (BlogsForm,BlogsEdit,BlogCommentForm)
-
+from collaborations.views import get_paginated_data, filter_by, FilterByCompanyname
+from django.db.models import Q
 # --------------------------------------------
 from django.utils import timezone
 from django.conf import settings
@@ -220,12 +221,17 @@ class BlogView(LoginRequiredMixin,View):
 				return redirect("admin:admin_Blogs")
 		return render(self.request, "admin/pages/blog_detail.html",context)
 
-#-------------------
 
-#blog-grid-right 
-class BlogList(View):
+def set_message(result):
+		if result['query'].count()==0:
+			result['message'] = 'No Result Found!'
+			result['message_am'] = "ምንም ውጤት አልተገኘም"
+		else:
+			result['message'] = f"{result['query'].count()} result found !"
+			result['message_am']  = f"{result['query'].count()} ውጤት ተገኝቷል"
+		return result
 
-	def get_tags(self,lang):
+def get_tags(lang):
 		blog = Blog.objects.filter(publish=True) 
 		string = ""
 		if(lang=="amharic"):
@@ -239,14 +245,43 @@ class BlogList(View):
 		tag_list = set(tag_list)
 		return tag_list
 
-	def get(self,*args,**kwargs):
-		blog = Blog.objects.filter(publish=True) 
-		template_name="frontpages/blog-grid-right.html"
-		tags=self.get_tags("english")
-		tags_am=self.get_tags("amharic")
-		context={'blogs':blog,'tags':tags,'tags_am':tags_am}
-		return render(self.request, template_name,context)
 
+class BlogList(View):
+	
+	def get(self, *args,**kwargs):
+		result ={}
+		if 'by_company' in self.request.GET:
+			result = FilterByCompanyname(self.request.GET.getlist('by_company'), Blog.objects.filter(publish=True))
+		else:
+			result['query'] = Blog.objects.filter(publish = True)
+			if 'by_title' in self.request.GET:
+				q = Q( Q(title__icontains = self.request.GET['by_title']) | Q(title_am__icontains = self.request.GET['by_title']) )
+				result['query'] = result['query'].filter(q)
+				result = set_message(result)
+			elif 'by_tag' in self.request.GET:
+				q = Q( Q(tag__icontains = self.request.GET['by_tag']) | Q(tag_am__icontains = self.request.GET['by_tag']) )
+				result['query'] = result['query'].filter(q)
+				result = set_message(result)
+			else:
+				result['query'] = Blog.objects.filter(publish=True)
+				result['message']  = "Blogs"
+				result['message_am'] = Blog.model_am
+		#making sure that the page is not empty
+		if result['query'].count() == 0:
+			result['query'] = Blog.objects.filter(publish=True)
+		
+		tags = get_tags("english")
+		tags_am = get_tags("amharic")
+
+		companies = []
+		for comp in Company.objects.all():
+			if comp.blog_set.count() > 0:
+				companies.append(comp)
+		data = get_paginated_data(self.request, result['query'])
+		
+		return render(self.request, "frontpages/blog/blog_list.html", {'blogs':data, 'message':result['message'],  'message_am':result['message_am'],
+																				'companies':companies,'tags':tags,'tags_am':tags_am})
+	
 
 class CreateBlogComment(LoginRequiredMixin,View):
 
@@ -260,83 +295,6 @@ class CreateBlogComment(LoginRequiredMixin,View):
 			return redirect(reverse("blog_details",kwargs={'id':str(self.kwargs['id'])}))
 		return render(self.request, template_name,context)
 
-class SearchBlog(View):
-	def get_tags(self,lang):
-		blog = Blog.objects.filter(publish=True) 
-		string = ""
-		if(lang=="amharic"):
-			for b in blog:
-				string+=b.tag_am+','
-		if(lang=="english"):
-			for b in blog:
-				string+=b.tag+','
-		string = string[:-1]
-		tag_list = string.split(',')
-		tag_list = set(tag_list)
-		return tag_list
-
-	def get(self,*args,**kwargs):
-		return redirect(reverse("blog_grid_right"))
-
-	def post(self,*args,**kwargs):
-		blog = Blog.objects.filter(title__contains=self.request.POST['search'])
-		template_name = "frontpages/blog-grid-right.html"
-		print(blog)
-		tags=self.get_tags("english")
-		tags_am=self.get_tags("amharic")
-		context = {'blogs':blog,'tags':tags,'tags_am':tags_am}
-		return render(self.request, template_name,context)
-
-class SearchBlogTag(View):
-	def get_tags(self,lang):
-		blog = Blog.objects.filter(publish=True) 
-		string = ""
-		if(lang=="amharic"):
-			for b in blog:
-				string+=b.tag_am+','
-		if(lang=="english"):
-			for b in blog:
-				string+=b.tag+','
-		string = string[:-1]
-		tag_list = string.split(',')
-		tag_list = set(tag_list)
-		return tag_list
-
-
-	def get(self,*args,**kwargs):
-		blog = Blog.objects.filter(tag__contains=self.kwargs['name'])
-		template_name = "frontpages/blog-grid-right.html"
-		print(blog)
-		tags=self.get_tags("english")
-		tags_am=self.get_tags("amharic")
-		context = {'blogs':blog,'tags':tags,'tags_am':tags_am}
-		return render(self.request, template_name,context)
-
-
-class SearchBlogTag_Am(View):
-	def get_tags(self,lang):
-		blog = Blog.objects.filter(publish=True) 
-		string = ""
-		if(lang=="amharic"):
-			for b in blog:
-				string+=b.tag_am+','
-		if(lang=="english"):
-			for b in blog:
-				string+=b.tag+','
-		string = string[:-1]
-		tag_list = string.split(',')
-		tag_list = set(tag_list)
-		return tag_list
-
-
-	def get(self,*args,**kwargs):
-		blog = Blog.objects.filter(tag_am__contains=self.kwargs['name'])
-		template_name = "frontpages/blog-grid-right.html"
-		print(blog)
-		tags=self.get_tags("english")
-		tags_am=self.get_tags("amharic")
-		context = {'blogs':blog,'tags':tags,'tags_am':tags_am}
-		return render(self.request, template_name,context)
 class BlogDetail(View):
 	def get_tags(self,lang):
 		blog = Blog.objects.filter(publish=True) 

@@ -386,8 +386,12 @@ class CompanyMessageReply(models.Model):
 	class Meta:
 		ordering = ['-created_date']
 
-# class CompanySubscription(models.Model):
 
+class CompanySubscription(models.Model):
+	# users can subscribe using an email address or their FBPIDI user account
+	email = models.EmailField( verbose_name = "Subscription Email.")
+	created_date = models.DateTimeField(auto_now_add = True)
+	
 
 
 class ProjectState(models.Model):
