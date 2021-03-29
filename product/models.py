@@ -182,6 +182,17 @@ class OrderProduct(models.Model):
         return self.product.price().price * self.quantity
 
 
+class ProductInquiry(models.Model):
+    sender_email = models.EmailField(verbose_name="sender email",)
+    product = models.ForeignKey(Product, on_delete = models.CASCADE)
+    subject = models.CharField(max_length=200,)
+    quantity = models.IntegerField()
+    pieces = models.CharField(max_length=100)
+    content = models.TextField()
+    attachement = models.FileField(upload_to = "InquiryDocument/", max_length=254, verbose_name="Inquiry document",help_text="pdf, Max size 3MB", blank=True)
+    created_date = models.DateTimeField()
+
+
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     products = models.ManyToManyField(OrderProduct,related_name='products',default="")

@@ -134,16 +134,35 @@
                     <div class="top-bar-right">
                         <ul class="custom ">
 
+                            
+
+                            <li  class="nav-item dropdown">
+                                <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
+                                
+                                    <a href = "{% url 'cart_summary' %} "><i class="fa fa-shopping-cart mr-1"></i><span>{% trans "My Cart" %}</span></a>
+                                    <span id = "inquiry_basket" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
+                                </a>
+                                
+                                
+                                <div style = "padding: 10px;   width: 300px;" class = "dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
+                                   
+                                    <div class="dropdown-content-body dropdown-scrollable">
+                                        <ul id = "inquiry_list" style = "width: 100%;" class="media-list">
+                                            
+                                        </ul>
+                                    </div>
+                                
+                    
+                                   
+                                </div>
+                            </li>
+                           
+
                             {%if user.is_authenticated%}
                             
 
                             {%if user.is_customer%}
-                            <li class="dropdown">
-                                <a href="{% url 'cart_summary' %}" class="text-dark">
-                                    <i class="fa fa-shopping-cart mr-1"></i><span>{% trans "My Cart" %}</span>
-                                </a>
-
-                            </li>
+                           
                             <li class="dropdown">
                                 <a href="{% url 'mydash' %}" class="text-dark">
                                     <i class="fa fa-user mr-1"></i><span>{% trans "My Profile" %}</span>
@@ -174,10 +193,6 @@
                                    
                                 </div>
                             </li>
-                           
-
-                           
-                              
                            
                             
                             {%elif user.is_staff%}
@@ -510,6 +525,18 @@
     </footer>
 
     <script>
+        function add_to_basket(product_id){
+				if (localStorage.getItem("prods") != null){
+					var ps = localStorage.getItem("prods")+product_id +",";
+					localStorage.setItem("prods", ps)
+					window.alert(localStorage.getItem("prods"))
+				}
+				else{
+					localStorage.setItem("prods", product_id+",")
+					window.alert(localStorage.getItem("prods"))
+				}
+				document.getElementById("prod_"+product_id).disabled = true
+			}
         setInterval(check_inbox, 2000);
         function check_inbox(){
               

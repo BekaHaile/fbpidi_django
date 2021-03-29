@@ -163,13 +163,18 @@
 																		<a class="" href="mailto:{{product.company.get_company_address.email}}" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
 																		<a class="" href="{{product.get_company_address.fax}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.get_company_address.fax}}"><i class="fa fa-globe"></i></a>
-																		<a class="" href="/chat/with/{{product.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+																		<a class="" href="/chat/with/{{product.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 																		
 																		<a class="" href="#"><i class="fa fa-share-alt"></i></a>
 																	</div>
 																</div>
 																<div class="ml-auto mt-3 mt-sm-0">
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
+																
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																		<button id="prod_{{product.id}}" onclick = "add_to_basket('{{product.id}}')">Add</button>
+																		<a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a>
+																		
+																	</div>
 																</div>
 															</div>
 														</div>
@@ -318,6 +323,21 @@
 			</div>
 		</section>
 		<!--/Add Listings-->
+		<script>
+			localStorage.removeItem("prods")
+			function add_to_basket(product_id){
+				if (localStorage.getItem("prods") != null){
+					var ps = localStorage.getItem("prods")+product_id +",";
+					localStorage.setItem("prods", ps)
+					window.alert(localStorage.getItem("prods"))
+				}
+				else{
+					localStorage.setItem("prods", product_id+",")
+					window.alert(localStorage.getItem("prods"))
+				}
+				document.getElementById("prod_"+product_id).disabled = true
+			}
+		</script>
 
 		
 
