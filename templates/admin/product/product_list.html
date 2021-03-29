@@ -8,7 +8,7 @@
 <!-- /theme JS files -->
 
 {% endblock %}
-{%block pagename%}Product List{%endblock%}
+{%block pagename%}Product/Varayti List{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -19,13 +19,13 @@
 	 
 	<div class="card">
 		<div class="card-header header-elements-inline">
-			<h5 class="card-title">Products</h5>
+			<h5 class="card-title">Products/Varayties</h5>
 			<div class="header-elements">
 				
 				<div class="list-icons">
 					{%if not user.is_superuser%}
 					<a href="{% url 'admin:create_product'%}" class="btn bg-teal btn-sm rounded-round"><i
-							class="icon-add mr-2"></i>Add New Product</a>
+							class="icon-add mr-2"></i>Add New Varayti</a>
 					{%endif%}
 				</div>
 
@@ -36,8 +36,8 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>Product Name</th>
-					<th>Category</th>
+					<th>Varayti Name</th>
+					<th>Product</th>
 					<th>Created By</th>
 					<th>Created Date</th>
 					<th class="text-center">Actions</th>
@@ -50,11 +50,7 @@
 					<td>{{cat.name}}</td>
 					
 					<td>
-						{%if cat.fandb_category%}
-						{{cat.fandb_category.brand_name}}
-						{%elif cat.pharmacy_category %}
-						{{cat.pharmacy_category.category_name}}
-						{%endif%}
+						{{cat.brand.product_type.sub_category_name}}
 					</td>
 					<td>{{cat.created_by.username}}</td>
 					<td>
@@ -66,13 +62,14 @@
 								<a href="#" class="list-icons-item" data-toggle="dropdown">
 									<i class="icon-menu9"></i>
 								</a>
-
+								{%if not user.is_superuser%}
 								<div class="dropdown-menu dropdown-menu-right">
 									<a href="{%url 'admin:delete' model_name='product' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Product</a>
 									<a href="{%url 'admin:product_detail' pk=cat.id%}" class="dropdown-item">
-										<i class="icon-pencil"></i>Edit Product</a>
+										<i class="icon-pencil"></i>Edit Varayti</a>
 									 
 								</div>
+								{%endif%}
 							</div>
 						</div>
 					</td>

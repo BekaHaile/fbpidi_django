@@ -107,11 +107,8 @@
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
 											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-briefcase text-muted mr-1"></i>
-												{%if product.fandb_category%}
-												{{product.fandb_category.product_type.category_name.category_type}}
-												{%elif product.pharmacy_category%}
-												{{product.pharmacy_category.category_type}}
-												{%endif%}</a></li>
+												{{product.brand.product_type.category_name.category_type}}
+												</a></li>
 											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i> {{product.company.get_company_address.city_town|title}}</a></li>
 											<!-- <li class="mr-5"><a href="#" class="icons"><i class="icon icon-calendar text-muted mr-1"></i> 5 hours ago</a></li> -->
 											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-eye text-muted mr-1"></i> 765</a></li>
@@ -274,11 +271,9 @@
 										<img src="{{rp.image.url}}" alt="img" class="cover-image">
 									</div>
 									<div class="item-card7-overlaytext">
-										<a href="{%url 'product_detail' pk=rp.id%}" class="text-white"> {%if product.fandb_category%}
-											{{product.fandb_category.product_type.category_name.category_type}}
-											{%elif product.pharmacy_category%}
-											{{product.pharmacy_category.category_type}}
-											{%endif%}</a>
+										<a href="{%url 'product_detail' pk=rp.id%}" class="text-white">
+											{{product.brand.product_type.category_name.category_type}}
+											 </a>
 									</div>
 									<div class="item-card7-icons">
 										<a href="#" class="item-card7-icons-l"> <i class="fa fa-pencil"></i></a>

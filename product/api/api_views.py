@@ -18,10 +18,10 @@ from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
 from collaborations.models import News
 from collaborations.api.serializers import NewsListSerializer
 
-from company.models import Company,SubCategory
+from company.models import Company
 from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer
 
-from product.models import Product, ProductImage, ProductPrice, Order, OrderProduct, InvoiceRecord
+from product.models import SubCategory,Product, ProductImage, ProductPrice, Order, OrderProduct, InvoiceRecord
 from product.api.serializer import (ProducteFullSerializer, ProductInfoSerializer, ProductImageSerializer,
                                      OrderSerializer, OrderProductSerializer, ShippingAddressSerializer)
         

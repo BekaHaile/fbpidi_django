@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
 <script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
 {% endblock %}
-{%block pagename%}Product Detail Form{%endblock%}
+{%block pagename%}Product/Varayti Detail Form{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -24,7 +24,7 @@
 
 			<form action="{%url 'admin:product_detail' pk=object.id%}" method="POST" id="pdform" enctype="multipart/form-data">
 				<fieldset class="mb-3 ml-3 mr-3">
-					<legend class="text-uppercase font-size-sm font-weight-bold">Update Product</legend>
+					<legend class="text-uppercase font-size-sm font-weight-bold">Update Product Varayti</legend>
 					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
 					 
 					{%csrf_token%}
@@ -40,18 +40,20 @@
 							{{form.name_am}}
 						</div>
 					</div>
-					<div class="form-group row">
-						<label class="col-form-label col-lg-3">{{form.uom.label|title}} *</label>
-						<div class="col-lg-9">
-							{{form.uom}}
-						</div>
-					</div>
+					 
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3">{{form.quantity.label|title}} *</label>
 						<div class="col-lg-9">
 							{{form.quantity}}
 						</div>
 					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">{{form.brand.label|title}} *</label>
+						<div class="col-lg-9">
+							{{form.brand}}
+						</div>
+					</div>
+					{%comment%}
 					{%if user.get_company.main_category == "Food" or user.get_company.main_category == "Beverage" %}
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3">{{form.fandb_category.label|title}} *</label>
@@ -59,13 +61,14 @@
 							{{form.fandb_category}}
 						</div>
 					</div>
-					{%elif user.get_company.main_category == "Pharmaceuticals"%}
-					<div class="form-group row">
+					{%endcomment%}
+					{%if user.get_company.main_category == "Pharmaceuticals"%}
+					<!-- <div class="form-group row">
 						<label class="col-form-label col-lg-3">{{form.pharmacy_category.label|title}} *</label>
 						<div class="col-lg-9">
 							{{form.pharmacy_category}}
 						</div>
-					</div>
+					</div> -->
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3">{{form.dose.label|title}} *</label>
 						<div class="col-lg-9">
@@ -185,15 +188,7 @@
 					</tbody>
 				</table>
 			</div>
-			<hr>
-			<div class="row">
-				<a href="{%url 'admin:production_capacity' product=object.id%}" class="btn btn-warning btn-md m-2">Production Capacity</a>
-				<a href="{%url 'admin:anual_input_need' product=object.id%}" class="btn btn-warning btn-md m-2">Anual Input Need</a>
-				<a href="{%url 'admin:demand_supply_list' product=object.id%}" class="btn btn-warning btn-md m-2">Input demand & Supply</a>
-				<a href="{%url 'admin:sales_performance' product=object.id%}" class="btn btn-warning btn-md m-2">Production sales Performance</a>
-				<a href="{%url 'admin:packaging' product=object.id%}" class="btn btn-warning btn-md m-2">Product Packaging Data</a>
-			</div>
-			<hr>
+			<!--  -->
 		</div>
 	</div>
 

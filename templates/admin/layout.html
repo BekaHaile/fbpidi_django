@@ -187,7 +187,33 @@
 						</li>
 						<li class="nav-item">
 							<a href="{%url 'admin:admin_products'%}" class="nav-link"><i
-									class="icon-stack"></i> <span>Products</span></a>
+									class="icon-stack"></i> <span>Varayti</span></a>
+						</li>
+						<li class="nav-item nav-item-submenu">
+							<a href="#" class="nav-link"><i class="icon-store"></i> <span>Product Data</span></a>
+							<ul class="nav nav-group-sub" data-submenu-title="Form components">
+								<li class="nav-item">
+									<a href="{%url 'admin:production_capacity'%}" class="nav-link"><i class="icon-drawer"></i>
+										<span>Production Capacity</span></a>
+								</li>
+								<li class="nav-item">
+									<a href="{%url 'admin:anual_input_need'%}" class="nav-link"><i class="icon-drawer"></i>
+										<span>Annual Input Need</span></a>
+								</li>
+								<li class="nav-item">
+									<a href="{%url 'admin:demand_supply_list'%}" class="nav-link"><i class="icon-drawer"></i>
+										<span>Input Demand & Supply</span></a>
+								</li>
+								<li class="nav-item">
+									<a href="{%url 'admin:sales_performance'%}" class="nav-link"><i class="icon-drawer"></i>
+										<span>Sales Performance</span></a>
+								</li>
+								<li class="nav-item">
+									<a href="{%url 'admin:packaging'%}" class="nav-link"><i class="icon-drawer"></i>
+										<span>Product Packaging</span></a>
+								</li>
+								 
+							</ul>
 						</li>
 						
 						<li class="nav-item nav-item">
@@ -290,7 +316,13 @@
 								</span>
 							</a>
 						</li>
-						 
+						<li class="nav-item">
+							<a href="{%url 'admin:report_page'%}" class="nav-link">
+								<i class="icon-file-text2"></i>
+								<span>Report</span>
+								 
+							</a>
+						</li>
 											 
 						{%else%} 
 						

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
-from company.models import Company, CompanyAddress, Certificates, Brand, SubCategory, InvestmentProject
+from company.models import Company, CompanyAddress, Certificates,  InvestmentProject
+from product.models import Brand, SubCategory
 from accounts.api.serializers import CompanyAdminSerializer, UserInfoSerializer
 from admin_site.models import Category
 from admin_site.api.serializers import CategorySerializer, SubCategorySerializer

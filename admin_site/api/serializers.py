@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from admin_site.models import Category
-from company.models import SubCategory
+from product.models import SubCategory
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

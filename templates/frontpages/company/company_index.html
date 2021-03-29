@@ -153,11 +153,8 @@
 												<img src="{{product.image.url}}" alt="img" class="cover-image">
 											</div>
 											<div class="item-card7-overlaytext">
-												<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="text-white"> {%if product.fandb_category%}
-													{{product.fandb_category.product_type.category_name.category_type}}
-													{%elif product.pharmacy_category%}
-													{{product.pharmacy_category.category_type}}
-													{%endif%}</a>
+												<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="text-white"> 
+													{{product.brand.product_type.category_name.category_type}} </a>
 											</div>
 											<div class="item-card7-icons">
 												<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>

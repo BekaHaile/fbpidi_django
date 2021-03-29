@@ -17,38 +17,7 @@ CAT_LIST = (
     ("Pharmaceuticals",'Pharmaceuticals'),
 )
 
-class SubCategory(models.Model):
-    company = models.ForeignKey('Company',on_delete=models.CASCADE,related_name='company_product_category')
-    category_name = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,
-									blank=True,verbose_name="Category Type",related_name="sub_category")
-    sub_category_name = models.CharField(max_length=200,verbose_name="Sub-Category Name(English)")
-    sub_category_name_am = models.CharField(max_length=200,verbose_name="Sub-Category Name(Amharic)")
-    description = models.TextField(verbose_name="Description (English)")
-    description_am = models.TextField(verbose_name="Description (Amharic)")
-    icons = models.ImageField( verbose_name="Category Icon")
-    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='subcat_created_by',null=True)
-    created_date	= models.DateTimeField(auto_now_add=True)
-    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='subcat_updated_by',null=True)
-    last_updated_date	= models.DateTimeField(null=True)
-    expired	= models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.sub_category_name
-
-
-class Brand(models.Model):
-	company = models.ForeignKey('Company',on_delete=models.CASCADE,related_name="company_brand",choices=CAT_LIST)
-	product_type = models.ForeignKey(SubCategory,on_delete=models.CASCADE, verbose_name="Product Type", related_name="product_category")
-	brand_name = models.CharField(max_length=200,verbose_name="Product Brand Name(English)")
-	brand_name_am = models.CharField(max_length=200,verbose_name="Product Brand Name(Amharic)")
-	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='brand_created_by',null=True)
-	created_date	= models.DateTimeField(auto_now_add=True)
-	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='brand_updated_by',null=True)
-	last_updated_date	= models.DateTimeField(null=True)
-	expired	= models.BooleanField(default=False)
-
-	def __str__(self):
-		return self.brand_name			
+		
 
 
 class Company(models.Model):
@@ -67,8 +36,8 @@ class Company(models.Model):
 	detail_am = models.TextField(verbose_name="Company Description in Amharic",default="")
 	contact_person	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True,related_name="contact_person") # contact person
 	category	= models.ManyToManyField(Category,related_name="company_category",verbose_name="Company Product Types") # category
-	expansion_plan	= models.TextField(verbose_name="Expansion Plan in English",null=True,blank=True)
-	expansion_plan_am	= models.TextField(verbose_name="Expansion Plan in Amharic",null=True,blank=True)
+	expansion_plan	= models.TextField(verbose_name="Expansion Plan in English",default="No")
+	expansion_plan_am	= models.TextField(verbose_name="Expansion Plan in Amharic",default="No")
 	trade_license	= models.FileField(max_length=254, verbose_name="your Trade License",
 									help_text="Images and pdf files less than 10MB", null=True,
 									upload_to="company/trade_license/",
@@ -182,6 +151,9 @@ class InvestmentCapital(models.Model):
 	building_cost	= models.FloatField(default=0)
 	working_capital	= models.FloatField(default=0)
 	timestamp = models.DateField(auto_now_add=True)
+
+	def get_inv_cap(self):
+		return float(self.machinery_cost+self.building_cost+self.working_capital)
 
 # Certificates
 class Certificates(models.Model):

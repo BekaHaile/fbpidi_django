@@ -15,10 +15,10 @@ from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
 from collaborations.models import News
 from collaborations.api.serializers import NewsListSerializer
 
-from company.models import Company,SubCategory
+from company.models import Company
 from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer
 
-from product.models import Product, ProductImage, ProductPrice
+from product.models import SubCategory,Product, ProductImage, ProductPrice
 from product.api.serializer import ProducteFullSerializer, ProductInfoSerializer, ProductImageSerializer
 
 from accounts.models import User,UserProfile, Customer, CompanyAdmin

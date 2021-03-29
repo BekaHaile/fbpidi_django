@@ -31,6 +31,13 @@ def company_count(user):
     if user.is_authenticated:
         return int(Company.objects.all().count())
 
+@register.filter
+def get_sum(data):
+    sm = 0
+    for d in data:
+        sm+=d['data']
+    return sm
+
 
 @register.simple_tag
 def user_create_button(user):

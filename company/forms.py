@@ -34,7 +34,6 @@ YEAR_CHOICES=[('','Select Year'),]
 YEAR_CHOICES += [(r,r) for r in range(2000, datetime.date.today().year+1)]
 
 class InvestmentCapitalForm(forms.ModelForm):
-     
 
     year_inv = forms.IntegerField(label="Year",widget=forms.Select( 
         choices=YEAR_CHOICES,

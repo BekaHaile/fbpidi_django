@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.core import serializers
 
 from company.models import *
-from accounts.models import CompanyAdmin,User
+from accounts.models import CompanyAdmin,UserProfile
 from product.models import Order,OrderProduct,Product
 
 from company.forms import *
@@ -1030,109 +1030,7 @@ class UpdateSliderImage(LoginRequiredMixin,UpdateView):
         return redirect("admin:update_slider",pk=self.kwargs['pk'])
  
 #  Company Report Views
-class CompanyListForReport(LoginRequiredMixin,ListView):
-    model=Company
-    template_name = "admin/company/companies_for_report.html"
 
-    def get_queryset(self):
-        return Company.objects.all().exclude(main_category="FBPIDI")
-
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership").order_by('-id')
-        return context
-
-class FilterCompanyByMainCategory(LoginRequiredMixin,ListView):
-    model = Company
-    template_name = "admin/company/companies_for_report.html"
-
-    def get_queryset(self):
-        try:
-            if self.kwargs['sector'] == "all":
-                return Company.objects.all().exclude(main_category="FBPIDI")
-            else:
-                return Company.objects.filter(main_category=self.kwargs['sector'])
-        except Exception as e:
-            return None
-
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.filter(category_type=self.kwargs['sector'])
-        context['sector'] = self.kwargs['sector']
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        return context
-
-class FilterCompanyCategory(LoginRequiredMixin,ListView):
-    model = Company
-    template_name = "admin/company/companies_for_report.html"
-
-    def get_queryset(self):
-        try:
-            if self.kwargs['category'] == 'Food' or self.kwargs['category'] == 'Beverage' or self.kwargs['category'] == 'Pharmaceuticals':
-                return Company.objects.filter(main_category=self.kwargs['category'])
-            else:
-                return Company.objects.filter( category=Category.objects.get(id=self.kwargs['category']) ) 
-        except Exception as e:
-            return None
-    
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        try:
-            if self.kwargs['category'] == 'Food' or self.kwargs['category'] == 'Beverage' or self.kwargs['category'] == 'Pharmaceuticals':
-                context['categories'] = Category.objects.filter(category_type=self.kwargs['category'])
-            else:
-                context['categories'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['category']).category_type)
-        except Exception as e:
-            return None
-        context['sector'] = Category.objects.get(id=self.kwargs['category']).category_type
-        context['sub_sector'] = Category.objects.get(id=self.kwargs['category']).category_name
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        return context
-
-class FilterByOwnership(LoginRequiredMixin,ListView):
-    model = Company
-    template_name = "admin/company/companies_for_report.html"
-
-    def get_queryset(self):
-        return Company.objects.filter(ownership_form=self.kwargs['ownership_form'])
-    
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        return context
-
-class ExportCSV(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        try:
-            companies=""
-            if self.kwargs['option'] == "main_category":
-                if self.kwargs['category'] == "all":
-                    companies = Company.objects.select_related().all().exclude(main_category="FBPIDI")
-                else:
-                    companies = Company.objects.select_related().filter(main_category=self.kwargs['category'])
-            elif self.kwargs['option'] == "sub_category":
-                companies = Company.objects.filter(
-                    category=Category.objects.get(category_name=self.kwargs['category'])
-                )
-            response = HttpResponse(content_type='text/csv',charset="utf-8")  
-            response['Content-Disposition'] = 'attachment; filename="COMPANY_DATA.csv"'  
-            writer = csv.writer(response)
-            writer.writerow(['name','Sector','Category','Products','Ownership Form','Established Year'])
-            for company in companies:
-                writer.writerow([
-                    company.name,company.main_category,get_categories(company),company.company_product.all().count(),
-                    company.ownership_form.name,company.established_yr
-                ])
-            return response             
-        except Exception as e:
-            messages.warning(self.request,e)
-            return redirect("admin:company_list_report")
-
-def get_categories(company):
-    str_cat = ""
-    for cat in company.category.all():
-        str_cat+=cat.category_name+", "
-    return str_cat
 
 
 

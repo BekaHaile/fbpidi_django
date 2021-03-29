@@ -118,11 +118,7 @@
 															<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
 														</div>
 														<div class="item-cardreview-absolute bg-secondary">
-															{%if product.fandb_category%}
-															{{product.fandb_category.product_type.category_name.category_type}}
-															{%elif product.pharmacy_category%}
-															{{product.pharmacy_category.category_type}}
-															{%endif%}
+															{{product.brand.product_type.category_name.category_type}}
 														</div>
 													</div>
 													<div class="card border-0 mb-0">
@@ -195,11 +191,8 @@
 																	<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
 																</div>
 																<div class="item-cardreview-absolute bg-secondary">
-																	{%if product.fandb_category%}
-																	{{product.fandb_category.product_type.category_name.category_type}}
-																	{%elif product.pharmacy_category%}
-																	{{product.pharmacy_category.category_type}}
-																	{%endif%}</div>
+																	{{product.brand.product_type.category_name.category_type}}
+																	
 															</div>
 															<div class="card border-0 mb-0">
 																<div class="card-body">
