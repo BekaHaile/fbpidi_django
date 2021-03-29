@@ -4,314 +4,423 @@
 {%block content%}
 {% get_current_language as LANGUAGE_CODE %}
 
-		<!--Sliders Section-->
-		<div>
-			<div class="cover-image sptb-1 bg-background" data-image-src="/static/frontpages/images/banners/banner1.jpg">
-				<div class="header-text1 mb-0">
-					<div class="container">
-						<div class="row">
-							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
-								<div class="text-center text-white ">
-									<h1 class=""><span class="font-weight-bold">{{object_list.count}}</span> Products available</h1>
-								</div>
-								<div class="search-background px-4 py-3 mt-4">
-									<div class="form row row-sm">
-										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
-											<input type="text" class="form-control input-lg border-white" id="text" placeholder="Search Products">
-										</div>
-										<div class="form-group col-xl-4 col-lg-4 select2-lg  col-md-12 mb-0 border-white">
-											<select class="form-control select2-show-search w-100" data-placeholder="Select">
-												<optgroup label="Categories">
-													<option>Select</option>
-													<option value="1">AutoMobile</option>
-													<option value="2">Real Estate</option>
-													<option value="3">Computer</option>
-													<option value="4">Clothing</option>
-													<option value="5">Job</option>
-													<option value="6">Services</option>
-													<option value="7">Electronics</option>
-													<option value="8">Mobile</option>
-													<option value="9">Events</option>
-													<option value="10">Constructions</option>
-												</optgroup>
-											</select>
-										</div>
-										<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
-											<a href="#" class="btn btn-lg btn-block btn-secondary">Search</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div><!-- /header-text -->
-			</div>
-		</div>
-		<!--/Sliders Section-->
+<!--Sliders Section-->
+<div>
+    <div class="cover-image sptb-1 bg-background" data-image-src="/static/frontpages/images/banners/banner1.jpg">
+        <div class="header-text1 mb-0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
+                        <div class="text-center text-white ">
+                            <h1 class=""><span class="font-weight-bold">{{object_list.count}}</span> Products available
+                            </h1>
+                        </div>
+                        <div class="search-background px-4 py-3 mt-4">
+                            <div class="form row row-sm">
+                                <div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
+                                    <input type="text" class="form-control input-lg border-white" id="text"
+                                           placeholder="Search Products">
+                                </div>
+                                <div class="form-group col-xl-4 col-lg-4 select2-lg  col-md-12 mb-0 border-white">
+                                    <select class="form-control select2-show-search w-100" data-placeholder="Select">
+                                        <optgroup label="Categories">
+                                            <option>Select</option>
+                                            <option value="1">AutoMobile</option>
+                                            <option value="2">Real Estate</option>
+                                            <option value="3">Computer</option>
+                                            <option value="4">Clothing</option>
+                                            <option value="5">Job</option>
+                                            <option value="6">Services</option>
+                                            <option value="7">Electronics</option>
+                                            <option value="8">Mobile</option>
+                                            <option value="9">Events</option>
+                                            <option value="10">Constructions</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="col-xl-2 col-lg-3 col-md-12 mb-0">
+                                    <a href="#" class="btn btn-lg btn-block btn-secondary">Search</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /header-text -->
+    </div>
+</div>
+<!--/Sliders Section-->
 
-		<!--Breadcrumb-->
-		<div class="bg-white border-bottom">
-			<div class="container">
-				<div class="page-header">
-					<h4 class="page-title">Products</h4>
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="{%url 'index'%}">Home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Product list</li>
-					</ol>
-				</div>
-			</div>
-		</div>
-		<!--/Breadcrumb-->
+<!--Breadcrumb-->
+<div class="bg-white border-bottom">
+    <div class="container">
+        <div class="page-header">
+            <h4 class="page-title">Products</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{%url 'index'%}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Product list</li>
+            </ol>
+        </div>
+    </div>
+</div>
+<!--/Breadcrumb-->
 
-		<!--Add listing-->
-		<section class="sptb">
-			<div class="container">
-				<div class="row">
-					<div class="col-xl-9 col-lg-9 col-md-12">
-						<!--Add lists-->
-						<div class=" mb-lg-0">
-							<div class="">
-								<div class="item2-gl business-list-01">
-									<div class="">
-										<div class="bg-white p-5 item2-gl-nav d-flex">
-											<h6 class="mb-0 mt-3">Showing {{object_list.count}} entries</h6>
-											<ul class="nav item2-gl-menu ml-auto mt-1">
-												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
-												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
-											</ul>
-											<div class="d-sm-flex">
-												<label class="mr-2 mt-2 mb-sm-1 sort-label">Sort By:</label>
-												<div class="selectgroup">
-													<label class="selectgroup-item mb-md-0">
-														<input type="radio" name="value" value="All" class="selectgroup-input" checked="">
-														<span class="selectgroup-button d-md-flex">All <i class="fa fa-sort ml-2 mt-1"></i></span>
-													</label>
-													<label class="selectgroup-item mb-md-0">
-														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">Distance</span>
-													</label>
-													<label class="selectgroup-item mb-0">
-														<input type="radio" name="value" value="Latest" class="selectgroup-input">
-														<span class="selectgroup-button">Latest</span>
-													</label>
-													<label class="selectgroup-item mb-0">
-														<input type="radio" name="value" value="Rating" class="selectgroup-input">
-														<span class="selectgroup-button">Rating</span>
-													</label>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="tab-content">
-										<div class="tab-pane active" id="tab-11">
-											{%for product in object_list%}
-											<div class="card overflow-hidden">
-												<!-- <div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">New</span></div> -->
-												<div class="d-md-flex">
-													<div class="item-card9-img">
-														<div class="item-card9-imgs">
-															<a target="_blank" href="{%url 'company_product_detail' company=product.company.name pk=product.id%}"></a>
-															<img src="{{product.image.url}}" alt="img" class="cover-image">
-															<!-- /media/Images/News%20Images/wp2234690.png -->
-														</div>
-														<div class="item-card9-icons">
-															<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
-														</div>
-														<div class="item-cardreview-absolute bg-secondary">
-															{{product.brand.product_type.category_name.category_type}}
-														</div>
-													</div>
-													<div class="card border-0 mb-0">
-														<div class="card-body h-100">
-															<div class="item-card9">
-																<a target="_blank" href="{%url 'company_product_detail' company=product.company.name pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
-																<div class="rating-stars d-flex mr-5">
-																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
-																	<div class="rating-stars-container mr-2">
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																	</div> <a class="fs-13 leading-tight mt-1" href="#">{{product|review_count}} Reviews</a>
-																</div>
-																<div class="mt-2 mb-2">
-																	<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i>{{product.company.get_company_address.city_town}}</a>
-																	<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{product.company.get_company_address.local_area}}, {{product.company.get_company_address.fax}}</a>
-																</div>
-																<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark">ETB {{product.price}}</span> </p>
-															</div>
-														</div>
-														<div class="card-footer pt-2 pb-2">
-															<div class="item-card9-footer d-sm-flex">
-																<div class="item-card9-cost">
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																		<a class="" href="mailto:{{product.company.get_company_address.email}}" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
-																		<a class="" href="{{product.get_company_address.fax}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.get_company_address.fax}}"><i class="fa fa-globe"></i></a>
-																		<a class="" href="/chat/with/{{product.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-																		
-																		<a class="" href="#"><i class="fa fa-share-alt"></i></a>
-																	</div>
-																</div>
-																<div class="ml-auto mt-3 mt-sm-0">
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											{%endfor%}
-										</div>
-										<div class="tab-pane" id="tab-12">
-											
-											<div class="row">
-												{%for product in object_list%}
-												<div class="col-lg-6 col-md-6 col-xl-6">
-													<div class="card overflow-hidden">
-														<!-- <div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">New</span></div> -->
-														<div class="h-100">
-															<div class="item-card9-img">
-																<div class="item-card9-imgs">
-																	<a target="_blank" href="{%url 'company_product_detail' company=product.company.name pk=product.id%}"></a>
-																	<img src="{{product.image.url}}" alt="img" class="cover-image">
-																</div>
-																<div class="item-card9-icons">
-																	<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
-																</div>
-																<div class="item-cardreview-absolute bg-secondary">
-																	{{product.brand.product_type.category_name.category_type}}
-																	
-															</div>
-															<div class="card border-0 mb-0">
-																<div class="card-body">
-																	<div class="item-card9">
-																		<a target="_blank" href="{%url 'company_product_detail' company=product.company.name pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
-																		<div class="rating-stars d-flex mr-5">
-																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
-																			<div class="rating-stars-container mr-2">
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																			</div> <a class="fs-13 leading-tight mt-1" href="#">{{product|review_count}} Reviews</a>
-																		</div>
-																		<div class="mt-2 mb-2">
-																			<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i> {{product.company.get_company_address.city_town}}</a>
-																			<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{product.company.get_company_address.local_area}}, {{product.company.get_company_address.fax}}</a>
-																		</div>
-																		<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark">ETB {{product.price}}</span></p>
-																	</div>
-																</div>
-																<div class="card-footer pt-2 pb-2">
-																	<div class="item-card9-footer d-sm-flex">
-																		<div class="item-card9-cost">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																				<a class="" href="mailto:{{product.company.get_company_address.email}}" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
-																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
-																				<a class="" href="{{product.get_company_address.fax}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.get_company_address.fax}}"><i class="fa fa-globe"></i></a>
-																				<a class="" href="/chat/with/{{product.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-																				
-																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
-																			</div>
-																		</div>
-																		<div class="ml-auto mt-3 mt-sm-0">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-												{%endfor%}
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="center-block text-center">
-									<ul class="pagination mb-5">
-									   {% if page_obj.has_previous %}
-									   <li class="page-item page-prev ">
-										   <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Prev</a>
-									   </li>
-									   {%endif%}
-									   <li class="page-item active"><a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a></li>
-									   {% if page_obj.has_next %}
-									   <li class="page-item page-next">
-										   <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-									   </li>
-									   {%endif%}
-								   </ul>
-							   </div>
-							</div>
-						</div>
-						<!--/Add lists-->
-					</div>
+<!--Add listing-->
+<section class="sptb">
 
-					<!--Right Side Content-->
-					<div class="col-xl-3 col-lg-3 col-md-12">
-						<div class="card">
-							<div class="card-body">
-								<div class="input-group">
-									<input type="text" class="form-control br-tl-3 br-bl-3" placeholder="Search">
-									<div class="input-group-append ">
-										<button type="button" class="btn btn-secondary br-tr-3 br-br-3">
-											Search
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card mb-0">
-							<div class="card-header">
-								<h3 class="card-title">Categories</h3>
-							</div>
-							<div class="card-body">
-								<div class="" id="container">
-									<div class="filter-product-checkboxs">
-										{%for category in categories%}
-										<label class="custom-control custom-checkbox mb-3">
-											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
-											<span class="custom-control-label">
-												<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{{category.category_name|truncatechars_html:20}}</a>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-xl-9 col-lg-9 col-md-12">
+                <!--Add lists-->
+                <div class=" mb-lg-0">
+                    <div class="">
+                        <div class="item2-gl business-list-01">
+                            <div class="">
+                                <div class="bg-white p-5 item2-gl-nav d-flex">
+
+                                    <h6 class="mb-0 mt-3">Showing {{object_list.count}} entries</h6>
+
+                                    <ul class="nav item2-gl-menu ml-auto mt-1">
+                                        <li class=""><a href="#tab-11" class="active show" data-toggle="tab"
+                                                        title="List style"><i class="fa fa-list"></i></a></li>
+                                        <li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i
+                                                class="fa fa-th"></i></a></li>
+                                    </ul>
+
+                                    <div class="d-sm-flex">
+                                        <label class="mr-2 mt-2 mb-sm-1 sort-label">Sort By:</label>
+                                        <div class="selectgroup">
+                                            <label class="selectgroup-item mb-md-0">
+                                                <input type="radio" name="value" value="All" class="selectgroup-input"
+                                                       checked="">
+                                                <span class="selectgroup-button d-md-flex">All <i
+                                                        class="fa fa-sort ml-2 mt-1"></i></span>
+                                            </label>
+                                            <label class="selectgroup-item mb-md-0">
+                                                <input type="radio" name="value" value="Distance"
+                                                       class="selectgroup-input">
+                                                <span class="selectgroup-button">Distance</span>
+                                            </label>
+                                            <label class="selectgroup-item mb-0">
+                                                <input type="radio" name="value" value="Latest"
+                                                       class="selectgroup-input">
+                                                <span class="selectgroup-button">Latest</span>
+                                            </label>
+                                            <label class="selectgroup-item mb-0">
+                                                <input type="radio" name="value" value="Rating"
+                                                       class="selectgroup-input">
+                                                <span class="selectgroup-button">Rating</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab-11">
+                                    {%for product in object_list%}
+                                    <div class="card overflow-hidden">
+                                        <!-- <div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">New</span></div> -->
+                                        <div class="d-md-flex">
+
+                                            <div class="item-card9-img">
+
+                                                <div class="item-card9-imgs">
+                                                    <a target="_blank"
+                                                       href="{%url 'company_product_detail' company=product.company.name pk=product.id%}"></a>
+                                                    <img src="{{product.image.url}}" alt="img" class="cover-image">
+                                                    <!-- /media/Images/News%20Images/wp2234690.png -->
+                                                </div>
+
+                                                <div class="item-card9-icons">
+                                                    <a href="#" class="item-card9-icons1 wishlist"> <i
+                                                            class="fa fa fa-heart-o"></i></a>
+                                                </div>
+
+                                                <div class="item-cardreview-absolute bg-secondary">
+                                                    {{product.brand.product_type.category_name.category_type}}
+                                                </div>
+
+                                            </div>
+
+                                            <div class="card border-0 mb-0">
+                                                <div class="card-body h-100">
+                                                    <div class="item-card9">
+                                                        <a target="_blank"
+                                                           href="{%url 'company_product_detail' company=product.company.name pk=product.id%}"
+                                                           class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">
+                                                            {% print_translated product.name product.name_am LANGUAGE_CODE %}<i
+                                                                class="fa fa-exclamation-circle text-warning ml-1"
+                                                                data-toggle="tooltip" data-placement="top" title=""
+                                                                data-original-title="Not Verified"></i></h4></a>
+                                                        <div class="rating-stars d-flex mr-5">
+                                                            <input type="number" readonly="readonly"
+                                                                   class="rating-value star" name="rating-stars-value"
+                                                                   value="3">
+                                                            <div class="rating-stars-container mr-2">
+                                                                <div class="rating-star sm">
+                                                                    <i class="fa fa-star"></i>
+                                                                </div>
+                                                                <div class="rating-star sm">
+                                                                    <i class="fa fa-star"></i>
+                                                                </div>
+                                                                <div class="rating-star sm">
+                                                                    <i class="fa fa-star"></i>
+                                                                </div>
+                                                                <div class="rating-star sm">
+                                                                    <i class="fa fa-star"></i>
+                                                                </div>
+                                                                <div class="rating-star sm">
+                                                                    <i class="fa fa-star"></i>
+                                                                </div>
+                                                            </div>
+                                                            <a class="fs-13 leading-tight mt-1" href="#">{{product|review_count}}
+                                                                Reviews</a>
+                                                        </div>
+                                                        <div class="mt-2 mb-2">
+                                                            <a href="#" class="mt-1 mb-1 mr-3 text-dark"><i
+                                                                    class="fa fa-globe mr-1"></i>{{product.company.get_company_address.city_town}}</a>
+                                                            <a href="#" class="mt-1 mb-1 mr-1 text-muted"><i
+                                                                    class="fa fa-map-marker mr-1"></i>
+                                                                {{product.company.get_company_address.local_area}},{{product.company.get_company_address.fax}}</a>
+                                                        </div>
+                                                        <p class="mb-0 leading-tight"><span
+                                                                class="font-weight-semibold text-dark">ETB {{product.price}}</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer pt-2 pb-2">
+                                                    <div class="item-card9-footer d-sm-flex">
+                                                        <div class="item-card9-cost">
+                                                            <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                <a class=""
+                                                                   href="mailto:{{product.company.get_company_address.email}}"
+                                                                   data-toggle="modal" data-target="#contact"><i
+                                                                        class="fa fa-envelope"></i></a>
+                                                                <a class="" href="#" data-toggle="tooltip"
+                                                                   data-placement="top" title=""
+                                                                   data-original-title="{{product.company.get_company_address.phone_number}}"><i
+                                                                        class="fa fa-phone"></i></a>
+                                                                <a class="" href="{{product.get_company_address.fax}}"
+                                                                   data-toggle="tooltip" data-placement="top" title=""
+                                                                   data-original-title="{{product.get_company_address.fax}}"><i
+                                                                        class="fa fa-globe"></i></a>
+                                                                <a class="" href="/chat/with/{{product.user.username}}/"
+                                                                   data-toggle="tooltip" data-placement="top" title=""
+                                                                   data-original-title="Chat with staff"><i
+                                                                        style="color:blue;"
+                                                                        class="fa fa-comments fa-"></i></a>
+
+                                                                <a class="" href="#"><i class="fa fa-share-alt"></i></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ml-auto mt-3 mt-sm-0">
+                                                            <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                <a href="#"><i class="fa fa-map-signs"></i> Get
+                                                                    Directions</a></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    {%endfor%}
+
+                                </div>
+
+                                <div class="tab-pane" id="tab-12">
+
+                                    <div class="row">
+                                        {%for product in object_list%}
+                                        <div class="col-lg-6 col-md-6 col-xl-6">
+                                            <div class="card overflow-hidden">
+                                                <!-- <div class="ribbon ribbon-top-left text-danger"><span class="bg-danger">New</span></div> -->
+                                                <div class="h-100">
+                                                    <div class="item-card9-img">
+                                                        <div class="item-card9-imgs">
+                                                            <a target="_blank"
+                                                               href="{%url 'company_product_detail' company=product.company.name pk=product.id%}"></a>
+                                                            <img src="{{product.image.url}}" alt="img"
+                                                                 class="cover-image">
+                                                        </div>
+                                                        <div class="item-card9-icons">
+                                                            <a href="#" class="item-card9-icons1 wishlist"> <i
+                                                                    class="fa fa fa-heart-o"></i></a>
+                                                        </div>
+                                                        <div class="item-cardreview-absolute bg-secondary">
+                                                            {{product.brand.product_type.category_name.category_type}}
+
+                                                        </div>
+                                                        <div class="card border-0 mb-0">
+                                                            <div class="card-body">
+                                                                <div class="item-card9">
+                                                                    <a target="_blank"
+                                                                       href="{%url 'company_product_detail' company=product.company.name pk=product.id%}"
+                                                                       class="text-dark"><h4
+                                                                            class="font-weight-semibold mt-1 mb-1">
+                                                                        {% print_translated product.name product.name_am LANGUAGE_CODE %}<i
+                                                                                class="fa fa-exclamation-circle text-warning ml-1"
+                                                                                data-toggle="tooltip"
+                                                                                data-placement="top" title=""
+                                                                                data-original-title="Not Verified"></i>
+                                                                    </h4></a>
+                                                                    <div class="rating-stars d-flex mr-5">
+                                                                        <input type="number" readonly="readonly"
+                                                                               class="rating-value star"
+                                                                               name="rating-stars-value" value="3">
+                                                                        <div class="rating-stars-container mr-2">
+                                                                            <div class="rating-star sm">
+                                                                                <i class="fa fa-star"></i>
+                                                                            </div>
+                                                                            <div class="rating-star sm">
+                                                                                <i class="fa fa-star"></i>
+                                                                            </div>
+                                                                            <div class="rating-star sm">
+                                                                                <i class="fa fa-star"></i>
+                                                                            </div>
+                                                                            <div class="rating-star sm">
+                                                                                <i class="fa fa-star"></i>
+                                                                            </div>
+                                                                            <div class="rating-star sm">
+                                                                                <i class="fa fa-star"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                        <a class="fs-13 leading-tight mt-1" href="#">{{product|review_count}}
+                                                                            Reviews</a>
+                                                                    </div>
+                                                                    <div class="mt-2 mb-2">
+                                                                        <a href="#" class="mt-1 mb-1 mr-3 text-dark"><i
+                                                                                class="fa fa-globe mr-1"></i>
+                                                                            {{product.company.get_company_address.city_town}}</a>
+                                                                        <a href="#" class="mt-1 mb-1 mr-1 text-muted"><i
+                                                                                class="fa fa-map-marker mr-1"></i>{{product.company.get_company_address.local_area}},{{product.company.get_company_address.fax}}</a>
+                                                                    </div>
+                                                                    <p class="mb-0 leading-tight"><span
+                                                                            class="font-weight-semibold text-dark">ETB {{product.price}}</span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer pt-2 pb-2">
+                                                                <div class="item-card9-footer d-sm-flex">
+                                                                    <div class="item-card9-cost">
+                                                                        <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                            <a class=""
+                                                                               href="mailto:{{product.company.get_company_address.email}}"
+                                                                               data-toggle="modal"
+                                                                               data-target="#contact"><i
+                                                                                    class="fa fa-envelope"></i></a>
+                                                                            <a class="" href="#" data-toggle="tooltip"
+                                                                               data-placement="top" title=""
+                                                                               data-original-title="{{product.company.get_company_address.phone_number}}"><i
+                                                                                    class="fa fa-phone"></i></a>
+                                                                            <a class=""
+                                                                               href="{{product.get_company_address.fax}}"
+                                                                               data-toggle="tooltip"
+                                                                               data-placement="top" title=""
+                                                                               data-original-title="{{product.get_company_address.fax}}"><i
+                                                                                    class="fa fa-globe"></i></a>
+                                                                            <a class=""
+                                                                               href="/chat/with/{{product.user.username}}/"
+                                                                               data-toggle="tooltip"
+                                                                               data-placement="top" title=""
+                                                                               data-original-title="Chat with staff"><i
+                                                                                    style="color:blue;"
+                                                                                    class="fa fa-comments fa-"></i></a>
+
+                                                                            <a class="" href="#"><i
+                                                                                    class="fa fa-share-alt"></i></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="ml-auto mt-3 mt-sm-0">
+                                                                        <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                            <a href="#"><i class="fa fa-map-signs"></i>
+                                                                                Get Directions</a></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        {%endfor%}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="center-block text-center">
+                                <ul class="pagination mb-5">
+                                    {% if page_obj.has_previous %}
+                                    <li class="page-item page-prev ">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+                                           tabindex="-1">Prev</a>
+                                    </li>
+                                    {%endif%}
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">Page
+                                        {{ page_obj.number}} of {{ page_obj.paginator.num_pages }}.
+                                        </a>
+                                    </li>
+                                    {% if page_obj.has_next %}
+                                    <li class="page-item page-next">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                                    </li>
+                                    {%endif%}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/Add lists-->
+                </div>
+
+            </div>
+            <!--Right Side Content-->
+            <div class="col-xl-3 col-lg-3 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="input-group">
+                            <input type="text" class="form-control br-tl-3 br-bl-3" placeholder="Search">
+                            <div class="input-group-append ">
+                                <button type="button" class="btn btn-secondary br-tr-3 br-br-3">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-0">
+                    <div class="card-header">
+                        <h3 class="card-title">Categories</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="" id="container">
+                            <div class="filter-product-checkboxs">
+                                {%for category in categories%}
+                                <label class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" name="checkbox1"
+                                           value="option1">
+                                    <span class="custom-control-label">
+												<a href="{%url 'product_category' cat_id=category.id%}"
+                                                   class="text-dark">{{category.category_name|truncatechars_html:20}}</a>
 											</span>
-										</label>
-										 {%endfor%}
-									</div>
-								</div>
-							</div>
-							  
-						</div>
-					</div>
-					<!--/Right Side Content-->
-				</div>
-			</div>
-		</section>
-		<!--/Add Listings-->
+                                </label>
+                                {%endfor%}
+                            </div>
+                        </div>
+                    </div>
 
-		
+                </div>
+            </div>
+            <!--/Right Side Content-->
 
-		{%endblock%} 
+        </div>
+</section>
+<!--/Add Listings-->
+
+
+{%endblock%}
