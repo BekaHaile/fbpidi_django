@@ -3,16 +3,31 @@
 {% block extrastyle %}
 
 	<!-- Theme JS files -->
-	<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
-	<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
-	<script src="/static/admin/global_assets/js/demo_pages/datatables_basic.js"></script>
-	<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+	 <script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+	<!--<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/datatables_extension_buttons_html5.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/datatables_extension_buttons_print.js"></script> -->
 
+
+	<script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+	<script src=" https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js "></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+	 
 	<!-- /theme JS files -->
  
 {% endblock %}
 
-{%block pagename%}Companies{%endblock%}
+{%block pagename%}Companies {%if sector and sector != 'all'%} <span> > </span> {{sector}} Sector{%endif%}{%if sub_sector%} <span> > </span>{{sub_sector}}{%endif%} <span class="badge badge-warning">{{object_list.count}}</span> Industries{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
@@ -22,43 +37,90 @@
 						<!-- <h5 class="mb-3">Website search results</h5> -->
 						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
 							<ul class="list-inline list-inline-condensed mb-0">
-								<li class="list-inline-item">
-									
-									<select class="form-control form-control-uniform"  name="sector" id="sector">
-										<option value="all"><i class="icon-stack2 mr-2"></i>All Sectors</option>
-										<option value="Food"><i class="mi-cake mr-2"></i>Food</option>
-										<option value="Beverage"><i class="mi-local-drink mr-2"></i>Beverage</option>
-										<option value="Pharmaceuticals"><i class="mi-local-pharmacy mr-2"></i>Pharmaceuticals</option>
-									</select>
-									<!-- <a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
 										<i class="icon-stack2 mr-2"></i>
-										All Sectors
+										Sectors
 									</a>
 
 									<div class="dropdown-menu">
-										<a href="#" class="dropdown-item"><i class="mi-cake "></i>Food</a>
-										<a href="#" class="dropdown-item"><i class="mi-local-drink"></i> Beverage</a>
-										<a href="#" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
-									</div> -->
+										<a href="{%url 'admin:filter_company_sector' sector='all'%}" class="dropdown-item"><i class="icon-stack2 "></i>All Sectors</a>
+										<a href="{%url 'admin:filter_company_sector' sector='Food'%}" class="dropdown-item"><i class="mi-cake "></i>Food</a>
+										<a href="{%url 'admin:filter_company_sector' sector='Beverage'%}" class="dropdown-item"><i class="mi-local-drink"></i>Beverage</a>
+										<a href="{%url 'admin:filter_company_sector' sector='Pharmaceuticals'%}" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
+									</div>
 								</li>
 								<li class="list-inline-item ">
-									<select class="form-control form-control-uniform" style="display: none;" id="sub_sector" >
-										 
-									</select>
-									<!-- <a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+									{%if sector == 'all'%}
+									{%elif sector == 'Food' or sector == 'Beverage' or sector == 'Pharmaceuticals'%}
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
 										<i class="icon-stack2 mr-2"></i>
 										Sub Sectors
 									</a>
 
 									<div class="dropdown-menu">
-										<a href="#" class="dropdown-item"><i class="mi-cake "></i>Food</a>
-										<a href="#" class="dropdown-item"><i class="mi-local-drink"></i> Beverage</a>
-										<a href="#" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
-									</div> -->
+										<a href="{%url 'admin:filter_company_sub_sector' category=sector%}" class="dropdown-item">All Categories</a>
+										{%for category in categories%}
+										<a href="{%url 'admin:filter_company_sub_sector' category=category.id%}" class="dropdown-item">{{category.category_name}}</a>
+										{%endfor%}
+									</div>
+									 
+									{%endif%}
+									 
+								</li>
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Share Of Ownership
+									</a>
+
+									<div class="dropdown-menu">
+										{%for list in ownership%}
+										<a href="{%url 'admin:filter_by_ownership' ownership_form=list.id%}" class="dropdown-item">{{list.name}}</a>
+										{%endfor%}
+									</div>
+								</li>
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Established Year
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:filter_established_yr' option='before_2000'%}" class="dropdown-item">Before 2000 E.C</a>
+										<a href="{%url 'admin:filter_established_yr' option='before_2005'%}" class="dropdown-item">2001 - 2005 E.C</a>
+										<a href="{%url 'admin:filter_established_yr' option='before_2010'%}" class="dropdown-item">2006 - 2010 E.C</a>
+										<a href="{%url 'admin:filter_established_yr' option='after_2011'%}" class="dropdown-item">After 2011 E.C</a>
+									</div>
+								</li>
+								<li class="list-inline-item"> 
+									<a href="{%url 'admin:filter_expansion_plan'%}" class="btn btn-link text-default" >
+										<i class="icon-stack2 mr-2"></i>
+										Espansion Plan
+									</a>
+								</li>
+								<li class="list-inline-item"> 
+									<a href="{%url 'admin:filter_by_license'%}" class="btn btn-link text-default" >
+										<i class="icon-stack2 mr-2"></i>
+										Trade License
+									</a>
+								</li>
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Working Hours
+									</a>
+
+									<div class="dropdown-menu">
+										{%for wh in working_hour%}
+										<a href="{%url 'admin:filter_by_working_hour' working_hour=wh.id%}" class="dropdown-item">{{wh.name}} hours</a>
+										{%endfor%}
+										 
+									</div>
 								</li>
 							</ul>
 
-							<ul class="list-inline mb-0 ml-md-auto">
+							<!-- <ul class="list-inline mb-0 ml-md-auto">
 								<li class="list-inline-item dropdown"> <a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
 										<i class="icon-file-text3 mr-2"></i> Export Data </a>
 
@@ -67,7 +129,7 @@
 										<a href="#" id='export_csv' class="dropdown-item"><i class="icon-file-excel"></i>Export CSV</a>
 									</div>
 								</li>
-							</ul>
+							</ul> -->
 						</div>
 					</div>
 				</div>
@@ -82,10 +144,12 @@
 									<th>#</th>
 									<th>Company Name</th>
 									<th>Sector</th>
-									<th>Logo</th>
+									<th>Product Categories</th>
+									<th>Product</th>
+									<th>Form of Ownership</th>
 									<th>Established Year</th>
-									<th>Trade License</th>
-								</tr>
+									<th>Working Hours</th>
+ 								</tr>
 							</thead>
 							<tbody id="tbody">
 								{%for company in object_list%}
@@ -93,10 +157,16 @@
 									<td>{{forloop.counter}}</td>
 									<td>{{company.name}}</td>
 									<td><a href="#">{{company.main_category}}</a></td>
-									<td><a target="_blank" href="{{company.logo.url}}"><i class="icon-eye"></i>See Logo</a></td>
+									<td>
+										{%for category in company.category.all%}
+										<a href="#">{{category.category_name}}</a>,
+										{%endfor%}
+									</td>
+									<td>{{company.company_product.all.count}} Products</td>
+									<td>{{company.ownership_form.name}}</td>
 									<td>{{company.established_yr}}</td>
-									<td><a target="_blank" href="{{company.trade_license.url}}">Open</a></td>
-								</tr>
+									<td>{{company.working_hours.name}} hours</td>
+ 								</tr>
 								 
 								 {%endfor%}
 							</tbody>
@@ -109,6 +179,14 @@
 			<!-- /content area -->
 			<script>
 				$(document).ready(function(){
+					$('.datatable-basic').DataTable(
+						{
+							dom: 'Bfrtip',
+							buttons: [
+								'csv', 'excel', 'pdf', 'print'
+							]
+						}
+					);
 					csv_link = document.getElementById('export_csv');
 					csv_link.href = "/admin/export-csv-file/all/main_category/";
 					$("#sector").change(function(){

@@ -1,10 +1,10 @@
 from django.urls import path
-from company.views import (
+from company.views.views import (
     CompaniesDetailView,CompaniesView,CreateCompanyProfile,
     CreateFbpidiCompanyProfile, CompanyByMainCategory,
     ProjectList,ProjectDetail
 )
-from company.company_views import *
+from company.views.company_views import *
 
 
 urlpatterns = [

@@ -3,27 +3,61 @@ from django.conf import settings
 from django.utils import timezone
 
 from admin_site.models import Category
-from company.models import Company,SubCategory,Brand
+from company.models import Company
 
+
+# This is For Product/Type
+class SubCategory(models.Model):
+    category_name = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,
+									blank=True,verbose_name="Category Type",related_name="sub_category")
+    sub_category_name = models.CharField(max_length=200,verbose_name="Product Name(English)")
+    sub_category_name_am = models.CharField(max_length=200,verbose_name="Product Name(Amharic)")
+    uom = models.CharField(max_length=25,verbose_name="Unit of Measurement")
+    description = models.TextField(verbose_name="Description (English)")
+    description_am = models.TextField(verbose_name="Description (Amharic)")
+    icons = models.ImageField( verbose_name="Product Icon")
+    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='product_created_by',null=True)
+    created_date	= models.DateTimeField(auto_now_add=True)
+    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='product_updated_by',null=True)
+    last_updated_date	= models.DateTimeField(null=True)
+    expired	= models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.sub_category_name
+# Brand
+class Brand(models.Model):
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_brand")
+	product_type = models.ForeignKey(SubCategory,on_delete=models.CASCADE, verbose_name="Product Type", related_name="product_category")
+	brand_name = models.CharField(max_length=200,verbose_name="Product Brand Name(English)")
+	brand_name_am = models.CharField(max_length=200,verbose_name="Product Brand Name(Amharic)")
+	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='brand_created_by',null=True)
+	created_date	= models.DateTimeField(auto_now_add=True)
+	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='brand_updated_by',null=True)
+	last_updated_date	= models.DateTimeField(null=True)
+	expired	= models.BooleanField(default=False)
+
+	def __str__(self):
+		return self.brand_name	
+# This is the specific Product or Varayti
 class Product(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_product")
-    name = models.CharField(max_length=255,verbose_name="Product Name(English)")
-    name_am = models.CharField(max_length=255,verbose_name="Product Name(Amharic)")
-    fandb_category = models.ForeignKey(Brand,on_delete=models.CASCADE, blank=True,null=True,
-                                 verbose_name="Product Category",related_name="product_category")
-    pharmacy_category = models.ForeignKey(Category,on_delete=models.CASCADE, blank=True,null=True, 
-                                        verbose_name="Pharmacy Product Category",related_name="pharmacy_category")
-    uom = models.CharField(max_length=25,verbose_name="Unit of Measurement",null=True)
+    name = models.CharField(max_length=255,verbose_name="Varayti Name(English)")
+    name_am = models.CharField(max_length=255,verbose_name="Varayti Name(Amharic)")
+    # fandb_category = models.ForeignKey(SubCategory,on_delete=models.CASCADE, blank=True,null=True,
+    #                              verbose_name="Product Category",related_name="product_fandb_category")
+    # pharmacy_category = models.ForeignKey(Category,on_delete=models.CASCADE, blank=True,null=True, 
+    #                                     verbose_name="Pharmacy Product Category",related_name="pharmacy_category")
+    brand = models.ForeignKey(Brand,on_delete=models.RESTRICT,verbose_name="Varayti Brand",null=True,blank=True,related_name="varayti_brand")
     quantity = models.FloatField(verbose_name="Product Quantity",default=0)
     therapeutic_group = models.CharField(max_length=255,verbose_name="Therapeutic Group",null=True,blank=True)
     dose = models.ForeignKey('Dose',on_delete=models.RESTRICT,null=True,blank=True,related_name="product_dose")
     dosage_form = models.ForeignKey('DosageForm',on_delete=models.RESTRICT,null=True,blank=True,related_name="product_dosage_form")
-    description = models.TextField(verbose_name="Product Description(English)")
-    description_am = models.TextField(verbose_name="Product Description(Amharic)")
+    description = models.TextField(verbose_name="Varayti Description(English)")
+    description_am = models.TextField(verbose_name="Varayti Description(Amharic)")
     image = models.ImageField()
-    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='product_created_by',null=True)
+    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='varayti_created_by',null=True)
     created_date	= models.DateTimeField(auto_now_add=True)
-    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='product_updated_by',null=True)
+    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='varayti_updated_by',null=True)
     last_updated_date	= models.DateTimeField(null=True)
     expired	= models.BooleanField(default=False)
 
@@ -70,8 +104,9 @@ class DosageForm(models.Model):
     def __str__(self):
         return self.dosage_form
 
-class ProductionCapacity(models.Model):	 		
-    product	= models.ForeignKey(Product, on_delete=models.CASCADE,related_name="production_capacity") 
+class ProductionCapacity(models.Model):	 	
+    company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_production_capacity")	
+    product	= models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="production_capacity") 
     p_date = models.DateField()
     install_prdn_capacity	= models.IntegerField(default=0,verbose_name="Installed Production Capacity")		
     atnbl_prdn_capacity = models.FloatField(default=0,verbose_name="Attainable Production Capacity")		
@@ -86,7 +121,8 @@ class ProductionCapacity(models.Model):
 
 class ProductPackaging(models.Model):
     PACKAGING_CATEGORY =  (('','Select Packaging Category'),('Primary','Primary'),('Secondary','Secondary'),('Teritiary','Teritiary'))
-    product	= models.ForeignKey(Product, on_delete=models.CASCADE,related_name="product_packaging")
+    company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_product_packaging")
+    product	= models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="product_packaging")
     packaging	= models.CharField(verbose_name="Pckaging Type", max_length=2000)	 
     category	= models.CharField(verbose_name="Packaging Category", max_length=200, choices=PACKAGING_CATEGORY)
     amount = models.IntegerField(verbose_name="Amount",default=0)	 
@@ -100,7 +136,8 @@ class ProductPackaging(models.Model):
     expired	= models.BooleanField(default=False)		
 
 class ProductionAndSalesPerformance(models.Model):
-    product	= models.ForeignKey(Product, on_delete=models.CASCADE,related_name="sales_performance")
+    company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_product_perfornamce")
+    product	= models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="sales_performance")
     activity_year	= models.IntegerField()			 
     production_amount	= models.FloatField(default=0,verbose_name="Total Production Amount")			
     sales_amount	= models.FloatField(default=0,verbose_name="Total Sales Amount")			
@@ -112,7 +149,8 @@ class ProductionAndSalesPerformance(models.Model):
     expired	= models.BooleanField(default=False)
 
 class AnnualInputNeed(models.Model):				
-    product	= models.ForeignKey(Product, on_delete=models.CASCADE,related_name="input_need")
+    company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_product_input")
+    product	= models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="input_need")
     input_name = models.CharField(max_length=255,verbose_name="Product Input")
     year = models.IntegerField()
     is_active_input	= models.BooleanField(default=False,verbose_name="Active or Not-Active Input")		
@@ -129,7 +167,8 @@ class AnnualInputNeed(models.Model):
         return self.input_name
 
 class InputDemandSupply(models.Model):
-    product	= models.ForeignKey(Product, on_delete=models.CASCADE,related_name="product_input_demand_supply")
+    company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_product_demand")
+    product	= models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="product_input_demand_supply")
     input_type	= models.CharField(max_length=255,verbose_name="Input Type")
     year = models.IntegerField()		
     demand	= models.FloatField(default=0,verbose_name="Input Demand")			

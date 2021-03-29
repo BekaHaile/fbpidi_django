@@ -1,6 +1,6 @@
 
 from admin_site.models import (Category, CompanyDropdownsMaster,
-                               ProjectDropDownsMaster)
+                               ProjectDropDownsMaster,RegionMaster)
 from django.conf import settings
 from django.contrib.gis.db import models as gis_models
 from django.core.validators import FileExtensionValidator
@@ -17,38 +17,7 @@ CAT_LIST = (
     ("Pharmaceuticals",'Pharmaceuticals'),
 )
 
-class SubCategory(models.Model):
-    company = models.ForeignKey('Company',on_delete=models.CASCADE,related_name='company_product_category')
-    category_name = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,
-									blank=True,verbose_name="Category Type",related_name="sub_category")
-    sub_category_name = models.CharField(max_length=200,verbose_name="Sub-Category Name(English)")
-    sub_category_name_am = models.CharField(max_length=200,verbose_name="Sub-Category Name(Amharic)")
-    description = models.TextField(verbose_name="Description (English)")
-    description_am = models.TextField(verbose_name="Description (Amharic)")
-    icons = models.ImageField( verbose_name="Category Icon")
-    created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='subcat_created_by',null=True)
-    created_date	= models.DateTimeField(auto_now_add=True)
-    last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='subcat_updated_by',null=True)
-    last_updated_date	= models.DateTimeField(null=True)
-    expired	= models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.sub_category_name
-
-
-class Brand(models.Model):
-	company = models.ForeignKey('Company',on_delete=models.CASCADE,related_name="company_brand",choices=CAT_LIST)
-	product_type = models.ForeignKey(SubCategory,on_delete=models.CASCADE, verbose_name="Product Type", related_name="product_category")
-	brand_name = models.CharField(max_length=200,verbose_name="Product Brand Name(English)")
-	brand_name_am = models.CharField(max_length=200,verbose_name="Product Brand Name(Amharic)")
-	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='brand_created_by',null=True)
-	created_date	= models.DateTimeField(auto_now_add=True)
-	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='brand_updated_by',null=True)
-	last_updated_date	= models.DateTimeField(null=True)
-	expired	= models.BooleanField(default=False)
-
-	def __str__(self):
-		return self.brand_name			
+		
 
 
 class Company(models.Model):
@@ -67,8 +36,8 @@ class Company(models.Model):
 	detail_am = models.TextField(verbose_name="Company Description in Amharic",default="")
 	contact_person	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True,related_name="contact_person") # contact person
 	category	= models.ManyToManyField(Category,related_name="company_category",verbose_name="Company Product Types") # category
-	expansion_plan	= models.TextField(verbose_name="Expansion Plan in English",null=True,blank=True)
-	expansion_plan_am	= models.TextField(verbose_name="Expansion Plan in Amharic",null=True,blank=True)
+	expansion_plan	= models.TextField(verbose_name="Expansion Plan in English",default="No")
+	expansion_plan_am	= models.TextField(verbose_name="Expansion Plan in Amharic",default="No")
 	trade_license	= models.FileField(max_length=254, verbose_name="your Trade License",
 									help_text="Images and pdf files less than 10MB", null=True,
 									upload_to="company/trade_license/",
@@ -78,10 +47,8 @@ class Company(models.Model):
 							help_text="Image and pdf files less thatn 10MB", null=True,blank=True,
 							upload_to="company/organization_structure/",
 							validators=[FileExtensionValidator(allowed_extensions=allowed_file_extensions)])
-	lab_test_analysis = models.TextField(verbose_name="Laboratory test analysis in english",null=True,blank=True)
-	lab_test_analysis_am = models.TextField(verbose_name="Laboratory test analysis in amharic",null=True,blank=True)
-	lab_equipment	= models.TextField(verbose_name="Laboratory equipment",null=True,blank=True)
-	lab_equipment_am	= models.TextField(verbose_name="Laboratory equipment in amharic",null=True,blank=True)
+	lab_test_analysis = models.ManyToManyField(CompanyDropdownsMaster,verbose_name="Laboratory test analysis in english",blank=True,related_name="lab_test_analysis") 
+	lab_equipment	= models.ManyToManyField(CompanyDropdownsMaster,verbose_name="Laboratory equipment",related_name="lab_equipment",blank=True) 
 	outsourced_test_param = models.TextField(verbose_name="Outsourced test parameters and contract agreements in english",null=True,blank=True)
 	outsourced_test_param_am = models.TextField(verbose_name="Outsourced test parameters and contract agreements in amharic", null=True,blank=True)
 	certification	= models.ManyToManyField(CompanyDropdownsMaster,related_name="certification",verbose_name="Which certificate have you received?")  
@@ -100,7 +67,7 @@ class Company(models.Model):
 	waste_trtmnt_system_am	= models.TextField(verbose_name="Waste Treatment and disposal system in amharic",null=True,blank=True)
 	efluent_treatment_plant = models.BooleanField(default=False,verbose_name="Do you have effluent treatment plant?")
 	env_mgmt_plan = models.BooleanField(default=False,verbose_name="Does the company have Environmental management plan?")
-	source_of_energy = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,related_name="source_of_energy",null=True)
+	source_of_energy = models.ManyToManyField(CompanyDropdownsMaster,related_name="source_of_energy",blank=True)
 	gas_carb_emision = models.TextField(verbose_name="Measure of Gas/carbon emission to the environment in english",null=True,blank=True)
 	gas_carb_emision_am = models.TextField(verbose_name="Measure of Gas/carbon emission to the environment in amharic",null=True,blank=True)
 	compound_allot	= models.BooleanField(default=False,verbose_name="Does the company allot 5%\ of the compound for greenery?")
@@ -116,7 +83,7 @@ class Company(models.Model):
 	quality_defects	= models.TextField(verbose_name="What quality defect frequently observed in your product? in English",null=True,blank=True)
 	gas_waste_mgmnt_measure	= models.TextField(verbose_name="What measures does your company introduced to reduce its gas and waste management? in English",null=True,blank=True)
 	gas_waste_mgmnt_measure_am	= models.TextField(verbose_name="What measures does your company introduced to reduce its gas and waste management? in amharic",null=True,blank=True)
-	support_required	= models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,verbose_name="What kind of support do you need to increase your production and market",related_name="major_challenges")
+	support_required	= models.ManyToManyField(CompanyDropdownsMaster,verbose_name="What kind of support do you need to increase your production and market",related_name="major_challenges")
 	company_condition = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,verbose_name="Status of processing/ industry facility",related_name="company_status")
 	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_created_by',null=True)
 	created_date	= models.DateTimeField(auto_now_add=True)
@@ -159,7 +126,7 @@ class Company(models.Model):
 # Company Address Model
 class CompanyAddress(models.Model):
 	company = models.OneToOneField(Company,on_delete=models.CASCADE,related_name="company_address")
-	region = models.CharField(max_length=255, verbose_name="Rigion",null=True,blank=True)
+	region = models.ForeignKey(RegionMaster, verbose_name="Rigion",on_delete=models.RESTRICT,null=True)
 	city_town = models.CharField(max_length=255, verbose_name="City Town",null=True,blank=True)
 	subcity_zone = models.CharField(max_length=255, verbose_name="Subcity zone",null=True,blank=True)
 	woreda = models.CharField(max_length=255, verbose_name="Woreda",null=True,blank=True)
@@ -185,6 +152,9 @@ class InvestmentCapital(models.Model):
 	working_capital	= models.FloatField(default=0)
 	timestamp = models.DateField(auto_now_add=True)
 
+	def get_inv_cap(self):
+		return float(self.machinery_cost+self.building_cost+self.working_capital)
+
 # Certificates
 class Certificates(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="certificates")
@@ -202,12 +172,12 @@ class Certificates(models.Model):
 class SourceAmountIputs(models.Model):		
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="source_amount_inputs",default=0)
 	year =  models.IntegerField()
-	import_company	= models.IntegerField(default=0,verbose_name="Imported By Company",help_text="(Ton/Year)")
-	govt_suplied	= models.IntegerField(default=0,verbose_name="Government Supplied",help_text="(Ton/Year)")
-	purchase_from_farmer	= models.IntegerField(default=0,verbose_name="Direct purchase from Farmers",help_text="(Ton/Year)")
-	purchase_from_union	= models.IntegerField(default=0,verbose_name="Purchase from Cooperative unions",help_text="(Ton/Year)")
-	purchase_from_agents	= models.IntegerField(default=0,verbose_name="Purchase from Commission Agents",help_text="(Ton/Year)")
-	purchase_from_other	= models.IntegerField(default=0,verbose_name="Other Specify other",help_text="(Ton/Year)")
+	import_company	= models.FloatField(default=0,verbose_name="Imported By Company",help_text="(Ton/Year)")
+	govt_suplied	= models.FloatField(default=0,verbose_name="Government Supplied",help_text="(Ton/Year)")
+	purchase_from_farmer	= models.FloatField(default=0,verbose_name="Direct purchase from Farmers",help_text="(Ton/Year)")
+	purchase_from_union	= models.FloatField(default=0,verbose_name="Purchase from Cooperative unions",help_text="(Ton/Year)")
+	purchase_from_agents	= models.FloatField(default=0,verbose_name="Purchase from Commission Agents",help_text="(Ton/Year)")
+	purchase_from_other	= models.FloatField(default=0,verbose_name="Other Specify other",help_text="(Ton/Year)")
 	timestamp = models.DateField(auto_now_add=True)
 
 # Employees information/statistics

@@ -222,6 +222,7 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             success: function (result) {
+                console.log(result);
                 if (result['error'] == false) {
                     // $("#srcamnt_input_form_modal").modal("hide");
                     $("#errors_input").html(result['message']);
@@ -230,7 +231,7 @@ $(document).ready(function () {
                 }
             },
             error: function (error) {
-
+                console.log(error)
             }
         });
 
@@ -393,19 +394,30 @@ $(document).ready(function () {
     });
     $("#id_year_emp").change(function(){
         var year = $(this).val();
-
+        if(year != ""){
+            $("#id_employment_type").prop('disabled',false);
+        }else{
+            $("#id_employment_type").prop('disabled',true);
+        }
+        
+        
+    });
+    $("#id_employment_type").change(function(){
+        var year = $("#id_year_emp").val();
+        var emp_typ = $(this).val();
         $.ajax({
             url: "/admin/check_company_year_data/employee/"+company_id+"/"+year+"/",
             type: "POST",
             headers: { "X-CSRFToken": my_token },
-            processData: false,
-            contentType: false,
+            data:{
+                'emp_type':emp_typ,
+            },
             success: function (result) {
                 if (result['error'] == false) {
                     $("#submit_employee").prop("disabled",false);
                     $("#errors_employee").empty();
                 } else {
-                    $("#errors_employee").html(result['message']);
+                    $("#errors_employee").html(emp_typ+" "+result['message']);
                     $("#submit_employee").prop("disabled",true);
                     for(var field in result['data']['fields']){
                         $("#id_"+field).val(result['data']['fields'][field]);
@@ -420,19 +432,26 @@ $(document).ready(function () {
     });
     $("#id_year_job").change(function(){
         var year = $(this).val();
-
+        if(year != ""){
+            $("#id_job_type").prop('disabled',false);
+        }else{
+            $("#id_job_type").prop('disabled',true);
+        }
+    });
+    $("#id_job_type").change(function(){
+        var year = $("#id_year_job").val();
+        var job_type = $(this).val()
         $.ajax({
             url: "/admin/check_company_year_data/jobs_created/"+company_id+"/"+year+"/",
             type: "POST",
             headers: { "X-CSRFToken": my_token },
-            processData: false,
-            contentType: false,
+            data:{'job_type':job_type},
             success: function (result) {
                 if (result['error'] == false) {
                     $("#submit_jobs").prop("disabled",false);
                     $("#errors_jobs").empty();
                 } else {
-                    $("#errors_jobs").html(result['message']);
+                    $("#errors_jobs").html(job_type+" "+result['message']);
                     $("#submit_jobs").prop("disabled",true);
                     for(var field in result['data']['fields']){
                         $("#id_"+field).val(result['data']['fields'][field]);
@@ -447,19 +466,26 @@ $(document).ready(function () {
     });
     $("#id_year_edu").change(function(){
         var year = $(this).val();
-
+        if(year != ""){
+            $("#id_education_type").prop('disabled',false);
+        }else{
+            $("#id_education_type").prop('disabled',true);
+        }
+    });
+    $("#id_education_type").change(function(){
+        var year = $("#id_year_edu").val();
+        var edu_type = $(this).val();
         $.ajax({
             url: "/admin/check_company_year_data/education/"+company_id+"/"+year+"/",
             type: "POST",
             headers: { "X-CSRFToken": my_token },
-            processData: false,
-            contentType: false,
+            data:{'edu_type':edu_type},
             success: function (result) {
                 if (result['error'] == false) {
                     $("#submit_education").prop("disabled",false);
                     $("#errors_education").empty();
                 } else {
-                    $("#errors_education").html(result['message']);
+                    $("#errors_education").html(edu_type+" "+result['message']);
                     $("#submit_education").prop("disabled",true);
                     for(var field in result['data']['fields']){
                         $("#id_"+field).val(result['data']['fields'][field]);

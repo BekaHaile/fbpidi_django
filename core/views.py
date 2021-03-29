@@ -5,9 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 
 # 
-from product.models import Product, ProductImage,Review
+from product.models import SubCategory,Product, ProductImage,Review
 from admin_site.models import Category
-from company.models import Company,SubCategory
+from company.models import Company
 # 
 from accounts.models import UserProfile,Company,Customer
 from product.forms import ReviewForm

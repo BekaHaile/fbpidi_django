@@ -1,0 +1,675 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{%load admin_template_tags%}
+{% block extrastyle %}
+
+	<!-- Theme JS files -->
+	 <script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+	<!--<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/datatables_extension_buttons_html5.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/datatables_extension_buttons_print.js"></script> -->
+
+
+	<script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+	<script src=" https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js "></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+	 
+	<!-- /theme JS files -->
+	<style>
+		li{
+			list-style-type: none;
+		}
+	</style>
+ 
+{% endblock %}
+
+{%block pagename%}{%if flag == 'capital_utilization'%}Capital Utilization{%elif flag == 'inv_cap'%}Total Investment Capital
+{%elif flag == 'num_employees'%}
+Number Of Employees By Sector
+{%elif flag == 'num_employees_female'%}
+Number Of Female Employees By Sector
+{%elif flag == 'num_employees_foreign'%}
+Number of Foreign Employees By Sector
+{%elif flag == 'change_capital_utilization'%}
+Change in Capital Utilization  
+{%elif flag == 'extraction_data'%}
+Average Extraction Rate by Product
+{%elif flag == 'gross_vp_data'%}
+Gross Value of Production (GVP)
+{%elif flag == 'unit_price_data'%}
+Average Unit Price
+ {%endif%} Report Data
+  {%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+				{%if flag == 'inv_cap'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Total Investment capital by sector</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Sectors</th>
+									<th>Data</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Food Sector</td>
+									<td>ETB {{food_inv_cap}}</td>
+								</tr>
+								<tr>
+									<td>Beverage Sector</td>
+									<td>ETB {{bev_inv_cap}}</td>
+								</tr>
+								<tr>
+									<td>Pharmaceutical Sector</td>
+									<td>ETB {{pharm_inv_cap}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{%elif flag ==  'production_cap'%}
+				<div class="card">
+					<div class="card-body">
+						<h5 class="mb-3">Production capacity by product per year </h5>
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Product</th>
+									<th>Installed Production Capacity</th>
+									<th>Actual Production Capacity</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										{%for l in labels%}
+										<li>{{l}}</li><hr>
+										{%endfor%}
+									</td>
+									<td>
+										{%for d in data%}
+										<li>{{d.data}}{{d.unit}}</li><hr>
+										{%endfor%}
+									</td>
+									<td>
+										{%for d2 in data_a%}
+										<li>{{d2.data}}{{d2.unit}}</li><hr>
+										{%endfor%}
+									</td>
+								</tr>
+								 
+							</tbody>
+						</table>
+						 
+					</div>
+				</div>
+				{%elif flag == 'capital_utilization'%}
+				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<ul class="list-inline list-inline-condensed mb-0">
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:get_capital_utilization' option='by_sector' sector='all'%}" class="dropdown-item"><i class="icon-stack2 "></i>All Sectors</a>
+										<a href="{%url 'admin:get_capital_utilization' option='by_sector' sector='Food'%}" class="dropdown-item"><i class="mi-cake "></i>Food</a>
+										<a href="{%url 'admin:get_capital_utilization' option='by_sector' sector='Beverage'%}" class="dropdown-item"><i class="mi-local-drink"></i>Beverage</a>
+										<a href="{%url 'admin:get_capital_utilization' option='by_sector' sector='Pharmaceuticals'%}" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
+									</div>
+								</li>
+								<li class="list-inline-item ">
+									{%if sector == 'all'%}
+									{%elif sector == 'Food' or sector == 'Beverage' or sector == 'Pharmaceuticals'%}
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sub Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										{%for category in sub_sectors%}
+										<a href="{%url 'admin:get_capital_utilization' option='by_sub_sector' sector=category.id%}" class="dropdown-item">{{category.category_name}}</a>
+										{%endfor%}
+									</div>
+									 
+									{%endif%}
+									 
+								</li>
+								 {%if products%}
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Products
+									</a>
+
+									<div class="dropdown-menu">
+										 {%for product in products%}
+										<a href="#" class="dropdown-item">{{product.sub_category_name}}</a>
+										{%endfor%}
+									</div>
+								</li>
+								{%endif%}
+							</ul>
+
+							 
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">{{title}} Sector</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Capital Utilization Data</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in capital_util_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td>
+									<td>{{capital_util_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div> 
+				</div>
+				{%elif flag == 'change_capital_utilization'%}
+				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<ul class="list-inline list-inline-condensed mb-0">
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:get_change_capital_utilization' option='by_sector' sector='all'%}" class="dropdown-item"><i class="icon-stack2 "></i>All Sectors</a>
+										<a href="{%url 'admin:get_change_capital_utilization' option='by_sector' sector='Food'%}" class="dropdown-item"><i class="mi-cake "></i>Food</a>
+										<a href="{%url 'admin:get_change_capital_utilization' option='by_sector' sector='Beverage'%}" class="dropdown-item"><i class="mi-local-drink"></i>Beverage</a>
+										<a href="{%url 'admin:get_change_capital_utilization' option='by_sector' sector='Pharmaceuticals'%}" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
+									</div>
+								</li>
+								<li class="list-inline-item ">
+									{%if sector == 'all'%}
+									{%elif sector == 'Food' or sector == 'Beverage' or sector == 'Pharmaceuticals'%}
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sub Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										{%for category in sub_sectors%}
+										<a href="{%url 'admin:get_change_capital_utilization' option='by_sub_sector' sector=category.id%}" class="dropdown-item">{{category.category_name}}</a>
+										{%endfor%}
+									</div>
+									 
+									{%endif%}
+									 
+								</li>
+								 {%if products%}
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Products
+									</a>
+
+									<div class="dropdown-menu">
+										 {%for product in products%}
+										<a href="#" class="dropdown-item">{{product.sub_category_name}}</a>
+										{%endfor%}
+									</div>
+								</li>
+								{%endif%}
+							</ul>
+
+							 
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">{{title}} Sector</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Change in Capital Utilization</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in change_capital_util_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td>
+									<td>{{change_capital_util_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div> 
+				</div>
+				{%elif flag == 'extraction_data'%}
+				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<ul class="list-inline list-inline-condensed mb-0">
+								 
+								{%if products%}
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Products
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:average_extraction_rate' product='all'%}" class="dropdown-item">All Products</a>
+										 {%for product in products%}
+										<a href="{%url 'admin:average_extraction_rate' product=product.id%}" class="dropdown-item">{{product.sub_category_name}}</a>
+										{%endfor%}
+									</div>
+								</li>
+								{%endif%}
+							</ul>
+
+							 
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h3 class="card-title">{{title}}</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Product</th>
+									<th>Average Extraction Rate</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in extn_data%}
+								<tr>
+									<td>{{fd.product}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								
+							</tbody>
+							<tr>
+								<td>Total</td>
+								<td>{{extn_data|get_sum}}</td>
+							</tr>
+						</table>
+					</div> 
+				</div>
+				{%elif flag == 'unit_price_data'%}
+				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<ul class="list-inline list-inline-condensed mb-0">
+								 
+								{%if products%}
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Products
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:get_unit_price' product='all'%}" class="dropdown-item">All Products</a>
+										 {%for product in products%}
+										<a href="{%url 'admin:get_unit_price' product=product.id%}" class="dropdown-item">{{product.sub_category_name}}</a>
+										{%endfor%}
+									</div>
+								</li>
+								{%endif%}
+							</ul>
+
+							 
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h3 class="card-title">{{title}}</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Product</th>
+									<th>Average Unit Price</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in price_data%}
+								<tr>
+									<td>{{fd.product}}</td>
+									<td>ETB {{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								
+							</tbody>
+							<tr>
+								<td>Total</td>
+								<td>ETB {{price_data|get_sum}}</td>
+							</tr>
+						</table>
+					</div> 
+				</div>
+				{%elif flag == 'gross_vp_data'%}
+				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<ul class="list-inline list-inline-condensed mb-0">
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:get_gvp_data' option='by_sector' sector='all'%}" class="dropdown-item"><i class="icon-stack2 "></i>All Sectors</a>
+										<a href="{%url 'admin:get_gvp_data' option='by_sector' sector='Food'%}" class="dropdown-item"><i class="mi-cake "></i>Food</a>
+										<a href="{%url 'admin:get_gvp_data' option='by_sector' sector='Beverage'%}" class="dropdown-item"><i class="mi-local-drink"></i>Beverage</a>
+										<a href="{%url 'admin:get_gvp_data' option='by_sector' sector='Pharmaceuticals'%}" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
+									</div>
+								</li>
+								<li class="list-inline-item ">
+									{%if sector == 'all'%}
+									{%elif sector == 'Food' or sector == 'Beverage' or sector == 'Pharmaceuticals'%}
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sub Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										{%for category in sub_sectors%}
+										<a href="{%url 'admin:get_gvp_data' option='by_sub_sector' sector=category.id%}" class="dropdown-item">{{category.category_name}}</a>
+										{%endfor%}
+									</div>
+									 
+									{%endif%}
+									 
+								</li>
+								{%if products%}
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Products
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:average_extraction_rate' product='all'%}" class="dropdown-item">All Products</a>
+										 {%for product in products%}
+										<a href="{%url 'admin:average_extraction_rate' product=product.id%}" class="dropdown-item">{{product.sub_category_name}}</a>
+										{%endfor%}
+									</div>
+								</li>
+								{%endif%}
+							</ul>
+
+							 
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h3 class="card-title">{{title}}</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>GVP</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in gvp_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								
+							</tbody>
+							<tr>
+								<td>Total</td>
+								<td>{{gvp_data|get_sum}}</td>
+							</tr>
+						</table>
+					</div> 
+				</div>
+				{%elif flag == 'num_employees' or flag == 'num_employees_female'%}
+				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<ul class="list-inline list-inline-condensed mb-0">
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sectors
+									</a>
+									{%if flag == 'num_employees'%}
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:get_number_emp' option='by_sector' sector='all'%}" class="dropdown-item"><i class="icon-stack2 "></i>All Sectors</a>
+										<a href="{%url 'admin:get_number_emp' option='by_sector' sector='Food'%}" class="dropdown-item"><i class="mi-cake "></i>Food</a>
+										<a href="{%url 'admin:get_number_emp' option='by_sector' sector='Beverage'%}" class="dropdown-item"><i class="mi-local-drink"></i>Beverage</a>
+										<a href="{%url 'admin:get_number_emp' option='by_sector' sector='Pharmaceuticals'%}" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
+									</div>
+									{%elif flag == 'num_employees_female'%}
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:get_num_emp_female' option='by_sector' sector='all'%}" class="dropdown-item"><i class="icon-stack2 "></i>All Sectors</a>
+										<a href="{%url 'admin:get_num_emp_female' option='by_sector' sector='Food'%}" class="dropdown-item"><i class="mi-cake "></i>Food</a>
+										<a href="{%url 'admin:get_num_emp_female' option='by_sector' sector='Beverage'%}" class="dropdown-item"><i class="mi-local-drink"></i>Beverage</a>
+										<a href="{%url 'admin:get_num_emp_female' option='by_sector' sector='Pharmaceuticals'%}" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
+									</div>
+									{%endif%}
+								</li>
+								<li class="list-inline-item ">
+									{%if sector == 'all'%}
+									{%elif sector == 'Food' or sector == 'Beverage' or sector == 'Pharmaceuticals'%}
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sub Sectors
+									</a>
+									{%if flag == 'num_employees'%}
+									<div class="dropdown-menu">
+										{%for category in sub_sectors%}
+										<a href="{%url 'admin:get_number_emp' option='by_sub_sector' sector=category.id%}" class="dropdown-item">{{category.category_name}}</a>
+										{%endfor%}
+									</div>
+									{%elif flag == 'num_employees_female'%}
+									<div class="dropdown-menu">
+										{%for category in sub_sectors%}
+										<a href="{%url 'admin:get_num_emp_female' option='by_sub_sector' sector=category.id%}" class="dropdown-item">{{category.category_name}}</a>
+										{%endfor%}
+									</div>
+									{%endif%}
+									{%endif%}
+									 
+								</li>
+								 
+							</ul>
+
+							 
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">{{title|title}} Sectors</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Permanent Employees</th>
+									<th>Temporary Employees</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in total_emp_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.perm_emp}}</td>
+									<td>{{fd.temp_emp}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td>
+									<td></td><td></td>
+									<td>{{total_emp_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div> 
+				</div>
+				  
+				{%elif flag == 'num_employees_foreign'%}
+				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<ul class="list-inline list-inline-condensed mb-0">
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:get_num_emp_foreign' option='by_sector' sector='all'%}" class="dropdown-item"><i class="icon-stack2 "></i>All Sectors</a>
+										<a href="{%url 'admin:get_num_emp_foreign' option='by_sector' sector='Food'%}" class="dropdown-item"><i class="mi-cake "></i>Food</a>
+										<a href="{%url 'admin:get_num_emp_foreign' option='by_sector' sector='Beverage'%}" class="dropdown-item"><i class="mi-local-drink"></i>Beverage</a>
+										<a href="{%url 'admin:get_num_emp_foreign' option='by_sector' sector='Pharmaceuticals'%}" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
+									</div>
+								</li>
+								<li class="list-inline-item ">
+									{%if sector == 'all'%}
+									{%elif sector == 'Food' or sector == 'Beverage' or sector == 'Pharmaceuticals'%}
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sub Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										{%for category in sub_sectors%}
+										<a href="{%url 'admin:get_num_emp_foreign' option='by_sub_sector' sector=category.id%}" class="dropdown-item">{{category.category_name}}</a>
+										{%endfor%}
+									</div>
+									 
+									{%endif%}
+									 
+								</li>
+							</ul>
+
+							 
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">{{title|title}} Sectors</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Female Employees</th>
+									<th>Male Employees</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in for_emp_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.for_female}}</td>
+									<td>{{fd.for_male}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td>
+									<td></td><td></td>
+									<td>{{for_emp_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div> 
+				</div>
+				 
+				{%endif%}
+			</div>
+			<!-- /content area -->
+			<script>
+				$(document).ready(function(){
+					$('.datatable-basic').DataTable(
+						{
+							dom: 'Bfrtip',
+							buttons: [
+								'csv', 'excel', 'pdf', 'print'
+							]
+						}
+					);
+				});
+			</script>
+			 
+{%endblock%}

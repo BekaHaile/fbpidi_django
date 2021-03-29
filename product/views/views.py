@@ -75,9 +75,9 @@ class SubCategoryView(LoginRequiredMixin,ListView):
         if self.request.user.is_superuser:
             return SubCategory.objects.all()
         elif self.request.user.is_company_admin:
-            return SubCategory.objects.filter(company=Company.objects.get(contact_person=self.request.user))
+            return SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())
         elif self.request.user.is_company_staff:
-            return SubCategory.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
+            return SubCategory.objects.filter(category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all())
             
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
@@ -91,18 +91,21 @@ class SubCategoryDetail(LoginRequiredMixin,UpdateView):
     template_name = "admin/product/category_form_update.html"
     success_url = "/admin/sub_categories/"
 
-    def get_form_kwargs(self):
-        kwargs = super(SubCategoryDetail,self).get_form_kwargs()
-        if self.request.user.is_company_admin:
-            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
-        elif self.request.user.is_company_staff:
-            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
-        return kwargs
-
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         context['sub_category'] = True
         return context
+    
+    def form_valid(self,form):        
+        sub_category = form.save(commit=False)
+        sub_category.created_by = self.request.user
+        sub_category.save()
+        messages.success(self.request,"You Updated a Product Type")
+        return redirect("admin:sub_categories")
+    
+    def form_invalid(self,form):
+        message.warning(self.request,form.errors)
+        return redirect("admin:edit_subcategory",pk=self.kwargs['pk']) 
 
 # This class/view is created for creating new categories
 class CreateSubCategories(LoginRequiredMixin,CreateView):
@@ -110,29 +113,23 @@ class CreateSubCategories(LoginRequiredMixin,CreateView):
     form_class = SubCategoryForm
     template_name = "admin/product/category_form_create.html"
     
-    def get_form_kwargs(self):
-        kwargs = super(CreateSubCategories,self).get_form_kwargs()
-        if self.request.user.is_company_admin:
-            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
-        elif self.request.user.is_company_staff:
-            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
-        return kwargs
 
     def form_valid(self,form):        
         sub_category = form.save(commit=False)
         sub_category.created_by = self.request.user
-        if self.request.user.is_company_admin:
-            sub_category.company = Company.objects.get(contact_person=self.request.user)
-        elif self.request.user.is_company_staff:
-            sub_category.company = CompanyStaff.objects.get(user=self.request.user).company        
         sub_category.save()
-        messages.success(self.request,"You Created a New Sub Category")
+        messages.success(self.request,"You Created a New Product Type")
         return redirect("admin:sub_categories")
     
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         context['sub_category'] = True
         return context
+    
+    def form_invalid(self,form):
+        message.warning(self.request,form.errors)
+        return redirect("admin:create_subcategory",pk=self.kwargs['pk']) 
+
 
 
 
@@ -173,6 +170,18 @@ class BrandDetail(LoginRequiredMixin,UpdateView):
         context['brand'] = True
         return context
 
+    def form_valid(self,form):        
+        brand = form.save(commit=False)
+        brand.last_updated_by = self.request.user
+        brand.last_updated_date = timezone.now()
+        brand.save()
+        messages.success(self.request,"You Created a New Brand")
+        return redirect("admin:brands")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:edit_brand",pk=self.kwargs['pk'])
+
 # This class/view is created for creating new brands
 class CreateBrand(LoginRequiredMixin,CreateView):
     model = Brand
@@ -202,6 +211,10 @@ class CreateBrand(LoginRequiredMixin,CreateView):
         context = super().get_context_data(**kwargs)
         context['brand'] = True
         return context
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_brand")
 
 
 
@@ -228,8 +241,6 @@ class CreateProductView(LoginRequiredMixin,CreateView):
             kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
         elif self.request.user.is_company_staff:
             kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
-        elif self.request.user.is_superuser:
-            kwargs.update({'company':Company.objects.get(main_category="FBPIDI")})
         return kwargs
 
     def form_valid(self,form):
@@ -358,11 +369,14 @@ class ListProductionCapacity(LoginRequiredMixin,ListView):
     template_name = "admin/product/product_data_list.html"
 
     def get_queryset(self):
-        return ProductionCapacity.objects.filter(product=Product.objects.get(id=self.kwargs['product']))
+        if self.request.user.is_superuser:
+            return ProductionCapacity.objects.all()
+        else:
+            return ProductionCapacity.objects.filter(company=self.request.user.get_company())
     
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=Product.objects.get(id=self.kwargs['product'])
+        # context['product']=Product.objects.get(id=self.kwargs['product'])
         context['flag'] = "production_capacity"
         return context
 
@@ -373,22 +387,34 @@ class CreateProductionCapacity(LoginRequiredMixin,CreateView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=Product.objects.get(id=self.kwargs['product'])
         context['flag'] = "production_capacity"
         return context
+    
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(CreateProductionCapacity,self).get_form_kwargs()
+        if self.request.user.is_superuser:
+            kwargs.update({'product':SubCategory.objects.all()})
+        elif self.request.user.is_company_admin:
+            kwargs.update({'product':SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'product':SubCategory.objects.filter(category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all())})
+        return kwargs
 
     def form_valid(self,form):
-        if ProductionCapacity.objects.filter(
-            product=Product.objects.get(id=self.kwargs['product']),p_date=form.cleaned_data.get('p_date')).exists():
+        if ProductionCapacity.objects.filter(company=self.request.user.get_company(),product=SubCategory.objects.get(id=form.cleaned_data.get('product').id),p_date=form.cleaned_data.get('p_date')).exists():
             messages.warning(self.request,"Data For this Day already exists")
-            return redirect("admin:create_production_capacity",product=self.kwargs['product'])
+            return redirect("admin:create_production_capacity")
         else:
             pc = form.save(commit=False)
-            pc.product = Product.objects.get(id=self.kwargs['product'])
+            pc.company = self.request.user.get_company()
             pc.created_by = self.request.user
             pc.save()
             messages.success(self.request,"Production Capacity Created")
-            return redirect("admin:production_capacity",product=self.kwargs['product'])
+            return redirect("admin:production_capacity")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_production_capacity")
 
 
 class UpdateProductionCapacity(LoginRequiredMixin,UpdateView):
@@ -398,9 +424,18 @@ class UpdateProductionCapacity(LoginRequiredMixin,UpdateView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=ProductionCapacity.objects.get(id=self.kwargs['pk']).product
         context['flag'] = "production_capacity"
         return context
+
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(UpdateProductionCapacity,self).get_form_kwargs()
+        if self.request.user.is_superuser:
+            kwargs.update({'product':SubCategory.objects.all()})
+        elif self.request.user.is_company_admin:
+            kwargs.update({'product':SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'product':SubCategory.objects.filter(category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all())})
+        return kwargs
 
     def form_valid(self,form):
         pc = form.save(commit=False)
@@ -408,7 +443,11 @@ class UpdateProductionCapacity(LoginRequiredMixin,UpdateView):
         pc.last_updated_date = timezone.now()
         pc.save()
         messages.success(self.request,"Production Capacity Updated")
-        return redirect("admin:production_capacity",product=pc.product.id)
+        return redirect("admin:production_capacity")
+
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_production_capacity",pk=self.kwargs['pk'])
 
 
 class ListSalesPerformance(LoginRequiredMixin,ListView):
@@ -416,11 +455,13 @@ class ListSalesPerformance(LoginRequiredMixin,ListView):
     template_name = "admin/product/product_data_list.html"
 
     def get_queryset(self):
-        return ProductionAndSalesPerformance.objects.filter(product=Product.objects.get(id=self.kwargs['product']))
+        if self.request.user.is_superuser:
+            return ProductionAndSalesPerformance.objects.all()
+        else:
+            return ProductionAndSalesPerformance.objects.filter(company=self.request.user.get_company())
     
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=Product.objects.get(id=self.kwargs['product'])
         context['flag'] = "sales_performance"
         return context
 
@@ -429,24 +470,42 @@ class CreateSalesPerformance(LoginRequiredMixin,CreateView):
     form_class=SalesPerformanceForm
     template_name = "admin/product/product_data_create.html"
 
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(CreateSalesPerformance,self).get_form_kwargs()
+        if self.request.user.is_superuser:
+            kwargs.update({'product':SubCategory.objects.all(),'company':self.request.user.get_company()})
+        elif self.request.user.is_company_admin:
+            kwargs.update({'product':SubCategory.objects.filter(
+                                    category_name__in=Company.objects.get(contact_person=self.request.user).category.all()),
+                            'company':self.request.user.get_company()})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'product':SubCategory.objects.filter(
+                                    category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all()),
+                                'company':self.request.user.get_company()})
+        return kwargs
+
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=Product.objects.get(id=self.kwargs['product'])
         context['flag'] = "sales_performance"
         return context
 
     def form_valid(self,form):
-        if ProductionAndSalesPerformance.objects.filter(
-            product=Product.objects.get(id=self.kwargs['product']),activity_year=form.cleaned_data.get('activity_year')).exists():
+        if ProductionAndSalesPerformance.objects.filter(company=self.request.user.get_company(),
+            product=SubCategory.objects.get(id=form.cleaned_data.get('product').id)
+            ,activity_year=form.cleaned_data.get('activity_year')).exists():
             messages.warning(self.request,"Data For this Year already exists")
-            return redirect("admin:create_sales_performance",product=self.kwargs['product'])
+            return redirect("admin:create_sales_performance")
         else:
             sp = form.save(commit=False)
-            sp.product = Product.objects.get(id=self.kwargs['product'])
+            sp.company = self.request.user.get_company()
             sp.created_by = self.request.user
             sp.save()
             messages.success(self.request,"Production Sales Performance Created")
-            return redirect("admin:sales_performance",product=self.kwargs['product'])
+            return redirect("admin:sales_performance")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_sales_performance")
 
 
 class UpdateSalesPerformance(LoginRequiredMixin,UpdateView):
@@ -454,9 +513,22 @@ class UpdateSalesPerformance(LoginRequiredMixin,UpdateView):
     form_class = SalesPerformanceForm
     template_name = "admin/product/product_data_update.html"
 
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(UpdateSalesPerformance,self).get_form_kwargs()
+        if self.request.user.is_superuser:
+            kwargs.update({'product':SubCategory.objects.all(),'company':self.request.user.get_company()})
+        elif self.request.user.is_company_admin:
+            kwargs.update({'product':SubCategory.objects.filter(
+                                    category_name__in=Company.objects.get(contact_person=self.request.user).category.all()),
+                            'company':self.request.user.get_company()})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'product':SubCategory.objects.filter(
+                                    category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all()),
+                                'company':self.request.user.get_company()})
+        return kwargs
+
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=ProductionAndSalesPerformance.objects.get(id=self.kwargs['pk']).product
         context['flag'] = "sales_performance"
         return context
 
@@ -466,7 +538,11 @@ class UpdateSalesPerformance(LoginRequiredMixin,UpdateView):
         sp.last_updated_date = timezone.now()
         sp.save()
         messages.success(self.request,"Sales Performance Updated")
-        return redirect("admin:sales_performance",product=pc.product.id)
+        return redirect("admin:sales_performance")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_sales_performance",pk=self.kwargs['pk'])
 
 
 class ListPackaging(LoginRequiredMixin,ListView):
@@ -474,11 +550,13 @@ class ListPackaging(LoginRequiredMixin,ListView):
     template_name = "admin/product/product_data_list.html"
 
     def get_queryset(self):
-        return ProductPackaging.objects.filter(product=Product.objects.get(id=self.kwargs['product']))
+        if self.request.user.is_superuser:
+            return ProductPackaging.objects.all()
+        else:
+            return ProductPackaging.objects.filter(company=self.request.user.get_company())
     
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=Product.objects.get(id=self.kwargs['product'])
         context['flag'] = "packaging"
         return context
 
@@ -489,21 +567,30 @@ class CreatePackaging(LoginRequiredMixin,CreateView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=Product.objects.get(id=self.kwargs['product'])
         context['flag'] = "packaging"
         return context
 
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(CreatePackaging,self).get_form_kwargs()
+        if self.request.user.is_superuser:
+            kwargs.update({'product':SubCategory.objects.all()})
+        elif self.request.user.is_company_admin:
+            kwargs.update({'product':SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'product':SubCategory.objects.filter(category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all())})
+        return kwargs
+
     def form_valid(self,form):
-        if ProductPackaging.objects.filter(product=Product.objects.get(id=self.kwargs['product'])).exists():
-            messages.warning(self.request,"Data For this Product already exists")
-            return redirect("admin:create_packaging",product=self.kwargs['product'])
-        else:
-            sp = form.save(commit=False)
-            sp.product = Product.objects.get(id=self.kwargs['product'])
-            sp.created_by = self.request.user
-            sp.save()
-            messages.success(self.request,"Product Packaging Created")
-            return redirect("admin:packaging",product=self.kwargs['product'])
+        sp = form.save(commit=False)
+        sp.company = self.request.user.get_company()
+        sp.created_by = self.request.user
+        sp.save()
+        messages.success(self.request,"Product Packaging Created")
+        return redirect("admin:packaging")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect('admin:create_packaging')
 
 
 class UpdatePackaging(LoginRequiredMixin,UpdateView):
@@ -511,9 +598,18 @@ class UpdatePackaging(LoginRequiredMixin,UpdateView):
     form_class = ProductPackagingForm
     template_name = "admin/product/product_data_update.html"
 
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(UpdatePackaging,self).get_form_kwargs()
+        if self.request.user.is_superuser:
+            kwargs.update({'product':SubCategory.objects.all()})
+        elif self.request.user.is_company_admin:
+            kwargs.update({'product':SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'product':SubCategory.objects.filter(category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all())})
+        return kwargs
+
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=ProductPackagingForm.objects.get(id=self.kwargs['pk']).product
         context['flag'] = "packaging"
         return context
 
@@ -523,18 +619,24 @@ class UpdatePackaging(LoginRequiredMixin,UpdateView):
         sp.last_updated_date = timezone.now()
         sp.save()
         messages.success(self.request,"Packaging Data Updated")
-        return redirect("admin:packaging",product=pc.product.id)
+        return redirect("admin:packaging")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_packaging",pk=self.kwargs['pk'])
 
 class ListAnualInputNeed(LoginRequiredMixin,ListView):
     model = AnnualInputNeed
     template_name = "admin/product/product_data_list.html"
 
     def get_queryset(self):
-        return AnnualInputNeed.objects.filter(product=Product.objects.get(id=self.kwargs['product']))
+        if self.request.user.is_superuser:
+            return AnnualInputNeed.objects.all()
+        else:
+            return AnnualInputNeed.objects.filter(company=self.request.user.get_company())
     
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=Product.objects.get(id=self.kwargs['product'])
         context['flag'] = "anual_input_need"
         return context
 
@@ -543,25 +645,37 @@ class CreateAnualInputNeed(LoginRequiredMixin,CreateView):
     form_class=AnualInputNeedForm
     template_name = "admin/product/product_data_create.html"
 
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(CreateAnualInputNeed,self).get_form_kwargs()
+        if self.request.user.is_superuser:
+            kwargs.update({'product':SubCategory.objects.all(),'company':self.request.user.get_company()})
+        elif self.request.user.is_company_admin:
+            kwargs.update({'product':SubCategory.objects.filter(
+                                    category_name__in=Company.objects.get(contact_person=self.request.user).category.all()),
+                            'company':self.request.user.get_company()})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'product':SubCategory.objects.filter(
+                                    category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all()),
+                                'company':self.request.user.get_company()})
+        return kwargs
+
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=Product.objects.get(id=self.kwargs['product'])
         context['flag'] = "anual_input_need"
         return context
 
     def form_valid(self,form):
-        if AnnualInputNeed.objects.filter(
-            product=Product.objects.get(id=self.kwargs['product']),year=form.cleaned_data.get('year'),
+        if AnnualInputNeed.objects.filter(company=self.request.user.get_company(),product=SubCategory.objects.get(id=form.cleaned_data.get('product').id),year=form.cleaned_data.get('year'),
             input_name__icontains =form.cleaned_data.get("input_name")).exists():
             messages.warning(self.request,"Data For this Input and Year already exists")
-            return redirect("admin:create_anual_inp_need",product=self.kwargs['product'])
+            return redirect("admin:create_anual_inp_need")
         else:
             ain = form.save(commit=False)
-            ain.product = Product.objects.get(id=self.kwargs['product'])
+            ain.company = self.request.user.get_company()
             ain.created_by = self.request.user
             ain.save()
             messages.success(self.request,"Anual Input Need Created")
-            return redirect("admin:anual_input_need",product=self.kwargs['product'])
+            return redirect("admin:anual_input_need")
 
 
 class UpdateAnualInputNeed(LoginRequiredMixin,UpdateView):
@@ -569,9 +683,22 @@ class UpdateAnualInputNeed(LoginRequiredMixin,UpdateView):
     form_class = AnualInputNeedForm
     template_name = "admin/product/product_data_update.html"
 
+    def get_form_kwargs(self,*args,**kwargs):
+        kwargs = super(UpdateAnualInputNeed,self).get_form_kwargs()
+        if self.request.user.is_superuser:
+            kwargs.update({'product':SubCategory.objects.all(),'company':self.request.user.get_company()})
+        elif self.request.user.is_company_admin:
+            kwargs.update({'product':SubCategory.objects.filter(
+                                    category_name__in=Company.objects.get(contact_person=self.request.user).category.all()),
+                            'company':self.request.user.get_company()})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'product':SubCategory.objects.filter(
+                                    category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all()),
+                                    'company':self.request.user.get_company()})
+        return kwargs
+
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=AnnualInputNeed.objects.get(id=self.kwargs['pk']).product
         context['flag'] = "anual_input_need"
         return context
 
@@ -581,7 +708,11 @@ class UpdateAnualInputNeed(LoginRequiredMixin,UpdateView):
         ain.last_updated_date = timezone.now()
         ain.save()
         messages.success(self.request,"Product Anual Input Need Updated")
-        return redirect("admin:anual_input_need",product=ain.product.id)
+        return redirect("admin:anual_input_need")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_anual_inp_need",pk=self.kwargs['id'])
 
 
 
@@ -590,11 +721,13 @@ class ListInputDemandSupply(LoginRequiredMixin,ListView):
     template_name = "admin/product/product_data_list.html"
 
     def get_queryset(self):
-        return InputDemandSupply.objects.filter(product=Product.objects.get(id=self.kwargs['product']))
+        if self.request.user.is_superuser:
+            return InputDemandSupply.objects.all()
+        else:
+            return InputDemandSupply.objects.filter(company=self.request.user.get_company())
     
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=Product.objects.get(id=self.kwargs['product'])
         context['flag'] = "demand_supply"
         return context
 
@@ -605,29 +738,40 @@ class CreateInputDemandSupply(LoginRequiredMixin,CreateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreateInputDemandSupply,self).get_form_kwargs()
-        kwargs.update({'product': Product.objects.get(id=self.kwargs['product']),
-                    'company':Product.objects.get(id=self.kwargs['product']).company})
+        if self.request.user.is_superuser:
+            kwargs.update({'product':SubCategory.objects.all(),'company':self.request.user.get_company()})
+        elif self.request.user.is_company_admin:
+            kwargs.update({'product':SubCategory.objects.filter(
+                                    category_name__in=Company.objects.get(contact_person=self.request.user).category.all()),
+                            'company':self.request.user.get_company()})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'product':SubCategory.objects.filter(
+                                    category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all()),
+                                    'company':self.request.user.get_company()})
         return kwargs
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=Product.objects.get(id=self.kwargs['product'])
         context['flag'] = "demand_supply"
         return context
 
     def form_valid(self,form):
-        if InputDemandSupply.objects.filter(
-                            product=Product.objects.get(id=self.kwargs['product']),
+        if InputDemandSupply.objects.filter(company=self.request.user.get_company(),
+                            product=form.cleaned_data.get('product').id,
                             year=form.cleaned_data.get('year'),input_type=form.cleaned_data.get('input_type')).exists():
             messages.warning(self.request,"Data For this Year already exists")
-            return redirect("admin:create_demand_supply",product=self.kwargs['product'])
+            return redirect("admin:create_demand_supply")
         else:
             ds = form.save(commit=False)
-            ds.product = Product.objects.get(id=self.kwargs['product'])
+            ds.company=self.request.user.get_company()
             ds.created_by = self.request.user
             ds.save()
             messages.success(self.request,"Input Demand and Supply data added")
-            return redirect("admin:demand_supply_list",product=self.kwargs['product'])
+            return redirect("admin:demand_supply_list")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_demand_supply")
 
 
 class UpdateInputDemandSupply(LoginRequiredMixin,UpdateView):
@@ -637,13 +781,20 @@ class UpdateInputDemandSupply(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(UpdateInputDemandSupply,self).get_form_kwargs()
-        kwargs.update({'product': InputDemandSupply.objects.get(id=self.kwargs['pk']).product,
-                    'company':InputDemandSupply.objects.get(id=self.kwargs['pk']).product.company})
+        if self.request.user.is_superuser:
+            kwargs.update({'product':SubCategory.objects.all(),'company':self.request.user.get_company()})
+        elif self.request.user.is_company_admin:
+            kwargs.update({'product':SubCategory.objects.filter(
+                                    category_name__in=Company.objects.get(contact_person=self.request.user).category.all()),
+                            'company':self.request.user.get_company()})
+        elif self.request.user.is_company_staff:
+            kwargs.update({'product':SubCategory.objects.filter(
+                                    category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all()),
+                                    'company':self.request.user.get_company()})
         return kwargs
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['product']=InputDemandSupply.objects.get(id=self.kwargs['pk']).product
         context['flag'] = "demand_supply"
         return context
 
@@ -653,7 +804,11 @@ class UpdateInputDemandSupply(LoginRequiredMixin,UpdateView):
         ds.last_updated_date = timezone.now()
         ds.save()
         messages.success(self.request,"Product Input Demand and supply data Updated")
-        return redirect("admin:demand_supply_list",product=ds.product.id)
+        return redirect("admin:demand_supply_list")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_demand_supply",pk=self.kwargs['pk'])
 
 
 
@@ -771,15 +926,16 @@ class ProductByCategoryView(ListView):
 
     def get_queryset(self):
         category = Category.objects.get(id=self.kwargs['cat_id'])
-        if category.category_type == "Pharmaceuticals":
-            return Product.objects.filter(
-                pharmacy_category=category)
-        elif category.category_type == "Food" or category.category_type == "Beverage":
-            brands = []
-            for sub_cat in category.sub_category.all():
-                for brand in sub_cat.product_category.all():
-                    brands.append(brand)
-            return Product.objects.filter(fandb_category__in=brands)
+        brands = []
+        for sub_cat in category.sub_category.all():
+            for brand in sub_cat.product_category.all():
+                brands.append(brand)
+        return Product.objects.filter(brand__in=brands)
+        # if category.category_type == "Pharmaceuticals":
+        #     return Product.objects.filter(
+        #         pharmacy_category=category)
+        # elif category.category_type == "Food" or category.category_type == "Beverage":
+            
 
 
 
@@ -801,16 +957,22 @@ class ProductByMainCategory(ListView):
                 for sub_cat in category.sub_category.all():
                     for brand in sub_cat.product_category.all():
                         brands.append(brand)
-            return Product.objects.filter(fandb_category__in=brands)
+            return Product.objects.filter(brand__in=brands)
         elif self.kwargs['option'] == "Food":
             categories = Category.objects.filter(category_type="Food")
             for category in categories:
                 for sub_cat in category.sub_category.all():
                     for brand in sub_cat.product_category.all():
                         brands.append(brand)
-            return Product.objects.filter(fandb_category__in=brands)
+            return Product.objects.filter(brand__in=brands)
         elif self.kwargs['option'] == "Pharmaceuticals":
-            return Product.objects.filter(pharmacy_category__in=Category.objects.filter(category_type="Pharmaceuticals"))
+            categories = Category.objects.filter(category_type="Pharmaceuticals")
+            for category in categories:
+                for sub_cat in category.sub_category.all():
+                    for brand in sub_cat.product_category.all():
+                        brands.append(brand)
+            return Product.objects.filter(brand__in=brands)
+            # return Product.objects.filter(pharmacy_category__in=Category.objects.filter(category_type="Pharmaceuticals"))
         elif self.kwargs['option'] == "all":
             return Product.objects.all()
 
@@ -818,9 +980,15 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = "frontpages/product/product_detail.html"
 
+    def get_object(self):
+        try:
+            return Product.objects.get(id=self.kwargs['pk'])
+        except Product.DoesNotExist:
+            return None
+    
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['related_products'] = Product.objects.filter(fandb_category=Product.objects.get(id=self.kwargs['pk']).fandb_category)[:6]
+        context['related_products'] = Product.objects.filter(brand=Product.objects.get(id=self.kwargs['pk']).brand)[:6]
         context['reviews'] = Review.objects.filter(product=Product.objects.get(id=self.kwargs['pk']))
         context['form'] = ReviewForm
         return context

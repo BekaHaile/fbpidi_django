@@ -1,0 +1,172 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+<!-- /theme JS files -->
+	<style>
+		.card{
+			height: 150px;
+		}
+	</style>
+
+{% endblock %}
+{%block pagename%}Report List{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+	<div class="row">
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">
+						<li class="nav-item"><a href="{%url 'admin:get_by_inv_capital'%}" class="btn btn-primary rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Investment Capital Report By Sector
+					</div>
+				</div>
+			</div>
+			 
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">
+						<li class="nav-item"><a href="{%url 'admin:get_production_capacity'%}" class="btn btn-primary rounded-round">View Report</a></li>
+					</ul>
+	
+					<div class="tab-content">
+						Production Capacity Report By Prouct
+					</div>
+				</div>
+			</div>
+			 
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:company_list_report'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						 Company Related Report
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_capital_utilization' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Capital Utilization Report Data
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_change_capital_utilization' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Change in Capital Utilization Report Data
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:average_extraction_rate' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Average Extraction Rate
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_gvp_data' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Gross Value of Production Data
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_unit_price' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Average Unit Price
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_number_emp' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Number Of Employees by Sector
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_num_emp_female' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Number Of Female Employees by Sector
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_num_emp_foreign' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Number Of Foreign Employees by Sector
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	 
+</div>
+<!-- /content area -->
+{%endblock%}

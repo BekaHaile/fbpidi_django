@@ -34,9 +34,12 @@ Product Packaging Data
 		<div class="card-header header-elements-inline">
 			<h5 class="card-title">Daily Production Capacity data</h5>
 			<div class="header-elements">
+				
 				<div class="list-icons">
-					<a href="{%url 'admin:create_production_capacity' product=product.id%}" class="btn bg-teal btn-sm rounded-round"><i
-							class="icon-add mr-2"></i>Add New Data</a>
+					{%if not user.is_superuser%}
+					<a href="{%url 'admin:create_production_capacity'%}" class="btn bg-teal btn-sm rounded-round">
+						<i class="icon-add mr-2"></i>Add New Data</a>
+					{%endif%}
 				</div>
 			</div>
 		</div>
@@ -44,26 +47,27 @@ Product Packaging Data
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
+					<th>Company</th>
 					<th>Date</th>
-					<th>Installed Cp</th>
+					<th>Product</th>
+					<th>Installed Capacity</th>
 					<th>Attainable</th>
 					<th>Actuall</th>
-					<th>Created Date</th>
 					<th class="text-center">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				{%for cat in object_list%}
 				<tr>
+					<td>{{cat.company.name}}</td>
 					<td>{{cat.p_date|date}}</td>
+					<td>{{cat.product.sub_category_name}}</td>
 					<td>{{cat.install_prdn_capacity}}</td>
 					<td>
 						{{cat.atnbl_prdn_capacity}}
 					</td>
 					<td>{{cat.actual_prdn_capacity}}</td>
-					<td>
-						{{cat.created_date|date}}
-					</td>
+					
 					<td class="text-center">
 						<div class="list-icons">
 							<div class="dropdown">
@@ -72,10 +76,11 @@ Product Packaging Data
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-right">
+									{%if not user.is_superuser%}
 									<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
 									<a href="{%url 'admin:update_production_capacity' pk=cat.id%}" class="dropdown-item">
 										<i class="icon-pencil"></i>Edit</a>
-									
+									{%endif%}
 								</div>
 							</div>
 						</div>
@@ -92,8 +97,10 @@ Product Packaging Data
 			<h5 class="card-title">Annual Input Need data</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					<a href="{%url 'admin:create_anual_inp_need' product=product.id%}" class="btn bg-teal btn-sm rounded-round"><i
+					{%if not user.is_superuser%}
+					<a href="{%url 'admin:create_anual_inp_need'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Data</a>
+					{%endif%}
 				</div>
 			</div>
 		</div>
@@ -101,24 +108,26 @@ Product Packaging Data
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
+					<th>Company</th>
 					<th>Year</th>
+					<th>Product</th>
 					<th>Input Name</th>
 					<th>Amount</th>
-					<th>Local Input</th>
-					<th>Imported Input</th>
+					<th>Local Input:Imported Input</th>
 					<th class="text-center">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				{%for cat in object_list%}
 				<tr>
+					<td>{{cat.company.name}}</td>
 					<td>{{cat.year}}</td>
+					<td>{{cat.product.sub_category_name}}</td>
 					<td>{{cat.input_name}}</td>
 					<td>
 						{{cat.amount}}
 					</td>
-					<td>{{cat.local_input}}%</td>
-					<td>{{cat.import_input}}%</td>
+					<td>{{cat.local_input}}%-{{cat.import_input}}%</td>
 					<td class="text-center">
 						<div class="list-icons">
 							<div class="dropdown">
@@ -127,10 +136,11 @@ Product Packaging Data
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-right">
+									{%if not user.is_superuser%}
 									<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
 									<a href="{%url 'admin:update_anual_inp_need' pk=cat.id%}" class="dropdown-item">
 										<i class="icon-pencil"></i>Edit</a>
-									
+									{%endif%}
 								</div>
 							</div>
 						</div>
@@ -147,8 +157,10 @@ Product Packaging Data
 			<h5 class="card-title">Anual Product Input Demand and Supply Data</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					<a href="{%url 'admin:create_demand_supply' product=product.id%}" class="btn bg-teal btn-sm rounded-round"><i
+					{%if not user.is_superuser%}
+					<a href="{%url 'admin:create_demand_supply'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Data</a>
+					{%endif%}
 				</div>
 			</div>
 		</div>
@@ -156,9 +168,10 @@ Product Packaging Data
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
-					<th>#</th>
-					<th>Input Type</th>
+					<th>Company</th>
 					<th>Year</th>
+					<th>Product</th>
+					<th>Input Type</th>
 					<th>Demand</th>
 					<th>Supply</th>
 					<th class="text-center">Actions</th>
@@ -167,11 +180,12 @@ Product Packaging Data
 			<tbody>
 				{%for cat in object_list%}
 				<tr>
-					<td>{{forloop.counter}}</td>
-					<td>{{cat.input_type}}</td>
+					<td>{{cat.company.name}}</td>
 					<td>{{cat.year}}</td>
+					<td>{{cat.product.sub_category_name}}</td>
+					<td>{{cat.input_type}}</td>
 					<td>{{cat.demand}}%</td>
-					<td>{{cat.supply}}</td>
+					<td>{{cat.supply}}%</td>
 					<td class="text-center">
 						<div class="list-icons">
 							<div class="dropdown">
@@ -180,10 +194,11 @@ Product Packaging Data
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-right">
+									{%if not user.is_superuser%}
 									<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
 									<a href="{%url 'admin:update_demand_supply' pk=cat.id%}" class="dropdown-item">
 										<i class="icon-pencil"></i>Edit</a>
-									
+									{%endif%}
 								</div>
 							</div>
 						</div>
@@ -200,8 +215,10 @@ Product Packaging Data
 			<h5 class="card-title">Product Production & Sales Performance</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					<a href="{%url 'admin:create_sales_performance' product=product.id%}" class="btn bg-teal btn-sm rounded-round"><i
+					{%if not user.is_superuser%}
+					<a href="{%url 'admin:create_sales_performance'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Data</a>
+					{%endif%}
 				</div>
 			</div>
 		</div>
@@ -209,8 +226,9 @@ Product Packaging Data
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
-					<th>#</th>
+					<th>Company</th>
 					<th>Year</th>
+					<th>Product</th>
 					<th>Production</th>
 					<th>Sales Amount</th>
 					<th>Sales Value</th>
@@ -220,11 +238,12 @@ Product Packaging Data
 			<tbody>
 				{%for cat in object_list%}
 				<tr>
-					<td>{{forloop.counter}}</td>
+					<td>{{cat.company.name}}</td>
 					<td>{{cat.activity_year}}</td>
-					<td>{{cat.production_amount}}</td>
-					<td>{{cat.sales_amount}}</td>
-					<td>{{cat.sales_value}}</td>
+					<td>{{cat.product.sub_category_name}}</td>
+					<td>{{cat.production_amount}} {{cat.product.uom}}</td>
+					<td>{{cat.sales_amount}} {{cat.product.uom}}</td>
+					<td>ETB {{cat.sales_value}}</td>
 					<td class="text-center">
 						<div class="list-icons">
 							<div class="dropdown">
@@ -233,10 +252,11 @@ Product Packaging Data
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-right">
+									{%if not user.is_superuser%}
 									<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
 									<a href="{%url 'admin:update_sales_performance' pk=cat.id%}" class="dropdown-item">
 										<i class="icon-pencil"></i>Edit</a>
-									
+									{%endif%}
 								</div>
 							</div>
 						</div>
@@ -253,8 +273,10 @@ Product Packaging Data
 			<h5 class="card-title">Product Packaging Data</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					<a href="{%url 'admin:create_packaging' product=product.id%}" class="btn bg-teal btn-sm rounded-round"><i
+					{%if not user.is_superuser%}
+					<a href="{%url 'admin:create_packaging'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Data</a>
+					{%endif%}
 				</div>
 			</div>
 		</div>
@@ -262,10 +284,12 @@ Product Packaging Data
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
+					<th>Company</th>
+					<th>Product</th>
 					<th>Packaging Type</th>
 					<th>Packaging Category</th>
 					<th>Amount</th>
-					<th>Source Of Inputs</th>
+					<th>Source of Inputs</th>
 					<th>Wastage %</th>
 					<th class="text-center">Actions</th>
 				</tr>
@@ -273,29 +297,28 @@ Product Packaging Data
 			<tbody>
 				{%for cat in object_list%}
 				<tr>
+					<td>{{cat.company.name}}</td>
+					<td>{{cat.product.sub_category_name}}</td>
 					<td>{{cat.packaging}}</td>
 					<td>{{cat.category}}</td>
 					<td>{{cat.amount}}</td>
-					<td>
-						Local: {{cat.local_input}}
-						Import: {{cat.import_input}}
-					</td>
-					<td>
-						{{cat.wastage}}
-					</td>
+					<td>Local: {{cat.local_input}}
+						Import: {{cat.import_input}}</td>
+					<td>{{cat.wastage}} </td> 
 					<td class="text-center">
 						<div class="list-icons">
 							<div class="dropdown">
 								<a href="#" class="list-icons-item" data-toggle="dropdown">
 									<i class="icon-menu9"></i>
 								</a>
-
+								{%if not user.is_superuser%}
 								<div class="dropdown-menu dropdown-menu-right">
 									<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
 									<a href="{%url 'admin:update_packaging' pk=cat.id%}" class="dropdown-item">
 										<i class="icon-pencil"></i>Edit</a>
 									
 								</div>
+								{%endif%}
 							</div>
 						</div>
 					</td>
@@ -310,5 +333,15 @@ Product Packaging Data
 
 
 </div>
+<script>
+	$(document).ready(function(){
+		// $('.datatable-show-all').DataTable({
+		// 			dom: 'Bfrtip',
+		// 			buttons: [
+		// 				'csv', 'excel', 'pdf', 'print'
+		// 			]
+		// 		});
+		});
+</script>
 <!-- /content area -->
 {%endblock%}

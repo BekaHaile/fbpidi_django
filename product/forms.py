@@ -8,7 +8,7 @@ from PIL import Image
 
 from product.models import *
 from admin_site.models import Category
-from company.models import SubCategory,Company,Brand
+from company.models import Company
 
 
 
@@ -31,7 +31,7 @@ class BrandForm(forms.ModelForm):
         self.company = kwargs.pop('company')
         super(BrandForm,self).__init__(*args,**kwargs)
         self.fields['product_type'].empty_label = "Select A Product Type"
-        self.fields['product_type'].queryset = SubCategory.objects.filter(company=self.company)
+        self.fields['product_type'].queryset = SubCategory.objects.filter(category_name__in=self.company.category.all())
         
     class Meta:
         model = Brand
@@ -44,24 +44,23 @@ class BrandForm(forms.ModelForm):
 
 class SubCategoryForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
-        self.company = kwargs.pop('company')
         super(SubCategoryForm,self).__init__(*args,**kwargs)
-        self.fields['category_name'].queryset = self.company.category.all()
+        self.fields['category_name'].queryset = Category.objects.all()
         self.fields['category_name'].empty_label = "Select A Product Category"
 
    
 
     class Meta:
         model = SubCategory
-        fields = ('category_name','sub_category_name','sub_category_name_am','description','description_am','icons')
+        fields = ('category_name','sub_category_name','sub_category_name_am','uom','description','description_am','icons')
         widgets = {
             'icons':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
-            # 'category_name':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-            'sub_category_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Sub Category Name(English)'}),
+            'category_name':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'sub_category_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Product Name(English)'}),
+            'uom':forms.TextInput(attrs={'class':'form-control','placeholder':'Unit Of Measurement'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),
-            'sub_category_name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Sub Category Name(Amharic)'}),
+            'sub_category_name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Product Name(Amharic)'}),
             'description_am':forms.Textarea(attrs={'class':'summernote'}),
-            # "description":SummernoteWidget(),
         } 
 
 class ProductCreationForm(forms.ModelForm):
@@ -73,35 +72,34 @@ class ProductCreationForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
         self.company = kwargs.pop('company')
         super(ProductCreationForm,self).__init__(*args,**kwargs)
-        self.fields['fandb_category'].queryset = Brand.objects.filter(company=self.company)
-        if self.company.main_category == 'FBPIDI':
-             self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type="Pharmaceuticals")
-        else:
-            self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type=self.company.main_category)
+        self.fields['brand'].queryset = Brand.objects.filter(company=self.company)
+        # if self.company.main_category == 'FBPIDI':
+        #      self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type="Pharmaceuticals")
+        # else:
+        #     self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type=self.company.main_category)
         self.fields['dose'].queryset = Dose.objects.all()
         self.fields['dosage_form'].queryset = DosageForm.objects.all()
         self.fields['dose'].empty_label = "Select Prodect Dose"
         self.fields['dosage_form'].empty_label = "Select Product Dosage Form"
-        self.fields['fandb_category'].empty_label = "Select Product Brand"
-        self.fields['pharmacy_category'].empty_label = "Select Product Category"
+        self.fields['brand'].empty_label = "Select Product Brand"
+        # self.fields['pharmacy_category'].empty_label = "Select Product Category"
      
     class Meta:
         model = Product
-        fields = ('name','name_am','fandb_category','pharmacy_category',
-                    'dose','dosage_form','uom','quantity','therapeutic_group',
+        fields = ('name','name_am','brand',
+                    'dose','dosage_form','quantity','therapeutic_group',
                     'description','description_am','image',)
         widgets = {
-            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Product Name(English)'}),
-            'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Product Name(Amharic)'}),
-            'fandb_category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-            'pharmacy_category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Product/Varayti Name(English)'}),
+            'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Product/Varayti Name(Amharic)'}),
+            'brand':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            # 'pharmacy_category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'dose':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'dosage_form':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'therapeutic_group':forms.TextInput(attrs={'class':'form-control','placeholder':'Therapeutic Group'}),
             'description':forms.Textarea(attrs={'class':'summernote','required':'False'}),
             'description_am':forms.Textarea(attrs={'class':'summernote','required':'False'}),
             'image':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
-            'uom':forms.TextInput(attrs={'class':'form-control','placeholder':'Unit Of Measurement'}),
             'quantity':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_quantity")'}),
         } 
 
@@ -154,11 +152,19 @@ class DoseForm(forms.ModelForm):
         }
 
 class ProductionCapacityForm(forms.ModelForm):
+
+    def __init__(self,*args,**kwargs):
+        self.product = kwargs.pop("product")
+        super(ProductionCapacityForm,self).__init__(*args,**kwargs)
+        self.fields['product'].queryset = self.product
+        self.fields['product'].empty_label = "Select A Product"
+
     class Meta:
         model=ProductionCapacity
-        fields = ('p_date','install_prdn_capacity','atnbl_prdn_capacity',
+        fields = ('product','p_date','install_prdn_capacity','atnbl_prdn_capacity',
                     'actual_prdn_capacity','production_plan','extraction_rate')
         widgets = {
+            'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'p_date':forms.DateInput(attrs={'class':'form-control','type':'date'}),
             'install_prdn_capacity':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_install_prdn_capacity")'}),
             'atnbl_prdn_capacity':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_atnbl_prdn_capacity")'}),
@@ -168,11 +174,19 @@ class ProductionCapacityForm(forms.ModelForm):
         }
 
 class ProductPackagingForm(forms.ModelForm):
+
+    def __init__(self,*args,**kwargs):
+        self.product = kwargs.pop('product')
+        super(ProductPackagingForm,self).__init__(*args,**kwargs)
+        self.fields['product'].queryset = self.product
+        self.fields['product'].empty_label = "Select Product"
+
     class Meta:
         model=ProductPackaging
-        fields = ('packaging','category','amount','local_input','import_input','wastage')
+        fields = ('product','packaging','category','amount','local_input','import_input','wastage')
         widgets = {
             'packaging':forms.TextInput(attrs={'class':'form-control','placeholder':'Packaging Type'}),
+            'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'amount':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_amount")'}),
             'local_input':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_local_input")'}),
@@ -189,37 +203,51 @@ YEAR_CHOICES=[('','Select Year'),]
 YEAR_CHOICES += [(r,r) for r in range(2000, datetime.date.today().year+1)]
 
 class SalesPerformanceForm(forms.ModelForm):
-    activity_year = forms.IntegerField(label="Activity Year",widget=forms.Select(choices=YEAR_CHOICES,
-                attrs={'class':'form-control form-control-uniform'}))
+    # activity_year = forms.IntegerField(label="Activity Year",widget=forms.Select(choices=YEAR_CHOICES,
+    #             attrs={'class':'form-control form-control-uniform'}))
 
     def __init__(self,*args,**kwargs):
+        self.product = kwargs.pop('product')
+        self.company = kwargs.pop('company')
         super(SalesPerformanceForm,self).__init__(*args,**kwargs)
-        self.fields['activity_year'].choices = YEAR_CHOICES
+        self.fields['activity_year'].empty_label = "Select Year"
+        self.fields['activity_year'].widget = forms.Select(choices=
+            return_year(self.company.established_yr),
+            attrs={'class':'form-control form-control-uniform'}
+            )
+        self.fields['product'].queryset = self.product
+        self.fields['product'].empty_label = "Select Product"
 
     class Meta:
         model=ProductionAndSalesPerformance
-        fields = ('activity_year','production_amount','sales_amount','sales_value')
+        fields = ('product','activity_year','production_amount','sales_amount','sales_value')
         widgets = {
-            'activity_year':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'production_amount':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_production_amount")'}),
             'sales_amount':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_sales_amount")'}),
             'sales_value':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_sales_value")'}),
         }
 
 class AnualInputNeedForm(forms.ModelForm):
-    year = forms.IntegerField(label="Year",widget=forms.Select(choices=YEAR_CHOICES,
-                attrs={'class':'form-control form-control-uniform'}))
 
     def __init__(self,*args,**kwargs):
+        self.product = kwargs.pop('product')
+        self.company = kwargs.pop('company')
         super(AnualInputNeedForm,self).__init__(*args,**kwargs)
-        self.fields['year'].get_queryset = YEAR_CHOICES
+        self.fields['year'].empty_label = "Select Year"
+        self.fields['year'].widget = forms.Select(choices=
+            return_year(self.company.established_yr),
+            attrs={'class':'form-control form-control-uniform'}
+            )
+        self.fields['product'].queryset = self.product
+        self.fields['product'].empty_label = "Select Product"
 
     class Meta:
         model=AnnualInputNeed
-        fields = ('input_name','year','is_active_input','amount','local_input','import_input')
+        fields = ('product','input_name','year','is_active_input','amount','local_input','import_input')
         widgets = {
             'input_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Input Type'}),
-            'year':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'is_active_input':forms.CheckboxInput(attrs={}),
             'amount':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("amount")'}),
             'local_input':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_local_input")'}),
@@ -238,15 +266,18 @@ class InputDemandSupplyForm(forms.ModelForm):
         super(InputDemandSupplyForm,self).__init__(*args,**kwargs)
         self.fields['year'].empty_label = "Select Year"
         self.fields['year'].widget = forms.Select(choices=
-        return_year(self.company.established_yr)
-        )
+            return_year(self.company.established_yr),
+            attrs={'class':'form-control form-control-uniform'}
+            )
+        self.fields['product'].queryset = self.product
+        self.fields['product'].empty_label = "Select Product"
 
     class Meta:
         model=InputDemandSupply
-        fields = ('input_type','year','demand','supply')
+        fields = ('product','input_type','year','demand','supply')
         widgets = {
             'input_type':forms.TextInput(attrs={'class':'form-control','placeholder':'Input Type '}),
-            'year':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'demand':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_demand")'}),
             'supply':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_supply")'}),
         }

@@ -38,7 +38,7 @@ Product Packaging Data Form
 		</div>
 
 		<div class="card-body">
-			<form action="{%url 'admin:create_production_capacity' product=product.id%}"
+			<form action="{%url 'admin:create_production_capacity'%}"
 			method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
 			 {{form|crispy}}
 			<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
@@ -59,7 +59,7 @@ Product Packaging Data Form
 		</div>
 
 		<div class="card-body">
-			<form action="{%url 'admin:create_anual_inp_need' product=product.id%}"
+			<form action="{%url 'admin:create_anual_inp_need'%}"
 			method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
 			 {{form|crispy}}
 			<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
@@ -80,7 +80,7 @@ Product Packaging Data Form
 		</div>
 
 		<div class="card-body">
-			<form action="{%url 'admin:create_demand_supply' product=product.id%}"
+			<form action="{%url 'admin:create_demand_supply'%}"
 			method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
 			 {{form|crispy}}
 			<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
@@ -101,7 +101,7 @@ Product Packaging Data Form
 		</div>
 
 		<div class="card-body">
-			<form action="{%url 'admin:create_sales_performance' product=product.id%}"
+			<form action="{%url 'admin:create_sales_performance'%}"
 			method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
 			 {{form|crispy}}
 			<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
@@ -122,7 +122,7 @@ Product Packaging Data Form
 		</div>
 
 		<div class="card-body">
-			<form action="{%url 'admin:create_packaging' product=product.id%}"
+			<form action="{%url 'admin:create_packaging'%}"
 			method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
 			 {{form|crispy}}
 			<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">

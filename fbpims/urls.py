@@ -13,6 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import random
+import string
+
 from django.conf import settings
 from django.conf.urls.static import static 
 
@@ -26,6 +29,10 @@ from accounts.views import activate
 from core.views import IndexView, ProfileView
 
 from django.views.generic import TemplateView
+
+
+def create_url_string():
+    return ''.join(random.choices(string.ascii_letters + string.digits,k=100))
 
 urlpatterns = [
     

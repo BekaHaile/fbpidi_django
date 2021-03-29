@@ -1,3 +1,4 @@
+
 from django.contrib import admin
 from functools import update_wrapper
 from django.template.response import TemplateResponse
@@ -15,11 +16,7 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,
 from admin_site.views.views import (AdminIndex,DeleteView,  Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice,  DetailPoll)
 
-from admin_site.views.dropdowns import (AllSettingsPage,
-                                       CreateCompanyDropdownsMaster,
-                                        UpdateCompanyDropdownsMaster,
-                                        CreateProjectDropdownsMaster,
-                                        UpdateProjectDropdownsMaster)
+from admin_site.views.dropdowns import *
 
 from collaborations.views import (  CreateNews, EditNews, AdminNewsList,AdminCompanyEventList,
                                     CreateCompanyEvent,EditCompanyEvent, TenderList, CreateTender, TenderDetail, 
@@ -60,13 +57,19 @@ from collaborations.Views.forums import(ListForumQuestionAdmin,CreateForumQuesti
                                           ListCommentReplayAdmin,CommentReplayDetail,
                                           ListForumCommentByIdAdmin,ListCommentReplayByIdAdmin )
 
-from product.views import *
+from product.views.views import *
                             
-from company.views import *
-from company.company_views import CompanyInboxList, CompanyInboxDetail
+from company.views.views import *
+from company.views.chart_views import *
+from company.views.report_views import *
+from company.views.company_views import *
 
 from accounts.forms import AdminLoginForm
 from chat.views import AdminChatList
+
+def create_ref_code():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits,k=30))
+
  
 class CustomAdminSite(admin.AdminSite):
     login_form = AdminLoginForm
@@ -162,6 +165,8 @@ class CustomAdminSite(admin.AdminSite):
             path('update-checklist/<pk>/',wrap(UpdateCompanyDropdownsMaster.as_view()),name='update_checklist'),
             path('create-project-lookup/',wrap(CreateProjectDropdownsMaster.as_view()),name='create_plookup'),
             path('update-project-lookup/<pk>/',wrap(UpdateProjectDropdownsMaster.as_view()),name='update_plookup'),
+            path('create-region-lookup/',wrap(CreateRegionMaster.as_view()),name='create_region'),
+            path('update-region-lookup/<pk>/',wrap(UpdateRegionMaster.as_view()),name='update_region'),
 
             path("categories/",wrap(CategoryView.as_view()),name="categories"),
             path("create_category/",wrap(CreateCategories.as_view()),name="create_category"),
@@ -182,24 +187,24 @@ class CustomAdminSite(admin.AdminSite):
             path('update_dose/<pk>/',wrap(UpdateDose.as_view()),name="update_dose"),
             path('update_dosage/<pk>/',wrap(UpdateDosageForm.as_view()),name="update_dosage"),
             path('create_dosage/',wrap(CreateDosageForm.as_view()),name="create_dosage"),
-            path('production_capacity/<product>/',wrap(ListProductionCapacity.as_view()),name="production_capacity"),
-            path('production_capacity_create/<product>/',wrap(CreateProductionCapacity.as_view()),name="create_production_capacity"),
+            path('production_capacity/',wrap(ListProductionCapacity.as_view()),name="production_capacity"),
+            path('production_capacity_create/',wrap(CreateProductionCapacity.as_view()),name="create_production_capacity"),
             path('production_capacity_update/<pk>/',wrap(UpdateProductionCapacity.as_view()),name="update_production_capacity"),
 
-            path('anual_input_need/<product>/',wrap(ListAnualInputNeed.as_view()),name="anual_input_need"),
-            path('anual_input_need_create/<product>/',wrap(CreateAnualInputNeed.as_view()),name="create_anual_inp_need"),
+            path('anual_input_need/',wrap(ListAnualInputNeed.as_view()),name="anual_input_need"),
+            path('anual_input_need_create/',wrap(CreateAnualInputNeed.as_view()),name="create_anual_inp_need"),
             path('anual_input_need_update/<pk>/',wrap(UpdateAnualInputNeed.as_view()),name="update_anual_inp_need"),
             
-            path('input_demand_spply/<product>/',wrap(ListInputDemandSupply.as_view()),name="demand_supply_list"),
-            path('input_demand_supply_create/<product>/',wrap(CreateInputDemandSupply.as_view()),name="create_demand_supply"),
+            path('input_demand_spply/',wrap(ListInputDemandSupply.as_view()),name="demand_supply_list"),
+            path('input_demand_supply_create/',wrap(CreateInputDemandSupply.as_view()),name="create_demand_supply"),
             path('input_demand_supply_update/<pk>/',wrap(UpdateInputDemandSupply.as_view()),name="update_demand_supply"),
 
-            path('sales_performance/<product>/',wrap(ListSalesPerformance.as_view()),name="sales_performance"),
-            path('sales_performance_create/<product>/',wrap(CreateSalesPerformance.as_view()),name="create_sales_performance"),
+            path('sales_performance/',wrap(ListSalesPerformance.as_view()),name="sales_performance"),
+            path('sales_performance_create/',wrap(CreateSalesPerformance.as_view()),name="create_sales_performance"),
             path('sales_performance_update/<pk>/',wrap(UpdateSalesPerformance.as_view()),name="update_sales_performance"),
             
-            path('packaging/<product>/',wrap(ListPackaging.as_view()),name="packaging"),
-            path('create_packaging/<product>/',wrap(CreatePackaging.as_view()),name="create_packaging"),
+            path('packaging/',wrap(ListPackaging.as_view()),name="packaging"),
+            path('create_packaging/',wrap(CreatePackaging.as_view()),name="create_packaging"),
             path('upadte_packaging/<pk>/',wrap(UpdatePackaging.as_view()),name="update_packaging"),
 
 
@@ -266,11 +271,7 @@ class CustomAdminSite(admin.AdminSite):
             path("update_slider_image/<pk>/",wrap(UpdateSliderImage.as_view()),name="update_slider"),
             path("slider-image-list/",wrap(SliderImageList.as_view()),name="slider_list"),
 
-            # Company Report Paths
-            path("company-list-for-generating-report/",wrap(CompanyListForReport.as_view()),name="company_list_report"),
-            path("company-filter-by-sector/<sector>/",wrap(FilterCompanyByMainCategory.as_view()),name="filter_company_sector"),
-            path("company-filter-by-sub_sector/<category>/",wrap(FilterCompanyCategory.as_view()),name="filter_company_sub_sector"),
-            path("export-csv-file/<category>/<option>/",wrap(ExportCSV.as_view()),name="export_csv_file"),
+            
 
             path("company_list/",wrap(CompaniesView.as_view()),name="companies"),
             path("company_detail/<pk>/",wrap(CompaniesDetailView.as_view()),name="company_detail"),
@@ -300,6 +301,28 @@ class CustomAdminSite(admin.AdminSite):
              path('edit_document/<id>/', wrap(EditDocument.as_view()), name='edit_document'),
              path('list_document_by_category/<option>/', wrap(DocumentListing.as_view()), name = "list_document_by_category"),
 
+            # Company Report Paths
+            path("report-page/",wrap(ReportPage.as_view()),name="report_page"),
+            path("company-list-for-generating-report/",wrap(CompanyListForReport.as_view()),name="company_list_report"),
+            path("company-filter-by-sector/<sector>/",wrap(FilterCompanyByMainCategory.as_view()),name="filter_company_sector"),
+            path("company-filter-by-sub_sector/<category>/",wrap(FilterCompanyCategory.as_view()),name="filter_company_sub_sector"),
+            path("get-by-formof-ownership/<ownership_form>/",wrap(FilterByOwnership.as_view()),name='filter_by_ownership'),
+            path("get-by-established-year/<option>/",wrap(FilterCompanyByEstablishedYear.as_view()),name='filter_established_yr'),
+            path("get-by-espansion-plan/",wrap(FilterByExpansionPlan.as_view()),name="filter_expansion_plan"),
+            path("filter-by-trande-license/",wrap(FilterByTradeLicense.as_view()),name="filter_by_license"),
+            path("filter-by-working-hour/<working_hour>/",wrap(FilterByWorkingHour.as_view()),name="filter_by_working_hour"),
+            path("get-investment-capital/",wrap(InvestmentCapitalReportView.as_view()),name="get_by_inv_capital"),
+            path("get-production-capacity-data/",wrap(ProductionCapacityView.as_view()),name="get_production_capacity"),
+            path("get-capital-utilization-data/<option>/<sector>/",wrap(CapitalUtilizationReportSector.as_view()),name="get_capital_utilization"),
+            path("get-change-capital-utilization-data/<option>/<sector>/",wrap(ChangeInCapitalUtilization.as_view()),name="get_change_capital_utilization"),
+            path("get-gross-value-production-data/<option>/<sector>/",wrap(GrossValueOfProduction.as_view()),name="get_gvp_data"),
+            path('get-average-extraction-rate/<product>/',wrap(AverageExtractionRate.as_view()),name="average_extraction_rate"),
+            path("get-average-unit_price-data/<product>/",wrap(AverageUnitPrice.as_view()),name="get_unit_price"),
+            path('get-number-employees/<option>/<sector>/',wrap(NumberOfEmployees.as_view()),name="get_number_emp"),
+            path("get-number-employees-female/<option>/<sector>/",wrap(NumberOfEmployeesFemale.as_view()),name='get_num_emp_female'),
+            path("get-number-employees-foreign/<option>/<sector>/",wrap(NumberOfEmployeesForeign.as_view()),name="get_num_emp_foreign"),
+            path("export-csv-file/<category>/<option>/",wrap(ExportCSV.as_view()),name="export_csv_file"),
+            path("company_chart_category/",wrap(main_category_chart),name="category_chart"),
             # path('project-view/<id>',wrap(ProjectDetailView.as_view()),name='project_view'),
             # path('project-approve/<id>',wrap(ProjectApprove.as_view()),name="project_approve"),
             # path('pedning-project-list',wrap(ListPendingProjectAdmin.as_view()),name="pedning_project_list"),

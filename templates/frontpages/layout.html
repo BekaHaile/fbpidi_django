@@ -161,8 +161,15 @@
                             {%if user.is_authenticated%}
                             
 
-                            {%if user.is_customer%}
+                            
                            
+                            {%if user.is_customer%}
+                            <!-- <li class="dropdown">
+                                <a href="{% url 'cart_summary' %}" class="text-dark">
+                                    <i class="fa fa-shopping-cart mr-1"></i><span>{% trans "My Cart" %}</span>
+                                </a>
+
+                            </li> -->
                             <li class="dropdown">
                                 <a href="{% url 'mydash' %}" class="text-dark">
                                     <i class="fa fa-user mr-1"></i><span>{% trans "My Profile" %}</span>

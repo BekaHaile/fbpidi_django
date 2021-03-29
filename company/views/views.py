@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.core import serializers
 
 from company.models import *
-from accounts.models import CompanyAdmin,User
+from accounts.models import CompanyAdmin,UserProfile
 from product.models import Order,OrderProduct,Product
 
 from company.forms import *
@@ -68,8 +68,8 @@ class CreateCompanyProfile(LoginRequiredMixin,CreateView):
         return redirect("admin:create_company_detail",pk=company.id)
 
     def form_invalid(self,form):
-        print(form.errors)
-        return redirect("admin:index")
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_company_profile")
 
 
 class CreateMyCompanyDetail(LoginRequiredMixin,UpdateView):
@@ -102,12 +102,20 @@ class CreateMyCompanyDetail(LoginRequiredMixin,UpdateView):
         company = form.save(commit=False)
         company.category.set(form.cleaned_data.get('category'))
         company.management_tools.set(form.cleaned_data.get('management_tools'))
+        company.source_of_energy.set(form.cleaned_data.get('source_of_energy'))
+        company.support_required.set(form.cleaned_data.get('support_required'))
+        company.lab_test_analysis.set(form.cleaned_data.get('lab_test_analysis'))
+        company.lab_equipment.set(form.cleaned_data.get('lab_equipment'))
         company.certification.set(form.cleaned_data.get('certification'))
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
         company.save()
         messages.success(self.request,"Company Detail Information Added")
         return redirect("admin:update_company_info",pk=self.kwargs['pk'])
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_mycompany_detail",pk=self.kwargs['pk'])
 
 class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
     model = Company
@@ -139,12 +147,20 @@ class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
         company = form.save(commit=False)
         company.category.set(form.cleaned_data.get('category'))
         company.management_tools.set(form.cleaned_data.get('management_tools'))
+        company.source_of_energy.set(form.cleaned_data.get('source_of_energy'))
+        company.support_required.set(form.cleaned_data.get('support_required'))
+        company.lab_test_analysis.set(form.cleaned_data.get('lab_test_analysis'))
+        company.lab_equipment.set(form.cleaned_data.get('lab_equipment'))
         company.certification.set(form.cleaned_data.get('certification'))
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
         company.save()
         messages.success(self.request,"Company Detail Information Added")
         return redirect("admin:companies")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_company_detail",pk=self.kwargs['pk'])
 
 class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
     model = Company
@@ -176,18 +192,35 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
         company = form.save(commit=False)
         company.category.set(form.cleaned_data.get('category'))
         company.management_tools.set(form.cleaned_data.get('management_tools'))
+        company.source_of_energy.set(form.cleaned_data.get('source_of_energy'))
+        company.support_required.set(form.cleaned_data.get('support_required'))
+        company.lab_test_analysis.set(form.cleaned_data.get('lab_test_analysis'))
+        company.lab_equipment.set(form.cleaned_data.get('lab_equipment'))
         company.certification.set(form.cleaned_data.get('certification'))
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
         company.save()
         messages.success(self.request,"Company Detail Information Updated")
-        return redirect("admin:update_company_info",pk=self.kwargs['pk'])
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=self.kwargs['pk'])
+        else:
+            return redirect("admin:update_company_info",pk=self.kwargs['pk'])
 
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=self.kwargs['pk'])
+        else:
+            return redirect("admin:update_company_info",pk=self.kwargs['pk'])
     
 class CompaniesView(LoginRequiredMixin,ListView):
     model = Company
     template_name = "admin/company/companies.html"
     paginate_by = 8
+
+
+    def get_queryset(self):
+        return Company.objects.all().exclude(main_category="FBPIDI")
 
 class CompaniesDetailView(LoginRequiredMixin,UpdateView):
     model = Company
@@ -198,6 +231,17 @@ class CompaniesDetailView(LoginRequiredMixin,UpdateView):
         context = super().get_context_data(**kwargs)
         context['rating_form'] = CompanyRatingForm
         context['address_form'] = CompanyAddressForm
+        context['inv_capital_form'] = InvestmentCapitalForm
+        context['certificate_form'] = CertificateForm
+        context['employees_form'] = EmployeesForm
+        context['job_created_form'] = JobCreatedForm
+        context['edication_form'] = EducationStatusForm
+        context['female_posn_form'] = FemalesInPositionForm
+        context['src_amnt_input_form'] = SourceAmountIputsForm
+        context['destination_form'] = MarketDestinationForm
+        context['target_form'] = MarketTargetForm
+        context['consumption_form'] = PowerConsumptionForm
+        context['title'] = Company.objects.get(id=self.kwargs['pk']).name
         return context
 
     def get_form_kwargs(self,*args,**kwargs):
@@ -298,7 +342,7 @@ class CreateEmployees(LoginRequiredMixin,View):
         form = EmployeesForm(self.request.POST)
         if form.is_valid():
             try:
-                if Employees.objects.filter(year=form.cleaned_data.get("year_emp"),company=Company.objects.get(id=self.kwargs['company'])).exists():
+                if Employees.objects.filter(year=form.cleaned_data.get("year_emp"),employment_type=form.cleaned_data.get('employment_type'), company=Company.objects.get(id=self.kwargs['company'])).exists():
                     return JsonResponse({'error': True, 'message': 'Data For this Year Already Exists'})
                 else:
                     employee = form.save(commit=False)
@@ -318,7 +362,7 @@ class CreateJobsCreatedYearly(LoginRequiredMixin,View):
         form = JobCreatedForm(self.request.POST)
         if form.is_valid():
             try:
-                if JobOpportunities.objects.filter(year=form.cleaned_data.get("year_job"),company=Company.objects.get(id=self.kwargs['company'])).exists():
+                if JobOpportunities.objects.filter(year=form.cleaned_data.get("year_job"),job_type=form.cleaned_data.get('job_type'),company=Company.objects.get(id=self.kwargs['company'])).exists():
                     return JsonResponse({'error': True, 'message': 'Data For this Year Already Exists'})
                 else:
                     jobs = form.save(commit=False)
@@ -338,7 +382,7 @@ class CreateEducationStatus(LoginRequiredMixin,View):
         form = EducationStatusForm(self.request.POST)
         if form.is_valid():
             try:
-                if EducationalStatus.objects.filter(year=form.cleaned_data.get("year_edu"),company=Company.objects.get(id=self.kwargs['company'])).exists():
+                if EducationalStatus.objects.filter(year=form.cleaned_data.get("year_edu"),education_type=form.cleaned_data.get('education_type'),company=Company.objects.get(id=self.kwargs['company'])).exists():
                     return JsonResponse({'error': True, 'message': 'Data For this Year Already Exists'})
                 else:
                     education = form.save(commit=False)
@@ -450,21 +494,21 @@ class CheckYearField(LoginRequiredMixin,View):
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "employee":
             try:
-                employee = Employees.objects.get(company=company,year=self.kwargs['year']) 
+                employee = Employees.objects.get(company=company,year=self.kwargs['year'],employment_type=self.request.POST['emp_type']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[employee],ensure_ascii=False))[0]})
             except Employees.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "jobs_created":
             try:
-                jobs = JobOpportunities.objects.get(company=company,year=self.kwargs['year']) 
+                jobs = JobOpportunities.objects.get(company=company,year=self.kwargs['year'],job_type=self.request.POST['job_type']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[jobs],ensure_ascii=False))[0]})
             except JobOpportunities.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "education":
             try:
-                education = EducationalStatus.objects.get(company=company,year=self.kwargs['year']) 
+                education = EducationalStatus.objects.get(company=company,year=self.kwargs['year'],education_type=self.request.POST['edu_type']) 
                 return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[education],ensure_ascii=False))[0]})
             except EducationalStatus.DoesNotExist:
@@ -957,13 +1001,17 @@ class CreateSliderImage(LoginRequiredMixin,CreateView):
     template_name = "admin/company/slider_create_form.html"
 
     def form_valid(self,form):
-        image = form.save(commit=False)
-        image.company = Company.objects.get(id=self.kwargs['company'])
-        image.created_by= self.request.user
-        image.save()
-        messages.success(self.request,"Image Uploaded Successfully")
-        return redirect("admin:slider_list")
-    
+        try:
+            image = form.save(commit=False)
+            image.company = Company.objects.get(id=self.kwargs['company'])
+            image.created_by= self.request.user
+            image.save()
+            messages.success(self.request,"Image Uploaded Successfully")
+            return redirect("admin:slider_list")
+        except Exception as e:
+            messages.warning(self.request,e)
+            return redirect("admin:create_slider",company=self.kwargs['company'])    
+            
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
         return redirect("admin:create_slider",company=self.kwargs['company'])
@@ -986,88 +1034,7 @@ class UpdateSliderImage(LoginRequiredMixin,UpdateView):
         return redirect("admin:update_slider",pk=self.kwargs['pk'])
  
 #  Company Report Views
-class CompanyListForReport(LoginRequiredMixin,ListView):
-    model=Company
-    template_name = "admin/company/companies_for_report.html"
 
-    def get_queryset(self):
-        return Company.objects.all().exclude(main_category="FBPIDI")
-
-class FilterCompanyByMainCategory(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        try:
-            company = Company.objects.all() 
-            category = Category.objects.all()
-            if self.kwargs['sector'] == "all":
-                company = Company.objects.select_related().all().exclude(main_category="FBPIDI")
-            else:
-                company = Company.objects.select_related().filter(main_category=self.kwargs['sector'])
-                category = Category.objects.filter(category_type=self.kwargs['sector'])
-
-            return JsonResponse(
-                {
-                    'error':False,
-                    'sector':self.kwargs['sector'],
-                    'sub_sector':json.loads(serializers.serialize('json',category,ensure_ascii=False,
-                                fields=('id','category_type','category_name','icon',),
-                                use_natural_foreign_keys=True,use_natural_primary_keys=True,)),
-                    'data':json.loads(serializers.serialize('json',company,indent=2,
-                            use_natural_foreign_keys=True,use_natural_primary_keys=True,ensure_ascii=False))
-                }
-            )
-        except Exception as e:
-            return JsonResponse({"error":True,"message":e})
-
-class FilterCompanyCategory(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        try:
-            company = Company.objects.filter(
-                category=Category.objects.get(category_name=self.kwargs['category'])
-            ) 
-
-            return JsonResponse(
-                {
-                    'error':False,
-                    'sub_sector':self.kwargs['category'],
-                    'data':json.loads(serializers.serialize('json',company,indent=2,
-                            use_natural_foreign_keys=True,use_natural_primary_keys=True,ensure_ascii=False))
-                }
-            )
-        except Exception as e:
-            return JsonResponse({"error":True,"message":e})
-
-class ExportCSV(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        try:
-            companies=""
-            if self.kwargs['option'] == "main_category":
-                if self.kwargs['category'] == "all":
-                    companies = Company.objects.select_related().all().exclude(main_category="FBPIDI")
-                else:
-                    companies = Company.objects.select_related().filter(main_category=self.kwargs['category'])
-            elif self.kwargs['option'] == "sub_category":
-                companies = Company.objects.filter(
-                    category=Category.objects.get(category_name=self.kwargs['category'])
-                )
-            response = HttpResponse(content_type='text/csv',charset="utf-8")  
-            response['Content-Disposition'] = 'attachment; filename="COMPANY_DATA.csv"'  
-            writer = csv.writer(response)
-            writer.writerow(['name','Sector','Category','Products','Ownership Form','Established Year'])
-            for company in companies:
-                writer.writerow([
-                    company.name,company.main_category,get_categories(company),company.company_product.all().count(),
-                    company.ownership_form.name,company.established_yr
-                ])
-            return response             
-        except Exception as e:
-            messages.warning(self.request,e)
-            return redirect("admin:company_list_report")
-
-def get_categories(company):
-    str_cat = ""
-    for cat in company.category.all():
-        str_cat+=cat.category_name+", "
-    return str_cat
 
 
 
