@@ -87,7 +87,7 @@ Company Certificates Data
 						{%elif flag == "market_target"%}
 						action="{%url 'admin:update_target' pk=object.id%}"
 						{%elif flag == "market_destination"%}
-						action="{%url 'admin:create_destination' pk=object.id%}"
+						action="{%url 'admin:update_destination' pk=object.id%}"
 						{%elif flag == "certificate"%}
 						action="{%url 'admin:update_comp_certificate' pk=object.id%}"
 						{%endif%} method="POST" enctype="multipart/form-data" data-fouc>

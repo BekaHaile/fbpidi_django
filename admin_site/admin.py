@@ -62,6 +62,7 @@ from product.views.views import *
 from company.views.views import *
 from company.views.chart_views import *
 from company.views.report_views import *
+from company.views.company_views import *
 
 from accounts.forms import AdminLoginForm
 from chat.views import AdminChatList
@@ -312,10 +313,14 @@ class CustomAdminSite(admin.AdminSite):
             path("filter-by-working-hour/<working_hour>/",wrap(FilterByWorkingHour.as_view()),name="filter_by_working_hour"),
             path("get-investment-capital/",wrap(InvestmentCapitalReportView.as_view()),name="get_by_inv_capital"),
             path("get-production-capacity-data/",wrap(ProductionCapacityView.as_view()),name="get_production_capacity"),
-            path("get-capital-utilization-data/",wrap(CapitalUtilizationReportSector.as_view()),name="get_capital_utilization"),
-            path('get-number-employees/',wrap(NumberOfEmployees.as_view()),name="get_number_emp"),
-            path("get-number-employees-female/",wrap(NumberOfEmployeesFemale.as_view()),name='get_num_emp_female'),
-            path("get-number-employees-foreign/",wrap(NumberOfEmployeesForeign.as_view()),name="get_num_emp_foreign"),
+            path("get-capital-utilization-data/<option>/<sector>/",wrap(CapitalUtilizationReportSector.as_view()),name="get_capital_utilization"),
+            path("get-change-capital-utilization-data/<option>/<sector>/",wrap(ChangeInCapitalUtilization.as_view()),name="get_change_capital_utilization"),
+            path("get-gross-value-production-data/<option>/<sector>/",wrap(GrossValueOfProduction.as_view()),name="get_gvp_data"),
+            path('get-average-extraction-rate/<product>/',wrap(AverageExtractionRate.as_view()),name="average_extraction_rate"),
+            path("get-average-unit_price-data/<product>/",wrap(AverageUnitPrice.as_view()),name="get_unit_price"),
+            path('get-number-employees/<option>/<sector>/',wrap(NumberOfEmployees.as_view()),name="get_number_emp"),
+            path("get-number-employees-female/<option>/<sector>/",wrap(NumberOfEmployeesFemale.as_view()),name='get_num_emp_female'),
+            path("get-number-employees-foreign/<option>/<sector>/",wrap(NumberOfEmployeesForeign.as_view()),name="get_num_emp_foreign"),
             path("export-csv-file/<category>/<option>/",wrap(ExportCSV.as_view()),name="export_csv_file"),
             path("company_chart_category/",wrap(main_category_chart),name="category_chart"),
             # path('project-view/<id>',wrap(ProjectDetailView.as_view()),name='project_view'),
