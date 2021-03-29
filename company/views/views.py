@@ -1001,13 +1001,17 @@ class CreateSliderImage(LoginRequiredMixin,CreateView):
     template_name = "admin/company/slider_create_form.html"
 
     def form_valid(self,form):
-        image = form.save(commit=False)
-        image.company = Company.objects.get(id=self.kwargs['company'])
-        image.created_by= self.request.user
-        image.save()
-        messages.success(self.request,"Image Uploaded Successfully")
-        return redirect("admin:slider_list")
-    
+        try:
+            image = form.save(commit=False)
+            image.company = Company.objects.get(id=self.kwargs['company'])
+            image.created_by= self.request.user
+            image.save()
+            messages.success(self.request,"Image Uploaded Successfully")
+            return redirect("admin:slider_list")
+        except Exception as e:
+            messages.warning(self.request,e)
+            return redirect("admin:create_slider",company=self.kwargs['company'])    
+            
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
         return redirect("admin:create_slider",company=self.kwargs['company'])

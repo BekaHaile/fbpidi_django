@@ -20,8 +20,7 @@ def review_count(product):
 @register.filter
 def company_count(type):
     try:
-        co = Company.objects.all()
-        return co.count() 
+        return Company.objects.all().exclude(main_category="FBPIDI").count()
     except ObjectDoesNotExist:
         return 0
 

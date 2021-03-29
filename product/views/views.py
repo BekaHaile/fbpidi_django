@@ -966,7 +966,7 @@ class ProductByMainCategory(ListView):
                         brands.append(brand)
             return Product.objects.filter(brand__in=brands)
         elif self.kwargs['option'] == "Pharmaceuticals":
-            categories = Category.objects.filter(category_type="Food")
+            categories = Category.objects.filter(category_type="Pharmaceuticals")
             for category in categories:
                 for sub_cat in category.sub_category.all():
                     for brand in sub_cat.product_category.all():
@@ -980,6 +980,12 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = "frontpages/product/product_detail.html"
 
+    def get_object(self):
+        try:
+            return Product.objects.get(id=self.kwargs['pk'])
+        except Product.DoesNotExist:
+            return None
+    
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         context['related_products'] = Product.objects.filter(brand=Product.objects.get(id=self.kwargs['pk']).brand)[:6]

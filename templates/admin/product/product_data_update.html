@@ -115,7 +115,7 @@ Product Packaging Data Form
 			</div>
 	
 			<div class="card-body">
-				<form action="{%url 'admin:update_packaging' pk=object.id%}"
+				<form action="{%url 'admin:update_sales_performance' pk=object.id%}"
 				method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
 				 {{form|crispy}}
 				<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
