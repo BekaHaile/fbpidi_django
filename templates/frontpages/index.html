@@ -208,11 +208,9 @@
 							<a href="{%url 'product_detail' pk=product.id %}" class="item-card2-icons-l"><i class="fa fa-cutlery"></i></a>
 
 						</div>
-						{%if product.company.main_category == "Pharmaceuticals"%}
-						<div class="blog--category">{% print_translated product.pharmacy_category.category_name product.pharmacy_category.category_name_am LANGUAGE_CODE%}</div>
-						{%else%}
-						<div class="blog--category">{% print_translated product.fandb_category.product_type.category_name.category_name product.fandb_category.product_type.category_name.category_name_am LANGUAGE_CODE%}</div>
-						{%endif%}
+						
+						<div class="blog--category">{% print_translated product.brand.product_type.category_name.category_name product.brand.product_type.category_name.category_name_am LANGUAGE_CODE%}</div>
+						
 					</div>
 					<div class="card-body pb-0">
 						<div class="item-card2">
@@ -1249,7 +1247,7 @@
 								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">
 									{% print_translated category.category_name category.category_name_am LANGUAGE_CODE%}</a>
 								<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">
-									{{category.id|count_food_and_beverage_products}}</span>
+									{{category.id|product_count_bycategory}}</span>
 							</li>
 							{%endif%}
 							{%endfor%}
@@ -1274,7 +1272,7 @@
 							<li class="">
 								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.category_name category.category_name_am LANGUAGE_CODE%}</a>
 								<span
-									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|count_food_and_beverage_products}}</span>
+									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_bycategory}}</span>
 							</li>
 							{%endif%}
 							{%endfor%}
@@ -1299,7 +1297,7 @@
 							<li class="">
 								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.category_name category.category_name_am LANGUAGE_CODE%}</a>
 								<span
-									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|pharmacy_product_count}}</span>
+									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_bycategory}}</span>
 							</li>
 							{%endif%}
 							{%endfor%}

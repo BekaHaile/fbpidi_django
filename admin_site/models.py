@@ -59,6 +59,8 @@ class CompanyDropdownsMaster(models.Model):
         ('Source of Energy','Source of Energy'),
         ('Areas of Major Challenges','Areas of Major Challenges'),
         ('Industry Status Checklists','Industry Status Checklists'),
+        ('Laboratory Test Analysis','Laboratory Test Analysis'),
+        ('Laboratory Equipment','Laboratory Equipment'),
     ),max_length=200,verbose_name="Check List Types")
     created_date = models.DateTimeField(auto_now_add=True,editable=False)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,
@@ -74,6 +76,13 @@ class CompanyDropdownsMaster(models.Model):
     class Meta:
         ordering = ('-created_date',)
 
+class RegionMaster(models.Model):
+    name = models.CharField(max_length=255,verbose_name="Region Name in English")
+    name_am = models.CharField(max_length=255,verbose_name="Region Name in Amharic")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
 
 class ProjectDropDownsMaster(models.Model):
     name = models.CharField(max_length=200)

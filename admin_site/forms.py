@@ -1,6 +1,6 @@
 from django import forms
 
-from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster
+from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster,RegionMaster
 
 
 class CompanyDropdownsMasterForm(forms.ModelForm):
@@ -11,7 +11,16 @@ class CompanyDropdownsMasterForm(forms.ModelForm):
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Lookup/Dropdown Name'}),
             'chk_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
         }
-    
+
+class RegionMasterForm(forms.ModelForm):
+    class Meta:
+        model=RegionMaster
+        fields = ('name','name_am',)
+        widgets={
+            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Region Name in English'}),
+            'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Region Name in Amharic'}),
+        }
+
 class ProjectDropdownsMasterForm(forms.ModelForm):
     class Meta:
         model=ProjectDropDownsMaster

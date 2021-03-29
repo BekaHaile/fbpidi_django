@@ -1,5 +1,5 @@
 from django.urls import path,include
-from product.views import  (AddToCartView,CartSummary,DecrementFromCart,CheckoutView,
+from product.views.views import  (AddToCartView,CartSummary,DecrementFromCart,CheckoutView,
  ProductDetailView, ProductByCategoryView, ProductByMainCategory,CreateReview)
 
 

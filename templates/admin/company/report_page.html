@@ -1,0 +1,409 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{%load admin_template_tags%}
+{% block extrastyle %}
+
+	<!-- Theme JS files -->
+	 <script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+	<!--<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/datatables_extension_buttons_html5.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/datatables_extension_buttons_print.js"></script> -->
+
+
+	<script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+	<script src=" https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js "></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+	 
+	<!-- /theme JS files -->
+	<style>
+		li{
+			list-style-type: none;
+		}
+	</style>
+ 
+{% endblock %}
+
+{%block pagename%}{%if flag == 'capital_utilization'%}Capital Utilization{%elif flag == 'inv_cap'%}Total Investment Capital
+{%elif flag == 'num_employees'%}
+Number Of Employees By Sector
+{%elif flag == 'num_employees_female'%}
+Number Of Female Employees By Sector
+{%elif flag == 'num_employees_foreign'%}
+Number of Foreign Employees By Sector
+ {%endif%} Report Data {%endblock%}
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+				{%if flag == 'inv_cap'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Total Investment capital by sector</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Sectors</th>
+									<th>Data</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Food Sector</td>
+									<td>ETB {{food_inv_cap}}</td>
+								</tr>
+								<tr>
+									<td>Beverage Sector</td>
+									<td>ETB {{bev_inv_cap}}</td>
+								</tr>
+								<tr>
+									<td>Pharmaceutical Sector</td>
+									<td>ETB {{pharm_inv_cap}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{%elif flag ==  'production_cap'%}
+				<div class="card">
+					<div class="card-body">
+						<h5 class="mb-3">Production capacity by product per year </h5>
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Data</th>
+									<th>Installed Production Capacity</th>
+									<th>Actual Production Capacity</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										{%for l in labels%}
+										<li>{{l}}</li><hr>
+										{%endfor%}
+									</td>
+									<td>
+										{%for d in data%}
+										<li>{{d}}</li><hr>
+										{%endfor%}
+									</td>
+									<td>
+										{%for d2 in data_a%}
+										<li>{{d2}}</li><hr>
+										{%endfor%}
+									</td>
+								</tr>
+								 
+							</tbody>
+						</table>
+						 
+					</div>
+				</div>
+				{%elif flag == 'capital_utilization'%}
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Food Sectors</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Capital Utilization Data</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in food_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td>
+									<td>{{food_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div> 
+				</div>
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Beverage Sectors Sectors</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Capital Utilization Data</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in bev_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td>
+									<td>{{bev_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Pharmaceutical Sectors</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Capital Utilization Data</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in pharm_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td>
+									<td>{{pharm_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div> 
+				</div>
+				{%elif flag == 'num_employees' or flag == 'num_employees_female'%}
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Food Sectors</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Permanent Employees</th>
+									<th>Temporary Employees</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in food_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.perm_emp}}</td>
+									<td>{{fd.temp_emp}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td>
+									<td></td><td></td>
+									<td>{{food_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div> 
+				</div>
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Beverage Sectors Sectors</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Permanent Employees</th>
+									<th>Temporary Employees</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in bev_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.perm_emp}}</td>
+									<td>{{fd.temp_emp}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td><td></td><td></td>
+									<td>{{bev_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Pharmaceutical Sectors</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Permanent Employees</th>
+									<th>Temporary Employees</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in pharm_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.perm_emp}}</td>
+									<td>{{fd.temp_emp}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td><td></td><td></td>
+									<td>{{pharm_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div> 
+				</div>
+				{%elif flag == 'num_employees_foreign'%}
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Food Sectors</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Female Employees</th>
+									<th>Male Employees</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in food_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.for_female}}</td>
+									<td>{{fd.for_male}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td>
+									<td></td><td></td>
+									<td>{{food_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div> 
+				</div>
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Beverage Sectors Sectors</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Female Employees</th>
+									<th>Male Employees</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in bev_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.for_female}}</td>
+									<td>{{fd.for_male}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td><td></td><td></td>
+									<td>{{bev_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Pharmaceutical Sectors</h5>
+					</div>
+					<div class="card-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Female Employees</th>
+									<th>Male Employees</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in pharm_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.for_female}}</td>
+									<td>{{fd.for_male}}</td>
+									<td>{{fd.data}}</td>
+								</tr>
+								{%endfor%}
+								<tr>
+									<td>Total</td><td></td><td></td>
+									<td>{{pharm_data|get_sum}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div> 
+				</div>
+				{%endif%}
+			</div>
+			<!-- /content area -->
+			<script>
+				$(document).ready(function(){
+					$('.datatable-basic').DataTable(
+						{
+							dom: 'Bfrtip',
+							buttons: [
+								'csv', 'excel', 'pdf', 'print'
+							]
+						}
+					);
+				});
+			</script>
+			 
+{%endblock%}

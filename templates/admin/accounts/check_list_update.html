@@ -27,6 +27,8 @@
 							action="{%url 'admin:update_dose' pk=object.id %}"
 							{%elif flag == 'product_dosage' %}
 							action="{%url 'admin:update_dosage' pk=object.id %}"
+							{%elif flag == 'product_dosage' %}
+							action="{%url 'admin:region_dropdown' pk=object.id %}"
 							
 							{%endif%}
 							 method="POST">{%csrf_token%}

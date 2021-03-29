@@ -2,8 +2,8 @@ from django import template
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
 
-from company.models import Company,SubCategory
-from product.models import Product,Review,Brand
+from company.models import Company
+from product.models import SubCategory,Product,Review
 from admin_site.models import Category
 from accounts.models import UserProfile
 import datetime
@@ -59,15 +59,16 @@ def company_count_bycategory(category):
 @register.filter
 def product_count_bycategory(category):
     category = Category.objects.get(id=category)
-    if category.category_type == "Pharmaceuticals":
-        return Product.objects.filter(pharmacy_category=category).count()
-    elif category.category_type == "Food" or category.category_type == "Beverage":
-        brands = []
-        sub_categories = category.sub_category.all()
-        for sub_cat in sub_categories:
-            for brand in sub_cat.product_category.all():
-                brands.append(brand)
-        return Product.objects.filter(fandb_category__in=brands).count()
+    brands = []
+    sub_categories = category.sub_category.all()
+    for sub_cat in sub_categories:
+        for brand in sub_cat.product_category.all():
+            brands.append(brand)
+    return Product.objects.filter(brand__in=brands).count()
+    # if category.category_type == "Pharmaceuticals":
+    #     return Product.objects.filter(pharmacy_category=category).count()
+    # elif category.category_type == "Food" or category.category_type == "Beverage":
+        
 
 
 @register.filter
