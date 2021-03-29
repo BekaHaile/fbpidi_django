@@ -34,52 +34,226 @@ class ReportPage(LoginRequiredMixin,View):
 
 class CapitalUtilizationReportSector(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        # capital utilization = (Sum(total_prodn_3yrs)/Sum(actual_produn_capacity*260))*100
+        # capital utilization = (Sum(total_prodn_thisyrs)/Sum(actual_produn_capacity*260))*100
         # Sectors,Sub-Sectors and Products
-        food_company_list = []
-        bev_company_list = []
-        pharm_company_list = []
+        capital_util_data = []
         pp_today=0
         pp_last=0
         pp_prev = 0
         context = {}         
-        for company in Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals']):
-            production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year)
-            production_performance_this_last = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1)
-            production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-2)
-            for p in production_performance_this_year:
-                pp_today += p.production_amount
+        companies = None
+        if self.kwargs['option'] == 'by_sector':
+            if self.kwargs['sector'] == "all":
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+            context['title'] = self.kwargs['sector'] 
+            context['sector'] = self.kwargs['sector'] 
+        elif self.kwargs['option'] == 'by_sub_sector':
+            companies = Company.objects.filter(category=self.kwargs['sector'])
+            context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
+            context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+            context['products'] = SubCategory.objects.filter(category_name=self.kwargs['sector'])
+        elif self.kwargs['option'] == 'product':
+            pass
+        if companies == None:
+            context['flag'] = "capital_utilization"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
+            return render(self.request,"admin/company/report_page.html",context)
+        else:
+            for company in companies:
+                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year)
+                production_performance_this_last = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1)
+                production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-2)
+                for p in production_performance_this_year:
+                    pp_today += p.production_amount
+                
+                for p in production_performance_this_last:
+                    pp_last += p.production_amount
+
+                for p in production_performance_this_pre:
+                    pp_prev += p.production_amount
+
+                total_apc = 0
+                for pco in ProductionCapacity.objects.filter(company=company):
+                    total_apc += (pco.actual_prdn_capacity*260)
+
+                # if company.main_category == "Food":
+                if total_apc == 0:
+                    capital_util_data.append({'company':company.name,'data':(float((pp_today)/1))*100})
+                else:
+                    capital_util_data.append({'company':company.name,'data':(float((pp_today)/total_apc))*100})
+            context['capital_util_data'] = capital_util_data
+            context['flag'] = "capital_utilization"
             
-            for p in production_performance_this_last:
-                pp_last += p.production_amount
+            return render(self.request,"admin/company/report_page.html",context)
 
-            for p in production_performance_this_pre:
-                pp_prev += p.production_amount
+class ChangeInCapitalUtilization(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        # capital utilization = (Sum(total_prodn_3-total_prodn_1yrs)/Sum(actual_produn_capacity*260))*100
+        # Sectors,Sub-Sectors and Products
+        change_capital_util_data = []
+        pp_today=0
+        pp_prev = 0
+        context = {}         
+        companies = None
+        if self.kwargs['option'] == 'by_sector':
+            if self.kwargs['sector'] == "all":
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+            context['title'] = self.kwargs['sector'] 
+            context['sector'] = self.kwargs['sector'] 
+        elif self.kwargs['option'] == 'by_sub_sector':
+            companies = Company.objects.filter(category=self.kwargs['sector'])
+            context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
+            context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+            context['products'] = SubCategory.objects.filter(category_name=self.kwargs['sector'])
+        elif self.kwargs['option'] == 'product':
+            pass
+        if companies == None:
+            context['flag'] = "change_capital_utilization"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fixe Your Request,There is issue in the request")
+            return render(self.request,"admin/company/report_page.html",context)
+        else:
+            for company in companies:
+                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year)
+                production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1)
+                for p in production_performance_this_year:
+                    pp_today += p.production_amount
+                
+                for p in production_performance_this_pre:
+                    pp_prev += p.production_amount
 
-            total_apc = 0
-            for pco in ProductionCapacity.objects.filter(company=company):
-                total_apc += (pco.actual_prdn_capacity*260)
+                total_apc = 0
+                for pco in ProductionCapacity.objects.filter(company=company):
+                    total_apc += (pco.actual_prdn_capacity*260)
 
-            if company.main_category == "Food":
                 if total_apc == 0:
-                    food_company_list.append({'company':company.name,'data':(float((pp_today+pp_last+pp_prev)/1))*100})
+                    change_capital_util_data.append({'company':company.name,'data':float((pp_prev-pp_today)/1)})
                 else:
-                    food_company_list.append({'company':company.name,'data':(float((pp_today+pp_last+pp_prev)/total_apc))*100})
-            elif company.main_category == "Beverage":
-                if total_apc == 0:
-                    bev_company_list.append({'company':company.name,'data':(float((pp_today+pp_last+pp_prev)/1))*100})
-                else:
-                    bev_company_list.append({'company':company.name,'data':(float((pp_today+pp_last+pp_prev)/total_apc))*100})
-            elif company.main_category == "Pharmaceuticals":
-                if total_apc == 0:
-                    pharm_company_list.append({'company':company.name,'data':(float((pp_today+pp_last+pp_prev)/1))*100})
-                else:
-                    pharm_company_list.append({'company':company.name,'data':(float((pp_today+pp_last+pp_prev)/total_apc))*100})
-        context['food_data'] = food_company_list
-        context['bev_data'] = bev_company_list
-        context['pharm_data'] = pharm_company_list
-        context['flag'] = "capital_utilization"
+                    change_capital_util_data.append({'company':company.name,'data':float((pp_prev-pp_today)/total_apc)})
+            context['change_capital_util_data'] = change_capital_util_data
+            context['flag'] = "change_capital_utilization"
+            
+            return render(self.request,"admin/company/report_page.html",context)
+
+class AverageExtractionRate(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        products = None
+        average_extraction_data = []
+        context = {}
+        if self.kwargs['product'] == "all":
+            products = SubCategory.objects.all()
+            context['title']= "All Products"
+        else:
+            products = SubCategory.objects.filter(id=self.kwargs['product'])
+            context['title']= SubCategory.objects.get(id=self.kwargs['product']).sub_category_name
+        extn_rate = 0
+        for product in products:
+            for pcd in ProductionCapacity.objects.filter(product=product):
+                extn_rate+=pcd.extraction_rate
+            average_extraction_data.append({'product':product.sub_category_name,'data':extn_rate})
+        context['extn_data']=average_extraction_data
+        context['flag'] = "extraction_data"
+        context['products'] = SubCategory.objects.all()
         return render(self.request,"admin/company/report_page.html",context)
+
+
+class GrossValueOfProduction(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        # Gross value of production = (Sum(total_prodn_thisyrs)/Sum(actual_produn_capacity*260))*100
+        # Sectors,Sub-Sectors and Products
+        gvp_data = []
+        pp_today=0
+        pp_last=0
+        pp_prev = 0
+        context = {}         
+        companies = None
+        if self.kwargs['option'] == 'by_sector':
+            if self.kwargs['sector'] == "all":
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+            context['title'] = self.kwargs['sector'] 
+            context['sector'] = self.kwargs['sector'] 
+        elif self.kwargs['option'] == 'by_sub_sector':
+            companies = Company.objects.filter(category=self.kwargs['sector'])
+            context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
+            context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+            context['products'] = SubCategory.objects.filter(category_name=self.kwargs['sector'])
+        elif self.kwargs['option'] == 'product':
+            pass
+
+        if companies == None:
+            context['flag'] = "gross_vp_data"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fixe Your Request,There is issue in the request")
+            return render(self.request,"admin/company/report_page.html",context)
+        else:
+            for company in companies:
+                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year)
+                production_performance_this_last = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1)
+                production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-2)
+                for p in production_performance_this_year:
+                    pp_today += p.sales_value
+                
+                for p in production_performance_this_last:
+                    pp_last += p.sales_value
+
+                for p in production_performance_this_pre:
+                    pp_prev += p.sales_value
+                gvp_data.append({'company':company.name,'data':float(pp_today+pp_last+pp_prev) })
+
+            context['gvp_data'] = gvp_data
+            context['flag'] = "gross_vp_data"
+            
+            return render(self.request,"admin/company/report_page.html",context)
+
+
+class AverageUnitPrice(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        products = None
+        average_price_data = []
+        context = {}
+        if self.kwargs['product'] == "all":
+            products = SubCategory.objects.all()
+            context['title']= "All Products"
+        else:
+            products = SubCategory.objects.filter(id=self.kwargs['product'])
+            context['title']= SubCategory.objects.get(id=self.kwargs['product']).sub_category_name
+        price_total = 0
+        prodn_total = 0
+        for product in products:
+            for aup in ProductionAndSalesPerformance.objects.filter(product=product,activity_year=this_year):
+                price_total+=aup.sales_value
+                prodn_total+=aup.production_amount
+            
+            pup = 0
+            if prodn_total == 0:
+                pup = float(price_total/1)
+            else:
+                pup = float(price_total/prodn_total)
+
+            average_price_data.append({'product':product.sub_category_name,'data':pup})
+        context['price_data']=average_price_data
+        context['flag'] = "unit_price_data"
+        context['products'] = SubCategory.objects.all()
+        return render(self.request,"admin/company/report_page.html",context)
+
+    
+
 
 class InvestmentCapitalReportView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -117,12 +291,13 @@ class ProductionCapacityView(LoginRequiredMixin,View):
         queryset = ProductionCapacity.objects.values('product').annotate(Sum('install_prdn_capacity')).order_by('product')
         for entry in queryset:
             labels.append(SubCategory.objects.get(id=entry['product']).sub_category_name)
-            data.append(entry['install_prdn_capacity__sum'])
+            data.append({'data':entry['install_prdn_capacity__sum'],'unit':SubCategory.objects.get(id=entry['product']).uom})
+            
         
         queryset2 = ProductionCapacity.objects.values('product').annotate(Sum('actual_prdn_capacity')).order_by('product')
         for entry in queryset2:
             labels2.append(SubCategory.objects.get(id=entry['product']).sub_category_name)
-            data2.append(entry['actual_prdn_capacity__sum'])
+            data2.append({'data':entry['actual_prdn_capacity__sum'],'unit':SubCategory.objects.get(id=entry['product']).uom})
 
         context['data'] = data
         context['labels'] = labels
@@ -289,78 +464,140 @@ class NumberOfEmployees(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         total_perm_emp = 0
         total_temp_emp=0
-        total_for_emp=0
-        food_data=[]
-        bev_data=[]
-        pharm_data=[]
-        for company in Company.objects.filter(main_category__in=['Food','Beverage','Pharmaceuticals']):
-            employees_perm = Employees.objects.filter(company=company,employment_type__icontains="Permanent")
-            employees_temp = Employees.objects.filter(company=company,employment_type__icontains="Temporary")
-            employees_foreign = Employees.objects.filter(company=company,employment_type__icontains="Foreign")
-            
-            for ep in employees_perm:
-                total_perm_emp += (ep.male+ep.female)
-            
-            for et in employees_temp:
-                total_temp_emp += (et.male+et.female)
-            
-            for ef in employees_foreign:
-                total_for_emp += (ef.male+ef.female)
-
-            total = total_perm_emp+total_temp_emp+total_for_emp
-
-            if company.main_category == "Food":
-                food_data.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
-            elif company.main_category == "Beverage":
-                bev_data.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
-            elif company.main_category == "Pharmaceuticals":
-                pharm_data.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
-        context = {
-            'food_data':food_data,'bev_data':bev_data,'pharm_data':pharm_data,
-            'flag':"num_employees"
-        }
-        return render(self.request,'admin/company/report_page.html',context)
+        emp_data_total=[]
+        companies = None
+        context = {}
+        if self.kwargs['option'] == 'by_sector':
+            if self.kwargs['sector'] == "all":
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+            context['title'] = self.kwargs['sector']
+            context['sector'] = self.kwargs['sector'] 
+        elif self.kwargs['option'] == 'by_sub_sector':
+            companies = Company.objects.filter(category=self.kwargs['sector'])
+            context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
+            context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+        
+        if companies == None:
+            context['flag'] = "num_employees"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
+            return render(self.request,"admin/company/report_page.html",context)
+        else:
+            for company in companies:
+                employees_perm = Employees.objects.filter(company=company,employment_type__icontains="Permanent")
+                employees_temp = Employees.objects.filter(company=company,employment_type__icontains="Temporary")
+                
+                for ep in employees_perm:
+                    total_perm_emp += (ep.male+ep.female)
+                
+                for et in employees_temp:
+                    total_temp_emp += (et.male+et.female)
+                
+                total = total_perm_emp+total_temp_emp
+                emp_data_total.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
+            context['total_emp_data'] = emp_data_total
+            context['flag'] = "num_employees"
+            return render(self.request,'admin/company/report_page.html',context)
 
 class NumberOfEmployeesFemale(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         total_perm_emp = 0
         total_temp_emp=0
-        food_data=[]
-        bev_data=[]
-        pharm_data=[]
-        for company in Company.objects.filter(main_category__in=['Food','Beverage','Pharmaceuticals']):
-            employees_perm = Employees.objects.filter(company=company,employment_type__icontains="Permanent")
-            employees_temp = Employees.objects.filter(company=company,employment_type__icontains="Temporary")
-            
-            for ep in employees_perm:
-                total_perm_emp += (ep.female)
-            
-            for et in employees_temp:
-                total_temp_emp += (et.female)
-            
-            total = total_perm_emp+total_temp_emp
-
-            if company.main_category == "Food":
-                food_data.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
-            elif company.main_category == "Beverage":
-                bev_data.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
-            elif company.main_category == "Pharmaceuticals":
-                pharm_data.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
-        context = {
-            'food_data':food_data,'bev_data':bev_data,'pharm_data':pharm_data,
-            'flag':"num_employees_female"
-        }
-        return render(self.request,'admin/company/report_page.html',context)
+        femal_emp_data=[]
+        companies = None
+        context = {}
+        if self.kwargs['option'] == 'by_sector':
+            if self.kwargs['sector'] == "all":
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+            context['title'] = self.kwargs['sector']
+            context['sector'] = self.kwargs['sector'] 
+        elif self.kwargs['option'] == 'by_sub_sector':
+            companies = Company.objects.filter(category=self.kwargs['sector'])
+            context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
+            context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+        if companies == None:
+            context['flag'] = "num_employees"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
+            return render(self.request,"admin/company/report_page.html",context)
+        else:
+            for company in companies:
+                employees_perm = Employees.objects.filter(company=company,employment_type__icontains="Permanent")
+                employees_temp = Employees.objects.filter(company=company,employment_type__icontains="Temporary")
+                
+                for ep in employees_perm:
+                    total_perm_emp += (ep.female)
+                
+                for et in employees_temp:
+                    total_temp_emp += (et.female)
+                
+                total = total_perm_emp+total_temp_emp
+                femal_emp_data.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
+                
+            context['total_emp_data'] = femal_emp_data
+            context['flag'] = "num_employees_female"
+            return render(self.request,'admin/company/report_page.html',context)
 
 
 class NumberOfEmployeesForeign(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         total_for_emp_m=0
         total_for_emp_f=0
+        for_emp_data=[]
+        companies = None
+        context = {}
+        if self.kwargs['option'] == 'by_sector':
+            if self.kwargs['sector'] == "all":
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+            context['title'] = self.kwargs['sector']
+            context['sector'] = self.kwargs['sector'] 
+        elif self.kwargs['option'] == 'by_sub_sector':
+            companies = Company.objects.filter(category=self.kwargs['sector'])
+            context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
+            context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+        if companies == None:
+            context['flag'] = "num_employees_foreign"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
+            return render(self.request,"admin/company/report_page.html",context)
+        else:
+            for company in companies:
+                employees_foreign = Employees.objects.filter(company=company,employment_type__icontains="Foreign")
+                            
+                for ef in employees_foreign:
+                    total_for_emp_m += (ef.male)
+                    total_for_emp_f += (ef.female)
+
+                total = total_for_emp_m+total_for_emp_f
+                for_emp_data.append({'company':company.name,'data':total,'for_male':total_for_emp_m,'for_female':total_for_emp_f})
+                 
+            context['for_emp_data'] = for_emp_data
+            context['flag'] = "num_employees_foreign"
+            return render(self.request,'admin/company/report_page.html',context)
+
+class NumberOfJobsCreatedBySubSector(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        total_for_emp_m=0
+        total_for_emp_f=0
         food_data=[]
         bev_data=[]
         pharm_data=[]
-        for company in Company.objects.filter(main_category__in=['Food','Beverage','Pharmaceuticals']):
+        for company in Company.objects.filter(category=self.kwargs['sub_sector']):
             employees_foreign = Employees.objects.filter(company=company,employment_type__icontains="Foreign")
                         
             for ef in employees_foreign:

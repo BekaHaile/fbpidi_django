@@ -64,7 +64,7 @@
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
-						<li class="nav-item"><a href="{%url 'admin:get_capital_utilization'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+						<li class="nav-item"><a href="{%url 'admin:get_capital_utilization' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
 
 					<div class="tab-content">
@@ -77,7 +77,59 @@
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
-						<li class="nav-item"><a href="{%url 'admin:get_number_emp'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+						<li class="nav-item"><a href="{%url 'admin:get_change_capital_utilization' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Change in Capital Utilization Report Data
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:average_extraction_rate' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Average Extraction Rate
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_gvp_data' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Gross Value of Production Data
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_unit_price' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Average Unit Price
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_number_emp' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
 
 					<div class="tab-content">
@@ -90,7 +142,7 @@
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
-						<li class="nav-item"><a href="{%url 'admin:get_num_emp_female'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+						<li class="nav-item"><a href="{%url 'admin:get_num_emp_female' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
 
 					<div class="tab-content">
@@ -103,7 +155,7 @@
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
-						<li class="nav-item"><a href="{%url 'admin:get_num_emp_foreign'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+						<li class="nav-item"><a href="{%url 'admin:get_num_emp_foreign' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
 
 					<div class="tab-content">

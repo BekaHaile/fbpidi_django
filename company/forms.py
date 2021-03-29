@@ -828,7 +828,7 @@ class SliderImageForm(forms.ModelForm):
     
     @atomic
     def save(self,commit=True):
-        slider = super(SliderImageForm, self).save()
+        slider = super(SliderImageForm, self).save(commit=commit)
 
         x = self.cleaned_data.get('x')
         y = self.cleaned_data.get('y')

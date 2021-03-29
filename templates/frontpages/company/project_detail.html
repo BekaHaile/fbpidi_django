@@ -33,7 +33,9 @@
 							<div class="card-body">
 								<a href="#" class="text-body"><h3 class="font-weight-semibold text-capitalize">{{project.project_name}}</h3></a>
 								<div class="demo-gallery">
+									{%if project.image%}
 									<img class="img-responsive" src="{{project.image.url}}" alt="Thumb-1">
+									{%endif%}
 
 								</div>
 								<div class="item7-card-desc d-flex mb-2 mt-3">
