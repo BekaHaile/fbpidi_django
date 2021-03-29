@@ -62,6 +62,7 @@ from product.views.views import *
 from company.views.views import *
 from company.views.chart_views import *
 from company.views.report_views import *
+from company.views.company_views import *
 
 from accounts.forms import AdminLoginForm
 from chat.views import AdminChatList
