@@ -7,9 +7,9 @@ from django.http import Http404
 from django.utils import timezone
 
 
-from company.models import Company,CompanyStaff
+from company.models import Company,CompanyStaff, CompanyMessage
 from product.models import Product
-from chat.models import  ChatMessage, ChatGroup,ChatMessages
+from chat.models import  ChatMessage
 from chat import views
 
 
@@ -52,8 +52,12 @@ def user_create_button(user):
 
 # count all unread messages
 @register.simple_tag
-def count_unread_messages(user):
-    return ChatMessages.count_unread_messages(user)
+def count_unread_chats(user):
+    return ChatMessages.count_unread_chats(user)
+
+@register.simple_tag
+def count_unread_inbox(user):
+    return CompanyMessage.objects.filter(company = user.get_company).count()
 
 @register.simple_tag
 def tag_edit(string):

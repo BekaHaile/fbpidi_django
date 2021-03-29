@@ -38,7 +38,7 @@ urlpatterns = [
     path("tender_detail/", ApiTenderDetail.as_view(), name = "api_tender_detail"),
     
     path("faqs/",ApiFaq.as_view(),name="api_faq"),
-    path("blog-list/",ApiBlogList.as_view(),name="api_blog_grid_right"),
+    path("blog-list/",ApiBlogList.as_view(),name="api_cusomer_blog_list"),
     path("blog-details/",ApiBlogDetail.as_view(),name="api_blog_details"),
     path("blog-comment/",ApiCreateBlogComment,name="api_comment"),
 

@@ -179,14 +179,14 @@
                             <li  class="nav-item dropdown">
                                 <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
                                 
-                                    <a href = "{% url 'admin:index' %} "><i class="fa fa-envelope" ></i><span>{% trans "My Messages" %}</span></a>
+                                    <a href = "{% url 'admin:admin_chat_list' %} "><i class="fa fa-envelope" ></i><span>{% trans "My Messages" %}</span></a>
                                     <span id = "num_unread_messages" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
                                 </a>
                                 
                                 
                                 <div style = "padding: 10px;   width: 300px;" class = "dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
                                     <div class="dropdown-content-header">
-                                        <span class="font-weight-semibold">{% trans " List of Messages" %}</span>
+                                        <span class="font-weight-semibold">{% trans "List of Messages" %}</span>
                                         <a href="#" class="text-default"><i class="icon-compose"></i></a>
                                     </div>
                                     <div class="dropdown-content-body dropdown-scrollable">
@@ -303,7 +303,7 @@
                         </ul>
                     </li>
                     <li><a href="{%url 'company_projects' pk=object.id%}">{% trans "Project" %}</a> </li>
-                    <li><span></span><a href="{% url 'company_contact' pk=object.id %}"> {% trans "Contact Us" %}<span
+                    <li><span></span><a href="{% url 'contact_company' pk=object.id %}"> {% trans "Contact Us" %}<span
                             class="wsarrow"></span></a></li>
 
 
@@ -318,6 +318,31 @@
     </div>
 </div>
 {%block content%}{%endblock%}
+
+
+<!-- Newsletter-->
+<section class="sptb border-top bg-white mt-5">
+    <div class="container">
+        <div class="section-title center-block text-center">
+            <h2>Subscribe To Our Newsletter</h2>
+            <p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+                <div class="input-group sub-input mt-0">
+                    <input type="text" id="email_field" class="form-control input-lg " placeholder="Enter your Email">
+                    <div class="input-group-append ">
+                        <button type="button" onclick="subscribe()" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+                            {%  trans "Subscribe" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/Newsletter-->
+
 <section>
     <footer class="bg-dark-purple text-white">
         <div class="footer-main border-bottom">
@@ -371,7 +396,7 @@
                         </ul>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-md-12">
-                        <h6 class="mb-2 mt-6 mt-xl-0">Subscribe</h6>
+                        <!-- <h6 class="mb-2 mt-6 mt-xl-0">Subscribe</h6>
                         <div class="input-group">
                             <input type="text" class="form-control br-tl-3  br-bl-3" placeholder="Email">
                             <div class="input-group-append ">
@@ -379,7 +404,7 @@
                                     Subscribe
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
                         <h6 class="mb-2 mt-5">Payments</h6>
                         <ul class="payments mb-0">
                             <li>
@@ -452,13 +477,13 @@
         </div>
     </footer>
     <script>
-        // setInterval(check_inbox, 2000);
+        setInterval(check_inbox, 2000);
         function check_inbox(){
               
                 fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>
                 {   num_unread_messages = data['num']
-
-                    document.getElementById("num_unread_messages").innerHTML = num_unread_messages
+                    if (num_unread_messages > 0)
+                        document.getElementById("num_unread_messages").innerHTML = num_unread_messages
                      // first clear the list area 
                     document.getElementById('list_of_senders').innerHTML = "";
                     for (unread_message of data['unread_messages']){
@@ -534,6 +559,35 @@
 <!--Footer Section-->
 <!-- Back to top -->
 <a href="#top" id="back-to-top"><i class="fa fa-rocket"></i></a>
+
+
+
+<!-- subscribe script -->
+<script>
+    function subscribe()
+    {
+        fetch("{% url 'subscribe' %}",
+            {
+                method:"POST",
+                credentials: 'same-origin',
+                headers:{
+                    "content-Type":'application/json',
+                    'X-CSRFToken':'{{csrf_token}}'
+                },
+                body:JSON.stringify({
+                    'email': document.getElementById('email_field').value,
+                })
+            }
+            ).then(e => e.json()).then(result=>{
+                    window.alert(result['message'])
+                    console.log(result['message']) 
+                    document.getElementById('email_field').value = ""             
+                }); 
+    }
+    
+</script>
+
+
 
 <!-- JQuery js-->
 <script src="/static/frontpages/js/vendors/jquery-3.2.1.min.js"></script>

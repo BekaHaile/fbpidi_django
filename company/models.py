@@ -331,6 +331,38 @@ class LandUsage(models.Model):
 	other = models.FloatField(verbose_name="production building in meter square")
 	timestamp = models.DateTimeField(auto_now_add=True)	 
 
+# messages from users to a company through the contact us form
+class CompanyMessage(models.Model):
+	company = models.ForeignKey(Company, on_delete=models.CASCADE)
+	name = models.CharField(max_length = 50, verbose_name='Sender Name')
+	email = models.EmailField(verbose_name="Sender Email")
+	message = models.TextField()
+	replied = models.BooleanField(default=False)
+	created_date = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering=['-created_date']
+	
+	def get_latest_reply(self):
+		return CompanyMessageReply.objects.filter(message = self).first() if CompanyMessageReply.objects.filter(message = self).exists() else None
+
+
+class CompanyMessageReply(models.Model):
+	message = models.ForeignKey(CompanyMessage, on_delete = models.CASCADE)
+	created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+	reply = models.TextField()
+	created_date = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering = ['-created_date']
+
+
+class CompanySubscription(models.Model):
+	# users can subscribe using an email address or their FBPIDI user account
+	email = models.EmailField( verbose_name = "Subscription Email.")
+	created_date = models.DateTimeField(auto_now_add = True)
+	
+
 
 class ProjectState(models.Model):
 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="project_state")

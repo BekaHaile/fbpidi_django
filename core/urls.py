@@ -63,7 +63,7 @@ urlpatterns = [
     #path("blog-detail-right/",TemplateView.as_view(template_name="frontpages/blog-details-right.html"),name="blog_details_right"),
     path("blog-grid/",TemplateView.as_view(template_name="frontpages/blog-grid.html"),name="blog_grid_f"),
     path("blog-grid-center/",TemplateView.as_view(template_name="frontpages/blog-grid-center.html"),name="blog_grid_center"),
-    #path("blog-grid-right/",TemplateView.as_view(template_name="frontpages/blog-grid-right.html"),name="blog_grid_right"),
+    #path("blog-grid-right/",TemplateView.as_view(template_name="frontpages/blog-grid-right.html"),name="cusomer_blog_list"),
 
     path("userprofile/",TemplateView.as_view(template_name="frontpages/userprofile.html"),name="userprofile"),
     path("mylistings/",TemplateView.as_view(template_name="frontpages/mylistings.html"),name="mylistings"),

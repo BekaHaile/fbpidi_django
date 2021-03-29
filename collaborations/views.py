@@ -44,15 +44,8 @@ from django.http import JsonResponse
 
 ### a dictionay holding model names with model objects, Used to hold a model object for a string
 models = { 'Research':Research,'Announcement':Announcement, 'Blog':Blog, 'BlogComment':BlogComment, 'Choice':Choices, 'Event':CompanyEvent, 'Tender':Tender, 'TenderApplicant':TenderApplicant, 
-            'Forums':ForumQuestion, 'Forum Comments':ForumComments, 'Job Application':JobApplication, 'Job Category':JobCategory, 'Polls':PollsQuestion, 'News':News }
+            'Forums':ForumQuestion, 'Forum Comments':ForumComments, 'Polls':PollsQuestion, 'News':News, 'Vacancy':Vacancy, 'Job Application':JobApplication, 'Job Category':JobCategory }
 
-def check_user_has_company(request):
-    try:
-        return request.user.get_company()
-    except Exception as e:
-        messages.warning(request, "Currently, You are not related with any registered Company.")
-        print("Exception while trying to find the company of an company admin or company staff user in  ", str(e))
-        return False
 
 
 def related_company_title(model_name, obj):
@@ -65,7 +58,7 @@ def related_company_title(model_name, obj):
     if result['query'].count() != 0:
         return {'query':result['query'], 'message':f"Other {model_name}s from {obj.company.name} ", 'message_am': f"ሌሎቸ በ{obj.company.name_am} ድርጅት የተለቀቁ {model.model_am}" }
     else:
-        result = search_title_related_objs(  obj, model.objects.exclude(id =obj.id)  )
+        result = search_title_related(  obj, model.objects.exclude(id =obj.id)  )
         if result['query'].count() != 0:
             return {'query': result, 'message':f'Other {model_name}s with related content', 'message_am': f"ሌሎች ተቀራራቢ ውጤቶች "}
         else:
@@ -92,7 +85,7 @@ def related_company_title_status(model_name, obj):
         return {'query': result, 'message':f"Other {model_name}s from {obj.company.name} ", 'message_am': f"ሌሎቸ በ{obj.company.name_am} ድርጅት የተለቀቁ" }
 
 
-def search_title_related_objs( obj, query_list):
+def search_title_related( obj, query_list):
     return {'query':query_list.filter( Q(title__icontains = obj.title) | Q(title_am__icontains = obj.title_am) |Q(description__icontains = obj.title ) | Q(description_am__icontains = obj.title_am) ).distinct()} 
 
 # returns all if there is no filter_key or there is no match, or the objects containg the filter_key, with their appropriat messages.
@@ -111,7 +104,7 @@ def SearchByTitle_All(model_name, request ):
             # if there is no match for the filter_key or there is no filter_key at all
             if query.count() == 0: 
                 query = model.objects.all()
-                return { 'query': query, 'message': f"No match containing '{filter_key}'!", 'message_am': f"ካስገቡት ቃል '{filter_key}' ጋር የሚግናኝ አልተገኘም፡፡ !" }       
+                return { 'query': query, 'message': f"No match containing '{filter_key}'!", 'message_am': f"ካስገቡት ቃል '{filter_key}' ጋር የሚገናኝ አልተገኘም፡፡ !" }       
             return { 'query': query, 'message': f"{query.count()} result found!", 'message_am': f"{query.count()} ውጤት ተገኝቷል!" }
     except Exception as e:
         print("Exception at SearchBYTitle_All", str(e))
@@ -138,8 +131,8 @@ def SearchCategory_Title(model_name, request):
     result = SearchByTitle_All(model_name, request) #returns matching objects by title and title_am, if none all objects
     category_name = request.GET.getlist('by_category')
     if category_name[0] == 'All':
-            return {'query':result['query'],'message':f"{result['query'].count()} {request.GET['by_title']} result found in {category_name[0]} category!", 
-                                            'message_am': f"በ {category_name[0]} {result['query'].count()} ውጤት ተገኝቷል",
+            return {'query':result['query'],'message':f"{result['query'].count()} {request.GET['by_title']} result found !", 
+                                            'message_am': f"{result['query'].count()} ውጤት ተገኝቷል",
                                             'searched_category':'All', 'searched_name': request.GET['by_title'] }   
     result = filter_by('catagory', category_name, result['query'])
     result['searched_category'] = category_name[0]
@@ -205,13 +198,6 @@ class CustomerPollList(View):
             print("exceptio at polls list ",e)
             return redirect('index')
 
-# class CompanyPollList(Listview):
-#     model = PollsQuestion
-#     template_name = "admin/collaborations/tenders.html"
-#     context_object_name = 'polls'  
-
-#     def get_queryset(self):            
-#             return PollsQuestion.objects.filter(company = Compnay.objects.get(id = self.request.GET['id']) )
 
 #only visible to logged in and never voted before
 class PollDetail(LoginRequiredMixin,View):
@@ -332,7 +318,7 @@ class TenderList(LoginRequiredMixin, ListView):
         if self.request.user.is_superuser:
             return Tender.objects.all() 
         else:
-            return Tender.objects.filter(company = self.request.user.get_company()) if check_user_has_company(self.request) else []
+            return Tender.objects.filter(company = self.request.user.get_company()) 
 
 
 class TenderDetail(LoginRequiredMixin, DetailView):
@@ -490,7 +476,6 @@ class ApplyForTender(View):
 
 class CreateNews(LoginRequiredMixin, View):
     def get(self,*args,**kwargs):
-        check_user_has_company(self.request) 
         return render(self.request,'admin/collaborations/create_news.html',{'form':NewsForm})
     
     def post(self, *args, **kwargs):
@@ -550,7 +535,7 @@ class AdminNewsList(LoginRequiredMixin, ListView):
             return News.objects.all()
         else:
             try: 
-                return News.objects.filter(company=self.request.user.get_company()) if check_user_has_company(self.request) else []
+                return News.objects.filter(company=self.request.user.get_company()) 
             except Exception as e:
                 print("Exception while trying to fetch news objects")
                 return redirect("admin:index")
@@ -706,6 +691,7 @@ def check_event_enddate(request, open_events):
             else:
                 print("Couldn't send Email to close event")
 
+
 class CustomerEventList(View):
 	def get(self, *agrs, **kwargs):
  
@@ -745,6 +731,7 @@ class CustomerEventDetail(View):
             print("Exception at customerEventDetail", e)
             result = SearchByTitle_All('Event', self.request)
             return redirect('customer_event_list')
+
 
 @login_required
 def AjaxEventParticipation(request, id):
@@ -791,7 +778,7 @@ class EventParticipation(LoginRequiredMixin, View):
 ###Admin Side
 class CreateDocument(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        check_user_has_company(self.request)
+      
         return render(self.request, "admin/document/create_document.html", {'form':DocumentForm})
     def post(self, args, **kwargs):
         form = DocumentForm(self.request.POST)
@@ -837,16 +824,15 @@ class DocumentListing(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         documents = []
         try:
-            if check_user_has_company(self.request):
-                if self.kwargs['option'] != 'all':
-                    documents =  Document.objects.filter( category = self.kwargs['option'] , company=self.request.user.get_company())
-                    if documents.count() != 0:
-                        return render(self.request, "admin/document/list_document_by_category.html", {'documents':documents, 'categories':Document.DOC_CATEGORY})
-                    else:
-                        messages.warning(self.request, f"No documents for {self.kwargs['option']}")
-                return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})
-            else:        
-                return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})
+            
+            if self.kwargs['option'] != 'all':
+                documents =  Document.objects.filter( category = self.kwargs['option'] , company=self.request.user.get_company())
+                if documents.count() != 0:
+                    return render(self.request, "admin/document/list_document_by_category.html", {'documents':documents, 'categories':Document.DOC_CATEGORY})
+                else:
+                    messages.warning(self.request, f"No documents for {self.kwargs['option']}")
+            return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})
+        
         except Exception as e:
             print("exceptio at document list ",e)
             return redirect('admin:index')

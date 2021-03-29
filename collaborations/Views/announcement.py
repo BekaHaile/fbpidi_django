@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models import User						 
 from collaborations.models import Announcement,AnnouncementImages
 from collaborations.forms import AnnouncementForm
-from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname, get_paginated_data, check_user_has_company
+from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname, get_paginated_data
 from company.models import Company
 
 

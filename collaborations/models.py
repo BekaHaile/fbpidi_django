@@ -236,21 +236,21 @@ class JobCategory(models.Model):
 
     
 class Vacancy(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE,related_name="company_vacancy")
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     location = models.CharField(max_length=1000)
     salary = models.IntegerField(null=True,default=0)
     category = models.ForeignKey(JobCategory, on_delete=models.CASCADE)
     employement_type = models.CharField(choices = JOB_CHOICES, max_length=10000,null=False)
     starting_date = models.DateTimeField()
     ending_date = models.DateTimeField()
-    job_title = models.CharField(max_length=10000,null=False)
+    title = models.CharField(max_length=10000,null=False)
     description = models.TextField(null=False)
     requirement = models.TextField(null=False)
-    job_title_am = models.CharField(max_length=10000,null=False)
+    title_am = models.CharField(max_length=10000,null=False)
     description_am = models.TextField(null=False)
     requirement_am = models.TextField(null=False)
     closed = models.BooleanField(default=False)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="vacancy_created_by")
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,related_name="vacancy_created_by")
     created_date = models.DateTimeField(auto_now_add=True,editable=False)
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="vacancy_updated_by")
     last_updated_date = models.DateTimeField(null=True)
@@ -260,7 +260,7 @@ class Vacancy(models.Model):
         ordering = ['-created_date',]
 
     def __str__(self):
-        return self.job_title
+        return self.title
 
     def countApplicant(self):
         return self.jobapplication_set.all().count()

@@ -16,12 +16,14 @@ from django.core import serializers
 
 from company.models import *
 from accounts.models import CompanyAdmin,User
+from accounts.email_messages import sendRelayMessage
 from product.models import Order,OrderProduct,Product
 
 from company.forms import *
 from collaborations.models import *
-from collaborations.forms import EventParticipantForm,TenderApplicantForm,CreateJobApplicationForm, BlogCommentForm
 from chat.models import ChatMessages
+from collaborations.forms import EventParticipantForm,TenderApplicantForm,CreateJobApplicationForm, BlogCommentForm
+
 
 
 class CompanyHomePage(DetailView):
@@ -34,14 +36,83 @@ class CompanyAbout(DetailView):
     template_name="frontpages/company/about.html"
 
 
-class CompanyContact(DetailView):
-    model=Company
-    template_name="frontpages/company/contact.html"
+class CompanyContact(CreateView):
+    model = CompanyMessage
+    template_name = "frontpages/company/contact.html"
+    form_class = CompanyMessageForm
+    
+    def get_context_data(self, *args, **kwargs):
+            context = super().get_context_data(**kwargs)
+            context['object']  = Company.objects.get(id = self.kwargs['pk'])
+            return context
+        
+    def form_valid(self, form):
+        try:
+            comp_message = form.save(commit = False)
+            comp_message.company = Company.objects.get (id = self.kwargs['pk'])
+            comp_message.save()
+            if comp_message.company.main_category == "FBPIDI": # if the contacted company is FBPIDI
+                return redirect('index')
+            return redirect(f"/company/company-home-page/{self.kwargs['pk']}/") 
+        except Exception as e:
+            print("@@@@@@@@ Exception at company Contact Form ", e)
+            return redirect(f"/company/contact/{self.kwargs['pk']}/")   
+
+    def form_invalid(self, form):
+        messages.warning(self.request, "Wrong Form Input!")
+        return redirect(f"/company/contact/{self.kwargs['pk']}/")
 
 
+class CompanyInboxList(ListView):
+    model = CompanyMessage
+    template_name = "admin/company/inbox_list.html"
+    context_object_name = "message_list"
+    def get_queryset(self):
+        if 'replied_only' in self.request.GET:
+            return CompanyMessage.objects.filter(company = self.request.user.get_company().id, replied =True)
+        elif 'unreplied_only' in self.request.GET:
+            return CompanyMessage.objects.filter(company = self.request.user.get_company().id, replied = False)
+        return CompanyMessage.objects.filter(company = self.request.user.get_company().id)
+
+
+class CompanyInboxDetail(View):
+    def post(self, *args, **kwargs):
+        try:
+            sender_message = CompanyMessage.objects.get(id = self.kwargs['pk'])
+            reply_message = self.request.POST['reply_message']
+            if sendRelayMessage(self.request, sender_message, reply_message): #returns true if the email is sent successfully
+                sender_message.replied = True
+                sender_message.save()
+                reply= CompanyMessageReply(created_by=self.request.user, message=sender_message, reply_message =reply_message)
+                reply.save()
+                messages.success(self.request, f"Successfully, replied to {message.email}")
+                return redirect('admin:admin_inbox_list')
+            else:
+                messages.warning(self.request, f"Reply couldn't be sent! Please check your connection and try again later.")
+                return redirect('admin:admin_inbox_list')
+        except Exception as e:
+            print("########## Exception at CompanyInboxDetail post ",e)
+            messages.warning(self.request, "########## Exception at CompanyInboxDetail post ",e)
+            return redirect("admin:index")
+
+
+def Subscribe(request):
+    if request.method=="POST":
+        try:
+            data = json.loads(request.body)
+            subscription = CompanySubscription( email=data['email'])
+            subscription.save()
+            print("inside the success function")
+            return JsonResponse(data={'error':False, 'message':'Successfull Subscription! '}, safe=False )
+        except Exception as e:
+            return JsonResponse(data={'error':True, 'message':f'The exception is {str(e)}'},  safe=False )
+                    
+
+    
 class CompanyProductList(DetailView):
     model= Company
     template_name = "frontpages/company/product_list.html"
+
 
 class CompanyProductdetail(DetailView):
     model=Product
@@ -53,9 +124,11 @@ class CompanyProductdetail(DetailView):
         context['object'] = Product.objects.get(id=self.kwargs['pk']).company
         return context
 
+
 class CompanyProjectList(DetailView):
     model= Company
     template_name = "frontpages/company/project_list.html"
+
 
 class CompanyProjectdetail(DetailView):
     model=InvestmentProject

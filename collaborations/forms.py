@@ -240,15 +240,15 @@ class VacancyForm(forms.ModelForm):
     class Meta:
         model = Vacancy
         fields = ('location', 'salary', 'category'
-                  ,'job_title', 'description','requirement',
-                  'job_title_am','description_am','requirement_am', 'employement_type')
+                  ,'title', 'description','requirement',
+                  'title_am','description_am','requirement_am', 'employement_type')
         
         widgets = {  
             'employement_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'location':forms.TextInput(attrs={'class':'form-control','placeholder':'Location'}),
             'salary':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("salary")','id':'salary','type':'number','placeholder':'Salary in Birr'}),
-            'job_title':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Title in English'}),
-            'job_title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Title in Amharic'}),
+            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Title in English'}),
+            'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Vacancy Title in Amharic'}),
             'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in English'}),
             'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'Description in Amharic'}),
             'requirement':forms.Textarea(attrs={'class':'summernote','placeholder':'Requirements for the Job in English'}),

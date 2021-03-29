@@ -90,4 +90,19 @@ def sendTenderEmailNotification(request, user, tender, message):
         print("Exception While Sending Email ", str(e))
         return False
 
+
+def sendRelayMessage(request, sender_message, reply_message):
+    try:
+        current_site = get_current_site(request)
+        mail_message = reply_message
+        mail_subject = f'Company Reply From {request.user.get_company()}'
+        to_email = sender_message.email
+        email = EmailMessage(mail_subject, mail_message, to=[sender_message.email])
+        email.content_subtype = "html"  
+        email.send()
+        print("Company Replay message sent to Email ", sender_message.email)
+        return True
+    except Exception as e:
+        print("Exception While Sending Email ", str(e))
+        return False
     
