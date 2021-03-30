@@ -27,11 +27,57 @@
  
 {% endblock %}
 
-{%block pagename%}<a href="{%url 'admin:report_page'%}">Reports</a> > Companies {%if sector and sector != 'all'%} <span> > </span> {{sector}} Sector{%endif%}{%if sub_sector%} <span> > </span>{{sub_sector}}{%endif%} <span class="badge badge-warning">{{object_list.count}}</span> Industries{%endblock%}
+{%block pagename%}<a href="{%url 'admin:report_page'%}">Reports</a> >{%if flag == 'company_count'%}{{label}}{%else%} Companies {%if sector and sector != 'all'%} <span> > </span> {{sector}} Sector{%endif%}{%if sub_sector%} <span> > </span>{{sub_sector}}{%endif%} <span class="badge badge-warning">{{object_list.count}}</span> Industries{%endif%}{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
 			<div class="content">
+				{%if flag == 'company_count'%}
+				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<ul class="list-inline list-inline-condensed mb-0">
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Filter Options
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:get_number_companies' option='test_param'%}" class="dropdown-item">Outsourced Test Parameter</a>
+										<a href="{%url 'admin:get_number_companies' option='research'%}" class="dropdown-item">Conducted Research</a>
+										<a href="{%url 'admin:get_number_companies' option='new_product'%}" class="dropdown-item">Developed New Product</a>
+									</div>
+								</li>								 
+							</ul>
+
+							 
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header">
+
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Data</th>
+									<th>Total</th>
+ 								</tr>
+							</thead>
+							<tbody id="tbody">
+								<tr>
+									<td>{{label}}</td>
+									<td>{{data}}</td>
+ 								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{%else%}
 				<div class="card">
 					<div class="card-body">
 						<!-- <h5 class="mb-3">Website search results</h5> -->
@@ -150,7 +196,7 @@
 						</table>
 					</div>
 				</div>
-				 
+				 {%endif%}
 				
 			</div>
 			<!-- /content area -->

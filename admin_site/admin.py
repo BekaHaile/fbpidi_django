@@ -327,6 +327,7 @@ class CustomAdminSite(admin.AdminSite):
             path("get-education-status-data/",wrap(EduLevelofEmployees.as_view()),name="get_education_status"),
             path("get-female-in-posn-data/",wrap(NumWomenInPosition.as_view()),name="get_women_in_psn"),
             path("get-company-certification-data/",wrap(CompanyCertificationData.as_view()),name="get_comp_certfication"),
+            path("get-company-count-data/<option>/",wrap(NumberofIndustriesByOption.as_view()),name="get_number_companies"),
             path("export-csv-file/<category>/<option>/",wrap(ExportCSV.as_view()),name="export_csv_file"),
             path("company_chart_category/",wrap(main_category_chart),name="category_chart"),
             # path('project-view/<id>',wrap(ProjectDetailView.as_view()),name='project_view'),

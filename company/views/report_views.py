@@ -541,7 +541,24 @@ class FilterByWorkingHour(LoginRequiredMixin,View):
         context['working_hour_data'] = working_hour_data
         context['flag'] = 'working_hour_data'
         return render(self.request,template_name,context)
+         
+
+class NumberofIndustriesByOption(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        context = {}
+        context['flag'] = "company_count"
         template_name = "admin/company/companies_for_report.html"
+        if self.kwargs['option'] == 'research':
+            context['data'] = Company.objects.all().exclude(conducted_research='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Conducted Research"
+        elif self.kwargs['option'] == 'test_param':
+            context['data'] = Company.objects.all().exclude(outsourced_test_param='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Out Sourced Test Parameter"
+        elif self.kwargs['option'] == 'new_product':
+            context['data'] =  Company.objects.all().exclude(new_product_developed='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Developed New Product"
+        
+        return render(self.request,template_name,context)
 
 
 
