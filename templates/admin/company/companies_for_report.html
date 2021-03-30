@@ -68,18 +68,7 @@
 									{%endif%}
 									 
 								</li>
-								<li class="list-inline-item"> 
-									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
-										<i class="icon-stack2 mr-2"></i>
-										Share Of Ownership
-									</a>
-
-									<div class="dropdown-menu">
-										{%for list in ownership%}
-										<a href="{%url 'admin:filter_by_ownership' ownership_form=list.id%}" class="dropdown-item">{{list.name}}</a>
-										{%endfor%}
-									</div>
-								</li>
+								 
 								<li class="list-inline-item"> 
 									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
 										<i class="icon-stack2 mr-2"></i>
@@ -105,19 +94,7 @@
 										Trade License
 									</a>
 								</li>
-								<li class="list-inline-item"> 
-									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
-										<i class="icon-stack2 mr-2"></i>
-										Working Hours
-									</a>
-
-									<div class="dropdown-menu">
-										{%for wh in working_hour%}
-										<a href="{%url 'admin:filter_by_working_hour' working_hour=wh.id%}" class="dropdown-item">{{wh.name}} hours</a>
-										{%endfor%}
-										 
-									</div>
-								</li>
+								 
 							</ul>
 
 							<!-- <ul class="list-inline mb-0 ml-md-auto">

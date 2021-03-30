@@ -19,7 +19,35 @@
 <!-- Content area -->
 <div class="content">
 	<div class="row">
-		<div class="col-md-3 col-sm-3">
+		<div class="col-md-4 col-sm-4">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">
+						<li class="nav-item"><a href="{%url 'admin:filter_by_ownership'%}" class="btn btn-primary rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Share of Companies by Ownership
+					</div>
+				</div>
+			</div>
+			 
+		</div>
+		<div class="col-md-4 col-sm-4">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">
+						<li class="nav-item"><a href="{%url 'admin:filter_by_working_hour'%}" class="btn btn-primary rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Number of Companies By Working Hour
+					</div>
+				</div>
+			</div>
+			 
+		</div>
+		<div class="col-md-4 col-sm-4">
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">
@@ -33,11 +61,11 @@
 			</div>
 			 
 		</div>
-		<div class="col-md-3 col-sm-3">
+		<div class="col-md-4 col-sm-4">
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">
-						<li class="nav-item"><a href="{%url 'admin:get_production_capacity'%}" class="btn btn-primary rounded-round">View Report</a></li>
+						<li class="nav-item"><a href="{%url 'admin:get_production_capacity' product='all'%}" class="btn btn-primary rounded-round">View Report</a></li>
 					</ul>
 	
 					<div class="tab-content">
@@ -47,7 +75,7 @@
 			</div>
 			 
 		</div>
-		<div class="col-md-3 col-sm-3">
+		<div class="col-md-4 col-sm-4">
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
@@ -60,7 +88,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3 col-sm-3">
+		<div class="col-md-4 col-sm-4">
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
@@ -73,7 +101,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3 col-sm-3">
+		<div class="col-md-4 col-sm-4">
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
@@ -86,7 +114,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3 col-sm-3">
+		<div class="col-md-4 col-sm-4">
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
@@ -99,7 +127,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3 col-sm-3">
+		<div class="col-md-4 col-sm-4">
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
@@ -112,7 +140,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3 col-sm-3">
+		<div class="col-md-4 col-sm-4">
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
@@ -125,7 +153,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3 col-sm-3">
+		<div class="col-md-4 col-sm-4">
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
@@ -138,7 +166,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3 col-sm-3">
+		<div class="col-md-4 col-sm-4">
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
@@ -151,7 +179,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3 col-sm-3">
+		<div class="col-md-4 col-sm-4">
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
@@ -160,6 +188,45 @@
 
 					<div class="tab-content">
 						Number Of Foreign Employees by Sector
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-4">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_num_jobs' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Number Of Jobs Created by Sector
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-4">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_input_available' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Available Inputs
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-4">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_input_share' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Share of Local Inputs
 					</div>
 				</div>
 			</div>
