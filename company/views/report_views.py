@@ -403,8 +403,6 @@ class CompanyListForReport(LoginRequiredMixin,ListView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership").order_by('-id')
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
         return context
 
 class FilterCompanyByMainCategory(LoginRequiredMixin,ListView):
@@ -424,8 +422,6 @@ class FilterCompanyByMainCategory(LoginRequiredMixin,ListView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.filter(category_type=self.kwargs['sector'])
         context['sector'] = self.kwargs['sector']
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
         return context
 
 
@@ -448,8 +444,6 @@ class FilterCompanyByEstablishedYear(LoginRequiredMixin,ListView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
         return context
 
 class FilterCompanyCategory(LoginRequiredMixin,ListView):
@@ -476,8 +470,6 @@ class FilterCompanyCategory(LoginRequiredMixin,ListView):
             return None
         context['sector'] = Category.objects.get(id=self.kwargs['category']).category_type
         context['sub_sector'] = Category.objects.get(id=self.kwargs['category']).category_name
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
         return context
 
 class OwnershipReport(LoginRequiredMixin,View):
@@ -487,15 +479,15 @@ class OwnershipReport(LoginRequiredMixin,View):
         template_name = "admin/company/report_page.html"
         company = Company.objects.all().exclude(main_category="FBPIDI")
         queryset = Company.objects.values('ownership_form').annotate(Count('id')).order_by('ownership_form').exclude(main_category='FBPIDI')
+        total = 0
         for ownership in queryset:
+            total += int(ownership['id__count'])
             # label.append(CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']))
             # data.append(ownership['id__count'])
             # percent.append(float(ownership['id__count']/queryset.count())*100)
-            print(company.count())
             ownership_data.append({'label':CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']),
-                                    'data':ownership['id__count'],
-                                    'percent':float(ownership['id__count']/company.count())*100})
-
+                                    'data':ownership['id__count']})
+        context['total'] = total
         context['ownership_data'] = ownership_data
         context['flag'] = 'ownership_data'
         return render(self.request,template_name,context)
@@ -539,18 +531,16 @@ class FilterByWorkingHour(LoginRequiredMixin,View):
         working_hour_data = []
         context = {}
         template_name = "admin/company/report_page.html"
-        company = Company.objects.all().exclude(main_category="FBPIDI")
         queryset = Company.objects.values('working_hours').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
-        
+        total = 0
         for working_hour in queryset:
+            total += int(working_hour['id__count'])
             working_hour_data.append({'label':CompanyDropdownsMaster.objects.get(id=working_hour['working_hours']),
-                                    'data':working_hour['id__count'],
-                                    'percent':float(working_hour['id__count']/company.count())*100})
-
+                                    'data':working_hour['id__count']})
+        context['total'] = total
         context['working_hour_data'] = working_hour_data
         context['flag'] = 'working_hour_data'
         return render(self.request,template_name,context)
-        model = Company
         template_name = "admin/company/companies_for_report.html"
 
 
@@ -741,17 +731,67 @@ class NumberOfJobsCreatedBySubSector(LoginRequiredMixin,View):
 
 class EduLevelofEmployees(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        total_perm_emp = 0
-        total_temp_emp=0
-        emp_data_total=[]
+        education_status_data = []
         context = {}
-        
-        queryset = EducationalStatus.objects.values('main_category').annotate(Count('id')).order_by('main_category').exclude(main_category='FBPIDI')
+        template_name = "admin/company/report_page.html"
+        queryset = EducationalStatus.objects.values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
+        total = 0
+        for edu_data in queryset:
+            total += int(edu_data['female__sum']+edu_data['male__sum'])
+            education_status_data.append({'label':edu_data['education_type'],
+                                    'data':int(edu_data['female__sum']+edu_data['male__sum'])})
+        print(total)
+        context['total'] = total
+        context['education_status_data'] = education_status_data
+        context['flag'] = 'education_status_data'
+        return render(self.request,template_name,context)
+        template_name = "admin/company/companies_for_report.html"
 
-        emp_data_total.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
-        context['total_emp_data'] = emp_data_total
-        context['flag'] = "num_employees"
-        return render(self.request,'admin/company/report_page.html',context)
+
+class NumWomenInPosition(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        women_in_pson_level = []
+        context = {}
+        template_name = "admin/company/report_page.html"
+        queryset = FemalesInPosition.objects.all()
+        # (Sum('high_position'),Sum('med_position'))
+        in_med = 0
+        in_high = 0
+        total = 0
+        for women_data in queryset:
+            in_high += int(women_data.high_position)
+            in_med += int(women_data.med_position)
+        total = int(in_high+in_med)
+        women_in_pson_level.append({'label':'Med Level Positions','data':in_med})
+        women_in_pson_level.append({'label':'Higher Level Positions','data':in_high})
+        context['total'] = total
+        context['women_in_pson_level'] = women_in_pson_level
+        context['flag'] = 'women_in_pson_level'
+        print(context)
+        return render(self.request,template_name,context)
+
+class CompanyCertificationData(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        certification_data = []
+        context = {}
+        template_name = "admin/company/report_page.html"
+        company = Company.objects.all().exclude(main_category="FBPIDI")
+        queryset = Company.objects.values('certification').annotate(Count('id')).order_by('certification').exclude(main_category='FBPIDI')
+        #  [{'certification': 21, 'id__count': 1}, 
+        #  {'certification': 20, 'id__count': 1}, 
+        #  {'certification': 18, 'id__count': 1}, 
+        #  {'certification': 16, 'id__count': 1}, 
+        #  {'certification': 13, 'id__count': 1}]
+        total = 0
+        for certification in queryset:
+            total+= int(certification['id__count'])
+            certification_data.append({'label':CompanyDropdownsMaster.objects.get(id=certification['certification']).name,
+                                    'data':certification['id__count']})
+        context['total'] = total
+        context['certification_data'] = certification_data
+        context['flag'] = 'certification_data'
+        return render(self.request,template_name,context)
+        template_name = "admin/company/companies_for_report.html"
 
 class ExportCSV(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):

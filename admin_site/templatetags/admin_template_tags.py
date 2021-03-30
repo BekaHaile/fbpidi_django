@@ -37,7 +37,10 @@ def get_sum(data):
     for d in data:
         sm+=d['data']
     return sm
-
+@register.simple_tag
+def get_share(data,total):
+    print(type(data),type(total))
+    return round(float(int(data)/int(total))*100,2)
 
 @register.simple_tag
 def user_create_button(user):
