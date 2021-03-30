@@ -66,6 +66,8 @@ Employees Educational Status
 Women in Higher and Middle Positions 
 {%elif flag == 'certification_data'%}
 Number of Industries based on Certifications
+{%elif flag == 'management_tool_data'%}
+Number of Industries by Management Tools
 {%endif%} Report Data
 {%endblock%}
 {%block content%}
@@ -179,6 +181,35 @@ Number of Industries based on Certifications
 							</thead>
 							<tbody>
 								{%for od in certification_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total %}</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{%elif flag == 'management_tool_data'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Industries By Management Tools Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Management Tools</th>
+									<th>Companies</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in management_tool_data%}
 								<tr>
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>

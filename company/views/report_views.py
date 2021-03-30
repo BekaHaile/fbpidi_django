@@ -492,16 +492,6 @@ class OwnershipReport(LoginRequiredMixin,View):
         context['flag'] = 'ownership_data'
         return render(self.request,template_name,context)
 
-class FilterByExpansionPlan(LoginRequiredMixin,ListView):
-    model = Company
-    template_name = "admin/company/companies_for_report.html"
-
-    def get_queryset(self):
-        return Company.objects.all().exclude(expansion_plan__icontains="No")
-    
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
 
 class FilterByTradeLicense(LoginRequiredMixin,ListView):
     model = Company
@@ -514,17 +504,6 @@ class FilterByTradeLicense(LoginRequiredMixin,ListView):
         context = super().get_context_data(**kwargs)
         return context
 
-class FilterCertificate(LoginRequiredMixin,ListView):
-    model = Company
-    template_name = "admin/company/companies_for_report.html"
-
-    def get_queryset(self):
-        return Company.objects.filter(main_category__in=['Food','Beverage','Pharmaceuticals'])
-                
-    
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
 
 class FilterByWorkingHour(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -541,7 +520,45 @@ class FilterByWorkingHour(LoginRequiredMixin,View):
         context['working_hour_data'] = working_hour_data
         context['flag'] = 'working_hour_data'
         return render(self.request,template_name,context)
+         
+
+class NumberofIndustriesByOption(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        context = {}
+        context['flag'] = "company_count"
         template_name = "admin/company/companies_for_report.html"
+        if self.kwargs['option'] == 'research':
+            context['data'] = Company.objects.all().exclude(conducted_research='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Conducted Research"
+        elif self.kwargs['option'] == 'test_param':
+            context['data'] = Company.objects.all().exclude(outsourced_test_param='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Out Sourced Test Parameter"
+        elif self.kwargs['option'] == 'new_product':
+            context['data'] =  Company.objects.all().exclude(new_product_developed='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Developed New Product"
+        elif self.kwargs['option'] == 'expansion_plan':
+            context['data'] =  Company.objects.all().exclude(expansion_plan='No').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who has Expansion Plan"
+        elif self.kwargs['option'] == 'ecomerce':
+            context['data'] =  Company.objects.filter(e_commerce=True).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Use Ecomerce"
+        elif self.kwargs['option'] == 'database':
+            context['data'] =  Company.objects.filter(active_database=True).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who has Active Database"
+        elif self.kwargs['option'] == 'efluent':
+            context['data'] =  Company.objects.filter(efluent_treatment_plant=True).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who has Efluent Treatment Plant"
+        elif self.kwargs['option'] == 'env_mgmt':
+            context['data'] =  Company.objects.filter(env_mgmt_plan=True).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who has Environmental Management Plan"
+        elif self.kwargs['option'] == 'focal_person':
+            context['data'] =  Company.objects.filter(env_focal_person=True).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who has have Environmental Focal person"
+        elif self.kwargs['option'] == 'saftey_profesional':
+            context['data'] =  Company.objects.filter(safety_profesional=True).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who has Saftey Professional"
+        
+        return render(self.request,template_name,context)
 
 
 
@@ -790,6 +807,23 @@ class CompanyCertificationData(LoginRequiredMixin,View):
         context['total'] = total
         context['certification_data'] = certification_data
         context['flag'] = 'certification_data'
+        return render(self.request,template_name,context)
+        template_name = "admin/company/companies_for_report.html"
+
+class CompanyByManagementTools(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        management_tool_data = []
+        context = {}
+        template_name = "admin/company/report_page.html"
+        queryset = Company.objects.values('management_tools').annotate(Count('id')).order_by('management_tools').exclude(main_category='FBPIDI')
+        total = 0
+        for management_tool in queryset:
+            total+= int(management_tool['id__count'])
+            management_tool_data.append({'label':CompanyDropdownsMaster.objects.get(id=management_tool['management_tools']).name,
+                                    'data':management_tool['id__count']})
+        context['total'] = total
+        context['management_tool_data'] = management_tool_data
+        context['flag'] = 'management_tool_data'
         return render(self.request,template_name,context)
         template_name = "admin/company/companies_for_report.html"
 
