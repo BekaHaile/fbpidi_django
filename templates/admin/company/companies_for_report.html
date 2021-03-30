@@ -48,6 +48,14 @@
 										<a href="{%url 'admin:get_number_companies' option='test_param'%}" class="dropdown-item">Outsourced Test Parameter</a>
 										<a href="{%url 'admin:get_number_companies' option='research'%}" class="dropdown-item">Conducted Research</a>
 										<a href="{%url 'admin:get_number_companies' option='new_product'%}" class="dropdown-item">Developed New Product</a>
+										<a href="{%url 'admin:get_number_companies' option='expansion_plan'%}" class="dropdown-item">With Expansion Plan</a>
+
+										<a href="{%url 'admin:get_number_companies' option='ecomerce'%}" class="dropdown-item">With Ecomerce System</a>
+										<a href="{%url 'admin:get_number_companies' option='database'%}" class="dropdown-item">With Active Database System</a>
+										<a href="{%url 'admin:get_number_companies' option='efluent'%}" class="dropdown-item">With Efluent Treatment Plant</a>
+										<a href="{%url 'admin:get_number_companies' option='env_mgmt'%}" class="dropdown-item">With Environmental Managment Plan</a>
+										<a href="{%url 'admin:get_number_companies' option='focal_person'%}" class="dropdown-item">With Focal Person</a>
+										<a href="{%url 'admin:get_number_companies' option='saftey_profesional'%}" class="dropdown-item">With Saftey Profesional</a>
 									</div>
 								</li>								 
 							</ul>
@@ -65,7 +73,7 @@
 							<thead>
 								<tr>
 									<th>Data</th>
-									<th>Total</th>
+									<th>Number of Companies</th>
  								</tr>
 							</thead>
 							<tbody id="tbody">
@@ -128,12 +136,7 @@
 										<a href="{%url 'admin:filter_established_yr' option='after_2011'%}" class="dropdown-item">After 2011 E.C</a>
 									</div>
 								</li>
-								<li class="list-inline-item"> 
-									<a href="{%url 'admin:filter_expansion_plan'%}" class="btn btn-link text-default" >
-										<i class="icon-stack2 mr-2"></i>
-										Espansion Plan
-									</a>
-								</li>
+								 
 								<li class="list-inline-item"> 
 									<a href="{%url 'admin:filter_by_license'%}" class="btn btn-link text-default" >
 										<i class="icon-stack2 mr-2"></i>
