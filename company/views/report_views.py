@@ -539,6 +539,9 @@ class NumberofIndustriesByOption(LoginRequiredMixin,View):
         elif self.kwargs['option'] == 'expansion_plan':
             context['data'] =  Company.objects.all().exclude(expansion_plan='No').exclude(main_category='FBPIDI').count()
             context['label'] = "Number of Industries Who has Expansion Plan"
+        elif self.kwargs['option'] == 'waste_trtmt_system':
+            context['data'] =  Company.objects.all().exclude(waste_trtmnt_system='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who have Waste Treatment & disposal System"
         elif self.kwargs['option'] == 'ecomerce':
             context['data'] =  Company.objects.filter(e_commerce=True).exclude(main_category='FBPIDI').count()
             context['label'] = "Number of Industries Who Use Ecomerce"
@@ -557,6 +560,12 @@ class NumberofIndustriesByOption(LoginRequiredMixin,View):
         elif self.kwargs['option'] == 'saftey_profesional':
             context['data'] =  Company.objects.filter(safety_profesional=True).exclude(main_category='FBPIDI').count()
             context['label'] = "Number of Industries Who has Saftey Professional"
+        elif self.kwargs['option'] == 'gass_emision':
+            context['data'] =  Company.objects.all().exclude(gas_carb_emision='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Measure Their Gas Carbon Emission"
+        elif self.kwargs['option'] == 'comunity_compliant':
+            context['data'] =  Company.objects.all().exclude(comunity_compliant='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who have Compliant with local Community"
         
         return render(self.request,template_name,context)
 
@@ -792,13 +801,7 @@ class CompanyCertificationData(LoginRequiredMixin,View):
         certification_data = []
         context = {}
         template_name = "admin/company/report_page.html"
-        company = Company.objects.all().exclude(main_category="FBPIDI")
         queryset = Company.objects.values('certification').annotate(Count('id')).order_by('certification').exclude(main_category='FBPIDI')
-        #  [{'certification': 21, 'id__count': 1}, 
-        #  {'certification': 20, 'id__count': 1}, 
-        #  {'certification': 18, 'id__count': 1}, 
-        #  {'certification': 16, 'id__count': 1}, 
-        #  {'certification': 13, 'id__count': 1}]
         total = 0
         for certification in queryset:
             total+= int(certification['id__count'])
@@ -825,7 +828,37 @@ class CompanyByManagementTools(LoginRequiredMixin,View):
         context['management_tool_data'] = management_tool_data
         context['flag'] = 'management_tool_data'
         return render(self.request,template_name,context)
-        template_name = "admin/company/companies_for_report.html"
+
+class EnergySourceData(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        energy_source_data = []
+        context = {}
+        template_name = "admin/company/report_page.html"
+        queryset = Company.objects.values('source_of_energy').annotate(Count('id')).order_by('source_of_energy').exclude(main_category='FBPIDI')
+        total = 0
+        for energy_source in queryset:
+            if energy_source['source_of_energy'] != None:
+                total+= int(energy_source['id__count'])
+                energy_source_data.append({'label':CompanyDropdownsMaster.objects.get(id=energy_source['source_of_energy']).name,
+                                    'data':energy_source['id__count']})
+        context['total'] = total
+        context['energy_source_data'] = energy_source_data
+        context['flag'] = 'energy_source_data'
+        return render(self.request,template_name,context)
+    
+
+class CompaniesByDestination(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        template_name = "admin/company/report_page.html"
+        context = {}
+        company = Company.objects.all().exclude(main_category='FBPIDI')
+        context['destination_data'] = [{'label':"Exporting ",
+                                        'data':company.filter(market_destination__export__gt=0,market_destination__year=2021).count()},
+                                        {'label':"Local/Domestic",
+                                        'data':company.filter(market_destination__domestic__gt=0,market_destination__year=2021).count()}
+                                    ]
+        context['flag'] = "destination_data"
+        return render(self.request,template_name,context)
 
 class ExportCSV(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):

@@ -326,6 +326,8 @@ class CustomAdminSite(admin.AdminSite):
             path("get-education-status-data/",wrap(EduLevelofEmployees.as_view()),name="get_education_status"),
             path("get-female-in-posn-data/",wrap(NumWomenInPosition.as_view()),name="get_women_in_psn"),
             path("get-company-certification-data/",wrap(CompanyCertificationData.as_view()),name="get_comp_certfication"),
+            path("get-company-energy_source-data/",wrap(EnergySourceData.as_view()),name="get_comp_energy_source"),
+            path("get-company-market-destination-data/",wrap(CompaniesByDestination.as_view()),name="get_comp_by_destination"),
             path("get-company-management-data/",wrap(CompanyByManagementTools.as_view()),name="get_comp_mgmg_tool"),
             path("get-company-count-data/<option>/",wrap(NumberofIndustriesByOption.as_view()),name="get_number_companies"),
             path("export-csv-file/<category>/<option>/",wrap(ExportCSV.as_view()),name="export_csv_file"),

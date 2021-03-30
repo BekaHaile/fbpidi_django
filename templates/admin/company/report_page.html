@@ -68,6 +68,10 @@ Women in Higher and Middle Positions
 Number of Industries based on Certifications
 {%elif flag == 'management_tool_data'%}
 Number of Industries by Management Tools
+{%elif flag == 'energy_source_data'%}
+Number of Industries By Source of Energy
+{%elif flag == 'destination_data'%}
+Number of Industries By Market Destination
 {%endif%} Report Data
 {%endblock%}
 {%block content%}
@@ -215,6 +219,62 @@ Number of Industries by Management Tools
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
 									<td>{% get_share od.data total %}</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{%elif flag == 'energy_source_data'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Industries By Energy Source Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Source of Energy</th>
+									<th>Companies</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in energy_source_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total %}</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{%elif flag == 'destination_data'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Industries By Market Destination Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Market Destination</th>
+									<th>Companies</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in destination_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
