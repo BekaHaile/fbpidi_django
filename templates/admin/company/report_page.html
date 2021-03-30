@@ -33,7 +33,7 @@
  
 {% endblock %}
 
-{%block pagename%} <a href="{%url 'admin:report_page'%}">Report Page</a> > {%if flag == 'capital_utilization'%}Capital Utilization{%elif flag == 'inv_cap'%}Total Investment Capital
+{%block pagename%} <a href="{%url 'admin:report_page'%}">Reports</a> > {%if flag == 'capital_utilization'%}Capital Utilization{%elif flag == 'inv_cap'%}Total Investment Capital
 {%elif flag == 'num_employees'%}
 Number Of Employees By Sector
 {%elif flag == 'num_employees_female'%}
@@ -60,8 +60,14 @@ Number of Companies By Working Hour
 Available Inputs
 {%elif flag == 'input_share'%}
 Share Of Local Inputs 
- {%endif%} Report Data
-  {%endblock%}
+{%elif flag == 'education_status_data'%}
+Employees Educational Status
+{%elif flag == 'women_in_pson_level'%}
+Women in Higher and Middle Positions 
+{%elif flag == 'certification_data'%}
+Number of Industries based on Certifications
+{%endif%} Report Data
+{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
@@ -119,7 +125,94 @@ Share Of Local Inputs
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{{od.percent}} %</td>
+									<td>{% get_share od.data total%} %</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{%elif flag == 'education_status_data'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Educational Status Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Educational Status</th>
+									<th>Employees</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in education_status_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total %}</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{%elif flag == 'certification_data'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Industries By Certification Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Certifications</th>
+									<th>Companies</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in certification_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total %}</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{%elif flag == 'women_in_pson_level'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Women in Positions Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Positions</th>
+									<th>Employees</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in women_in_pson_level%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total %}</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -148,7 +241,7 @@ Share Of Local Inputs
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}} Hours</td>
 									<td>{{od.data}}</td>
-									<td>{{od.percent}} %</td>
+									<td>{% get_share od.data total %} %</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
