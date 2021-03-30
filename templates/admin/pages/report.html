@@ -1,4 +1,5 @@
 {%extends 'admin/base_site.html'%}
+{%load core_template_tags%}
 {% block extrastyle %}
 
 <!-- Theme JS files -->
@@ -18,6 +19,92 @@
 
 <!-- Content area -->
 <div class="content">
+	<div class="row">
+		<div class="col-lg-4">
+
+			<!-- Members online -->
+			<div class="card bg-teal-400">
+				<div class="card-body">
+					<div class="d-flex">
+						<h3 class="font-weight-semibold mb-0">{{user|company_count}} Companies</h3>
+						<a href="{%url 'admin:filter_by_ownership'%}" class="btn rounded-round"><span class="badge bg-teal-800 badge-pill align-self-center ml-auto">View Report</span></a> 
+					</div>
+
+					<div>
+						Share of Companies by Ownership
+						<!-- <div class="font-size-sm opacity-75">489 avg</div> -->
+					</div>
+				</div>
+
+				<div class="container-fluid">
+					<div id="server-load"></div>
+				</div>
+			</div>
+			<!-- /members online -->
+
+		</div>
+
+		<div class="col-lg-4">
+
+			<!-- Current server load -->
+			<div class="card bg-pink-400">
+				<div class="card-body">
+					<div class="d-flex">
+						<h3 class="font-weight-semibold mb-0">49.4%</h3>
+						<div class="list-icons ml-auto">
+							<div class="list-icons-item dropdown">
+								<a href="#" class="list-icons-item dropdown-toggle"
+								   data-toggle="dropdown"><i class="icon-cog3"></i></a>
+								<div class="dropdown-menu dropdown-menu-right">
+									<a href="#" class="dropdown-item"><i class="icon-sync"></i> Update
+										data</a>
+									<a href="#" class="dropdown-item"><i
+											class="icon-list-unordered"></i> Detailed log</a>
+									<a href="#" class="dropdown-item"><i class="icon-pie5"></i>
+										Statistics</a>
+									<a href="#" class="dropdown-item"><i class="icon-cross3"></i> Clear
+										list</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						Current server load
+						<div class="font-size-sm opacity-75">34.6% avg</div>
+					</div>
+				</div>
+
+				<div id="server-load"></div>
+			</div>
+			<!-- /current server load -->
+
+		</div>
+
+		<div class="col-lg-4">
+
+			<!-- Today's revenue -->
+			<div class="card bg-blue-400">
+				<div class="card-body">
+					<div class="d-flex">
+						<h3 class="font-weight-semibold mb-0">$18,390</h3>
+						<div class="list-icons ml-auto">
+							<a class="list-icons-item" data-action="reload"></a>
+						</div>
+					</div>
+
+					<div>
+						Today's revenue
+						<div class="font-size-sm opacity-75">$37,578 avg</div>
+					</div>
+				</div>
+
+				<div id="today-revenue"></div>
+			</div>
+			<!-- /today's revenue -->
+
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-md-4 col-sm-4">
 			<div class="card">
@@ -291,7 +378,33 @@
 					</ul>
 
 					<div class="tab-content">
-						Number of By Management Tools
+						Number Of Industries By Management Tools
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-4">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_comp_energy_source'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Number of Industries By Source of energy
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-4">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_comp_by_destination'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Number of Industries By Market Destination
 					</div>
 				</div>
 			</div>
