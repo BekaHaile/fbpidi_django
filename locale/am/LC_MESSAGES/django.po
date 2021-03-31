@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: .\accounts\forms.py:30
-#, fuzzy
+
 #| msgid "Password change"
 msgid "Password"
 msgstr "የይለፍ ቃል ቀይር"
@@ -73,7 +73,7 @@ msgstr ""
 
 #: .\templates\admin\base.html:39
 msgid "Welcome,"
-msgstr ""
+msgstr "እንኳን በደህና መጡ"
 
 #: .\templates\admin\base.html:44
 msgid "View site"
@@ -397,12 +397,12 @@ msgid "Exsiting User"
 msgstr "በፊት የተመዝገበ"
 
 #: .\templates\frontpages\index.html:652 .\templates\frontpages\index.html:684
-msgid ""
-"it look like readable English. Many desktop publishing packages and web page "
-"editors now use Lorem Ipsum as their default model text"
-msgstr ""
-"የሚነበብ እንግሊዝኛ ይመስላል። ብዙ የዴስክቶፕ ማተሚያ ጥቅሎች እና ድረ-ገጽ አርታኢዎች አሁን ሎረም አይፕሱምን እንደ "
-"ነባሪ አምሳያ ጽሑፋቸው ይጠቀማሉ"
+msgid "it look like readable English. Many desktop publishing packages and web page "
+msgstr "የሚነበብ እንግሊዝኛ ይመስላል። ብዙ የዴስክቶፕ ማተሚያ ጥቅሎች እና ድረ-ገጽ አርታኢዎች አሁን ሎረም አይፕሱምን እንደ "
+
+msgid "editors now use Lorem Ipsum as their default model text"
+msgstr "ነባሪ አምሳያ ጽሑፋቸው ይጠቀማሉ"
+
 
 #: .\templates\frontpages\index.html:653
 #: .\templates\frontpages\layout.html:220
@@ -741,6 +741,10 @@ msgstr "የዜና ዝርዝር"
 msgid "News Details"
 msgstr "የዜና ዝርዝር"
 
+#: .\template\frontpages\company\company_news.html:18
+msgid "Company Home Page"
+msgstr "የድርጅቱ ዎና ገጽ"
+
 #: .\templates\frontpages\news\customer_news_detail.html:128
 
 #| msgid "Research Description"
@@ -760,7 +764,7 @@ msgstr "ሁሉም"
 #: .\templates\frontpages\news\customer_news_list.html:65
 #: .\templates\frontpages\news\customer_news_list.html:69
 msgid "News list"
-msgstr "የዜናዎች"
+msgstr "የዜናዎች ዝርዝር"
 
 #: .\templates\frontpages\news\customer_news_list.html:68
 msgid "Pages"
@@ -965,7 +969,7 @@ msgid "Applicant Form"
 msgstr "የአመልካች ቅጽ"
 
 msgid "Total Applications"
-msgstr ""
+msgstr "አጠቃላይ አመልካቾች"
 
 
 
