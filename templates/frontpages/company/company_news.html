@@ -15,7 +15,7 @@
 							<h1 class="">{% print_translated object.name object.name_am LANGUAGE_CODE %} {% trans "News" %}</h1>
 							<ol class="breadcrumb text-center">
 								
-								<li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% trans "Company Home Page" %} </a></li>
+								<li class="breadcrumb-item"><a href="{% url 'company_home' pk=object.id %}">{% tran "Company Home Page" %} </a></li>
 								
 								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Company News List" %} </li>
 							</ol>
@@ -39,13 +39,13 @@
 								<div class="card">
 									<div class="item7-card-img">
 										<a href="{% url 'company_news_detail' pk=obj.id company_pk=object.id %}"></a>
-															{% if obj.get_images.0.image.url %}
-															<img src="{{obj.get_images.0.image.url}}" width = "370px" height= "200px" alt="img" class="cover-image">
-															{% elif obj.get_company.get_image %}
-															<img src="{{obj.get_company.get_image}}"  width = "370px" height= "200px" alt="img" class="cover-image">
-															{% else %}
-															<img src="/static/frontpages/images/products/products/v1.jpg" width = "370px" height= "200px"  alt="img" class="cover-image">
-															{% endif %}
+												{% if obj.get_images.0.image.url %}
+												<img src="{{obj.get_images.0.image.url}}" width = "370px" height= "200px" alt="img" class="cover-image">
+												{% elif obj.get_company.get_image %}
+												<img src="{{obj.get_company.get_image}}"  width = "370px" height= "200px" alt="img" class="cover-image">
+												{% else %}
+												<img src="/static/frontpages/images/products/products/v1.jpg" width = "370px" height= "200px"  alt="img" class="cover-image">
+												{% endif %}
 										<div class="item7-card-text">
 											<span class="badge badge-success">{{obj.catagory}}</span>
 										</div>
