@@ -332,3 +332,18 @@ class CheckoutForm(forms.ModelForm):
             'home_address':forms.TextInput(attrs={'class':'form-control','placeholder':'Home Address'}),
         }
     
+
+class ProductInquiryForm(forms.ModelForm):
+    attacement = forms.FileField(required=False)
+    class Meta:
+        model = ProductInquiry
+        fields = ("sender_email", "subject", "quantity","content", "attachement")
+        widgets = {
+            'sender_email':forms.TextInput(attrs={'class':'form-control','placeholder':'Your Email '}),
+            'subject':forms.TextInput(attrs={'class':'form-control','placeholder':'subject '}),
+            'quantity':forms.NumberInput(attrs={'class':'form-control'}),
+            'content': forms.Textarea(attrs={'class':'summernote','placeholder':'Your inquiry content'}),
+            'attachement':forms.FileInput(attrs={'class':'form-control'})
+        }
+        
+

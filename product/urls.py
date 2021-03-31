@@ -1,6 +1,6 @@
 from django.urls import path,include
 from product.views.views import  (AddToCartView,CartSummary,DecrementFromCart,CheckoutView,
- ProductDetailView, ProductByCategoryView, ProductByMainCategory,CreateReview)
+ ProductDetailView, ProductByCategoryView, ProductByMainCategory,CreateReview, FetchInquiryProducts, InquiryForm)
 
 
 urlpatterns = [
@@ -12,5 +12,10 @@ urlpatterns = [
     path("cart_summary/",CartSummary.as_view(),name="cart_summary"),
     path("decrement_cart/<id>/",DecrementFromCart.as_view(),name="decrement_cart"),
     path("checkout/",CheckoutView.as_view(),name="checkout"),
+
+    path("fetch_inquiry_products/", FetchInquiryProducts, name = "fetch_inquiry_products"),
+    path("inquiry_form/", InquiryForm.as_view(), name = "inquiry_form"),
+
+
     
 ]
