@@ -57,8 +57,15 @@ class CapitalUtilizationReportSector(LoginRequiredMixin,View):
             context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
             context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
             context['products'] = SubCategory.objects.filter(category_name=self.kwargs['sector'])
-        elif self.kwargs['option'] == 'product':
-            pass
+            context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
+        elif self.kwargs['option'] == 'by_product':
+            product = SubCategory.objects.get(id=self.kwargs['sector'])
+            companies = Company.objects.filter(category=product.category_name)
+            context['sub_sectors'] = Category.objects.filter(category_type=product.category_name.category_type)
+            context['title'] = product.sub_category_name
+            context['sector'] =  product.category_name.category_type 
+            context['products'] = SubCategory.objects.filter(category_name=product.category_name)
+            context['sub_sector'] =  product.category_name.category_name
         if companies == None:
             context['flag'] = "capital_utilization"
             context['title'] = self.kwargs['sector'] 
@@ -116,8 +123,16 @@ class ChangeInCapitalUtilization(LoginRequiredMixin,View):
             context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
             context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
             context['products'] = SubCategory.objects.filter(category_name=self.kwargs['sector'])
-        elif self.kwargs['option'] == 'product':
-            pass
+            context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
+        elif self.kwargs['option'] == 'by_product':
+            product = SubCategory.objects.get(id=self.kwargs['sector'])
+            companies = Company.objects.filter(category=product.category_name)
+            context['sub_sectors'] = Category.objects.filter(category_type=product.category_name.category_type)
+            context['title'] = product.sub_category_name
+            context['sector'] =  product.category_name.category_type 
+            context['products'] = SubCategory.objects.filter(category_name=product.category_name)
+            context['sub_sector'] =  product.category_name.category_name
+
         if companies == None:
             context['flag'] = "change_capital_utilization"
             context['title'] = self.kwargs['sector'] 
@@ -158,10 +173,13 @@ class AverageExtractionRate(LoginRequiredMixin,View):
             products = SubCategory.objects.filter(id=self.kwargs['product'])
             context['title']= SubCategory.objects.get(id=self.kwargs['product']).sub_category_name
         extn_rate = 0
+        index = 1
         for product in products:
-            for pcd in ProductionCapacity.objects.filter(product=product):
+            pcapacity = ProductionCapacity.objects.filter(product=product)
+            for pcd in pcapacity:
                 extn_rate+=pcd.extraction_rate
-            average_extraction_data.append({'product':product.sub_category_name,'data':extn_rate})
+                index += 1
+            average_extraction_data.append({'product':product.sub_category_name,'data':extn_rate/pcapacity.count(),})
         context['extn_data']=average_extraction_data
         context['flag'] = "extraction_data"
         context['products'] = SubCategory.objects.all()
@@ -185,16 +203,23 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
             else:
                 companies = Company.objects.filter(main_category=self.kwargs['sector'])
                 context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
-            context['title'] = self.kwargs['sector'] 
-            context['sector'] = self.kwargs['sector'] 
+                context['title'] = self.kwargs['sector'] 
+                context['sector'] = self.kwargs['sector']
         elif self.kwargs['option'] == 'by_sub_sector':
             companies = Company.objects.filter(category=self.kwargs['sector'])
             context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
             context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
             context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
             context['products'] = SubCategory.objects.filter(category_name=self.kwargs['sector'])
-        elif self.kwargs['option'] == 'product':
-            pass
+            context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
+        elif self.kwargs['option'] == 'by_product':
+            product = SubCategory.objects.get(id=self.kwargs['sector'])
+            companies = Company.objects.filter(category=product.category_name)
+            context['sub_sectors'] = Category.objects.filter(category_type=product.category_name.category_type)
+            context['title'] = product.sub_category_name
+            context['sector'] =  product.category_name.category_type 
+            context['products'] = SubCategory.objects.filter(category_name=product.category_name)
+            context['sub_sector'] =  product.category_name.category_name
 
         if companies == None:
             context['flag'] = "gross_vp_data"
@@ -214,10 +239,13 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
 
                 for p in production_performance_this_pre:
                     pp_prev += p.sales_value
-                gvp_data.append({'company':company.name,'data':float(pp_today+pp_last+pp_prev) })
+                gvp_data.append({'company':company.name,'data':float(pp_today+pp_last+pp_prev),'gvp_data':{
+                    'this_yr':pp_today,'last_yr':pp_last,'prev_yr':pp_prev
+                } })
 
             context['gvp_data'] = gvp_data
             context['flag'] = "gross_vp_data"
+            context['years'] = {'this_year':this_year,'last_year':this_year-1,'prev_year':this_year-2}
             
             return render(self.request,"admin/company/report_page.html",context)
 
@@ -236,20 +264,23 @@ class AverageUnitPrice(LoginRequiredMixin,View):
         price_total = 0
         prodn_total = 0
         for product in products:
-            for aup in ProductionAndSalesPerformance.objects.filter(product=product,activity_year=this_year):
-                price_total+=aup.sales_value
-                prodn_total+=aup.production_amount
-            
             pup = 0
-            if prodn_total == 0:
-                pup = float(price_total/1)
-            else:
-                pup = float(price_total/prodn_total)
+            spp = ProductionAndSalesPerformance.objects.filter(product=product,activity_year=this_year)
+            if spp.exists():
+                for aup in spp:
+                    price_total = aup.sales_value
+                    prodn_total = aup.sales_amount
+                
+                if prodn_total == 0:
+                    pup = float(price_total/1)
+                else:
+                    pup = float(price_total/prodn_total)
 
             average_price_data.append({'product':product.sub_category_name,'data':pup})
         context['price_data']=average_price_data
         context['flag'] = "unit_price_data"
         context['products'] = SubCategory.objects.all()
+        print(context)
         return render(self.request,"admin/company/report_page.html",context)
 
     
@@ -281,30 +312,86 @@ class InvestmentCapitalReportView(LoginRequiredMixin,View):
 
 class ProductionCapacityView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        template_name="admin/company/report_page.html"
-        context = {}
-        labels=[]
-        data=[]
-        labels2 = []
-        data2 = []
+        products = None
+        context = {}         
+        if self.kwargs['product'] == "all":
+            products = SubCategory.objects.all()
+            context['title']= "All Products"
+        else:
+            products = SubCategory.objects.filter(id=self.kwargs['product'])
+            context['title']= SubCategory.objects.get(id=self.kwargs['product']).sub_category_name
 
-        queryset = ProductionCapacity.objects.values('product').annotate(Sum('install_prdn_capacity')).order_by('product')
-        for entry in queryset:
-            labels.append(SubCategory.objects.get(id=entry['product']).sub_category_name)
-            data.append({'data':entry['install_prdn_capacity__sum'],'unit':SubCategory.objects.get(id=entry['product']).uom})
-            
-        
-        queryset2 = ProductionCapacity.objects.values('product').annotate(Sum('actual_prdn_capacity')).order_by('product')
-        for entry in queryset2:
-            labels2.append(SubCategory.objects.get(id=entry['product']).sub_category_name)
-            data2.append({'data':entry['actual_prdn_capacity__sum'],'unit':SubCategory.objects.get(id=entry['product']).uom})
+        total_data = []
+        prodn_total = 0
+        actual_total = 0
+        for product in products:
+            for aup in ProductionCapacity.objects.filter(product=product):
+                prodn_total+=float(aup.install_prdn_capacity*260)
+                actual_total+=float(aup.actual_prdn_capacity*260)
 
-        context['data'] = data
-        context['labels'] = labels
-        context['data_a'] = data2
-        context['labels_a'] = labels2
+            total_data.append({'product':product.sub_category_name,'total_data':{'installed':prodn_total,'actual':actual_total},'data':prodn_total+actual_total})
+        context['produn_data']=total_data
+        context['products'] = SubCategory.objects.all()
         context['flag'] = 'production_cap'
-        return render(self.request,template_name,context)
+        return render(self.request,"admin/company/report_page.html",context)
+  
+class InputAvailablity(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        products = None
+        context = {}         
+        if self.kwargs['product'] == "all":
+            products = SubCategory.objects.all()
+            context['title']= "All Products"
+        else:
+            products = SubCategory.objects.filter(id=self.kwargs['product'])
+            context['title']= SubCategory.objects.get(id=self.kwargs['product']).sub_category_name
+
+        total_data = []
+        supply = 0
+        demand = 0
+        av_inp = 0
+        for product in products:
+            inp_dem_sups = InputDemandSupply.objects.filter(product=product)
+            if inp_dem_sups.exists():
+                for aup in inp_dem_sups:
+                    demand += aup.demand
+                    supply += aup.supply
+
+                if demand == 0:
+                    av_inp=float(supply/1)
+                else:
+                    av_inp=float(supply/demand)
+                
+                total_data.append({'product':product.sub_category_name,'data':av_inp*100,'unit':product.uom})
+        context['avalilable_input']=total_data
+        context['flag'] = "avalilable_input"
+        context['products'] = SubCategory.objects.all()
+        return render(self.request,"admin/company/report_page.html",context)
+
+class ShareLocalInputs(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        products = None
+        context = {}         
+        if self.kwargs['product'] == "all":
+            products = SubCategory.objects.all()
+            context['title']= "All Products"
+        else:
+            products = SubCategory.objects.filter(id=self.kwargs['product'])
+            context['title']= SubCategory.objects.get(id=self.kwargs['product']).sub_category_name
+
+        total_data = []
+        local_share = 0
+        for product in products:
+            ann_inp_need = AnnualInputNeed.objects.filter(product=product)
+            if ann_inp_need.exists():
+                for aup in ann_inp_need:
+                    local_share += aup.local_input
+                
+                total_data.append({'product':product.sub_category_name,'data':local_share,'unit':product.uom})
+        context['input_share']=total_data
+        context['flag'] = "input_share"
+        context['products'] = SubCategory.objects.all()
+        return render(self.request,"admin/company/report_page.html",context)
 
 
 class CompanyListForReport(LoginRequiredMixin,ListView):
@@ -316,8 +403,6 @@ class CompanyListForReport(LoginRequiredMixin,ListView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership").order_by('-id')
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
         return context
 
 class FilterCompanyByMainCategory(LoginRequiredMixin,ListView):
@@ -337,8 +422,6 @@ class FilterCompanyByMainCategory(LoginRequiredMixin,ListView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.filter(category_type=self.kwargs['sector'])
         context['sector'] = self.kwargs['sector']
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
         return context
 
 
@@ -361,8 +444,6 @@ class FilterCompanyByEstablishedYear(LoginRequiredMixin,ListView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
         return context
 
 class FilterCompanyCategory(LoginRequiredMixin,ListView):
@@ -389,35 +470,28 @@ class FilterCompanyCategory(LoginRequiredMixin,ListView):
             return None
         context['sector'] = Category.objects.get(id=self.kwargs['category']).category_type
         context['sub_sector'] = Category.objects.get(id=self.kwargs['category']).category_name
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
         return context
 
-class FilterByOwnership(LoginRequiredMixin,ListView):
-    model = Company
-    template_name = "admin/company/companies_for_report.html"
+class OwnershipReport(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        ownership_data = []
+        context = {}
+        template_name = "admin/company/report_page.html"
+        company = Company.objects.all().exclude(main_category="FBPIDI")
+        queryset = Company.objects.values('ownership_form').annotate(Count('id')).order_by('ownership_form').exclude(main_category='FBPIDI')
+        total = 0
+        for ownership in queryset:
+            total += int(ownership['id__count'])
+            # label.append(CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']))
+            # data.append(ownership['id__count'])
+            # percent.append(float(ownership['id__count']/queryset.count())*100)
+            ownership_data.append({'label':CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']),
+                                    'data':ownership['id__count']})
+        context['total'] = total
+        context['ownership_data'] = ownership_data
+        context['flag'] = 'ownership_data'
+        return render(self.request,template_name,context)
 
-    def get_queryset(self):
-        return Company.objects.filter(ownership_form=self.kwargs['ownership_form'])
-    
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
-        return context
-
-class FilterByExpansionPlan(LoginRequiredMixin,ListView):
-    model = Company
-    template_name = "admin/company/companies_for_report.html"
-
-    def get_queryset(self):
-        return Company.objects.all().exclude(expansion_plan__icontains="No")
-    
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
-        return context
 
 class FilterByTradeLicense(LoginRequiredMixin,ListView):
     model = Company
@@ -428,36 +502,73 @@ class FilterByTradeLicense(LoginRequiredMixin,ListView):
     
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
         return context
 
-class FilterCertificate(LoginRequiredMixin,ListView):
-    model = Company
-    template_name = "admin/company/companies_for_report.html"
 
-    def get_queryset(self):
-        return Company.objects.filter(main_category__in=['Food','Beverage','Pharmaceuticals'])
-                
-    
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
-        return context
+class FilterByWorkingHour(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        working_hour_data = []
+        context = {}
+        template_name = "admin/company/report_page.html"
+        queryset = Company.objects.values('working_hours').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
+        total = 0
+        for working_hour in queryset:
+            total += int(working_hour['id__count'])
+            working_hour_data.append({'label':CompanyDropdownsMaster.objects.get(id=working_hour['working_hours']),
+                                    'data':working_hour['id__count']})
+        context['total'] = total
+        context['working_hour_data'] = working_hour_data
+        context['flag'] = 'working_hour_data'
+        return render(self.request,template_name,context)
+         
 
-class FilterByWorkingHour(LoginRequiredMixin,ListView):
-    model = Company
-    template_name = "admin/company/companies_for_report.html"
+class NumberofIndustriesByOption(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        context = {}
+        context['flag'] = "company_count"
+        template_name = "admin/company/companies_for_report.html"
+        if self.kwargs['option'] == 'research':
+            context['data'] = Company.objects.all().exclude(conducted_research='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Conducted Research"
+        elif self.kwargs['option'] == 'test_param':
+            context['data'] = Company.objects.all().exclude(outsourced_test_param='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Out Sourced Test Parameter"
+        elif self.kwargs['option'] == 'new_product':
+            context['data'] =  Company.objects.all().exclude(new_product_developed='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Developed New Product"
+        elif self.kwargs['option'] == 'expansion_plan':
+            context['data'] =  Company.objects.all().exclude(expansion_plan='No').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who has Expansion Plan"
+        elif self.kwargs['option'] == 'waste_trtmt_system':
+            context['data'] =  Company.objects.all().exclude(waste_trtmnt_system='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who have Waste Treatment & disposal System"
+        elif self.kwargs['option'] == 'ecomerce':
+            context['data'] =  Company.objects.filter(e_commerce=True).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Use Ecomerce"
+        elif self.kwargs['option'] == 'database':
+            context['data'] =  Company.objects.filter(active_database=True).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who has Active Database"
+        elif self.kwargs['option'] == 'efluent':
+            context['data'] =  Company.objects.filter(efluent_treatment_plant=True).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who has Efluent Treatment Plant"
+        elif self.kwargs['option'] == 'env_mgmt':
+            context['data'] =  Company.objects.filter(env_mgmt_plan=True).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who has Environmental Management Plan"
+        elif self.kwargs['option'] == 'focal_person':
+            context['data'] =  Company.objects.filter(env_focal_person=True).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who has have Environmental Focal person"
+        elif self.kwargs['option'] == 'saftey_profesional':
+            context['data'] =  Company.objects.filter(safety_profesional=True).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who has Saftey Professional"
+        elif self.kwargs['option'] == 'gass_emision':
+            context['data'] =  Company.objects.all().exclude(gas_carb_emision='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who Measure Their Gas Carbon Emission"
+        elif self.kwargs['option'] == 'comunity_compliant':
+            context['data'] =  Company.objects.all().exclude(comunity_compliant='').exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who have Compliant with local Community"
+        
+        return render(self.request,template_name,context)
 
-    def get_queryset(self):
-        return Company.objects.filter(working_hours=self.kwargs['working_hour'])
-    
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        context['ownership'] = CompanyDropdownsMaster.objects.filter(chk_type ="Forms of Ownership")
-        context['working_hour'] = CompanyDropdownsMaster.objects.filter(chk_type ="Working hours")
-        return context
 
 
 class NumberOfEmployees(LoginRequiredMixin,View):
@@ -481,6 +592,7 @@ class NumberOfEmployees(LoginRequiredMixin,View):
             context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
             context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
             context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+            context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
         
         if companies == None:
             context['flag'] = "num_employees"
@@ -525,6 +637,7 @@ class NumberOfEmployeesFemale(LoginRequiredMixin,View):
             context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
             context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
             context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+            context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
         if companies == None:
             context['flag'] = "num_employees"
             context['title'] = self.kwargs['sector'] 
@@ -570,6 +683,7 @@ class NumberOfEmployeesForeign(LoginRequiredMixin,View):
             context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
             context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
             context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+            context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
         if companies == None:
             context['flag'] = "num_employees_foreign"
             context['title'] = self.kwargs['sector'] 
@@ -592,31 +706,159 @@ class NumberOfEmployeesForeign(LoginRequiredMixin,View):
 
 class NumberOfJobsCreatedBySubSector(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        total_for_emp_m=0
-        total_for_emp_f=0
-        food_data=[]
-        bev_data=[]
-        pharm_data=[]
-        for company in Company.objects.filter(category=self.kwargs['sub_sector']):
-            employees_foreign = Employees.objects.filter(company=company,employment_type__icontains="Foreign")
-                        
-            for ef in employees_foreign:
-                total_for_emp_m += (ef.male)
-                total_for_emp_f += (ef.female)
+        job_created_data=[]
+        companies = None
+        context = {}
+        if self.kwargs['option'] == 'by_sector':
+            if self.kwargs['sector'] == "all":
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+            context['title'] = self.kwargs['sector']
+            context['sector'] = self.kwargs['sector'] 
+        elif self.kwargs['option'] == 'by_sub_sector':
+            companies = Company.objects.filter(category=self.kwargs['sector'])
+            context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
+            context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+        if companies == None:
+            context['flag'] = "num_jobs_created"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
+            return render(self.request,"admin/company/report_page.html",context)
+        else:
+            for company in companies:
+                jobs_created_temp = JobOpportunities.objects.filter(company=company,job_type__icontains="Temporary")
+                jobs_created_permanent = JobOpportunities.objects.filter(company=company,job_type__icontains="Permanent")
+               
+                temp_male = 0
+                temp_female = 0
+                for temp in jobs_created_temp:
+                    temp_female += temp.female
+                    temp_male += temp.male
 
-            total = total_for_emp_m+total_for_emp_f
+                permanent_male = 0
+                permanent_female = 0
+                for p in jobs_created_permanent:
+                    permanent_male += p.male
+                    permanent_female += p.female
 
-            if company.main_category == "Food":
-                food_data.append({'company':company.name,'data':total,'for_male':total_for_emp_m,'for_female':total_for_emp_f})
-            elif company.main_category == "Beverage":
-                bev_data.append({'company':company.name,'data':total,'for_male':total_for_emp_m,'for_female':total_for_emp_f})
-            elif company.main_category == "Pharmaceuticals":
-                pharm_data.append({'company':company.name,'data':total,'for_male':total_for_emp_m,'for_female':total_for_emp_f})
-        context = {
-            'food_data':food_data,'bev_data':bev_data,'pharm_data':pharm_data,
-            'flag':"num_employees_foreign"
-        }
-        return render(self.request,'admin/company/report_page.html',context)
+                job_created_data.append({'company':company.name,'data':{
+                    'temporary_male':temp_male,'temporary_female':temp_female,
+                    'permanent_male':permanent_male,'permanent_female':permanent_female
+                }})
+
+            context['job_created_data'] = job_created_data 
+            context['flag'] = "num_jobs_created"
+            return render(self.request,'admin/company/report_page.html',context)
+
+class EduLevelofEmployees(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        education_status_data = []
+        context = {}
+        template_name = "admin/company/report_page.html"
+        queryset = EducationalStatus.objects.values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
+        total = 0
+        for edu_data in queryset:
+            total += int(edu_data['female__sum']+edu_data['male__sum'])
+            education_status_data.append({'label':edu_data['education_type'],
+                                    'data':int(edu_data['female__sum']+edu_data['male__sum'])})
+        print(total)
+        context['total'] = total
+        context['education_status_data'] = education_status_data
+        context['flag'] = 'education_status_data'
+        return render(self.request,template_name,context)
+        template_name = "admin/company/companies_for_report.html"
+
+
+class NumWomenInPosition(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        women_in_pson_level = []
+        context = {}
+        template_name = "admin/company/report_page.html"
+        queryset = FemalesInPosition.objects.all()
+        # (Sum('high_position'),Sum('med_position'))
+        in_med = 0
+        in_high = 0
+        total = 0
+        for women_data in queryset:
+            in_high += int(women_data.high_position)
+            in_med += int(women_data.med_position)
+        total = int(in_high+in_med)
+        women_in_pson_level.append({'label':'Med Level Positions','data':in_med})
+        women_in_pson_level.append({'label':'Higher Level Positions','data':in_high})
+        context['total'] = total
+        context['women_in_pson_level'] = women_in_pson_level
+        context['flag'] = 'women_in_pson_level'
+        print(context)
+        return render(self.request,template_name,context)
+
+class CompanyCertificationData(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        certification_data = []
+        context = {}
+        template_name = "admin/company/report_page.html"
+        queryset = Company.objects.values('certification').annotate(Count('id')).order_by('certification').exclude(main_category='FBPIDI')
+        total = 0
+        for certification in queryset:
+            total+= int(certification['id__count'])
+            certification_data.append({'label':CompanyDropdownsMaster.objects.get(id=certification['certification']).name,
+                                    'data':certification['id__count']})
+        context['total'] = total
+        context['certification_data'] = certification_data
+        context['flag'] = 'certification_data'
+        return render(self.request,template_name,context)
+        template_name = "admin/company/companies_for_report.html"
+
+class CompanyByManagementTools(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        management_tool_data = []
+        context = {}
+        template_name = "admin/company/report_page.html"
+        queryset = Company.objects.values('management_tools').annotate(Count('id')).order_by('management_tools').exclude(main_category='FBPIDI')
+        total = 0
+        for management_tool in queryset:
+            total+= int(management_tool['id__count'])
+            management_tool_data.append({'label':CompanyDropdownsMaster.objects.get(id=management_tool['management_tools']).name,
+                                    'data':management_tool['id__count']})
+        context['total'] = total
+        context['management_tool_data'] = management_tool_data
+        context['flag'] = 'management_tool_data'
+        return render(self.request,template_name,context)
+
+class EnergySourceData(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        energy_source_data = []
+        context = {}
+        template_name = "admin/company/report_page.html"
+        queryset = Company.objects.values('source_of_energy').annotate(Count('id')).order_by('source_of_energy').exclude(main_category='FBPIDI')
+        total = 0
+        for energy_source in queryset:
+            if energy_source['source_of_energy'] != None:
+                total+= int(energy_source['id__count'])
+                energy_source_data.append({'label':CompanyDropdownsMaster.objects.get(id=energy_source['source_of_energy']).name,
+                                    'data':energy_source['id__count']})
+        context['total'] = total
+        context['energy_source_data'] = energy_source_data
+        context['flag'] = 'energy_source_data'
+        return render(self.request,template_name,context)
+    
+
+class CompaniesByDestination(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        template_name = "admin/company/report_page.html"
+        context = {}
+        company = Company.objects.all().exclude(main_category='FBPIDI')
+        context['destination_data'] = [{'label':"Exporting ",
+                                        'data':company.filter(market_destination__export__gt=0,market_destination__year=2021).count()},
+                                        {'label':"Local/Domestic",
+                                        'data':company.filter(market_destination__domestic__gt=0,market_destination__year=2021).count()}
+                                    ]
+        context['flag'] = "destination_data"
+        return render(self.request,template_name,context)
 
 class ExportCSV(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):

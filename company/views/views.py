@@ -1053,7 +1053,7 @@ class CompanyByMainCategory(ListView):
         elif self.kwargs['option'] == "Pharmaceuticals":
             return Company.objects.filter(main_category="Pharmaceuticals")
         elif self.kwargs['option'] == "all":
-            return Company.objects.all()
+            return Company.objects.all().exclude(main_category="FBPIDI")
 
 class ProjectList(ListView):
     model = InvestmentProject
