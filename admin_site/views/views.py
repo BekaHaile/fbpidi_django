@@ -11,7 +11,7 @@ from product import models
 from product.models import *
 from accounts.models import UserProfile
 from company.models import Company,CompanyEvent, HomePageSlider, InvestmentProject
-from admin_site.models import Category
+from admin_site.models import *
 from chat.models import ChatGroup, ChatMessage
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
@@ -71,9 +71,7 @@ class DeleteView(LoginRequiredMixin,View):
                 message = "Sub category Deleted"
                 messages.success(self.request,message)
                 return redirect("admin:sub_categories")
-            
             elif self.kwargs['model_name'] == 'Brand':
-                
                 brand=Brand.objects.get(id=self.kwargs['id']) 
                 brand.delete()
                 message = "Brand Deleted"
@@ -128,6 +126,34 @@ class DeleteView(LoginRequiredMixin,View):
                 messages.success(self.request,message)
                 return redirect("admin:project_list")
 
+
+                # settings
+            elif self.kwargs['model_name'] == 'CompanyDropdownsMaster':
+                company_dropdown_master = CompanyDropdownsMaster.objects.get(id=self.kwargs['id'])
+                company_dropdown_master.delete()
+                message ="Company Lookup Item Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:settings")
+            elif self.kwargs['model_name'] == 'ProjectDropDownsMaster':
+                project_dropdown_master = ProjectDropDownsMaster.objects.get(id=self.kwargs['id'])
+                project_dropdown_master.delete()
+                message ="Project Lookup Item Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:settings")
+            elif self.kwargs['model_name'] == 'Dose':
+                dose = Dose.objects.get(id=self.kwargs['id'])
+                dose.delete()
+                message ="Dose Item Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:settings")
+            elif self.kwargs['model_name'] == 'RegionMaster':
+                region = RegionMaster.objects.get(id=self.kwargs['id'])
+                region.delete()
+                message ="Region Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:settings")
+
+
             elif self.kwargs['model_name'] == 'Vacancy':
                 vacancy = Vacancy.objects.get(id=self.kwargs['id'])
                 vacancy.delete()
@@ -163,7 +189,7 @@ class DeleteView(LoginRequiredMixin,View):
                 category = ResearchProjectCategory.objects.get(id=self.kwargs['id'])
                 category.delete()
                 messages.success(self.request,"Research and project Category Deleted")
-                return redirect("admin:research_project_category_list")
+                return redirect("admin:settings")
             elif self.kwargs['model_name'] == 'PollsQuestion':
                 poll = PollsQuestion.objects.get(id = self.kwargs['id'])
                 poll.delete()
