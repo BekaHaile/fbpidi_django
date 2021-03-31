@@ -1,0 +1,132 @@
+{%extends 'frontpages/layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+
+{%block title%}{{object.name}}-Contact{%endblock%}
+{%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+		<!--Breadcrumb-->
+		<div>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white ">
+							<h1 class="">{% trans "Inquiry Form" %}</h1>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/Breadcrumb-->
+		{% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-warning" role="alert">
+                        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                        <span class="font-weight-semibold">{{message}}</span>
+                    </div>
+
+                    {% endfor %}
+                {% endif %}
+
+		<!--Contact-->
+		<div class="sptb bg-white">
+			<div class="container">
+				<div class="row ">
+				    <div class="col-xl-11 col-lg-5 col-md-10"> 
+						<!--Add Lists-->
+						 
+						<div class="row">
+                            <div class="card "  style = "padding-left:20px">
+								<form action="{% url 'inquiry_form' %}" method="POST" enctype="multipart/form-data">
+									{%csrf_token%}
+									{%if form.errors%}
+									<div class="alert alert-danger" role="alert">
+									  {{form.errors}}
+									</div>
+									{% endif %}
+									<div class="card-header ">
+										<h3 class="card-title">Send Your Inquiry</h3>
+									</div>
+                                    <input type="hidden" id = "products_input" name="products" >
+
+									<div class="card-body ">
+
+										<div class="row" style="margin-bottom: 20px;">
+											<label class="form-label text-dark" >From *</label>
+                                            <div class="  col-lg-9">
+                                                {%if user.is_authenticated and user.email %}
+                                                    <input type= "text" name="sender_email" class = " form-control" value = "{{user.email}}" placeholder= 'Your Email '>
+                                                {% else %}
+                                                    
+                                                        {{form.sender_email}}
+                                                    
+                                                {% endif %}
+                                            </div>
+										</div>
+
+										
+																					
+										<div class="row " style="margin-bottom: 20px;">
+											<label class="form-label text-dark mr-5">To </label>
+
+											<div class=" card card-body col-lg-9">
+                                                
+												<img src = "{{products.0.image.url}}" width = "40px" height = "40px">
+                                                <p>{{products.0.company.name}}</p>
+
+											</div>
+
+										</div>
+
+                                        <div class="row mb-3" style="margin-bottom: 20px;">
+                                            <label class="form-label text-dark">Subject *</label>
+                                            <div class="col-lg-9">
+                                                {{form.subject}}
+                                                </div>
+                                        </div>
+
+                                        <div class="row mt-5 mb-5" style="margin-bottom: 20px;">
+                                            <label class="form-label text-dark">Quantity *</label>
+                                            <div class="col-lg-3">
+                                                {{form.quantity}}
+                                                </div>
+                                        </div>
+                                        <div class="row mb-3" style="margin-bottom: 20px;">
+                                            <label class="form-label text-dark">Content *</label>
+                                            <div class="col-lg-9">
+                                                {{form.content}}
+                                                </div>
+                                        </div>
+                                        <div class="row mt-5" style="margin-bottom: 20px;">
+                                            <label class="form-label text-dark">Any Attachments </label>
+                                            <div class="col-lg-9">
+                                                {{form.attachement}}
+                                                </div>
+                                        </div>
+
+										
+									</div>
+
+									<div class="text-right">
+										<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+											class="btn btn-primary rounded-round mr-5 mb-5">Send Inquiry </button>
+									</div>
+								</form>
+                            </div>
+
+						
+                            
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--Contact-->
+        <script>
+            document.getElementById("products_input").value = "{{prods_id_list}}"
+        </script>
+
+	
+{%endblock%}

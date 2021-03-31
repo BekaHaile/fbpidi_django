@@ -477,7 +477,10 @@
         </div>
     </footer>
     <script>
-        setInterval(check_inbox, 2000);
+        // check unread messages for only logged in users
+        if ("{{user.is_authenticated}}"=="True")
+            setInterval(check_inbox, 2000);
+            
         function check_inbox(){
               
                 fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>

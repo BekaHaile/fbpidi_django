@@ -165,7 +165,19 @@
 																	</div>
 																</div>
 																<div class="ml-auto mt-3 mt-sm-0">
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																		<!-- the add_to_cart is a js function written inside frontpages/layout.html -->
+																		
+
+																		<div style = "display: inline;" class="mr-0">
+																			<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" class="mr-0">
+																				<input type="hidden" name="products" value="{{product.id}},">
+																				<button  type="submit">Contact Now</button>
+																			<a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
+																			</form>
+																			<button class= " bg-secondary" id = "prod_{{product.id}}" onclick = "add_to_cart('{{product.id}}')">Add To Basket</button>
+																			
+																		</div>
 																</div>
 															</div>
 														</div>

@@ -36,8 +36,8 @@ class Company(models.Model):
 	detail_am = models.TextField(verbose_name="Company Description in Amharic",default="")
 	contact_person	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True,related_name="contact_person") # contact person
 	category	= models.ManyToManyField(Category,related_name="company_category",verbose_name="Company Product Types") # category
-	expansion_plan	= models.TextField(verbose_name="Expansion Plan in English",default="No")
-	expansion_plan_am	= models.TextField(verbose_name="Expansion Plan in Amharic",default="No")
+	expansion_plan	= models.TextField(verbose_name="Expansion Plan in English", null = True)
+	expansion_plan_am	= models.TextField(verbose_name="Expansion Plan in Amharic", null = True)
 	trade_license	= models.FileField(max_length=254, verbose_name="your Trade License",
 									help_text="Images and pdf files less than 10MB", null=True,
 									upload_to="company/trade_license/",

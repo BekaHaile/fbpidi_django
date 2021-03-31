@@ -34,7 +34,7 @@
 				<div class="row">
 					{%for slider in object_list%}
 					<div class="col-sm-6 col-xl-4">
-						<div class="card" ">
+						<div class="card" >
 							<div class="card-img-actions mx-1 mt-1">
 								<img class="card-img img-fluid" src="{{slider.slider_image.url}}" style="height: 150px; ">
 								<div class="card-img-actions-overlay card-img">
@@ -56,7 +56,7 @@
 
 									<div class="list-icons list-icons-extended ml-auto">
 										<a href="{%url 'admin:update_slider' pk=slider.id%}" class="list-icons-item"><i class="icon-pencil top-0"></i></a>
-										<a onclick="return confirm('Are You sure you want to delete this image?');" href="#" class="list-icons-item"><i class="icon-bin top-0"></i></a>
+										<a onclick="return confirm('Are You sure you want to delete this image?');" href="{%url 'admin:delete' model_name='slider_image' id=slider.id%}" class="list-icons-item"><i class="icon-bin top-0"></i></a>
 									</div>
 								</div>
 							</div>
