@@ -5,7 +5,11 @@ from django.utils import timezone
 from admin_site.models import Category
 from company.models import Company
 
-
+UOM=(
+    ('Pieces', 'Pieces'),
+    ('Bags', 'Bags'),
+    ('Boxes', "Boxes")
+)
 # This is For Product/Type
 class SubCategory(models.Model):
     category_name = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,
@@ -229,7 +233,11 @@ class ProductInquiry(models.Model):
     pieces = models.CharField(max_length=100)
     content = models.TextField()
     attachement = models.FileField(upload_to = "InquiryDocument/", max_length=254, verbose_name="Inquiry document",help_text="pdf, Max size 3MB", blank=True)
-    created_date = models.DateTimeField()
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def save(self):
+        self.pieces = self.product.brand.product_type.uom
+        super(ProductInquiry, self).save()
 
 
 class Order(models.Model):

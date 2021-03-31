@@ -159,18 +159,25 @@
 																		<a class="" href="mailto:{{product.company.get_company_address.email}}" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
 																		<a class="" href="{{product.get_company_address.fax}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.get_company_address.fax}}"><i class="fa fa-globe"></i></a>
-																		<a class="" href="/chat/with/{{product.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-																		
+																		<a class="" href="/chat/with/{{product.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+
 																		<a class="" href="#"><i class="fa fa-share-alt"></i></a>
 																	</div>
 																</div>
 																<div class="ml-auto mt-3 mt-sm-0">
-																
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																		<button id="prod_{{product.id}}" onclick = "add_to_basket('{{product.id}}')">Add</button>
-																		<a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a>
+																		<!-- the add_to_cart is a js function written inside frontpages/layout.html -->
 																		
-																	</div>
+
+																		<div style = "display: inline;" class="mr-0">
+																			<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" class="mr-0">
+																				<input type="hidden" name="products" value="{{product.id}},">
+																				<button  type="submit">Contact Now</button>
+																			<a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
+																			</form>
+																			<button class= " bg-secondary" id = "prod_{{product.id}}" onclick = "add_to_cart('{{product.id}}')">Add To Basket</button>
+																			
+																		</div>
 																</div>
 															</div>
 														</div>
@@ -180,7 +187,7 @@
 											{%endfor%}
 										</div>
 										<div class="tab-pane" id="tab-12">
-											
+
 											<div class="row">
 												{%for product in object_list%}
 												<div class="col-lg-6 col-md-6 col-xl-6">
@@ -197,7 +204,7 @@
 																</div>
 																<div class="item-cardreview-absolute bg-secondary">
 																	{{product.brand.product_type.category_name.category_type}}
-																	
+
 															</div>
 															<div class="card border-0 mb-0">
 																<div class="card-body">
@@ -238,7 +245,7 @@
 																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
 																				<a class="" href="{{product.get_company_address.fax}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.get_company_address.fax}}"><i class="fa fa-globe"></i></a>
 																				<a class="" href="/chat/with/{{product.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-																				
+
 																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
 																			</div>
 																		</div>
@@ -251,8 +258,9 @@
 														</div>
 													</div>
 												</div>
+
+											    </div>
 												{%endfor%}
-											</div>
 										</div>
 									</div>
 								</div>
@@ -275,63 +283,48 @@
 						</div>
 						<!--/Add lists-->
 					</div>
-					
-					<!--Right Side Content-->
-					<div class="col-xl-3 col-lg-3 col-md-12">
-						<div class="card">
-							<div class="card-body">
-								<div class="input-group">
-									<input type="text" class="form-control br-tl-3 br-bl-3" placeholder="Search">
-									<div class="input-group-append ">
-										<button type="button" class="btn btn-secondary br-tr-3 br-br-3">
-											Search
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card mb-0">
-							<div class="card-header">
-								<h3 class="card-title">Categories</h3>
-							</div>
-							<div class="card-body">
-								<div class="" id="container">
-									<div class="filter-product-checkboxs">
-										{%for category in categories%}
-										<label class="custom-control custom-checkbox mb-3">
-											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
-											<span class="custom-control-label">
+				    </div>
+
+                    <!--Right Side Content-->
+                    <div class="col-xl-3 col-lg-3 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="input-group">
+                                    <input type="text" class="form-control br-tl-3 br-bl-3" placeholder="Search">
+                                    <div class="input-group-append ">
+                                        <button type="button" class="btn btn-secondary br-tr-3 br-br-3">
+                                            Search
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-0">
+                            <div class="card-header">
+                                <h3 class="card-title">Categories</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="" id="container">
+                                    <div class="filter-product-checkboxs">
+                                        {%for category in categories%}
+                                        <label class="custom-control custom-checkbox mb-3">
+                                            <input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
+                                            <span class="custom-control-label">
 												<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{{category.category_name|truncatechars_html:20}}</a>
 											</span>
-										</label>
-										 {%endfor%}
-									</div>
-								</div>
-							</div>
-							  
-						</div>
-					</div>
-					<!--/Right Side Content-->
-				</div>
+                                        </label>
+                                        {%endfor%}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--/Right Side Content-->
 			</div>
 		</section>
 		<!--/Add Listings-->
-		<script>
-			localStorage.removeItem("prods")
-			function add_to_basket(product_id){
-				if (localStorage.getItem("prods") != null){
-					var ps = localStorage.getItem("prods")+product_id +",";
-					localStorage.setItem("prods", ps)
-					window.alert(localStorage.getItem("prods"))
-				}
-				else{
-					localStorage.setItem("prods", product_id+",")
-					window.alert(localStorage.getItem("prods"))
-				}
-				document.getElementById("prod_"+product_id).disabled = true
-			}
-		</script>
 
-		
 
-		{%endblock%} 
+
+		{%endblock%}

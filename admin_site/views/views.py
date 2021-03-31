@@ -341,7 +341,7 @@ class DeleteView(LoginRequiredMixin,View):
                     return redirect("admin:tenders")   
         
         except Exception as e:
-                messages.warning(self.request, "Exception while deleting! \n hint: item may not be available!")
+                messages.warning(self.request, "Exception while deleting! \n hint: item may not be available!",e)
                 return redirect("admin:index") 
 
 

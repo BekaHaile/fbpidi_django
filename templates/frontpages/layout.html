@@ -139,8 +139,8 @@
                             <li  class="nav-item dropdown">
                                 <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
                                 
-                                    <a href = "{% url 'cart_summary' %} "><i class="fa fa-shopping-cart mr-1"></i><span>{% trans "My Cart" %}</span></a>
-                                    <span id = "inquiry_basket" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
+                                    <a href = ""><i class="fa fa-shopping-cart mr-1"></i><span>{% trans "My Cart" %}</span></a>
+                                    <span id = "num_of_inquiry" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
                                 </a>
                                 
                                 
@@ -148,8 +148,15 @@
                                    
                                     <div class="dropdown-content-body dropdown-scrollable">
                                         <ul id = "inquiry_list" style = "width: 100%;" class="media-list">
-                                            
+                                        
+                                        
+                                    
                                         </ul>
+                                        
+                                        
+                                            <input type= "hidden" id="list_of_prod_ids" name ="products" value="" >
+                                            <button class="btn mt-4" id="btn_send_inquiry" style = "background-color: orange; display: none;">Send Inquiry</button>
+                                       
                                     </div>
                                 
                     
@@ -160,16 +167,8 @@
 
                             {%if user.is_authenticated%}
                             
-
-                            
-                           
                             {%if user.is_customer%}
-                            <!-- <li class="dropdown">
-                                <a href="{% url 'cart_summary' %}" class="text-dark">
-                                    <i class="fa fa-shopping-cart mr-1"></i><span>{% trans "My Cart" %}</span>
-                                </a>
-
-                            </li> -->
+                           
                             <li class="dropdown">
                                 <a href="{% url 'mydash' %}" class="text-dark">
                                     <i class="fa fa-user mr-1"></i><span>{% trans "My Profile" %}</span>
@@ -195,9 +194,7 @@
                                             
                                         </ul>
                                     </div>
-                                
-                    
-                                   
+                                  
                                 </div>
                             </li>
                            
@@ -217,7 +214,6 @@
                                     <span id = "num_unread_messages" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
                                 </a>
                                 
-                                
                                 <div style = "padding: 10px;   width: 300px;" class = "dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
                                     <div class="dropdown-content-header">
                                         <span class="font-weight-semibold">{% trans " List of Messages" %}</span>
@@ -227,10 +223,7 @@
                                         <ul id = "list_of_senders" style = "width: 100%;" class="media-list">
                                             
                                         </ul>
-                                    </div>
-                                
-                    
-                                   
+                                    </div>   
                                 </div>
                             </li>
                            
@@ -531,101 +524,11 @@
         </div>
     </footer>
 
-    <script>
-        function add_to_basket(product_id){
-				if (localStorage.getItem("prods") != null){
-					var ps = localStorage.getItem("prods")+product_id +",";
-					localStorage.setItem("prods", ps)
-					window.alert(localStorage.getItem("prods"))
-				}
-				else{
-					localStorage.setItem("prods", product_id+",")
-					window.alert(localStorage.getItem("prods"))
-				}
-				document.getElementById("prod_"+product_id).disabled = true
-			}
-        setInterval(check_inbox, 2000);
-        function check_inbox(){
-              
-                fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>
-                {   num_unread_messages = data['num']
-                    if (num_unread_messages > 0)
-                        document.getElementById("num_unread_messages").innerHTML = num_unread_messages
-                     // first clear the list area 
-                    document.getElementById('list_of_senders').innerHTML = "";
-                    for (unread_message of data['unread_messages']){
-                        console.log("from for loop"+unread_message.sender_name+" "+unread_message.message)
-                        append_unread_messages(unread_message);
-                    }
-
-                });
-            }
-
-            function append_unread_messages(message_obj){
-                console.log("from appende meesages"+message_obj)
-        
-        var li_item = document.createElement('li');
-        li_item.id = message_obj.content;
-        var li_card_item = document.createElement('div');
-        li_card_item.className = "card card-body "
-        li_card_item.style['padding']="5px";
-        li_card_item.style['margin']="0px 0px 5px";
-        
-            var img_div = document.createElement('div');
-                var image_anchor = document.createElement('a');
-                    var image_item = document.createElement('img');
-
-                var chat_div = document.createElement('div');
-                        var name_anch = document.createElement('a');
-                        var count_area = document.createElement('p');
-            var time_area = document.createElement('small');           
-              
-    //    ######################## setting values
-                image_item.src = message_obj.sender_image;
-                image_item.className = "rounded-circle mr-2"
-                image_item.width = "36";
-                image_item.height = "36";
-               
-            image_anchor.href = "/chat/with/"+message_obj.sender_name+"/";
-            image_anchor.style['display'] = 'inline'
-            image_anchor.appendChild(image_item);
-
-        img_div.style['display'] ='inline'
-        img_div.appendChild(image_anchor)
-            name_anch.href = "/chat/with/"+message_obj.sender_name+"/";
-            name_anch.target = "blank";
-            name_anch.className = "mr-3";
-            name_anch.textContent = message_obj.sender_name;
-            count_area.className = "badge bg-danger badge-pill ml-auto float-right";
-            count_area.style['color'] = "white"
-            count_area.textContent = message_obj.count;
-            
-        img_div.appendChild(name_anch) 
-        img_div.appendChild(count_area)
-        
-        time_area.textContent = message_obj.time;
-        time_area.className = "text-muted float-right font-size-sm";
-
-        chat_div.className = "media-body";
-        chat_div.appendChild(time_area);
-        
-        li_card_item.appendChild(img_div);
-        li_card_item.appendChild(chat_div)
-        li_item.className = "media";
-        li_item.appendChild(li_card_item);
-        
-        ul_item =document.getElementById('list_of_senders')
-        ul_item.appendChild(li_item);
-
-    }
-    
-
-    </script>
-
 </section>
 <!--Footer Section-->
 <!-- Back to top -->
 <a href="#top" id="back-to-top"><i class="fa fa-rocket"></i></a>
+
 
 <!-- subscribe script -->
 <script>
@@ -651,6 +554,238 @@
     }
     
 </script>
+
+<!-- Start of Script for unread messages  -->
+<script>
+    
+    // Check the inbox for logged in users only
+    if ("{{user.is_authenticated}}"=="True")
+        setInterval(check_inbox, 2000);
+    
+    
+    function check_inbox(){
+          
+            fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>
+            {   num_unread_messages = data['num']
+                if (num_unread_messages > 0)
+                    document.getElementById("num_unread_messages").innerHTML = num_unread_messages
+                 // first clear the list area 
+                document.getElementById('list_of_senders').innerHTML = "";
+                for (unread_message of data['unread_messages']){
+                    console.log("from for loop"+unread_message.sender_name+" "+unread_message.message)
+                    append_unread_messages(unread_message);
+                }
+
+            });
+        }
+
+
+    function append_unread_messages(message_obj){
+            console.log("from appende meesages"+message_obj)
+    
+    var li_item = document.createElement('li');
+    li_item.id = message_obj.content;
+    var li_card_item = document.createElement('div');
+    li_card_item.className = "card card-body "
+    li_card_item.style['padding']="5px";
+    li_card_item.style['margin']="0px 0px 5px";
+    
+        var img_div = document.createElement('div');
+            var image_anchor = document.createElement('a');
+                var image_item = document.createElement('img');
+
+            var chat_div = document.createElement('div');
+                    var name_anch = document.createElement('a');
+                    var count_area = document.createElement('p');
+        var time_area = document.createElement('small');           
+          
+//    ######################## setting values
+            image_item.src = message_obj.sender_image;
+            image_item.className = "rounded-circle mr-2"
+            image_item.width = "36";
+            image_item.height = "36";
+           
+        image_anchor.href = "/chat/with/"+message_obj.sender_name+"/";
+        image_anchor.style['display'] = 'inline'
+        image_anchor.appendChild(image_item);
+
+    img_div.style['display'] ='inline'
+    img_div.appendChild(image_anchor)
+        name_anch.href = "/chat/with/"+message_obj.sender_name+"/";
+        name_anch.target = "blank";
+        name_anch.className = "mr-3";
+        name_anch.textContent = message_obj.sender_name;
+        count_area.className = "badge bg-danger badge-pill ml-auto float-right";
+        count_area.style['color'] = "white"
+        count_area.textContent = message_obj.count;
+        
+    img_div.appendChild(name_anch) 
+    img_div.appendChild(count_area)
+    
+    time_area.textContent = message_obj.time;
+    time_area.className = "text-muted float-right font-size-sm";
+
+    chat_div.className = "media-body";
+    chat_div.appendChild(time_area);
+    
+    li_card_item.appendChild(img_div);
+    li_card_item.appendChild(chat_div)
+    li_item.className = "media";
+    li_item.appendChild(li_card_item);
+    
+    ul_item =document.getElementById('list_of_senders')
+    ul_item.appendChild(li_item);
+
+}
+
+
+</script>
+<!-- End of Script for unread message  -->
+
+
+
+
+<!-- start of script for cart  -->
+<script>
+
+console.log(localStorage.getItem("prods"))
+if (count_products() > 0)
+{
+    document.getElementById("num_of_inquiry").innerHTML = count_products()
+    document.getElementById("btn_send_inquiry").style['display'] = "block"
+    // store the list of selected product ids inside a hidden input, so that we can send it in the get request
+    document.getElementById("list_of_prod_ids").value = localStorage.getItem("prods")
+    fetch_products()
+}
+else{
+    document.getElementById("num_of_inquiry").innerHTML = ""
+    document.getElementById("btn_send_inquiry").display = "none"
+}
+
+
+function count_products(){
+    if(localStorage.getItem("prods") == null)
+        return 0
+    else
+        {
+        var num = localStorage.getItem("prods").match(/,/g || []).length;
+        console.log("num of , is ", num)
+        return num
+        }
+}
+
+function add_to_cart(product_id){
+    
+    if(localStorage.getItem("prods") == null){
+        localStorage.setItem("prods",product_id+",")
+        }
+    else{
+        
+        var p = localStorage.getItem("prods")+product_id+","
+        localStorage.setItem("prods", p) ;
+        // then disable the Add to Basket for that specific product
+        document.getElementById('prod_'+product_id).disabled = true
+    }
+    // document.getElementById('prod_'+product_id).disabled = true
+    window.alert(localStorage.getItem("prods"))
+    fetch_products();
+}
+
+
+function fetch_products(){
+    console.log("inside fetch_products")
+    fetch("{% url 'fetch_inquiry_products'  %}",
+            {
+                method:"POST",
+                credentials: 'same-origin',
+                headers:{
+                    "content-Type":'application/json',
+                    'X-CSRFToken':'{{csrf_token}}'
+                },
+                body:JSON.stringify({
+                    'products': localStorage.getItem("prods"),
+                })
+            }
+           ).then(e => e.json()).then(result=>{
+                    console.log(result)
+                    // first clear the ul item
+                    document.getElementById('inquiry_list').innerHTML = "";
+                    result.forEach(element => {
+                        append_product_cart(element)
+                    });
+
+                    if (count_products() > 0)
+                        {
+                        console.log("changing the number ", count_products())
+                        document.getElementById("num_of_inquiry").innerHTML = count_products()
+                        document.getElementById("btn_send_inquiry").style['display'] = "block"
+                        document.getElementById("list_of_prod_ids").value = localStorage.getItem("prods")
+                        }
+                                  
+                });
+        
+    
+}
+           
+function append_product_cart(product){
+    var li_item = document.createElement('li');
+    var li_card_item = document.createElement('div');
+    li_card_item.className = "card card-body "
+    li_card_item.style['padding']="5px";
+    li_card_item.style['margin']="0px 0px 5px";
+    
+        var img_div = document.createElement('div');
+            var image_anchor = document.createElement('a');
+                var image_item = document.createElement('img');
+
+            var prod_div = document.createElement('div');
+                    var name_anch = document.createElement('a');
+                    var count_area = document.createElement('p');
+             
+          
+//    ######################## setting values
+            image_item.src = product.image;
+            image_item.className = "mr-2"
+            image_item.width = "40";
+            image_item.height = "40";
+           
+        // image_anchor.href = "/chat/with/"+message_obj.sender_name+"/";
+        image_anchor.style['display'] = 'inline'
+        image_anchor.appendChild(image_item);
+
+        img_div.style['display'] ='inline'
+        img_div.appendChild(image_anchor)
+        // name_anch.href = "/product/"+message_obj.sender_name+"/";
+        name_anch.target = "blank";
+        name_anch.className = "mr-3";
+        name_anch.textContent = product.name;
+        count_area.className = "badge bg-danger badge-pill ml-auto float-right";
+        count_area.style['color'] = "white"
+        count_area.textContent = 3;
+        
+    img_div.appendChild(name_anch) 
+    img_div.appendChild(count_area)
+    
+   
+
+    prod_div.className = "media-body";
+    
+    
+    li_card_item.appendChild(img_div);
+    li_card_item.appendChild(prod_div)
+    li_item.className = "media";
+    li_item.appendChild(li_card_item);
+    
+    ul_item =document.getElementById('inquiry_list')
+    ul_item.appendChild(li_item);
+
+}
+
+  
+</script>
+<!-- End of Script for cart -->
+
+
 
 <!-- JQuery js-->
 <script src="/static/frontpages/js/vendors/jquery-3.2.1.min.js"></script>
