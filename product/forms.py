@@ -115,14 +115,14 @@ class ProductCreationForm(forms.ModelForm):
         if (x or y or w or h ):
                 image = Image.open(product.image)
                 cropped_image = image.crop((x, y, w+x, h+y))
-                resized_image = cropped_image.resize((1280, 720), Image.ANTIALIAS)
+                resized_image = cropped_image.resize((208, 208), Image.ANTIALIAS)
                 resized_image.save(product.image.path)
 
                 return product
                 
         else:
                 image = Image.open(product.image)
-                resized_image = image.resize((1280, 720), Image.ANTIALIAS)
+                resized_image = image.resize((208, 208), Image.ANTIALIAS)
                 resized_image.save(product.image.path)
                 return product
     

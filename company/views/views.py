@@ -266,10 +266,14 @@ class CreateCompanyAddress(LoginRequiredMixin,CreateView):
     form_class = CompanyAddressForm
 
     def form_valid(self,form):
-        address = form.save(commit=False)
-        address.company = Company.objects.get(id=self.kwargs['company'])
-        address.save()
-        return JsonResponse({'error':False,'message':'Company Address Saved Successfully'})
+        try:
+            address = form.save(commit=False)
+            address.company = Company.objects.get(id=self.kwargs['company'])
+            address.save()
+            return JsonResponse({'error':False,'message':'Company Address Saved Successfully'})
+        except IntegrityError as e:
+            return JsonResponse({'error':True,'message':'Company Address is Already Added'})
+        
 
 class UpdateCompanyAddress(LoginRequiredMixin,UpdateView):
     model = CompanyAddress

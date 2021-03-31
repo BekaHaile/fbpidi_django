@@ -105,7 +105,12 @@ Number of Industries By Market Destination
 									<td>Pharmaceutical Sector</td>
 									<td>ETB {{pharm_inv_cap}}</td>
 								</tr>
+								
 							</tbody>
+							<tr>
+								<td>Total</td>
+								<td>ETB {{total}}</td>
+							</tr>
 						</table>
 					</div>
 				</div>
@@ -581,13 +586,14 @@ Number of Industries By Market Destination
 				<div class="card">
 					 
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">{{title}} Sector</h5>
+						<h5 class="card-title">{{title|title}} Sector</h5>
 					</div>
 					<div class="card-body">
 						<table class="table datatable-basic">
 							<thead>
 								<tr>
 									<th>Company</th>
+									<th>Product</th>
 									<th>Capital Utilization Data</th>
 									{%if sector != 'all'%}
 									<th>Sector</th>
@@ -601,7 +607,8 @@ Number of Industries By Market Destination
 								{%for fd in capital_util_data%}
 								<tr>
 									<td>{{fd.company}}</td>
-									<td>{{fd.data|floatformat:2}}%</td>
+									<td>{{fd.product}}</td>
+									<td>{% get_util_data fd.production_amount fd.actual_production %}</td>
 									{%if sector != 'all'%}
 									<td>{{sector}}</td>
 									{%endif%}
@@ -610,17 +617,18 @@ Number of Industries By Market Destination
 									{%endif%}
 								</tr>
 								{%endfor%}
-								<tr>
-									<td>Total</td>
-									{%if sector != 'all'%}
-									<td></td>
-									{%endif%}
-									{%if sub_sector%}
-									<td></td>
-									{%endif%}
-									<td>{{capital_util_data|get_sum|floatformat:2}}</td>
-								</tr>
+								
 							</tbody>
+							<tr>
+								<td>Total</td>
+								{%if sector != 'all'%}
+								<td></td>
+								{%endif%}
+								{%if sub_sector%}
+								<td></td>
+								{%endif%}
+								<td>#</td>
+							</tr>
 						</table>
 					</div> 
 				</div>
@@ -1041,18 +1049,19 @@ Number of Industries By Market Destination
 									{%endif%}
 								</tr>
 								{%endfor%}
-								<tr>
-									<td>Total</td>
-									<td></td><td></td>
-									{%if sector != 'all'%}
-									<td> </td>
-									{%endif%}
-									{%if sub_sector%}
-									<td> </td>
-									{%endif%}
-									<td>{{total_emp_data|get_sum}}</td>
-								</tr>
+								
 							</tbody>
+							<tr>
+								<td>Total</td>
+								<td></td><td></td>
+								{%if sector != 'all'%}
+								<td> </td>
+								{%endif%}
+								{%if sub_sector%}
+								<td> </td>
+								{%endif%}
+								<td>{{total_emp_data|get_sum}}</td>
+							</tr>
 						</table>
 					</div> 
 				</div>

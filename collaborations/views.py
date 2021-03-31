@@ -598,7 +598,7 @@ class AdminCompanyEventList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return CompanyEventForm.objects.all()
+            return CompanyEvent.objects.all()
         else: 
             return CompanyEvent.objects.filter(company =  self.request.user.get_company())
 

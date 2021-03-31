@@ -37,6 +37,11 @@ def get_sum(data):
     for d in data:
         sm+=d['data']
     return sm
+
+@register.simple_tag
+def get_util_data(x,y):
+    return round(float(x/y)*100,2)
+    
 @register.simple_tag
 def get_share(data,total):
     print(type(data),type(total))
