@@ -13,8 +13,8 @@
 						<div class="text-center text-white">
 							<!-- <h1 class="">{{object.name}} Products</h1> -->
 							<ol class="breadcrumb text-center">
-								<li class="breadcrumb-item"><a href="{%url 'company_home' pk=object.id%}">Home</a></li>
-								<li class="breadcrumb-item"><a href="{%url 'company_products' pk=object.id%}">Products</a></li>
+								<li class="breadcrumb-item"><a href="{%url 'company_home' pk=object.id%}">{% trans "Home" %}</a></li>
+								<li class="breadcrumb-item"><a href="{%url 'company_products' pk=object.id%}">{% trans "Products" %}</a></li>
 							</ol>
 						</div>
 					</div>
@@ -50,18 +50,18 @@
 										</div>
 										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{{product.name}}</h4></a>
 										<p>{{product.description|truncatechars_html:100|safe}}</p>
-										<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="btn btn-secondary btn-sm">Read More</a>
-										<a href="#" class="btn btn-primary btn-sm pull-right">Contact Supplier</a>
+										<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
+										<a href="#" class="btn btn-primary btn-sm pull-right">{% trans "Contact Supplier" %}</a>
 									</div>
 								</div>
 							</div>
 							{%endfor%}
 						</div>
 						<div class="d-sm-flex">
-							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>
+							<h6 class="mb-0 mt-3">{% trans "Showing" %} 1 {% trans "to" %} 6 {% trans "of" %} 30 {% trans "entries" %}</h6>
 							<ul class="pagination mb-lg-0 mb-5 ml-auto">
 								<li class="page-item page-prev disabled">
-									<a class="page-link" href="#" tabindex="-1">Prev</a>
+									<a class="page-link" href="#" tabindex="-1">{% trans "Prev" %}</a>
 								</li>
 								<li class="page-item active"><a class="page-link" href="#">1</a></li>
 								<li class="page-item"><a class="page-link" href="#">2</a></li>

@@ -37,7 +37,7 @@
 											</select>
 										</div>
 										<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
-											<a href="#" class="btn btn-lg btn-block btn-secondary">Search</a>
+											<a href="#" class="btn btn-lg btn-block btn-secondary">{% trans "Search" %}</a>
 										</div>
 									</div>
 								</div>
@@ -53,10 +53,10 @@
 		<div class="bg-white border-bottom">
 			<div class="container">
 				<div class="page-header">
-					<h4 class="page-title">Industry List</h4>
+					<h4 class="page-title">{% trans "Industry List" %}</h4>
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="{%url 'index'%}">Home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Industries</li>
+						<li class="breadcrumb-item"><a href="{%url 'index'%}">{% trans "Home" %}</a></li>
+						<li class="breadcrumb-item active" aria-current="page">{% trans "Industries" %}</li>
 					</ol>
 				</div>
 			</div>
@@ -74,29 +74,29 @@
 								<div class="item2-gl ">
 									<div class="">
 										<div class="bg-white p-5 item2-gl-nav d-flex">
-											<h6 class="mb-0 mt-3">Showing {{object_list.count}} entries</h6>
+											<h6 class="mb-0 mt-3">{% trans "Showing"%} {{object_list.count}} {% trans "entries"%}</h6>
 											<ul class="nav item2-gl-menu ml-auto mt-1">
 												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
 											</ul>
 											<div class="d-sm-flex">
-												<label class="mr-2 mt-2 mb-sm-1 sort-label">Sort By:</label>
+												<label class="mr-2 mt-2 mb-sm-1 sort-label">{% trans "Sort By" %}:</label>
 												<div class="selectgroup">
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="All" class="selectgroup-input" checked="">
-														<span class="selectgroup-button d-md-flex">All <i class="fa fa-sort ml-2 mt-1"></i></span>
+														<span class="selectgroup-button d-md-flex">{% trans "All" %} <i class="fa fa-sort ml-2 mt-1"></i></span>
 													</label>
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">Distance</span>
+														<span class="selectgroup-button">{% trans "Distance" %}</span>
 													</label>
 													<label class="selectgroup-item mb-0">
 														<input type="radio" name="value" value="Latest" class="selectgroup-input">
-														<span class="selectgroup-button">Latest</span>
+														<span class="selectgroup-button">{% trans "Latest" %}</span>
 													</label>
 													<label class="selectgroup-item mb-0">
 														<input type="radio" name="value" value="Rating" class="selectgroup-input">
-														<span class="selectgroup-button">Rating</span>
+														<span class="selectgroup-button">{% trans "Rating" %}</span>
 													</label>
 												</div>
 											</div>
@@ -147,7 +147,7 @@
 																	</div>
 																</div>
 																<div class="ml-auto mt-3 mt-sm-0">
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i> {% trans "Get Directions" %}</a></div>
 																</div>
 															</div>
 														</div>
@@ -200,7 +200,7 @@
 																			</div>
 																		</div>
 																		<div class="ml-auto mt-3 mt-sm-0">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
+																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  {% trans "Get Directions" %}</a></div>
 																		</div>
 																	</div>
 																</div>
@@ -275,13 +275,13 @@
 									 <ul class="pagination mb-5">
 										{% if page_obj.has_previous %}
 										<li class="page-item page-prev ">
-											<a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Prev</a>
+											<a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">{% trans "Prev" %}</a>
 										</li>
 										{%endif%}
-										<li class="page-item active"><a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a></li>
+										<li class="page-item active"><a class="page-link" href="#">{% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}.</a></li>
 										{% if page_obj.has_next %}
 										<li class="page-item page-next">
-											<a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+											<a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
 										</li>
 										{%endif%}
 									</ul>
@@ -299,7 +299,7 @@
 									<input type="text" class="form-control br-tl-3 br-bl-3" placeholder="Search">
 									<div class="input-group-append ">
 										<button type="button" class="btn btn-secondary br-tr-3 br-br-3">
-											Search
+											{% trans "Search" %}
 										</button>
 									</div>
 								</div>
@@ -307,7 +307,7 @@
 						</div>
 						<div class="card mb-0">
 							<div class="card-header">
-								<h3 class="card-title">Categories</h3>
+								<h3 class="card-title">{% trans "Categories" %}</h3>
 							</div>
 							<div class="card-body">
 								<div class="" id="container">
@@ -315,19 +315,19 @@
 										<label class="custom-control custom-checkbox mb-3">
 											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
 											<span class="custom-control-label">
-												<a href="#" class="text-dark">Food<span class="label label-primary float-right"></span></a>
+												<a href="#" class="text-dark">{% trans "Food" %}<span class="label label-primary float-right"></span></a>
 											</span>
 										</label>
 										<label class="custom-control custom-checkbox mb-3">
 											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
 											<span class="custom-control-label">
-												<a href="#" class="text-dark">Beverage</a>
+												<a href="#" class="text-dark">{% trans "Beverage" %}</a>
 											</span>
 										</label>
 										<label class="custom-control custom-checkbox mb-3">
 											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
 											<span class="custom-control-label">
-												<a href="#" class="text-dark">Pharmaceutical</a>
+												<a href="#" class="text-dark">"{% trans "Pharmaceutical" %}</a>
 											</span>
 										</label>
 										
@@ -335,7 +335,7 @@
 								</div>
 							</div>
 							<div class="card-footer">
-								<a href="#" class="btn btn-primary btn-block">Apply Filter</a>
+								<a href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>
 							</div>
 						</div>
 					</div>
