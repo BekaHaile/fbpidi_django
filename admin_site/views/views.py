@@ -8,8 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 # 
 from product import models
+from product.models import *
 from accounts.models import UserProfile
-from company.models import Company,CompanyEvent
+from company.models import Company,CompanyEvent, HomePageSlider, InvestmentProject
 from admin_site.models import Category
 from chat.models import ChatGroup, ChatMessage
 
@@ -61,7 +62,72 @@ class DeleteView(LoginRequiredMixin,View):
                 category.delete()
                 message = "Category Deleted"
                 messages.success(self.request,message)
-                return redirect("admin:p_categories",option='category') 
+                # return redirect("admin:p_categories",option='category') 
+                return redirect("admin:categories")
+            elif self.kwargs['model_name'] == 'sub_category':
+                
+                sub_category=SubCategory.objects.get(id=self.kwargs['id']) 
+                sub_category.delete()
+                message = "Sub category Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:sub_categories")
+            
+            elif self.kwargs['model_name'] == 'Brand':
+                
+                brand=Brand.objects.get(id=self.kwargs['id']) 
+                brand.delete()
+                message = "Brand Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:brands")
+            elif self.kwargs['model_name'] == 'product':
+                product = Product.objects.get(id=self.kwargs['id'])
+                product.delete()
+                message ="Product Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:admin_products")
+            elif self.kwargs['model_name'] == 'production_capacity':
+                production_capacity = ProductionCapacity.objects.get(id=self.kwargs['id'])
+                production_capacity.delete()
+                message ="Production Capacity Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:production_capacity")
+            elif self.kwargs['model_name'] == 'anual_input_need':
+                anual_input_need = AnnualInputNeed.objects.get(id=self.kwargs['id'])
+                anual_input_need.delete()
+                message ="Annual Input Need Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:anual_input_need")
+            elif self.kwargs['model_name'] == 'input_demand_supply':
+                input_demand_supply = InputDemandSupply.objects.get(id=self.kwargs['id'])
+                input_demand_supply.delete()
+                message ="Input Demand Supply Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:demand_supply_list")
+            elif self.kwargs['model_name'] == 'sales_performance':
+                sales_performance = ProductionAndSalesPerformance.objects.get(id=self.kwargs['id'])
+                sales_performance.delete()
+                message ="Production And Sales Performance Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:sales_performance")
+            elif self.kwargs['model_name'] == 'packaging':
+                packaging = ProductPackaging.objects.get(id=self.kwargs['id'])
+                packaging.delete()
+                message ="Product Packaging Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:packaging")
+            elif self.kwargs['model_name'] == 'slider_image':
+                image = HomePageSlider.objects.get(id=self.kwargs['id'])
+                image.delete()
+                message ="Slider Image Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:slider_list")
+            elif self.kwargs['model_name'] == 'investment_project':
+                investment_project = InvestmentProject.objects.get(id=self.kwargs['id'])
+                investment_project.delete()
+                message ="Investment Project Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:project_list")
+
             elif self.kwargs['model_name'] == 'Vacancy':
                 vacancy = Vacancy.objects.get(id=self.kwargs['id'])
                 vacancy.delete()
@@ -194,12 +260,7 @@ class DeleteView(LoginRequiredMixin,View):
                 message ="User Deleted"
                 messages.success(self.request,message)
                 return redirect("admin:users_list")
-            elif self.kwargs['model_name'] == 'product':
-                product = models.Product.objects.get(id=self.kwargs['id'])
-                product.delete()
-                message ="Product Deleted"
-                messages.success(self.request,message)
-                return redirect("admin:index")
+            
             elif self.kwargs['model_name'] == 'company':
                 company = Company.objects.get(id=self.kwargs['id'])
                 company.delete()
@@ -341,7 +402,8 @@ class DeleteView(LoginRequiredMixin,View):
                     return redirect("admin:tenders")   
         
         except Exception as e:
-                messages.warning(self.request, "Exception while deleting! \n hint: item may not be available!",e)
+                messages.warning(self.request, "Exception while deleting!", str(e))
+                print("#######3Excetion ",e)
                 return redirect("admin:index") 
 
 
