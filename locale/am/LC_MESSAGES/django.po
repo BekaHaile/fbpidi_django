@@ -821,17 +821,15 @@ msgstr ""
 
 #: .\templates\frontpages\company\company_list.html:83
 msgid "Sort By"
-msgstr "ደርድር"
+msgstr "ቅደም ተከተል"
 
 #: .\templates\frontpages\company\company_list.html:91
 msgid "Distance"
 msgstr "ርቀት"
 
 #: .\templates\frontpages\company\company_list.html:95
-#, fuzzy
-#| msgid "Latest News"
 msgid "Latest"
-msgstr "አቅራቢዎች"
+msgstr "አዳዲሶች"
 
 #: .\templates\frontpages\company\company_list.html:99
 msgid "Rating"
@@ -840,7 +838,7 @@ msgstr "በተጠቃሚ ምርጫ"
 #: .\templates\frontpages\company\company_list.html:150
 #: .\templates\frontpages\company\company_list.html:203
 msgid "Get Directions"
-msgstr "ትረፍ ያግኙ"
+msgstr "አቅጣጫ ያግኙ"
 
 #: .\templates\frontpages\company\company_list.html:310
 #: .\templates\frontpages\job_apply.html:29
