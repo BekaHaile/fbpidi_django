@@ -80,6 +80,31 @@ Number of Industries By Market Destination
 			<div class="content">
 				{%if flag == 'inv_cap'%}
 				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<ul class="list-inline list-inline-condensed mb-0">
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:get_by_inv_capital' option='by_sector' sector='all'%}" class="dropdown-item"><i class="icon-stack2 "></i>All Sectors</a>
+										<a href="{%url 'admin:get_by_inv_capital' option='by_sector' sector='Food'%}" class="dropdown-item"><i class="mi-cake "></i>Food</a>
+										<a href="{%url 'admin:get_by_inv_capital' option='by_sector' sector='Beverage'%}" class="dropdown-item"><i class="mi-local-drink"></i>Beverage</a>
+										<a href="{%url 'admin:get_by_inv_capital' option='by_sector' sector='Pharmaceuticals'%}" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
+									</div>
+								</li>
+								  
+							</ul>
+
+							 
+						</div>
+					</div>
+				</div>
+				<div class="card">
 					<div class="card-header header-elements-inline">
 						<h5 class="card-title">Total Investment capital by sector</h5>
 					</div>
@@ -88,28 +113,43 @@ Number of Industries By Market Destination
 						<table class="table datatable-basic">
 							<thead>
 								<tr>
-									<th>Sectors</th>
-									<th>Data</th>
+									<th>#</th>
+									<th>Company</th>
+									<th>Machinery Cost</th>
+									<th>Building Cost</th>
+									<th>Working Capital</th>
+									<th>Investment Capital</th>
+									{%if sector != 'all'%}
+									<th>Sector</th>
+									{%endif%}
 								</tr>
 							</thead>
 							<tbody>
+								{%for id in inv_cap_data%}
 								<tr>
-									<td>Food Sector</td>
-									<td>ETB {{food_inv_cap}}</td>
+									<td>{{forloop.counter}}</td>
+									<td>{{id.company}}</td>
+									<td>ETB {{id.machinery}}</td>
+									<td>ETB {{id.building}}</td>
+									<td>ETB {{id.working}}</td>
+									<td>ETB {{id.total_inv_cap}}</td>
+									{%if sector != 'all'%}
+									<td>{{sector}}</td>
+									{%endif%}
 								</tr>
-								<tr>
-									<td>Beverage Sector</td>
-									<td>ETB {{bev_inv_cap}}</td>
-								</tr>
-								<tr>
-									<td>Pharmaceutical Sector</td>
-									<td>ETB {{pharm_inv_cap}}</td>
-								</tr>
+								{%endfor%}
 								
 							</tbody>
 							<tr>
+								<td></td>
 								<td>Total</td>
-								<td>ETB {{total}}</td>
+								<td>ETB {% get_inv_cap_sum inv_cap_data 'machinery' %}</td>
+								<td>ETB {% get_inv_cap_sum inv_cap_data 'building' %}</td>
+								<td>ETB {% get_inv_cap_sum inv_cap_data 'working' %}</td>
+								<td>ETB {% get_inv_cap_sum inv_cap_data  'total' %}</td>
+								{%if sector != 'all'%}
+									<td></td>
+									{%endif%}
 							</tr>
 						</table>
 					</div>
@@ -381,7 +421,6 @@ Number of Industries By Market Destination
 									<th>Product</th>
 									<th>Installed Production Capacity</th>
 									<th>Actual Production Capacity</th>
-									<th>Total</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -391,19 +430,20 @@ Number of Industries By Market Destination
 										 {{d.product}}
 									</td>
 									<td>
-										{{d.total_data.installed}}
+										{{d.total_data.installed}} {{d.unit}}
 									</td>
 									<td>
-										{{d.total_data.actual}}
+										{{d.total_data.actual}}  {{d.unit}}
 									</td>
-									<td>{{d.data}}</td>
+									 
 								</tr>
 								 {%endfor%}
 								 
 							</tbody>
 							<tr>
-								<td>Total</td><td></td><td></td>
-								<td>{{produn_data|get_sum}}</td>
+								<td>Total</td>
+								<td>{%get_prodn_total produn_data 'prodn'%}</td>	
+								<td>{%get_prodn_total produn_data 'actual'%}</td>
 							</tr>
 						</table>
 						 
@@ -594,6 +634,8 @@ Number of Industries By Market Destination
 								<tr>
 									<th>Company</th>
 									<th>Product</th>
+									<th>Production Amount</th> 
+									<th>Actual Production</th>
 									<th>Capital Utilization Data</th>
 									{%if sector != 'all'%}
 									<th>Sector</th>
@@ -608,7 +650,9 @@ Number of Industries By Market Destination
 								<tr>
 									<td>{{fd.company}}</td>
 									<td>{{fd.product}}</td>
-									<td>{% get_util_data fd.production_amount fd.actual_production %}</td>
+									<td>{{fd.production_amount}}</td>
+									<td>{{fd.actual_production}}</td>
+									<td>{% get_capital_util fd.production_amount fd.actual_production %} %</td>
 									{%if sector != 'all'%}
 									<td>{{sector}}</td>
 									{%endif%}
@@ -621,13 +665,17 @@ Number of Industries By Market Destination
 							</tbody>
 							<tr>
 								<td>Total</td>
+								<td></td>
+								<td>{{capital_util_data|get_total_prodn|floatformat:2}}</td>
+								<td>{{capital_util_data|get_total_actual|floatformat:2}}</td>
+								<td>{%get_capital_util capital_util_data|get_total_prodn|floatformat:2 capital_util_data|get_total_actual|floatformat:2 %} %</td>
 								{%if sector != 'all'%}
 								<td></td>
-								{%endif%}
+								{%endif%}a
 								{%if sub_sector%}
 								<td></td>
 								{%endif%}
-								<td>#</td>
+								
 							</tr>
 						</table>
 					</div> 
@@ -698,6 +746,10 @@ Number of Industries By Market Destination
 							<thead>
 								<tr>
 									<th>Company</th>
+									<th>Product</th>
+									<th>This Year Production Amount</th>
+									<th>Last Year Production Amount</th>
+									<th>Actual Production Amount</th>
 									<th>Change in Capital Utilization</th>
 									{%if sector != 'all'%}
 									<th>Sector</th>
@@ -711,7 +763,11 @@ Number of Industries By Market Destination
 								{%for fd in change_capital_util_data%}
 								<tr>
 									<td>{{fd.company}}</td>
-									<td>{{fd.data|floatformat:2}}</td>
+									<td>{{fd.product}}</td>
+									<td>{{fd.pa_this|floatformat:2}} {{unit}}</td>
+									<td>{{fd.pa_last}} {{unit}}</td>
+									<td>{{fd.apc}} {{unit}}</td>
+									<td>{%change_capital_util fd.pa_this fd.pa_last fd.apc%} %</td>
 									{%if sector != 'all'%}
 									<td>{{sector}}</td>
 									{%endif%}
@@ -720,17 +776,22 @@ Number of Industries By Market Destination
 									{%endif%}
 								</tr>
 								{%endfor%}
-								<tr>
-									<td>Total</td>
-									{%if sector != 'all'%}
-									<td></td>
+								 
+							</tbody>
+							<tr>
+								<td>Total</td>
+								<td></td>
+								<td>{%change_util_total change_capital_util_data 'thisyear'%}</td>
+								<td>{%change_util_total change_capital_util_data 'lastyear'%}</td>
+								<td>{%change_util_total change_capital_util_data 'apc'%}</td>
+								<td>{%change_util_total change_capital_util_data 'total'%} %</td>
+								{%if sector != 'all'%}
+									<td> </td>
 									{%endif%}
 									{%if sub_sector%}
-									<td></td>
+									<td> </td>
 									{%endif%}
-									<td>{{change_capital_util_data|get_sum}}</td>
-								</tr>
-							</tbody>
+							</tr>
 						</table>
 					</div> 
 				</div>

@@ -13,7 +13,7 @@ UOM=(
 # This is For Product/Type
 class SubCategory(models.Model):
     category_name = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,
-									blank=True,verbose_name="Category Type",related_name="sub_category")
+									blank=True,verbose_name="Sub Sector",related_name="sub_category")
     sub_category_name = models.CharField(max_length=200,verbose_name="Product Name(English)")
     sub_category_name_am = models.CharField(max_length=200,verbose_name="Product Name(Amharic)")
     uom = models.CharField(max_length=25,verbose_name="Unit of Measurement")

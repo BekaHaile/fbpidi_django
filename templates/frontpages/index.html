@@ -30,74 +30,65 @@
 							</div>
 							<div class="tab-content">
 								<div class="tab-pane active" id="tab1">
+									<form action="{% url 'search_product' %}" method="post">{%csrf_token%}
 									<div class="form row">
+										
 										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
-											<input type="text" class="form-control " id="text6"
+											<input type="text" name="name" class="form-control " id="text6"
 												placeholder="{% trans 'Enter Your Product Keywords' %}">
 										</div>
 										<div class="form-group col-xl-6 col-lg-7 col-md-12 mb-0">
 											<div class="row">
 												<div class="form-group col-xl-8 col-lg-7 col-md-12 mb-0">
-													<select
+													<select name="sector"
 														class="form-control select2-show-search  border-bottom-0 br-lg-0"
 														data-placeholder="Select Category">
 														<optgroup label="Categories">
 															<option>{% trans "Select Category" %}</option>
-															<option value="0">All Categories</option>
-															<option value="1">Hotels</option>
-															<option value="2">Restaurant</option>
-															<option value="3">Events</option>
-															<option value="4">Cinema</option>
-															<option value="5">Gym</option>
-															<option value="6">Shop & Store</option>
-															<option value="7">Tours & Travels</option>
-															<option value="8">Cafe</option>
-															<option value="9">Mobile Store</option>
-															<option value="10">College</option>
+															<option value="">All Categories</option>
+															{%for sub_sec in sub_sectors%}
+															<option value="{{sub_sec.id}}">{{sub_sec.category_name}}</option>
+															{%endfor%}
 														</optgroup>
 													</select>
 												</div>
 												<div class="col-xl-4 col-lg-5 col-md-12 mb-0">
-													<a href="#" class="btn btn-block btn-secondary">{% trans "Search Now" %}</a>
+													<button type="submit" class="btn btn-block btn-secondary">{% trans "Search Now" %}</button>
 												</div>
 											</div>
 										</div>
-									</div>
+										
+									</div></form>
 								</div>
 								<div class="tab-pane" id="tab2">
+									<form action="{%url 'search_company'%}" method="post"> {%csrf_token%}
 									<div class="form row">
 										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
-											<input type="text" class="form-control  " id="text8"
+											<input type="text" name="name" class="form-control  " id="text8"
 												placeholder="{% trans 'Enter Your Companies Keywords' %}">
 										</div>
 										<div class="form-group col-xl-6 col-lg-7 col-md-12 mb-0">
 											<div class="row">
 												<div class="form-group col-xl-8 col-lg-7 col-md-12 mb-0">
-													<select
+													<select name="sector"
 														class="form-control select2-show-search  border-bottom-0 br-lg-0"
 														data-placeholder="Select Category">
 														<optgroup label="Categories">
 															<option>{% trans "Select Category" %}</option>
-															<option value="0">All Categories</option>
-															<option value="1">Hotels</option>
-															<option value="2">Restaurant</option>
-															<option value="3">Events</option>
-															<option value="4">Cinema</option>
-															<option value="5">Gym</option>
-															<option value="6">Shop & Store</option>
-															<option value="7">Tours & Travels</option>
-															<option value="8">Cafe</option>
-															<option value="9">Mobile Store</option>
-															<option value="10">College</option>
+															<option value="">All Categories</option>
+															{%for sub_sec in sub_sectors%}
+															<option value="{{sub_sec.id}}">{{sub_sec.category_name}}</option>
+															{%endfor%}
 														</optgroup>
 													</select>
 												</div>
 												<div class="col-xl-4 col-lg-5 col-md-12 mb-0">
-													<a href="#" class="btn btn-block btn-secondary">{% trans "Search Now" %}</a>
+													<button type="submit" class="btn btn-block btn-secondary">{% trans "Search Now" %}</button>
 												</div>
 											</div>
 										</div>
 									</div>
+								</form>
 								</div>
 								<div class="tab-pane" id="tab3">
 									<div class="form row">
@@ -113,17 +104,10 @@
 														data-placeholder="Select Category">
 														<optgroup label="Categories">
 															<option>{% trans "Select Category" %}</option>
-															<option value="0">All Categories</option>
-															<option value="1">Hotels</option>
-															<option value="2">Restaurant</option>
-															<option value="3">Events</option>
-															<option value="4">Cinema</option>
-															<option value="5">Gym</option>
-															<option value="6">Shop & Store</option>
-															<option value="7">Tours & Travels</option>
-															<option value="8">Cafe</option>
-															<option value="9">Mobile Store</option>
-															<option value="10">College</option>
+															<option value="">All Categories</option>
+															{%for sub_sec in sub_sectors%}
+															<option value="{{sub_sec.id}}">{{sub_sec.category_name}}</option>
+															{%endfor%}
 														</optgroup>
 													</select>
 												</div>
@@ -209,7 +193,7 @@
 
 						</div>
 						
-						<div class="blog--category">{% print_translated product.brand.product_type.category_name.category_name product.brand.product_type.category_name.category_name_am LANGUAGE_CODE%}</div>
+						<div class="blog--category">{% print_translated product.brand.product_type.sub_category_name product.brand.product_type.sub_category_name_am LANGUAGE_CODE%}</div>
 						
 					</div>
 					<div class="card-body pb-0">

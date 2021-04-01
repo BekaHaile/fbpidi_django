@@ -1043,6 +1043,20 @@ class UpdateSliderImage(LoginRequiredMixin,UpdateView):
 
 
 ############## newly added, delete this commet after everything has worked right
+class SearchCompany(View):
+    def post(self,*args,**kwargs):
+        template_name = "frontpages/company/company_list.html"
+        companies = Company.objects.all().exclude(main_category='FBPIDI')
+        if self.request.POST['name'] != '':
+            companies = Company.objects.filter(Q(name=self.request.POST['name'])
+            |Q(company_product__name=self.request.POST['name'])) 
+        try:
+            if self.request.POST['sector'] !='' or self.request.POST['sector'] != 'Select':
+                companies = companies.filter(Q(category__id=self.request.POST['sector']))
+        except ValueError:
+            companies=companies
+
+        return render(self.request,template_name,{'object_list':companies})
 
 class CompanyByMainCategory(ListView):
     model = Company

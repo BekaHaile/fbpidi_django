@@ -8,7 +8,7 @@
 	<!-- /theme JS files -->
  
 {% endblock %}
-{%block pagename%}{%if category == True%}Product Categories{%elif sub_category == True %}Product Type{%elif brand == True%}Produt Brand{%endif%}{%endblock%}
+{%block pagename%}{%if category == True%}Product Sectors{%elif sub_category == True %}Product Type{%elif brand == True%}Produt Brand{%endif%}{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
@@ -17,7 +17,7 @@
 				<!-- Page length options main category -->
 				<div class="card">
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">Categories</h5>
+						<h5 class="card-title">Sectors & Sub Sectors</h5>
 						<div class="header-elements">
 							{%if user.is_superuser%}
 							<div class="list-icons">
@@ -30,9 +30,9 @@
 					<table class="table datatable-show-all">
 						<thead>
 							<tr>
-								<th>Category Name</th>
-								<th>Category Type</th>
-								<th>Description</th>
+								<th>#</th>
+								<th>Sub Sector Name</th>
+								<th>Sector</th>
 								<th>Created By</th>
 								<th>Created Date</th>
 								<th class="text-center">Actions</th>
@@ -41,9 +41,9 @@
 						<tbody>
 							{%for cat in object_list%}
 							<tr>
+								<td>{{forloop.counter}}</td>
 								<td>{{cat.category_name}}</td>
 								<td>{{cat.category_type}}</td>
-								<td><div class="summernote">{{cat.description|safe|truncatechars_html:10}}</div></td>
 								<td>{{cat.created_by.username}}</td>
 								<td><span class="badge badge-success">{{cat.created_date}}</span></td>
 								<td class="text-center">
@@ -89,7 +89,7 @@
 						<table class="table datatable-show-all">
 							<thead>
 								<tr>
-									<th>Category Name</th>
+									<th>Sub Sector</th>
 									<th>Product Name</th>
 									<th>Description</th>
 									<th>Created By</th>

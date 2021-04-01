@@ -303,6 +303,8 @@ class CustomAdminSite(admin.AdminSite):
 
             # Company Report Paths
             path("report-page/",wrap(ReportPage.as_view()),name="report_page"),
+            path('certification-chart/',wrap(certification_chart),name='certification_chart'),
+            path('management-tools-chart/',wrap(management_tool_chart),name='mgmt_tools_chart'),
             path("company-list-for-generating-report/",wrap(CompanyListForReport.as_view()),name="company_list_report"),
             path("company-filter-by-sector/<sector>/",wrap(FilterCompanyByMainCategory.as_view()),name="filter_company_sector"),
             path("company-filter-by-sub_sector/<category>/",wrap(FilterCompanyCategory.as_view()),name="filter_company_sub_sector"),
@@ -311,7 +313,7 @@ class CustomAdminSite(admin.AdminSite):
             path("filter-by-trande-license/",wrap(FilterByTradeLicense.as_view()),name="filter_by_license"),
             path("filter-by-valid-certificate/",wrap(CompaniesWithCertificate.as_view()),name="filter_by_certificate"),
             path("filter-by-working-hour/",wrap(FilterByWorkingHour.as_view()),name="filter_by_working_hour"),
-            path("get-investment-capital/",wrap(InvestmentCapitalReportView.as_view()),name="get_by_inv_capital"),
+            path("get-investment-capital/<option>/<sector>/",wrap(InvestmentCapitalReportView.as_view()),name="get_by_inv_capital"),
             path("get-production-capacity-data/<product>/",wrap(ProductionCapacityView.as_view()),name="get_production_capacity"),
             path("get-available-input-data/<product>/",wrap(InputAvailablity.as_view()),name="get_input_available"),
             path("get-share-input-data/<product>/",wrap(ShareLocalInputs.as_view()),name="get_input_share"),

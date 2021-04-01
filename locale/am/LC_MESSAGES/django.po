@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-18 01:49+0300\n"
+"POT-Creation-Date: 2021-03-31 19:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: .\accounts\forms.py:30
-
-#| msgid "Password change"
 msgid "Password"
 msgstr "የይለፍ ቃል ቀይር"
 
-#: .\fbpims\settings.py:168
+#: .\fbpims\settings.py:179
 msgid "Amharic"
 msgstr "አማርኛ"
 
@@ -37,17 +35,29 @@ msgstr "የጠየቁትን ግጽ ማግኘት አልቻልንም"
 #: .\templates\admin\500.html:6 .\templates\admin\base.html:65
 #: .\templates\frontpages\announcement\customer_announcement.html:44
 #: .\templates\frontpages\announcement\customer_announcement_detail.html:22
-#: .\templates\frontpages\layout.html:280
+#: .\templates\frontpages\blog\blog_list.html:43
+#: .\templates\frontpages\company\about.html:17
+#: .\templates\frontpages\company\company_layout.html:275
+#: .\templates\frontpages\company\company_list.html:58
+#: .\templates\frontpages\company\company_vacancy.html:17
+#: .\templates\frontpages\company\contact.html:16
+#: .\templates\frontpages\company\product_details.html:16
+#: .\templates\frontpages\company\product_list.html:16
+#: .\templates\frontpages\company\project_detail.html:16
+#: .\templates\frontpages\company\project_list.html:16
+#: .\templates\frontpages\layout.html:301
 #: .\templates\frontpages\news\customer_event_detail.html:56
 #: .\templates\frontpages\news\customer_event_list.html:43
-#: .\templates\frontpages\news\customer_news_detail.html:22
-#: .\templates\frontpages\news\customer_news_detail.html:57
 #: .\templates\frontpages\news\customer_news_list.html:67
 #: .\templates\frontpages\poll\poll_detail.html:20
 #: .\templates\frontpages\poll\polls-list.html:44
 #: .\templates\frontpages\product\checkout.html:12
+#: .\templates\frontpages\research\research_detail.html:42
+#: .\templates\frontpages\research\research_form.html:30
+#: .\templates\frontpages\research\research_list.html:42
 #: .\templates\frontpages\tender\customer_tender_detail.html:20
 #: .\templates\frontpages\tender\customer_tender_list.html:43
+#: .\templates\frontpages\vacancy\vacancy_list.html:59
 #: .\templates\registration\logged_out.html:4
 #: .\templates\registration\password_change_done.html:17
 msgid "Home"
@@ -104,22 +114,25 @@ msgstr ""
 #: .\templates\frontpages\announcement\customer_announcement.html:187
 #: .\templates\frontpages\blog-details-right.html:38
 #: .\templates\frontpages\blog-grid-right.html:37
+#: .\templates\frontpages\blog\blog_list.html:24
+#: .\templates\frontpages\blog\blog_list.html:176
+#: .\templates\frontpages\company\company_list.html:40
+#: .\templates\frontpages\company\company_list.html:302
 #: .\templates\frontpages\news\customer_event_list.html:24
 #: .\templates\frontpages\news\customer_event_list.html:218
 #: .\templates\frontpages\news\customer_news_list.html:47
 #: .\templates\frontpages\news\customer_news_list.html:611
 #: .\templates\frontpages\poll\polls-list.html:25
 #: .\templates\frontpages\poll\polls-list.html:209
-#: .\templates\frontpages\project\project_list.html:39
-#: .\templates\frontpages\research\research_detail.html:50
+#: .\templates\frontpages\project\project_list_ol.html:39
+#: .\templates\frontpages\research\research_detail.html:24
 #: .\templates\frontpages\research\research_detail_edit.html:54
-#: .\templates\frontpages\research\research_form.html:55
-#: .\templates\frontpages\research\research_list.html:51
-#: .\templates\frontpages\tender\customer_tender_detail.html:198
+#: .\templates\frontpages\research\research_list.html:25
+#: .\templates\frontpages\tender\customer_tender_detail.html:193
 #: .\templates\frontpages\tender\customer_tender_list.html:24
 #: .\templates\frontpages\tender\customer_tender_list.html:224
-
-#| msgid "Search Now"
+#: .\templates\frontpages\vacancy\vacancy_list.html:39
+#: .\templates\frontpages\vacancy\vacancy_list.html:200
 msgid "Search"
 msgstr "ፈልግ"
 
@@ -130,43 +143,86 @@ msgid "Announcement List"
 msgstr "ማስታወቂያ"
 
 #: .\templates\frontpages\announcement\customer_announcement.html:63
+#: .\templates\frontpages\blog\blog_list.html:62
+#: .\templates\frontpages\company\company_list.html:281
 #: .\templates\frontpages\news\customer_event_list.html:62
 #: .\templates\frontpages\news\customer_news_list.html:88
 #: .\templates\frontpages\poll\polls-list.html:63
 #: .\templates\frontpages\tender\customer_tender_list.html:61
-
-msgid "Pages"
+#: .\templates\frontpages\vacancy\vacancy_list.html:78
+#, fuzzy
+#| msgid "Pages"
+msgid "Page"
 msgstr "ገጾች"
 
-
-msgid "Page"
-msgstr "ገጽ"
-
-
 #: .\templates\frontpages\announcement\customer_announcement.html:63
+#: .\templates\frontpages\blog\blog_list.html:62
+#: .\templates\frontpages\company\company_announcement.html:69
+#: .\templates\frontpages\company\company_blog.html:77
+#: .\templates\frontpages\company\company_events.html:76
+#: .\templates\frontpages\company\company_faq.html:71
+#: .\templates\frontpages\company\company_list.html:281
+#: .\templates\frontpages\company\company_news.html:72
+#: .\templates\frontpages\company\company_poll.html:92
+#: .\templates\frontpages\company\company_research.html:74
+#: .\templates\frontpages\company\company_tenders.html:91
+#: .\templates\frontpages\company\company_vacancy.html:72
+#: .\templates\frontpages\company\product_list.html:61
 #: .\templates\frontpages\news\customer_event_list.html:62
 #: .\templates\frontpages\news\customer_news_list.html:88
 #: .\templates\frontpages\poll\polls-list.html:63
 #: .\templates\frontpages\tender\customer_tender_list.html:61
+#: .\templates\frontpages\vacancy\vacancy_list.html:78
 msgid "of"
 msgstr "ከ"
 
 #: .\templates\frontpages\announcement\customer_announcement.html:74
+#: .\templates\frontpages\blog\blog_list.html:73
+#: .\templates\frontpages\company\company_list.html:87
 #: .\templates\frontpages\news\customer_event_list.html:73
 #: .\templates\frontpages\news\customer_news_list.html:99
 #: .\templates\frontpages\poll\polls-list.html:74
+#: .\templates\frontpages\research\research_list.html:70
 #: .\templates\frontpages\tender\customer_tender_list.html:72
+#: .\templates\frontpages\vacancy\vacancy_list.html:89
 msgid "All"
 msgstr "ሁሉም"
 
 #: .\templates\frontpages\announcement\customer_announcement.html:130
+#: .\templates\frontpages\blog\blog_list.html:123
+#: .\templates\frontpages\company\company_poll_detail.html:44
+#: .\templates\frontpages\company\company_research_detail.html:43
 #: .\templates\frontpages\news\customer_event_list.html:163
 #: .\templates\frontpages\poll\polls-list.html:152
+#: .\templates\frontpages\research\research_list.html:141
+#: .\templates\frontpages\vacancy\vacancy_list.html:147
 msgid "At"
 msgstr "በ"
 
 #: .\templates\frontpages\announcement\customer_announcement.html:151
 #: .\templates\frontpages\announcement\customer_announcement.html:153
+#: .\templates\frontpages\blog\blog_list.html:140
+#: .\templates\frontpages\blog\blog_list.html:142
+#: .\templates\frontpages\company\company_announcement.html:72
+#: .\templates\frontpages\company\company_announcement.html:74
+#: .\templates\frontpages\company\company_blog.html:80
+#: .\templates\frontpages\company\company_blog.html:82
+#: .\templates\frontpages\company\company_events.html:79
+#: .\templates\frontpages\company\company_events.html:81
+#: .\templates\frontpages\company\company_faq.html:74
+#: .\templates\frontpages\company\company_faq.html:76
+#: .\templates\frontpages\company\company_list.html:278
+#: .\templates\frontpages\company\company_news.html:75
+#: .\templates\frontpages\company\company_news.html:77
+#: .\templates\frontpages\company\company_poll.html:95
+#: .\templates\frontpages\company\company_poll.html:97
+#: .\templates\frontpages\company\company_research.html:77
+#: .\templates\frontpages\company\company_research.html:79
+#: .\templates\frontpages\company\company_tenders.html:94
+#: .\templates\frontpages\company\company_tenders.html:96
+#: .\templates\frontpages\company\company_vacancy.html:75
+#: .\templates\frontpages\company\company_vacancy.html:77
+#: .\templates\frontpages\company\product_list.html:64
 #: .\templates\frontpages\news\customer_event_list.html:180
 #: .\templates\frontpages\news\customer_event_list.html:182
 #: .\templates\frontpages\news\customer_news_list.html:574
@@ -175,11 +231,34 @@ msgstr "በ"
 #: .\templates\frontpages\poll\polls-list.html:175
 #: .\templates\frontpages\tender\customer_tender_list.html:189
 #: .\templates\frontpages\tender\customer_tender_list.html:191
+#: .\templates\frontpages\vacancy\vacancy_list.html:164
+#: .\templates\frontpages\vacancy\vacancy_list.html:166
 msgid "Prev"
 msgstr "የበፈቱን"
 
 #: .\templates\frontpages\announcement\customer_announcement.html:165
 #: .\templates\frontpages\announcement\customer_announcement.html:167
+#: .\templates\frontpages\blog\blog_list.html:154
+#: .\templates\frontpages\blog\blog_list.html:156
+#: .\templates\frontpages\company\company_announcement.html:86
+#: .\templates\frontpages\company\company_announcement.html:88
+#: .\templates\frontpages\company\company_blog.html:94
+#: .\templates\frontpages\company\company_blog.html:96
+#: .\templates\frontpages\company\company_events.html:93
+#: .\templates\frontpages\company\company_events.html:95
+#: .\templates\frontpages\company\company_faq.html:88
+#: .\templates\frontpages\company\company_faq.html:90
+#: .\templates\frontpages\company\company_list.html:284
+#: .\templates\frontpages\company\company_news.html:89
+#: .\templates\frontpages\company\company_news.html:91
+#: .\templates\frontpages\company\company_poll.html:109
+#: .\templates\frontpages\company\company_poll.html:111
+#: .\templates\frontpages\company\company_research.html:91
+#: .\templates\frontpages\company\company_research.html:93
+#: .\templates\frontpages\company\company_tenders.html:108
+#: .\templates\frontpages\company\company_tenders.html:110
+#: .\templates\frontpages\company\company_vacancy.html:89
+#: .\templates\frontpages\company\company_vacancy.html:91
 #: .\templates\frontpages\news\customer_event_list.html:194
 #: .\templates\frontpages\news\customer_event_list.html:196
 #: .\templates\frontpages\news\customer_news_list.html:588
@@ -188,70 +267,1079 @@ msgstr "የበፈቱን"
 #: .\templates\frontpages\poll\polls-list.html:189
 #: .\templates\frontpages\tender\customer_tender_list.html:203
 #: .\templates\frontpages\tender\customer_tender_list.html:205
+#: .\templates\frontpages\vacancy\vacancy_list.html:178
+#: .\templates\frontpages\vacancy\vacancy_list.html:180
 msgid "Next"
 msgstr "ቀጣይ"
 
 #: .\templates\frontpages\announcement\customer_announcement.html:201
+#: .\templates\frontpages\blog\blog_list.html:187
 #: .\templates\frontpages\news\customer_event_list.html:230
-#: .\templates\frontpages\news\customer_news_detail.html:231
 #: .\templates\frontpages\poll\polls-list.html:223
 #: .\templates\frontpages\tender\customer_tender_list.html:234
+#: .\templates\frontpages\vacancy\vacancy_list.html:214
 msgid "Filter by company"
 msgstr "በድርጅት አጣራ"
 
 #: .\templates\frontpages\announcement\customer_announcement.html:216
-#: .\templates\frontpages\news\customer_event_detail.html:250
+#: .\templates\frontpages\blog\blog_list.html:203
+#: .\templates\frontpages\company\company_list.html:338
+#: .\templates\frontpages\news\customer_event_detail.html:248
 #: .\templates\frontpages\news\customer_event_list.html:246
-#: .\templates\frontpages\news\customer_news_detail.html:247
-#: .\templates\frontpages\news\customer_news_list.html:660
+#: .\templates\frontpages\news\customer_news_list.html:642
 #: .\templates\frontpages\poll\polls-list.html:238
+#: .\templates\frontpages\research\research_detail.html:85
+#: .\templates\frontpages\research\research_form.html:76
+#: .\templates\frontpages\research\research_list.html:210
 #: .\templates\frontpages\tender\customer_tender_list.html:250
+#: .\templates\frontpages\vacancy\vacancy_list.html:231
+#: .\templates\frontpages\vacancy\vacancy_list.html:261
 msgid "Apply Filter"
 msgstr "አጣራ"
 
 #: .\templates\frontpages\announcement\customer_announcement_detail.html:18
 #: .\templates\frontpages\announcement\customer_announcement_detail.html:24
-#: .\templates\frontpages\layout.html:307
-#: .\templates\frontpages\layout.html:309
+#: .\templates\frontpages\company\company_announcement.html:15
+#: .\templates\frontpages\company\company_announcement_detail.html:14
+#: .\templates\frontpages\company\company_layout.html:287
+#: .\templates\frontpages\company\company_layout.html:289
+#: .\templates\frontpages\layout.html:331
+#: .\templates\frontpages\layout.html:333
 msgid "Announcement"
 msgstr "ማስታወቂያ"
 
+#: .\templates\frontpages\announcement\customer_announcement_detail.html:122
+#: .\templates\frontpages\company\company_vacancy_apply.html:32
+#: .\templates\frontpages\company\company_vacancy_apply.html:46
+#: .\templates\frontpages\news\customer_event_detail.html:212
+msgid "Company Contact Info"
+msgstr "የድርጅቱ አድራሻ"
+
 #: .\templates\frontpages\blog-details-right.html:15
 #: .\templates\frontpages\blog-grid-right.html:13
-#: .\templates\frontpages\layout.html:320
+#: .\templates\frontpages\blog\blog_list.html:44
+#: .\templates\frontpages\company\company_layout.html:300
+#: .\templates\frontpages\layout.html:344
 msgid "Blog"
 msgstr "ብሎግ"
 
 #: .\templates\frontpages\blog-details-right.html:48
 #: .\templates\frontpages\blog-grid-right.html:47
+#: .\templates\frontpages\blog\blog_list.html:210
+#: .\templates\frontpages\company\company_blog_detail.html:37
 msgid "Tags"
 msgstr "መለያዎች"
 
-#: .\templates\frontpages\blog-details-right.html:128
+#: .\templates\frontpages\blog-details-right.html:95
+#: .\templates\frontpages\company\company_blog_detail.html:83
+#, fuzzy
+#| msgid "Add a Comment"
+msgid "Comments"
+msgstr "አስተያየት ያክሉ"
+
+#: .\templates\frontpages\blog-details-right.html:124
+#: .\templates\frontpages\company\company_blog_detail.html:112
 msgid "Add a Comment"
 msgstr "አስተያየት ያክሉ"
 
-#: .\templates\frontpages\blog-details-right.html:140
-#: .\templates\frontpages\job_apply.html:130
-#: .\templates\frontpages\research\research_detail_edit.html:233
-#: .\templates\frontpages\research\research_form.html:194
-#: .\templates\frontpages\tender\customer_tender_detail.html:180
+#: .\templates\frontpages\blog-details-right.html:136
+#: .\templates\frontpages\company\company_blog_detail.html:124
+#: .\templates\frontpages\company\company_index.html:384
+#: .\templates\frontpages\company\company_poll_detail.html:186
+#: .\templates\frontpages\company\company_tender_detail.html:185
+#: .\templates\frontpages\company\company_vacancy_apply.html:162
+#: .\templates\frontpages\company\company_vacancy_detail.html:136
+#: .\templates\frontpages\job_apply.html:143
+#: .\templates\frontpages\research\research_detail_edit.html:225
+#: .\templates\frontpages\research\research_form.html:148
+#: .\templates\frontpages\tender\customer_tender_detail.html:175
 msgid "Submit"
 msgstr "አስገባ"
 
-#: .\templates\frontpages\chat\customer_chat_layout.html:85
+#: .\templates\frontpages\blog\blog_list.html:41
+#, fuzzy
+#| msgid "Blog"
+msgid "Blog list"
+msgstr "ብሎግ"
+
+#: .\templates\frontpages\blog\blog_list.html:108
+#: .\templates\frontpages\company\company_event_detail.html:44
+#: .\templates\frontpages\company\company_poll.html:54
+#: .\templates\frontpages\company\company_poll_detail.html:41
+#: .\templates\frontpages\company\company_research_detail.html:42
+#: .\templates\frontpages\company\company_tender_detail.html:41
+#: .\templates\frontpages\company\company_tenders.html:70
+#: .\templates\frontpages\company\company_vacancy.html:48
+#: .\templates\frontpages\company\company_vacancy_detail.html:42
+#: .\templates\frontpages\news\customer_event_detail.html:79
+#: .\templates\frontpages\news\customer_event_list.html:138
+#: .\templates\frontpages\news\customer_news_list.html:134
+#: .\templates\frontpages\news\customer_news_list.html:141
+#: .\templates\frontpages\poll\poll_detail.html:60
+#: .\templates\frontpages\tender\customer_tender_detail.html:50
+#: .\templates\frontpages\tender\customer_tender_list.html:148
+#: .\templates\frontpages\vacancy\vacancy_list.html:132
+msgid "By"
+msgstr "በ"
+
+#: .\templates\frontpages\blog\blog_list.html:117
+#: .\templates\frontpages\company\company_announcement.html:59
+#: .\templates\frontpages\company\company_blog.html:67
+#: .\templates\frontpages\company\company_faq.html:61
+#: .\templates\frontpages\company\company_research.html:64
+#: .\templates\frontpages\company\product_list.html:53
+#: .\templates\frontpages\research\research_list.html:133
+msgid "Read More"
+msgstr "ተጨማሪ ያንብቡ"
+
+#: .\templates\frontpages\chat\customer_chat_layout.html:87
+#, fuzzy
+#| msgid "Your Chats with "
+msgid "To Chat List"
+msgstr "የእርሶ ውይይት ከ"
+
+#: .\templates\frontpages\chat\customer_chat_layout.html:91
 msgid "Your Chats with "
 msgstr "የእርሶ ውይይት ከ"
 
-#: .\templates\frontpages\company\about.html:12
-
-#| msgid "About Us"
-msgid "about"
+#: .\templates\frontpages\company\about.html:15
+#: .\templates\frontpages\company\about.html:18
+#: .\templates\frontpages\company\about.html:33
+#: .\templates\frontpages\company\company_layout.html:277
+#: .\templates\frontpages\layout.html:302
+msgid "About Us"
 msgstr "ስለ እኛ"
+
+#: .\templates\frontpages\company\company_announcement.html:19
+#: .\templates\frontpages\company\company_announcement_detail.html:16
+#: .\templates\frontpages\company\company_blog.html:18
+#: .\templates\frontpages\company\company_blog_detail.html:17
+#: .\templates\frontpages\company\company_event_detail.html:16
+#: .\templates\frontpages\company\company_events.html:18
+#: .\templates\frontpages\company\company_faq.html:19
+#: .\templates\frontpages\company\company_faq_detail.html:16
+#: .\templates\frontpages\company\company_news_detail.html:16
+#: .\templates\frontpages\company\company_poll.html:19
+#: .\templates\frontpages\company\company_poll_detail.html:17
+#: .\templates\frontpages\company\company_research.html:19
+#: .\templates\frontpages\company\company_research_detail.html:16
+#: .\templates\frontpages\company\company_tender_detail.html:17
+#: .\templates\frontpages\company\company_tenders.html:18
+#: .\templates\frontpages\company\company_vacancy.html:19
+#: .\templates\frontpages\company\company_vacancy_detail.html:17
+msgid "Company Home Page"
+msgstr "የድርጅቱ ዎና ገጽ"
+
+#: .\templates\frontpages\company\company_announcement.html:21
+#: .\templates\frontpages\company\company_announcement_detail.html:17
+#, fuzzy
+#| msgid "Announcement List"
+msgid "Company Announcement List"
+msgstr "ማስታወቂያ"
+
+#: .\templates\frontpages\company\company_announcement.html:69
+#: .\templates\frontpages\company\company_blog.html:77
+#: .\templates\frontpages\company\company_events.html:76
+#: .\templates\frontpages\company\company_faq.html:71
+#: .\templates\frontpages\company\company_news.html:72
+#: .\templates\frontpages\company\company_poll.html:92
+#: .\templates\frontpages\company\company_research.html:74
+#: .\templates\frontpages\company\company_tenders.html:91
+#: .\templates\frontpages\company\company_vacancy.html:72
+#: .\templates\frontpages\news\customer_news_list.html:68
+msgid "Pages"
+msgstr "ገጾች"
+
+#: .\templates\frontpages\company\company_announcement_detail.html:18
+#, fuzzy
+#| msgid "Announcement List"
+msgid "Announcement Details"
+msgstr "ማስታወቂያ"
+
+#: .\templates\frontpages\company\company_announcement_detail.html:69
+#, fuzzy
+#| msgid "Announcement List"
+msgid "Annnouncement Description"
+msgstr "ማስታወቂያ"
+
+#: .\templates\frontpages\company\company_blog.html:15
+#: .\templates\frontpages\company\company_blog_detail.html:6
+#, fuzzy
+#| msgid "Blog"
+msgid "Blogs"
+msgstr "ብሎግ"
+
+#: .\templates\frontpages\company\company_blog.html:20
+#, fuzzy
+#| msgid "Companies"
+msgid "Company Blog List"
+msgstr "ድርጅቶች"
+
+#: .\templates\frontpages\company\company_blog_detail.html:15
+#, fuzzy
+#| msgid "Poll Detail"
+msgid "Blog Detail"
+msgstr "የምርጫ ዝርዝር"
+
+#: .\templates\frontpages\company\company_blog_detail.html:18
+#, fuzzy
+#| msgid "Company Address"
+msgid "Company Blogs List"
+msgstr "የድርጅት አድራሻ"
+
+#: .\templates\frontpages\company\company_blog_detail.html:19
+#, fuzzy
+#| msgid "Poll Detail"
+msgid "Blog Details"
+msgstr "የምርጫ ዝርዝር"
+
+#: .\templates\frontpages\company\company_event_detail.html:14
+#: .\templates\frontpages\company\company_events.html:66
+#: .\templates\frontpages\news\customer_event_detail.html:20
+#: .\templates\frontpages\news\customer_event_detail.html:59
+#: .\templates\frontpages\news\customer_event_list.html:148
+msgid "Event Detail"
+msgstr "የዝግጅቱ ዝርዝር"
+
+#: .\templates\frontpages\company\company_event_detail.html:17
+#, fuzzy
+#| msgid "Events list"
+msgid "Company Events List"
+msgstr "የዝግጅቶች ዝርዝር"
+
+#: .\templates\frontpages\company\company_event_detail.html:18
+#, fuzzy
+#| msgid "Event Detail"
+msgid "Event Details"
+msgstr "የዝግጅቱ ዝርዝር"
+
+#: .\templates\frontpages\company\company_event_detail.html:46
+#: .\templates\frontpages\company\company_tender_detail.html:44
+#: .\templates\frontpages\company\company_vacancy_detail.html:45
+#: .\templates\frontpages\news\customer_event_detail.html:81
+#: .\templates\frontpages\tender\customer_tender_detail.html:43
+msgid "Start Date"
+msgstr "የሚደምርበት ቀን"
+
+#: .\templates\frontpages\company\company_event_detail.html:47
+#: .\templates\frontpages\company\company_tender_detail.html:45
+#: .\templates\frontpages\company\company_vacancy_detail.html:46
+#: .\templates\frontpages\news\customer_event_detail.html:82
+#: .\templates\frontpages\tender\customer_tender_detail.html:44
+msgid "End Date"
+msgstr "የሚያልቅበት ቀን"
+
+#: .\templates\frontpages\company\company_event_detail.html:56
+#: .\templates\frontpages\company\company_events.html:49
+#: .\templates\frontpages\company\company_tender_detail.html:52
+#: .\templates\frontpages\company\company_tenders.html:52
+#: .\templates\frontpages\news\customer_event_list.html:123
+#: .\templates\frontpages\tender\customer_tender_detail.html:64
+#: .\templates\frontpages\tender\customer_tender_list.html:134
+msgid "Open"
+msgstr "ክፈት"
+
+#: .\templates\frontpages\company\company_event_detail.html:58
+#: .\templates\frontpages\company\company_events.html:51
+#: .\templates\frontpages\company\company_tender_detail.html:54
+#: .\templates\frontpages\company\company_tenders.html:54
+#: .\templates\frontpages\news\customer_event_list.html:125
+#: .\templates\frontpages\tender\customer_tender_detail.html:66
+#: .\templates\frontpages\tender\customer_tender_list.html:136
+msgid "Upcoming"
+msgstr "ወደፊት የሚመጡ"
+
+#: .\templates\frontpages\company\company_event_detail.html:60
+#: .\templates\frontpages\company\company_events.html:53
+#: .\templates\frontpages\company\company_tender_detail.html:56
+#: .\templates\frontpages\company\company_tenders.html:56
+#: .\templates\frontpages\news\customer_event_list.html:127
+#: .\templates\frontpages\tender\customer_tender_detail.html:68
+#: .\templates\frontpages\tender\customer_tender_list.html:138
+msgid "Closed"
+msgstr "ዝግ"
+
+#: .\templates\frontpages\company\company_event_detail.html:70
+#: .\templates\frontpages\news\customer_event_detail.html:106
+msgid "From"
+msgstr "ከ"
+
+#: .\templates\frontpages\company\company_event_detail.html:87
+#: .\templates\frontpages\news\customer_event_detail.html:127
+msgid "Remind Me"
+msgstr "የማስታወሻ መልዕክት ላክ"
+
+#: .\templates\frontpages\company\company_event_detail.html:97
+#: .\templates\frontpages\news\customer_event_detail.html:135
+#, fuzzy
+#| msgid "News Description"
+msgid "Event Description"
+msgstr "የምርምር መግለጫ"
+
+#: .\templates\frontpages\company\company_events.html:15
+#: .\templates\frontpages\company\company_layout.html:290
+#: .\templates\frontpages\layout.html:334
+#: .\templates\frontpages\news\customer_event_detail.html:57
+#: .\templates\frontpages\news\customer_event_list.html:44
+msgid "Events"
+msgstr "ዝግጅቶች"
+
+#: .\templates\frontpages\company\company_events.html:20
+#, fuzzy
+#| msgid "Open Events"
+msgid "Company Event List"
+msgstr "ክፈት ዝግጅቶች"
+
+#: .\templates\frontpages\company\company_faq.html:15
+#: .\templates\frontpages\company\company_faq_detail.html:14
+#: .\templates\frontpages\company\company_layout.html:302
+#: .\templates\frontpages\layout.html:347
+msgid "Faqs"
+msgstr "ተየጥ"
+
+#: .\templates\frontpages\company\company_faq.html:21
+#: .\templates\frontpages\company\company_faq_detail.html:17
+#, fuzzy
+msgid "Company Faq List"
+msgstr "የድርጅት ስም"
+
+#: .\templates\frontpages\company\company_faq_detail.html:5
+#, fuzzy
+#| msgid "Detail"
+msgid "Faq Detail"
+msgstr "ዝርዝር"
+
+#: .\templates\frontpages\company\company_faq_detail.html:18
+#, fuzzy
+#| msgid "Detail"
+msgid "Faq Details"
+msgstr "ዝርዝር"
+
+#: .\templates\frontpages\company\company_index.html:88
+#, fuzzy
+#| msgid "Company Contact Info"
+msgid "Contact Info"
+msgstr "የድርጅቱ አድራሻ"
+
+#: .\templates\frontpages\company\company_index.html:101
+#, fuzzy
+#| msgid "Company Contact Info"
+msgid "More Company Info"
+msgstr "የድርጅቱ አድራሻ"
+
+#: .\templates\frontpages\company\company_index.html:106
+msgid "Established Year"
+msgstr ""
+
+#: .\templates\frontpages\company\company_index.html:110
+msgid "Services"
+msgstr ""
+
+#: .\templates\frontpages\company\company_index.html:118
+msgid "Fax"
+msgstr ""
+
+#: .\templates\frontpages\company\company_index.html:122
+msgid "Certification"
+msgstr ""
+
+#: .\templates\frontpages\company\company_index.html:142
+#: .\templates\frontpages\company\company_layout.html:278
+#: .\templates\frontpages\company\product_details.html:17
+#: .\templates\frontpages\company\product_list.html:17
+#: .\templates\frontpages\company\project_detail.html:17
+#: .\templates\frontpages\index.html:178
+#: .\templates\frontpages\layout.html:312
+msgid "Products"
+msgstr "ምርት"
+
+#: .\templates\frontpages\company\company_index.html:209
+#, fuzzy
+#| msgid "Total Manufacturers"
+msgid "Contact Manufacturer"
+msgstr "አምራቾች"
+
+#: .\templates\frontpages\company\company_index.html:236
+#: .\templates\frontpages\company\company_vacancy_apply.html:58
+#: .\templates\frontpages\news\customer_event_detail.html:223
+#: .\templates\frontpages\product\product_detail.html:481
+msgid "Chat"
+msgstr "ንግግር"
+
+#: .\templates\frontpages\company\company_index.html:237
+#, fuzzy
+#| msgid "Contact Us"
+msgid "Contact Me"
+msgstr "ተገናኙን"
+
+#: .\templates\frontpages\company\company_index.html:238
+msgid "Send Inquiry"
+msgstr ""
+
+#: .\templates\frontpages\company\company_index.html:245
+#, fuzzy
+#| msgid "Location"
+msgid "Listing location"
+msgstr "መልክት"
+
+#: .\templates\frontpages\company\company_index.html:258
+#, fuzzy
+#| msgid "News Description"
+msgid "Get Direction"
+msgstr "የምርምር መግለጫ"
+
+#: .\templates\frontpages\company\company_index.html:276
+#: .\templates\frontpages\company\contact.html:56
+#: .\templates\frontpages\company\product_details.html:207
+msgid "Send Message"
+msgstr "መልዕክቱን ላክ"
+
+#: .\templates\frontpages\company\company_index.html:293
+#: .\templates\frontpages\company\company_index.html:322
+#: .\templates\frontpages\company\company_index.html:383
+#: .\templates\frontpages\company\company_poll_detail.html:185
+#: .\templates\frontpages\company\company_tender_detail.html:184
+#: .\templates\frontpages\company\company_vacancy_detail.html:135
+#: .\templates\frontpages\tender\customer_tender_detail.html:174
+msgid "Cancel"
+msgstr "ሰርዝ"
+
+#: .\templates\frontpages\company\company_index.html:294
+#: .\templates\frontpages\company\company_index.html:323
+msgid "Send"
+msgstr ""
+
+#: .\templates\frontpages\company\company_index.html:305
+#, fuzzy
+#| msgid "Add a Comment"
+msgid "Leave a Comment"
+msgstr "አስተያየት ያክሉ"
+
+#: .\templates\frontpages\company\company_index.html:334
+#, fuzzy
+#| msgid "Notifications"
+msgid "Direction"
+msgstr "መልክት"
+
+#: .\templates\frontpages\company\company_index.html:355
+msgid "Report Abuse"
+msgstr ""
+
+#: .\templates\frontpages\company\company_layout.html:139
+#: .\templates\frontpages\layout.html:142
+msgid "My Cart"
+msgstr "ዘንቢል"
+
+#: .\templates\frontpages\company\company_layout.html:145
+#: .\templates\frontpages\company\company_layout.html:175
+#: .\templates\frontpages\layout.html:174
+#: .\templates\frontpages\layout.html:205
+msgid "My Profile"
+msgstr "የራስ አካውንት"
+
+#: .\templates\frontpages\company\company_layout.html:152
+#: .\templates\frontpages\company\company_layout.html:182
+#: .\templates\frontpages\layout.html:182
+#: .\templates\frontpages\layout.html:213
+msgid "My Messages"
+msgstr "መልዕክቶች"
+
+#: .\templates\frontpages\company\company_layout.html:159
+#: .\templates\frontpages\company\company_layout.html:189
+#, fuzzy
+#| msgid " List of Messages"
+msgid "List of Messages"
+msgstr "የመልክዕት ዝርዝር"
+
+#: .\templates\frontpages\company\company_layout.html:206
+#: .\templates\frontpages\layout.html:233
+msgid "Logout"
+msgstr "ውጣ"
+
+#: .\templates\frontpages\company\company_layout.html:210
+#: .\templates\frontpages\index.html:432 .\templates\frontpages\index.html:684
+#: .\templates\frontpages\layout.html:237
+msgid "Register"
+msgstr "ተመዝገብ"
+
+#: .\templates\frontpages\company\company_layout.html:214
+#: .\templates\frontpages\index.html:652
+#: .\templates\frontpages\layout.html:241
+msgid "Login"
+msgstr "ግባ"
+
+#: .\templates\frontpages\company\company_layout.html:221
+#: .\templates\frontpages\layout.html:248
+msgid "Language"
+msgstr "ቋንቋ"
+
+#: .\templates\frontpages\company\company_layout.html:227
+#: .\templates\frontpages\layout.html:254
+#, fuzzy
+#| msgid " English"
+msgid "English"
+msgstr "እንግሊዝኛ"
+
+#: .\templates\frontpages\company\company_layout.html:233
+#: .\templates\frontpages\layout.html:260
+msgid " Amharic"
+msgstr "አማርኛ"
+
+#: .\templates\frontpages\company\company_layout.html:280
+#: .\templates\frontpages\company\company_layout.html:282
+#: .\templates\frontpages\layout.html:321
+#: .\templates\frontpages\layout.html:323
+#: .\templates\frontpages\research\research_detail_edit.html:17
+#: .\templates\frontpages\research\research_form.html:17
+msgid "Research"
+msgstr "ምርምር"
+
+#: .\templates\frontpages\company\company_layout.html:283
+#: .\templates\frontpages\company\company_layout.html:305
+#: .\templates\frontpages\layout.html:324
+#: .\templates\frontpages\layout.html:327
+#: .\templates\frontpages\project\project_detail_old.html:12
+#: .\templates\frontpages\project\project_list_ol.html:12
+msgid "Project"
+msgstr "ፕሮጀክት"
+
+#: .\templates\frontpages\company\company_layout.html:291
+#: .\templates\frontpages\company\company_news.html:15
+#: .\templates\frontpages\layout.html:335
+msgid "News"
+msgstr "ዜና"
+
+#: .\templates\frontpages\company\company_layout.html:292
+#: .\templates\frontpages\company\company_tenders.html:15
+#: .\templates\frontpages\layout.html:336
+#: .\templates\frontpages\tender\customer_tender_list.html:41
+msgid "Tenders"
+msgstr "ጨረታዎቸ"
+
+#: .\templates\frontpages\company\company_layout.html:293
+#: .\templates\frontpages\company\company_vacancy.html:15
+#: .\templates\frontpages\company\company_vacancy_detail.html:14
+#: .\templates\frontpages\layout.html:337
+#: .\templates\frontpages\vacancy_detail.html:12
+#: .\templates\frontpages\vacancy_list.html:12
+msgid "Vacancy"
+msgstr "ክፍት የሥራ ቦታ"
+
+#: .\templates\frontpages\company\company_layout.html:298
+#: .\templates\frontpages\layout.html:342
+msgid "Collaborations"
+msgstr "መተባበሪያ"
+
+#: .\templates\frontpages\company\company_layout.html:301
+#: .\templates\frontpages\company\company_poll.html:15
+#: .\templates\frontpages\layout.html:346
+#: .\templates\frontpages\poll\poll_detail.html:21
+#: .\templates\frontpages\poll\polls-list.html:42
+#: .\templates\frontpages\poll\polls-list.html:45
+msgid "Polls"
+msgstr "ምረጫ"
+
+#: .\templates\frontpages\company\company_layout.html:306
+#: .\templates\frontpages\company\contact.html:14
+#: .\templates\frontpages\layout.html:351
+msgid "Contact Us"
+msgstr "ተገናኙን"
+
+#: .\templates\frontpages\company\company_layout.html:336
+#: .\templates\frontpages\index.html:599 .\templates\frontpages\index.html:610
+#: .\templates\frontpages\layout.html:377
+msgid "Subscribe"
+msgstr "ይመዝገቡ"
 
 #: .\templates\frontpages\company\company_list.html:15
 msgid "listings available"
 msgstr "የተገኙ ውጤቶች"
+
+#: .\templates\frontpages\company\company_list.html:56
+msgid "Industry List"
+msgstr ""
+
+#: .\templates\frontpages\company\company_list.html:59
+msgid "Industries"
+msgstr ""
+
+#: .\templates\frontpages\company\company_list.html:77
+#: .\templates\frontpages\company\product_list.html:61
+msgid "Showing"
+msgstr ""
+
+#: .\templates\frontpages\company\company_list.html:77
+#: .\templates\frontpages\company\product_list.html:61
+msgid "entries"
+msgstr ""
+
+#: .\templates\frontpages\company\company_list.html:83
+msgid "Sort By"
+msgstr "ደርድር"
+
+#: .\templates\frontpages\company\company_list.html:91
+msgid "Distance"
+msgstr ""
+
+#: .\templates\frontpages\company\company_list.html:95
+#, fuzzy
+#| msgid "Latest News"
+msgid "Latest"
+msgstr "አቅራቢዎች"
+
+#: .\templates\frontpages\company\company_list.html:99
+msgid "Rating"
+msgstr ""
+
+#: .\templates\frontpages\company\company_list.html:150
+#: .\templates\frontpages\company\company_list.html:203
+#, fuzzy
+#| msgid "Get Earnings"
+msgid "Get Directions"
+msgstr "ትረፍ ያግኙ"
+
+#: .\templates\frontpages\company\company_list.html:310
+#: .\templates\frontpages\job_apply.html:29
+#: .\templates\frontpages\news\customer_news_list.html:623
+#: .\templates\frontpages\project\project_detail_old.html:49
+#: .\templates\frontpages\project\project_list_ol.html:48
+#: .\templates\frontpages\research\research_detail_edit.html:63
+#: .\templates\frontpages\vacancy\vacancy_list.html:240
+#: .\templates\frontpages\vacancy_detail.html:32
+#: .\templates\frontpages\vacancy_list.html:51
+msgid "Categories"
+msgstr "ምድቦች"
+
+#: .\templates\frontpages\company\company_list.html:318
+#, fuzzy
+#| msgid "Foods"
+msgid "Food"
+msgstr "ምግብ"
+
+#: .\templates\frontpages\company\company_list.html:324
+#, fuzzy
+#| msgid "Beverages"
+msgid "Beverage"
+msgstr "መጠጥ"
+
+#: .\templates\frontpages\company\company_list.html:330
+#, fuzzy
+#| msgid "Pharmaceuticals"
+msgid "Pharmaceutical"
+msgstr "መድሃኒት"
+
+#: .\templates\frontpages\company\company_news.html:20
+#: .\templates\frontpages\company\company_news_detail.html:17
+#, fuzzy
+msgid "Company News List"
+msgstr "የድርጅት ስም"
+
+#: .\templates\frontpages\company\company_news.html:62
+#: .\templates\frontpages\company\company_news_detail.html:14
+#: .\templates\frontpages\news\customer_news_list.html:153
+msgid "News Detail"
+msgstr "የዜና ዝርዝር"
+
+#: .\templates\frontpages\company\company_news_detail.html:18
+msgid "News Details"
+msgstr "የዜና ዝርዝር"
+
+#: .\templates\frontpages\company\company_news_detail.html:59
+msgid "News Description"
+msgstr "የምርምር መግለጫ"
+
+#: .\templates\frontpages\company\company_poll.html:21
+#: .\templates\frontpages\company\company_poll_detail.html:18
+#, fuzzy
+#| msgid "Company Address"
+msgid "Company Polls List"
+msgstr "የድርጅት አድራሻ"
+
+#: .\templates\frontpages\company\company_poll.html:63
+#: .\templates\frontpages\poll\polls-list.html:114
+msgid "Choices"
+msgstr "አማራጮች"
+
+#: .\templates\frontpages\company\company_poll.html:65
+#: .\templates\frontpages\poll\polls-list.html:116
+msgid "Choice"
+msgstr "አማራጭ"
+
+#: .\templates\frontpages\company\company_poll.html:74
+#: .\templates\frontpages\company\company_poll_detail.html:79
+#: .\templates\frontpages\poll\poll_detail.html:84
+#: .\templates\frontpages\poll\polls-list.html:123
+msgid "Votes"
+msgstr "ድምጾች"
+
+#: .\templates\frontpages\company\company_poll.html:77
+#: .\templates\frontpages\company\company_poll_detail.html:81
+#: .\templates\frontpages\company\company_poll_detail.html:93
+#: .\templates\frontpages\poll\poll_detail.html:86
+#: .\templates\frontpages\poll\poll_detail.html:98
+#: .\templates\frontpages\poll\polls-list.html:126
+msgid "Vote"
+msgstr "ድምጽ"
+
+#: .\templates\frontpages\company\company_poll.html:82
+#: .\templates\frontpages\poll\polls-list.html:144
+msgid "Poll Detail"
+msgstr "የምርጫ ዝርዝር"
+
+#: .\templates\frontpages\company\company_poll_detail.html:14
+#: .\templates\frontpages\company\company_poll_detail.html:19
+#: .\templates\frontpages\poll\poll_detail.html:18
+#: .\templates\frontpages\poll\poll_detail.html:22
+msgid "Poll-Details"
+msgstr "የምርጫ ዝርዝርው"
+
+#: .\templates\frontpages\company\company_poll_detail.html:45
+#: .\templates\frontpages\poll\poll_detail.html:61
+#, fuzzy
+#| msgid "Total votes"
+msgid "Total Votes"
+msgstr "ጠቅላላ መራጮች"
+
+#: .\templates\frontpages\company\company_poll_detail.html:52
+#: .\templates\frontpages\poll\poll_detail.html:40
+#, fuzzy
+#| msgid "You can not vote on this poll, since you are the creator of the poll"
+msgid "You can not vote on this poll, since your company created the poll."
+msgstr "የምርጫው ፈጣሪ እርስዎ ነዎት ስለሆነም በዚህ ምርጫ ላይ ድምጽ መስጠት አይችሉም"
+
+#: .\templates\frontpages\company\company_poll_detail.html:55
+#: .\templates\frontpages\poll\poll_detail.html:43
+#| msgid "Super users cannot Vote"
+msgid "Super users cannot Vote."
+msgstr "ልዕለ ተጠቃሚዎች ድምጽ መስጠት አይችሉም"
+
+#: .\templates\frontpages\company\company_poll_detail.html:58
+#: .\templates\frontpages\poll\poll_detail.html:46
+#, fuzzy
+#| msgid "You already have voted for this poll"
+msgid "You already have voted for this poll."
+msgstr "ለዚህ ምርጫ አስቀድመው ድምጽ ሰጥተዋል"
+
+#: .\templates\frontpages\company\company_poll_detail.html:103
+msgid " This poll has no choice, yet!"
+msgstr ""
+
+#: .\templates\frontpages\company\company_poll_detail.html:109
+#: .\templates\frontpages\poll\poll_detail.html:117
+msgid "Any Remarks"
+msgstr "ማንኛውም አስተያየት"
+
+#: .\templates\frontpages\company\company_poll_detail.html:116
+#: .\templates\frontpages\poll\poll_detail.html:124
+msgid "Submit Vote"
+msgstr "ድምጽ ያስገቡ"
+
+#: .\templates\frontpages\company\company_poll_detail.html:127
+#: .\templates\frontpages\poll\poll_detail.html:67
+msgid "Poll description"
+msgstr "የምርጫው መግለጫ"
+
+#: .\templates\frontpages\company\company_poll_detail.html:149
+#: .\templates\frontpages\company\company_tender_detail.html:148
+#: .\templates\frontpages\company\company_vacancy_detail.html:99
+#: .\templates\frontpages\tender\customer_tender_detail.html:138
+msgid "Applicant Form"
+msgstr "የአመልካች ቅጽ"
+
+#: .\templates\frontpages\company\company_poll_detail.html:159
+#: .\templates\frontpages\company\company_tender_detail.html:158
+#: .\templates\frontpages\company\company_vacancy_detail.html:109
+#: .\templates\frontpages\tender\customer_tender_detail.html:148
+msgid "First Name"
+msgstr "የመጀመሪያ ስም"
+
+#: .\templates\frontpages\company\company_poll_detail.html:163
+#: .\templates\frontpages\company\company_tender_detail.html:162
+#: .\templates\frontpages\company\company_vacancy_detail.html:113
+#: .\templates\frontpages\tender\customer_tender_detail.html:152
+msgid "Last Name"
+msgstr "ያባት ስም"
+
+#: .\templates\frontpages\company\company_poll_detail.html:168
+#: .\templates\frontpages\company\company_tender_detail.html:167
+#: .\templates\frontpages\company\company_vacancy_detail.html:118
+#: .\templates\frontpages\tender\customer_tender_detail.html:157
+#, fuzzy
+msgid "Company Name"
+msgstr "የድርጅት ስም"
+
+#: .\templates\frontpages\company\company_poll_detail.html:172
+#: .\templates\frontpages\company\company_tender_detail.html:171
+#: .\templates\frontpages\company\company_vacancy_detail.html:122
+#: .\templates\frontpages\tender\customer_tender_detail.html:161
+msgid "Company Tin Number"
+msgstr "ኩባንያ ቲን ቁጥር"
+
+#: .\templates\frontpages\company\company_poll_detail.html:176
+#: .\templates\frontpages\company\company_tender_detail.html:175
+#: .\templates\frontpages\company\company_vacancy_detail.html:126
+#: .\templates\frontpages\tender\customer_tender_detail.html:165
+msgid "Email"
+msgstr "ኢሜል"
+
+#: .\templates\frontpages\company\company_poll_detail.html:179
+#: .\templates\frontpages\company\company_tender_detail.html:178
+#: .\templates\frontpages\company\company_vacancy_detail.html:129
+#: .\templates\frontpages\tender\customer_tender_detail.html:168
+msgid "Phone Number"
+msgstr "ስልክ ቁጥር"
+
+#: .\templates\frontpages\company\company_research.html:15
+#, fuzzy
+#| msgid "Research"
+msgid "Researchs"
+msgstr "ምርምር"
+
+#: .\templates\frontpages\company\company_research.html:21
+#, fuzzy
+#| msgid "Companies"
+msgid "Company obj List"
+msgstr "ድርጅቶች"
+
+#: .\templates\frontpages\company\company_research_detail.html:14
+msgid "Research Detail"
+msgstr "የምርምር ዝርዝር"
+
+#: .\templates\frontpages\company\company_research_detail.html:17
+#, fuzzy
+#| msgid "Research Title"
+msgid "Company Research List"
+msgstr "የምርምር ርዕስ"
+
+#: .\templates\frontpages\company\company_research_detail.html:18
+#, fuzzy
+#| msgid "Research Detail"
+msgid "Research Details"
+msgstr "የምርምር ዝርዝር"
+
+#: .\templates\frontpages\company\company_research_detail.html:47
+#: .\templates\frontpages\company\company_research_detail.html:49
+#: .\templates\frontpages\company\company_research_detail.html:51
+#: .\templates\frontpages\project\project_detail_old.html:92
+#: .\templates\frontpages\research\research_detail.html:142
+#: .\templates\frontpages\research\research_detail.html:144
+#: .\templates\frontpages\research\research_detail.html:146
+#: .\templates\frontpages\research\research_detail.html:148
+msgid "status"
+msgstr "ሁኔታ"
+
+#: .\templates\frontpages\company\company_research_detail.html:56
+#: .\templates\frontpages\project\project_detail_old.html:94
+#: .\templates\frontpages\research\research_detail.html:152
+msgid "Category"
+msgstr "ምድብ"
+
+#: .\templates\frontpages\company\company_research_detail.html:61
+#: .\templates\frontpages\research\research_detail.html:179
+#, fuzzy
+#| msgid "Research Title"
+msgid "Research Files"
+msgstr "የምርምር ርዕስ"
+
+#: .\templates\frontpages\company\company_research_detail.html:108
+#: .\templates\frontpages\research\research_detail_edit.html:185
+#: .\templates\frontpages\research\research_form.html:127
+msgid "Research Description"
+msgstr "የምርምር መግለጫ"
+
+#: .\templates\frontpages\company\company_tender_detail.html:14
+#: .\templates\frontpages\company\company_tender_detail.html:19
+#: .\templates\frontpages\tender\customer_tender_detail.html:18
+msgid "Tender-Details"
+msgstr "ጨረታ ዝርዝር"
+
+#: .\templates\frontpages\company\company_tender_detail.html:18
+#: .\templates\frontpages\company\company_tenders.html:19
+#, fuzzy
+#| msgid "Company Tin Number"
+msgid "Company Tender List"
+msgstr "ኩባንያ ቲን ቁጥር"
+
+#: .\templates\frontpages\company\company_tender_detail.html:61
+#: .\templates\frontpages\tender\customer_tender_detail.html:53
+msgid "Type"
+msgstr "አይነት"
+
+#: .\templates\frontpages\company\company_tender_detail.html:64
+#: .\templates\frontpages\tender\customer_tender_detail.html:56
+msgid "Price"
+msgstr "ዋጋ"
+
+#: .\templates\frontpages\company\company_tender_detail.html:67
+#: .\templates\frontpages\tender\customer_tender_detail.html:59
+#, fuzzy
+#| msgid "Applicant Form"
+msgid "Total Applications"
+msgstr "የአመልካች ቅጽ"
+
+#: .\templates\frontpages\company\company_tender_detail.html:78
+#: .\templates\frontpages\tender\customer_tender_detail.html:81
+msgid "Download Document"
+msgstr "ፋይል አውርድ"
+
+#: .\templates\frontpages\company\company_tender_detail.html:87
+#: .\templates\frontpages\tender\customer_tender_detail.html:90
+msgid "Users from tender company can't participate in their own tender!"
+msgstr "ከጨረታ ኩባንያ የመጡ ተጠቃሚዎች በራሳቸው ጨረታ ላይ መሳተፍ አይችሉም"
+
+#: .\templates\frontpages\company\company_tender_detail.html:93
+#: .\templates\frontpages\tender\customer_tender_detail.html:96
+msgid "Participate in tender"
+msgstr "በጨረታ ውስጥ ይሳተፉ"
+
+#: .\templates\frontpages\company\company_tender_detail.html:111
+#: .\templates\frontpages\tender\customer_tender_detail.html:114
+msgid ""
+"This Tender is not Free, You can read the description below and attend the "
+"tender in person!"
+msgstr "ይህ ጨረታ ነፃ አይደለም ፣ ከዚህ በታች ያለውን መግለጫ በማንበብ ጨረታውን በአካል ተገኝተው ማግኘት ይችላሉ!"
+
+#: .\templates\frontpages\company\company_tender_detail.html:126
+#: .\templates\frontpages\tender\customer_tender_detail.html:126
+msgid "Tender description"
+msgstr "ጨረታ መግለጫ"
+
+#: .\templates\frontpages\company\company_tenders.html:81
+#: .\templates\frontpages\tender\customer_tender_list.html:159
+msgid "Tender Detail"
+msgstr "የጨረታ ዝርዝር"
+
+#: .\templates\frontpages\company\company_vacancy.html:21
+#: .\templates\frontpages\company\company_vacancy_detail.html:18
+msgid "Company Vacancy List"
+msgstr ""
+
+#: .\templates\frontpages\company\company_vacancy.html:60
+#: .\templates\frontpages\vacancy\vacancy_list.html:140
+#: .\templates\frontpages\vacancy_list.html:102
+msgid "View job details"
+msgstr "የስራው መግለጫ"
+
+#: .\templates\frontpages\company\company_vacancy.html:61
+#: .\templates\frontpages\company\company_vacancy_detail.html:67
+#: .\templates\frontpages\vacancy_detail.html:101
+#: .\templates\frontpages\vacancy_list.html:103
+msgid "Apply"
+msgstr "አመልክት"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:15
+#: .\templates\frontpages\job_apply.html:13
+msgid "Appying to"
+msgstr "ማመልከቻ"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:74
+#: .\templates\frontpages\job_apply.html:54
+msgid "Job application form"
+msgstr "የማምልከቻ ቅጽ"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:94
+#: .\templates\frontpages\job_apply.html:75
+msgid "Status"
+msgstr "ወቅታዊ ሁኔታ"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:104
+#: .\templates\frontpages\job_apply.html:85
+msgid "The institute you learned in"
+msgstr "የተማሩበት የት/ት ተቋም"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:111
+#: .\templates\frontpages\job_apply.html:92
+msgid "The field you are an expert in"
+msgstr "የሙያ አይነት"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:118
+#: .\templates\frontpages\job_apply.html:99
+msgid "Grade"
+msgstr "ውጤት"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:126
+#: .\templates\frontpages\job_apply.html:107
+msgid "experiance (in years)"
+msgstr "የስራ ልምድ (አመት)"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:134
+#: .\templates\frontpages\job_apply.html:115
+msgid "Introduce your self"
+msgstr "እራሶን ያስተዋውቁ"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:142
+#: .\templates\frontpages\job_apply.html:123
+msgid "Upload your CV"
+msgstr "CV አያይዝ"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:151
+#: .\templates\frontpages\job_apply.html:132
+msgid "Upload your Documents (This is for certifivates and other documents)"
+msgstr "ተያያዥ ማስረጃዎችን ያያይዙ"
+
+#: .\templates\frontpages\company\company_vacancy_detail.html:19
+#, fuzzy
+#| msgid "Vacancy"
+msgid "Vacancy-Detail"
+msgstr "ክፍት የሥራ ቦታ"
+
+#: .\templates\frontpages\company\company_vacancy_detail.html:54
+#: .\templates\frontpages\vacancy_detail.html:74
+msgid "Location"
+msgstr "መልክት"
+
+#: .\templates\frontpages\company\company_vacancy_detail.html:57
+#: .\templates\frontpages\vacancy_detail.html:77
+msgid "Salary"
+msgstr "ደሞዝ"
+
+#: .\templates\frontpages\company\company_vacancy_detail.html:62
+#: .\templates\frontpages\vacancy_detail.html:82
+msgid "Requirement"
+msgstr "ቅድመ-ሁኔታ"
+
+#: .\templates\frontpages\company\company_vacancy_detail.html:77
+#: .\templates\frontpages\vacancy_detail.html:95
+msgid "Description"
+msgstr "መግለጫ"
+
+#: .\templates\frontpages\company\contact.html:17
+#, fuzzy
+#| msgid "Contact Us"
+msgid "Contact"
+msgstr "ተገናኙን"
+
+#: .\templates\frontpages\company\product_details.html:131
+msgid "Product In Stock"
+msgstr ""
+
+#: .\templates\frontpages\company\product_details.html:151
+#, fuzzy
+#| msgid "Total Manufacturers"
+msgid "Contact Manfacturer"
+msgstr "አምራቾች"
+
+#: .\templates\frontpages\company\product_details.html:192
+#, fuzzy
+#| msgid "Latest Manufacturers"
+msgid "Send Message to Manufacturer"
+msgstr "አምራቾች"
+
+#: .\templates\frontpages\company\product_list.html:54
+#, fuzzy
+#| msgid "Total Suppliers"
+msgid "Contact Supplier"
+msgstr "አቅራቢዎች"
+
+#: .\templates\frontpages\company\product_list.html:61
+msgid "to"
+msgstr ""
+
+#: .\templates\frontpages\company\project_list.html:17
+#, fuzzy
+#| msgid "Project"
+msgid "Projects"
+msgstr "ፕሮጀክት"
 
 #: .\templates\frontpages\faq.html:15
 msgid "FAQ"
@@ -261,7 +1349,7 @@ msgstr "ተይጥ"
 msgid "Welcome To The Biggest Business Directory"
 msgstr "ወደ ትልቁ የንግድ ማውጫ እንኳን በደህና መጡ!"
 
-#: .\templates\frontpages\index.html:19 .\templates\frontpages\index.html:601
+#: .\templates\frontpages\index.html:19 .\templates\frontpages\index.html:600
 msgid ""
 "It is a long established fact that a reader will be distracted by the "
 "readable."
@@ -307,387 +1395,164 @@ msgstr "የመፈለግያ ቃላት ጻፍ"
 msgid "Companies"
 msgstr "ድርጅቶች"
 
-#: .\templates\frontpages\index.html:178
-#: .\templates\frontpages\layout.html:291
-msgid "Products"
-msgstr "ምርት"
-
 #: .\templates\frontpages\index.html:195
 msgid "Latest Products"
 msgstr "አዲስ ምርቶች"
 
-#: .\templates\frontpages\index.html:196 .\templates\frontpages\index.html:331
-#: .\templates\frontpages\index.html:402 .\templates\frontpages\index.html:531
-#: .\templates\frontpages\index.html:631 .\templates\frontpages\index.html:781
-#: .\templates\frontpages\index.html:869
+#: .\templates\frontpages\index.html:196 .\templates\frontpages\index.html:333
+#: .\templates\frontpages\index.html:401 .\templates\frontpages\index.html:530
+#: .\templates\frontpages\index.html:630
+#: .\templates\frontpages\index.html:1232
+#: .\templates\frontpages\index.html:1321
 msgid "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula"
 msgstr "ሞርቢ አሥራ አንድ ፣ ሊጉላ በሴሴቲተር ተሸከርካሪ ላይ ሞርቢ አሥራ አንድ ፣ ሊጉላ በሴሴቲተር ተሸከርካሪ ላይ"
 
-#: .\templates\frontpages\index.html:288
+#: .\templates\frontpages\index.html:290
 msgid "Total Products"
 msgstr "ምርት"
 
-#: .\templates\frontpages\index.html:297
+#: .\templates\frontpages\index.html:299
 msgid "Total Manufacturers"
 msgstr "አምራቾች"
 
-#: .\templates\frontpages\index.html:306
+#: .\templates\frontpages\index.html:308
 msgid "Happy Customers"
 msgstr "ደንበኞች"
 
-#: .\templates\frontpages\index.html:330
+#: .\templates\frontpages\index.html:332
 msgid "Latest Manufacturers"
 msgstr "አምራቾች"
 
-#: .\templates\frontpages\index.html:401
+#: .\templates\frontpages\index.html:400
 msgid "How It Works?"
 msgstr "እንደት ይሰራል"
 
-#: .\templates\frontpages\index.html:433 .\templates\frontpages\index.html:685
-#: .\templates\frontpages\layout.html:216
-msgid "Register"
-msgstr "ተመዝገብ"
-
-#: .\templates\frontpages\index.html:434
+#: .\templates\frontpages\index.html:433
 msgid "You can register and get Unlimited Functionalities"
 msgstr "ተመዝግበዉ የማያልቁ አገልግሎት ያግኙ"
 
-#: .\templates\frontpages\index.html:458
+#: .\templates\frontpages\index.html:457
 msgid "Create Account"
 msgstr "አካዉንት ከፈት"
 
-#: .\templates\frontpages\index.html:459
+#: .\templates\frontpages\index.html:458
 msgid "You Can Create Account and Get Unlimited Functionalities"
 msgstr "አካዉንት ከፍተዉ የማያልቅ አገልግሎት ያግኙ"
 
-#: .\templates\frontpages\index.html:487
+#: .\templates\frontpages\index.html:486
 msgid "Add Products"
 msgstr "ምርት ጨምር"
 
-#: .\templates\frontpages\index.html:488
+#: .\templates\frontpages\index.html:487
 msgid "You Can Add your Products and comunicate with buyers"
 msgstr "መርቶትን ለሸማቾች ያቀርቡ"
 
-#: .\templates\frontpages\index.html:514
+#: .\templates\frontpages\index.html:513
 msgid "Get Earnings"
 msgstr "ትረፍ ያግኙ"
 
-#: .\templates\frontpages\index.html:515
+#: .\templates\frontpages\index.html:514
 msgid "You can register, add products,buy products and get Your earnings"
 msgstr "አካዉንት ከፍተዉ የማያልቅ አገልግሎት ያግኙ"
 
-#: .\templates\frontpages\index.html:530
+#: .\templates\frontpages\index.html:529
 msgid "Latest Suppliers"
 msgstr "አቅራቢዎች"
 
-#: .\templates\frontpages\index.html:600 .\templates\frontpages\index.html:611
-msgid "Subscribe"
-msgstr "ይመዝገቡ"
-
-#: .\templates\frontpages\index.html:607
+#: .\templates\frontpages\index.html:606
 msgid "Enter your Email"
 msgstr "ኢመይል ያስገቡ"
 
-#: .\templates\frontpages\index.html:630
+#: .\templates\frontpages\index.html:629
 msgid "Getting Started"
 msgstr "አሁን ይጀምሩ"
 
-#: .\templates\frontpages\index.html:651
+#: .\templates\frontpages\index.html:650
 msgid "Exsiting User"
 msgstr "በፊት የተመዝገበ"
 
-#: .\templates\frontpages\index.html:652 .\templates\frontpages\index.html:684
-msgid "it look like readable English. Many desktop publishing packages and web page "
-msgstr "የሚነበብ እንግሊዝኛ ይመስላል። ብዙ የዴስክቶፕ ማተሚያ ጥቅሎች እና ድረ-ገጽ አርታኢዎች አሁን ሎረም አይፕሱምን እንደ "
+#: .\templates\frontpages\index.html:651 .\templates\frontpages\index.html:683
+#, fuzzy
+#| msgid ""
+#| "it look like readable English. Many desktop publishing packages and web "
+#| "page "
+msgid ""
+"it look like readable English. Many desktop publishing packages and web page "
+"editors now use Lorem Ipsum as their default model text"
+msgstr ""
+"የሚነበብ እንግሊዝኛ ይመስላል። ብዙ የዴስክቶፕ ማተሚያ ጥቅሎች እና ድረ-ገጽ አርታኢዎች አሁን ሎረም አይፕሱምን እንደ "
 
-msgid "editors now use Lorem Ipsum as their default model text"
-msgstr "ነባሪ አምሳያ ጽሑፋቸው ይጠቀማሉ"
-
-
-#: .\templates\frontpages\index.html:653
-#: .\templates\frontpages\layout.html:220
-msgid "Login"
-msgstr "ግባ"
-
-#: .\templates\frontpages\index.html:683
+#: .\templates\frontpages\index.html:682
 msgid "New User"
 msgstr "አዲስ ተጠቃሚ"
 
-#: .\templates\frontpages\index.html:698
+#: .\templates\frontpages\index.html:697
 msgid "Latest News"
 msgstr "አቅራቢዎች"
 
-#: .\templates\frontpages\index.html:699
+#: .\templates\frontpages\index.html:698
 msgid "In Ethiopian Food, Beverage and Pharmaceutical Industry."
 msgstr "በኢትዮጵያ የምግብ፣ መጠጥ እና መድሃኒቶች ኢንዱስትሪ"
 
-#: .\templates\frontpages\index.html:780
+#: .\templates\frontpages\index.html:1231
 msgid "Categories List"
 msgstr "የምርት አይነቶች"
 
-#: .\templates\frontpages\index.html:788
+#: .\templates\frontpages\index.html:1239
 msgid "Food Sectors"
 msgstr "መግብ"
 
-#: .\templates\frontpages\index.html:813
+#: .\templates\frontpages\index.html:1265
 msgid "Beverage Sectors"
 msgstr "መጠጥ"
 
-#: .\templates\frontpages\index.html:838
+#: .\templates\frontpages\index.html:1290
 msgid "Pharmaceutical Sectors"
 msgstr "መድሃኒት"
 
-#: .\templates\frontpages\index.html:868
+#: .\templates\frontpages\index.html:1320
 msgid "Download App"
 msgstr "መተግበሪያ አዉርድ"
 
-#: .\templates\frontpages\job_apply.html:10
-msgid "Appying to"
-msgstr "ማመልከቻ"
-
-#: .\templates\frontpages\job_apply.html:26
-#: .\templates\frontpages\news\customer_news_list.html:623
-#: .\templates\frontpages\project\project_detail.html:49
-#: .\templates\frontpages\project\project_list.html:48
-#: .\templates\frontpages\research\research_detail.html:60
-#: .\templates\frontpages\research\research_detail_edit.html:63
-#: .\templates\frontpages\research\research_form.html:64
-#: .\templates\frontpages\research\research_list.html:60
-#: .\templates\frontpages\vacancy_detail.html:32
-#: .\templates\frontpages\vacancy_list.html:51
-msgid "Categories"
-msgstr "ምድቦች"
-
-#: .\templates\frontpages\job_apply.html:51
-msgid "Job application form"
-msgstr "የማምልከቻ ቅጽ"
-
-#: .\templates\frontpages\job_apply.html:62
-msgid "Status"
-msgstr "ወቅታዊ ሁኔታ"
-
-#: .\templates\frontpages\job_apply.html:72
-msgid "The institute you learned in"
-msgstr "የተማሩበት የት/ት ተቋም"
-
-#: .\templates\frontpages\job_apply.html:79
-msgid "The field you are an expert in"
-msgstr "የሙያ አይነት"
-
-#: .\templates\frontpages\job_apply.html:86
-msgid "Grade"
-msgstr "ውጤት"
-
-#: .\templates\frontpages\job_apply.html:94
-msgid "experiance (in years)"
-msgstr "የስራ ልምድ (አመት)"
-
-#: .\templates\frontpages\job_apply.html:102
-msgid "Introduce your self"
-msgstr "እራሶን ያስተዋውቁ"
-
-#: .\templates\frontpages\job_apply.html:110
-msgid "Upload your CV"
-msgstr "CV አያይዝ"
-
-#: .\templates\frontpages\job_apply.html:119
-msgid "Upload your Documents (This is for certifivates and other documents)"
-msgstr "ተያያዥ ማስረጃዎችን ያያይዙ"
-
-#: .\templates\frontpages\layout.html:140
-msgid "My Cart"
-msgstr "ዘንቢል"
-
-#: .\templates\frontpages\layout.html:146
-#: .\templates\frontpages\layout.html:182
-msgid "My Profile"
-msgstr "የራስ አካውንት"
-
-#: .\templates\frontpages\layout.html:153
-
-#| msgid "Pages"
-msgid "My Messages"
-msgstr "መልዕክቶች"
-
-#: .\templates\frontpages\layout.html:160
-
-#| msgid "Pages"
+#: .\templates\frontpages\layout.html:189
+#: .\templates\frontpages\layout.html:219
 msgid " List of Messages"
 msgstr "የመልክዕት ዝርዝር"
 
-#: .\templates\frontpages\layout.html:212
-msgid "Logout"
-msgstr "ውጣ"
-
-#: .\templates\frontpages\layout.html:227
-msgid "Language"
-msgstr "ቋንቋ"
-
-#: .\templates\frontpages\layout.html:233
-
-#| msgid "English"
-msgid " English"
-msgstr "እንግሊዝኛ"
-
-#: .\templates\frontpages\layout.html:239
-
-#| msgid "Amharic"
-msgid " Amharic"
-msgstr "አማርኛ"
-
-#: .\templates\frontpages\layout.html:281
-msgid "About Us"
-msgstr "ስለ እኛ"
-
-#: .\templates\frontpages\layout.html:282
+#: .\templates\frontpages\layout.html:303
 msgid "Manufacturers"
 msgstr "አምራቾች"
 
-#: .\templates\frontpages\layout.html:285
-#: .\templates\frontpages\layout.html:294
+#: .\templates\frontpages\layout.html:306
+#: .\templates\frontpages\layout.html:315
 msgid "Foods"
 msgstr "ምግብ"
 
-#: .\templates\frontpages\layout.html:286
-#: .\templates\frontpages\layout.html:295
+#: .\templates\frontpages\layout.html:307
+#: .\templates\frontpages\layout.html:316
 msgid "Beverages"
 msgstr "መጠጥ"
 
-#: .\templates\frontpages\layout.html:287
-#: .\templates\frontpages\layout.html:296
+#: .\templates\frontpages\layout.html:308
+#: .\templates\frontpages\layout.html:317
 msgid "Pharmaceuticals"
 msgstr "መድሃኒት"
 
-#: .\templates\frontpages\layout.html:300
-#: .\templates\frontpages\layout.html:302
-#: .\templates\frontpages\research\research_detail.html:12
-#: .\templates\frontpages\research\research_detail_edit.html:17
-#: .\templates\frontpages\research\research_form.html:17
-#: .\templates\frontpages\research\research_list.html:12
-msgid "Research"
-msgstr "ምርምር"
-
-#: .\templates\frontpages\layout.html:303
-#: .\templates\frontpages\project\project_detail.html:12
-#: .\templates\frontpages\project\project_list.html:12
-msgid "Project"
-msgstr "ፕሮጀክት"
-
-#: .\templates\frontpages\layout.html:310
-#: .\templates\frontpages\news\customer_event_detail.html:57
-#: .\templates\frontpages\news\customer_event_list.html:44
-msgid "Events"
-msgstr "ዝግጅቶች"
-
-#: .\templates\frontpages\layout.html:311
-#: .\templates\frontpages\news\customer_news_detail.html:23
-#: .\templates\frontpages\news\customer_news_detail.html:55
-#: .\templates\frontpages\news\customer_news_detail.html:58
-msgid "News"
-msgstr "ዜና"
-
-#: .\templates\frontpages\layout.html:312
-#: .\templates\frontpages\tender\customer_tender_list.html:41
-msgid "Tenders"
-msgstr "ጨረታዎቸ"
-
-#: .\templates\frontpages\layout.html:313
-#: .\templates\frontpages\vacancy_detail.html:12
-#: .\templates\frontpages\vacancy_list.html:12
-msgid "Vacancy"
-msgstr "ክፍት የሥራ ቦታ"
-
-#: .\templates\frontpages\layout.html:318
-msgid "Collaborations"
-msgstr "መተባበሪያ"
-
-#: .\templates\frontpages\layout.html:321
+#: .\templates\frontpages\layout.html:345
 msgid "Forums"
 msgstr "ዉይይት"
 
-#: .\templates\frontpages\layout.html:322
-#: .\templates\frontpages\poll\poll_detail.html:21
-#: .\templates\frontpages\poll\polls-list.html:42
-#: .\templates\frontpages\poll\polls-list.html:45
-msgid "Polls"
-msgstr "ምረጫ"
-
-#: .\templates\frontpages\layout.html:323
-msgid "Faqs"
-msgstr "ተየጥ"
-
-#: .\templates\frontpages\layout.html:327
-msgid "Contact Us"
-msgstr "ተገናኙን"
-
-#: .\templates\frontpages\news\customer_event_detail.html:20
-#: .\templates\frontpages\news\customer_event_detail.html:59
-#: .\templates\frontpages\news\customer_event_list.html:148
-msgid "Event Detail"
-msgstr "የዝግጅቱ ዝርዝር"
-
 #: .\templates\frontpages\news\customer_event_detail.html:30
-#: .\templates\frontpages\news\customer_news_detail.html:35
-#, fuzzy
-msgid "Company Name"
-msgstr "የድርጅት ስም"
-
-
 msgid "Company Address"
 msgstr "የድርጅት አድራሻ"
 
-#: .\templates\frontpages\news\customer_event_detail.html:79
-#: .\templates\frontpages\news\customer_event_list.html:138
-#: .\templates\frontpages\news\customer_news_detail.html:78
-#: .\templates\frontpages\news\customer_news_list.html:134
-#: .\templates\frontpages\news\customer_news_list.html:141
-#: .\templates\frontpages\tender\customer_tender_detail.html:50
-#: .\templates\frontpages\tender\customer_tender_list.html:148
-msgid "By"
-msgstr "በ"
-
-#: .\templates\frontpages\news\customer_event_detail.html:81
-#: .\templates\frontpages\tender\customer_tender_detail.html:43
-msgid "Start Date"
-msgstr "የሚደምርበት ቀን"
-
-#: .\templates\frontpages\news\customer_event_detail.html:82
-#: .\templates\frontpages\tender\customer_tender_detail.html:44
-msgid "End Date"
-msgstr "የሚያልቅበት ቀን"
-
-#: .\templates\frontpages\news\customer_event_detail.html:107
-msgid "From"
-msgstr "ከ"
-
-#: .\templates\frontpages\news\customer_event_detail.html:128
-msgid "Remind Me"
-msgstr "የማስታወሻ መልዕክት ላክ"
-
-#: .\templates\frontpages\news\customer_event_detail.html:137
-msgid "Tender description"
-msgstr "ጨረታ መግለጫ"
-
-msgid "Event Description"
-"የዝግጅት ዝርዝር"
-
-#: .\templates\frontpages\news\customer_event_detail.html:197
-#: .\templates\frontpages\news\customer_news_detail.html:181
-fuzzy
-msgid "Shipping Information"
+#: .\templates\frontpages\news\customer_event_detail.html:195
+#, fuzzy
+#| msgid "Shipping Information"
+msgid "Company Information"
 msgstr "የግብይት መረጃ"
 
-#: .\templates\frontpages\news\customer_event_detail.html:214
-#: .\templates\frontpages\news\customer_news_detail.html:207
-msgid "Company Contact Info"
-msgstr "የድርጅቱ አድራሻ"
-
-#: .\templates\frontpages\news\customer_event_detail.html:225
-#: .\templates\frontpages\news\customer_news_detail.html:219
-msgid "Chat"
-msgstr "ንግግር"
-
-#: .\templates\frontpages\news\customer_event_detail.html:234
+#: .\templates\frontpages\news\customer_event_detail.html:232
 msgid "Filter by company "
 msgstr "ብድርጅት ለይ"
 
@@ -703,119 +1568,35 @@ msgstr "መጪ የዝግጅቶች"
 msgid "Open Events"
 msgstr "ክፈት ዝግጅቶች"
 
-#: .\templates\frontpages\news\customer_event_list.html:123
-#: .\templates\frontpages\tender\customer_tender_detail.html:64
-#: .\templates\frontpages\tender\customer_tender_list.html:134
-msgid "Open"
-msgstr "ክፈት"
-
-#: .\templates\frontpages\news\customer_event_list.html:125
-#: .\templates\frontpages\tender\customer_tender_detail.html:66
-#: .\templates\frontpages\tender\customer_tender_list.html:136
-
-msgid "Upcoming Events"
-msgstr "መጪ የዝግጅቶች"
-
-msgid "Upcoming"
-msgstr "ወደፊት የሚመጡ"
-
-#: .\templates\frontpages\news\customer_event_list.html:127
-#: .\templates\frontpages\tender\customer_tender_detail.html:68
-#: .\templates\frontpages\tender\customer_tender_list.html:138
-msgid "Closed"
-msgstr "ዝግ"
-
 #: .\templates\frontpages\news\customer_event_list.html:129
 #: .\templates\frontpages\tender\customer_tender_detail.html:70
 msgid "Suspended"
 msgstr "ታግዷል"
-
-#: .\templates\frontpages\news\customer_news_detail.html:18
-#: .\templates\frontpages\news\customer_news_list.html:153
-msgid "News Detail"
-msgstr "የዜና ዝርዝር"
-
-#: .\templates\frontpages\news\customer_news_detail.html:24
-
-#| msgid "News Detail"
-msgid "News Details"
-msgstr "የዜና ዝርዝር"
-
-#: .\template\frontpages\company\company_news.html:18
-msgid "Company Home Page"
-msgstr "የድርጅቱ ዎና ገጽ"
-
-#: .\templates\frontpages\news\customer_news_detail.html:128
-
-#| msgid "Research Description"
-msgid "News Description"
-msgstr "የምርምር መግለጫ"
-
-#: .\templates\frontpages\news\customer_news_detail.html:198
-#, fuzzy
-#| msgid "Contact Us"
-msgid "Contat"
-msgstr "ተገናኙን"
-
-#: .\templates\frontpages\news\customer_news_detail.html:221
-msgid "All Listings"
-msgstr "ሁሉም"
 
 #: .\templates\frontpages\news\customer_news_list.html:65
 #: .\templates\frontpages\news\customer_news_list.html:69
 msgid "News list"
 msgstr "የዜናዎች ዝርዝር"
 
-#: .\templates\frontpages\news\customer_news_list.html:68
-msgid "Pages"
-msgstr "ገጾች"
-
 #: .\templates\frontpages\news\customer_news_list.html:151
 msgid "Chat with staff"
 msgstr "ከሰራተኞች ጋር ይወያዩ"
 
-#: .\templates\frontpages\news\customer_news_list.html:700
-msgid "Send Message"
-msgstr "መልዕክቱን ላክ"
-
-#: .\templates\frontpages\poll\poll_detail.html:18
-#: .\templates\frontpages\poll\poll_detail.html:22
-msgid "Poll-Details"
-msgstr "የምርጫ ዝርዝርው"
-
 #: .\templates\frontpages\poll\poll_detail.html:55
-
-#| msgid "Poll Detail"
 msgid "Poll title"
 msgstr "የምርጫ ዝርዝር"
 
-#: .\templates\frontpages\poll\poll_detail.html:117
-msgid "Any Remarks"
-msgstr "ማንኛውም አስተያየት"
+#: .\templates\frontpages\poll\poll_detail.html:62
+msgid "Poll created at :"
+msgstr ""
+
+#: .\templates\frontpages\poll\poll_detail.html:111
+msgid "This poll has no choice, yet!"
+msgstr ""
 
 #: .\templates\frontpages\poll\polls-list.html:80
 msgid "Highest votes"
 msgstr "በመራጮች ድምጽ ብዛት"
-
-#: .\templates\frontpages\poll\polls-list.html:114
-msgid "Choices"
-msgstr "አማራጮች"
-
-#: .\templates\frontpages\poll\polls-list.html:116
-msgid "Choice"
-msgstr "አማራጭ"
-
-#: .\templates\frontpages\poll\polls-list.html:123
-msgid "Votes"
-msgstr "ድምጾች"
-
-#: .\templates\frontpages\poll\polls-list.html:126
-msgid "Vote"
-msgstr "ድምጽ"
-
-#: .\templates\frontpages\poll\polls-list.html:144
-msgid "Poll Detail"
-msgstr "የምርጫ ዝርዝር"
 
 #: .\templates\frontpages\product\carts.html:45
 msgid "Proceed To Checkout"
@@ -833,47 +1614,67 @@ msgstr "የግብይት መረጃ"
 msgid "CONTINUE SHOPPING"
 msgstr "ግብይት ቀጥል"
 
-#: .\templates\frontpages\project\project_detail.html:39
+#: .\templates\frontpages\product\inquiry_form.html:14
+msgid "Inquiry Form"
+msgstr ""
+
+#: .\templates\frontpages\product\success_inquiry.html:14
+msgid "Inquiry Request Successfull!"
+msgstr ""
+
+#: .\templates\frontpages\project\project_detail_old.html:39
 msgid "search"
 msgstr "ፈልግ"
 
-#: .\templates\frontpages\project\project_detail.html:87
-#: .\templates\frontpages\research\research_detail.html:136
+#: .\templates\frontpages\project\project_detail_old.html:87
 #, fuzzy
 #| msgid "New User"
 msgid "User"
 msgstr "አዲስ ተጠቃሚ"
 
-#: .\templates\frontpages\project\project_detail.html:92
-msgid "status"
-msgstr "ሁኔታ"
-
-#: .\templates\frontpages\project\project_detail.html:94
-#: .\templates\frontpages\research\research_detail.html:143
-msgid "Category"
-msgstr "ምድብ"
-
-#: .\templates\frontpages\project\project_detail.html:99
-#: .\templates\frontpages\research\research_detail.html:148
+#: .\templates\frontpages\project\project_detail_old.html:99
+#: .\templates\frontpages\research\research_detail.html:166
 msgid "Detail"
 msgstr "ዝርዝር"
 
-#: .\templates\frontpages\project\project_detail.html:104
-#: .\templates\frontpages\research\research_detail.html:153
+#: .\templates\frontpages\project\project_detail_old.html:104
+#: .\templates\frontpages\research\research_detail.html:171
 msgid "Attachments"
 msgstr "ፋይል"
 
-#: .\templates\frontpages\research\research_detail.html:33
+#: .\templates\frontpages\research\research_detail.html:40
+#: .\templates\frontpages\research\research_detail.html:43
+#: .\templates\frontpages\research\research_form.html:28
+#: .\templates\frontpages\research\research_form.html:31
+#: .\templates\frontpages\research\research_list.html:40
+#: .\templates\frontpages\research\research_list.html:43
+#, fuzzy
+#| msgid "Research Title"
+msgid "Research List"
+msgstr "የምርምር ርዕስ"
+
+#: .\templates\frontpages\research\research_detail.html:60
 #: .\templates\frontpages\research\research_detail_edit.html:37
-#: .\templates\frontpages\research\research_form.html:38
-#: .\templates\frontpages\research\research_list.html:34
+#: .\templates\frontpages\research\research_form.html:50
+#: .\templates\frontpages\research\research_list.html:185
 msgid "Add new Research"
 msgstr "አዲስ ምርምር አስገባ"
 
-#: .\templates\frontpages\research\research_detail.html:83
+#: .\templates\frontpages\research\research_detail.html:70
+#: .\templates\frontpages\research\research_form.html:61
+#: .\templates\frontpages\research\research_list.html:195
+#, fuzzy
+#| msgid "Filter by company"
+msgid "Filter by Category"
+msgstr "በድርጅት አጣራ"
+
+#: .\templates\frontpages\research\research_detail.html:91
+#, fuzzy
+#| msgid "Add a Research"
+msgid "Related Researches"
+msgstr "አዲስ ምርምር አስገባ"
+
 #: .\templates\frontpages\research\research_detail_edit.html:85
-#: .\templates\frontpages\research\research_form.html:86
-#: .\templates\frontpages\research\research_list.html:83
 msgid "Research you Posted"
 msgstr "የርሶ ምርምሮች"
 
@@ -882,12 +1683,12 @@ msgid "Edit a Research"
 msgstr "ምርምሮን ያስተካክሉ"
 
 #: .\templates\frontpages\research\research_detail_edit.html:143
-#: .\templates\frontpages\research\research_form.html:144
+#: .\templates\frontpages\research\research_form.html:104
 msgid "Research Title"
 msgstr "የምርምር ርዕስ"
 
 #: .\templates\frontpages\research\research_detail_edit.html:153
-#: .\templates\frontpages\research\research_form.html:151
+#: .\templates\frontpages\research\research_form.html:111
 msgid "Research Status"
 msgstr "የምርምር ሂደት"
 
@@ -895,55 +1696,31 @@ msgstr "የምርምር ሂደት"
 msgid "Research Category Name"
 msgstr "የምርምር ምድብ "
 
-#: .\templates\frontpages\research\research_detail_edit.html:185
-#: .\templates\frontpages\research\research_form.html:167
-msgid "Research Description"
-msgstr "የምርምር መግለጫ"
-
-#: .\templates\frontpages\research\research_detail_edit.html:196
-#: .\templates\frontpages\research\research_form.html:175
-msgid "Research Detail"
-msgstr "የምርምር ዝርዝር"
-
-#: .\templates\frontpages\research\research_detail_edit.html:208
+#: .\templates\frontpages\research\research_detail_edit.html:200
 msgid "The Current Document"
 msgstr "የአሁኑ ሰነድ"
 
-#: .\templates\frontpages\research\research_detail_edit.html:212
+#: .\templates\frontpages\research\research_detail_edit.html:204
 msgid "No attachments in the current time"
 msgstr "ሰነድ የለም"
 
-#: .\templates\frontpages\research\research_detail_edit.html:218
+#: .\templates\frontpages\research\research_detail_edit.html:210
 msgid "Change your attachment (if you have one)"
 msgstr "ሰነድ ይቀይሩ"
 
-#: .\templates\frontpages\research\research_detail_edit.html:220
+#: .\templates\frontpages\research\research_detail_edit.html:212
 msgid "Upload your attachment (if you have one)"
 msgstr "ሰነድ ይላኩ"
 
-#: .\templates\frontpages\research\research_form.html:140
+#: .\templates\frontpages\research\research_form.html:100
 msgid "Add a Research"
 msgstr "አዲስ ምርምር አስገባ"
 
-#: .\templates\frontpages\research\research_form.html:159
+#: .\templates\frontpages\research\research_form.html:119
 msgid "Research Category"
 msgstr "ምርምር ምረጥ"
 
-#: .\templates\frontpages\research\research_form.html:183
-msgid "Upload your attchment (if you have one)"
-msgstr "ሰነድ ይላኩ"
-
-#: .\templates\frontpages\research\research_list.html:159
-msgid "Read More"
-msgstr "ተጨማሪ ያንብቡ"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:18
-msgid "Tender-Details"
-msgstr "ጨረታ ዝርዝር"
-
 #: .\templates\frontpages\tender\customer_tender_detail.html:21
-
-#| msgid "Tenders"
 msgid "Tenders list"
 msgstr "ጨረታዎቸ"
 
@@ -955,84 +1732,9 @@ msgstr "ጨረታ"
 msgid "Title"
 msgstr "ርዕስ"
 
-#: .\templates\frontpages\tender\customer_tender_detail.html:53
-msgid "Type"
-msgstr "አይነት"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:56
-msgid "Price"
-msgstr "ዋጋ"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:59
-
-msgid "Applicant Form"
-msgstr "የአመልካች ቅጽ"
-
-msgid "Total Applications"
-msgstr "አጠቃላይ አመልካቾች"
-
-
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:81
-#: .\templates\frontpages\tender\customer_tender_detail.html:93
-msgid "Download Document"
-msgstr "ፋይል አውርድ"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:90
-msgid "Users from tender company can't participate in their own tender!"
-msgstr "ከጨረታ ኩባንያ የመጡ ተጠቃሚዎች በራሳቸው ጨረታ ላይ መሳተፍ አይችሉም"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:101
-msgid "Participate in tender"
-msgstr "በጨረታ ውስጥ ይሳተፉ"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:119
-msgid ""
-"This Tender is not Free, You can read the description below and attend the "
-"tender in person!"
-msgstr "ይህ ጨረታ ነፃ አይደለም ፣ ከዚህ በታች ያለውን መግለጫ በማንበብ ጨረታውን በአካል ተገኝተው ማግኘት ይችላሉ!"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:131
-msgid "Tender description"
-msgstr "ጨረታ መግለጫ"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:143
-msgid "Applicant Form"
-msgstr "የአመልካች ቅጽ"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:153
-msgid "First Name"
-msgstr "የመጀመሪያ ስም"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:157
-msgid "Last Name"
-msgstr "ያባት ስም"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:162
-msgid "Company Name"
-msgstr "ድርጅት ስም"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:166
-msgid "Company Tin Number"
-msgstr "ኩባንያ ቲን ቁጥር"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:170
-msgid "Email"
-msgstr "ኢሜል"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:173
-msgid "Phone Number"
-msgstr "ስልክ ቁጥር"
-
-#: .\templates\frontpages\tender\customer_tender_detail.html:179
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_confirm_delete.html:12
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorize.html:29
-msgid "Cancel"
-msgstr "ሰርዝ"
-
 #: .\templates\frontpages\tender\customer_tender_list.html:67
-
-msgid "Apply Filter"
+#, fuzzy
+#| msgid "Apply Filter"
 msgid "Filter "
 msgstr "አጣራ"
 
@@ -1049,60 +1751,44 @@ msgstr "የሚያስከፍሉ ብቻ"
 msgid "Open Only"
 msgstr "ክፈት ብቻ"
 
-#: .\templates\frontpages\tender\customer_tender_list.html:159
-msgid "Tender Detail"
-msgstr "የጨረታ ዝርዝር"
-
 #: .\templates\frontpages\tender\customer_tender_list.html:168
-
-#| msgid "Posted By"
 msgid "Posted"
 msgstr "በ"
 
-#: .\templates\frontpages\vacancy_detail.html:66
+#: .\templates\frontpages\vacancy\vacancy_list.html:57
+#: .\templates\frontpages\vacancy\vacancy_list.html:60
+#, fuzzy
+#| msgid "Vacancy"
+msgid "Vacancy list"
+msgstr "ክፍት የሥራ ቦታ"
 
-#| msgid "Select Category"
+#: .\templates\frontpages\vacancy\vacancy_list.html:120
+#, fuzzy
+#| msgid "cateory"
+msgid "category"
+msgstr "ምድብ"
+
+#: .\templates\frontpages\vacancy\vacancy_list.html:124
+#, fuzzy
+#| msgid "Employee Type"
+msgid "Employment Type"
+msgstr "የቅጥር አይነት"
+
+#: .\templates\frontpages\vacancy_detail.html:66
 msgid "Cateory"
 msgstr "ምድብ"
 
 #: .\templates\frontpages\vacancy_detail.html:71
-
-#| msgid "Companies"
 msgid "Campany"
 msgstr "ድርጅቶች"
 
-#: .\templates\frontpages\vacancy_detail.html:74
-
-#| msgid "Notifications"
-msgid "Location"
-msgstr "መልክት"
-
-#: .\templates\frontpages\vacancy_detail.html:77
-msgid "Salary"
-msgstr "ደሞዝ"
-
-#: .\templates\frontpages\vacancy_detail.html:82
-msgid "Requirement"
-msgstr "ቅድመ-ሁኔታ"
-
 #: .\templates\frontpages\vacancy_detail.html:87
-
-#| msgid "Getting Started"
 msgid "Starting date"
 msgstr "የሚደምርበት ቀን"
 
 #: .\templates\frontpages\vacancy_detail.html:91
 msgid "Ending date"
 msgstr "የሚያልቅበት ቀን"
-
-#: .\templates\frontpages\vacancy_detail.html:95
-msgid "Description"
-msgstr "መግለጫ"
-
-#: .\templates\frontpages\vacancy_detail.html:101
-#: .\templates\frontpages\vacancy_list.html:103
-msgid "Apply"
-msgstr "አመልክት"
 
 #: .\templates\frontpages\vacancy_list.html:87
 msgid "cateory"
@@ -1111,10 +1797,6 @@ msgstr "ምድብ"
 #: .\templates\frontpages\vacancy_list.html:90
 msgid "Employee Type"
 msgstr "የቅጥር አይነት"
-
-#: .\templates\frontpages\vacancy_list.html:102
-msgid "View job details"
-msgstr "የስራው መግለጫ"
 
 #: .\templates\registration\logged_out.html:10
 msgid "Thanks for spending some quality time with the Web site today."
@@ -1166,1422 +1848,95 @@ msgstr ""
 msgid "The %(site_name)s team"
 msgstr ""
 
-#: .\venv\Lib\site-packages\colorfield\fields.py:17
-msgid "Enter a valid color."
-msgstr ""
+#~| msgid "About Us"
+#~ msgid "about"
+#~ msgstr "ስለ እኛ"
 
-#: .\venv\Lib\site-packages\crispy_forms\tests\test_form_helper.py:129
-#: .\venv\Lib\site-packages\crispy_forms\tests\test_form_helper.py:139
-#: .\venv\Lib\site-packages\django\forms\fields.py:54
-msgid "This field is required."
-msgstr ""
+#~ msgid "editors now use Lorem Ipsum as their default model text"
+#~ msgstr "ነባሪ አምሳያ ጽሑፋቸው ይጠቀማሉ"
 
-#: .\venv\Lib\site-packages\crispy_forms\tests\test_layout.py:361
-msgid "i18n text"
-msgstr ""
+#~ msgid "All Listings"
+#~ msgstr "ሁሉም"
 
-#: .\venv\Lib\site-packages\crispy_forms\tests\test_layout.py:361
-msgid "i18n legend"
-msgstr ""
+#~ msgid "Upload your attchment (if you have one)"
+#~ msgstr "ሰነድ ይላኩ"
 
-#: .\venv\Lib\site-packages\crispy_forms\tests\test_layout_objects.py:129
-#: .\venv\Lib\site-packages\django\core\validators.py:20
-msgid "Enter a valid value."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\contrib\messages\apps.py:7
 #, fuzzy
-#| msgid "Pages"
-msgid "Messages"
-msgstr "ገጾች"
+#~| msgid "Pages"
+#~ msgid "Messages"
+#~ msgstr "ገጾች"
 
-#: .\venv\Lib\site-packages\django\contrib\sitemaps\apps.py:7
-msgid "Site Maps"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\contrib\staticfiles\apps.py:9
-msgid "Static Files"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\contrib\syndication\apps.py:7
 #, fuzzy
-#| msgid "Notifications"
-msgid "Syndication"
-msgstr "መልክት"
+#~| msgid "Notifications"
+#~ msgid "Syndication"
+#~ msgstr "መልክት"
 
-#: .\venv\Lib\site-packages\django\core\paginator.py:48
-msgid "That page number is not an integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\paginator.py:50
-msgid "That page number is less than 1"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\paginator.py:55
-msgid "That page contains no results"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:91
-#: .\venv\Lib\site-packages\django\forms\fields.py:671
-msgid "Enter a valid URL."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:145
-msgid "Enter a valid integer."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:156
-msgid "Enter a valid email address."
-msgstr ""
-
-#. Translators: "letters" means latin letters: a-z and A-Z.
-#: .\venv\Lib\site-packages\django\core\validators.py:230
-msgid ""
-"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:237
-msgid ""
-"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
-"hyphens."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:246
-#: .\venv\Lib\site-packages\django\core\validators.py:266
-msgid "Enter a valid IPv4 address."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:251
-#: .\venv\Lib\site-packages\django\core\validators.py:267
-msgid "Enter a valid IPv6 address."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:261
-#: .\venv\Lib\site-packages\django\core\validators.py:265
-msgid "Enter a valid IPv4 or IPv6 address."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:295
-msgid "Enter only digits separated by commas."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:301
-#, python-format
-msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:334
-#, python-format
-msgid "Ensure this value is less than or equal to %(limit_value)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:343
-#, python-format
-msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:353
-#, python-format
-msgid ""
-"Ensure this value has at least %(limit_value)d character (it has "
-"%(show_value)d)."
-msgid_plural ""
-"Ensure this value has at least %(limit_value)d characters (it has "
-"%(show_value)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:368
-#, python-format
-msgid ""
-"Ensure this value has at most %(limit_value)d character (it has "
-"%(show_value)d)."
-msgid_plural ""
-"Ensure this value has at most %(limit_value)d characters (it has "
-"%(show_value)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:387
-#: .\venv\Lib\site-packages\django\forms\fields.py:292
-#: .\venv\Lib\site-packages\django\forms\fields.py:327
-msgid "Enter a number."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:389
-#, python-format
-msgid "Ensure that there are no more than %(max)s digit in total."
-msgid_plural "Ensure that there are no more than %(max)s digits in total."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:394
-#, python-format
-msgid "Ensure that there are no more than %(max)s decimal place."
-msgid_plural "Ensure that there are no more than %(max)s decimal places."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:399
-#, python-format
-msgid ""
-"Ensure that there are no more than %(max)s digit before the decimal point."
-msgid_plural ""
-"Ensure that there are no more than %(max)s digits before the decimal point."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:461
-#, python-format
-msgid ""
-"File extension “%(extension)s” is not allowed. Allowed extensions are: "
-"%(allowed_extensions)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:513
-msgid "Null characters are not allowed."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\base.py:1190
-#: .\venv\Lib\site-packages\django\forms\models.py:760
-msgid "and"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\base.py:1192
-#, python-format
-msgid "%(model_name)s with this %(field_labels)s already exists."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:100
-#, python-format
-msgid "Value %(value)r is not a valid choice."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:101
-msgid "This field cannot be null."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:102
-msgid "This field cannot be blank."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:103
-#, python-format
-msgid "%(model_name)s with this %(field_label)s already exists."
-msgstr ""
-
-#. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
-#. Eg: "Title must be unique for pub_date year"
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:107
-#, python-format
-msgid ""
-"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:126
-#, python-format
-msgid "Field of type: %(field_type)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:939
-#, python-format
-msgid "“%(value)s” value must be either True or False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:940
-#, python-format
-msgid "“%(value)s” value must be either True, False, or None."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:942
-msgid "Boolean (Either True or False)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:983
-#, python-format
-msgid "String (up to %(max_length)s)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1047
-msgid "Comma-separated integers"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1096
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
-"format."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1098
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1241
-#, python-format
-msgid ""
-"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
-"date."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1101
-msgid "Date (without time)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1239
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
-"uuuuuu]][TZ] format."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1243
-#, python-format
-msgid ""
-"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
-"[TZ]) but it is an invalid date/time."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1247
-msgid "Date (with time)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1395
-#, python-format
-msgid "“%(value)s” value must be a decimal number."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1397
-msgid "Decimal number"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1536
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
-"uuuuuu] format."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1539
 #, fuzzy
-#| msgid "Notifications"
-msgid "Duration"
-msgstr "መልክት"
+#~| msgid "Company Tin Number"
+#~ msgid "Floating point number"
+#~ msgstr "ኩባንያ ቲን ቁጥር"
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1589
-msgid "Email address"
-msgstr ""
+#~ msgid "Currently"
+#~ msgstr "ገንዘብ"
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1612
-msgid "File path"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1678
-#, python-format
-msgid "“%(value)s” value must be a float."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1680
 #, fuzzy
-#| msgid "Company Tin Number"
-msgid "Floating point number"
-msgstr "ኩባንያ ቲን ቁጥር"
+#~| msgid "Search Now"
+#~ msgid "March"
+#~ msgstr "ፈልግ"
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1718
-#, python-format
-msgid "“%(value)s” value must be an integer."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1720
-msgid "Integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1803
-msgid "Big (8 byte) integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1819
-msgid "IPv4 address"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1850
-msgid "IP address"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1930
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1931
-#, python-format
-msgid "“%(value)s” value must be either None, True or False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1933
-msgid "Boolean (Either True, False or None)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1976
-msgid "Positive big integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1989
-msgid "Positive integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2002
-msgid "Positive small integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2016
-#, python-format
-msgid "Slug (up to %(max_length)s)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2048
-msgid "Small integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2055
-msgid "Text"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2083
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
-"format."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2085
-#, python-format
-msgid ""
-"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
-"invalid time."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2088
-msgid "Time"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2214
-msgid "URL"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2236
-msgid "Raw binary data"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2301
-#, python-format
-msgid "“%(value)s” is not a valid UUID."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2303
-msgid "Universally unique identifier"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\files.py:231
-msgid "File"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\files.py:379
-msgid "Image"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\json.py:18
-msgid "A JSON object"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\json.py:20
-msgid "Value must be valid JSON."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:790
-#, python-format
-msgid "%(model)s instance with %(field)s %(value)r does not exist."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:792
-msgid "Foreign Key (type determined by related field)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1045
-msgid "One-to-one relationship"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1099
-#, python-format
-msgid "%(from)s-%(to)s relationship"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1100
-#, python-format
-msgid "%(from)s-%(to)s relationships"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1142
-msgid "Many-to-many relationship"
-msgstr ""
-
-#. Translators: If found as last label character, these punctuation
-#. characters will prevent the default label_suffix to be appended to the label
-#: .\venv\Lib\site-packages\django\forms\boundfield.py:150
-msgid ":?.!"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:247
-msgid "Enter a whole number."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:398
-#: .\venv\Lib\site-packages\django\forms\fields.py:1139
-msgid "Enter a valid date."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:422
-#: .\venv\Lib\site-packages\django\forms\fields.py:1140
-msgid "Enter a valid time."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:450
-msgid "Enter a valid date/time."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:484
-msgid "Enter a valid duration."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:485
-#, python-brace-format
-msgid "The number of days must be between {min_days} and {max_days}."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:545
-msgid "No file was submitted. Check the encoding type on the form."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:546
-msgid "No file was submitted."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:547
-msgid "The submitted file is empty."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:549
-#, python-format
-msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
-msgid_plural ""
-"Ensure this filename has at most %(max)d characters (it has %(length)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:552
-msgid "Please either submit a file or check the clear checkbox, not both."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:613
-msgid ""
-"Upload a valid image. The file you uploaded was either not an image or a "
-"corrupted image."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:775
-#: .\venv\Lib\site-packages\django\forms\fields.py:865
-#: .\venv\Lib\site-packages\django\forms\models.py:1296
-#, python-format
-msgid "Select a valid choice. %(value)s is not one of the available choices."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:866
-#: .\venv\Lib\site-packages\django\forms\fields.py:981
-#: .\venv\Lib\site-packages\django\forms\models.py:1295
-msgid "Enter a list of values."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:982
-msgid "Enter a complete value."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:1198
-msgid "Enter a valid UUID."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:1228
-msgid "Enter a valid JSON."
-msgstr ""
-
-#. Translators: This is the default suffix added to form field labels
-#: .\venv\Lib\site-packages\django\forms\forms.py:78
-msgid ":"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\forms.py:205
-#, python-format
-msgid "(Hidden field %(name)s) %(error)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:93
-msgid "ManagementForm data is missing or has been tampered with"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:345
-#, python-format
-msgid "Please submit %d or fewer forms."
-msgid_plural "Please submit %d or fewer forms."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:352
-#, python-format
-msgid "Please submit %d or more forms."
-msgid_plural "Please submit %d or more forms."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:379
-#: .\venv\Lib\site-packages\django\forms\formsets.py:386
-msgid "Order"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:391
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_confirm_delete.html:13
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:38
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-token-delete.html:7
-msgid "Delete"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:755
-#, python-format
-msgid "Please correct the duplicate data for %(field)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:759
-#, python-format
-msgid "Please correct the duplicate data for %(field)s, which must be unique."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:765
-#, python-format
-msgid ""
-"Please correct the duplicate data for %(field_name)s which must be unique "
-"for the %(lookup)s in %(date_field)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:774
-msgid "Please correct the duplicate values below."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:1096
-msgid "The inline value did not match the parent instance."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:1180
-msgid "Select a valid choice. That choice is not one of the available choices."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:1298
-#, python-format
-msgid "“%(pk)s” is not a valid value."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\utils.py:167
-#, python-format
-msgid ""
-"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
-"may be ambiguous or it may not exist."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:398
-msgid "Clear"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:399
-msgid "Currently"
-msgstr "ገንዘብ"
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:400
-msgid "Change"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:709
-msgid "Unknown"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:710
-msgid "Yes"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:711
-msgid "No"
-msgstr ""
-
-#. Translators: Please do not add spaces around commas.
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:790
-msgid "yes,no,maybe"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:819
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:836
-#, python-format
-msgid "%(size)d byte"
-msgid_plural "%(size)d bytes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:838
-#, python-format
-msgid "%s KB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:840
-#, python-format
-msgid "%s MB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:842
-#, python-format
-msgid "%s GB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:844
-#, python-format
-msgid "%s TB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:846
-#, python-format
-msgid "%s PB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:65
-msgid "p.m."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:66
-msgid "a.m."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:71
-msgid "PM"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:72
-msgid "AM"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:149
-msgid "midnight"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:151
-msgid "noon"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:6
-msgid "Monday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:6
-msgid "Tuesday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:6
-msgid "Wednesday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:6
-msgid "Thursday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:6
-msgid "Friday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:7
-msgid "Saturday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:7
-msgid "Sunday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:10
-msgid "Mon"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:10
-msgid "Tue"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:10
-msgid "Wed"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:10
-msgid "Thu"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:10
-msgid "Fri"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:11
-msgid "Sat"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:11
-msgid "Sun"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:14
-msgid "January"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:14
-msgid "February"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:14
 #, fuzzy
-#| msgid "Search Now"
-msgid "March"
-msgstr "ፈልግ"
+#~| msgid "Phone Number"
+#~ msgid "November"
+#~ msgstr "ስልክ ቁጥር"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:14
-msgid "April"
-msgstr ""
+#~ msgid "mar"
+#~ msgstr "አማርኛ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:14
-msgid "May"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:14
-msgid "June"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:15
-msgid "July"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:15
-msgid "August"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:15
-msgid "September"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:15
-msgid "October"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:15
 #, fuzzy
-#| msgid "Phone Number"
-msgid "November"
-msgstr "ስልክ ቁጥር"
+#~| msgid "mar"
+#~ msgid "apr"
+#~ msgstr "አማርኛ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:16
-msgid "December"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:19
-msgid "jan"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:19
-msgid "feb"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:19
-msgid "mar"
-msgstr "አማርኛ"
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:19
 #, fuzzy
-#| msgid "mar"
-msgid "apr"
-msgstr "አማርኛ"
+#~| msgid "mar"
+#~ msgid "may"
+#~ msgstr "አማርኛ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:19
 #, fuzzy
-#| msgid "mar"
-msgid "may"
-msgstr "አማርኛ"
+#~| msgid "Project"
+#~ msgid "oct"
+#~ msgstr "ፕሮጀክት"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:19
-msgid "jun"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
-msgid "jul"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
-msgid "aug"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
-msgid "sep"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
 #, fuzzy
-#| msgid "Project"
-msgid "oct"
-msgstr "ፕሮጀክት"
+#~| msgid "Search Now"
+#~ msgctxt "abbrev. month"
+#~ msgid "March"
+#~ msgstr "ፈልግ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
-msgid "nov"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
-msgid "dec"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:23
-msgctxt "abbrev. month"
-msgid "Jan."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:24
-msgctxt "abbrev. month"
-msgid "Feb."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:25
 #, fuzzy
-#| msgid "Search Now"
-msgctxt "abbrev. month"
-msgid "March"
-msgstr "ፈልግ"
+#~| msgid "Search Now"
+#~ msgctxt "alt. month"
+#~ msgid "March"
+#~ msgstr "ፈልግ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:26
-msgctxt "abbrev. month"
-msgid "April"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:27
-msgctxt "abbrev. month"
-msgid "May"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:28
-msgctxt "abbrev. month"
-msgid "June"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:29
-msgctxt "abbrev. month"
-msgid "July"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:30
-msgctxt "abbrev. month"
-msgid "Aug."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:31
-msgctxt "abbrev. month"
-msgid "Sept."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:32
-msgctxt "abbrev. month"
-msgid "Oct."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:33
-msgctxt "abbrev. month"
-msgid "Nov."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:34
-msgctxt "abbrev. month"
-msgid "Dec."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:37
-msgctxt "alt. month"
-msgid "January"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:38
-msgctxt "alt. month"
-msgid "February"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:39
 #, fuzzy
-#| msgid "Search Now"
-msgctxt "alt. month"
-msgid "March"
-msgstr "ፈልግ"
+#~| msgid "Phone Number"
+#~ msgctxt "alt. month"
+#~ msgid "November"
+#~ msgstr "ስልክ ቁጥር"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:40
-msgctxt "alt. month"
-msgid "April"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:41
-msgctxt "alt. month"
-msgid "May"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:42
-msgctxt "alt. month"
-msgid "June"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:43
-msgctxt "alt. month"
-msgid "July"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:44
-msgctxt "alt. month"
-msgid "August"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:45
-msgctxt "alt. month"
-msgid "September"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:46
-msgctxt "alt. month"
-msgid "October"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:47
 #, fuzzy
-#| msgid "Phone Number"
-msgctxt "alt. month"
-msgid "November"
-msgstr "ስልክ ቁጥር"
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:48
-msgctxt "alt. month"
-msgid "December"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\ipv6.py:8
-msgid "This is not a valid IPv6 address."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\text.py:70
-#, python-format
-msgctxt "String to return when truncating text"
-msgid "%(truncated_text)s…"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\text.py:236
-msgid "or"
-msgstr ""
-
-#. Translators: This string is used as a separator between list elements
-#: .\venv\Lib\site-packages\django\utils\text.py:255
-#: .\venv\Lib\site-packages\django\utils\timesince.py:83
-msgid ", "
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:9
-#, python-format
-msgid "%d year"
-msgid_plural "%d years"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:10
-#, python-format
-msgid "%d month"
-msgid_plural "%d months"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:11
-#, python-format
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:12
-#, python-format
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:13
-#, python-format
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:14
-#, python-format
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:110
-msgid "Forbidden"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:111
-msgid "CSRF verification failed. Request aborted."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:115
-msgid ""
-"You are seeing this message because this HTTPS site requires a “Referer "
-"header” to be sent by your Web browser, but none was sent. This header is "
-"required for security reasons, to ensure that your browser is not being "
-"hijacked by third parties."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:120
-msgid ""
-"If you have configured your browser to disable “Referer” headers, please re-"
-"enable them, at least for this site, or for HTTPS connections, or for “same-"
-"origin” requests."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:124
-msgid ""
-"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
-"including the “Referrer-Policy: no-referrer” header, please remove them. The "
-"CSRF protection requires the “Referer” header to do strict referer checking. "
-"If you’re concerned about privacy, use alternatives like <a rel=\"noreferrer"
-"\" …> for links to third-party sites."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:132
-msgid ""
-"You are seeing this message because this site requires a CSRF cookie when "
-"submitting forms. This cookie is required for security reasons, to ensure "
-"that your browser is not being hijacked by third parties."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:137
-msgid ""
-"If you have configured your browser to disable cookies, please re-enable "
-"them, at least for this site, or for “same-origin” requests."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:142
-msgid "More information is available with DEBUG=True."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:41
-msgid "No year specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:61
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:111
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:208
-msgid "Date out of range"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:90
-msgid "No month specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:142
-msgid "No day specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:188
-msgid "No week specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:338
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:367
-#, python-format
-msgid "No %(verbose_name_plural)s available"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:589
-#, python-format
-msgid ""
-"Future %(verbose_name_plural)s not available because %(class_name)s."
-"allow_future is False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:623
-#, python-format
-msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\detail.py:54
-#, python-format
-msgid "No %(verbose_name)s found matching the query"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\list.py:67
-msgid "Page is not “last”, nor can it be converted to an int."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\list.py:72
-#, python-format
-msgid "Invalid page (%(page_number)s): %(message)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\list.py:154
-#, python-format
-msgid "Empty list and “%(class_name)s.allow_empty” is False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\static.py:40
-msgid "Directory indexes are not allowed here."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\static.py:42
-#, python-format
-msgid "“%(path)s” does not exist"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\static.py:80
-#, python-format
-msgid "Index of %(directory)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:7
-msgid "Django: the Web framework for perfectionists with deadlines."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:346
-#, python-format
-msgid ""
-"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
-"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:368
-msgid "The install worked successfully! Congratulations!"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:369
-#, python-format
-msgid ""
-"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
-"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
-"\">DEBUG=True</a> is in your settings file and you have not configured any "
-"URLs."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:384
-#, fuzzy
-#| msgid "Download Document"
-msgid "Django Documentation"
-msgstr "ፋይል አውርድ"
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:385
-msgid "Topics, references, &amp; how-to’s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:396
-msgid "Tutorial: A Polling App"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:397
-msgid "Get started with Django"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:408
-msgid "Django Community"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:409
-msgid "Connect, get help, or contribute"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django_summernote\views.py:71
-msgid "Only POST method is allowed"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django_summernote\views.py:86
-msgid "Attachment module is disabled"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django_summernote\views.py:93
-msgid "Only authenticated users are allowed"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django_summernote\views.py:99
-msgid "No files were requested"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django_summernote\views.py:140
-msgid "File size exceeds the limit allowed and cannot be saved"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django_summernote\views.py:160
-msgid "Failed to save attachment"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:46
-msgid "Confidential"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:47
-msgid "Public"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:55
-msgid "Authorization code"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:56
-msgid "Implicit"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:57
-msgid "Resource owner password-based"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:58
-msgid "Client credentials"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:73
-msgid "Allowed URIs list, space separated"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:148
-#, python-brace-format
-msgid "Unauthorized redirect scheme: {scheme}"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:152
-#, python-brace-format
-msgid "redirect_uris cannot be empty with grant_type {grant_type}"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\oauth2_validators.py:168
-msgid "The access token is invalid."
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\oauth2_validators.py:175
-msgid "The access token has expired."
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\oauth2_validators.py:182
-msgid "The access token is valid but does not have enough scope."
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_confirm_delete.html:6
-msgid "Are you sure to delete the application"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:10
-msgid "Client id"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:15
-msgid "Client secret"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:20
-msgid "Client type"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:25
-msgid "Authorization Grant Type"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:30
-msgid "Redirect Uris"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:36
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_form.html:35
-msgid "Go Back"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:37
-msgid "Edit"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_form.html:9
-msgid "Edit application"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_form.html:37
-msgid "Save"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_list.html:6
-msgid "Your applications"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_list.html:14
-#, fuzzy
-#| msgid "Applicant Form"
-msgid "New Application"
-msgstr "የአመልካች ቅጽ"
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_list.html:17
-msgid "No applications defined"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_list.html:17
-msgid "Click here"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_list.html:17
-msgid "if you want to register a new one"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_registration_form.html:5
-msgid "Register a new application"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorize.html:8
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorize.html:30
-msgid "Authorize"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorize.html:17
-msgid "Application requires following permissions"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-oob.html:12
-msgid "Success"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-oob.html:14
-msgid "Please return to your application and enter this code:"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-token-delete.html:6
-msgid "Are you sure you want to delete this token?"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-tokens.html:6
-msgid "Tokens"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-tokens.html:11
-msgid "revoke"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-tokens.html:19
-msgid "There are no authorized tokens yet."
-msgstr ""
-
+#~| msgid "Download Document"
+#~ msgid "Django Documentation"
+#~ msgstr "ፋይል አውርድ"
 
 #~| msgid "Announcement"
 #~ msgid "Announcements"
 #~ msgstr "ማስታወቂያ"
 
-#~ msgid "Sort By"
-#~ msgstr "ደርድር"
-
-
 #~| msgid "Posted By"
 #~ msgid "Posted By "
 #~ msgstr "በ"
-
 
 #~| msgid "Closed"
 #~ msgid "Closed Only"
@@ -2599,9 +1954,6 @@ msgstr ""
 #~ msgid "Search Tender & Vacancy"
 #~ msgstr "ጨረታና ማስታወቂያ ፈልግ"
 
-#~ msgid "Total Suppliers"
-#~ msgstr "አቅራቢዎች"
-
 #~ msgid "Suppliers"
 #~ msgstr "አቅራቢዎች"
 
@@ -2614,30 +1966,11 @@ msgstr ""
 #~ msgid "Reseller"
 #~ msgstr "ሻጭ"
 
-#~ msgid "Total votes"
-#~ msgstr "ጠቅላላ መራጮች"
-
-#~ msgid "You can not vote on this poll, since you are the creator of the poll"
-#~ msgstr "የምርጫው ፈጣሪ እርስዎ ነዎት ስለሆነም በዚህ ምርጫ ላይ ድምጽ መስጠት አይችሉም"
-
-#~ msgid "Super users cannot Vote"
-#~ msgstr "ልዕለ ተጠቃሚዎች ድምጽ መስጠት አይችሉም"
-
-#~ msgid "You already have voted for this poll"
-#~ msgstr "ለዚህ ምርጫ አስቀድመው ድምጽ ሰጥተዋል"
-
-#~ msgid "Poll description"
-#~ msgstr "የምርጫው መግለጫ"
-
-#~ msgid "Submit Vote"
-#~ msgstr "ድምጽ ያስገቡ"
-
 #~ msgid "Recent"
 #~ msgstr "የቅርብ ጊዜ"
 
 #~ msgid "Number of votes"
 #~ msgstr "የድምፅዎች ብዛት"
-
 
 #~| msgid "Suppliers"
 #~ msgid "Supplier"

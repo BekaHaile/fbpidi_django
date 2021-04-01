@@ -308,7 +308,7 @@ class CompanyProfileForm(forms.ModelForm):
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'logo':forms.FileInput(attrs={'class':''}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
-            'established_yr':forms.TextInput(attrs={'class':'form-control','placeholder':'Established Year (E.C)','max-length':'4'}),
+            'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
@@ -366,7 +366,7 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'logo':forms.FileInput(attrs={'class':''}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 900, 'map_height': 400}),
-            'established_yr':forms.TextInput(attrs={'class':'form-control','placeholder':'Established Year'}),
+            'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform'}),
@@ -479,6 +479,7 @@ class CompanyUpdateForm(forms.ModelForm):
                 'gas_waste_mgmnt_measure_am':forms.Textarea(attrs={'class':'summernote'}),
                 'detail':forms.Textarea(attrs={'class':'summernote'}),
                 'detail_am':forms.Textarea(attrs={'class':'summernote'}),
+                'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             }
         
     

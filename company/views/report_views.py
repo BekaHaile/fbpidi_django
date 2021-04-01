@@ -24,6 +24,23 @@ from company.forms import *
 today = datetime.datetime.today()
 this_year = today.year
 
+def certification_chart(request):
+    labels=[]
+    data=[]
+    queryset = Company.objects.values('certification__name').annotate(Count('id')).order_by('certification').exclude(main_category='FBPIDI')
+    for certification in queryset:
+        labels.append(certification['certification__name'])
+        data.append(certification['id__count'])
+    return JsonResponse({'labels':labels,'data':data})
+
+def management_tool_chart(request):
+    labels=[]
+    data=[]
+    queryset = Company.objects.values('management_tools__name').annotate(Count('id')).order_by('management_tools').exclude(main_category='FBPIDI')
+    for tools in queryset:
+        labels.append(tools['management_tools__name'])
+        data.append(tools['id__count'])
+    return JsonResponse({'labels':labels,'data':data})   
 
 class ReportPage(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -84,7 +101,7 @@ class CapitalUtilizationReportSector(LoginRequiredMixin,View):
                     if performance.product == capacity.product:
                         capital_util_data.append({
                             'company':company.name,'product':performance.product.sub_category_name,'production_amount':performance.production_amount,
-                            'actual_production':capacity.actual_prdn_capacity*260
+                            'actual_production':capacity.actual_prdn_capacity
                         })
             print(capital_util_data)
             context['capital_util_data'] = capital_util_data
@@ -131,26 +148,40 @@ class ChangeInCapitalUtilization(LoginRequiredMixin,View):
             messages.warning(self.request,"Please Fixe Your Request,There is issue in the request")
             return render(self.request,"admin/company/report_page.html",context)
         else:
-            for company in companies:
-                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year)
-                production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1)
-                for p in production_performance_this_year:
-                    pp_today += p.production_amount
-                
-                for p in production_performance_this_pre:
-                    pp_prev += p.production_amount
+            companies_with_data = companies.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))),
+                                                    Exists(ProductionCapacity.objects.filter(company=OuterRef('pk')))
+                                                    )
+            for company in companies_with_data:
+                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year).distinct('product')
+                production_performance_last_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1).distinct('product')
+                production_capacity_this_year = ProductionCapacity.objects.filter(company=company).distinct('product')
 
-                total_apc = 0
-                for pco in ProductionCapacity.objects.filter(company=company):
-                    total_apc += (pco.actual_prdn_capacity*260)
-
-                if total_apc == 0:
-                    change_capital_util_data.append({'company':company.name,'data':float((pp_prev-pp_today)/1)})
+                if production_performance_last_year.exists():
+                    for (performance_this,performance_last,capacity) in zip(production_performance_this_year,production_performance_last_year,production_capacity_this_year):
+                        if performance_this.product == capacity.product or performance_last.product == capacity.product:
+                            change_capital_util_data.append({
+                                'company':company.name,
+                                'product':performance_this.product.sub_category_name,
+                                'unit':performance_this.product.uom,
+                                'pa_this':performance_this.production_amount,
+                                'pa_last':performance_last.production_amount,
+                                'apc':capacity.actual_prdn_capacity
+                            })
                 else:
-                    change_capital_util_data.append({'company':company.name,'data':float((pp_prev-pp_today)/total_apc)})
+                    for (performance_this,capacity) in zip(production_performance_this_year,production_capacity_this_year):
+                        if performance_this.product == capacity.product:
+                            change_capital_util_data.append({
+                                'company':company.name,
+                                'product':performance_this.product.sub_category_name,
+                                'unit':performance_this.product.uom,
+                                'pa_this':performance_this.production_amount,
+                                'pa_last':0,
+                                'apc':capacity.actual_prdn_capacity
+                            })
+                     
+             
             context['change_capital_util_data'] = change_capital_util_data
             context['flag'] = "change_capital_utilization"
-            print(context)
             return render(self.request,"admin/company/report_page.html",context)
 
 class AverageExtractionRate(LoginRequiredMixin,View):
@@ -281,24 +312,39 @@ class InvestmentCapitalReportView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         template_name="admin/company/report_page.html"
         context = {}
-        total_food_inv_cap = 0
-        total_bev_inv_cap = 0
-        total_pharm_inv_cap = 0
-        
-        for company in Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals']):
-            if company.main_category == "Food":
-                for invcap in InvestmentCapital.objects.filter(company=company):
-                    total_food_inv_cap +=invcap.get_inv_cap()
-            elif company.main_category == "Beverage":
-                for invcap in InvestmentCapital.objects.filter(company=company):
-                    total_bev_inv_cap +=invcap.get_inv_cap()
-            elif company.main_category == "Pharmaceuticals":
-                for invcap in InvestmentCapital.objects.filter(company=company):
-                    total_pharm_inv_cap +=invcap.get_inv_cap()
-        context['food_inv_cap'] = total_food_inv_cap
-        context['bev_inv_cap'] = total_bev_inv_cap
-        context['pharm_inv_cap'] = total_pharm_inv_cap
-        context['total'] = float(total_bev_inv_cap+total_food_inv_cap+total_pharm_inv_cap)
+        total_inv_cap_data = []
+        if self.kwargs['option'] == 'by_sector':
+            if self.kwargs['sector'] == "all":
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+                context['title'] = self.kwargs['sector'] 
+                context['sector'] = self.kwargs['sector']
+
+        if companies == None:
+            context['flag'] = "gross_vp_data"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fixe Your Request,There is issue in the request")
+            return render(self.request,"admin/company/report_page.html",context)
+        else:
+            for company in companies:
+                if InvestmentCapital.objects.filter(company=company).exists():
+                    queryset =  InvestmentCapital.objects.filter(company=company).values('company__name').annotate(
+                        machinery = Sum('machinery_cost'),
+                        building = Sum('building_cost'),
+                        working = Sum('working_capital')
+                    )
+                    for invcap in queryset:
+                        total_inv_cap_data.append({
+                            'company':invcap['company__name'],
+                            'total_inv_cap':invcap['machinery']+invcap['working']+invcap['building'],
+                            'machinery':invcap['machinery'],
+                            'building':invcap['building'],
+                            'working':invcap['working']
+                        })
+        context['inv_cap_data'] = total_inv_cap_data
         context['flag'] = 'inv_cap'
         return render(self.request,template_name,context)
 
@@ -322,7 +368,8 @@ class ProductionCapacityView(LoginRequiredMixin,View):
                 prodn_total+=float(aup.install_prdn_capacity*260)
                 actual_total+=float(aup.actual_prdn_capacity*260)
 
-            total_data.append({'product':product.sub_category_name,'total_data':{'installed':prodn_total,'actual':actual_total},'data':prodn_total+actual_total})
+            total_data.append({'product':product.sub_category_name,'unit':product.uom,'total_data':{'installed':prodn_total,'actual':actual_total}})
+
         context['produn_data']=total_data
         context['products'] = SubCategory.objects.all()
         context['flag'] = 'production_cap'
@@ -563,6 +610,9 @@ class NumberofIndustriesByOption(LoginRequiredMixin,View):
         elif self.kwargs['option'] == 'comunity_compliant':
             context['data'] =  Company.objects.all().exclude(comunity_compliant='').exclude(main_category='FBPIDI').count()
             context['label'] = "Number of Industries Who have Compliant with local Community"
+        # elif self.kwargs['option'] == 'laboratory':
+        #     context['data'] =  Company.objects.all().exclude(Q(lab_test_analysis='')|Q(lab_equipment='')).exclude(main_category='FBPIDI').count()
+        #     context['label'] = "Number of Industries Who have Quality Control Laboratory"
         
         return render(self.request,template_name,context)
 
