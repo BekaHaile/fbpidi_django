@@ -1,5 +1,6 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags %}
+{%load admin_template_tags%}
 {% block extrastyle %}
 
 	<!-- Theme JS files -->
@@ -58,11 +59,99 @@
 										<a href="{%url 'admin:get_number_companies' option='comunity_compliant'%}" class="dropdown-item">With Comunity Compliant</a>
 										<a href="{%url 'admin:get_number_companies' option='focal_person'%}" class="dropdown-item">With Focal Person</a>
 										<a href="{%url 'admin:get_number_companies' option='saftey_profesional'%}" class="dropdown-item">With Saftey Profesional</a>
+										<a href="{%url 'admin:get_number_companies' option='laboratory'%}" class="dropdown-item">With Quality Control Laboratory</a>
 									</div>
 								</li>								 
 							</ul>
 
 							 
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">{{label}}</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company</th>
+									<th>Sector</th>
+ 								</tr>
+							</thead>
+							<tbody id="tbody">
+								{%for d in data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{d.name}}</td>
+									<td>{{d.main_category}}</td>
+ 								</tr>
+								 {%endfor%}
+
+							</tbody>
+							<tr>
+								<td>Total</td><td></td><td>{{data.count}} Companies</td>
+							</tr>
+							<tr>
+								<td>Share</td><td></td><td>{% get_percent data.count total_count %} %</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				{%elif flag == 'companies_by_region'%}
+				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<form class="form-inline" method="POST"> {%csrf_token%}
+							<ul class="list-inline list-inline-condensed mb-0 mr-4">
+								<li class="list-inline-item"> 
+									<select class="form-control" name="region" id="">
+										<option value="">Select Region</option>
+										{%for region in regions%}
+										<option value="{{region.id}}">{{region}}</option>
+										{%endfor%}
+									</select>
+								</li>
+								<li class="list-inline-item"> 
+									<select class="form-control" name="sector" id="">
+										<option value="">Select Sector</option>
+										<option value='Food' >Food</option>
+										<option value='Beverage' >Beverage</option>
+										<option value='Pharmaceuticals' >Pharmaceutical</option>
+									</select>
+								</li>
+								<li class="list-inline-item"> 
+									<select class="form-control" name="sub_sector" id="">
+										<option value="">Select Sub sectors</option>
+										{%for sub_sector in sub_sectors%}
+										<option value="{{sub_sector.id}}">{{sub_sector}}</option>
+										{%endfor%}
+									</select>
+								</li> 
+								<li class="list-inline-item"> 
+									<select class="form-control" name="product" id="">
+										<option value="">Select Product</option>
+										{%for product in products%}
+										<option value="{{product.id}}">{{product}}</option>
+										{%endfor%}
+									</select>
+								</li> 
+								 
+								 
+								 
+							</ul>
+
+							<ul class="list-inline ml-2 mb-0">
+								<li class="list-inline-item"> <button type="submit"class="btn btn-primary text-default">
+										<i class="icon-search4 mr-2"></i>Get Filtered</a>
+
+									 
+								</li>
+							</ul>
+						 </form>
 						</div>
 					</div>
 				</div>
@@ -74,16 +163,40 @@
 						<table class="table datatable-basic">
 							<thead>
 								<tr>
-									<th>Data</th>
-									<th>Number of Companies</th>
+									<th>#</th>
+									<th>Company Name</th>
+									<th>Sector</th>
+									<th>Sub-Sector</th>
+									{%if product%}<th>Product</th>{%endif%}									
+									<th>Region</th>
  								</tr>
 							</thead>
-							<tbody id="tbody">
+							<tbody>
+								{%for company in object_list%}
 								<tr>
-									<td>{{label}}</td>
-									<td>{{data}}</td>
+									<td>{{forloop.counter}}</td>
+									<td>{{company.name}}</td>
+									<td><a href="#">{{company.main_category}}</a></td>
+									<td>
+										{%for category in company.category.all%}
+										<a href="#">{{category.category_name}}</a>,
+										{%endfor%}
+									</td>
+									{%if product%}
+									<td>{{product}}</td>
+									{%endif%}
+									<td>{{company.company_address.region.name}}</td>
  								</tr>
+								 
+								 {%endfor%}
+								 
 							</tbody>
+							<tr>
+								<td></td>
+								<td>Total</td>
+								<td></td><td></td> {%if product%}<td></td>{%endif%}
+								<td>{{object_list.count}} Companies</td>
+							</tr>
 						</table>
 					</div>
 				</div>
@@ -145,6 +258,12 @@
 										Trade License
 									</a>
 								</li>
+								<li class="list-inline-item"> 
+									<a href="{%url 'admin:filter_by_certificate'%}" class="btn btn-link text-default" >
+										<i class="icon-stack2 mr-2"></i>
+										Valid Certificate
+									</a>
+								</li>
 								 
 							</ul>
 
@@ -163,7 +282,7 @@
 				</div>
 				<div class="card">
 					<div class="card-header">
-
+						<h3 class="card-title">{{title}}</h3>
 					</div>
 					<div class="card-body">
 						<table class="table datatable-basic">
@@ -197,10 +316,18 @@
  								</tr>
 								 
 								 {%endfor%}
+								 
 							</tbody>
+							<tr>
+								<td></td>
+								<td>Total</td>
+								<td></td><td></td><td></td><td></td><td></td>
+								<td>{{object_list.count}} Companies</td>
+							</tr>
 						</table>
 					</div>
 				</div>
+				
 				 {%endif%}
 				
 			</div>

@@ -410,6 +410,7 @@ class CreateProductionCapacity(LoginRequiredMixin,CreateView):
         else:
             pc = form.save(commit=False)
             pc.company = self.request.user.get_company()
+            pc.p_date = datetime.datetime.now()
             pc.created_by = self.request.user
             pc.save()
             messages.success(self.request,"Production Capacity Created")
@@ -1045,6 +1046,22 @@ class ProductByMainCategory(ListView):
         elif self.kwargs['option'] == "all":
             return Product.objects.all()
 
+class SearchProduct(View):
+
+    def post(self,*args,**kwargs):
+        template_name = "frontpages/product/product_category.html"
+        products = Product.objects.all()
+        
+        if self.request.POST['name'] != '':
+            products = Product.objects.filter(Q(name=self.request.POST['name'])|Q(brand__brand_name__icontains=self.request.POST['name'])|Q(brand__product_type__sub_category_name__icontains=self.request.POST['name'])
+                                    )
+        try:
+            if self.request.POST['sector'] !='' or self.request.POST['sector'] != "Select":
+                products = products.filter(Q(brand__product_type__category_name__id=self.request.POST['sector']))
+        except ValueError as e:
+            products = products 
+        return render(self.request,template_name,{'object_list':products})
+        
 class ProductDetailView(DetailView):
     model = Product
     template_name = "frontpages/product/product_detail.html"
