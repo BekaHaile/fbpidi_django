@@ -623,7 +623,7 @@ class NumberofIndustriesByOption(LoginRequiredMixin,View):
         elif self.kwargs['option'] == 'laboratory':
             context['data'] =  Company.objects.all().exclude(Q(lab_test_analysis=None)|Q(lab_equipment=None)).exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who have Quality Control Laboratory"
-        
+        context['total_count'] = Company.objects.all().exclude(main_category='FBPIDI').count()
         return render(self.request,template_name,context)
 
 

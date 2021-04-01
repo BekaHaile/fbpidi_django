@@ -1,5 +1,6 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags %}
+{%load admin_template_tags%}
 {% block extrastyle %}
 
 	<!-- Theme JS files -->
@@ -92,6 +93,9 @@
 							</tbody>
 							<tr>
 								<td>Total</td><td></td><td>{{data.count}} Companies</td>
+							</tr>
+							<tr>
+								<td>Share</td><td></td><td>{% get_percent data.count total_count %} %</td>
 							</tr>
 						</table>
 					</div>
