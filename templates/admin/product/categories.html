@@ -8,7 +8,7 @@
 	<!-- /theme JS files -->
  
 {% endblock %}
-{%block pagename%}{%if category == True%}Product Categories{%elif sub_category == True %}Product Type{%elif brand == True%}Produt Brand{%endif%}{%endblock%}
+{%block pagename%}{%if category == True%}Product Categories{%elif sub_category == True %}Products {%elif brand == True%}Products Brand{%endif%}{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
@@ -89,8 +89,8 @@
 						<table class="table datatable-show-all">
 							<thead>
 								<tr>
-									<th>Category Name</th>
 									<th>Product Name</th>
+									<th>Category Name</th>
 									<th>Description</th>
 									<th>Created By</th>
 									<th>Created Date</th>
@@ -100,8 +100,8 @@
 							<tbody>
 								{%for cat in object_list%}
 							<tr>
-								<td>{{cat.category_name}}</td>
 								<td>{{cat.sub_category_name}}</td>
+								<td>{{cat.category_name}}</td>
 								<td><div class="summernote">{{cat.description|safe|truncatechars_html:10}}</div></td>
 								<td>{{cat.created_by.username}}</td>
 								<td><span class="badge badge-success">{{cat.created_date}}</span></td>
