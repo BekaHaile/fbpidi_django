@@ -1,5 +1,6 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags %}
+{%load admin_template_tags%}
 {% block extrastyle %}
 
 	<!-- Theme JS files -->
@@ -69,22 +70,33 @@
 				</div>
 				<div class="card">
 					<div class="card-header">
-
+						<h3 class="card-title">{{label}}</h3>
 					</div>
 					<div class="card-body">
 						<table class="table datatable-basic">
 							<thead>
 								<tr>
-									<th>Data</th>
-									<th>Number of Companies</th>
+									<th>#</th>
+									<th>Company</th>
+									<th>Sector</th>
  								</tr>
 							</thead>
 							<tbody id="tbody">
+								{%for d in data%}
 								<tr>
-									<td>{{label}}</td>
-									<td>{{data}}</td>
+									<td>{{forloop.counter}}</td>
+									<td>{{d.name}}</td>
+									<td>{{d.main_category}}</td>
  								</tr>
+								 {%endfor%}
+
 							</tbody>
+							<tr>
+								<td>Total</td><td></td><td>{{data.count}} Companies</td>
+							</tr>
+							<tr>
+								<td>Share</td><td></td><td>{% get_percent data.count total_count %} %</td>
+							</tr>
 						</table>
 					</div>
 				</div>

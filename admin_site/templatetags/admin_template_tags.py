@@ -124,6 +124,11 @@ def change_util_total(data,option):
 
     return round(total,2)
 
+@register.simple_tag
+def get_percent(x,y):
+    return round(float(x/y)*100,2)
+
+
 
 @register.simple_tag
 def get_share(data,total):
