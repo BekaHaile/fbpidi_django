@@ -582,46 +582,46 @@ class NumberofIndustriesByOption(LoginRequiredMixin,View):
         context['flag'] = "company_count"
         template_name = "admin/company/companies_for_report.html"
         if self.kwargs['option'] == 'research':
-            context['data'] = Company.objects.all().exclude(conducted_research='').exclude(main_category='FBPIDI').count()
+            context['data'] = Company.objects.all().exclude(conducted_research='').exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who Conducted Research"
         elif self.kwargs['option'] == 'test_param':
-            context['data'] = Company.objects.all().exclude(outsourced_test_param='').exclude(main_category='FBPIDI').count()
+            context['data'] = Company.objects.all().exclude(outsourced_test_param='').exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who Out Sourced Test Parameter"
         elif self.kwargs['option'] == 'new_product':
-            context['data'] =  Company.objects.all().exclude(new_product_developed='').exclude(main_category='FBPIDI').count()
+            context['data'] =  Company.objects.all().exclude(new_product_developed='').exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who Developed New Product"
         elif self.kwargs['option'] == 'expansion_plan':
-            context['data'] =  Company.objects.all().exclude(expansion_plan='No').exclude(main_category='FBPIDI').count()
+            context['data'] =  Company.objects.all().exclude(expansion_plan='No').exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who has Expansion Plan"
         elif self.kwargs['option'] == 'waste_trtmt_system':
-            context['data'] =  Company.objects.all().exclude(waste_trtmnt_system='').exclude(main_category='FBPIDI').count()
+            context['data'] =  Company.objects.all().exclude(waste_trtmnt_system='').exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who have Waste Treatment & disposal System"
         elif self.kwargs['option'] == 'ecomerce':
-            context['data'] =  Company.objects.filter(e_commerce=True).exclude(main_category='FBPIDI').count()
+            context['data'] =  Company.objects.filter(e_commerce=True).exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who Use Ecomerce"
         elif self.kwargs['option'] == 'database':
-            context['data'] =  Company.objects.filter(active_database=True).exclude(main_category='FBPIDI').count()
+            context['data'] =  Company.objects.filter(active_database=True).exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who has Active Database"
         elif self.kwargs['option'] == 'efluent':
-            context['data'] =  Company.objects.filter(efluent_treatment_plant=True).exclude(main_category='FBPIDI').count()
+            context['data'] =  Company.objects.filter(efluent_treatment_plant=True).exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who has Efluent Treatment Plant"
         elif self.kwargs['option'] == 'env_mgmt':
-            context['data'] =  Company.objects.filter(env_mgmt_plan=True).exclude(main_category='FBPIDI').count()
+            context['data'] =  Company.objects.filter(env_mgmt_plan=True).exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who has Environmental Management Plan"
         elif self.kwargs['option'] == 'focal_person':
-            context['data'] =  Company.objects.filter(env_focal_person=True).exclude(main_category='FBPIDI').count()
+            context['data'] =  Company.objects.filter(env_focal_person=True).exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who has have Environmental Focal person"
         elif self.kwargs['option'] == 'saftey_profesional':
-            context['data'] =  Company.objects.filter(safety_profesional=True).exclude(main_category='FBPIDI').count()
+            context['data'] =  Company.objects.filter(safety_profesional=True).exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who has Saftey Professional"
         elif self.kwargs['option'] == 'gass_emision':
-            context['data'] =  Company.objects.all().exclude(gas_carb_emision='').exclude(main_category='FBPIDI').count()
+            context['data'] =  Company.objects.all().exclude(gas_carb_emision='').exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who Measure Their Gas Carbon Emission"
         elif self.kwargs['option'] == 'comunity_compliant':
-            context['data'] =  Company.objects.all().exclude(comunity_compliant='').exclude(main_category='FBPIDI').count()
+            context['data'] =  Company.objects.all().exclude(comunity_compliant='').exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who have Compliant with local Community"
         elif self.kwargs['option'] == 'laboratory':
-            context['data'] =  Company.objects.all().exclude(Q(lab_test_analysis=None)|Q(lab_equipment=None)).exclude(main_category='FBPIDI').count()
+            context['data'] =  Company.objects.all().exclude(Q(lab_test_analysis=None)|Q(lab_equipment=None)).exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who have Quality Control Laboratory"
         
         return render(self.request,template_name,context)
