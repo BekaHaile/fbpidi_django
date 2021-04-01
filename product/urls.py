@@ -15,7 +15,7 @@ urlpatterns = [
 
     path("fetch_inquiry_products/", FetchInquiryProducts, name = "fetch_inquiry_products"),
     path("inquiry_form/", InquiryForm.as_view(), name = "inquiry_form"),
-
+    
 
     
 ]

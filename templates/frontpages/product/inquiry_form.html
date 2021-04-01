@@ -48,8 +48,8 @@
 									<div class="card-header ">
 										<h3 class="card-title">Send Your Inquiry</h3>
 									</div>
-                                    <input type="hidden" id = "products_input" name="products" >
 
+                                    <input type="hidden" id = "products_input" name="prod_id_list" value = "{{prod_id_list}}" >
 									<div class="card-body ">
 
 										<div class="row" style="margin-bottom: 20px;">
@@ -58,23 +58,21 @@
                                                 {%if user.is_authenticated and user.email %}
                                                     <input type= "text" name="sender_email" class = " form-control" value = "{{user.email}}" placeholder= 'Your Email '>
                                                 {% else %}
-                                                    
                                                         {{form.sender_email}}
-                                                    
                                                 {% endif %}
                                             </div>
-										</div>
-
-										
+										</div>										
 																					
 										<div class="row " style="margin-bottom: 20px;">
 											<label class="form-label text-dark mr-5">To </label>
-
 											<div class=" card card-body col-lg-9">
-                                                
-												<img src = "{{products.0.image.url}}" width = "40px" height = "40px">
-                                                <p>{{products.0.company.name}}</p>
 
+												{% if product_count %}
+													<p>{{product_count}} products: </p>
+												{% else %}                                                
+													<img src = "{{products.0.image.url}}" width = "40px" height = "40px">
+													<p>{{products.0.company.name}}</p>
+												{% endif %}
 											</div>
 
 										</div>
@@ -102,7 +100,7 @@
                                             <label class="form-label text-dark">Any Attachments </label>
                                             <div class="col-lg-9">
                                                 {{form.attachement}}
-                                                </div>
+											</div>
                                         </div>
 
 										
@@ -124,9 +122,7 @@
 			</div>
 		</div>
 		<!--Contact-->
-        <script>
-            document.getElementById("products_input").value = "{{prods_id_list}}"
-        </script>
+        
 
 	
 {%endblock%}
