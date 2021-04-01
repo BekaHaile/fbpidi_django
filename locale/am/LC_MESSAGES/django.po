@@ -1489,17 +1489,32 @@ msgstr "በመራጮች ድምጽ ብዛት"
 msgid "Proceed To Checkout"
 msgstr "ወደ ቼክ - ኣውት ቀጥል"
 
-#: .\templates\frontpages\product\checkout.html:10
-msgid "Checkout Page"
-msgstr "ቼክ - ኣውት ገጽ"
+#: .\templates\frontpages\company\company_poll_detail.html:45
+#: .\templates\frontpages\poll\poll_detail.html:61
+#, fuzzy
+#| msgid "Total votes"
+msgid "Total Votes"
+msgstr "ጠቅላላ መራጮች"
 
-#: .\templates\frontpages\product\checkout.html:31
-msgid "Shipping Information"
-msgstr "የግብይት መረጃ"
+#: .\templates\frontpages\company\company_poll_detail.html:52
+#: .\templates\frontpages\poll\poll_detail.html:40
+#, fuzzy
+#| msgid "You can not vote on this poll, since you are the creator of the poll"
+msgid "You can not vote on this poll, since your company created the poll."
+msgstr "የምርጫው ፈጣሪ እርስዎ ነዎት ስለሆነም በዚህ ምርጫ ላይ ድምጽ መስጠት አይችሉም"
 
-#: .\templates\frontpages\product\checkout.html:77
-msgid "CONTINUE SHOPPING"
-msgstr "ግብይት ቀጥል"
+#: .\templates\frontpages\company\company_poll_detail.html:55
+#: .\templates\frontpages\poll\poll_detail.html:43
+#| msgid "Super users cannot Vote"
+msgid "Super users cannot Vote."
+msgstr "ልዕለ ተጠቃሚዎች ድምጽ መስጠት አይችሉም"
+
+#: .\templates\frontpages\company\company_poll_detail.html:58
+#: .\templates\frontpages\poll\poll_detail.html:46
+#, fuzzy
+#| msgid "You already have voted for this poll"
+msgid "You already have voted for this poll."
+msgstr "ለዚህ ምርጫ አስቀድመው ድምጽ ሰጥተዋል"
 
 #: .\templates\frontpages\product\inquiry_form.html:14
 msgid "Inquiry Form"
@@ -1557,9 +1572,12 @@ msgstr "አዲስ ምርምር አስገባ"
 msgid "Research you Posted"
 msgstr "የርሶ ምርምሮች"
 
-#: .\templates\frontpages\research\research_detail_edit.html:139
-msgid "Edit a Research"
-msgstr "ምርምሮን ያስተካክሉ"
+#: .\templates\frontpages\company\company_poll_detail.html:172
+#: .\templates\frontpages\company\company_tender_detail.html:171
+#: .\templates\frontpages\company\company_vacancy_detail.html:122
+#: .\templates\frontpages\tender\customer_tender_detail.html:161
+msgid "Company Tin Number"
+msgstr "ኩባንያ ቲን ቁጥር"
 
 #: .\templates\frontpages\research\research_detail_edit.html:143
 #: .\templates\frontpages\research\research_form.html:104
@@ -1571,9 +1589,11 @@ msgstr "የምርምር ርዕስ"
 msgid "Research Status"
 msgstr "የምርምር ሂደት"
 
-#: .\templates\frontpages\research\research_detail_edit.html:169
-msgid "Research Category Name"
-msgstr "የምርምር ምድብ "
+#: .\templates\frontpages\company\company_research.html:15
+#, fuzzy
+#| msgid "Research"
+msgid "Researchs"
+msgstr "ምርምር"
 
 #: .\templates\frontpages\research\research_detail_edit.html:200
 msgid "The Current Document"
@@ -1615,18 +1635,20 @@ msgstr "ርዕስ"
 msgid "Filter "
 msgstr "አጣራ"
 
-#: .\templates\frontpages\tender\customer_tender_list.html:79
-msgid "Free Only"
-msgstr "ነፃ ብቻ"
+#: .\templates\frontpages\company\company_vacancy_apply.html:74
+#: .\templates\frontpages\job_apply.html:54
+msgid "Job application form"
+msgstr "የማምልከቻ ቅጽ"
 
-#: .\templates\frontpages\tender\customer_tender_list.html:86
-msgid "Paid Only"
-msgstr "የሚያስከፍሉ ብቻ"
+#: .\templates\frontpages\company\company_vacancy_apply.html:94
+#: .\templates\frontpages\job_apply.html:75
+msgid "Status"
+msgstr "ወቅታዊ ሁኔታ"
 
-#: .\templates\frontpages\tender\customer_tender_list.html:94
-#: .\templates\frontpages\tender\customer_tender_list.html:97
-msgid "Open Only"
-msgstr "ክፈት ብቻ"
+#: .\templates\frontpages\company\company_vacancy_apply.html:104
+#: .\templates\frontpages\job_apply.html:85
+msgid "The institute you learned in"
+msgstr "የተማሩበት የት/ት ተቋም"
 
 #: .\templates\frontpages\tender\customer_tender_list.html:168
 msgid "Posted"
@@ -1673,18 +1695,18 @@ msgstr "የቅጥር አይነት"
 msgid "Thanks for spending some quality time with the Web site today."
 msgstr "ለነበረን ጊዘ እናመሰናለን"
 
-#: .\templates\registration\logged_out.html:12
-msgid "Log in again"
-msgstr "እንደገና ግባ"
+#: .\templates\frontpages\company\product_details.html:192
+#, fuzzy
+#| msgid "Latest Manufacturers"
+msgid "Send Message to Manufacturer"
+msgstr "አምራቾች"
 
 #: .\templates\registration\password_change_done.html:15
 msgid "Your password was changed."
 msgstr "የይለፍ ቃል ቀይር"
 
-#: .\templates\registration\password_reset_done.html:68
-msgid ""
-"We’ve emailed you instructions for setting your password, if an account "
-"exists with the email you entered. You should receive them shortly."
+#: .\templates\frontpages\company\product_list.html:61
+msgid "to"
 msgstr ""
 
 #: .\templates\registration\password_reset_done.html:70
@@ -2502,25 +2524,27 @@ msgstr ""
 msgid "May"
 msgstr "አማርኛ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:14
-msgid "June"
-msgstr ""
+#: .\templates\frontpages\faq.html:15
+msgid "FAQ"
+msgstr "ተይጥ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:15
-msgid "July"
-msgstr ""
+#: .\templates\frontpages\index.html:18
+msgid "Welcome To The Biggest Business Directory"
+msgstr "ወደ ትልቁ የንግድ ማውጫ እንኳን በደህና መጡ!"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:15
-msgid "August"
-msgstr ""
+#: .\templates\frontpages\index.html:19 .\templates\frontpages\index.html:600
+msgid ""
+"It is a long established fact that a reader will be distracted by the "
+"readable."
+msgstr "አንባቢ በሚነበብ ነገር ሊዘናጋ መሆኑ ረጅም የተረጋገጠ ሀቅ ነው ፡፡"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:15
-msgid "September"
-msgstr ""
+#: .\templates\frontpages\index.html:26
+msgid "Search Products"
+msgstr "ምርት ፈልግ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:15
-msgid "October"
-msgstr ""
+#: .\templates\frontpages\index.html:27
+msgid "Search Companies"
+msgstr "ድርጅቶችን ፈልግ"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:15
 msgid "November"
@@ -2536,13 +2560,15 @@ msgstr "ስልክ ቁጥር"
 msgid "jan"
 msgstr ""
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:19
-msgid "feb"
-msgstr ""
+#: .\templates\frontpages\index.html:45 .\templates\frontpages\index.html:80
+#: .\templates\frontpages\index.html:115
+msgid "Select Category"
+msgstr "ምድብ ምረጥ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:19
-msgid "mar"
-msgstr "አማርኛ"
+#: .\templates\frontpages\index.html:61 .\templates\frontpages\index.html:96
+#: .\templates\frontpages\index.html:131
+msgid "Search Now"
+msgstr "ፈልግ"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:19
 msgid "apr"
@@ -2552,53 +2578,54 @@ msgstr "አማርኛ"
 msgid "may"
 msgstr "አማርኛ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:19
-msgid "jun"
-msgstr ""
+#: .\templates\frontpages\index.html:173
+msgid "Companies"
+msgstr "ድርጅቶች"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
-msgid "jul"
-msgstr ""
+#: .\templates\frontpages\index.html:195
+msgid "Latest Products"
+msgstr "አዲስ ምርቶች"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
-msgid "aug"
-msgstr ""
+#: .\templates\frontpages\index.html:196 .\templates\frontpages\index.html:333
+#: .\templates\frontpages\index.html:401 .\templates\frontpages\index.html:530
+#: .\templates\frontpages\index.html:630
+#: .\templates\frontpages\index.html:1232
+#: .\templates\frontpages\index.html:1321
+msgid "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula"
+msgstr "ሞርቢ አሥራ አንድ ፣ ሊጉላ በሴሴቲተር ተሸከርካሪ ላይ ሞርቢ አሥራ አንድ ፣ ሊጉላ በሴሴቲተር ተሸከርካሪ ላይ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
-msgid "sep"
-msgstr ""
+#: .\templates\frontpages\index.html:290
+msgid "Total Products"
+msgstr "ምርት"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:20
 msgid "oct"
 msgstr "ፕሮጀክት"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
-msgid "nov"
-msgstr ""
+#: .\templates\frontpages\index.html:308
+msgid "Happy Customers"
+msgstr "ደንበኞች"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
-msgid "dec"
-msgstr ""
+#: .\templates\frontpages\index.html:332
+msgid "Latest Manufacturers"
+msgstr "አምራቾች"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:23
-msgctxt "abbrev. month"
-msgid "Jan."
-msgstr ""
+#: .\templates\frontpages\index.html:400
+msgid "How It Works?"
+msgstr "እንደት ይሰራል"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:24
-msgctxt "abbrev. month"
-msgid "Feb."
-msgstr ""
+#: .\templates\frontpages\index.html:433
+msgid "You can register and get Unlimited Functionalities"
+msgstr "ተመዝግበዉ የማያልቁ አገልግሎት ያግኙ"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:25
 msgctxt "abbrev. month"
 msgid "March"
 msgstr "ፈልግ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:26
-msgctxt "abbrev. month"
-msgid "April"
-msgstr ""
+#: .\templates\frontpages\index.html:458
+msgid "You Can Create Account and Get Unlimited Functionalities"
+msgstr "አካዉንት ከፍተዉ የማያልቅ አገልግሎት ያግኙ"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:27
 #, fuzzy
@@ -2607,60 +2634,57 @@ msgctxt "abbrev. month"
 msgid "May"
 msgstr "አማርኛ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:28
-msgctxt "abbrev. month"
-msgid "June"
-msgstr ""
+#: .\templates\frontpages\index.html:487
+msgid "You Can Add your Products and comunicate with buyers"
+msgstr "መርቶትን ለሸማቾች ያቀርቡ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:29
-msgctxt "abbrev. month"
-msgid "July"
-msgstr ""
+#: .\templates\frontpages\index.html:513
+msgid "Get Earnings"
+msgstr "ትረፍ ያግኙ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:30
-msgctxt "abbrev. month"
-msgid "Aug."
-msgstr ""
+#: .\templates\frontpages\index.html:514
+msgid "You can register, add products,buy products and get Your earnings"
+msgstr "አካዉንት ከፍተዉ የማያልቅ አገልግሎት ያግኙ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:31
-msgctxt "abbrev. month"
-msgid "Sept."
-msgstr ""
+#: .\templates\frontpages\index.html:529
+msgid "Latest Suppliers"
+msgstr "አቅራቢዎች"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:32
-msgctxt "abbrev. month"
-msgid "Oct."
-msgstr ""
+#: .\templates\frontpages\index.html:606
+msgid "Enter your Email"
+msgstr "ኢመይል ያስገቡ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:33
-msgctxt "abbrev. month"
-msgid "Nov."
-msgstr ""
+#: .\templates\frontpages\index.html:629
+msgid "Getting Started"
+msgstr "አሁን ይጀምሩ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:34
-msgctxt "abbrev. month"
-msgid "Dec."
-msgstr ""
+#: .\templates\frontpages\index.html:650
+msgid "Exsiting User"
+msgstr "በፊት የተመዝገበ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:37
-msgctxt "alt. month"
-msgid "January"
+#: .\templates\frontpages\index.html:651 .\templates\frontpages\index.html:683
+#, fuzzy
+#| msgid ""
+#| "it look like readable English. Many desktop publishing packages and web "
+#| "page "
+msgid ""
+"it look like readable English. Many desktop publishing packages and web page "
+"editors now use Lorem Ipsum as their default model text"
 msgstr ""
+"የሚነበብ እንግሊዝኛ ይመስላል። ብዙ የዴስክቶፕ ማተሚያ ጥቅሎች እና ድረ-ገጽ አርታኢዎች አሁን ሎረም አይፕሱምን እንደ "
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:38
-msgctxt "alt. month"
-msgid "February"
-msgstr ""
+#: .\templates\frontpages\index.html:682
+msgid "New User"
+msgstr "አዲስ ተጠቃሚ"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:39
 msgctxt "alt. month"
 msgid "March"
 msgstr "ፈልግ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:40
-msgctxt "alt. month"
-msgid "April"
-msgstr ""
+#: .\templates\frontpages\index.html:698
+msgid "In Ethiopian Food, Beverage and Pharmaceutical Industry."
+msgstr "በኢትዮጵያ የምግብ፣ መጠጥ እና መድሃኒቶች ኢንዱስትሪ"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:41
 #, fuzzy
@@ -2669,30 +2693,26 @@ msgctxt "alt. month"
 msgid "May"
 msgstr "አማርኛ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:42
-msgctxt "alt. month"
-msgid "June"
-msgstr ""
+#: .\templates\frontpages\index.html:1239
+msgid "Food Sectors"
+msgstr "መግብ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:43
-msgctxt "alt. month"
-msgid "July"
-msgstr ""
+#: .\templates\frontpages\index.html:1265
+msgid "Beverage Sectors"
+msgstr "መጠጥ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:44
-msgctxt "alt. month"
-msgid "August"
-msgstr ""
+#: .\templates\frontpages\index.html:1290
+msgid "Pharmaceutical Sectors"
+msgstr "መድሃኒት"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:45
-msgctxt "alt. month"
-msgid "September"
-msgstr ""
+#: .\templates\frontpages\index.html:1320
+msgid "Download App"
+msgstr "መተግበሪያ አዉርድ"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:46
-msgctxt "alt. month"
-msgid "October"
-msgstr ""
+#: .\templates\frontpages\layout.html:189
+#: .\templates\frontpages\layout.html:219
+msgid " List of Messages"
+msgstr "የመልክዕት ዝርዝር"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:47
 msgctxt "alt. month"
@@ -2706,229 +2726,197 @@ msgctxt "alt. month"
 msgid "December"
 msgstr "ስልክ ቁጥር"
 
-#: .\venv\Lib\site-packages\django\utils\ipv6.py:8
-msgid "This is not a valid IPv6 address."
+#: .\templates\frontpages\layout.html:307
+#: .\templates\frontpages\layout.html:316
+msgid "Beverages"
+msgstr "መጠጥ"
+
+#: .\templates\frontpages\layout.html:308
+#: .\templates\frontpages\layout.html:317
+msgid "Pharmaceuticals"
+msgstr "መድሃኒት"
+
+#: .\templates\frontpages\layout.html:345
+msgid "Forums"
+msgstr "ዉይይት"
+
+#: .\templates\frontpages\news\customer_event_detail.html:30
+msgid "Company Address"
+msgstr "የድርጅት አድራሻ"
+
+#: .\templates\frontpages\news\customer_event_detail.html:195
+#, fuzzy
+#| msgid "Shipping Information"
+msgid "Company Information"
+msgstr "የግብይት መረጃ"
+
+#: .\templates\frontpages\news\customer_event_detail.html:232
+msgid "Filter by company "
+msgstr "ብድርጅት ለይ"
+
+#: .\templates\frontpages\news\customer_event_list.html:41
+msgid "Events list"
+msgstr "የዝግጅቶች ዝርዝር"
+
+#: .\templates\frontpages\news\customer_event_list.html:80
+msgid "Upcoming Events"
+msgstr "መጪ የዝግጅቶች"
+
+#: .\templates\frontpages\news\customer_event_list.html:87
+msgid "Open Events"
+msgstr "ክፈት ዝግጅቶች"
+
+#: .\templates\frontpages\news\customer_event_list.html:129
+#: .\templates\frontpages\tender\customer_tender_detail.html:70
+msgid "Suspended"
+msgstr "ታግዷል"
+
+#: .\templates\frontpages\news\customer_news_list.html:65
+#: .\templates\frontpages\news\customer_news_list.html:69
+msgid "News list"
+msgstr "የዜናዎች ዝርዝር"
+
+#: .\templates\frontpages\news\customer_news_list.html:151
+msgid "Chat with staff"
+msgstr "ከሰራተኞች ጋር ይወያዩ"
+
+#: .\templates\frontpages\poll\poll_detail.html:55
+msgid "Poll title"
+msgstr "የምርጫ ዝርዝር"
+
+#: .\templates\frontpages\poll\poll_detail.html:62
+msgid "Poll created at :"
 msgstr ""
 
-#: .\venv\Lib\site-packages\django\utils\text.py:70
-#, python-format
-msgctxt "String to return when truncating text"
-msgid "%(truncated_text)s…"
+#: .\templates\frontpages\poll\poll_detail.html:111
+msgid "This poll has no choice, yet!"
 msgstr ""
 
-#: .\venv\Lib\site-packages\django\utils\text.py:236
-msgid "or"
+#: .\templates\frontpages\poll\polls-list.html:80
+msgid "Highest votes"
+msgstr "በመራጮች ድምጽ ብዛት"
+
+#: .\templates\frontpages\product\carts.html:45
+msgid "Proceed To Checkout"
+msgstr "ወደ ቼክ - ኣውት ቀጥል"
+
+#: .\templates\frontpages\product\checkout.html:10
+msgid "Checkout Page"
+msgstr "ቼክ - ኣውት ገጽ"
+
+#: .\templates\frontpages\product\checkout.html:31
+msgid "Shipping Information"
+msgstr "የግብይት መረጃ"
+
+#: .\templates\frontpages\product\checkout.html:77
+msgid "CONTINUE SHOPPING"
+msgstr "ግብይት ቀጥል"
+
+#: .\templates\frontpages\product\inquiry_form.html:14
+msgid "Inquiry Form"
 msgstr ""
 
-#. Translators: This string is used as a separator between list elements
-#: .\venv\Lib\site-packages\django\utils\text.py:255
-#: .\venv\Lib\site-packages\django\utils\timesince.py:83
-msgid ", "
+#: .\templates\frontpages\product\success_inquiry.html:14
+msgid "Inquiry Request Successfull!"
 msgstr ""
 
-#: .\venv\Lib\site-packages\django\utils\timesince.py:9
-#, python-format
-msgid "%d year"
-msgid_plural "%d years"
-msgstr[0] ""
-msgstr[1] ""
+#: .\templates\frontpages\project\project_detail_old.html:39
+msgid "search"
+msgstr "ፈልግ"
 
-#: .\venv\Lib\site-packages\django\utils\timesince.py:10
-#, python-format
-msgid "%d month"
-msgid_plural "%d months"
-msgstr[0] ""
-msgstr[1] ""
+#: .\templates\frontpages\project\project_detail_old.html:87
+#, fuzzy
+#| msgid "New User"
+msgid "User"
+msgstr "አዲስ ተጠቃሚ"
 
-#: .\venv\Lib\site-packages\django\utils\timesince.py:11
-#, python-format
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] ""
-msgstr[1] ""
+#: .\templates\frontpages\project\project_detail_old.html:99
+#: .\templates\frontpages\research\research_detail.html:166
+msgid "Detail"
+msgstr "ዝርዝር"
 
-#: .\venv\Lib\site-packages\django\utils\timesince.py:12
-#, python-format
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
+#: .\templates\frontpages\project\project_detail_old.html:104
+#: .\templates\frontpages\research\research_detail.html:171
+msgid "Attachments"
+msgstr "ፋይል"
 
-#: .\venv\Lib\site-packages\django\utils\timesince.py:13
-#, python-format
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
+#: .\templates\frontpages\research\research_detail.html:40
+#: .\templates\frontpages\research\research_detail.html:43
+#: .\templates\frontpages\research\research_form.html:28
+#: .\templates\frontpages\research\research_form.html:31
+#: .\templates\frontpages\research\research_list.html:40
+#: .\templates\frontpages\research\research_list.html:43
+#, fuzzy
+#| msgid "Research Title"
+msgid "Research List"
+msgstr "የምርምር ርዕስ"
 
-#: .\venv\Lib\site-packages\django\utils\timesince.py:14
-#, python-format
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] ""
-msgstr[1] ""
+#: .\templates\frontpages\research\research_detail.html:60
+#: .\templates\frontpages\research\research_detail_edit.html:37
+#: .\templates\frontpages\research\research_form.html:50
+#: .\templates\frontpages\research\research_list.html:185
+msgid "Add new Research"
+msgstr "አዲስ ምርምር አስገባ"
 
-#: .\venv\Lib\site-packages\django\views\csrf.py:110
-msgid "Forbidden"
-msgstr ""
+#: .\templates\frontpages\research\research_detail.html:70
+#: .\templates\frontpages\research\research_form.html:61
+#: .\templates\frontpages\research\research_list.html:195
+#, fuzzy
+#| msgid "Filter by company"
+msgid "Filter by Category"
+msgstr "በድርጅት አጣራ"
 
-#: .\venv\Lib\site-packages\django\views\csrf.py:111
-msgid "CSRF verification failed. Request aborted."
-msgstr ""
+#: .\templates\frontpages\research\research_detail.html:91
+#, fuzzy
+#| msgid "Add a Research"
+msgid "Related Researches"
+msgstr "አዲስ ምርምር አስገባ"
 
-#: .\venv\Lib\site-packages\django\views\csrf.py:115
-msgid ""
-"You are seeing this message because this HTTPS site requires a “Referer "
-"header” to be sent by your Web browser, but none was sent. This header is "
-"required for security reasons, to ensure that your browser is not being "
-"hijacked by third parties."
-msgstr ""
+#: .\templates\frontpages\research\research_detail_edit.html:85
+msgid "Research you Posted"
+msgstr "የርሶ ምርምሮች"
 
-#: .\venv\Lib\site-packages\django\views\csrf.py:120
-msgid ""
-"If you have configured your browser to disable “Referer” headers, please re-"
-"enable them, at least for this site, or for HTTPS connections, or for “same-"
-"origin” requests."
-msgstr ""
+#: .\templates\frontpages\research\research_detail_edit.html:139
+msgid "Edit a Research"
+msgstr "ምርምሮን ያስተካክሉ"
 
-#: .\venv\Lib\site-packages\django\views\csrf.py:124
-msgid ""
-"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
-"including the “Referrer-Policy: no-referrer” header, please remove them. The "
-"CSRF protection requires the “Referer” header to do strict referer checking. "
-"If you’re concerned about privacy, use alternatives like <a rel=\"noreferrer"
-"\" …> for links to third-party sites."
-msgstr ""
+#: .\templates\frontpages\research\research_detail_edit.html:143
+#: .\templates\frontpages\research\research_form.html:104
+msgid "Research Title"
+msgstr "የምርምር ርዕስ"
 
-#: .\venv\Lib\site-packages\django\views\csrf.py:132
-msgid ""
-"You are seeing this message because this site requires a CSRF cookie when "
-"submitting forms. This cookie is required for security reasons, to ensure "
-"that your browser is not being hijacked by third parties."
-msgstr ""
+#: .\templates\frontpages\research\research_detail_edit.html:153
+#: .\templates\frontpages\research\research_form.html:111
+msgid "Research Status"
+msgstr "የምርምር ሂደት"
 
-#: .\venv\Lib\site-packages\django\views\csrf.py:137
-msgid ""
-"If you have configured your browser to disable cookies, please re-enable "
-"them, at least for this site, or for “same-origin” requests."
-msgstr ""
+#: .\templates\frontpages\research\research_detail_edit.html:169
+msgid "Research Category Name"
+msgstr "የምርምር ምድብ "
 
-#: .\venv\Lib\site-packages\django\views\csrf.py:142
-msgid "More information is available with DEBUG=True."
-msgstr ""
+#: .\templates\frontpages\research\research_detail_edit.html:200
+msgid "The Current Document"
+msgstr "የአሁኑ ሰነድ"
 
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:41
-msgid "No year specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:61
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:111
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:208
-msgid "Date out of range"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:90
-msgid "No month specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:142
-msgid "No day specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:188
-msgid "No week specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:338
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:367
-#, python-format
-msgid "No %(verbose_name_plural)s available"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:589
-#, python-format
-msgid ""
-"Future %(verbose_name_plural)s not available because %(class_name)s."
-"allow_future is False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:623
-#, python-format
-msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\detail.py:54
-#, python-format
-msgid "No %(verbose_name)s found matching the query"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\list.py:67
-msgid "Page is not “last”, nor can it be converted to an int."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\list.py:72
-#, python-format
-msgid "Invalid page (%(page_number)s): %(message)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\list.py:154
-#, python-format
-msgid "Empty list and “%(class_name)s.allow_empty” is False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\static.py:40
-msgid "Directory indexes are not allowed here."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\static.py:42
-#, python-format
-msgid "“%(path)s” does not exist"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\static.py:80
-#, python-format
-msgid "Index of %(directory)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:7
-msgid "Django: the Web framework for perfectionists with deadlines."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:346
-#, python-format
-msgid ""
-"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
-"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:368
-msgid "The install worked successfully! Congratulations!"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:369
-#, python-format
-msgid ""
-"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
-"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
-"\">DEBUG=True</a> is in your settings file and you have not configured any "
-"URLs."
-msgstr ""
+#: .\templates\frontpages\research\research_detail_edit.html:204
+msgid "No attachments in the current time"
+msgstr "ሰነድ የለም"
 
 #: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:384
 msgid "Django Documentation"
 msgstr "ፋይል አውርድ"
 
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:385
-msgid "Topics, references, &amp; how-to’s"
-msgstr ""
+#: .\templates\frontpages\research\research_detail_edit.html:212
+msgid "Upload your attachment (if you have one)"
+msgstr "ሰነድ ይላኩ"
 
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:396
-msgid "Tutorial: A Polling App"
-msgstr ""
+#: .\templates\frontpages\research\research_form.html:100
+msgid "Add a Research"
+msgstr "አዲስ ምርምር አስገባ"
 
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:397
-msgid "Get started with Django"
-msgstr ""
+#: .\templates\frontpages\research\research_form.html:119
+msgid "Research Category"
+msgstr "ምርምር ምረጥ"
 
 #: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:408
 #, fuzzy
@@ -2936,94 +2924,111 @@ msgstr ""
 msgid "Django Community"
 msgstr "ፋይል አውርድ"
 
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:409
-msgid "Connect, get help, or contribute"
+#: .\templates\frontpages\tender\customer_tender_detail.html:22
+msgid "Tender"
+msgstr "ጨረታ"
+
+#: .\templates\frontpages\tender\customer_tender_detail.html:40
+msgid "Title"
+msgstr "ርዕስ"
+
+#: .\templates\frontpages\tender\customer_tender_list.html:67
+#, fuzzy
+#| msgid "Apply Filter"
+msgid "Filter "
+msgstr "አጣራ"
+
+#: .\templates\frontpages\tender\customer_tender_list.html:79
+msgid "Free Only"
+msgstr "ነፃ ብቻ"
+
+#: .\templates\frontpages\tender\customer_tender_list.html:86
+msgid "Paid Only"
+msgstr "የሚያስከፍሉ ብቻ"
+
+#: .\templates\frontpages\tender\customer_tender_list.html:94
+#: .\templates\frontpages\tender\customer_tender_list.html:97
+msgid "Open Only"
+msgstr "ክፈት ብቻ"
+
+#: .\templates\frontpages\tender\customer_tender_list.html:168
+msgid "Posted"
+msgstr "በ"
+
+#: .\templates\frontpages\vacancy\vacancy_list.html:57
+#: .\templates\frontpages\vacancy\vacancy_list.html:60
+#, fuzzy
+#| msgid "Vacancy"
+msgid "Vacancy list"
+msgstr "ክፍት የሥራ ቦታ"
+
+#: .\templates\frontpages\vacancy\vacancy_list.html:120
+#, fuzzy
+#| msgid "cateory"
+msgid "category"
+msgstr "ምድብ"
+
+#: .\templates\frontpages\vacancy\vacancy_list.html:124
+#, fuzzy
+#| msgid "Employee Type"
+msgid "Employment Type"
+msgstr "የቅጥር አይነት"
+
+#: .\templates\frontpages\vacancy_detail.html:66
+msgid "Cateory"
+msgstr "ምድብ"
+
+#: .\templates\frontpages\vacancy_detail.html:71
+msgid "Campany"
+msgstr "ድርጅቶች"
+
+#: .\templates\frontpages\vacancy_detail.html:87
+msgid "Starting date"
+msgstr "የሚደምርበት ቀን"
+
+#: .\templates\frontpages\vacancy_detail.html:91
+msgid "Ending date"
+msgstr "የሚያልቅበት ቀን"
+
+#: .\templates\frontpages\vacancy_list.html:87
+msgid "cateory"
+msgstr "ምድብ"
+
+#: .\templates\frontpages\vacancy_list.html:90
+msgid "Employee Type"
+msgstr "የቅጥር አይነት"
+
+#: .\templates\registration\logged_out.html:10
+msgid "Thanks for spending some quality time with the Web site today."
+msgstr "ለነበረን ጊዘ እናመሰናለን"
+
+#: .\templates\registration\logged_out.html:12
+msgid "Log in again"
+msgstr "እንደገና ግባ"
+
+#: .\templates\registration\password_change_done.html:15
+#, fuzzy
+#| msgid "Password change"
+msgid "Your password was changed."
+msgstr "የይለፍ ቃል ቀይር"
+
+#: .\templates\registration\password_reset_done.html:68
+msgid ""
+"We’ve emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
 msgstr ""
 
-#: .\venv\Lib\site-packages\django_summernote\views.py:71
-msgid "Only POST method is allowed"
+#: .\templates\registration\password_reset_done.html:70
+msgid ""
+"If you don’t receive an email, please make sure you’ve entered the address "
+"you registered with, and check your spam folder."
 msgstr ""
 
-#: .\venv\Lib\site-packages\django_summernote\views.py:86
-msgid "Attachment module is disabled"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django_summernote\views.py:93
-msgid "Only authenticated users are allowed"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django_summernote\views.py:99
-msgid "No files were requested"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django_summernote\views.py:140
-msgid "File size exceeds the limit allowed and cannot be saved"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django_summernote\views.py:160
-msgid "Failed to save attachment"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:46
-msgid "Confidential"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:47
-msgid "Public"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:55
-msgid "Authorization code"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:56
-msgid "Implicit"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:57
-msgid "Resource owner password-based"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:58
-msgid "Client credentials"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:73
-msgid "Allowed URIs list, space separated"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:148
-#, python-brace-format
-msgid "Unauthorized redirect scheme: {scheme}"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\models.py:152
-#, python-brace-format
-msgid "redirect_uris cannot be empty with grant_type {grant_type}"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\oauth2_validators.py:168
-msgid "The access token is invalid."
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\oauth2_validators.py:175
-msgid "The access token has expired."
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\oauth2_validators.py:182
-msgid "The access token is valid but does not have enough scope."
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_confirm_delete.html:6
-msgid "Are you sure to delete the application"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:10
-msgid "Client id"
-msgstr ""
-
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:15
-msgid "Client secret"
+#: .\templates\registration\password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
 msgstr ""
 
 #: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:20
@@ -3032,22 +3037,22 @@ msgstr ""
 msgid "Client type"
 msgstr "የቅጥር አይነት"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:25
-msgid "Authorization Grant Type"
+#: .\templates\registration\password_reset_email.html:8
+msgid "Your username, in case you’ve forgotten:"
 msgstr ""
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:30
-msgid "Redirect Uris"
+#: .\templates\registration\password_reset_email.html:10
+msgid "Thanks for using our site!"
 msgstr ""
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:36
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_form.html:35
-msgid "Go Back"
+#: .\templates\registration\password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
 msgstr ""
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:37
-msgid "Edit"
-msgstr ""
+#~| msgid "About Us"
+#~ msgid "about"
+#~ msgstr "ስለ እኛ"
 
 #: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_form.html:9
 #, fuzzy
@@ -3055,9 +3060,8 @@ msgstr ""
 msgid "Edit application"
 msgstr "የአመልካች ቅጽ"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_form.html:37
-msgid "Save"
-msgstr ""
+#~ msgid "All Listings"
+#~ msgstr "ሁሉም"
 
 #: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_list.html:6
 #, fuzzy
@@ -3065,7 +3069,6 @@ msgstr ""
 msgid "Your applications"
 msgstr "የአመልካች ቅጽ"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_list.html:14
 #, fuzzy
 #| msgid "Total Applications"
 msgid "New Application"
@@ -3077,50 +3080,59 @@ msgstr "የአመልካች ቅጽ"
 msgid "No applications defined"
 msgstr "የማምልከቻ ቅጽ"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_list.html:17
-msgid "Click here"
-msgstr ""
+#, fuzzy
+#~| msgid "Company Tin Number"
+#~ msgid "Floating point number"
+#~ msgstr "ኩባንያ ቲን ቁጥር"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_list.html:17
-msgid "if you want to register a new one"
-msgstr ""
+#~ msgid "Currently"
+#~ msgstr "ገንዘብ"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_registration_form.html:5
-msgid "Register a new application"
-msgstr ""
+#, fuzzy
+#~| msgid "Search Now"
+#~ msgid "March"
+#~ msgstr "ፈልግ"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorize.html:8
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorize.html:30
-msgid "Authorize"
-msgstr ""
+#, fuzzy
+#~| msgid "Phone Number"
+#~ msgid "November"
+#~ msgstr "ስልክ ቁጥር"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorize.html:17
-msgid "Application requires following permissions"
-msgstr ""
+#~ msgid "mar"
+#~ msgstr "አማርኛ"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-oob.html:12
-msgid "Success"
-msgstr ""
+#, fuzzy
+#~| msgid "mar"
+#~ msgid "apr"
+#~ msgstr "አማርኛ"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-oob.html:14
-msgid "Please return to your application and enter this code:"
-msgstr ""
+#, fuzzy
+#~| msgid "mar"
+#~ msgid "may"
+#~ msgstr "አማርኛ"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-token-delete.html:6
-msgid "Are you sure you want to delete this token?"
-msgstr ""
+#, fuzzy
+#~| msgid "Project"
+#~ msgid "oct"
+#~ msgstr "ፕሮጀክት"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-tokens.html:6
-msgid "Tokens"
-msgstr ""
+#, fuzzy
+#~| msgid "Search Now"
+#~ msgctxt "abbrev. month"
+#~ msgid "March"
+#~ msgstr "ፈልግ"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-tokens.html:11
-msgid "revoke"
-msgstr ""
+#, fuzzy
+#~| msgid "Search Now"
+#~ msgctxt "alt. month"
+#~ msgid "March"
+#~ msgstr "ፈልግ"
 
-#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-tokens.html:19
-msgid "There are no authorized tokens yet."
-msgstr ""
+#, fuzzy
+#~| msgid "Phone Number"
+#~ msgctxt "alt. month"
+#~ msgid "November"
+#~ msgstr "ስልክ ቁጥር"
 
 #~| msgid "About Us"
 #~ msgid "about"

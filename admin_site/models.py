@@ -4,19 +4,19 @@ from django.conf import settings
 from django.utils import timezone
 
 CAT_LIST = (
-    ('','Select Main Category'),
+    ('','Select Sector'),
     ("Food",'Food'),
     ("Beverage",'Beverages'),
     ("Pharmaceuticals",'Pharmaceuticals'),
 )
 
 class Category(models.Model):
-    category_type = models.CharField(choices=CAT_LIST,max_length=200,verbose_name="Category Type(English)")
-    category_type_am = models.CharField(choices=CAT_LIST,max_length=200,verbose_name="Category Type(Amharic)")
-    category_name = models.CharField(max_length=200,verbose_name="Category Name(English)")
-    category_name_am = models.CharField(max_length=200,verbose_name="Category Name(Amharic)")
-    description = models.TextField(verbose_name="Description(English)")
-    description_am = models.TextField(verbose_name="Description(Amharic)")
+    category_type = models.CharField(choices=CAT_LIST,max_length=200,verbose_name="Sector Name(English)")
+    category_type_am = models.CharField(choices=CAT_LIST,max_length=200,verbose_name="Sector Sector(Amharic)")
+    category_name = models.CharField(max_length=200,verbose_name="Sub Sector Name(English)")
+    category_name_am = models.CharField(max_length=200,verbose_name="Sub Sector Name(Amharic)")
+    description = models.TextField(verbose_name="Description(English)",default="")
+    description_am = models.TextField(verbose_name="Description(Amharic)",default="")
     icons = models.ImageField()
     created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='category_created_by',null=True)
     created_date	= models.DateTimeField(auto_now_add=True)

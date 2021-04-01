@@ -31,7 +31,7 @@ class Company(models.Model):
 	geo_location	= gis_models.PointField(verbose_name="Company Location",null=True)
 	ownership_form = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,
 										verbose_name="Form Of Ownership",related_name="ownership_form")
-	established_yr	= models.IntegerField(default=0,verbose_name="Established Year")
+	established_yr	= models.IntegerField(verbose_name="Established Year")
 	detail = models.TextField(verbose_name="Company Description in English",default="")
 	detail_am = models.TextField(verbose_name="Company Description in Amharic",default="")
 	contact_person	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True,related_name="contact_person") # contact person
@@ -126,13 +126,13 @@ class Company(models.Model):
 # Company Address Model
 class CompanyAddress(models.Model):
 	company = models.OneToOneField(Company,on_delete=models.CASCADE,related_name="company_address")
-	region = models.ForeignKey(RegionMaster, verbose_name="Rigion",on_delete=models.RESTRICT,null=True)
-	city_town = models.CharField(max_length=255, verbose_name="City Town",null=True,blank=True)
-	subcity_zone = models.CharField(max_length=255, verbose_name="Subcity zone",null=True,blank=True)
-	woreda = models.CharField(max_length=255, verbose_name="Woreda",null=True,blank=True)
+	region = models.ForeignKey(RegionMaster, verbose_name="Rigion",on_delete=models.RESTRICT)
+	city_town = models.CharField(max_length=255, verbose_name="City Town")
+	subcity_zone = models.CharField(max_length=255, verbose_name="Subcity zone")
+	woreda = models.CharField(max_length=255, verbose_name="Woreda")
 	kebele = models.CharField(max_length=255, verbose_name="Kebele",null=True,blank=True)
 	local_area = models.CharField(max_length=255, verbose_name="Local Area",null=True,blank=True)
-	phone_number = models.CharField(max_length=255, verbose_name="Phone Number",null=True,blank=True)
+	phone_number = models.CharField(max_length=255, verbose_name="Phone Number")
 	fax = models.CharField(max_length=255, verbose_name="Fax",null=True,blank=True)
 	email = models.EmailField(verbose_name="Email Link", max_length=255,null=True,blank=True)
 	facebooklink = models.CharField(verbose_name="Facebook Link", max_length=255,null=True,blank=True)

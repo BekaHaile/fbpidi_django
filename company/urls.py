@@ -2,7 +2,7 @@ from django.urls import path
 from company.views.views import (
     CompaniesDetailView,CompaniesView,CreateCompanyProfile,
     CreateFbpidiCompanyProfile, CompanyByMainCategory,
-    ProjectList,ProjectDetail
+    ProjectList,ProjectDetail,SearchCompany
 )
 from company.views.company_views import *
 
@@ -13,7 +13,7 @@ urlpatterns = [
     path("about/<pk>/",CompanyAbout.as_view(),name="company_about"),
     path("contact/<pk>/",CompanyContact.as_view(),name="contact_company"),
     path("subscribe/", Subscribe, name="subscribe"),
-    
+    path("search-company/",SearchCompany.as_view(),name='search_company'),
     path("company-products/<pk>/",CompanyProductList.as_view(),name="company_products"),
     path("company-product-detail/<str:company>/<pk>/",CompanyProductdetail.as_view(),name="company_product_detail"),
     path("company-projects/<pk>/",CompanyProjectList.as_view(),name="company_projects"),

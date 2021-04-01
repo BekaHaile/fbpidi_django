@@ -27,11 +27,11 @@ from company.models import *
 
 def return_years(company):
     YEAR_CHOICES=[('','Select Year'),]
-    YEAR_CHOICES += [(r,r) for r in range(company.established_year, datetime.date.today().year+1)]
+    YEAR_CHOICES += [(r,r) for r in range(company.established_year, datetime.date.today().year+8)]
     return YEAR_CHOICES
 
 YEAR_CHOICES=[('','Select Year'),]
-YEAR_CHOICES += [(r,r) for r in range(2000, datetime.date.today().year+1)]
+YEAR_CHOICES += [(r,r) for r in range(2000, datetime.date.today().year+8)]
 
 class InvestmentCapitalForm(forms.ModelForm):
 
@@ -270,7 +270,7 @@ class CompanyAddressForm(forms.ModelForm):
                     'linkedinlink','googlelink')
         
         widgets = {
-            'region':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'region':forms.Select(attrs={'class':'form-control'}),
             'city_town':forms.TextInput(attrs={'class':'form-control','placeholder':'City/Town'}),
             'subcity_zone':forms.TextInput(attrs={'class':'form-control','placeholder':'Subcity/Zone'}),
             'woreda':forms.TextInput(attrs={'class':'form-control','placeholder':'Woreda'}),
@@ -308,7 +308,7 @@ class CompanyProfileForm(forms.ModelForm):
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'logo':forms.FileInput(attrs={'class':''}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
-            'established_yr':forms.TextInput(attrs={'class':'form-control','placeholder':'Established Year'}),
+            'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
@@ -328,14 +328,14 @@ class CompanyProfileForm(forms.ModelForm):
         if (x or y or w or h ):
                 image = Image.open(profile.logo)
                 cropped_image = image.crop((x, y, w+x, h+y))
-                resized_image = cropped_image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image = cropped_image.resize((400, 400), Image.ANTIALIAS)
                 resized_image.save(profile.logo.path)
 
                 return profile
                 
         else:
                 image = Image.open(profile.logo)
-                resized_image = image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image = image.resize((400, 400), Image.ANTIALIAS)
                 resized_image.save(profile.logo.path)
                 return profile
                     
@@ -366,7 +366,7 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'logo':forms.FileInput(attrs={'class':''}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 900, 'map_height': 400}),
-            'established_yr':forms.TextInput(attrs={'class':'form-control','placeholder':'Established Year'}),
+            'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform'}),
@@ -388,14 +388,14 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
         if (x or y or w or h ):
                 image = Image.open(profile.logo)
                 cropped_image = image.crop((x, y, w+x, h+y))
-                resized_image = cropped_image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image = cropped_image.resize((400, 400), Image.ANTIALIAS)
                 resized_image.save(profile.logo.path)
 
                 return profile
                 
         else:
                 image = Image.open(profile.logo)
-                resized_image = image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image = image.resize((400, 400), Image.ANTIALIAS)
                 resized_image.save(profile.logo.path)
                 return profile
 
@@ -436,7 +436,7 @@ class CompanyUpdateForm(forms.ModelForm):
 
     class Meta:
         model=Company
-        fields=('name','name_am','logo','established_yr','category','ownership_form','trade_license',
+        fields=('name','contact_person','name_am','logo','established_yr','category','ownership_form','trade_license',
             'expansion_plan','expansion_plan_am','geo_location',
             'detail','detail_am',
             'orgn_strct','certification','management_tools','working_hours',
@@ -479,6 +479,7 @@ class CompanyUpdateForm(forms.ModelForm):
                 'gas_waste_mgmnt_measure_am':forms.Textarea(attrs={'class':'summernote'}),
                 'detail':forms.Textarea(attrs={'class':'summernote'}),
                 'detail_am':forms.Textarea(attrs={'class':'summernote'}),
+                'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             }
         
     
@@ -494,14 +495,14 @@ class CompanyUpdateForm(forms.ModelForm):
         if (x or y or w or h ):
                 image = Image.open(profile.logo)
                 cropped_image = image.crop((x, y, w+x, h+y))
-                resized_image = cropped_image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image = cropped_image.resize((400, 400), Image.ANTIALIAS)
                 resized_image.save(profile.logo.path)
 
                 return profile
                 
         else:
                 image = Image.open(profile.logo)
-                resized_image = image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image = image.resize((400, 400), Image.ANTIALIAS)
                 resized_image.save(profile.logo.path)
                 return profile
             
@@ -838,7 +839,7 @@ class SliderImageForm(forms.ModelForm):
         if (x or y or w or h ):
                 image = Image.open(slider.slider_image)
                 cropped_image = image.crop((x, y, w+x, h+y))
-                resized_image = cropped_image.resize((1280, 1280), Image.ANTIALIAS)
+                resized_image = cropped_image.resize((1280, 720), Image.ANTIALIAS)
                 resized_image.save(slider.slider_image.path)
 
                 return slider
