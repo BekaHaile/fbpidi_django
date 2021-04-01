@@ -371,7 +371,9 @@
 				});
 
 				$("#address_tab").click(function(){
-						$("#id_region").val("{{object.get_company_address.region}}".toUpperCase());
+						$('select[name="region"]').find('option[value="{{object.get_company_address.region.id}}"]').attr("selected",true);
+						
+						// $("#id_region").val("{{object.get_company_address.region}}".toUpperCase());
 						$("#id_city_town").val("{{object.get_company_address.city_town}}".toUpperCase());
 						$("#id_subcity_zone").val("{{object.get_company_address.subcity_zone}}".toUpperCase());
 						$("#id_woreda").val("{{object.get_company_address.woreda}}".toUpperCase());

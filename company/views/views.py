@@ -266,10 +266,14 @@ class CreateCompanyAddress(LoginRequiredMixin,CreateView):
     form_class = CompanyAddressForm
 
     def form_valid(self,form):
-        address = form.save(commit=False)
-        address.company = Company.objects.get(id=self.kwargs['company'])
-        address.save()
-        return JsonResponse({'error':False,'message':'Company Address Saved Successfully'})
+        try:
+            address = form.save(commit=False)
+            address.company = Company.objects.get(id=self.kwargs['company'])
+            address.save()
+            return JsonResponse({'error':False,'message':'Company Address Saved Successfully'})
+        except IntegrityError as e:
+            return JsonResponse({'error':True,'message':'Company Address is Already Added'})
+        
 
 class UpdateCompanyAddress(LoginRequiredMixin,UpdateView):
     model = CompanyAddress
@@ -1039,6 +1043,20 @@ class UpdateSliderImage(LoginRequiredMixin,UpdateView):
 
 
 ############## newly added, delete this commet after everything has worked right
+class SearchCompany(View):
+    def post(self,*args,**kwargs):
+        template_name = "frontpages/company/company_list.html"
+        companies = Company.objects.all().exclude(main_category='FBPIDI')
+        if self.request.POST['name'] != '':
+            companies = Company.objects.filter(Q(name=self.request.POST['name'])
+            |Q(company_product__name=self.request.POST['name'])) 
+        try:
+            if self.request.POST['sector'] !='' or self.request.POST['sector'] != 'Select':
+                companies = companies.filter(Q(category__id=self.request.POST['sector']))
+        except ValueError:
+            companies=companies
+
+        return render(self.request,template_name,{'object_list':companies})
 
 class CompanyByMainCategory(ListView):
     model = Company

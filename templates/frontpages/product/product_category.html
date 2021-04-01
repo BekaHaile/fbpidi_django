@@ -15,31 +15,27 @@
 									<h1 class=""><span class="font-weight-bold">{{object_list.count}}</span> Products available</h1>
 								</div>
 								<div class="search-background px-4 py-3 mt-4">
+									<form action="{%url 'search_product'%}" method="post">{%csrf_token%}
 									<div class="form row row-sm">
 										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
-											<input type="text" class="form-control input-lg border-white" id="text" placeholder="Search Products">
+											<input type="text" name="name" class="form-control input-lg border-white" id="text" placeholder="Search Products">
 										</div>
 										<div class="form-group col-xl-4 col-lg-4 select2-lg  col-md-12 mb-0 border-white">
-											<select class="form-control select2-show-search w-100" data-placeholder="Select">
+											<select name="sector" class="form-control select2-show-search w-100" data-placeholder="Select">
 												<optgroup label="Categories">
 													<option>Select</option>
-													<option value="1">AutoMobile</option>
-													<option value="2">Real Estate</option>
-													<option value="3">Computer</option>
-													<option value="4">Clothing</option>
-													<option value="5">Job</option>
-													<option value="6">Services</option>
-													<option value="7">Electronics</option>
-													<option value="8">Mobile</option>
-													<option value="9">Events</option>
-													<option value="10">Constructions</option>
+													<option value="">All Categories</option>
+													{%for sub_sec in sub_sectors%}
+													<option value="{{sub_sec.id}}">{{sub_sec.category_name}}</option>
+													{%endfor%}
 												</optgroup>
 											</select>
 										</div>
 										<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
-											<a href="#" class="btn btn-lg btn-block btn-secondary">Search</a>
+											<button type="submit" class="btn btn-lg btn-block btn-secondary">Search</button>
 										</div>
 									</div>
+								</form>
 								</div>
 							</div>
 						</div>
@@ -80,23 +76,23 @@
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
 											</ul>
 											<div class="d-sm-flex">
-												<label class="mr-2 mt-2 mb-sm-1 sort-label">Sort By:</label>
+												<label class="mr-2 mt-2 mb-sm-1 sort-label">{% trans "Sort By" %}:</label>
 												<div class="selectgroup">
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="All" class="selectgroup-input" checked="">
-														<span class="selectgroup-button d-md-flex">All <i class="fa fa-sort ml-2 mt-1"></i></span>
+														<span class="selectgroup-button d-md-flex">{% trans "All" %} <i class="fa fa-sort ml-2 mt-1"></i></span>
 													</label>
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">Distance</span>
+														<span class="selectgroup-button">{% trans "Distance" %}</span>
 													</label>
 													<label class="selectgroup-item mb-0">
 														<input type="radio" name="value" value="Latest" class="selectgroup-input">
-														<span class="selectgroup-button">Latest</span>
+														<span class="selectgroup-button">{% trans "Latest" %}</span>
 													</label>
 													<label class="selectgroup-item mb-0">
 														<input type="radio" name="value" value="Rating" class="selectgroup-input">
-														<span class="selectgroup-button">Rating</span>
+														<span class="selectgroup-button">{% trans "Rating" %}</span>
 													</label>
 												</div>
 											</div>
@@ -165,7 +161,19 @@
 																	</div>
 																</div>
 																<div class="ml-auto mt-3 mt-sm-0">
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																		<!-- the add_to_cart is a js function written inside frontpages/layout.html -->
+																		
+
+																		<div style = "display: inline;" class="mr-0">
+																			<!-- <form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" class="mr-0">
+																				<input type="hidden" name="products" value="{{product.id}},">
+																				<button  type="submit">Contact Now</button> -->
+																			<a href="#"><i class="fa fa-map-signs"></i>  {% trans "Get Directions" %}</a></div>
+																			<!-- </form> -->
+																			<!-- <button class= " bg-secondary" id = "prod_{{product.id}}" onclick = "add_to_cart('{{product.id}}')">Add To Basket</button> -->
+																			
+																		</div>
 																</div>
 															</div>
 														</div>
@@ -238,7 +246,7 @@
 																			</div>
 																		</div>
 																		<div class="ml-auto mt-3 mt-sm-0">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
+																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>   {% trans "Get Directions" %}</a></div>
 																		</div>
 																	</div>
 																</div>

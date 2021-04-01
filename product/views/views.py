@@ -1,5 +1,6 @@
 import random
 import string
+import json
 
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views.generic import View,ListView,UpdateView,CreateView,DetailView
@@ -8,6 +9,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+from django.http import JsonResponse
+from rest_framework import serializers
 
 from django.db.models import Q
 
@@ -407,6 +410,7 @@ class CreateProductionCapacity(LoginRequiredMixin,CreateView):
         else:
             pc = form.save(commit=False)
             pc.company = self.request.user.get_company()
+            pc.p_date = datetime.datetime.now()
             pc.created_by = self.request.user
             pc.save()
             messages.success(self.request,"Production Capacity Created")
@@ -885,6 +889,7 @@ class DecrementFromCart(LoginRequiredMixin,View):
             messages.warning(self.request,"You do not have order")
             return redirect("index")    
 
+
 class CheckoutView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = {}
@@ -912,6 +917,78 @@ class CheckoutView(LoginRequiredMixin,View):
             order.ordered = True
             order.save()
             return redirect("")
+
+ 
+class p_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ("name", "name_am",  "image")
+
+
+def FetchInquiryProducts(request):
+    data = json.loads(request.body)
+    # remove the last , from the incoming string
+    prods_id_list = data['products'][:-1] 
+    product_ids = prods_id_list.split(",")
+    product_list = [int(i) for i in product_ids]
+    products = Product.objects.filter(id__in = product_list).distinct()
+    
+    return JsonResponse( p_serializer(products, many = True).data, safe = False)
+
+# def InquiryForm(request):
+    
+    # print(data['products'])
+    # return render(request, "frontpages/product/inquiry_form.html",{})
+
+class InquiryForm(View):
+    selected_prods = []
+    def get(self, *args, **kwargs):
+        try:
+            prods_id_list = self.request.GET['products'][:-1] 
+            product_ids = prods_id_list.split(",")
+            product_list = [int(i) for i in product_ids]
+            products = Product.objects.filter(id__in = product_list).distinct()
+            selected_prods = products
+            return render(self.request, "frontpages/product/inquiry_form.html", {'products':products,'prods_id_list': self.request.GET['products'],'form':ProductInquiryForm})
+        except Exception as e:
+            print("@@@@@@ Exception at InquiryForm get ",e)
+            return redirect ('index')
+    def post(self, *args,**kwargs):
+        try:
+            prods_id_list = self.request.POST['products'][:-1] 
+            product_ids = prods_id_list.split(",")
+            product_list = [int(i) for i in product_ids]
+            products = Product.objects.filter(id__in = product_list).distinct()
+            form = ProductInquiryForm(self.request.POST)
+            if form.is_valid:
+                for p in products:
+                    print("ppppppppppp",p)
+                    i = form.save(commit = False)
+                    i.product = p
+                    i.save()
+                    print ("saved the inquiry for product ",p.name, " with inquiry ",i)
+            else:
+                print("form invalid")
+            return render(self.request, "frontpages/product/success_inquiry.html",{'email':self.request.POST['sender_email']})
+        except Exception as e:
+            print("@@@ Exception ",e)
+            return redirect("index")
+
+
+# def  InquiryForm(request):
+#     if request.Method == "GET":
+#         data = json.loads(request.body)
+#         prods_id_list = data['products'][:-1] 
+#         product_ids = prods_id_list.split(",")
+#         product_list = [int(i) for i in product_ids]
+#         products = Product.objects.filter(id__in = product_list).distinct()
+#         return render(request, "frontpages/product/inquiry_form", {'products':products})
+
+
+    
+
+
+
 
 ################### newly added , delete this comment
 class ProductByCategoryView(ListView):
@@ -976,6 +1053,22 @@ class ProductByMainCategory(ListView):
         elif self.kwargs['option'] == "all":
             return Product.objects.all()
 
+class SearchProduct(View):
+
+    def post(self,*args,**kwargs):
+        template_name = "frontpages/product/product_category.html"
+        products = Product.objects.all()
+        
+        if self.request.POST['name'] != '':
+            products = Product.objects.filter(Q(name=self.request.POST['name'])|Q(brand__brand_name__icontains=self.request.POST['name'])|Q(brand__product_type__sub_category_name__icontains=self.request.POST['name'])
+                                    )
+        try:
+            if self.request.POST['sector'] !='' or self.request.POST['sector'] != "Select":
+                products = products.filter(Q(brand__product_type__category_name__id=self.request.POST['sector']))
+        except ValueError as e:
+            products = products 
+        return render(self.request,template_name,{'object_list':products})
+        
 class ProductDetailView(DetailView):
     model = Product
     template_name = "frontpages/product/product_detail.html"
@@ -1002,4 +1095,6 @@ class CreateReview(CreateView):
         review.product = Product.objects.get(id=self.kwargs['product'])
         review.save()
         return redirect('product_detail',pk=self.kwargs['product'])
-        
+    
+    def form_invalid(self,form):
+        return redirect('product_detail',pk=self.kwargs['product'])

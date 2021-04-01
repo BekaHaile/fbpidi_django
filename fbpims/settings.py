@@ -111,6 +111,9 @@ TEMPLATES = [
 
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                'product.context_processors.sectors',
+                'product.context_processors.sub_sectors',
+                'product.context_processors.product_type',
 
             ],
         },

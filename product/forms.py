@@ -16,14 +16,14 @@ class CategoryForm(forms.ModelForm):
 
     class Meta:
         model = Category
-        fields = ('category_type','category_name','category_name_am','description','description_am','icons')
+        fields = ('category_type','category_name','category_name_am','icons')
         widgets = {
             'icons':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
             'category_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-            'category_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Sub Category Name(English)'}),
-            'description':forms.Textarea(attrs={'class':'summernote'}),
-            'category_name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Sub Category Name(Amharic)'}),
-            'description_am':forms.Textarea(attrs={'class':'summernote'}),
+            'category_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Sub Sector Name(English)'}),
+            # 'description':forms.Textarea(attrs={'class':'summernote'}),
+            'category_name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Sub Sector Name(Amharic)'}),
+            # 'description_am':forms.Textarea(attrs={'class':'summernote'}),
         }
 
 class BrandForm(forms.ModelForm):
@@ -46,13 +46,13 @@ class SubCategoryForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
         super(SubCategoryForm,self).__init__(*args,**kwargs)
         self.fields['category_name'].queryset = Category.objects.all()
-        self.fields['category_name'].empty_label = "Select A Product Category"
+        self.fields['category_name'].empty_label = "Select Sub Sector"
 
    
 
     class Meta:
         model = SubCategory
-        fields = ('category_name','sub_category_name','sub_category_name_am','uom','description','description_am','icons')
+        fields = ('category_name','sub_category_name','description','description_am','sub_category_name_am','uom','icons')
         widgets = {
             'icons':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
             'category_name':forms.Select(attrs={'class':'form-control form-control-uniform'}),
@@ -115,14 +115,14 @@ class ProductCreationForm(forms.ModelForm):
         if (x or y or w or h ):
                 image = Image.open(product.image)
                 cropped_image = image.crop((x, y, w+x, h+y))
-                resized_image = cropped_image.resize((1280, 720), Image.ANTIALIAS)
+                resized_image = cropped_image.resize((208, 208), Image.ANTIALIAS)
                 resized_image.save(product.image.path)
 
                 return product
                 
         else:
                 image = Image.open(product.image)
-                resized_image = image.resize((1280, 720), Image.ANTIALIAS)
+                resized_image = image.resize((208, 208), Image.ANTIALIAS)
                 resized_image.save(product.image.path)
                 return product
     
@@ -161,11 +161,11 @@ class ProductionCapacityForm(forms.ModelForm):
 
     class Meta:
         model=ProductionCapacity
-        fields = ('product','p_date','install_prdn_capacity','atnbl_prdn_capacity',
+        fields = ('product','install_prdn_capacity','atnbl_prdn_capacity',
                     'actual_prdn_capacity','production_plan','extraction_rate')
         widgets = {
             'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-            'p_date':forms.DateInput(attrs={'class':'form-control','type':'date'}),
+            # 'p_date':forms.DateInput(attrs={'class':'form-control','type':'date'}),
             'install_prdn_capacity':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_install_prdn_capacity")'}),
             'atnbl_prdn_capacity':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_atnbl_prdn_capacity")'}),
             'actual_prdn_capacity':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_actual_prdn_capacity")'}),
@@ -332,3 +332,18 @@ class CheckoutForm(forms.ModelForm):
             'home_address':forms.TextInput(attrs={'class':'form-control','placeholder':'Home Address'}),
         }
     
+
+class ProductInquiryForm(forms.ModelForm):
+    attacement = forms.FileField(required=False)
+    class Meta:
+        model = ProductInquiry
+        fields = ("sender_email", "subject", "quantity","content", "attachement")
+        widgets = {
+            'sender_email':forms.TextInput(attrs={'class':'form-control','placeholder':'Your Email '}),
+            'subject':forms.TextInput(attrs={'class':'form-control','placeholder':'subject '}),
+            'quantity':forms.NumberInput(attrs={'class':'form-control'}),
+            'content': forms.Textarea(attrs={'class':'summernote','placeholder':'Your inquiry content'}),
+            'attachement':forms.FileInput(attrs={'class':'form-control'})
+        }
+        
+

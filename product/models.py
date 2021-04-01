@@ -5,16 +5,20 @@ from django.utils import timezone
 from admin_site.models import Category
 from company.models import Company
 
-
+UOM=(
+    ('Pieces', 'Pieces'),
+    ('Bags', 'Bags'),
+    ('Boxes', "Boxes")
+)
 # This is For Product/Type
 class SubCategory(models.Model):
     category_name = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,
-									blank=True,verbose_name="Category Type",related_name="sub_category")
+									blank=True,verbose_name="Sub Sector",related_name="sub_category")
     sub_category_name = models.CharField(max_length=200,verbose_name="Product Name(English)")
     sub_category_name_am = models.CharField(max_length=200,verbose_name="Product Name(Amharic)")
     uom = models.CharField(max_length=25,verbose_name="Unit of Measurement")
-    description = models.TextField(verbose_name="Description (English)")
-    description_am = models.TextField(verbose_name="Description (Amharic)")
+    description = models.TextField(verbose_name="Description (English)",default="")
+    description_am = models.TextField(verbose_name="Description (Amharic)",default="")
     icons = models.ImageField( verbose_name="Product Icon")
     created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='product_created_by',null=True)
     created_date	= models.DateTimeField(auto_now_add=True)
@@ -219,6 +223,21 @@ class OrderProduct(models.Model):
     
     def get_total_item_price(self):
         return self.product.price().price * self.quantity
+
+
+class ProductInquiry(models.Model):
+    sender_email = models.EmailField(verbose_name="sender email",)
+    product = models.ForeignKey(Product, on_delete = models.CASCADE)
+    subject = models.CharField(max_length=200,)
+    quantity = models.IntegerField()
+    pieces = models.CharField(max_length=100)
+    content = models.TextField()
+    attachement = models.FileField(upload_to = "InquiryDocument/", max_length=254, verbose_name="Inquiry document",help_text="pdf, Max size 3MB", blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def save(self):
+        self.pieces = self.product.brand.product_type.uom
+        super(ProductInquiry, self).save()
 
 
 class Order(models.Model):

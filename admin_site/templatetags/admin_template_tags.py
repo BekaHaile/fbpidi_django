@@ -37,6 +37,99 @@ def get_sum(data):
     for d in data:
         sm+=d['data']
     return sm
+
+@register.filter
+def get_total_prodn(data):
+    total = 0
+    for tpa in data:
+        total += tpa['production_amount']
+    return total
+
+@register.filter
+def get_total_actual(data):
+    total = 0
+    for tpa in data:
+        total += tpa['actual_production']
+    return total
+
+@register.simple_tag
+def get_capital_util(x,y):
+    if float(y) > 0:
+        return round(float(float(x)/(float(y)*260))*100,2)
+    elif float(y) == 0:
+        return round(float(float(x)/(1))*100,2)
+
+@register.simple_tag
+def get_inv_cap_sum(data,option):
+    print(option)
+    total = 0
+    if option == 'machinery':
+        for i in data:
+            total += i['machinery']
+    
+    if option == 'building':
+        for i in data:
+            total += i['building']
+    if option == 'working':
+        for i in data:
+            total += i['working']
+    
+    if option == 'total':
+        for i in data:
+            total += i['total_inv_cap']
+
+    return round(total,2)
+
+@register.simple_tag
+def get_prodn_total(data,option):
+    total = 0
+    if option == 'prodn':
+        for d in data:
+            total += d['total_data']['installed']
+    
+    if option == 'actual':
+        for d in data:
+            total += d['total_data']['actual']
+
+    return round(total,2)
+
+@register.simple_tag
+def change_capital_util(thisd,last,pdata):
+    return round((float(thisd)-float(last))/float(pdata),2)
+
+@register.simple_tag
+def change_util_total(data,option):
+    total = 0
+    if option == 'thisyear':
+        for d in data:
+            total += d['pa_this']
+
+    if option == 'lastyear':
+        for d in data:
+            total += d['pa_last']
+    
+    if option == 'apc':
+        for d in data:
+            total += d['apc']
+    
+    if option == 'total':
+        x=0
+        y=0
+        a =0
+        for d in data:
+            x += d['pa_this']
+            y += d['pa_last']
+            a += d['apc']
+        total = (x-y)/a
+
+    return round(total,2)
+
+@register.simple_tag
+def get_percent(x,y):
+    return round(float(x/y)*100,2)
+
+
+
 @register.simple_tag
 def get_share(data,total):
     print(type(data),type(total))

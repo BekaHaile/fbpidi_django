@@ -25,79 +25,70 @@
 								<ul class="nav pl-0">
 									<li class=""><a href="#tab1" class="active ml-0" data-toggle="tab">{% trans "Search Products" %}</a></li>
 									<li><a href="#tab2" data-toggle="tab">{% trans "Search Companies" %}</a></li>
-									<li><a href="#tab3" data-toggle="tab">Search Others</a></li>
+									<li><a href="#tab3" data-toggle="tab">{% trans "Search Others" %}</a></li>
 								</ul>
 							</div>
 							<div class="tab-content">
 								<div class="tab-pane active" id="tab1">
+									<form action="{% url 'search_product' %}" method="post">{%csrf_token%}
 									<div class="form row">
+										
 										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
-											<input type="text" class="form-control " id="text6"
+											<input type="text" name="name" class="form-control " id="text6"
 												placeholder="{% trans 'Enter Your Product Keywords' %}">
 										</div>
 										<div class="form-group col-xl-6 col-lg-7 col-md-12 mb-0">
 											<div class="row">
 												<div class="form-group col-xl-8 col-lg-7 col-md-12 mb-0">
-													<select
+													<select name="sector"
 														class="form-control select2-show-search  border-bottom-0 br-lg-0"
 														data-placeholder="Select Category">
 														<optgroup label="Categories">
 															<option>{% trans "Select Category" %}</option>
-															<option value="0">All Categories</option>
-															<option value="1">Hotels</option>
-															<option value="2">Restaurant</option>
-															<option value="3">Events</option>
-															<option value="4">Cinema</option>
-															<option value="5">Gym</option>
-															<option value="6">Shop & Store</option>
-															<option value="7">Tours & Travels</option>
-															<option value="8">Cafe</option>
-															<option value="9">Mobile Store</option>
-															<option value="10">College</option>
+															<option value="">All Categories</option>
+															{%for sub_sec in sub_sectors%}
+															<option value="{{sub_sec.id}}">{{sub_sec.category_name}}</option>
+															{%endfor%}
 														</optgroup>
 													</select>
 												</div>
 												<div class="col-xl-4 col-lg-5 col-md-12 mb-0">
-													<a href="#" class="btn btn-block btn-secondary">{% trans "Search Now" %}</a>
+													<button type="submit" class="btn btn-block btn-secondary">{% trans "Search Now" %}</button>
 												</div>
 											</div>
 										</div>
-									</div>
+										
+									</div></form>
 								</div>
 								<div class="tab-pane" id="tab2">
+									<form action="{%url 'search_company'%}" method="post"> {%csrf_token%}
 									<div class="form row">
 										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
-											<input type="text" class="form-control  " id="text8"
+											<input type="text" name="name" class="form-control  " id="text8"
 												placeholder="{% trans 'Enter Your Companies Keywords' %}">
 										</div>
 										<div class="form-group col-xl-6 col-lg-7 col-md-12 mb-0">
 											<div class="row">
 												<div class="form-group col-xl-8 col-lg-7 col-md-12 mb-0">
-													<select
+													<select name="sector"
 														class="form-control select2-show-search  border-bottom-0 br-lg-0"
 														data-placeholder="Select Category">
 														<optgroup label="Categories">
 															<option>{% trans "Select Category" %}</option>
-															<option value="0">All Categories</option>
-															<option value="1">Hotels</option>
-															<option value="2">Restaurant</option>
-															<option value="3">Events</option>
-															<option value="4">Cinema</option>
-															<option value="5">Gym</option>
-															<option value="6">Shop & Store</option>
-															<option value="7">Tours & Travels</option>
-															<option value="8">Cafe</option>
-															<option value="9">Mobile Store</option>
-															<option value="10">College</option>
+															<option value="">All Categories</option>
+															{%for sub_sec in sub_sectors%}
+															<option value="{{sub_sec.id}}">{{sub_sec.category_name}}</option>
+															{%endfor%}
 														</optgroup>
 													</select>
 												</div>
 												<div class="col-xl-4 col-lg-5 col-md-12 mb-0">
-													<a href="#" class="btn btn-block btn-secondary">{% trans "Search Now" %}</a>
+													<button type="submit" class="btn btn-block btn-secondary">{% trans "Search Now" %}</button>
 												</div>
 											</div>
 										</div>
 									</div>
+								</form>
 								</div>
 								<div class="tab-pane" id="tab3">
 									<div class="form row">
@@ -113,17 +104,10 @@
 														data-placeholder="Select Category">
 														<optgroup label="Categories">
 															<option>{% trans "Select Category" %}</option>
-															<option value="0">All Categories</option>
-															<option value="1">Hotels</option>
-															<option value="2">Restaurant</option>
-															<option value="3">Events</option>
-															<option value="4">Cinema</option>
-															<option value="5">Gym</option>
-															<option value="6">Shop & Store</option>
-															<option value="7">Tours & Travels</option>
-															<option value="8">Cafe</option>
-															<option value="9">Mobile Store</option>
-															<option value="10">College</option>
+															<option value="">All Categories</option>
+															{%for sub_sec in sub_sectors%}
+															<option value="{{sub_sec.id}}">{{sub_sec.category_name}}</option>
+															{%endfor%}
 														</optgroup>
 													</select>
 												</div>
@@ -209,7 +193,7 @@
 
 						</div>
 						
-						<div class="blog--category">{% print_translated product.brand.product_type.category_name.category_name product.brand.product_type.category_name.category_name_am LANGUAGE_CODE%}</div>
+						<div class="blog--category">{% print_translated product.brand.product_type.sub_category_name product.brand.product_type.sub_category_name_am LANGUAGE_CODE%}</div>
 						
 					</div>
 					<div class="card-body pb-0">
@@ -589,38 +573,6 @@
 <!--</section>-->
 <!--&lt;!&ndash;/Suppliers Listings&ndash;&gt;-->
 
-<!--Subscribe section-->
-<section>
-	<div class="cover-image sptb bg-background-color" data-image-src="../../assets/images/banners/banner5.jpg">
-		<div class="content-text mb-0">
-			<div class="content-text mb-0">
-				<div class="container">
-					<div class="text-center text-white ">
-						<h2 class="mb-2">{% trans "Subscribe" %}</h2>
-						<p class="fs-16 mb-0">{% trans "It is a long established fact that a reader will be distracted by the readable." %}</p>
-						<div class="row">
-							<div class="col-lg-8 mx-auto d-block">
-								<div class="mt-5">
-									<div class="input-group sub-input mt-1">
-										<input type="text" class="form-control input-lg "
-											placeholder="{% trans 'Enter your Email' %}">
-										<div class="input-group-append ">
-											<button type="button"
-												class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
-												{% trans "Subscribe" %}
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-<!--/Subscribe section-->
 
 <!--Getting Started Section-->
 <section class="sptb bg-white">
@@ -754,469 +706,7 @@
 
 							</div>
 						</div>
-						<div class="tab-pane" id="tab-2">
-							<div class="row">
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-xl-0">
-										<div class="item-card8-img  br-tr-4 br-tl-4">
-											<img src="/static/frontpages/images/products/products/f1.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-primary mb-0">Business</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">6 Aug 2019.</p>
-												<h4 class="font-weight-semibold">Business Analysis</h4>
-												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/female/2.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">Thu
-														Astudillo<i class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-xl-0">
-										<div class="item-card8-img">
-											<img src="/static/frontpages/images/products/products/j2.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-secondary mb-0">Business</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">7 July 2019.</p>
-												<h4 class="font-weight-semibold">Business Styles</h4>
-												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/male/2.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-														Shelton Vause <i class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-0">
-										<div class="item-card8-img">
-											<img src="/static/frontpages/images/products/products/j3.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-info mb-0">Business</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">16 April 2019.</p>
-												<h4 class="font-weight-semibold">Categorized Business</h4>
-												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/female/3.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-														Ellena Beachy <i class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="tab-pane" id="tab-3">
-							<div class="row">
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-xl-0">
-										<div class="item-card8-img  br-tr-4 br-tl-4">
-											<img src="/static/frontpages/images/products/products/b1.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-info mb-0">Spa</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">16 May 2019.</p>
-												<h4 class="font-weight-semibold">Spanish Spa</h4>
-												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/female/5.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">Vania
-														Pease <i class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-0">
-										<div class="item-card8-img">
-											<img src="/static/frontpages/images/products/products/b2.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-primary mb-0">Spa</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">15 May 2019.</p>
-												<h4 class="font-weight-semibold">Beauty Saloon</h4>
-												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/male/5.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">Chery
-														Fogle <i class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-lg-0">
-										<div class="item-card8-img  br-tr-4 br-tl-4">
-											<img src="/static/frontpages/images/products/products/j1.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-secondary mb-0">Spa</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">16 Feb 2019.</p>
-												<h4 class="font-weight-semibold">Hiar Spa</h4>
-												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/female/6.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-														Leonila Payson <i
-															class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="tab-pane" id="tab-4">
-							<div class="row">
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-xl-0">
-										<div class="item-card8-img  br-tr-4 br-tl-4">
-											<img src="/static/frontpages/images/products/products/h4.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-primary mb-0">Real Estate</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">22 November 2019.</p>
-												<h4 class="font-weight-semibold">Building RealEstate</h4>
-												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/male/7.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-														Margarita Franklin <i
-															class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-xl-0">
-										<div class="item-card8-img">
-											<img src="/static/frontpages/images/products/products/h2.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-info mb-0">Real Estate</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">28 December 2019.</p>
-												<h4 class="font-weight-semibold">Modern Ventures</h4>
-												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/male/8.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-														Hobert Dillon <i class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-0">
-										<div class="item-card8-img">
-											<img src="/static/frontpages/images/products/products/h3.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-secondary mb-0">Real Estate</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">14 December 2019.</p>
-												<h4 class="font-weight-semibold">Consultancy Pvt Ltd</h4>
-												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/female/10.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-														Angele Vorpahl <i
-															class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="tab-pane" id="tab-5">
-							<div class="row">
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-xl-0">
-										<div class="item-card8-img  br-tr-4 br-tl-4">
-											<img src="/static/frontpages/images/products/products/f4.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-info mb-0">Restaurant</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">16 November 2019.</p>
-												<h4 class="font-weight-semibold">Food Courts</h4>
-												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/female/19.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-														Elizabeth<i class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-xl-0">
-										<div class="item-card8-img">
-											<img src="/static/frontpages/images/products/products/f3.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-secondary mb-0">Restaurant</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">7 May 2019.</p>
-												<h4 class="font-weight-semibold">Healthy Homely Food</h4>
-												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/female/19.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-														Elizabeth<i class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-xl-4 col-lg-4 col-md-12">
-									<div class="card mb-0">
-										<div class="item-card8-img">
-											<img src="/static/frontpages/images/products/products/f2.jpg" alt="img"
-												class="cover-image">
-										</div>
-										<div class="item-card8-overlaytext">
-											<h6 class="bg-primary mb-0">Restaurant</h6>
-										</div>
-										<div class="card-body">
-											<div class="item-card8-desc">
-												<p class="text-muted mb-2">18 June 2019.</p>
-												<h4 class="font-weight-semibold">Spanish Styles</h4>
-												<p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p>
-											</div>
-										</div>
-										<div class="card-footer">
-											<div class="footerimg d-flex mt-0 mb-0">
-												<div class="d-flex footerimg-l mb-0">
-													<img src="/static/frontpages/images/faces/female/19.jpg" alt="image"
-														class="avatar brround  mr-2">
-													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-														Elizabeth<i class="icon icon-check text-success fs-12 ml-1"
-															data-toggle="tooltip" data-placement="top" title=""
-															data-original-title="verified"></i></h5>
-												</div>
-												<div class="mt-2 footerimg-r ml-auto">
-													<a href="{% url 'bs' %}" class="text-muted" data-toggle="tooltip"
-														data-placement="top" title=""
-														data-original-title="Add Wishlist"><i
-															class="fa fa-heart"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+
 					</div>
 				</div>
 			</div>
