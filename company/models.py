@@ -101,7 +101,7 @@ class Company(models.Model):
 		try:
 			return CompanyAddress.objects.get(company=self)
 		except Exception as e:
-			return []
+			return None
 
 	# These 2 methods r used for Company serialization
 	def get_company_certificates(self): 
@@ -116,11 +116,11 @@ class Company(models.Model):
 	
 	def phone_number(self):
 		address = self.get_company_address()
-		return address.phone_number
+		return address.phone_number if address else ''
 	
 	def location(self):
 		address = self.get_company_address()
-		return f"{address.city_town}"
+		return f"{address.city_town}" if address else ''
 	
 
 # Company Address Model

@@ -22,14 +22,6 @@ from collaborations.models import (BlogComment,PollsQuestion, PollsResult, Choic
 from django.http import HttpResponse, FileResponse
 from django.db.models import Q
 
-def check_user_has_company(user):
-    if user.get_company() == None:
-        messages.warning(self.request, "Currently, You have not registered a Company.")
-        return redirect("admin:create_mycompany_profile")
-    else:
-        return 
-        print("Exception while trying to find the company of an company admin or company staff user in CreateNews ", str(e))
-        
 
 # 
 # INDEX VIEW
