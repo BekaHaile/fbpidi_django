@@ -33,6 +33,16 @@ def certification_chart(request):
         data.append(certification['id__count'])
     return JsonResponse({'labels':labels,'data':data})
 
+def company_subsector_chart(request):
+    labels=[]
+    data=[]
+    queryset = Company.objects.values('category__category_name').annotate(Count('id')).order_by('category').exclude(main_category='FBPIDI')
+    for category in queryset:
+        labels.append(category['category__category_name'])
+        data.append(category['id__count'])
+    return JsonResponse({'labels':labels,'data':data})
+
+
 def management_tool_chart(request):
     labels=[]
     data=[]
@@ -610,9 +620,9 @@ class NumberofIndustriesByOption(LoginRequiredMixin,View):
         elif self.kwargs['option'] == 'comunity_compliant':
             context['data'] =  Company.objects.all().exclude(comunity_compliant='').exclude(main_category='FBPIDI').count()
             context['label'] = "Number of Industries Who have Compliant with local Community"
-        # elif self.kwargs['option'] == 'laboratory':
-        #     context['data'] =  Company.objects.all().exclude(Q(lab_test_analysis='')|Q(lab_equipment='')).exclude(main_category='FBPIDI').count()
-        #     context['label'] = "Number of Industries Who have Quality Control Laboratory"
+        elif self.kwargs['option'] == 'laboratory':
+            context['data'] =  Company.objects.all().exclude(Q(lab_test_analysis=None)|Q(lab_equipment=None)).exclude(main_category='FBPIDI').count()
+            context['label'] = "Number of Industries Who have Quality Control Laboratory"
         
         return render(self.request,template_name,context)
 
@@ -916,7 +926,35 @@ class CompaniesWithCertificate(LoginRequiredMixin,ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = "Companies Having Valid Certificate of Competency"
         return context
-                
+
+class CompaniesByTarget(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        template_name = 'admin/company/report_page.html'
+        context = {}
+        company = Company.objects.all().exclude(main_category='FBPIDI').order_by('id')
+        context['target_data'] = [{'label':"Further Processing Factors",
+                                        'data':company.filter(market_target__further_proc_power__gt=0).distinct('id').count()},
+                                    {'label':"Final Consumers",
+                                        'data':company.filter(market_target__final_consumer__gt=0).distinct('id').count()},
+                                    {'label':"Restaurant & Hotels",
+                                    'data':company.filter(market_target__restaurant_and_hotels__gt=0).distinct('id').count()},
+                                    {'label':"Institutions",
+                                    'data':company.filter(market_target__institutions__gt=0).distinct('id').count()},
+                                    {'label':"EPSA",
+                                    'data':company.filter(market_target__epsa__gt=0).distinct('id').count()},
+                                    {'label':"Hospitals",
+                                    'data':company.filter(market_target__hospitals__gt=0).distinct('id').count()},
+                                    {'label':"Agents",
+                                    'data':company.filter(market_target__agents__gt=0).distinct('id').count()},
+                                    {'label':"Wholesaler/Distributor",
+                                    'data':company.filter(market_target__wholesaler_distributor__gt=0).distinct('id').count()},
+                                    {'label':"Retailor",
+                                    'data':company.filter(market_target__retailer__gt=0).distinct('id').count()},
+                                 
+                                ]
+        context['flag'] = "target_data"
+        return render(self.request,template_name,context)
+
 
 class CompaniesByDestination(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):

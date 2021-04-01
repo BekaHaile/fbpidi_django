@@ -17,6 +17,38 @@
            
 
 		$(function () {
+
+			var $subsectorCompanyChart = $("#subsector-company-chart");
+		  $.ajax({
+			url: $subsectorCompanyChart.data("url"),
+			success: function (data) {
+	
+			  var ctx = $subsectorCompanyChart[0].getContext("2d");
+	
+			  new Chart(ctx, {
+				type: 'doughnut',
+				data: {
+				  labels: data.labels,
+				  datasets: [{
+					label: 'Companies',
+					backgroundColor: [ '#03e8fc', '#F44336', '#6ceb87', '#FF9800', '#4CAF50'],
+					data: data.data
+				  }]          
+				},
+				options: {
+				  responsive: true,
+				  legend: {
+					position: 'top',
+				  },
+				  title: {
+					display: true,
+					text: 'Number of Industries by Sub Sector'
+				  }
+				}
+			  });
+	
+			}
+		  });
 	
 		  var $populationChart = $("#certification-chart");
 		  $.ajax({
@@ -193,19 +225,6 @@
 			<div class="card">
 				<div class="card-body">
 					<ul class="nav nav-pills nav-justified">						
-						<li class="nav-item"><a href="{%url 'admin:company_list_report'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-					</ul>
-
-					<div class="tab-content">
-						 Company Distribution by Sectors Established year & Trade License
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4 col-sm-4">
-			<div class="card">
-				<div class="card-body">
-					<ul class="nav nav-pills nav-justified">						
 						<li class="nav-item"><a href="{%url 'admin:get_capital_utilization' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
 
@@ -215,58 +234,72 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4">
-			<div class="card">
+	</div>
+	<div class="row">
+		<div class="col-md-8 col-sm-8 mb-2">
+			<div class="card" style="height: 100%;">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-justified">						
-						<li class="nav-item"><a href="{%url 'admin:get_change_capital_utilization' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					<div id="container" style="width: 100%;">
+						<canvas id="subsector-company-chart" data-url="{% url 'admin:company_subsector_chart' %}"></canvas>
+						 
+						
+					</div>
+					<ul class="nav nav-pills nav-justified">	
+						Company Distribution by Sectors Established year & Trade License					
+						<li class="nav-item"><a href="{%url 'admin:company_list_report'%}" class="btn bg-primary btn-sm rounded-round">View Report Detail</a></li>
 					</ul>
 
-					<div class="tab-content">
-						Change in Capital Utilization Report Data
-					</div>
+					 
 				</div>
 			</div>
 		</div>
 		<div class="col-md-4 col-sm-4">
-			<div class="card">
-				<div class="card-body">
-					<ul class="nav nav-pills nav-justified">						
-						<li class="nav-item"><a href="{%url 'admin:average_extraction_rate' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-					</ul>
-
-					<div class="tab-content">
-						Average Extraction Rate
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<div class="card bg-teal-800">
+						<div class="card-body">
+							<ul class="nav nav-pills nav-justified">						
+								<li class="nav-item"><a href="{%url 'admin:get_change_capital_utilization' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+							</ul>
+		
+							<div class="tab-content">
+								Change in Capital Utilization Report Data
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 col-sm-12">
+					<div class="card bg-primary-400">
+						<div class="card-body">
+							<ul class="nav nav-pills nav-justified">						
+								<li class="nav-item"><a href="{%url 'admin:average_extraction_rate' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+							</ul>
+		
+							<div class="tab-content">
+								Average Extraction Rate
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 col-sm-12">
+					<div class="card bg-pink-400" >
+						<div class="card-body " >
+							<ul class="nav nav-pills nav-justified">						
+								<li class="nav-item"><a href="{%url 'admin:get_gvp_data' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+							</ul>
+		
+							<div class="tab-content">
+								Gross Value of Production Data
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4">
-			<div class="card">
-				<div class="card-body">
-					<ul class="nav nav-pills nav-justified">						
-						<li class="nav-item"><a href="{%url 'admin:get_gvp_data' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-					</ul>
 
-					<div class="tab-content">
-						Gross Value of Production Data
-					</div>
-				</div>
-			</div>
 		</div>
-		<div class="col-md-4 col-sm-4">
-			<div class="card">
-				<div class="card-body">
-					<ul class="nav nav-pills nav-justified">						
-						<li class="nav-item"><a href="{%url 'admin:get_unit_price' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-					</ul>
-
-					<div class="tab-content">
-						Average Unit Price
-					</div>
-				</div>
-			</div>
-		</div>
+	<div class="row">
+		 
 		<div class="col-md-4 col-sm-4">
 			<div class="card">
 				<div class="card-body">
@@ -345,19 +378,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4">
-			<div class="card">
-				<div class="card-body">
-					<ul class="nav nav-pills nav-justified">						
-						<li class="nav-item"><a href="{%url 'admin:get_input_available' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-					</ul>
-
-					<div class="tab-content">
-						Available Inputs
-					</div>
-				</div>
-			</div>
-		</div>
+		
 		
 		
 		
@@ -366,10 +387,24 @@
 		
 	</div>
 	<div class="row">
+		
 		<div class="col-md-4 col-sm-4">
 			<div class="row">
-				<div class="col-md-12 col-sm-12 m-2">
-					<div class="card" style="height: 200px;">
+				<div class="col-md-12 col-sm-12">
+					<div class="card">
+						<div class="card-body">
+							<ul class="nav nav-pills nav-justified">						
+								<li class="nav-item"><a href="{%url 'admin:get_input_available' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+							</ul>
+		
+							<div class="tab-content">
+								Available Inputs
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 col-sm-12">
+					<div class="card">
 						<div class="card-body">
 							<ul class="nav nav-pills nav-justified">						
 								<li class="nav-item"><a href="{%url 'admin:get_input_share' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
@@ -382,8 +417,8 @@
 					</div>
 				</div>
 				
-				<div class="col-md-12 col-sm-12 m-2">
-					<div class="card " style="height: 200px;">
+				<div class="col-md-12 col-sm-12">
+					<div class="card">
 						<div class="card-body">
 							<ul class="nav nav-pills nav-justified">						
 								<li class="nav-item"><a href="{%url 'admin:get_number_companies' option='research'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
@@ -437,7 +472,20 @@
 		<div class="col-md-4 col-sm-4 col-lg-4">
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
-					<div class="card bg-blue-400" style="height: 200;">
+					<div class="card">
+						<div class="card-body">
+							<ul class="nav nav-pills nav-justified">						
+								<li class="nav-item"><a href="{%url 'admin:get_unit_price' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+							</ul>
+		
+							<div class="tab-content">
+								Average Unit Price
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 col-sm-12">
+					<div class="card bg-blue-400">
 						<div class="card-body">
 							<ul class="nav nav-pills nav-justified">						
 								<li class="nav-item"><a href="{%url 'admin:get_comp_energy_source'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
@@ -450,7 +498,7 @@
 					</div>
 				</div>
 				<div class="col-md-12 col-sm-12 col-lg-12 mb-0">
-					<div class="card bg-teal-400" style="height: 200px;">
+					<div class="card bg-teal-400">
 						<div class="card-body">
 							<div class="d-flex">
 								<a href="{%url 'admin:get_comp_by_destination'%}" class="btn btn-pink rounded-round"><span class="badge bg-teal-800 badge-pill align-self-center ml-auto">View Report</span></a> 
@@ -468,6 +516,34 @@
 			</div>
 		</div>
 		
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-sm-6">
+			<div class="card bg-primary-400">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_comp_by_target'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Number/Share Of Industries By Market Target
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6">
+			<div class="card bg-green-400">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_comp_by_target'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Number/Share Of Industries Having Quality Control Laboratory
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 	 
