@@ -74,7 +74,7 @@ class ListAnnouncementAdmin(LoginRequiredMixin, ListView):
 			if self.request.user.is_superuser:
 				return Announcement.objects.all()
 			else:
-				return Announcement.objects.filter(company=self.request.user.get_company()) if check_user_has_company(self.request) else []
+				return Announcement.objects.filter(company=self.request.user.get_company()) 
 		
 class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):

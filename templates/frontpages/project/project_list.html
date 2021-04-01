@@ -11,10 +11,10 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Projects List</h1>
+							<h1 class="">{% trans "Projects List" %}</h1>
 							<ol class="breadcrumb text-center">
-								<li class="breadcrumb-item"><a href="{%url 'index' %}">Home</a></li>
-								<li class="breadcrumb-item"><a href="#">Projects</a></li>
+								<li class="breadcrumb-item"><a href="{%url 'index' %}">{% trans "Home" %}</a></li>
+								<li class="breadcrumb-item"><a href="#">{% trans "Projects" %}</a></li>
 							</ol>
 						</div>
 					</div>
@@ -49,23 +49,23 @@
 										</div>
 										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{{project.project_name}}</h4></a>
 										<p>{{project.description|truncatechars_html:100|safe}}</p>
-										<a href="{%url 'project_detail' pk=project.id%}" class="btn btn-secondary btn-sm">Read More</a>
+										<a href="{%url 'project_detail' pk=project.id%}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
 									</div>
 								</div>
 							</div>
 							{%endfor%}
 						</div>
 						<div class="d-sm-flex">
-							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>
+							<h6 class="mb-0 mt-3">{% trans "Showing" %} 1 {% trans "to" %} 6 of 30 entries</h6>
 							<ul class="pagination mb-lg-0 mb-5 ml-auto">
 								<li class="page-item page-prev disabled">
-									<a class="page-link" href="#" tabindex="-1">Prev</a>
+									<a class="page-link" href="#" tabindex="-1">{% trans "Prev" %}</a>
 								</li>
 								<li class="page-item active"><a class="page-link" href="#">1</a></li>
 								<li class="page-item"><a class="page-link" href="#">2</a></li>
 								<li class="page-item"><a class="page-link" href="#">3</a></li>
 								<li class="page-item page-next">
-									<a class="page-link" href="#">Next</a>
+									<a class="page-link" href="#">{% trans "Next" %}</a>
 								</li>
 							</ul>
 						</div>

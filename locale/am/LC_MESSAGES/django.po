@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-31 19:22+0300\n"
+"POT-Creation-Date: 2021-03-31 20:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,7 +108,7 @@ msgstr ""
 #: .\templates\admin\pages\product_detail.html:26
 #: .\templates\admin\product\product_detail.html:26
 msgid "Ecommerce - Product Detail"
-msgstr ""
+msgstr "የምርት ዝርዝር"
 
 #: .\templates\frontpages\announcement\customer_announcement.html:25
 #: .\templates\frontpages\announcement\customer_announcement.html:187
@@ -150,8 +150,6 @@ msgstr "ማስታወቂያ"
 #: .\templates\frontpages\poll\polls-list.html:63
 #: .\templates\frontpages\tender\customer_tender_list.html:61
 #: .\templates\frontpages\vacancy\vacancy_list.html:78
-#, fuzzy
-#| msgid "Pages"
 msgid "Page"
 msgstr "ገጾች"
 
@@ -332,8 +330,6 @@ msgstr "መለያዎች"
 
 #: .\templates\frontpages\blog-details-right.html:95
 #: .\templates\frontpages\company\company_blog_detail.html:83
-#, fuzzy
-#| msgid "Add a Comment"
 msgid "Comments"
 msgstr "አስተያየት ያክሉ"
 
@@ -357,8 +353,6 @@ msgid "Submit"
 msgstr "አስገባ"
 
 #: .\templates\frontpages\blog\blog_list.html:41
-#, fuzzy
-#| msgid "Blog"
 msgid "Blog list"
 msgstr "ብሎግ"
 
@@ -393,8 +387,6 @@ msgid "Read More"
 msgstr "ተጨማሪ ያንብቡ"
 
 #: .\templates\frontpages\chat\customer_chat_layout.html:87
-#, fuzzy
-#| msgid "Your Chats with "
 msgid "To Chat List"
 msgstr "የእርሶ ውይይት ከ"
 
@@ -418,6 +410,7 @@ msgstr "ስለ እኛ"
 #: .\templates\frontpages\company\company_events.html:18
 #: .\templates\frontpages\company\company_faq.html:19
 #: .\templates\frontpages\company\company_faq_detail.html:16
+#: .\templates\frontpages\company\company_news.html:18
 #: .\templates\frontpages\company\company_news_detail.html:16
 #: .\templates\frontpages\company\company_poll.html:19
 #: .\templates\frontpages\company\company_poll_detail.html:17
@@ -432,8 +425,6 @@ msgstr "የድርጅቱ ዎና ገጽ"
 
 #: .\templates\frontpages\company\company_announcement.html:21
 #: .\templates\frontpages\company\company_announcement_detail.html:17
-#, fuzzy
-#| msgid "Announcement List"
 msgid "Company Announcement List"
 msgstr "ማስታወቂያ"
 
@@ -451,47 +442,33 @@ msgid "Pages"
 msgstr "ገጾች"
 
 #: .\templates\frontpages\company\company_announcement_detail.html:18
-#, fuzzy
-#| msgid "Announcement List"
 msgid "Announcement Details"
 msgstr "ማስታወቂያ"
 
 #: .\templates\frontpages\company\company_announcement_detail.html:69
-#, fuzzy
-#| msgid "Announcement List"
 msgid "Annnouncement Description"
 msgstr "ማስታወቂያ"
 
 #: .\templates\frontpages\company\company_blog.html:15
 #: .\templates\frontpages\company\company_blog_detail.html:6
-#, fuzzy
-#| msgid "Blog"
 msgid "Blogs"
 msgstr "ብሎግ"
 
 #: .\templates\frontpages\company\company_blog.html:20
-#, fuzzy
-#| msgid "Companies"
 msgid "Company Blog List"
 msgstr "ድርጅቶች"
 
 #: .\templates\frontpages\company\company_blog_detail.html:15
-#, fuzzy
-#| msgid "Poll Detail"
 msgid "Blog Detail"
-msgstr "የምርጫ ዝርዝር"
+msgstr "የብሎጉ ዝርዝር"
 
 #: .\templates\frontpages\company\company_blog_detail.html:18
-#, fuzzy
-#| msgid "Company Address"
 msgid "Company Blogs List"
-msgstr "የድርጅት አድራሻ"
+msgstr "የድርጅቱ ብሎጎች"
 
 #: .\templates\frontpages\company\company_blog_detail.html:19
-#, fuzzy
-#| msgid "Poll Detail"
 msgid "Blog Details"
-msgstr "የምርጫ ዝርዝር"
+msgstr "የብሎጉ ዝርዝር"
 
 #: .\templates\frontpages\company\company_event_detail.html:14
 #: .\templates\frontpages\company\company_events.html:66
@@ -502,14 +479,10 @@ msgid "Event Detail"
 msgstr "የዝግጅቱ ዝርዝር"
 
 #: .\templates\frontpages\company\company_event_detail.html:17
-#, fuzzy
-#| msgid "Events list"
 msgid "Company Events List"
 msgstr "የዝግጅቶች ዝርዝር"
 
 #: .\templates\frontpages\company\company_event_detail.html:18
-#, fuzzy
-#| msgid "Event Detail"
 msgid "Event Details"
 msgstr "የዝግጅቱ ዝርዝር"
 
@@ -519,7 +492,7 @@ msgstr "የዝግጅቱ ዝርዝር"
 #: .\templates\frontpages\news\customer_event_detail.html:81
 #: .\templates\frontpages\tender\customer_tender_detail.html:43
 msgid "Start Date"
-msgstr "የሚደምርበት ቀን"
+msgstr "የሚጀምርበት ቀን"
 
 #: .\templates\frontpages\company\company_event_detail.html:47
 #: .\templates\frontpages\company\company_tender_detail.html:45
@@ -571,8 +544,6 @@ msgstr "የማስታወሻ መልዕክት ላክ"
 
 #: .\templates\frontpages\company\company_event_detail.html:97
 #: .\templates\frontpages\news\customer_event_detail.html:135
-#, fuzzy
-#| msgid "News Description"
 msgid "Event Description"
 msgstr "የምርምር መግለጫ"
 
@@ -585,8 +556,6 @@ msgid "Events"
 msgstr "ዝግጅቶች"
 
 #: .\templates\frontpages\company\company_events.html:20
-#, fuzzy
-#| msgid "Open Events"
 msgid "Company Event List"
 msgstr "ክፈት ዝግጅቶች"
 
@@ -599,41 +568,32 @@ msgstr "ተየጥ"
 
 #: .\templates\frontpages\company\company_faq.html:21
 #: .\templates\frontpages\company\company_faq_detail.html:17
-#, fuzzy
 msgid "Company Faq List"
-msgstr "የድርጅት ስም"
+msgstr "የድርጅት ተደጋጋሚ ጥያቄዎች"
 
 #: .\templates\frontpages\company\company_faq_detail.html:5
-#, fuzzy
-#| msgid "Detail"
 msgid "Faq Detail"
 msgstr "ዝርዝር"
 
 #: .\templates\frontpages\company\company_faq_detail.html:18
-#, fuzzy
-#| msgid "Detail"
 msgid "Faq Details"
 msgstr "ዝርዝር"
 
 #: .\templates\frontpages\company\company_index.html:88
-#, fuzzy
-#| msgid "Company Contact Info"
 msgid "Contact Info"
 msgstr "የድርጅቱ አድራሻ"
 
 #: .\templates\frontpages\company\company_index.html:101
-#, fuzzy
-#| msgid "Company Contact Info"
 msgid "More Company Info"
 msgstr "የድርጅቱ አድራሻ"
 
 #: .\templates\frontpages\company\company_index.html:106
 msgid "Established Year"
-msgstr ""
+msgstr "የምስርታ አምት"
 
 #: .\templates\frontpages\company\company_index.html:110
 msgid "Services"
-msgstr ""
+msgstr "አገልግሎቶች"
 
 #: .\templates\frontpages\company\company_index.html:118
 msgid "Fax"
@@ -641,7 +601,7 @@ msgstr ""
 
 #: .\templates\frontpages\company\company_index.html:122
 msgid "Certification"
-msgstr ""
+msgstr "የማረጋገጫ ሰርተፊኬት"
 
 #: .\templates\frontpages\company\company_index.html:142
 #: .\templates\frontpages\company\company_layout.html:278
@@ -654,8 +614,6 @@ msgid "Products"
 msgstr "ምርት"
 
 #: .\templates\frontpages\company\company_index.html:209
-#, fuzzy
-#| msgid "Total Manufacturers"
 msgid "Contact Manufacturer"
 msgstr "አምራቾች"
 
@@ -667,24 +625,18 @@ msgid "Chat"
 msgstr "ንግግር"
 
 #: .\templates\frontpages\company\company_index.html:237
-#, fuzzy
-#| msgid "Contact Us"
 msgid "Contact Me"
 msgstr "ተገናኙን"
 
 #: .\templates\frontpages\company\company_index.html:238
 msgid "Send Inquiry"
-msgstr ""
+msgstr "የምርት ጥያቄ ላክ"
 
 #: .\templates\frontpages\company\company_index.html:245
-#, fuzzy
-#| msgid "Location"
 msgid "Listing location"
 msgstr "መልክት"
 
 #: .\templates\frontpages\company\company_index.html:258
-#, fuzzy
-#| msgid "News Description"
 msgid "Get Direction"
 msgstr "የምርምር መግለጫ"
 
@@ -701,29 +653,27 @@ msgstr "መልዕክቱን ላክ"
 #: .\templates\frontpages\company\company_tender_detail.html:184
 #: .\templates\frontpages\company\company_vacancy_detail.html:135
 #: .\templates\frontpages\tender\customer_tender_detail.html:174
+#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_confirm_delete.html:12
+#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorize.html:29
 msgid "Cancel"
 msgstr "ሰርዝ"
 
 #: .\templates\frontpages\company\company_index.html:294
 #: .\templates\frontpages\company\company_index.html:323
 msgid "Send"
-msgstr ""
+msgstr "ላክ"
 
 #: .\templates\frontpages\company\company_index.html:305
-#, fuzzy
-#| msgid "Add a Comment"
 msgid "Leave a Comment"
 msgstr "አስተያየት ያክሉ"
 
 #: .\templates\frontpages\company\company_index.html:334
-#, fuzzy
-#| msgid "Notifications"
 msgid "Direction"
 msgstr "መልክት"
 
 #: .\templates\frontpages\company\company_index.html:355
 msgid "Report Abuse"
-msgstr ""
+msgstr "ቅሬታ አምልክት"
 
 #: .\templates\frontpages\company\company_layout.html:139
 #: .\templates\frontpages\layout.html:142
@@ -746,8 +696,6 @@ msgstr "መልዕክቶች"
 
 #: .\templates\frontpages\company\company_layout.html:159
 #: .\templates\frontpages\company\company_layout.html:189
-#, fuzzy
-#| msgid " List of Messages"
 msgid "List of Messages"
 msgstr "የመልክዕት ዝርዝር"
 
@@ -775,8 +723,6 @@ msgstr "ቋንቋ"
 
 #: .\templates\frontpages\company\company_layout.html:227
 #: .\templates\frontpages\layout.html:254
-#, fuzzy
-#| msgid " English"
 msgid "English"
 msgstr "እንግሊዝኛ"
 
@@ -857,16 +803,16 @@ msgstr "የተገኙ ውጤቶች"
 
 #: .\templates\frontpages\company\company_list.html:56
 msgid "Industry List"
-msgstr ""
+msgstr "የኢንዱስትሪ ዝርዝር"
 
 #: .\templates\frontpages\company\company_list.html:59
 msgid "Industries"
-msgstr ""
+msgstr "ኢንዱስትሪዎች"
 
 #: .\templates\frontpages\company\company_list.html:77
 #: .\templates\frontpages\company\product_list.html:61
 msgid "Showing"
-msgstr ""
+msgstr "ገጽ"
 
 #: .\templates\frontpages\company\company_list.html:77
 #: .\templates\frontpages\company\product_list.html:61
@@ -875,28 +821,24 @@ msgstr ""
 
 #: .\templates\frontpages\company\company_list.html:83
 msgid "Sort By"
-msgstr "ደርድር"
+msgstr "ቅደም ተከተል"
 
 #: .\templates\frontpages\company\company_list.html:91
 msgid "Distance"
-msgstr ""
+msgstr "ርቀት"
 
 #: .\templates\frontpages\company\company_list.html:95
-#, fuzzy
-#| msgid "Latest News"
 msgid "Latest"
-msgstr "አቅራቢዎች"
+msgstr "አዳዲሶች"
 
 #: .\templates\frontpages\company\company_list.html:99
 msgid "Rating"
-msgstr ""
+msgstr "በተጠቃሚ ምርጫ"
 
 #: .\templates\frontpages\company\company_list.html:150
 #: .\templates\frontpages\company\company_list.html:203
-#, fuzzy
-#| msgid "Get Earnings"
 msgid "Get Directions"
-msgstr "ትረፍ ያግኙ"
+msgstr "አቅጣጫ ያግኙ"
 
 #: .\templates\frontpages\company\company_list.html:310
 #: .\templates\frontpages\job_apply.html:29
@@ -911,28 +853,21 @@ msgid "Categories"
 msgstr "ምድቦች"
 
 #: .\templates\frontpages\company\company_list.html:318
-#, fuzzy
-#| msgid "Foods"
 msgid "Food"
 msgstr "ምግብ"
 
 #: .\templates\frontpages\company\company_list.html:324
-#, fuzzy
-#| msgid "Beverages"
 msgid "Beverage"
 msgstr "መጠጥ"
 
 #: .\templates\frontpages\company\company_list.html:330
-#, fuzzy
-#| msgid "Pharmaceuticals"
 msgid "Pharmaceutical"
 msgstr "መድሃኒት"
 
 #: .\templates\frontpages\company\company_news.html:20
 #: .\templates\frontpages\company\company_news_detail.html:17
-#, fuzzy
 msgid "Company News List"
-msgstr "የድርጅት ስም"
+msgstr "የድርጅት ዚናዎች"
 
 #: .\templates\frontpages\company\company_news.html:62
 #: .\templates\frontpages\company\company_news_detail.html:14
@@ -950,10 +885,8 @@ msgstr "የምርምር መግለጫ"
 
 #: .\templates\frontpages\company\company_poll.html:21
 #: .\templates\frontpages\company\company_poll_detail.html:18
-#, fuzzy
-#| msgid "Company Address"
 msgid "Company Polls List"
-msgstr "የድርጅት አድራሻ"
+msgstr "የድርጅት ምርጫዎች"
 
 #: .\templates\frontpages\company\company_poll.html:63
 #: .\templates\frontpages\poll\polls-list.html:114
@@ -995,34 +928,27 @@ msgstr "የምርጫ ዝርዝርው"
 
 #: .\templates\frontpages\company\company_poll_detail.html:45
 #: .\templates\frontpages\poll\poll_detail.html:61
-#, fuzzy
-#| msgid "Total votes"
 msgid "Total Votes"
 msgstr "ጠቅላላ መራጮች"
 
 #: .\templates\frontpages\company\company_poll_detail.html:52
 #: .\templates\frontpages\poll\poll_detail.html:40
-#, fuzzy
-#| msgid "You can not vote on this poll, since you are the creator of the poll"
 msgid "You can not vote on this poll, since your company created the poll."
 msgstr "የምርጫው ፈጣሪ እርስዎ ነዎት ስለሆነም በዚህ ምርጫ ላይ ድምጽ መስጠት አይችሉም"
 
 #: .\templates\frontpages\company\company_poll_detail.html:55
 #: .\templates\frontpages\poll\poll_detail.html:43
-#| msgid "Super users cannot Vote"
 msgid "Super users cannot Vote."
 msgstr "ልዕለ ተጠቃሚዎች ድምጽ መስጠት አይችሉም"
 
 #: .\templates\frontpages\company\company_poll_detail.html:58
 #: .\templates\frontpages\poll\poll_detail.html:46
-#, fuzzy
-#| msgid "You already have voted for this poll"
 msgid "You already have voted for this poll."
 msgstr "ለዚህ ምርጫ አስቀድመው ድምጽ ሰጥተዋል"
 
 #: .\templates\frontpages\company\company_poll_detail.html:103
 msgid " This poll has no choice, yet!"
-msgstr ""
+msgstr "ይህ ምርጫ ምንም አማራጮች የሉትም!"
 
 #: .\templates\frontpages\company\company_poll_detail.html:109
 #: .\templates\frontpages\poll\poll_detail.html:117
@@ -1064,7 +990,6 @@ msgstr "ያባት ስም"
 #: .\templates\frontpages\company\company_tender_detail.html:167
 #: .\templates\frontpages\company\company_vacancy_detail.html:118
 #: .\templates\frontpages\tender\customer_tender_detail.html:157
-#, fuzzy
 msgid "Company Name"
 msgstr "የድርጅት ስም"
 
@@ -1090,14 +1015,10 @@ msgid "Phone Number"
 msgstr "ስልክ ቁጥር"
 
 #: .\templates\frontpages\company\company_research.html:15
-#, fuzzy
-#| msgid "Research"
 msgid "Researchs"
 msgstr "ምርምር"
 
 #: .\templates\frontpages\company\company_research.html:21
-#, fuzzy
-#| msgid "Companies"
 msgid "Company obj List"
 msgstr "ድርጅቶች"
 
@@ -1106,14 +1027,10 @@ msgid "Research Detail"
 msgstr "የምርምር ዝርዝር"
 
 #: .\templates\frontpages\company\company_research_detail.html:17
-#, fuzzy
-#| msgid "Research Title"
 msgid "Company Research List"
 msgstr "የምርምር ርዕስ"
 
 #: .\templates\frontpages\company\company_research_detail.html:18
-#, fuzzy
-#| msgid "Research Detail"
 msgid "Research Details"
 msgstr "የምርምር ዝርዝር"
 
@@ -1136,8 +1053,6 @@ msgstr "ምድብ"
 
 #: .\templates\frontpages\company\company_research_detail.html:61
 #: .\templates\frontpages\research\research_detail.html:179
-#, fuzzy
-#| msgid "Research Title"
 msgid "Research Files"
 msgstr "የምርምር ርዕስ"
 
@@ -1155,8 +1070,6 @@ msgstr "ጨረታ ዝርዝር"
 
 #: .\templates\frontpages\company\company_tender_detail.html:18
 #: .\templates\frontpages\company\company_tenders.html:19
-#, fuzzy
-#| msgid "Company Tin Number"
 msgid "Company Tender List"
 msgstr "ኩባንያ ቲን ቁጥር"
 
@@ -1172,8 +1085,6 @@ msgstr "ዋጋ"
 
 #: .\templates\frontpages\company\company_tender_detail.html:67
 #: .\templates\frontpages\tender\customer_tender_detail.html:59
-#, fuzzy
-#| msgid "Applicant Form"
 msgid "Total Applications"
 msgstr "የአመልካች ቅጽ"
 
@@ -1212,7 +1123,7 @@ msgstr "የጨረታ ዝርዝር"
 #: .\templates\frontpages\company\company_vacancy.html:21
 #: .\templates\frontpages\company\company_vacancy_detail.html:18
 msgid "Company Vacancy List"
-msgstr ""
+msgstr "የድርጅቱ ክፍት የስራ ቦታዎች"
 
 #: .\templates\frontpages\company\company_vacancy.html:60
 #: .\templates\frontpages\vacancy\vacancy_list.html:140
@@ -1278,8 +1189,6 @@ msgid "Upload your Documents (This is for certifivates and other documents)"
 msgstr "ተያያዥ ማስረጃዎችን ያያይዙ"
 
 #: .\templates\frontpages\company\company_vacancy_detail.html:19
-#, fuzzy
-#| msgid "Vacancy"
 msgid "Vacancy-Detail"
 msgstr "ክፍት የሥራ ቦታ"
 
@@ -1304,40 +1213,30 @@ msgid "Description"
 msgstr "መግለጫ"
 
 #: .\templates\frontpages\company\contact.html:17
-#, fuzzy
-#| msgid "Contact Us"
 msgid "Contact"
 msgstr "ተገናኙን"
 
 #: .\templates\frontpages\company\product_details.html:131
 msgid "Product In Stock"
-msgstr ""
+msgstr "በክምችት ያለ ምርት"
 
 #: .\templates\frontpages\company\product_details.html:151
-#, fuzzy
-#| msgid "Total Manufacturers"
 msgid "Contact Manfacturer"
 msgstr "አምራቾች"
 
 #: .\templates\frontpages\company\product_details.html:192
-#, fuzzy
-#| msgid "Latest Manufacturers"
 msgid "Send Message to Manufacturer"
 msgstr "አምራቾች"
 
 #: .\templates\frontpages\company\product_list.html:54
-#, fuzzy
-#| msgid "Total Suppliers"
 msgid "Contact Supplier"
 msgstr "አቅራቢዎች"
 
 #: .\templates\frontpages\company\product_list.html:61
 msgid "to"
-msgstr ""
+msgstr "ለ"
 
 #: .\templates\frontpages\company\project_list.html:17
-#, fuzzy
-#| msgid "Project"
 msgid "Projects"
 msgstr "ፕሮጀክት"
 
@@ -1364,8 +1263,6 @@ msgid "Search Companies"
 msgstr "ድርጅቶችን ፈልግ"
 
 #: .\templates\frontpages\index.html:36
-#, fuzzy
-#| msgid "Enter Your Keywords"
 msgid "Enter Your Product Keywords"
 msgstr "የመፈለግያ ቃላት ጻፍ"
 
@@ -1380,14 +1277,10 @@ msgid "Search Now"
 msgstr "ፈልግ"
 
 #: .\templates\frontpages\index.html:71
-#, fuzzy
-#| msgid "Enter Your Keywords"
 msgid "Enter Your Companies Keywords"
 msgstr "የመፈለግያ ቃላት ጻፍ"
 
 #: .\templates\frontpages\index.html:106
-#, fuzzy
-#| msgid "Enter Your Keywords"
 msgid "Enter Your Others Keywords"
 msgstr "የመፈለግያ ቃላት ጻፍ"
 
@@ -1472,10 +1365,6 @@ msgid "Exsiting User"
 msgstr "በፊት የተመዝገበ"
 
 #: .\templates\frontpages\index.html:651 .\templates\frontpages\index.html:683
-#, fuzzy
-#| msgid ""
-#| "it look like readable English. Many desktop publishing packages and web "
-#| "page "
 msgid ""
 "it look like readable English. Many desktop publishing packages and web page "
 "editors now use Lorem Ipsum as their default model text"
@@ -1527,6 +1416,1315 @@ msgstr "አምራቾች"
 #: .\templates\frontpages\layout.html:315
 msgid "Foods"
 msgstr "ምግብ"
+
+#: .\templates\frontpages\layout.html:307
+#: .\templates\frontpages\layout.html:316
+msgid "Beverages"
+msgstr "መጠጥ"
+
+#: .\templates\frontpages\layout.html:308
+#: .\templates\frontpages\layout.html:317
+msgid "Pharmaceuticals"
+msgstr "መድሃኒት"
+
+#: .\templates\frontpages\layout.html:345
+msgid "Forums"
+msgstr "ዉይይት"
+
+#: .\templates\frontpages\news\customer_event_detail.html:30
+msgid "Company Address"
+msgstr "የድርጅት አድራሻ"
+
+#: .\templates\frontpages\news\customer_event_detail.html:195
+msgid "Company Information"
+msgstr "የግብይት መረጃ"
+
+#: .\templates\frontpages\news\customer_event_detail.html:232
+msgid "Filter by company "
+msgstr "ብድርጅት ለይ"
+
+#: .\templates\frontpages\news\customer_event_list.html:41
+msgid "Events list"
+msgstr "የዝግጅቶች ዝርዝር"
+
+#: .\templates\frontpages\news\customer_event_list.html:80
+msgid "Upcoming Events"
+msgstr "መጪ የዝግጅቶች"
+
+#: .\templates\frontpages\news\customer_event_list.html:87
+msgid "Open Events"
+msgstr "ክፈት ዝግጅቶች"
+
+#: .\templates\frontpages\news\customer_event_list.html:129
+#: .\templates\frontpages\tender\customer_tender_detail.html:70
+msgid "Suspended"
+msgstr "ታግዷል"
+
+#: .\templates\frontpages\news\customer_news_list.html:65
+#: .\templates\frontpages\news\customer_news_list.html:69
+msgid "News list"
+msgstr "የዜናዎች ዝርዝር"
+
+#: .\templates\frontpages\news\customer_news_list.html:151
+msgid "Chat with staff"
+msgstr "ከሰራተኞች ጋር ይወያዩ"
+
+#: .\templates\frontpages\poll\poll_detail.html:55
+msgid "Poll title"
+msgstr "የምርጫ ዝርዝር"
+
+#: .\templates\frontpages\poll\poll_detail.html:62
+msgid "Poll created at :"
+msgstr "ምርጫው የተፈጠርበት ቀን"
+
+#: .\templates\frontpages\poll\poll_detail.html:111
+msgid "This poll has no choice, yet!"
+msgstr "ይህ ምርጫ ምንም አማራጮች የሉትም"
+
+#: .\templates\frontpages\poll\polls-list.html:80
+msgid "Highest votes"
+msgstr "በመራጮች ድምጽ ብዛት"
+
+#: .\templates\frontpages\product\carts.html:45
+msgid "Proceed To Checkout"
+msgstr "ወደ ቼክ - ኣውት ቀጥል"
+
+#: .\templates\frontpages\company\company_poll_detail.html:45
+#: .\templates\frontpages\poll\poll_detail.html:61
+#, fuzzy
+#| msgid "Total votes"
+msgid "Total Votes"
+msgstr "ጠቅላላ መራጮች"
+
+#: .\templates\frontpages\company\company_poll_detail.html:52
+#: .\templates\frontpages\poll\poll_detail.html:40
+#, fuzzy
+#| msgid "You can not vote on this poll, since you are the creator of the poll"
+msgid "You can not vote on this poll, since your company created the poll."
+msgstr "የምርጫው ፈጣሪ እርስዎ ነዎት ስለሆነም በዚህ ምርጫ ላይ ድምጽ መስጠት አይችሉም"
+
+#: .\templates\frontpages\company\company_poll_detail.html:55
+#: .\templates\frontpages\poll\poll_detail.html:43
+#| msgid "Super users cannot Vote"
+msgid "Super users cannot Vote."
+msgstr "ልዕለ ተጠቃሚዎች ድምጽ መስጠት አይችሉም"
+
+#: .\templates\frontpages\company\company_poll_detail.html:58
+#: .\templates\frontpages\poll\poll_detail.html:46
+#, fuzzy
+#| msgid "You already have voted for this poll"
+msgid "You already have voted for this poll."
+msgstr "ለዚህ ምርጫ አስቀድመው ድምጽ ሰጥተዋል"
+
+#: .\templates\frontpages\product\inquiry_form.html:14
+msgid "Inquiry Form"
+msgstr "የጥያቄ ቅጽ"
+
+#: .\templates\frontpages\product\success_inquiry.html:14
+msgid "Inquiry Request Successfull!"
+msgstr "ጥያቄዎ በተሳካ ሁኔታ ተስተናግዷል"
+
+#: .\templates\frontpages\project\project_detail_old.html:39
+msgid "search"
+msgstr "ፈልግ"
+
+#: .\templates\frontpages\project\project_detail_old.html:87
+msgid "User"
+msgstr "አዲስ ተጠቃሚ"
+
+#: .\templates\frontpages\project\project_detail_old.html:99
+#: .\templates\frontpages\research\research_detail.html:166
+msgid "Detail"
+msgstr "ዝርዝር"
+
+#: .\templates\frontpages\project\project_detail_old.html:104
+#: .\templates\frontpages\research\research_detail.html:171
+msgid "Attachments"
+msgstr "ፋይል"
+
+#: .\templates\frontpages\research\research_detail.html:40
+#: .\templates\frontpages\research\research_detail.html:43
+#: .\templates\frontpages\research\research_form.html:28
+#: .\templates\frontpages\research\research_form.html:31
+#: .\templates\frontpages\research\research_list.html:40
+#: .\templates\frontpages\research\research_list.html:43
+msgid "Research List"
+msgstr "የምርምር ርዕስ"
+
+#: .\templates\frontpages\research\research_detail.html:60
+#: .\templates\frontpages\research\research_detail_edit.html:37
+#: .\templates\frontpages\research\research_form.html:50
+#: .\templates\frontpages\research\research_list.html:185
+msgid "Add new Research"
+msgstr "አዲስ ምርምር አስገባ"
+
+#: .\templates\frontpages\research\research_detail.html:70
+#: .\templates\frontpages\research\research_form.html:61
+#: .\templates\frontpages\research\research_list.html:195
+msgid "Filter by Category"
+msgstr "በድርጅት አጣራ"
+
+#: .\templates\frontpages\research\research_detail.html:91
+msgid "Related Researches"
+msgstr "አዲስ ምርምር አስገባ"
+
+#: .\templates\frontpages\research\research_detail_edit.html:85
+msgid "Research you Posted"
+msgstr "የርሶ ምርምሮች"
+
+#: .\templates\frontpages\company\company_poll_detail.html:172
+#: .\templates\frontpages\company\company_tender_detail.html:171
+#: .\templates\frontpages\company\company_vacancy_detail.html:122
+#: .\templates\frontpages\tender\customer_tender_detail.html:161
+msgid "Company Tin Number"
+msgstr "ኩባንያ ቲን ቁጥር"
+
+#: .\templates\frontpages\research\research_detail_edit.html:143
+#: .\templates\frontpages\research\research_form.html:104
+msgid "Research Title"
+msgstr "የምርምር ርዕስ"
+
+#: .\templates\frontpages\research\research_detail_edit.html:153
+#: .\templates\frontpages\research\research_form.html:111
+msgid "Research Status"
+msgstr "የምርምር ሂደት"
+
+#: .\templates\frontpages\company\company_research.html:15
+#, fuzzy
+#| msgid "Research"
+msgid "Researchs"
+msgstr "ምርምር"
+
+#: .\templates\frontpages\research\research_detail_edit.html:200
+msgid "The Current Document"
+msgstr "የአሁኑ ሰነድ"
+
+#: .\templates\frontpages\research\research_detail_edit.html:204
+msgid "No attachments in the current time"
+msgstr "ሰነድ የለም"
+
+#: .\templates\frontpages\research\research_detail_edit.html:210
+msgid "Change your attachment (if you have one)"
+msgstr "ሰነድ ይቀይሩ"
+
+#: .\templates\frontpages\research\research_detail_edit.html:212
+msgid "Upload your attachment (if you have one)"
+msgstr "ሰነድ ይላኩ"
+
+#: .\templates\frontpages\research\research_form.html:100
+msgid "Add a Research"
+msgstr "አዲስ ምርምር አስገባ"
+
+#: .\templates\frontpages\research\research_form.html:119
+msgid "Research Category"
+msgstr "ምርምር ምረጥ"
+
+#: .\templates\frontpages\tender\customer_tender_detail.html:21
+msgid "Tenders list"
+msgstr "ጨረታዎቸ"
+
+#: .\templates\frontpages\tender\customer_tender_detail.html:22
+msgid "Tender"
+msgstr "ጨረታ"
+
+#: .\templates\frontpages\tender\customer_tender_detail.html:40
+msgid "Title"
+msgstr "ርዕስ"
+
+#: .\templates\frontpages\tender\customer_tender_list.html:67
+msgid "Filter "
+msgstr "አጣራ"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:74
+#: .\templates\frontpages\job_apply.html:54
+msgid "Job application form"
+msgstr "የማምልከቻ ቅጽ"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:94
+#: .\templates\frontpages\job_apply.html:75
+msgid "Status"
+msgstr "ወቅታዊ ሁኔታ"
+
+#: .\templates\frontpages\company\company_vacancy_apply.html:104
+#: .\templates\frontpages\job_apply.html:85
+msgid "The institute you learned in"
+msgstr "የተማሩበት የት/ት ተቋም"
+
+#: .\templates\frontpages\tender\customer_tender_list.html:168
+msgid "Posted"
+msgstr "በ"
+
+#: .\templates\frontpages\vacancy\vacancy_list.html:57
+#: .\templates\frontpages\vacancy\vacancy_list.html:60
+msgid "Vacancy list"
+msgstr "ክፍት የሥራ ቦታ"
+
+#: .\templates\frontpages\vacancy\vacancy_list.html:120
+msgid "category"
+msgstr "ምድብ"
+
+#: .\templates\frontpages\vacancy\vacancy_list.html:124
+msgid "Employment Type"
+msgstr "የቅጥር አይነት"
+
+#: .\templates\frontpages\vacancy_detail.html:66
+msgid "Cateory"
+msgstr "ምድብ"
+
+#: .\templates\frontpages\vacancy_detail.html:71
+msgid "Campany"
+msgstr "ድርጅቶች"
+
+#: .\templates\frontpages\vacancy_detail.html:87
+msgid "Starting date"
+msgstr "የሚጀምርበት ቀን"
+
+#: .\templates\frontpages\vacancy_detail.html:91
+msgid "Ending date"
+msgstr "የሚያልቅበት ቀን"
+
+#: .\templates\frontpages\vacancy_list.html:87
+msgid "cateory"
+msgstr "ምድብ"
+
+#: .\templates\frontpages\vacancy_list.html:90
+msgid "Employee Type"
+msgstr "የቅጥር አይነት"
+
+#: .\templates\registration\logged_out.html:10
+msgid "Thanks for spending some quality time with the Web site today."
+msgstr "ለነበረን ጊዘ እናመሰናለን"
+
+#: .\templates\frontpages\company\product_details.html:192
+#, fuzzy
+#| msgid "Latest Manufacturers"
+msgid "Send Message to Manufacturer"
+msgstr "አምራቾች"
+
+#: .\templates\registration\password_change_done.html:15
+msgid "Your password was changed."
+msgstr "የይለፍ ቃል ቀይር"
+
+#: .\templates\frontpages\company\product_list.html:61
+msgid "to"
+msgstr ""
+
+#: .\templates\registration\password_reset_done.html:70
+msgid ""
+"If you don’t receive an email, please make sure you’ve entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html:8
+msgid "Your username, in case you’ve forgotten:"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: .\venv\Lib\site-packages\colorfield\fields.py:17
+msgid "Enter a valid color."
+msgstr ""
+
+#: .\venv\Lib\site-packages\crispy_forms\tests\test_form_helper.py:129
+#: .\venv\Lib\site-packages\crispy_forms\tests\test_form_helper.py:139
+#: .\venv\Lib\site-packages\django\forms\fields.py:54
+msgid "This field is required."
+msgstr ""
+
+#: .\venv\Lib\site-packages\crispy_forms\tests\test_layout.py:361
+msgid "i18n text"
+msgstr ""
+
+#: .\venv\Lib\site-packages\crispy_forms\tests\test_layout.py:361
+msgid "i18n legend"
+msgstr ""
+
+#: .\venv\Lib\site-packages\crispy_forms\tests\test_layout_objects.py:129
+#: .\venv\Lib\site-packages\django\core\validators.py:20
+msgid "Enter a valid value."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\contrib\messages\apps.py:7
+msgid "Messages"
+msgstr "ገጾች"
+
+#: .\venv\Lib\site-packages\django\contrib\sitemaps\apps.py:7
+msgid "Site Maps"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\contrib\staticfiles\apps.py:9
+#, fuzzy
+#| msgid "Research Files"
+msgid "Static Files"
+msgstr "የምርምር ርዕስ"
+
+#: .\venv\Lib\site-packages\django\contrib\syndication\apps.py:7
+msgid "Syndication"
+msgstr "መልክት"
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:48
+msgid "That page number is not an integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:50
+msgid "That page number is less than 1"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:55
+msgid "That page contains no results"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:91
+#: .\venv\Lib\site-packages\django\forms\fields.py:671
+msgid "Enter a valid URL."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:145
+msgid "Enter a valid integer."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:156
+msgid "Enter a valid email address."
+msgstr ""
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+#: .\venv\Lib\site-packages\django\core\validators.py:230
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:237
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:246
+#: .\venv\Lib\site-packages\django\core\validators.py:266
+msgid "Enter a valid IPv4 address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:251
+#: .\venv\Lib\site-packages\django\core\validators.py:267
+msgid "Enter a valid IPv6 address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:261
+#: .\venv\Lib\site-packages\django\core\validators.py:265
+msgid "Enter a valid IPv4 or IPv6 address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:295
+msgid "Enter only digits separated by commas."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:301
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:334
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:343
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:353
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:368
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:387
+#: .\venv\Lib\site-packages\django\forms\fields.py:292
+#: .\venv\Lib\site-packages\django\forms\fields.py:327
+msgid "Enter a number."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:389
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:394
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:399
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:461
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:513
+msgid "Null characters are not allowed."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\base.py:1190
+#: .\venv\Lib\site-packages\django\forms\models.py:760
+msgid "and"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\base.py:1192
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:100
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:101
+msgid "This field cannot be null."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:102
+msgid "This field cannot be blank."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:103
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr ""
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
+#. Eg: "Title must be unique for pub_date year"
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:107
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:126
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:939
+#, python-format
+msgid "“%(value)s” value must be either True or False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:940
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:942
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:983
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1047
+msgid "Comma-separated integers"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1096
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1098
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1241
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1101
+msgid "Date (without time)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1239
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1243
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1247
+msgid "Date (with time)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1395
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1397
+msgid "Decimal number"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1536
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
+"uuuuuu] format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1539
+#, fuzzy
+#| msgid "Direction"
+msgid "Duration"
+msgstr "መልክት"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1589
+#, fuzzy
+#| msgid "Company Address"
+msgid "Email address"
+msgstr "የድርጅት አድራሻ"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1612
+msgid "File path"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1678
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1680
+msgid "Floating point number"
+msgstr "ኩባንያ ቲን ቁጥር"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1718
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1720
+msgid "Integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1803
+msgid "Big (8 byte) integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1819
+msgid "IPv4 address"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1850
+msgid "IP address"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1930
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1931
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1933
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1976
+msgid "Positive big integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1989
+msgid "Positive integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2002
+msgid "Positive small integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2016
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2048
+msgid "Small integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2055
+msgid "Text"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2083
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2085
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2088
+msgid "Time"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2214
+msgid "URL"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2236
+msgid "Raw binary data"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2301
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2303
+msgid "Universally unique identifier"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:231
+msgid "File"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:379
+msgid "Image"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\json.py:18
+msgid "A JSON object"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\json.py:20
+msgid "Value must be valid JSON."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:790
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r does not exist."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:792
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1045
+msgid "One-to-one relationship"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1099
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1100
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1142
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to the label
+#: .\venv\Lib\site-packages\django\forms\boundfield.py:150
+msgid ":?.!"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:247
+msgid "Enter a whole number."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:398
+#: .\venv\Lib\site-packages\django\forms\fields.py:1139
+msgid "Enter a valid date."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:422
+#: .\venv\Lib\site-packages\django\forms\fields.py:1140
+msgid "Enter a valid time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:450
+msgid "Enter a valid date/time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:484
+msgid "Enter a valid duration."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:485
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:545
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:546
+msgid "No file was submitted."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:547
+msgid "The submitted file is empty."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:549
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:552
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:613
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:775
+#: .\venv\Lib\site-packages\django\forms\fields.py:865
+#: .\venv\Lib\site-packages\django\forms\models.py:1296
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:866
+#: .\venv\Lib\site-packages\django\forms\fields.py:981
+#: .\venv\Lib\site-packages\django\forms\models.py:1295
+msgid "Enter a list of values."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:982
+msgid "Enter a complete value."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1198
+msgid "Enter a valid UUID."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1228
+msgid "Enter a valid JSON."
+msgstr ""
+
+#. Translators: This is the default suffix added to form field labels
+#: .\venv\Lib\site-packages\django\forms\forms.py:78
+msgid ":"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\forms.py:205
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:93
+msgid "ManagementForm data is missing or has been tampered with"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:345
+#, python-format
+msgid "Please submit %d or fewer forms."
+msgid_plural "Please submit %d or fewer forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:352
+#, python-format
+msgid "Please submit %d or more forms."
+msgid_plural "Please submit %d or more forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:379
+#: .\venv\Lib\site-packages\django\forms\formsets.py:386
+msgid "Order"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:391
+#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_confirm_delete.html:13
+#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:38
+#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\authorized-token-delete.html:7
+msgid "Delete"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:755
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:759
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:765
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:774
+msgid "Please correct the duplicate values below."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1096
+msgid "The inline value did not match the parent instance."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1180
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1298
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\utils.py:167
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:398
+msgid "Clear"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:399
+msgid "Currently"
+msgstr "ገንዘብ"
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:400
+msgid "Change"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:709
+msgid "Unknown"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:710
+msgid "Yes"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:711
+msgid "No"
+msgstr ""
+
+#. Translators: Please do not add spaces around commas.
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:790
+msgid "yes,no,maybe"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:819
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:836
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:838
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:840
+#, python-format
+msgid "%s MB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:842
+#, python-format
+msgid "%s GB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:844
+#, python-format
+msgid "%s TB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:846
+#, python-format
+msgid "%s PB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:65
+msgid "p.m."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:66
+msgid "a.m."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:71
+msgid "PM"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:72
+msgid "AM"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:149
+msgid "midnight"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:151
+msgid "noon"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:6
+msgid "Monday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:6
+msgid "Tuesday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:6
+msgid "Wednesday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:6
+msgid "Thursday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:6
+msgid "Friday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:7
+msgid "Saturday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:7
+msgid "Sunday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:10
+msgid "Mon"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:10
+msgid "Tue"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:10
+msgid "Wed"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:10
+msgid "Thu"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:10
+msgid "Fri"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:11
+#, fuzzy
+#| msgid "Status"
+msgid "Sat"
+msgstr "ወቅታዊ ሁኔታ"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:11
+msgid "Sun"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:14
+msgid "January"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:14
+msgid "February"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:14
+msgid "March"
+msgstr "ፈልግ"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:14
+msgid "April"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:14
+#, fuzzy
+#| msgid "may"
+msgid "May"
+msgstr "አማርኛ"
+
+#: .\templates\frontpages\faq.html:15
+msgid "FAQ"
+msgstr "ተይጥ"
+
+#: .\templates\frontpages\index.html:18
+msgid "Welcome To The Biggest Business Directory"
+msgstr "ወደ ትልቁ የንግድ ማውጫ እንኳን በደህና መጡ!"
+
+#: .\templates\frontpages\index.html:19 .\templates\frontpages\index.html:600
+msgid ""
+"It is a long established fact that a reader will be distracted by the "
+"readable."
+msgstr "አንባቢ በሚነበብ ነገር ሊዘናጋ መሆኑ ረጅም የተረጋገጠ ሀቅ ነው ፡፡"
+
+#: .\templates\frontpages\index.html:26
+msgid "Search Products"
+msgstr "ምርት ፈልግ"
+
+#: .\templates\frontpages\index.html:27
+msgid "Search Companies"
+msgstr "ድርጅቶችን ፈልግ"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:15
+msgid "November"
+msgstr "ስልክ ቁጥር"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:16
+#, fuzzy
+#| msgid "November"
+msgid "December"
+msgstr "ስልክ ቁጥር"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:19
+msgid "jan"
+msgstr ""
+
+#: .\templates\frontpages\index.html:45 .\templates\frontpages\index.html:80
+#: .\templates\frontpages\index.html:115
+msgid "Select Category"
+msgstr "ምድብ ምረጥ"
+
+#: .\templates\frontpages\index.html:61 .\templates\frontpages\index.html:96
+#: .\templates\frontpages\index.html:131
+msgid "Search Now"
+msgstr "ፈልግ"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:19
+msgid "apr"
+msgstr "አማርኛ"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:19
+msgid "may"
+msgstr "አማርኛ"
+
+#: .\templates\frontpages\index.html:173
+msgid "Companies"
+msgstr "ድርጅቶች"
+
+#: .\templates\frontpages\index.html:195
+msgid "Latest Products"
+msgstr "አዲስ ምርቶች"
+
+#: .\templates\frontpages\index.html:196 .\templates\frontpages\index.html:333
+#: .\templates\frontpages\index.html:401 .\templates\frontpages\index.html:530
+#: .\templates\frontpages\index.html:630
+#: .\templates\frontpages\index.html:1232
+#: .\templates\frontpages\index.html:1321
+msgid "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula"
+msgstr "ሞርቢ አሥራ አንድ ፣ ሊጉላ በሴሴቲተር ተሸከርካሪ ላይ ሞርቢ አሥራ አንድ ፣ ሊጉላ በሴሴቲተር ተሸከርካሪ ላይ"
+
+#: .\templates\frontpages\index.html:290
+msgid "Total Products"
+msgstr "ምርት"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:20
+msgid "oct"
+msgstr "ፕሮጀክት"
+
+#: .\templates\frontpages\index.html:308
+msgid "Happy Customers"
+msgstr "ደንበኞች"
+
+#: .\templates\frontpages\index.html:332
+msgid "Latest Manufacturers"
+msgstr "አምራቾች"
+
+#: .\templates\frontpages\index.html:400
+msgid "How It Works?"
+msgstr "እንደት ይሰራል"
+
+#: .\templates\frontpages\index.html:433
+msgid "You can register and get Unlimited Functionalities"
+msgstr "ተመዝግበዉ የማያልቁ አገልግሎት ያግኙ"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:25
+msgctxt "abbrev. month"
+msgid "March"
+msgstr "ፈልግ"
+
+#: .\templates\frontpages\index.html:458
+msgid "You Can Create Account and Get Unlimited Functionalities"
+msgstr "አካዉንት ከፍተዉ የማያልቅ አገልግሎት ያግኙ"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:27
+#, fuzzy
+#| msgid "may"
+msgctxt "abbrev. month"
+msgid "May"
+msgstr "አማርኛ"
+
+#: .\templates\frontpages\index.html:487
+msgid "You Can Add your Products and comunicate with buyers"
+msgstr "መርቶትን ለሸማቾች ያቀርቡ"
+
+#: .\templates\frontpages\index.html:513
+msgid "Get Earnings"
+msgstr "ትረፍ ያግኙ"
+
+#: .\templates\frontpages\index.html:514
+msgid "You can register, add products,buy products and get Your earnings"
+msgstr "አካዉንት ከፍተዉ የማያልቅ አገልግሎት ያግኙ"
+
+#: .\templates\frontpages\index.html:529
+msgid "Latest Suppliers"
+msgstr "አቅራቢዎች"
+
+#: .\templates\frontpages\index.html:606
+msgid "Enter your Email"
+msgstr "ኢመይል ያስገቡ"
+
+#: .\templates\frontpages\index.html:629
+msgid "Getting Started"
+msgstr "አሁን ይጀምሩ"
+
+#: .\templates\frontpages\index.html:650
+msgid "Exsiting User"
+msgstr "በፊት የተመዝገበ"
+
+#: .\templates\frontpages\index.html:651 .\templates\frontpages\index.html:683
+#, fuzzy
+#| msgid ""
+#| "it look like readable English. Many desktop publishing packages and web "
+#| "page "
+msgid ""
+"it look like readable English. Many desktop publishing packages and web page "
+"editors now use Lorem Ipsum as their default model text"
+msgstr ""
+"የሚነበብ እንግሊዝኛ ይመስላል። ብዙ የዴስክቶፕ ማተሚያ ጥቅሎች እና ድረ-ገጽ አርታኢዎች አሁን ሎረም አይፕሱምን እንደ "
+
+#: .\templates\frontpages\index.html:682
+msgid "New User"
+msgstr "አዲስ ተጠቃሚ"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:39
+msgctxt "alt. month"
+msgid "March"
+msgstr "ፈልግ"
+
+#: .\templates\frontpages\index.html:698
+msgid "In Ethiopian Food, Beverage and Pharmaceutical Industry."
+msgstr "በኢትዮጵያ የምግብ፣ መጠጥ እና መድሃኒቶች ኢንዱስትሪ"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:41
+#, fuzzy
+#| msgid "may"
+msgctxt "alt. month"
+msgid "May"
+msgstr "አማርኛ"
+
+#: .\templates\frontpages\index.html:1239
+msgid "Food Sectors"
+msgstr "መግብ"
+
+#: .\templates\frontpages\index.html:1265
+msgid "Beverage Sectors"
+msgstr "መጠጥ"
+
+#: .\templates\frontpages\index.html:1290
+msgid "Pharmaceutical Sectors"
+msgstr "መድሃኒት"
+
+#: .\templates\frontpages\index.html:1320
+msgid "Download App"
+msgstr "መተግበሪያ አዉርድ"
+
+#: .\templates\frontpages\layout.html:189
+#: .\templates\frontpages\layout.html:219
+msgid " List of Messages"
+msgstr "የመልክዕት ዝርዝር"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:47
+msgctxt "alt. month"
+msgid "November"
+msgstr "ስልክ ቁጥር"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:48
+#, fuzzy
+#| msgid "November"
+msgctxt "alt. month"
+msgid "December"
+msgstr "ስልክ ቁጥር"
 
 #: .\templates\frontpages\layout.html:307
 #: .\templates\frontpages\layout.html:316
@@ -1704,9 +2902,9 @@ msgstr "የአሁኑ ሰነድ"
 msgid "No attachments in the current time"
 msgstr "ሰነድ የለም"
 
-#: .\templates\frontpages\research\research_detail_edit.html:210
-msgid "Change your attachment (if you have one)"
-msgstr "ሰነድ ይቀይሩ"
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:384
+msgid "Django Documentation"
+msgstr "ፋይል አውርድ"
 
 #: .\templates\frontpages\research\research_detail_edit.html:212
 msgid "Upload your attachment (if you have one)"
@@ -1720,9 +2918,11 @@ msgstr "አዲስ ምርምር አስገባ"
 msgid "Research Category"
 msgstr "ምርምር ምረጥ"
 
-#: .\templates\frontpages\tender\customer_tender_detail.html:21
-msgid "Tenders list"
-msgstr "ጨረታዎቸ"
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:408
+#, fuzzy
+#| msgid "Django Documentation"
+msgid "Django Community"
+msgstr "ፋይል አውርድ"
 
 #: .\templates\frontpages\tender\customer_tender_detail.html:22
 msgid "Tender"
@@ -1831,9 +3031,11 @@ msgid ""
 "user account at %(site_name)s."
 msgstr ""
 
-#: .\templates\registration\password_reset_email.html:4
-msgid "Please go to the following page and choose a new password:"
-msgstr ""
+#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_detail.html:20
+#, fuzzy
+#| msgid "Employment Type"
+msgid "Client type"
+msgstr "የቅጥር አይነት"
 
 #: .\templates\registration\password_reset_email.html:8
 msgid "Your username, in case you’ve forgotten:"
@@ -1852,24 +3054,31 @@ msgstr ""
 #~ msgid "about"
 #~ msgstr "ስለ እኛ"
 
-#~ msgid "editors now use Lorem Ipsum as their default model text"
-#~ msgstr "ነባሪ አምሳያ ጽሑፋቸው ይጠቀማሉ"
+#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_form.html:9
+#, fuzzy
+#| msgid "Total Applications"
+msgid "Edit application"
+msgstr "የአመልካች ቅጽ"
 
 #~ msgid "All Listings"
 #~ msgstr "ሁሉም"
 
-#~ msgid "Upload your attchment (if you have one)"
-#~ msgstr "ሰነድ ይላኩ"
+#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_list.html:6
+#, fuzzy
+#| msgid "Total Applications"
+msgid "Your applications"
+msgstr "የአመልካች ቅጽ"
 
 #, fuzzy
-#~| msgid "Pages"
-#~ msgid "Messages"
-#~ msgstr "ገጾች"
+#| msgid "Total Applications"
+msgid "New Application"
+msgstr "የአመልካች ቅጽ"
 
+#: .\venv\Lib\site-packages\oauth2_provider\templates\oauth2_provider\application_list.html:17
 #, fuzzy
-#~| msgid "Notifications"
-#~ msgid "Syndication"
-#~ msgstr "መልክት"
+#| msgid "Job application form"
+msgid "No applications defined"
+msgstr "የማምልከቻ ቅጽ"
 
 #, fuzzy
 #~| msgid "Company Tin Number"
@@ -1925,10 +3134,18 @@ msgstr ""
 #~ msgid "November"
 #~ msgstr "ስልክ ቁጥር"
 
-#, fuzzy
-#~| msgid "Download Document"
-#~ msgid "Django Documentation"
-#~ msgstr "ፋይል አውርድ"
+#~| msgid "About Us"
+#~ msgid "about"
+#~ msgstr "ስለ እኛ"
+
+#~ msgid "editors now use Lorem Ipsum as their default model text"
+#~ msgstr "ነባሪ አምሳያ ጽሑፋቸው ይጠቀማሉ"
+
+#~ msgid "All Listings"
+#~ msgstr "ሁሉም"
+
+#~ msgid "Upload your attchment (if you have one)"
+#~ msgstr "ሰነድ ይላኩ"
 
 #~| msgid "Announcement"
 #~ msgid "Announcements"

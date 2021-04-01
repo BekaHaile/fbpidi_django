@@ -76,23 +76,23 @@
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
 											</ul>
 											<div class="d-sm-flex">
-												<label class="mr-2 mt-2 mb-sm-1 sort-label">Sort By:</label>
+												<label class="mr-2 mt-2 mb-sm-1 sort-label">{% trans "Sort By" %}:</label>
 												<div class="selectgroup">
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="All" class="selectgroup-input" checked="">
-														<span class="selectgroup-button d-md-flex">All <i class="fa fa-sort ml-2 mt-1"></i></span>
+														<span class="selectgroup-button d-md-flex">{% trans "All" %} <i class="fa fa-sort ml-2 mt-1"></i></span>
 													</label>
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">Distance</span>
+														<span class="selectgroup-button">{% trans "Distance" %}</span>
 													</label>
 													<label class="selectgroup-item mb-0">
 														<input type="radio" name="value" value="Latest" class="selectgroup-input">
-														<span class="selectgroup-button">Latest</span>
+														<span class="selectgroup-button">{% trans "Latest" %}</span>
 													</label>
 													<label class="selectgroup-item mb-0">
 														<input type="radio" name="value" value="Rating" class="selectgroup-input">
-														<span class="selectgroup-button">Rating</span>
+														<span class="selectgroup-button">{% trans "Rating" %}</span>
 													</label>
 												</div>
 											</div>
@@ -166,12 +166,12 @@
 																		
 
 																		<div style = "display: inline;" class="mr-0">
-																			<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" class="mr-0">
+																			<!-- <form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" class="mr-0">
 																				<input type="hidden" name="products" value="{{product.id}},">
-																				<button  type="submit">Contact Now</button>
-																			<a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
-																			</form>
-																			<button class= " bg-secondary" id = "prod_{{product.id}}" onclick = "add_to_cart('{{product.id}}')">Add To Basket</button>
+																				<button  type="submit">Contact Now</button> -->
+																			<a href="#"><i class="fa fa-map-signs"></i>  {% trans "Get Directions" %}</a></div>
+																			<!-- </form> -->
+																			<!-- <button class= " bg-secondary" id = "prod_{{product.id}}" onclick = "add_to_cart('{{product.id}}')">Add To Basket</button> -->
 																			
 																		</div>
 																</div>
@@ -246,7 +246,7 @@
 																			</div>
 																		</div>
 																		<div class="ml-auto mt-3 mt-sm-0">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  Get Directions</a></div>
+																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>   {% trans "Get Directions" %}</a></div>
 																		</div>
 																	</div>
 																</div>
