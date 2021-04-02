@@ -115,7 +115,7 @@ class CompanyInquiryList(ListView):
 
 class CompanyInquiryReply(View):
     def post(self, *args, **kwargs):
-        try:
+        
             sender_inquiry = ProductInquiry.objects.get(id = self.kwargs['pk'])
             reply_message = self.request.POST['reply_message']
             if sendInquiryReplay(self.request, sender_inquiry, reply_message): #returns true if the email is sent successfully
@@ -133,10 +133,7 @@ class CompanyInquiryReply(View):
             else:
                 messages.warning(self.request, f"Reply couldn't be sent! Please check your connection and try again later.")
                 return redirect('admin:admin_inquiry_list')
-        except Exception as e:
-            print("########## Exception at CompanyInquiryReply post ",e)
-            messages.warning(self.request, "Exception while replying. Please try again later.",e)
-            return redirect("admin:index")
+       
 
 
 def Subscribe(request):

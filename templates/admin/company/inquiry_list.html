@@ -115,7 +115,7 @@
     
     <div class="table-responsive">
         <table class="table table-inbox">	
-                <th>
+            <tr class="table-inbox-name">
                     <td>#</td>
                     <td><b>Sender Email</b></td>
                     <td><b>Subject</b></td>
@@ -123,15 +123,11 @@
                     <td><b>Quantity</b></td>
                     <td><b>Status</b></td>
                     <td><b>Request Date</b></td>
-                    
-                    
-                </th>									
+            </tr>									
             <tbody data-link="row" class="rowlink">
                 
             
                 {% for inquiry in object_list %}
-                  
-
                         {% if inquiry.replied == False %}
                             <tr class = "unread" > 
                         {% else %}
@@ -144,12 +140,12 @@
                             
                                 <td class="table-inbox-name">
                                     <a href=""  data-toggle="modal" data-target="#compose{{message.id}}">
-                                        <div class="letter-icon-title text-default"><b>{{inquiry.sender_email}}</b></div>
+                                        <div class="letter-icon-title text-default">{{inquiry.sender_email}}</div>
                                     </a>
                                 </td>
                                 <td class="table-inbox-name">
                                     <a href=""  data-toggle="modal" data-target="#compose{{message.id}}" >
-                                        <div class="letter-icon-title text-default"><b>{{inquiry.subject|safe|truncatechars_html:20}}</b></div>
+                                        <div class="letter-icon-title text-default">{{inquiry.subject|safe|truncatechars_html:20}}</div>
                                     </a>
                                 </td>
                                 <td class="table-inbox-message">
@@ -166,18 +162,15 @@
                                         
                                         <div class="letter-icon-title text-default">
                                             {% if inquiry.replied %}
-                                                <b>Replied</b>
+                                                Replied
                                             {% else %}
-                                                <b>Not Replied</b>
+                                                Not Replied
                                             {% endif %}
                                         </div>
                                     </a>
                                 </td>
-                               
-                                
-                               
                                 <td class="table-inbox-time">
-                                    {{inquiry.created_date}}
+                                    <p class  = "mr-3"> {{inquiry.created_date}}</p>
                                 </td>
                             </tr>     
                             
@@ -214,7 +207,7 @@
                                                     <p>Your previous reply, You can resend another replay, by editing.</p>
                                                     
                                                     <div class="form-group">
-                                                        <textarea class="form-control"  rows="7" placeholder="Reply Message" required>
+                                                        <textarea class="form-control" name="reply_message" rows="7" placeholder="Reply Message" required>
                                                             {{inquiry.productinquiryreply_set.first.reply}}
                                                         </textarea>
                                                     </div>

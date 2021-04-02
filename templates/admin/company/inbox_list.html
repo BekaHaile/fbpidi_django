@@ -114,7 +114,18 @@
     
     
     <div class="table-responsive">
-        <table class="table table-inbox">										
+        <table class="table table-inbox">	
+            <tr class="table-inbox-name">
+                <td>#</td>
+                <td><b>Sender Email</b></td>
+                <td><b>Sender Name</b></td>
+                <td><b>Status</b></td>
+                <td><b>Message Hint</b></td>
+                
+                <td><b>Request Date</b></td>
+                
+                
+        </tr>										
             <tbody data-link="row" class="rowlink">
             
                 {% for message in message_list %}
@@ -127,23 +138,8 @@
                         {% endif %}
                         <a href = "#" target = "blank" >
                             
-                                <td class="table-inbox-checkbox rowlink-skip">
-                                    <a href="#compose{{message.id}}" target = "blank" ></a>
-                                    <input type="checkbox" class="form-input-styled" data-fouc>
-                                </td>
-                                <td class="table-inbox-star rowlink-skip">
-                                    <a href="#">
-                                        <i class="icon-star-empty3 text-muted"></i>
-                                    </a>
-                                </td>
-                                <!-- <td class="table-inbox-image">
-                                    <img src="{{message.sender_image}}" class="rounded-circle" width="32" height="32" alt="">
-                                    
-                                </td> -->
                                 <td class="table-inbox-name">
-                                    <a href=""  data-toggle="modal" data-target="#compose{{message.id}}">
-                                        <div class="letter-icon-title text-default"><b>{{message.name}}</b></div>
-                                    </a>
+                                    {{forloop.counter}}
                                 </td>
                                 <td class="table-inbox-name">
                                     <a href=""  data-toggle="modal" data-target="#compose{{message.id}}" >
@@ -151,9 +147,13 @@
                                     </a>
                                 </td>
                                 <td class="table-inbox-name">
-
+                                    <a href=""  data-toggle="modal" data-target="#compose{{message.id}}">
+                                        <div class="letter-icon-title text-default"><b>{{message.name}}</b></div>
+                                    </a>
+                                </td>
+                                
+                                <td class="table-inbox-name">
                                     <a href=""  data-toggle="modal" data-target="#compose{{message.id}}" >
-                                        
                                         <div class="letter-icon-title text-default">
                                             {% if message.replied %}
                                                 <b>Replied</b>
@@ -168,11 +168,9 @@
                                     <div class="table-inbox-subject">{{message.message|truncatechars_html:20}}</div>
                                     <!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
                                 </td>
-                                <td class="table-inbox-attachment">
-                                    <i class="icon-attachment text-muted"></i>
-                                </td>
-                                <td class="table-inbox-time">
-                                    {{message.created_date}}
+                                
+                                <td class="table-inbox-time ">
+                                   <p class  = "mr-5">{{message.created_date}}</p> 
                                 </td>
                             </tr>     
                             
