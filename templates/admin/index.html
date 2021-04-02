@@ -21,14 +21,14 @@
                 success: function (data) {
         
                   var ctx = $populationChart[0].getContext("2d");
-        
+                   
                   new Chart(ctx, {
-                    type: 'pie',
+                    type: 'doughnut',
                     data: {
                       labels: data.labels,
                       datasets: [{
                         label: 'Companies',
-                        backgroundColor: [ '#2196F3;', '#F44336', '#FF7043', '#FF9800', '#4CAF50'],
+                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0'],
                         data: data.data
                       }]          
                     },
@@ -69,7 +69,7 @@
         </div>
 
         <div class="card-body">
-        <div id="container" style="width: 75%;">
+        <div id="container" style="width: 100%;">
             <canvas id="category-chart" data-url="{% url 'admin:category_chart' %}"></canvas>
             </div>
             

@@ -11,9 +11,9 @@ def main_category_chart(request):
     labels = []
     data = []
     
-    queryset = Company.objects.values('main_category').annotate(Count('id')).order_by('main_category').exclude(main_category='FBPIDI')
+    queryset = Company.objects.values('category__category_name').annotate(Count('id')).order_by('category').exclude(main_category='FBPIDI')
     for entry in queryset:
-        labels.append(entry['main_category'])
+        labels.append(entry['category__category_name'])
         data.append(entry['id__count'])
     print(labels,data)
     print(queryset)
