@@ -458,25 +458,20 @@ Number of Industries By Market Target
 								<tr>
 									<td>{{forloop.counter}}</td>
 									<td>
-										 {{d.product}}
+										 {{d.product__sub_category_name}}
 									</td>
 									<td>
-										{{d.total_data.installed}} {{d.unit}}
+										{{d.total_prdn_capacity}} {{d.product__uom}}
 									</td>
 									<td>
-										{{d.total_data.actual}}  {{d.unit}}
+										{{d.total_actual}}  {{d.product__uom}}
 									</td>
 									 
 								</tr>
 								 {%endfor%}
 								 
 							</tbody>
-							<tr>
-								<td></td>
-								<td>Total</td>
-								<td>{%get_prodn_total produn_data 'prodn'%}</td>	
-								<td>{%get_prodn_total produn_data 'actual'%}</td>
-							</tr>
+							 
 						</table>
 						 
 					</div>
@@ -877,16 +872,13 @@ Number of Industries By Market Target
 							<tbody>
 								{%for fd in extn_data%}
 								<tr>
-									<td>{{fd.product}}</td>
-									<td>{{fd.data|floatformat:2}}</td>
+									<td>{{fd.product__sub_category_name}}</td>
+									<td>{{fd.avg_extraction_rate|floatformat:2}} {{fd.product__uom}}</td>
 								</tr>
 								{%endfor%}
 								
 							</tbody>
-							<tr>
-								<td>Total</td>
-								<td>{{extn_data|get_sum}}</td>
-							</tr>
+							 
 						</table>
 					</div> 
 				</div>
@@ -942,11 +934,11 @@ Number of Industries By Market Target
 								{%endfor%}
 								
 							</tbody>
-							<tr>
+							<!-- <tr>
 								<td>Total</td>
 								<td></td>
 								<td>ETB {{price_data|get_sum|floatformat:2}}</td>
-							</tr>
+							</tr> -->
 						</table>
 					</div> 
 				</div>

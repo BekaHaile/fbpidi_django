@@ -12,7 +12,7 @@ from django.views.generic import CreateView,UpdateView,ListView,View,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.core import serializers
-from django.db.models import Sum,Count,OuterRef,Exists,Q,F
+from django.db.models import Sum,Count,OuterRef,Exists,Q,F,Avg
 
 
 from company.models import *
@@ -196,24 +196,25 @@ class ChangeInCapitalUtilization(LoginRequiredMixin,View):
 
 class AverageExtractionRate(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        products = None
-        average_extraction_data = []
+        pdata = None
         context = {}
         if self.kwargs['product'] == "all":
-            products = SubCategory.objects.all()
+            # products = SubCategory.objects.all()
+            pdata = ProductionCapacity.objects.values('product__sub_category_name','product__uom').annotate(avg_extraction_rate=Avg('extraction_rate')).order_by('product')
             context['title']= "All Products"
         else:
-            products = SubCategory.objects.filter(id=self.kwargs['product'])
+            # products = SubCategory.objects.filter(id=self.kwargs['product'])
+            pdata = ProductionCapacity.objects.filter(product__id=self.kwargs['product']).values('product__sub_category_name','product__uom').annotate(avg_extraction_rate=Avg('extraction_rate')).order_by('product')
             context['title']= SubCategory.objects.get(id=self.kwargs['product']).sub_category_name
         extn_rate = 0
-        index = 1
-        for product in products:
-            pcapacity = ProductionCapacity.objects.filter(product=product)
-            for pcd in pcapacity:
-                extn_rate+=pcd.extraction_rate
-                index += 1
-            average_extraction_data.append({'product':product.sub_category_name,'data':extn_rate/pcapacity.count(),})
-        context['extn_data']=average_extraction_data
+        # index = 1
+        # for product in products:
+        #     pcapacity = ProductionCapacity.objects.filter(product=product)
+        #     for pcd in pcapacity:
+        #         extn_rate+=pcd.extraction_rate
+        #         index += 1
+        #     average_extraction_data.append({'product':product.sub_category_name,'data':extn_rate/pcapacity.count(),})
+        context['extn_data']=pdata
         context['flag'] = "extraction_data"
         context['products'] = SubCategory.objects.all()
         return render(self.request,"admin/company/report_page.html",context)
@@ -260,22 +261,37 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
             messages.warning(self.request,"Please Fixe Your Request,There is issue in the request")
             return render(self.request,"admin/company/report_page.html",context)
         else:
-            for company in companies:
-                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year)
-                production_performance_this_last = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1)
-                production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-2)
-                for p in production_performance_this_year:
-                    pp_today += p.sales_value
-                
-                for p in production_performance_this_last:
-                    pp_last += p.sales_value
+            companies_with_data = companies.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))))
+            for company in companies_with_data:
+                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year).annotate(total=Sum('sales_value')).order_by('company')
+                production_performance_this_last = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1).annotate(total=Sum('sales_value')).order_by('company')
+                production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-2).annotate(total=Sum('sales_value')).order_by('company')
+            
+                # for (p_this,p_last,p_prev) in zip(production_performance_this_year,production_performance_this_last,production_performance_this_pre):
+                #         pp_today += p_this.sales_value
+                #         pp_last += p_last.sales_value
+                #         pp_prev += p_prev.sales_value
+                #         print(p_this,p_last,p_prev)
 
-                for p in production_performance_this_pre:
-                    pp_prev += p.sales_value
+                
+
+                if production_performance_this_year.exists():
+                    for p in production_performance_this_year:
+                        pp_today = p.sales_value 
+                        
+                if production_performance_this_last.exists():
+                    for p in production_performance_this_last:
+                        pp_last += p.sales_value
+                         
+                if production_performance_this_pre.exists():
+                    for p in production_performance_this_pre:
+                        pp_prev += p.sales_value
+                        
+
                 gvp_data.append({'company':company.name,'data':float(pp_today+pp_last+pp_prev),'gvp_data':{
                     'this_yr':pp_today,'last_yr':pp_last,'prev_yr':pp_prev
                 } })
-
+            print(gvp_data)
             context['gvp_data'] = gvp_data
             context['flag'] = "gross_vp_data"
             context['years'] = {'this_year':this_year,'last_year':this_year-1,'prev_year':this_year-2}
@@ -361,26 +377,30 @@ class InvestmentCapitalReportView(LoginRequiredMixin,View):
 
 class ProductionCapacityView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        products = None
+        pdata = None
         context = {}         
         if self.kwargs['product'] == "all":
-            products = SubCategory.objects.all()
+            # products = SubCategory.objects.all()
             context['title']= "All Products"
+            pdata = ProductionCapacity.objects.values('product__sub_category_name','product__uom').annotate(total_prdn_capacity=Sum('install_prdn_capacity')*260,total_actual=Sum('actual_prdn_capacity')*260).order_by('product')
         else:
-            products = SubCategory.objects.filter(id=self.kwargs['product'])
+            # products = SubCategory.objects.filter(id=self.kwargs['product'])
+            pdata = ProductionCapacity.objects.filter(product__id=self.kwargs['product']).values('product__sub_category_name','product__uom').annotate(total_prdn_capacity=Sum('install_prdn_capacity')*260,total_actual=Sum('actual_prdn_capacity')*260).order_by('product')
             context['title']= SubCategory.objects.get(id=self.kwargs['product']).sub_category_name
 
-        total_data = []
-        prodn_total = 0
-        actual_total = 0
-        for product in products:
-            for aup in ProductionCapacity.objects.filter(product=product):
-                prodn_total+=float(aup.install_prdn_capacity*260)
-                actual_total+=float(aup.actual_prdn_capacity*260)
+        # total_data = []
+        # prodn_total = 0
+        # actual_total = 0
+        # pdata = ProductionCapacity.objects.values('product__sub_category_name','product__uom').annotate(total_prdn_capacity=Sum('install_prdn_capacity')*260,total_actual=Sum('actual_prdn_capacity')*260).order_by('product')
 
-            total_data.append({'product':product.sub_category_name,'unit':product.uom,'total_data':{'installed':prodn_total,'actual':actual_total}})
+        # for product in products:
+        #     for aup in ProductionCapacity.objects.filter(product=product):
+        #         prodn_total +=float(aup.install_prdn_capacity*260)
+        #         actual_total +=float(aup.actual_prdn_capacity*260)
 
-        context['produn_data']=total_data
+        #     total_data.append({'product':product.sub_category_name,'unit':product.uom,'total_data':{'installed':prodn_total,'actual':actual_total}})
+
+        context['produn_data']=pdata
         context['products'] = SubCategory.objects.all()
         context['flag'] = 'production_cap'
         return render(self.request,"admin/company/report_page.html",context)
