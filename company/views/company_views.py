@@ -16,8 +16,8 @@ from django.core import serializers
 
 from company.models import *
 from accounts.models import CompanyAdmin,User
-from accounts.email_messages import sendRelayMessage
-from product.models import Order,OrderProduct,Product
+from accounts.email_messages import sendRelayMessage, sendInquiryReplay
+from product.models import Order,OrderProduct,Product, ProductInquiry,ProductInquiryReply
 
 from company.forms import *
 from collaborations.models import *
@@ -81,18 +81,61 @@ class CompanyInboxDetail(View):
             sender_message = CompanyMessage.objects.get(id = self.kwargs['pk'])
             reply_message = self.request.POST['reply_message']
             if sendRelayMessage(self.request, sender_message, reply_message): #returns true if the email is sent successfully
+                if sender_message.replied:
+                    reply = sender_message.companymessagereply_set.first()
+                    reply.reply = reply_message
+                    reply.save()
+                else:
+                    reply= CompanyMessageReply(created_by=self.request.user, message=sender_message, reply =reply_message)
+                    reply.save()
                 sender_message.replied = True
                 sender_message.save()
-                reply= CompanyMessageReply(created_by=self.request.user, message=sender_message, reply_message =reply_message)
-                reply.save()
-                messages.success(self.request, f"Successfully, replied to {message.email}")
+                messages.success(self.request, f"Successfully, replied to {sender_message.email}")
                 return redirect('admin:admin_inbox_list')
             else:
                 messages.warning(self.request, f"Reply couldn't be sent! Please check your connection and try again later.")
                 return redirect('admin:admin_inbox_list')
         except Exception as e:
             print("########## Exception at CompanyInboxDetail post ",e)
-            messages.warning(self.request, "########## Exception at CompanyInboxDetail post ",e)
+            messages.warning(self.request, "Exception while replying. Please try again later.",e)
+            return redirect("admin:index")
+
+
+class CompanyInquiryList(ListView):
+    model = ProductInquiry
+    template_name = "admin/company/inquiry_list.html"
+    def get_queryset(self):
+        if 'replied_only' in self.request.GET:
+            return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id, replied =True)
+        elif 'unreplied_only' in self.request.GET:
+            return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id, replied = False)
+        return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id)
+
+
+
+class CompanyInquiryReply(View):
+    def post(self, *args, **kwargs):
+        try:
+            sender_inquiry = ProductInquiry.objects.get(id = self.kwargs['pk'])
+            reply_message = self.request.POST['reply_message']
+            if sendInquiryReplay(self.request, sender_inquiry, reply_message): #returns true if the email is sent successfully
+                if sender_inquiry.replied:
+                    reply = sender_inquiry.productinquiryreply_set.first()
+                    reply.reply = reply_message
+                    reply.save()
+                else:
+                    reply= ProductInquiryReply(created_by=self.request.user, inquiry=sender_inquiry, reply =reply_message)
+                    reply.save()
+                sender_inquiry.replied = True
+                sender_inquiry.save()
+                messages.success(self.request, f"Successfully, replied to {sender_inquiry.sender_email}")
+                return redirect('admin:admin_inquiry_list')
+            else:
+                messages.warning(self.request, f"Reply couldn't be sent! Please check your connection and try again later.")
+                return redirect('admin:admin_inquiry_list')
+        except Exception as e:
+            print("########## Exception at CompanyInquiryReply post ",e)
+            messages.warning(self.request, "Exception while replying. Please try again later.",e)
             return redirect("admin:index")
 
 

@@ -36,7 +36,7 @@
 
 <div class="card">
     <div class="card-header bg-transparent header-elements-inline">
-        <h6 class="card-title"> My inbox</h6>
+        <h6 class="card-title"> My inquiry List</h6>
     </div>
 
 
@@ -67,17 +67,17 @@
                     </div>
 
                     <div class="btn-group ml-3 mr-lg-3">
-                        <form action = "{% url 'admin:admin_inbox_list' %} " method = "GET" >
+                        <form action = "{% url 'admin:admin_inquiry_list' %} " method = "GET" >
                             
                             <button type="submit" class="btn btn-light"><a href="" class="dropdown-item"><span class="d-none d-lg-inline-block ml-2">All</span></a></button>
                         </form>
 
-                        <form action = "{% url 'admin:admin_inbox_list' %} " method = "GET" >
+                        <form action = "{% url 'admin:admin_inquiry_list' %} " method = "GET" >
                             <input type="hidden" name= "unreplied_only"  value='unreplied_only'>
                             <button  type="submit" class="btn btn-light"><a href="" class="dropdown-item"><i class="icon-spam"></i> <span class="d-none d-lg-inline-block ml-2">Unreplied</span></a></button>
                         </form>
 
-                        <form action = "{% url 'admin:admin_inbox_list' %} " method = "GET" >
+                        <form action = "{% url 'admin:admin_inquiry_list' %} " method = "GET" >
                             <input type="hidden" name= "replied_only"  value='replied_only'>
                             <button  type="submit" class="btn btn-light"><a href="" class="dropdown-item"> <span class="d-none d-lg-inline-block ml-2">Replied</span></a></button>
                         </form>
@@ -117,10 +117,10 @@
         <table class="table table-inbox">										
             <tbody data-link="row" class="rowlink">
             
-                {% for message in message_list %}
+                {% for inquiry in object_list %}
                     <!-- if the current user is the receiver of the message -->
 
-                        {% if message.replied == False %}
+                        {% if inquiry.replied == False %}
                             <tr class = "unread" > 
                         {% else %}
                             <tr style="background-color: rgb(228, 228, 228);"> 
@@ -128,7 +128,7 @@
                         <a href = "#" target = "blank" >
                             
                                 <td class="table-inbox-checkbox rowlink-skip">
-                                    <a href="#compose{{message.id}}" target = "blank" ></a>
+                                    <a href="#compose{{inquiry.id}}" target = "blank" ></a>
                                     <input type="checkbox" class="form-input-styled" data-fouc>
                                 </td>
                                 <td class="table-inbox-star rowlink-skip">
@@ -142,12 +142,12 @@
                                 </td> -->
                                 <td class="table-inbox-name">
                                     <a href=""  data-toggle="modal" data-target="#compose{{message.id}}">
-                                        <div class="letter-icon-title text-default"><b>{{message.name}}</b></div>
+                                        <div class="letter-icon-title text-default"><b>{{inquiry.sender_email}}</b></div>
                                     </a>
                                 </td>
                                 <td class="table-inbox-name">
                                     <a href=""  data-toggle="modal" data-target="#compose{{message.id}}" >
-                                        <div class="letter-icon-title text-default"><b>{{message.email}}</b></div>
+                                        <div class="letter-icon-title text-default"><b>{{inquiry.subject|safe|truncatechars_html:20}}</b></div>
                                     </a>
                                 </td>
                                 <td class="table-inbox-name">
@@ -155,7 +155,7 @@
                                     <a href=""  data-toggle="modal" data-target="#compose{{message.id}}" >
                                         
                                         <div class="letter-icon-title text-default">
-                                            {% if message.replied %}
+                                            {% if inquiry.replied %}
                                                 <b>Replied</b>
                                             {% else %}
                                                 <b>Not Replied</b>
@@ -165,14 +165,14 @@
                                 </td>
                                 <!-- the rest is the same whether the user is a receiver or a sender -->
                                 <td class="table-inbox-message">
-                                    <div class="table-inbox-subject">{{message.message|truncatechars_html:20}}</div>
+                                    <div class="table-inbox-subject">{{inquiry.quantity}}</div>
                                     <!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
                                 </td>
                                 <td class="table-inbox-attachment">
                                     <i class="icon-attachment text-muted"></i>
                                 </td>
                                 <td class="table-inbox-time">
-                                    {{message.created_date}}
+                                    {{inquiry.created_date}}
                                 </td>
                             </tr>     
                             
@@ -180,7 +180,7 @@
                          <div id="compose{{message.id}}" class="modal fade" tabindex="-1">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <form action = "{% url 'admin:admin_inbox_detail' pk=message.id %} " method = "POST" enctype="multipart/form-data">
+                                    <form action = "{% url 'admin:admin_inquiry_reply' pk=inquiry.id %}" method = "POST" enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <div class="modal-header">
                                             <h5 class="modal-title"><b>Compose Replay</b> </h5>
@@ -188,26 +188,29 @@
                                         </div>					
                                         <div class="modal-body">
                                                 <div  style="padding-left: 20px;">
-                                                        
-                                                    
-                                                    <h5 style = "color:black"> <b>Sender Name :</b> {{message.name}}</h5>
-                                                    <h5 style = "color:black"> <b>Sender Email :</b> {{message.email}} </h5>
+                                                    <!-- <h5 style = "color:black"> <b>Sender Name :</b> {{message.name}}</h5> -->
+                                                    <h5 style = "color:black"> <b>Sender Email :</b> <p style = "display:inline; color:rgb(91, 91, 201)">{{inquiry.sender_email}}</p> </h5>
                                                     <br>
-                                                    <h5 style = "color:black"><b>Sender message</b></h5>
-                                                   
+                                                    <h5 style = "color:black"><b>Subject :</b></h5>
+                                                    <div class="form-group">
+                                                        <input   class =" form form-control"  disabled="True" value= "{{inquiry.subject}}" >
+                                                    </div>
+                                                    <br>
+                                                    <h5 style = "color:black"><b>Inquiry Content :</b></h5>
                                                     <div class="form-group">
                                                         <textarea  rows="7" class =" form form-control"  disabled="True">
-                                                            {{message.message}}</textarea> 
+                                                            {{inquiry.content}}</textarea> 
                                                     </div>
+                                                    <br>
                                                 
                                                    
                                                     <br>
-                                                    {% if message.replied %}
+                                                    {% if inquiry.replied %}
                                                     <p>Your previous reply, You can resend another replay, by editing.</p>
                                                     
                                                     <div class="form-group">
-                                                        <textarea class="form-control" name="reply_message" rows="7" placeholder="Reply Message" required>
-                                                            {{message.companymessagereply_set.first.reply}}
+                                                        <textarea class="form-control"  rows="7" placeholder="Reply Message" required>
+                                                            {{inquiry.productinquiryreply_set.first.reply}}
                                                         </textarea>
                                                     </div>
                                                     {% else %}
