@@ -28,7 +28,7 @@
  
 {% endblock %}
 
-{%block pagename%}<a href="{%url 'admin:report_page'%}">Reports</a> >{%if flag == 'company_count'%}{{label}}{%else%} Companies {%if sector and sector != 'all'%} <span> > </span> {{sector}} Sector{%endif%}{%if sub_sector%} <span> > </span>{{sub_sector}}{%endif%} <span class="badge badge-warning">{{object_list.count}}</span> Industries{%endif%}{%endblock%}
+{%block pagename%}<a href="{%url 'admin:report_page'%}">Reports</a> {%if flag == 'company_count'%}{{label}}{%else%} {%if sector and sector != 'all'%} <span> > </span> {{sector}} Sector{%endif%}{%if sub_sector%} <span> > </span>{{sub_sector}}{%endif%} <span class=" ">{{object_list.count}}</span> Industries{%endif%}{%endblock%}
 {%block content%}
 
 			<!-- Content area -->

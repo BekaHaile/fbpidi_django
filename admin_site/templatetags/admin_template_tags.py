@@ -95,7 +95,10 @@ def get_prodn_total(data,option):
 
 @register.simple_tag
 def change_capital_util(thisd,last,pdata):
-    return round((float(thisd)-float(last))/float(pdata),2)
+    if pdata == 0:
+        return round((float(thisd)-float(last))/1,2) 
+    else:
+        return round((float(thisd)-float(last))/float(pdata),2)
 
 @register.simple_tag
 def change_util_total(data,option):
