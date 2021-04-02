@@ -139,7 +139,7 @@
 					<div class="card-body">
 						<div class="cat-item text-center">
 							<a href="{%url 'product_category' cat_id=category.id%}"></a>
-							<div class="cat-img category-svg">
+							<div class="category-svg">
 
 								<!--Real-Estate Icon Svg --->
 								<img src="{{category.icons.url}}" alt="" srcset="">
@@ -332,7 +332,7 @@
 								<a href="{% url 'company_home' pk=company.id %}" class="text-white">{%print_translated company.main_category company.main_category LANGUAGE_CODE%}</a>
 							</div>
 
-							<div class="card-body">
+							<div class="card-body" style="padding: 1.5rem 1.0rem;">
 								<div class="item-card7-desc">
 									<div class="item-card7-text">
 										<a href="{% url 'company_home' pk=company.id %}" class="text-dark">
