@@ -261,7 +261,6 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
             messages.warning(self.request,"Please Fixe Your Request,There is issue in the request")
             return render(self.request,"admin/company/report_page.html",context)
         else:
-            print(this_year)
             companies_with_data = companies.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))))
             production_performance_this_year = companies_with_data.values('name').annotate(total=Sum('company_product_perfornamce__sales_value',filter=Q(company_product_perfornamce__activity_year=this_year)))
             production_performance_this_last = companies_with_data.values('name').annotate(total=Sum('company_product_perfornamce__sales_value',filter=Q(company_product_perfornamce__activity_year=this_year-1)))
@@ -283,7 +282,6 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
                     gvp_data.append({'company':p_this['name'],'data':float(pp_today+pp_last+pp_prev),'gvp_data':{
                         'this_yr':pp_today,'last_yr':pp_last,'prev_yr':pp_prev
                     } })
-            print(gvp_data)
 
             # for company in companies_with_data:
             #     production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year).annotate(total=Sum('sales_value'))
