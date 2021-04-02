@@ -264,9 +264,9 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
             print(this_year)
             companies_with_data = companies.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))))
             for company in companies_with_data:
-                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year).annotate(total=Sum('sales_value',filter=Q(company=company))).order_by('company')
-                production_performance_this_last = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1).annotate(total=Sum('sales_value')).order_by('company')
-                production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-2).annotate(total=Sum('sales_value')).order_by('company')
+                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year).annotate(total=Sum('sales_value')).order_by('product')
+                production_performance_this_last = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1).annotate(total=Sum('sales_value')).order_by(product')
+                production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-2).annotate(total=Sum('sales_value')).order_by('product')
             
                 # for (p_this,p_last,p_prev) in zip(production_performance_this_year,production_performance_this_last,production_performance_this_pre):
                 #         pp_today += p_this.sales_value
