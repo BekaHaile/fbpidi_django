@@ -166,12 +166,12 @@
 																		
 
 																		<div style = "display: inline;" class="mr-0">
-																			<!-- <form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" class="mr-0">
+																			<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" class="mr-0">
 																				<input type="hidden" name="products" value="{{product.id}},">
-																				<button  type="submit">Contact Now</button> -->
+																				<button id="product_contact_now" type="submit">{% trans "Contact Now" %}</button>
 																			<a href="#"><i class="fa fa-map-signs"></i>  {% trans "Get Directions" %}</a></div>
-																			<!-- </form> -->
-																			<!-- <button class= " bg-secondary" id = "prod_{{product.id}}" onclick = "add_to_cart('{{product.id}}')">Add To Basket</button> -->
+																			</form>
+																			<button class= " bg-secondary" id = "prod_{{product.id}}" onclick = "add_to_cart('{{product.id}}')">Add To Basket</button>
 																			
 																		</div>
 																</div>

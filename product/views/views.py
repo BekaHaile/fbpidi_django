@@ -922,7 +922,7 @@ class CheckoutView(LoginRequiredMixin,View):
 class p_serializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ("name", "name_am",  "image")
+        fields = ("id","name", "name_am",  "image")
 
 
 def FetchInquiryProducts(request):
@@ -935,45 +935,38 @@ def FetchInquiryProducts(request):
     
     return JsonResponse( p_serializer(products, many = True).data, safe = False)
 
-# def InquiryForm(request):
-    
-    # print(data['products'])
-    # return render(request, "frontpages/product/inquiry_form.html",{})
+def get_id_list(str_id):
+    prods_id_list = str_id[:-1] 
+    product_ids = prods_id_list.split(",")
+    return [int(i) for i in product_ids]
 
 class InquiryForm(View):
-    selected_prods = []
     def get(self, *args, **kwargs):
         try:
-            prods_id_list = self.request.GET['products'][:-1] 
-            product_ids = prods_id_list.split(",")
-            product_list = [int(i) for i in product_ids]
-            products = Product.objects.filter(id__in = product_list).distinct()
-            selected_prods = products
-            return render(self.request, "frontpages/product/inquiry_form.html", {'products':products,'prods_id_list': self.request.GET['products'],'form':ProductInquiryForm})
+            selected_prods = Product.objects.filter(id__in = get_id_list( self.request.GET['products']) )
+            context = {'products':selected_prods,'prod_id_list': self.request.GET['products'],'form':ProductInquiryForm}
+            if selected_prods.count() > 1:
+                context['product_count'] = selected_prods.count()
+            return render(self.request, "frontpages/product/inquiry_form.html", context)
         except Exception as e:
             print("@@@@@@ Exception at InquiryForm get ",e)
             return redirect ('index')
+
     def post(self, *args,**kwargs):
         try:
-            prods_id_list = self.request.POST['products'][:-1] 
-            product_ids = prods_id_list.split(",")
-            product_list = [int(i) for i in product_ids]
-            products = Product.objects.filter(id__in = product_list).distinct()
+            products = Product.objects.filter(id__in = get_id_list( self.request.POST['prod_id_list']) ).distinct()
             form = ProductInquiryForm(self.request.POST)
             if form.is_valid:
-                for p in products:
-                    print("ppppppppppp",p)
-                    i = form.save(commit = False)
-                    i.product = p
-                    i.save()
-                    print ("saved the inquiry for product ",p.name, " with inquiry ",i)
+                for p in products:       
+                    item = form.save(commit = False)
+                    item.product = p
+                    item.save()
             else:
                 print("form invalid")
-            return render(self.request, "frontpages/product/success_inquiry.html",{'email':self.request.POST['sender_email']})
+            return render(self.request, "frontpages/product/success_inquiry.html",{ 'email':self.request.POST['sender_email'], 'prod_id_list': self.request.POST['prod_id_list'] })
         except Exception as e:
             print("@@@ Exception ",e)
             return redirect("index")
-
 
 # def  InquiryForm(request):
 #     if request.Method == "GET":

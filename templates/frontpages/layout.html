@@ -147,16 +147,22 @@
                                 <div style = "padding: 10px;   width: 300px;" class = "dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
                                    
                                     <div class="dropdown-content-body dropdown-scrollable">
-                                        <ul id = "inquiry_list" style = "width: 100%;" class="media-list">
                                         
+                                            <ul id = "inquiry_list" style = "width: 100%;" class="media-list">
+                                            
+                                            
                                         
-                                    
-                                        </ul>
-                                        
-                                        
-                                            <input type= "hidden" id="list_of_prod_ids" name ="products" value="" >
-                                            <button class="btn mt-4" id="btn_send_inquiry" style = "background-color: orange; display: none;">Send Inquiry</button>
-                                       
+                                            </ul>
+                                            
+                                            <form target="blank"  action = "{% url 'inquiry_form' %}" method = "GET" >
+                                                <input type= "hidden" id="list_of_prod_ids" name ="products" value="" >
+                                                <button class="btn mt-4" id="btn_send_inquiry" style = "background-color: orange; color:white; display: none;"><b>Send Inquiry</b></button> 
+                                            </form>
+
+                                            <form>
+                                            <button class="btn mt-4" id="btn_clear_cart" onclick="clear_cart()" style = "background-color: rgb(169, 64, 8); color:white;display: none;">Clear Cart</button> 
+                                            </form>
+                                  
                                     </div>
                                 
                     
@@ -647,31 +653,84 @@
 
 <!-- start of script for cart  -->
 <script>
+fetch_products()
 
-console.log(localStorage.getItem("prods"))
-if (count_products() > 0)
-{
-    document.getElementById("num_of_inquiry").innerHTML = count_products()
-    document.getElementById("btn_send_inquiry").style['display'] = "block"
-    // store the list of selected product ids inside a hidden input, so that we can send it in the get request
-    document.getElementById("list_of_prod_ids").value = localStorage.getItem("prods")
-    fetch_products()
-}
-else{
-    document.getElementById("num_of_inquiry").innerHTML = ""
-    document.getElementById("btn_send_inquiry").display = "none"
-}
+// check to see if other pages have changed the value of our cart
+// the product_contact_now is available only inside the product listing webpage 
+if(document.getElementById("product_contact_now"))
+    setInterval(set_inquiry_display,2000)
 
+function set_inquiry_display(){
+    if (count_products() > 0)
+        {
+        document.getElementById("num_of_inquiry").innerHTML = count_products()
+        document.getElementById("btn_send_inquiry").style['display'] = "block"
+        document.getElementById("btn_clear_cart").style['display'] = "block"
+        // set the products input value, so that when the Send Inquiry button is clicked it will be passed to the get view
+        document.getElementById("list_of_prod_ids").value = localStorage.getItem("prods")
+        // disable the "Add to Cart" button for selected products
+        if ( document.getElementById('product_contact_now' ))
+            {
+                let selected_ids = get_int_ids(localStorage.getItem('prods'))
+                selected_ids.forEach(i => { document.getElementById('prod_'+i).disabled = true})
+            }
+        }
+
+    else{
+        document.getElementById("num_of_inquiry").innerHTML = ""
+        // set the cart listing to empty
+        document.getElementById('inquiry_list').innerHTML = "";
+        document.getElementById("btn_send_inquiry").style['display'] = "none"
+        document.getElementById("btn_clear_cart").style['display'] = "none"
+        document.getElementById("list_of_prod_ids").value = ""
+        //enable all "Add to Cart" buttons for all products
+        // if(document.getElementById("product_contact_now"))
+        //     {
+        //         let prods = "{{object_list}}"
+        //         prods.forEach(product =>{document.getElementById("prod_"+product.id).disabled = false})
+        //     }
+        
+         }
+}
 
 function count_products(){
-    if(localStorage.getItem("prods") == null)
+    if(localStorage.getItem("prods") == null || localStorage.getItem("prods")=="")
         return 0
     else
-        {
-        var num = localStorage.getItem("prods").match(/,/g || []).length;
-        console.log("num of , is ", num)
-        return num
-        }
+        return localStorage.getItem("prods").match(/,/g || []).length;           
+}
+
+
+// converts the string ids to an array or product ids
+function get_int_ids(str_ids)
+{
+        console.log("Get int ids called "+str_ids)
+        let prod_ids = str_ids.split(",");
+        // since the last element of the string ids will be ',' like "1, 34, 23, ": we need to cut it off from the string by using pop()
+        let x = prod_ids.pop()
+        let int_ids = [] 
+        prod_ids.forEach(i =>{int_ids.push (parseInt(i)) })
+        return int_ids
+}
+
+
+function clear_cart(){
+    // remove the product ids from cart
+    localStorage.removeItem('prods')
+    set_inquiry_display()
+}
+
+function remove_prod_from_cart(p_id){
+    let cart_ids = localStorage.getItem('prods')
+    let prod_id = p_id.toString()+","
+    localStorage.setItem('prods', cart_ids.replace(prod_id, ''))
+    fetch_products()
+    
+    // if this function is called inside product list webpage refresh the view 
+    if( document.getElementById('prod_'+p_id)){
+        document.getElementById('prod_'+p_id).disabled = false
+    }
+    
 }
 
 function add_to_cart(product_id){
@@ -687,14 +746,14 @@ function add_to_cart(product_id){
         document.getElementById('prod_'+product_id).disabled = true
     }
     // document.getElementById('prod_'+product_id).disabled = true
-    window.alert(localStorage.getItem("prods"))
+    
     fetch_products();
 }
 
-
 function fetch_products(){
-    console.log("inside fetch_products")
-    fetch("{% url 'fetch_inquiry_products'  %}",
+   
+    if(count_products() > 0){
+        fetch("{% url 'fetch_inquiry_products'  %}",
             {
                 method:"POST",
                 credentials: 'same-origin',
@@ -707,27 +766,25 @@ function fetch_products(){
                 })
             }
            ).then(e => e.json()).then(result=>{
-                    console.log(result)
+                   
                     // first clear the ul item
                     document.getElementById('inquiry_list').innerHTML = "";
                     result.forEach(element => {
                         append_product_cart(element)
                     });
-
-                    if (count_products() > 0)
-                        {
-                        console.log("changing the number ", count_products())
-                        document.getElementById("num_of_inquiry").innerHTML = count_products()
-                        document.getElementById("btn_send_inquiry").style['display'] = "block"
-                        document.getElementById("list_of_prod_ids").value = localStorage.getItem("prods")
-                        }
-                                  
+                    
+                    // we need to refresh the inquiry display when ever we call fetch products,
+                               
                 });
-        
+        }
     
+        set_inquiry_display()
+
+       
 }
            
 function append_product_cart(product){
+    console.log ("appending called")
     var li_item = document.createElement('li');
     var li_card_item = document.createElement('div');
     li_card_item.className = "card card-body "
@@ -740,7 +797,7 @@ function append_product_cart(product){
 
             var prod_div = document.createElement('div');
                     var name_anch = document.createElement('a');
-                    var count_area = document.createElement('p');
+                    var remove_btn = document.createElement('button');
              
           
 //    ######################## setting values
@@ -759,17 +816,18 @@ function append_product_cart(product){
         name_anch.target = "blank";
         name_anch.className = "mr-3";
         name_anch.textContent = product.name;
-        count_area.className = "badge bg-danger badge-pill ml-auto float-right";
-        count_area.style['color'] = "white"
-        count_area.textContent = 3;
+        remove_btn.className = "icon-trash badge bg-danger badge-pill ml-auto float-right";
+        remove_btn.style['color'] = "white"
+        remove_btn.textContent = "R";
+        remove_btn.addEventListener("click", function (){
+            remove_prod_from_cart(product.id)
+            }
+        )
         
     img_div.appendChild(name_anch) 
-    img_div.appendChild(count_area)
+    img_div.appendChild(remove_btn)
     
-   
-
     prod_div.className = "media-body";
-    
     
     li_card_item.appendChild(img_div);
     li_card_item.appendChild(prod_div)
