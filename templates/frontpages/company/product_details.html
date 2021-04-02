@@ -176,13 +176,23 @@
 										</div>
 									</div>
 								</div>
+								
+																	
 								<div class="card-footer">
-									<div class="">
-										<a href="{% url 'chat_with' reciever_name=product.created_by.username %}" target="blank" class="btn btn-info mt-1 mb-1" title="{% print_translated 'Chat with Manufacturer' 'አምራቹን አግኝ' LANGUAGE_CODE %} "><i class="fa fa-envelope"></i></a>
-										<a href="mailto:{{product.company.contact_person.email}}" title="Contact Manufacturer" class="btn btn-secondary"><i class="fa fa-user"></i></a>
-										<a href="#" class="btn btn-light mt-1 mb-1" title="Make Inquiry"><i class="fa fa-cart-plus"></i></a>
-										<a href="#" class="btn btn-info icons" title="Share Product"><i class="icon icon-share mr-1"></i></a>
-										<a href="#" class="btn btn-pink icons" title="Ad to Favorites"><i class="icon icon-heart  mr-1"></i> 678</a>
+									<div class="row">
+										<a href="{% url 'chat_with' reciever_name=product.created_by.username %}" target="blank" class="btn btn-info ml-1 mr-1" title="{% print_translated 'Chat with Manufacturer' 'አምራቹን አግኝ' LANGUAGE_CODE %} "><i class="fa fa-envelope"></i></a>
+										<a href="mailto:{{product.company.contact_person.email}}" title="Contact Manufacturer" class="btn btn-secondary ml-1 mr-1"><i class="fa fa-user"></i></a>
+										{% if user.is_customer %}
+										<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" class="mr-0" >
+											<input type="hidden" name="products" value="{{product.id}},">
+											<button class="btn btn-lightml-1 ml-1 mr-1" title="Make Inquiry" style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">
+												<i class="fa fa-cart-plus" style = "color:white"></i>
+											</button>
+										</form>
+										{% endif %}
+
+										<a href="#" class="btn btn-info icons ml-1 mr-1" title="Share Product"><i class="icon icon-share "></i></a>
+										<a href="#" class="btn btn-pink icons ml-1 mr-1" title="Ad to Favorites"><i class="icon icon-heart  "></i> 678</a>
 									</div>
 								</div>
 							</div>
@@ -218,40 +228,6 @@
 		</section>
 		<!--/Add listing-->
 
-		<!-- Newsletter-->
-		<section class="sptb border-top bg-white">
-			<div class="container">
-				<div class="section-title center-block text-center">
-					<h2>Subscribe To Our Newsletter</h2>
-					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
-				</div>
-				<div class="row">
-					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
-						<div class="input-group sub-input mt-0">
-							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
-							<div class="input-group-append ">
-								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
-									Subscribe
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<!--/Newsletter-->
-		<!-- Home Video Modal -->
-		<div class="modal fade" id="homeVideo" tabindex="-1" role="dialog">
-			<div class="modal-dialog modal-lg" role="document">
-				<div class="modal-content">
-					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="pauseVid()"><i class="fa fa-times" aria-hidden="true"></i></button>
-					<div class="embed-responsive embed-responsive-16by9">
-						<video id="gossVideo" class="embed-responsive-item" controls="controls">
-							<source src="/static/frontpages/video/300052515.mp4" type="video/mp4">
-						</video>
-					</div>
-				</div>
-			</div>
-		</div>
+		
 
 {%endblock%} 
