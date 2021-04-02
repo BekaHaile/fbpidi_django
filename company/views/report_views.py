@@ -261,9 +261,10 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
             messages.warning(self.request,"Please Fixe Your Request,There is issue in the request")
             return render(self.request,"admin/company/report_page.html",context)
         else:
+            print(this_year)
             companies_with_data = companies.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))))
             for company in companies_with_data:
-                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year).annotate(total=Sum('sales_value')).order_by('company')
+                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year).annotate(total=Sum('sales_value',filter=Q(company=company))).order_by('company')
                 production_performance_this_last = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1).annotate(total=Sum('sales_value')).order_by('company')
                 production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-2).annotate(total=Sum('sales_value')).order_by('company')
             
@@ -277,21 +278,21 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
 
                 if production_performance_this_year.exists():
                     for p in production_performance_this_year:
-                        pp_today = p.sales_value 
+                        pp_today = p.total 
                         
                 if production_performance_this_last.exists():
                     for p in production_performance_this_last:
-                        pp_last += p.sales_value
+                        pp_last = p.total
                          
                 if production_performance_this_pre.exists():
                     for p in production_performance_this_pre:
-                        pp_prev += p.sales_value
+                        pp_prev = p.total
                         
 
                 gvp_data.append({'company':company.name,'data':float(pp_today+pp_last+pp_prev),'gvp_data':{
                     'this_yr':pp_today,'last_yr':pp_last,'prev_yr':pp_prev
                 } })
-            print(gvp_data)
+            # print(gvp_data)
             context['gvp_data'] = gvp_data
             context['flag'] = "gross_vp_data"
             context['years'] = {'this_year':this_year,'last_year':this_year-1,'prev_year':this_year-2}
