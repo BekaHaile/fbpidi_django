@@ -114,32 +114,34 @@
     
     
     <div class="table-responsive">
-        <table class="table table-inbox">										
+        <table class="table table-inbox">	
+                <th>
+                    <td>#</td>
+                    <td><b>Sender Email</b></td>
+                    <td><b>Subject</b></td>
+                    <td><b>Product</b></td>
+                    <td><b>Quantity</b></td>
+                    <td><b>Status</b></td>
+                    <td><b>Request Date</b></td>
+                    
+                    
+                </th>									
             <tbody data-link="row" class="rowlink">
+                
             
                 {% for inquiry in object_list %}
-                    <!-- if the current user is the receiver of the message -->
+                  
 
                         {% if inquiry.replied == False %}
                             <tr class = "unread" > 
                         {% else %}
                             <tr style="background-color: rgb(228, 228, 228);"> 
                         {% endif %}
-                        <a href = "#" target = "blank" >
+                       
+                                <td class="table-inbox-name">
+                                    {{forloop.counter}}
+                                </td>
                             
-                                <td class="table-inbox-checkbox rowlink-skip">
-                                    <a href="#compose{{inquiry.id}}" target = "blank" ></a>
-                                    <input type="checkbox" class="form-input-styled" data-fouc>
-                                </td>
-                                <td class="table-inbox-star rowlink-skip">
-                                    <a href="#">
-                                        <i class="icon-star-empty3 text-muted"></i>
-                                    </a>
-                                </td>
-                                <!-- <td class="table-inbox-image">
-                                    <img src="{{message.sender_image}}" class="rounded-circle" width="32" height="32" alt="">
-                                    
-                                </td> -->
                                 <td class="table-inbox-name">
                                     <a href=""  data-toggle="modal" data-target="#compose{{message.id}}">
                                         <div class="letter-icon-title text-default"><b>{{inquiry.sender_email}}</b></div>
@@ -149,6 +151,14 @@
                                     <a href=""  data-toggle="modal" data-target="#compose{{message.id}}" >
                                         <div class="letter-icon-title text-default"><b>{{inquiry.subject|safe|truncatechars_html:20}}</b></div>
                                     </a>
+                                </td>
+                                <td class="table-inbox-message">
+                                    {{inquiry.product.name}}
+                                </td>
+
+                                <td class="table-inbox-message">
+                                    <div class="table-inbox-subject">{{inquiry.quantity}}</div>
+                                   
                                 </td>
                                 <td class="table-inbox-name">
 
@@ -163,14 +173,9 @@
                                         </div>
                                     </a>
                                 </td>
-                                <!-- the rest is the same whether the user is a receiver or a sender -->
-                                <td class="table-inbox-message">
-                                    <div class="table-inbox-subject">{{inquiry.quantity}}</div>
-                                    <!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
-                                </td>
-                                <td class="table-inbox-attachment">
-                                    <i class="icon-attachment text-muted"></i>
-                                </td>
+                               
+                                
+                               
                                 <td class="table-inbox-time">
                                     {{inquiry.created_date}}
                                 </td>
