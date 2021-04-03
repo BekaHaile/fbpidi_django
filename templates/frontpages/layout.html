@@ -136,6 +136,12 @@
 
                             
 
+                           
+                           
+
+                            {%if user.is_authenticated%}
+                            
+                            {%if user.is_customer%}
                             <li  class="nav-item dropdown">
                                 <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
                                 
@@ -169,11 +175,6 @@
                                    
                                 </div>
                             </li>
-                           
-
-                            {%if user.is_authenticated%}
-                            
-                            {%if user.is_customer%}
                            
                             <li class="dropdown">
                                 <a href="{% url 'mydash' %}" class="text-dark">
@@ -554,7 +555,7 @@
             }
             ).then(e => e.json()).then(result=>{
                     window.alert(result['message'])
-                    console.log(result['message']) 
+                   
                     document.getElementById('email_field').value = ""             
                 }); 
     }
@@ -578,7 +579,7 @@
                  // first clear the list area 
                 document.getElementById('list_of_senders').innerHTML = "";
                 for (unread_message of data['unread_messages']){
-                    console.log("from for loop"+unread_message.sender_name+" "+unread_message.message)
+                    
                     append_unread_messages(unread_message);
                 }
 
@@ -587,8 +588,7 @@
 
 
     function append_unread_messages(message_obj){
-            console.log("from appende meesages"+message_obj)
-    
+        
     var li_item = document.createElement('li');
     li_item.id = message_obj.content;
     var li_card_item = document.createElement('div');
@@ -672,7 +672,13 @@ function set_inquiry_display(){
         if ( document.getElementById('product_contact_now' ))
             {
                 let selected_ids = get_int_ids(localStorage.getItem('prods'))
-                selected_ids.forEach(i => { document.getElementById('prod_'+i).disabled = true})
+                selected_ids.forEach(i => {
+                 document.getElementById('prod_'+i).disabled = true;
+                 //disabling the button in the grid view
+                 if(document.getElementById('gprod_'+i))
+                    document.getElementById('gprod_'+i).disabled = true;
+                
+                })
             }
         }
 
@@ -704,7 +710,7 @@ function count_products(){
 // converts the string ids to an array or product ids
 function get_int_ids(str_ids)
 {
-        console.log("Get int ids called "+str_ids)
+       
         let prod_ids = str_ids.split(",");
         // since the last element of the string ids will be ',' like "1, 34, 23, ": we need to cut it off from the string by using pop()
         let x = prod_ids.pop()
@@ -729,6 +735,11 @@ function remove_prod_from_cart(p_id){
     // if this function is called inside product list webpage refresh the view 
     if( document.getElementById('prod_'+p_id)){
         document.getElementById('prod_'+p_id).disabled = false
+        // for the grid button
+        if(document.getElementById('gprod_'+p_id))
+            document.getElementById('gprod_'+p_id).disabled = false
+
+
     }
     
 }
@@ -744,8 +755,11 @@ function add_to_cart(product_id){
         localStorage.setItem("prods", p) ;
         // then disable the Add to Basket for that specific product
         document.getElementById('prod_'+product_id).disabled = true
+        if(document.getElementById('gprod_'+product_id))
+            document.getElementById('gprod_'+product_id).disabled = true
+
     }
-    // document.getElementById('prod_'+product_id).disabled = true
+   
     
     fetch_products();
 }
@@ -784,7 +798,7 @@ function fetch_products(){
 }
            
 function append_product_cart(product){
-    console.log ("appending called")
+   
     var li_item = document.createElement('li');
     var li_card_item = document.createElement('div');
     li_card_item.className = "card card-body "

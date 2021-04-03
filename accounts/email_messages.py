@@ -106,6 +106,20 @@ def sendRelayMessage(request, sender_message, reply_message):
         print("Exception While Sending Email ", str(e))
         return False
     
+def sendInquiryReplay(request, inquiry, reply_message):
+    try:
+        current_site = get_current_site(request)
+        mail_message = reply_message
+        mail_subject = f'Inquiry Reply From {request.user.get_company()}'
+        to_email = inquiry.sender_email
+        email = EmailMessage(mail_subject, mail_message, to=[inquiry.sender_email])
+        email.content_subtype = "html"  
+        # email.send()
+        print("Inquiry Replay message sent to Email ", inquiry.sender_email)
+        return True
+    except Exception as e:
+        print("Exception While Sending Inquiry Email ", str(e))
+        return False
 
 
 

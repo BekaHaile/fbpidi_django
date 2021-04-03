@@ -232,12 +232,24 @@ class ProductInquiry(models.Model):
     quantity = models.IntegerField()
     pieces = models.CharField(max_length=100)
     content = models.TextField()
+    replied = models.BooleanField(default=False)
     attachement = models.FileField(upload_to = "InquiryDocument/", max_length=254, verbose_name="Inquiry document",help_text="pdf, Max size 3MB", blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
     def save(self):
         self.pieces = self.product.brand.product_type.uom
         super(ProductInquiry, self).save()
+
+class ProductInquiryReply(models.Model):
+    inquiry = models.ForeignKey(ProductInquiry, on_delete = models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+    reply = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_date']
+
+
 
 
 class Order(models.Model):
