@@ -100,7 +100,17 @@
 															<!-- /media/Images/News%20Images/wp2234690.png -->
 														</div>
 														<div class="item-card9-icons">
-															<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
+														{% if user.is_authenticated %}
+															{% user_liked_product user product.id  as liked %}
+															{% if liked == True %}
+																<a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+															{% else %}
+																<a  href="" class="item-card9-icons1 wishlist" id="like_{{product.id}}" onclick="like_product('{{product.id}}')" value=""> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+															{% endif %}
+														{% else %}
+															<a href="/accounts/login/?next=/product/fetch_inquiry_products/" class="item-card9-icons1 wishlist"  value=""> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+															
+														{% endif %}
 														</div>
 														<div class="item-cardreview-absolute bg-secondary">
 															{{product.brand.product_type.category_name.category_type}}
@@ -149,21 +159,44 @@
 																		<a class="" href="#"><i class="fa fa-share-alt"></i></a>
 																	</div>
 																</div>
-																{% if user.is_customer %}
-																	<div class="ml-auto mt-3 mt-sm-0">
-																		<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																			<!-- the add_to_cart is a js function written inside frontpages/layout.html -->
+																{%if not user.is_authenticated%}
+																<!-- Fully functional Add to cart button for company admin and superuser -->
+																<div class="ml-auto mt-3 mt-sm-0">
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																		<!-- the add_to_cart is a js function written inside frontpages/layout.html -->
 
-																			<div  class="row mt-1 mb-1 mr-2">
-																				<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" >
-																					<input type="hidden" name="products" value="{{product.id}},">
-																					<button class="btn btn-secondary br-tr-3 br-br-3 mr-3"  style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Contact Now" %}</button>
-																				</form>
-																				<button class="btn btn-secondary br-tr-3 br-br-3" id = "prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
-																			</div>
-
+																		<div  class="row mt-1 mb-1 mr-2">
+																			<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" >
+																				<input type="hidden" name="products" value="{{product.id}},">
+																				<button class="btn btn-secondary br-tr-3 br-br-3 mr-3"  style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Contact Now" %}</button>
+																			</form>
+																			<!-- <button class="btn btn-secondary br-tr-3 br-br-3" id = "prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button> -->
 																		</div>
+
 																	</div>
+																</div>
+																{% elif user.is_customer %}
+																	<!-- Fully functional Add to cart button for company admin and superuser -->
+																	
+																		<div class="ml-auto mt-3 mt-sm-0">
+																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																				<!-- the add_to_cart is a js function written inside frontpages/layout.html -->
+
+																				<div  class="row mt-1 mb-1 mr-2">
+																					<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" >
+																						<input type="hidden" name="products" value="{{product.id}},">
+																						<button class="btn btn-secondary br-tr-3 br-br-3 mr-3"  style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Contact Now" %}</button>
+																					</form>
+																					<button class="btn btn-secondary br-tr-3 br-br-3" id = "prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
+																				</div>
+
+																			</div>
+																		</div>
+
+																		<!-- Disabled Add to cart button for company admin and superuser -->
+																	
+																
+
 																{% endif %}
 															</div>
 														</div>
@@ -186,7 +219,18 @@
 																	<img src="{{product.image.url}}" alt="img" class="cover-image">
 																</div>
 																<div class="item-card9-icons">
-																	<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
+																	{% if user.is_authenticated %}
+																		{% user_liked_product user product.id  as liked %}
+																		{% if liked == True %}
+																			<a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+																		{% else %}
+																			<a  class="item-card9-icons1 wishlist" id="glike_{{product.id}}" onclick="like_product('{{product.id}}')"> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+
+																		{% endif %}
+																	{% else %}
+																	<a href="/accounts/login/?next=/product/fetch_inquiry_products/" class="item-card9-icons1 wishlist" > <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+
+																	{% endif %}
 																</div>
 																<div class="item-cardreview-absolute bg-secondary">
 																	{{product.brand.product_type.category_name.category_type}}
@@ -319,6 +363,46 @@
 			</div>
 		</section>
 		<!--/Add Listings-->
+
+		<script>
+			function like_product(p_id)
+			{
+				if (document.getElementById('like_'+p_id).value != "liked")
+				{
+						fetch("{% url 'like_product'  %}",
+					{
+					method:"POST",
+					credentials: 'same-origin',
+					headers:{
+						"content-Type":'application/json',
+						'X-CSRFToken':'{{csrf_token}}'
+					},
+					body:JSON.stringify({
+						'p_id': p_id,
+					})
+					}).then(e => e.json()).then(result=>{
+						if(result['error'] == false){
+							window.alert('Product Liked Successfull')
+							var linear = document.getElementById('like_'+p_id)
+							var grid = document.getElementById('glike_'+p_id)
+
+							linear.style['background-color'] =  "rgb(252, 67, 67)";
+							grid.style['background-color']  =  "rgb(252, 67, 67)";
+							linear.value = "liked"
+							grid.value = "liked"
+							
+						}
+						else{
+							window.alert("not like")
+						}   		
+					});
+
+				}
+				
+				
+			}
+		
+		</script>
 
 
 

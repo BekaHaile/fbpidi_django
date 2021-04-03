@@ -10,6 +10,7 @@ from django.http import HttpResponse,JsonResponse
 from django.contrib import messages
 from django.views.generic import CreateView,UpdateView,ListView,View,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.utils import timezone
 from django.core import serializers
@@ -146,8 +147,18 @@ def Subscribe(request):
             return JsonResponse(data={'error':False, 'message':'Successfull Subscription! '}, safe=False )
         except Exception as e:
             return JsonResponse(data={'error':True, 'message':f'The exception is {str(e)}'},  safe=False )
-                    
 
+@login_required          
+def Like_Company(request):
+    try:
+        data = json.loads( request.body )
+        c_like = CompanyLike(user = request.user, company = Company.objects.get (id= int(data['c_id'] ) )  )
+        c_like.save()
+        return JsonResponse({'error':False})
+
+    except Exception as e:
+        print("########Exception while tring to like a product ",e)
+        return JsonResponse({'error':True})
     
 class CompanyProductList(DetailView):
     model= Company

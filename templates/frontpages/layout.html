@@ -156,8 +156,7 @@
                                         
                                             <ul id = "inquiry_list" style = "width: 100%;" class="media-list">
                                             
-                                            
-                                        
+
                                             </ul>
                                             
                                             <form target="blank"  action = "{% url 'inquiry_form' %}" method = "GET" >
@@ -745,23 +744,24 @@ function remove_prod_from_cart(p_id){
 }
 
 function add_to_cart(product_id){
-    
-    if(localStorage.getItem("prods") == null){
-        localStorage.setItem("prods",product_id+",")
+    if("{{user.is_authenticated}}"=="True"){
+            if(localStorage.getItem("prods") == null)
+                localStorage.setItem("prods",product_id+",")
+                
+            else{ 
+                var p = localStorage.getItem("prods")+product_id+","
+                localStorage.setItem("prods", p) ;
+                // then disable the Add to Basket for that specific product
+                document.getElementById('prod_'+product_id).disabled = true
+                if(document.getElementById('gprod_'+product_id))
+                    document.getElementById('gprod_'+product_id).disabled = true
+            }
+   
+            fetch_products();
         }
     else{
-        
-        var p = localStorage.getItem("prods")+product_id+","
-        localStorage.setItem("prods", p) ;
-        // then disable the Add to Basket for that specific product
-        document.getElementById('prod_'+product_id).disabled = true
-        if(document.getElementById('gprod_'+product_id))
-            document.getElementById('gprod_'+product_id).disabled = true
-
+        fetch("accounts/login/?next=/product/fetch_inquiry_products/ ")
     }
-   
-    
-    fetch_products();
 }
 
 function fetch_products(){
@@ -857,6 +857,8 @@ function append_product_cart(product){
 </script>
 <!-- End of Script for cart -->
 
+
+<!-- Start of Product Like Script -->
 
 
 <!-- JQuery js-->

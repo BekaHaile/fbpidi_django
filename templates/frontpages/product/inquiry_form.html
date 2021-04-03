@@ -38,7 +38,7 @@
 						 
 						<div class="row">
                             <div class="card "  style = "padding-left:20px">
-								<form action="{% url 'inquiry_form' %}" method="POST" enctype="multipart/form-data">
+								<form target="blank" action="{% url 'inquiry_form' %}" method="POST" enctype="multipart/form-data">
 									{%csrf_token%}
 									{%if form.errors%}
 									<div class="alert alert-danger" role="alert">

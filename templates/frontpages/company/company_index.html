@@ -158,7 +158,18 @@
 											</div>
 											<div class="item-card7-icons">
 												<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
-												<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
+
+												{% if user.is_authenticated %}
+													{% user_liked_product user product.id  as liked %}
+													{% if liked == True %}
+														<a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+													{% else %}
+														<a  href="" class="item-card9-icons1 wishlist" id="like_{{product.id}}" onclick="like_product('{{product.id}}')" value=""> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+													{% endif %}
+												{% else %}
+													<a href="/accounts/login/?next=/product/fetch_inquiry_products/" class="item-card9-icons1 wishlist"   value=""> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+													
+												{% endif %}
 											</div>
 											<div class="card-body">
 												<div class="rating-stars mb-1 mt-0 d-flex">
@@ -425,4 +436,43 @@
 			}
 			
 		</script>
+		<script>
+			function like_product(p_id)
+			{
+				if (document.getElementById('like_'+p_id).value != "liked")
+				{
+						fetch("{% url 'like_product'  %}",
+					{
+					method:"POST",
+					credentials: 'same-origin',
+					headers:{
+						"content-Type":'application/json',
+						'X-CSRFToken':'{{csrf_token}}'
+					},
+					body:JSON.stringify({
+						'p_id': p_id,
+					})
+					}).then(e => e.json()).then(result=>{
+						if(result['error'] == false){
+							
+							var linear = document.getElementById('like_'+p_id)
+							var grid = document.getElementById('glike_'+p_id)
+
+							linear.style['background-color'] =  "rgb(252, 67, 67)";
+							linear.value = "liked"
+							window.alert('Product Liked Successfull')
+							
+						}
+						else{
+							window.alert("not like")
+						}   		
+					});
+
+				}
+				
+				
+			}
+		
+		</script>
+
 		{%endblock%}
