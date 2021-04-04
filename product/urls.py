@@ -16,7 +16,6 @@ urlpatterns = [
 
     path("fetch_inquiry_products/", FetchInquiryProducts, name = "fetch_inquiry_products"),
     path("inquiry_form/", InquiryRequest.as_view(), name = "inquiry_form"),
-
     path('like_product/', LikeProduct, name = "like_product"),
     
 

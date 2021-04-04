@@ -134,11 +134,19 @@
 											</div> 4.0
 										</div>
 										<div class="rating-stars d-flex">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-heart"></i>
-												</div>
-											</div> 135
+											
+											{% if user.is_authenticated %}
+												
+												{% user_liked_product user product.id  as liked %}
+												{% if liked == True %}
+													<a  class="item-card9-icons1 wishlist" style = "background-color: white;"  > <i style="color:rgb(252, 67, 67);; "class="fa fa-heart"></i></a>
+												{% else %}
+													<a  class="item-card9-icons1 wishlist" style = "background-color: white;"  id="like_{{product.id}}" onclick="like_product('{{product.id}}')"> <i  class="fa fa-heart"></i></a>
+												{% endif %}
+											{% else %}
+											<a   href="/accounts/login/?next=/product/fetch_inquiry_products/"  class="item-card9-icons1 wishlist" style = "background-color: white;"   > <i  class="fa fa-heart"></i></a>
+											{% endif %}
+											<p class = "ml-2" id= "product_like_count">{{product.productlike_set.all.count}}</p> 
 										</div>
 									</div>
 								</div>
@@ -249,7 +257,11 @@
 							<div class="card-footer bg-white">
 								<div class="icons">
 									<a href="#" class="btn btn-info icons"><i class="icon icon-share mr-1"></i> Share Ad</a>
-									<a href="#" class="btn btn-pink icons"><i class="icon icon-heart  mr-1"></i> 678</a>
+
+									<!-- <a href="#" class="btn btn-pink icons"><i class="icon icon-heart  mr-1"></i>  -->
+									<span> </span>
+									</a>
+
 									<!-- <a href="#" class="btn btn-primary icons"><i class="icon icon-printer  mr-1"></i> Print</a> -->
 									<a href="{%url 'add_to_cart' id=product.id%}" class="btn btn-primary icons mb-1 mt-1" ><i class="icon icon-shopping-cart mr-1"></i> Add to Cart</a>
 								</div>
@@ -391,8 +403,10 @@
 
 						<div class="card mb-lg-0">
 							<div class="card-header">
-								<h3 class="card-title">Add a Review</h3>
+								{{product.review_set.all}}
+								<h3 class="card-title">ffff {{product.review_set.all.count}} Add a Review</h3>
 							</div>
+							
 							<div class="card-body">
 								<form action="{% url 'create_review' product=product.id %}" method="POST">{%csrf_token%}
 								<p class="mb-0">Add Your Rating for the Product</p>
@@ -565,4 +579,39 @@
 				$("#id_rating").val(value);
 			}
 		</script>
+			<script>
+				function like_product(p_id)
+				{
+					if (document.getElementById('like_'+p_id).value != "liked")
+					{
+							fetch("{% url 'like_product'  %}",
+						{
+						method:"POST",
+						credentials: 'same-origin',
+						headers:{
+							"content-Type":'application/json',
+							'X-CSRFToken':'{{csrf_token}}'
+						},
+						body:JSON.stringify({
+							'p_id': p_id,
+						})
+						}).then(e => e.json()).then(result=>{
+							if(result['error'] == false){
+								window.alert('Product Liked Successfull')
+								var linear = document.getElementById('like_'+p_id)
+								linear.style['color'] =  "rgb(252, 67, 67)";		
+								linear.value = "liked"
+								let count = parseInt(document.getElementById("product_like_count").innerHTML)
+								document.getElementById("product_like_count").innerHTML = count + 1;
+	
+							}
+							else{
+								window.alert("not like")
+							}   		
+						});
+					}	
+				}
+			
+			</script>
+	
 		{%endblock%}
