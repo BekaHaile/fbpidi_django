@@ -322,7 +322,7 @@ class InvoiceRecord(models.Model):
 class Review(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name="review")
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
     rating = models.IntegerField()
     review = models.TextField()
     time_stamp = models.DateTimeField(auto_now_add=True)

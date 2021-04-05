@@ -139,6 +139,11 @@ def get_fbpidi_id():
     return Company.objects.get(main_category="FBPIDI").id if Company.objects.filter(main_category = "FBPIDI") else None
 
 
+@register.simple_tag
+def count_review_rating(product, rating):
+    return product.review_set.filter(rating = rating).count()
+
+    
 
 
 

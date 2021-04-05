@@ -1088,7 +1088,9 @@ class CreateReview(CreateView):
         review = form.save(commit=False)
         review.product = Product.objects.get(id=self.kwargs['product'])
         review.save()
+        print("############### Review saved!")
         return redirect('product_detail',pk=self.kwargs['product'])
     
     def form_invalid(self,form):
+        print("############### Exception Review saved!",form.errors)
         return redirect('product_detail',pk=self.kwargs['product'])
