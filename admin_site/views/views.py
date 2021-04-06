@@ -138,6 +138,12 @@ class DeleteView(LoginRequiredMixin,View):
                 message ="Dose Item Deleted"
                 messages.success(self.request,message)
                 return redirect("admin:settings")
+            elif self.kwargs['model_name'] == 'DosageForm':
+                dose = DosageForm.objects.get(id=self.kwargs['id'])
+                dose.delete()
+                message ="Dosage Form Item Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:settings")
             elif self.kwargs['model_name'] == 'RegionMaster':
                 region = RegionMaster.objects.get(id=self.kwargs['id'])
                 region.delete()
