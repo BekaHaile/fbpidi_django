@@ -49,10 +49,10 @@
 		<div class="bg-white border-bottom">
 			<div class="container">
 				<div class="page-header">
-					<h4 class="page-title">Products</h4>
+					<h4 class="page-title">{% trans "Products" %}</h4>
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="{%url 'index'%}">Home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Product list</li>
+						<li class="breadcrumb-item"><a href="{%url 'index'%}">{% trans "Home" %}</a></li>
+						<li class="breadcrumb-item active" aria-current="page">{% trans "Product list" %}</li>
 					</ol>
 				</div>
 			</div>
@@ -76,24 +76,13 @@
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
 											</ul>
 											<div class="d-sm-flex">
-												<label class="mr-2 mt-2 mb-sm-1 sort-label">{% trans "Sort By" %}:</label>
+												
 												<div class="selectgroup">
 													<label class="selectgroup-item mb-md-0">
 														<input type="radio" name="value" value="All" class="selectgroup-input" checked="">
 														<span class="selectgroup-button d-md-flex">{% trans "All" %} <i class="fa fa-sort ml-2 mt-1"></i></span>
 													</label>
-													<label class="selectgroup-item mb-md-0">
-														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">{% trans "Distance" %}</span>
-													</label>
-													<label class="selectgroup-item mb-0">
-														<input type="radio" name="value" value="Latest" class="selectgroup-input">
-														<span class="selectgroup-button">{% trans "Latest" %}</span>
-													</label>
-													<label class="selectgroup-item mb-0">
-														<input type="radio" name="value" value="Rating" class="selectgroup-input">
-														<span class="selectgroup-button">{% trans "Rating" %}</span>
-													</label>
+													
 												</div>
 											</div>
 										</div>
@@ -160,21 +149,22 @@
 																		<a class="" href="#"><i class="fa fa-share-alt"></i></a>
 																	</div>
 																</div>
-																<div class="ml-auto mt-3 mt-sm-0">
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																		<!-- the add_to_cart is a js function written inside frontpages/layout.html -->
-																		
+																{% if user.is_customer %}
+																	<div class="ml-auto mt-3 mt-sm-0">
+																		<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																			<!-- the add_to_cart is a js function written inside frontpages/layout.html -->
 
-																		<div style = "display: inline;" class="mr-0">
-																			<!-- <form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" class="mr-0">
-																				<input type="hidden" name="products" value="{{product.id}},">
-																				<button  type="submit">Contact Now</button> -->
-																			<a href="#"><i class="fa fa-map-signs"></i>  {% trans "Get Directions" %}</a></div>
-																			<!-- </form> -->
-																			<!-- <button class= " bg-secondary" id = "prod_{{product.id}}" onclick = "add_to_cart('{{product.id}}')">Add To Basket</button> -->
-																			
+																			<div  class="row mt-1 mb-1 mr-2">
+																				<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" >
+																					<input type="hidden" name="products" value="{{product.id}},">
+																					<button class="btn btn-secondary br-tr-3 br-br-3 mr-3"  style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Contact Now" %}</button>
+																				</form>
+																				<button class="btn btn-secondary br-tr-3 br-br-3" id = "prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
+																			</div>
+
 																		</div>
-																</div>
+																	</div>
+																{% endif %}
 															</div>
 														</div>
 													</div>
@@ -241,13 +231,22 @@
 																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
 																				<a class="" href="{{product.get_company_address.fax}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.get_company_address.fax}}"><i class="fa fa-globe"></i></a>
 																				<a class="" href="/chat/with/{{product.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-
 																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
 																			</div>
 																		</div>
-																		<div class="ml-auto mt-3 mt-sm-0">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>   {% trans "Get Directions" %}</a></div>
-																		</div>
+																		{% if user.is_customer %}
+																			<div class="ml-auto mt-3 mt-sm-0">
+																				<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																					<div  class="row mt-1 mb-1 ml-2">
+																						<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" >
+																							<input type="hidden" name="products" value="{{product.id}},">
+																							<button class="btn btn-secondary br-tr-3 br-br-3 mr-3" style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Contact Now" %}</button>
+																						</form>
+																						<button class="btn btn-secondary br-tr-3 br-br-3 " id = "gprod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
+																					</div>
+																				</div>
+																			</div>
+																		{% endif %}
 																	</div>
 																</div>
 															</div>

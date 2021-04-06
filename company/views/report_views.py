@@ -261,37 +261,57 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
             messages.warning(self.request,"Please Fixe Your Request,There is issue in the request")
             return render(self.request,"admin/company/report_page.html",context)
         else:
-            print(this_year)
             companies_with_data = companies.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))))
-            for company in companies_with_data:
-                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year).annotate(total=Sum('sales_value')).order_by('product')
-                production_performance_this_last = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1).annotate(total=Sum('sales_value')).order_by('product')
-                production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-2).annotate(total=Sum('sales_value')).order_by('product')
+            production_performance_this_year = companies_with_data.values('name').annotate(total=Sum('company_product_perfornamce__sales_value',filter=Q(company_product_perfornamce__activity_year=this_year)))
+            production_performance_this_last = companies_with_data.values('name').annotate(total=Sum('company_product_perfornamce__sales_value',filter=Q(company_product_perfornamce__activity_year=this_year-1)))
+            production_performance_this_pre = companies_with_data.values('name').annotate(total=Sum('company_product_perfornamce__sales_value',filter=Q(company_product_perfornamce__activity_year=this_year-2)))
             
-                # for (p_this,p_last,p_prev) in zip(production_performance_this_year,production_performance_this_last,production_performance_this_pre):
-                #         pp_today += p_this.sales_value
-                #         pp_last += p_last.sales_value
-                #         pp_prev += p_prev.sales_value
-                #         print(p_this,p_last,p_prev)
+            for (p_this,p_last,p_prev) in zip(production_performance_this_year,production_performance_this_last,production_performance_this_pre):
+                    if p_this['total'] == None:
+                        pp_today = 0
+                    else:
+                        pp_today = p_this['total']
+                    if p_last['total'] == None:
+                        pp_last = 0
+                    else:
+                        pp_last = p_last['total']
+                    if p_prev['total'] == None:
+                        pp_prev = 0
+                    else:
+                        pp_prev = p_prev['total']
+                    gvp_data.append({'company':p_this['name'],'data':float(pp_today+pp_last+pp_prev),'gvp_data':{
+                        'this_yr':pp_today,'last_yr':pp_last,'prev_yr':pp_prev
+                    } })
 
-                
+            # for company in companies_with_data:
+            #     production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year).annotate(total=Sum('sales_value'))
+            #     production_performance_this_last = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1).annotate(total=Sum('sales_value')) 
+            #     production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-2).annotate(total=Sum('sales_value')) 
 
-                if production_performance_this_year.exists():
-                    for p in production_performance_this_year:
-                        pp_today = p.total 
+            #     # for (p_this,p_last,p_prev) in zip(production_performance_this_year,production_performance_this_last,production_performance_this_pre):
+            #     #         pp_today += p_this.sales_value
+            #     #         pp_last += p_last.sales_value
+            #     #         pp_prev += p_prev.sales_value
+            #     #         print(p_this,p_last,p_prev)
+
+            #     # print(production_performance_this_year)
+
+            #     if production_performance_this_year.exists():
+            #         for p in production_performance_this_year:
+            #             pp_today = p.total 
                         
-                if production_performance_this_last.exists():
-                    for p in production_performance_this_last:
-                        pp_last = p.total
+            #     if production_performance_this_last.exists():
+            #         for p in production_performance_this_last:
+            #             pp_last = p.total
                          
-                if production_performance_this_pre.exists():
-                    for p in production_performance_this_pre:
-                        pp_prev = p.total
+            #     if production_performance_this_pre.exists():
+            #         for p in production_performance_this_pre:
+            #             pp_prev = p.total
                         
 
-                gvp_data.append({'company':company.name,'data':float(pp_today+pp_last+pp_prev),'gvp_data':{
-                    'this_yr':pp_today,'last_yr':pp_last,'prev_yr':pp_prev
-                } })
+                # gvp_data.append({'company':company.name,'data':float(pp_today+pp_last+pp_prev),'gvp_data':{
+                #     'this_yr':pp_today,'last_yr':pp_last,'prev_yr':pp_prev
+                # } })
             # print(gvp_data)
             context['gvp_data'] = gvp_data
             context['flag'] = "gross_vp_data"

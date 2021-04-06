@@ -30,18 +30,24 @@
                             <div class="card "  style = "padding-left:20px">
 								<div class = "card-body">
                                     <h3>Your Inquiry Request has been sent successfully!</h3>
-                                    <h2> The companies will respond through {{email}} </h2>
+                                    <h2> You will recieve the response through <a href="#" style="color: rgb(103, 103, 174);">{{email}}</a> </h2>
                                 </div>
                             </div>
-
-						
-                            
-					
 						
 					</div>
 				</div>
 			</div>
 		</div>
 		<!--Contact-->
-       
+
+		<script>
+			
+			
+			let cart_ids = localStorage.getItem('prods')
+			let prod_id_list = "{{prod_id_list}}"
+			localStorage.setItem('prods', cart_ids.replace(prod_id_list, ''))
+    		
+   
+		   </script>
+      
 {%endblock%}
