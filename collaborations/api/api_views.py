@@ -19,7 +19,7 @@ from company.models import Company, CompanyEvent, EventParticipants
 
 
 from collaborations.api.serializers import (PollListSerializer,  ChoiceSerializer, NewsListSerializer, NewsDetailSerializer, 
-                                            EventListSerializer, BlogSerializer, BlogCommentSerializer, AnnouncementSerializer, AnnouncementDetailSerializer, 
+                                            EventListSerializer, BlogSerializer,BlogDetailSerializer, BlogCommentSerializer, AnnouncementSerializer, AnnouncementDetailSerializer, 
                                             TenderSerializer,TenderApplicantSerializer, VacancyListSerializer, JobCategorySerializer,
                                             ResearchProjectCategorySerializer, ProjectSerializer, ResearchSerializer, 
                                             ForumQuestionSerializer, ForumDetailSerializer, ForumCommentSerializer, CommentReplay, FaqSerializer, JobApplicationSerializer
@@ -196,7 +196,7 @@ class ApiBlogDetail(APIView):
     def get(self, request):
         try:    
             blog = get_object_or_404( Blog, id = request.query_params['id'])
-            return Response(data = {'error':False, 'count_comment': blog.countComment(), 'blog':BlogSerializer(blog).data,'comments': BlogCommentSerializer(blog.comments(), many = True ).data })
+            return Response(data = {'error':False, 'count_comment': blog.countComment(), 'blog':BlogDetailSerializer(blog).data   })
         except Http404:
             return Response(data = {'error':True, 'message': 'Blog Not Found!'})
 
