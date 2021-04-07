@@ -1,36 +1,161 @@
-from django.shortcuts import get_object_or_404
+import datetime
 from django.http import Http404
-from rest_framework import generics, permissions, status
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import generics, permissions, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import authentication, permissions
 from rest_framework.decorators import permission_classes, authentication_classes,api_view
 
-
-from rest_framework import authentication, permissions
+from company.models import Company, CompanyEvent, EventParticipants
 from collaborations.models import (PollsQuestion, PollsResult, Choices, News, NewsImages, Blog, BlogComment,
                                     Announcement, AnnouncementImages, Tender, TenderApplicant, Faqs, JobApplication, 
                                     JobCategory, Project, Research, ResearchProjectCategory, Vacancy, ForumQuestion,
                                     ForumComments, CommentReplay, Faqs)
 from collaborations.forms import CreateJobApplicationForm, ForumQuestionForm, CommentForm, CommentReplayForm, ResearchForm
-
-from company.models import Company, CompanyEvent, EventParticipants
-
-
 from collaborations.api.serializers import (PollListSerializer,  ChoiceSerializer, NewsListSerializer, NewsDetailSerializer, 
                                             EventListSerializer, BlogSerializer,BlogDetailSerializer, BlogCommentSerializer, AnnouncementSerializer, AnnouncementDetailSerializer, 
                                             TenderSerializer,TenderApplicantSerializer, VacancyListSerializer, JobCategorySerializer,
                                             ResearchProjectCategorySerializer, ProjectSerializer, ResearchSerializer, 
                                             ForumQuestionSerializer, ForumDetailSerializer, ForumCommentSerializer, CommentReplay, FaqSerializer, JobApplicationSerializer
                                             )
-from django.contrib.auth.mixins import LoginRequiredMixin
-import datetime
+
+
+### a dictionay holding model names with model objects, Used to hold a model object for a string
+models = { 'Research':Research,'Announcement':Announcement, 'Blog':Blog, 'BlogComment':BlogComment, 'Choice':Choices, 'Event':CompanyEvent, 'Tender':Tender, 'TenderApplicant':TenderApplicant, 
+            'Forums':ForumQuestion, 'Forum Comments':ForumComments, 'Polls':PollsQuestion, 'News':News, 'Vacancy':Vacancy, 'Job Application':JobApplication, 'Job Category':JobCategory }
+
+
+def related_company_title(model_name, obj):
+    """
+    given a modle name and an obj, searchs for other model objs with related company, if none found search for related objs with related title or description,
+    if none found returns 4 elements from the model
+    """
+    model = models[model_name]
+    result = FilterByCompanyname( [obj.company], model.objects.exclude(id =obj.id)  )
+    if result['query'].count() != 0:
+        return {'query':result['query'], 'message':f"Other {model_name}s from {obj.company.name} ", 'message_am': f"ሌሎቸ በ{obj.company.name_am} ድርጅት የተለቀቁ {model.model_am}" }
+    else:
+        result = search_title_related(  obj, model.objects.exclude(id =obj.id)  )
+        if result['query'].count() != 0:
+            return {'query': result, 'message':f'Other {model_name}s with related content', 'message_am': f"ሌሎች ተቀራራቢ ውጤቶች "}
+        else:
+            return {'query':model.objects.exclude(id = obj.id)[:4], 'message': f'Other {model_name}s ', 'message_am': 'ሌሎች ውጤቶች'}
+   
+
+def related_company_title_status(model_name, obj):
+    """
+    given status column containing obj finds related objs with related company or title with status open or upcoming \n 
+    For Event, Poll, Status
+    """
+    model = models[model_name]
+    q =  Q(   Q(status = 'Open') | Q(status = 'Upcoming')  )
+    c =  Q(   Q(company__name__contains = obj.company.name ) | Q(company__name_am__contains = obj.company.name_am ) ) 
+    result = model.objects.filter(c , q).exclude(id = obj.id)
+    if result.count() == 0:
+        t = Q (  Q(title__icontains = obj.title) | Q(title_am__icontains = obj.title_am )  )
+        result = model.objects.filter(  q , t  ).exclude(id = obj.id)
+        if result.count() == 0:
+            return {'query':model.objects.exclude(id = obj.id)[:3], 'message': f'Other {model_name}s ', 'message_am': 'ሌሎቸ ውጤቶች' }
+        else:
+            return {'query': result, 'message':f'Other {model_name}s with related content', 'message_am':'ሌሎች ተቀራራቢ ውጤቶቸ'  }
+    else:
+        return {'query': result, 'message':f"Other {model_name}s from {obj.company.name} ", 'message_am': f"ሌሎቸ በ{obj.company.name_am} ድርጅት የተለቀቁ" }
+
+
+def search_title_related( obj, query_list):
+    return {'query':query_list.filter( Q(title__icontains = obj.title) | Q(title_am__icontains = obj.title_am) |Q(description__icontains = obj.title ) | Q(description_am__icontains = obj.title_am) ).distinct()} 
+
+# returns all if there is no filter_key or there is no match, or the objects containg the filter_key, with their appropriat messages.
+def SearchByTitle_All(model_name, request ): 
+    """
+    Search objects with requested title or title_am, if by_title is in request.kwargs, else return all
+    """   
+    try:
+        model= models[model_name]
+        if not 'by_title' in request.query_params: #not searching, just displaying latest news 
+            query  = model.objects.all()
+            return { 'query': query, 'message': f" {model_name} ",  'message_am': f" {model.model_am} "} # 3 Polls Found!
+        else:   #if there is a filter_key list
+            filter_key = request.query_params['by_title']
+            query = model.objects.filter( Q(title__icontains = filter_key) | Q(title_am__icontains = filter_key) |Q(description__icontains = filter_key ) | Q(description_am__icontains = filter_key) ).distinct() 
+            # if there is no match for the filter_key or there is no filter_key at all
+            if query.count() == 0: 
+                query = model.objects.all()
+                return { 'query': query, 'message': f"No match containing '{filter_key}'!", 'message_am': f"ካስገቡት ቃል '{filter_key}' ጋር የሚገናኝ አልተገኘም፡፡ !" }       
+            return { 'query': query, 'message': f"{query.count()} result found!", 'message_am': f"{query.count()} ውጤት ተገኝቷል!" }
+    except Exception as e:
+        print("Exception at SearchBYTitle_All", str(e))
+        return {'query':[], 'message':'Exception occured!'}
+
+
+def FilterByCompanyname(company_list,  query_set):
+    try:
+        q_object = Q()
+        for company_name in company_list:
+            q_object.add( Q(company__name = company_name ), Q.OR )
+            q_object.add( Q(company__name_am = company_name ), Q.OR )
+        query = query_set.filter(q_object).distinct()
+        return {'query':query, 'message':f'{query.count()} result Found!', 'message_am': f" {query.count()} ውጤት ተገኝቷል" }
+    except Exception as e:
+        print("###########Exception at FilterByCompanyName", str(e))
+        return {'query':query, 'message':f"No company found!", 'message_am':f"ምንም ማግኘት አልተቻለም!"}
+
+#  Uses both search by title and filter by category at once
+def SearchCategory_Title(model_name, request):
+    """
+    Uses both search by title and filter by category at once
+    """
+    result = SearchByTitle_All(model_name, request) #returns matching objects by title and title_am, if none all objects
+    category_name =  request.query_params['by_category'].split(',')
+    if category_name[0] == 'All':
+            return {'query':result['query'],'message':f"{result['query'].count()} {request.GET['by_title']} result found !", 
+                                            'message_am': f"{result['query'].count()} ውጤት ተገኝቷል",
+                                            'searched_category':'All', 'searched_name': request.GET['by_title'] }   
+    result = filter_by('catagory', category_name, result['query'])
+    result['searched_category'] = category_name[0]
+    result['searched_name'] = request.GET['by_title']
+    return result
+
+# accepts dynamic field name with filtering field value keys, and filters from the query
+def filter_by(field_name, field_values, query):
+    """
+    accepts field_name like category or title etc and filter keys like ['Food','Beverage'] and filters from a query
+    """
+    kwargs ={}
+    q= Q()  
+    for value in field_values:
+        if value == 'All':
+            break
+        kwargs ['{0}__{1}'.format(field_name, 'contains')] = value
+        q.add(Q(**kwargs),Q.OR)
+        kwargs = {}
+    result = query.filter(q)
+    if not result.count() == 0:
+        return {'query':result,'message':f"{result.count()} result found!",'searched_category':'All','message_am':f"{result.count()} ተገኝቷል! " ,'searched_name': field_name }
+    return {'query':result, 'message':f"No results Found!", 'message_am':f" ምንም ውጤት አልተገኘም፡፡ !" ,'searched_category':'All', 'searched_name': field_name }
+
+# returns paginated data from a query set
+def get_paginated_data(request, query):
+    page_number = request.GET.get('page', 1)
+    try:
+        return Paginator(query, 2).page(page_number)
+    except Exception as e:
+        print("exception at get_paginate_data ",e)
+        return Paginator(query, 2).page(1)
+
+
 
 class PollListApiView(generics.ListAPIView):
     #for the future we will override the get_queryset() method to filter 
     queryset = PollsQuestion.objects.all()
     serializer_class = PollListSerializer
+    
 
 
 class PollDetailApiView( APIView):
@@ -77,18 +202,37 @@ class PollDetailApiView( APIView):
 
 
 class NewsListApiView(APIView):
-
     def get(self, request):
         data = {}
+        result = []
         try:
-            data['error'] = False
-            data['news_list'] = NewsDetailSerializer( News.objects.all(), many = True).data
-            data['news_category'] = News.NEWS_CATAGORY
-            return Response(data, status=status.HTTP_200_OK)
+            if 'by_category' in request.query_params and 'by_title' in request.query_params:
+                result = SearchCategory_Title('News', request)
+                # data = get_paginated_data(request, result['query'])
+                return Response(data= {'error':False, 'news_list':NewsDetailSerializer( result['query'], many = True).data, 'message':result['message'],  'message_am':result['message_am'],'NEWS_CATAGORY':News.NEWS_CATAGORY})
+            elif 'by_category' in request.query_params:
+                result = filter_by('catagory', request.query_params['by_category'].split(','), News.objects.all())
+            elif 'by_company' in request.query_params:
+                print("$$$$$$$$$$4 ",type(request.query_params['by_company'].split(',')))
+                result = FilterByCompanyname(request.query_params['by_company'].split(','), News.objects.all())
+            else: 
+                result = SearchByTitle_All('News', request)
+
+            if result['query'].count()==0:
+                result['query'] = News.objects.all()
+            # data = get_paginated_data(self.request, result['query'])
+            # print("$$$$$$ ", request.query_params)
+        
+            # print("###########33", request.query_params['by_category'], ' ')
+            # data['error'] = False
+            # data['news_list'] = NewsDetailSerializer( News.objects.all(), many = True).data
+            # data['news_category'] = News.NEWS_CATAGORY
+            # return Response(data, status=status.HTTP_200_OK)
+            return Response(data= {'error':False, 'news_list': NewsDetailSerializer( result['query'], many = True).data, 'message':result['message'],  'message_am':result['message_am'], 'NEWS_CATAGORY':News.NEWS_CATAGORY})
+            
         except Exception as e:
-            data['error'] = True
-            data['message'] = f"Exceptin Occured: {str(e)}"
-            return Response(data, status=status.HTTP_400_BAD_REQUEST)     
+            return Response(data = {'error': True, 'message': f"Exceptin Occured: {str(e)}"})
+   
 
 
 class NewsDetailApiView(generics.RetrieveAPIView):
@@ -122,9 +266,7 @@ class EventDetailApiView(APIView):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def EventNotifyApiView(request):
-
-    #    try:   
+def EventNotifyApiView(request):   
                 if request.data['email'] and request.data['notify_on'] and request.data['id'] :
                     event = CompanyEvent.objects.get(id = request.data['id'])
                     older = EventParticipants.objects.filter(event = event, patricipant_email = request.data['email']).first()
@@ -141,31 +283,6 @@ def EventNotifyApiView(request):
                     
 
 
-
-            # if request.data['email'] and request.data['notify_on'] and request.data['id'] :
-            #     id = request.data['id']
-            #     notify_on = request.data['notify_on']
-            #     event = CompanyEvent.objects.get(id = id)
-            #     participant = EventParticipants(user =request.user, event= event,
-            #                                     patricipant_email=request.data['email'])
-            #     #??? Real comparison
-            #     if event.start_date.month <= datetime.datetime.now().month:
-            #         if notify_on <=  event.start_date.day - datetime.datetime.now().day: 
-            #             participant.notified= False
-            #             participant.notifiy_in = notify_on
-            #             try:
-            #                 participant.save()   # if the email has been previously registered, it will through an unique exception
-            #             except Exception as e:
-            #                 return Response(data={'error':True, 'message':'You aleard have registered for a notification.'}, status = status.HTTP_205_RESET_CONTENT)
-                            
-            #             return Response(data={'error':False}, status=status.HTTP_201_CREATED)  
-                    
-            #         else:
-            #             return  Response(data={'error':True, 'message':'Invalid Date to notify'}, status = status.HTTP_205_RESET_CONTENT)
-            #     else:
-            #         return Response(data={'error':True, 'message':'Invalid month to notify'}, status = status.HTTP_205_RESET_CONTENT)
-
-            # return Response(data={'error':True, 'message':'Email, event id and number of days to notify are required!'}, status = status.HTTP_205_RESET_CONTENT)
 
             
 def get_blog_tags():

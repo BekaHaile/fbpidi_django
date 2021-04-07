@@ -14,11 +14,11 @@
 								<div class="text-center text-white ">
 									<h1 class=""><span class="font-weight-bold"></span>{% print_translated message message_am LANGUAGE_CODE %}</h1>
 								</div>
-								<form action="{% url 'customer_blog_list'  %}" metho = "GET">
+								<form action="{% url 'customer_blog_list'  %}" method = "GET">
 									<div class="search-background px-4 py-3 mt-4">
 										<div class="form row row-sm">
 											<div class="form-group  col-xl-10 col-lg-9 col-md-12 mb-0">
-												<input type="text" name = 'by_title' class="form-control input-lg border-white" id="text" placeholder="Search Blog">
+												<input type="text" required name = 'by_title' class="form-control input-lg border-white" id="text" placeholder="Search Blog">
 											</div>
 											<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
 												<button href="#" type = "submit" class="btn btn-lg btn-block btn-secondary">{% trans "Search" %}</button>
