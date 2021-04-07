@@ -68,9 +68,23 @@
 										<div class="rating-stars d-flex">
 											<div class="rating-stars-container mr-2">
 												<div class="rating-star sm">
-													<i class="fa fa-heart"></i>
+
+													{% if user.is_authenticated %}
+												
+														{% user_liked_product user product.id  as liked %}
+														{% if liked == True %}
+															<a  class="item-card9-icons1 wishlist" style = "background-color: white;"  > <i style="color:rgb(252, 67, 67);; "class="fa fa-heart"></i></a>
+														{% else %}
+															<a  class="item-card9-icons1 wishlist" style = "background-color: white;"  id="like_{{product.id}}" onclick="like_product('{{product.id}}')"> <i  class="fa fa-heart"></i></a>
+														{% endif %}
+													{% else %}
+													<a   href="/accounts/login/?next=/product/fetch_inquiry_products/"  class="item-card9-icons1 wishlist" style = "background-color: white;"   > <i  class="fa fa-heart"></i></a>
+													{% endif %}
 												</div>
-											</div> 135
+											</div>
+
+											<p id= "product_like_count">{{product.productlike_set.all.count}}</p> 
+
 										</div>
 									</div>
 								</div>
@@ -192,7 +206,28 @@
 										{% endif %}
 
 										<a href="#" class="btn btn-info icons ml-1 mr-1" title="Share Product"><i class="icon icon-share "></i></a>
-										<a href="#" class="btn btn-pink icons ml-1 mr-1" title="Ad to Favorites"><i class="icon icon-heart  "></i> 678</a>
+										
+										{% if user.is_authenticated %}
+											{% user_liked_company user product.company.id  as liked %}
+									
+											{% if liked == True %}
+												<a  class="btn btn-pink icons ml-1 mr-1" style = "color:white" > <i style="color:white; "class="fa fa fa-heart-o"></i>
+													<span id="company_like_count">{{product.company.companylike_set.all.count}}</span>
+												</a>
+												</a>
+											{% else %}
+												<a  class="btn btn-pink icons ml-1 mr-1" id="clike_{{product.company.id}}" onclick="like_company('{{product.company.id}}')" style = "color:white"> <i style="color:white; " class="fa fa fa-heart-o"></i>
+													<span id="company_like_count">{{product.company.companylike_set.all.count}}</span>
+												</a>
+
+											{% endif %}
+										{% else %}
+										<a  href= "/accounts/login/?next=/company/like_company/"  class="btn btn-pink icons ml-1 mr-1" style = "color:white" > <i style="color:white; " class="fa fa fa-heart-o"></i>
+											<span id="company_like_count">{{product.company.companylike_set.all.count}}</span>
+										</a></a>
+
+										{% endif %}
+										
 									</div>
 								</div>
 							</div>
@@ -227,6 +262,82 @@
 			</div>
 		</section>
 		<!--/Add listing-->
+
+		<script>
+			function like_product(p_id)
+			{
+				if (document.getElementById('like_'+p_id).value != "liked")
+				{
+						fetch("{% url 'like_product'  %}",
+					{
+					method:"POST",
+					credentials: 'same-origin',
+					headers:{
+						"content-Type":'application/json',
+						'X-CSRFToken':'{{csrf_token}}'
+					},
+					body:JSON.stringify({
+						'p_id': p_id,
+					})
+					}).then(e => e.json()).then(result=>{
+						if(result['error'] == false){
+							window.alert('Product Liked Successfull')
+							var linear = document.getElementById('like_'+p_id)
+							linear.style['color'] =  "rgb(252, 67, 67)";		
+							linear.value = "liked"
+							let count = parseInt(document.getElementById("product_like_count").innerHTML)
+							document.getElementById("product_like_count").innerHTML = count + 1;
+
+						}
+						else{
+							window.alert("not like")
+						}   		
+					});
+				}	
+			}
+		
+		</script>
+
+
+			<script>
+				function like_company(c_id)
+				{
+					if (document.getElementById('clike_'+c_id).value != "liked")
+					{
+							fetch("{% url 'like_company'  %}",
+						{
+						method:"POST",
+						credentials: 'same-origin',
+						headers:{
+							"content-Type":'application/json',
+							'X-CSRFToken':'{{csrf_token}}'
+						},
+						body:JSON.stringify({
+							'c_id': c_id,
+						})
+						}).then(e => e.json()).then(result=>{
+							if(result['error'] == false){
+								window.alert('Company Liked Successfull')
+								var likebtn = document.getElementById('clike_'+c_id)
+								// likebtn.style['background-color'] =  "rgb(252, 67, 67)";
+								let count = parseInt(document.getElementById("company_like_count").innerHTML)
+								document.getElementById("company_like_count").innerHTML = count + 1;
+								
+							}
+							else{
+								window.alert("not like")
+							}   		
+						});
+	
+					}
+					
+					
+				}
+			
+			</script>
+	
+
+
 
 		
 

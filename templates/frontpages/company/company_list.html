@@ -74,27 +74,7 @@
 												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
 											</ul>
-											<div class="d-sm-flex">
-												<label class="mr-2 mt-2 mb-sm-1 sort-label">{% trans "Sort By" %}:</label>
-												<div class="selectgroup">
-													<label class="selectgroup-item mb-md-0">
-														<input type="radio" name="value" value="All" class="selectgroup-input" checked="">
-														<span class="selectgroup-button d-md-flex">{% trans "All" %} <i class="fa fa-sort ml-2 mt-1"></i></span>
-													</label>
-													<label class="selectgroup-item mb-md-0">
-														<input type="radio" name="value" value="Distance" class="selectgroup-input">
-														<span class="selectgroup-button">{% trans "Distance" %}</span>
-													</label>
-													<label class="selectgroup-item mb-0">
-														<input type="radio" name="value" value="Latest" class="selectgroup-input">
-														<span class="selectgroup-button">{% trans "Latest" %}</span>
-													</label>
-													<label class="selectgroup-item mb-0">
-														<input type="radio" name="value" value="Rating" class="selectgroup-input">
-														<span class="selectgroup-button">{% trans "Rating" %}</span>
-													</label>
-												</div>
-											</div>
+											
 										</div>
 									</div>
 									<div class="tab-content">
@@ -110,7 +90,19 @@
 															<!-- /media/Images/News%20Images/wp2234690.png -->
 														</div>
 														<div class="item-card9-icons">
-															<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
+															{% if user.is_authenticated %}
+																{% user_liked_company user company.id  as liked %}
+																{% if liked == True %}
+																	<a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+																{% else %}
+																	<a  class="item-card9-icons1 wishlist" id="like_{{company.id}}" onclick="like_company('{{company.id}}')"> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+
+																{% endif %}
+															{% else %}
+															<a  href= "/accounts/login/?next=/company/like_company"  class="item-card9-icons1 wishlist" id="like_{{company.id}}" > <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+
+															{% endif %}
+															
 														</div>
 														<div class="item-cardreview-absolute bg-secondary">{%print_translated company.main_category company.main_category LANGUAGE_CODE%}</div>
 													</div>
@@ -165,7 +157,18 @@
 																	<img src="{{company.logo.url}}" alt="img" class="cover-image">
 																</div>
 																<div class="item-card9-icons">
-																	<a href="#" class="item-card9-icons1 wishlist"> <i class="fa fa fa-heart-o"></i></a>
+																	{% if user.is_authenticated %}
+																		{% user_liked_company user company.id  as liked %}
+																		{% if liked == True %}
+																			<a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+																		{% else %}
+																			<a  class="item-card9-icons1 wishlist" id="glike_{{company.id}}" onclick="like_company('{{company.id}}')"> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+
+																		{% endif %}
+																	{% else %}
+																	<a  href= "/accounts/login/?next=/company/like_company" class="item-card9-icons1 wishlist" id="glike_{{company.id}}" > <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+
+																	{% endif %}
 																</div>
 																<div class="item-cardreview-absolute bg-secondary">{{company.main_category}}</div>
 															</div>
@@ -339,6 +342,47 @@
 			</div>
 		</section>
 		<!--/Add Listings-->
+
+
+		<script>
+			function like_company(c_id)
+			{
+				if (document.getElementById('like_'+c_id).value != "liked")
+				{
+						fetch("{% url 'like_company'  %}",
+					{
+					method:"POST",
+					credentials: 'same-origin',
+					headers:{
+						"content-Type":'application/json',
+						'X-CSRFToken':'{{csrf_token}}'
+					},
+					body:JSON.stringify({
+						'c_id': c_id,
+					})
+					}).then(e => e.json()).then(result=>{
+						if(result['error'] == false){
+							window.alert('Company Liked Successfull')
+							var linear = document.getElementById('like_'+c_id)
+							var grid = document.getElementById('glike_'+c_id)
+
+							linear.style['background-color'] =  "rgb(252, 67, 67)";
+							grid.style['background-color']  =  "rgb(252, 67, 67)";
+							linear.value = "liked"
+							grid.value = "liked"
+							
+						}
+						else{
+							window.alert("not like")
+						}   		
+					});
+
+				}
+				
+				
+			}
+		
+		</script>
 
 	
 {%endblock%}

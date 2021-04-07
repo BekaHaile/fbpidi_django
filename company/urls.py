@@ -13,6 +13,7 @@ urlpatterns = [
     path("about/<pk>/",CompanyAbout.as_view(),name="company_about"),
     path("contact/<pk>/",CompanyContact.as_view(),name="contact_company"),
     path("subscribe/", Subscribe, name="subscribe"),
+    path("like_company", Like_Company, name = "like_company"),
     path("search-company/",SearchCompany.as_view(),name='search_company'),
     path("company-products/<pk>/",CompanyProductList.as_view(),name="company_products"),
     path("company-product-detail/<str:company>/<pk>/",CompanyProductdetail.as_view(),name="company_product_detail"),

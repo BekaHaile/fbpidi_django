@@ -1,6 +1,6 @@
 from django.urls import path,include
 from product.views.views import  (AddToCartView,CartSummary,DecrementFromCart,CheckoutView,SearchProduct,
- ProductDetailView, ProductByCategoryView, ProductByMainCategory,CreateReview, FetchInquiryProducts, InquiryForm)
+ ProductDetailView, ProductByCategoryView, ProductByMainCategory,CreateReview, FetchInquiryProducts, InquiryRequest, LikeProduct)
 
 
 urlpatterns = [
@@ -15,7 +15,8 @@ urlpatterns = [
     path("checkout/",CheckoutView.as_view(),name="checkout"),
 
     path("fetch_inquiry_products/", FetchInquiryProducts, name = "fetch_inquiry_products"),
-    path("inquiry_form/", InquiryForm.as_view(), name = "inquiry_form"),
+    path("inquiry_form/", InquiryRequest.as_view(), name = "inquiry_form"),
+    path('like_product/', LikeProduct, name = "like_product"),
     
 
     

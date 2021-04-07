@@ -42,7 +42,6 @@ class ApiCompanyByMainCategoryList(APIView):
 
 
 class ApiCompanyDetailView(APIView):
-    @permission_classes((IsAuthenticated))
     def get(self, request):
         try:
             company = get_object_or_404(Company, id = request.query_params['id'])

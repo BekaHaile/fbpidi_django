@@ -284,7 +284,6 @@ class BlogList(View):
 	
 
 class CreateBlogComment(LoginRequiredMixin,View):
-
 	def post(self,*args,**kwargs):
 		form = BlogCommentForm(self.request.POST)
 		blog = Blog.objects.get(id=self.kwargs['id'])
@@ -317,6 +316,6 @@ class BlogDetail(View):
 		comment = BlogCommentForm()
 		tags=self.get_tags("english")
 		tags_am=self.get_tags("amharic")
-		template_name="frontpages/blog-details-right.html" 
+		template_name="frontpages/blog/blog_detail.html" 
 		context = {'blog':blog,'comment':comment,'tags':tags,'tags_am':tags_am}
 		return render(self.request, template_name,context)

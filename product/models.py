@@ -74,6 +74,9 @@ class Product(models.Model):
     def more_images(self):
         return ProductImage.objects.filter(product=self)
 
+    def count_likes(self):
+        return self.productlike_set.all().count()
+
     def get_category(self):
         # is this like return self.company.category.category_name
         return [self.pharmacy_category.category_name, self.pharmacy_category.category_name_am]
@@ -81,6 +84,12 @@ class Product(models.Model):
     
     class Meta:
         ordering = ('-created_date',)
+
+class ProductLike(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+    product = models.ForeignKey(Product, on_delete = models.CASCADE)
+    created_date = models.DateField(auto_now_add=True)
+
 
 class Dose(models.Model):
     dose = models.TextField(verbose_name="Dose in English")
@@ -313,7 +322,7 @@ class InvoiceRecord(models.Model):
 class Review(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name="review")
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
     rating = models.IntegerField()
     review = models.TextField()
     time_stamp = models.DateTimeField(auto_now_add=True)

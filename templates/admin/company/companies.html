@@ -11,9 +11,10 @@
 						<h5 class="card-title">Registered Industries List</h5>
 						<div class="header-elements">
 							<div class="list-icons">
-								
+								{% if user.is_superuser %}
 								<a href="{%url 'admin:create_company_profile'%}" class="btn bg-teal btn-sm rounded-round"><i
 										class="icon-add mr-2"></i>Add New Industry</a>
+								{% endif %}
 							</div>
 
 						</div>
