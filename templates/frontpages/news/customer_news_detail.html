@@ -1,716 +1,241 @@
-{%extends 'admin/base_site.html'%}
-{%block pagename%}Form Tags Inputs{%endblock%}
+{%extends 'frontpages/layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
 {%block content%}
-			<!-- Content area -->
-			<div class="content">
+{% get_current_language as LANGUAGE_CODE %}
 
-				<!-- Tokenfield title -->
-				<div class="mb-3">
-					<h6 class="mb-0 font-weight-semibold">
-						Tokenfield for Bootstrap
-					</h6>
-					<span class="text-muted d-block">Advanced tagging/tokenizing plugin</span>
-				</div>
-				<!-- /tokenfield title -->
-
-
-				<!-- Tokenfield basic -->
-				<div class="row">
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-header header-elements-inline">
-								<h5 class="card-title">Basic usage</h5>
-								<div class="header-elements">
-									<div class="list-icons">
-				                		<a class="list-icons-item" data-action="collapse"></a>
-				                		<a class="list-icons-item" data-action="reload"></a>
-				                		<a class="list-icons-item" data-action="remove"></a>
-				                	</div>
-			                	</div>
-							</div>
-
-							<div class="card-body">
-
-								<!-- Basic example -->
-								<div class="form-group">
-									<label>Basic example</label>
-									<input type="text" class="form-control tokenfield" value="These,are,tokens" data-fouc>
-								</div>
-								<!-- /basic example -->
-
-
-								<!-- Limit tokens number -->
-								<div class="form-group">
-									<label>Limit tokens number</label>
-									<input type="text" class="form-control tokenfield" data-limit="5" value="Maximum,five,tokens" data-fouc>
-								</div>
-								<!-- /limit tokens number -->
-
-
-								<!-- Disabled field -->
-								<div class="form-group">
-									<label>Disabled field</label>
-									<input type="text" class="form-control tokenfield" disabled value="This,is,disabled,field" data-fouc>
-								</div>
-								<!-- disabled field -->
-
-
-								<!-- Readonly field -->
-								<div class="form-group">
-									<label>Readonly field</label>
-									<input type="text" class="form-control tokenfield" readonly value="This,is,readonly,field" data-fouc>
-								</div>
-								<!-- readonly field -->
-
-
-								<!-- Using typeahead -->
-								<div class="form-group">
-									<label>Using Twitter Typeahead</label>
-									<input type="text" class="form-control tokenfield-typeahead" value="Enter,color,names" data-fouc>
-								</div>
-								<!-- /using typeahead -->
-
-
-								<!-- Keyboard support -->
-								<div class="form-group">
-									<label>Keyboard support</label>
-									<input type="text" class="form-control tokenfield" value="Try,pressing,backspace" data-fouc>
-								</div>
-								<!-- /keyboard support -->
-
-
-								<!-- Copy paste support -->
-								<div class="form-group">
-									<label>Copy and paste support</label>
-									<input type="text" class="form-control tokenfield" value="Copy,and,paste" data-fouc>
-								</div>
-								<!-- /copy paste support -->
-
-
-								<!-- Create token on blur -->
-								<div class="form-group">
-									<label>Create token on blur</label>
-									<input type="text" class="form-control tokenfield-blur" value="Type,and,focus,out" data-fouc>
-								</div>
-								<!-- /create token on blur -->
-
-
-								<!-- Custom delimiter -->
-								<div class="form-group">
-									<label>Custom delimiter</label>
-									<input type="text" class="form-control tokenfield-delimiter" value="Semicolon;as;delimiter" data-fouc>
-								</div>
-								<!-- /custom delimiter -->
-
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-header header-elements-inline">
-								<h5 class="card-title">Advanced examples</h5>
-								<div class="header-elements">
-									<div class="list-icons">
-				                		<a class="list-icons-item" data-action="collapse"></a>
-				                		<a class="list-icons-item" data-action="reload"></a>
-				                		<a class="list-icons-item" data-action="remove"></a>
-				                	</div>
-			                	</div>
-							</div>
-
-							<div class="card-body">
-
-								<!-- Show placeholder -->
-								<div class="form-group">
-									<label>Show placeholder</label>
-									<input type="text" class="form-control tokenfield" placeholder="Add tag" value="Copy,and,paste" data-fouc>
-								</div>
-								<!-- /show placeholder -->
-
-
-								<!-- Inside form group with addon -->
-								<div class="form-group">
-									<label>Input group with addon</label>
-									<div class="input-group">
-										<span class="input-group-prepend">
-											<span class="input-group-text"><i class="icon-price-tags"></i></span>
+<!-- USED THE busines_education/ template -->
+		<!--Sliders Section-->
+		<div>
+			<div class="relative sptb-12 pattern2 bg-background">
+				<div class="header-text1 mb-0">
+					<div class="container">
+						<div class="row">
+							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
+								<div class="text-center text-white ">
+									<h1 class="mb-2">
+										<span class="font-weight-semibold">
+											{% trans "News Detail" %}
 										</span>
-										<input type="text" class="form-control tokenfield" value="cool,nice,great" data-fouc>
-									</div>
+									</h1>
+									<ol class="breadcrumb" style="display: inline-flex;">
+										<li class="breadcrumb-item"><a href="">{% trans "Home" %}</a></li>
+										<li class="breadcrumb-item"><a href="/collaborations/customer_news_list/">{% trans "News" %}</a></li>
+										<li class="breadcrumb-item active text-white" aria-current="page">{% trans "News Details" %}</li>
+									</ol>
 								</div>
-								<!-- /inside form group with addon -->
-
-
-								<!-- Inside form group with button -->
-								<div class="form-group">
-									<label>Input group with button</label>
-									<div class="input-group">
-										<input type="text" class="form-control tokenfield" value="Cool,nice,great" data-fouc>
-
-										<div class="input-group-append">
-											<button type="button" class="btn btn-light btn-icon dropdown-toggle" data-toggle="dropdown"><i class="icon-cog5"></i></button>
-			                                <div class="dropdown-menu dropdown-menu-right">
-												<a href="#" class="dropdown-item">Action</a>
-												<a href="#" class="dropdown-item">Another action</a>
-												<a href="#" class="dropdown-item">Something else here</a>
-												<a href="#" class="dropdown-item">One more line</a>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- /inside form group with button -->
-
-
-								<!-- Set tokens method -->
-								<div class="form-group">
-									<label>Set tokens method</label>
-									<div class="input-group">
-										<input type="text" class="form-control tokenfield" id="set-tokens-field" value="Click,Set,button" data-fouc>
-										<div class="input-group-append">
-											<button type="button" class="btn btn-light" id="set-tokens">Set tokens</button>
-										</div>
-									</div>
-								</div>
-								<!-- /set tokens method -->
-
-
-								<!-- Get tokens method -->
-								<div class="form-group">
-									<label>Get tokens method</label>
-									<div class="input-group">
-										<input type="text" class="form-control tokenfield" id="get-tokens-field" value="Click,Get,button" data-fouc>
-										<div class="input-group-append">
-											<button type="button" class="btn btn-light" id="get-tokens">Get tokens</button>
-										</div>
-									</div>
-								</div>
-								<!-- /get tokens method -->
-
-
-								<!-- Create token method -->
-								<div class="form-group">
-									<label>Create token method</label>
-									<div class="input-group">
-										<input type="text" class="form-control tokenfield" id="create-token-field" value="Create,token" data-fouc>
-										<div class="input-group-append">
-											<button type="button" class="btn btn-light" id="create-token">Create token</button>
-										</div>
-									</div>
-								</div>
-								<!-- /create token method -->
-
-
-								<!-- Disable/enable methods -->
-								<div class="form-group">
-									<label>Disable / enable methods</label>
-									<div class="input-group">
-										<input type="text" class="form-control tokenfield-disable" value="Disable,and,enable" data-fouc>
-										<div class="input-group-append">
-											<button type="button" class="btn btn-light" id="disable">Disable</button>
-											<button type="button" class="btn bg-info" id="enable">Enable</button>
-										</div>
-									</div>
-								</div>
-								<!-- /disable/enable methods -->
-
-
-								<!-- Readonly/writeable methods -->
-								<div class="form-group">
-									<label>Readonly / writable methods</label>
-									<div class="input-group">
-										<input type="text" class="form-control tokenfield-readonly" value="Readonly,and,writeable" data-fouc>
-										<div class="input-group-append">
-											<button type="button" class="btn btn-light" id="readonly">Readonly</button>
-											<button type="button" class="btn bg-info" id="writeable">Writeable</button>
-										</div>
-									</div>
-								</div>
-								<!-- /readonly/writeable methods -->
-
-
-								<!-- Destroy method -->
-								<div class="form-group">
-									<label>Destroy</label>
-									<div class="input-group">
-										<input type="text" class="form-control tokenfield-destroy" value="Destroy,and,create" data-fouc>
-										<div class="input-group-append">
-											<button type="button" class="btn btn-light" id="destroy">Destroy</button>
-											<button type="button" class="btn bg-info" id="create">Create</button>
-										</div>
-									</div>
-								</div>
-								<!-- /destroy method -->
-
 							</div>
+						</div>
+					</div>
+				</div><!-- /header-text -->
+				<div class="details-absolute">
+					<div class="d-sm-flex container">
+						<div>
+							<a href="#" class="text-white d-inline-block mr-4 ">
+								<i class="icon icon-location-pin text-white mr-2"></i>{% trans "Company Address" %}: {{news.company.location}}
+							</a>
+						</div>
+
+						<div class="ml-auto">
+							<a href="#" class="text-white d-inline-block mt-2 mt-sm-0 fs-18">
+								<i class="icon icon-phone text-white mr-2 fs-14"></i>{{news.company.phone_number}}
+							</a>
 						</div>
 
 					</div>
 				</div>
-				<!-- /tokenfield basic -->
-
-
-				<!-- Tokenfield inputs sizing -->
-				<div class="row">
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-header header-elements-inline">
-								<h5 class="card-title">Input sizing</h5>
-								<div class="header-elements">
-									<div class="list-icons">
-				                		<a class="list-icons-item" data-action="collapse"></a>
-				                		<a class="list-icons-item" data-action="reload"></a>
-				                		<a class="list-icons-item" data-action="remove"></a>
-				                	</div>
-			                	</div>
-							</div>
-
-							<div class="card-body">
-
-								<!-- Large input size -->
-								<div class="form-group">
-									<label>Large input size</label>
-									<input type="text" class="form-control tokenfield form-control-lg" value="Red,blue,green" data-fouc>
-								</div>
-								<!-- /large input size -->
-
-
-								<!-- Default input size -->
-								<div class="form-group">
-									<label>Default input size</label>
-									<input type="text" class="form-control tokenfield" value="Red,blue,green" data-fouc>
-								</div>
-								<!-- /default input size -->
-
-
-								<!-- Small input size -->
-								<div class="form-group">
-									<label>Small input size</label>
-									<input type="text" class="form-control tokenfield form-control-sm" value="Red,blue,green" data-fouc>
-								</div>
-								<!-- /small input size -->
-
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-header header-elements-inline">
-								<h5 class="card-title">Input group sizing</h5>
-								<div class="header-elements">
-									<div class="list-icons">
-				                		<a class="list-icons-item" data-action="collapse"></a>
-				                		<a class="list-icons-item" data-action="reload"></a>
-				                		<a class="list-icons-item" data-action="remove"></a>
-				                	</div>
-			                	</div>
-							</div>
-
-							<div class="card-body">
-
-								<!-- Large input group size -->
-								<div class="form-group">
-									<label>Large input group size</label>
-									<div class="input-group input-group-lg">
-										<div class="input-group-prepend">
-											<span class="input-group-text"><i class="icon-menu7"></i></span>
-										</div>
-										<input type="text" class="form-control tokenfield" value="Red,blue,green" data-fouc>
-									</div>
-								</div>
-								<!-- /large input group size -->
-
-
-								<!-- Default input group size -->
-								<div class="form-group">
-									<label>Default input group size</label>
-									<div class="input-group">
-										<div class="input-group-prepend">
-											<span class="input-group-text"><i class="icon-cash3"></i></span>
-										</div>
-										<input type="text" class="form-control tokenfield" value="Red,blue,green" data-fouc>
-									</div>
-								</div>
-								<!-- /default input group size -->
-
-
-								<!-- Small input group size -->
-								<div class="form-group">
-									<label>Small input group size</label>
-									<div class="input-group input-group-sm">
-										<div class="input-group-prepend">
-											<span class="input-group-text"><i class="icon-lifebuoy"></i></span>
-										</div>
-										<input type="text" class="form-control tokenfield" value="Red,blue,green" data-fouc>
-									</div>
-								</div>
-								<!-- /small input group size -->
-
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /tokenfield inputs sizing -->
-
-
-				<!-- Tokenfield styling -->
-				<div class="row">
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-header header-elements-inline">
-								<h5 class="card-title">Validation states</h5>
-								<div class="header-elements">
-									<div class="list-icons">
-				                		<a class="list-icons-item" data-action="collapse"></a>
-				                		<a class="list-icons-item" data-action="reload"></a>
-				                		<a class="list-icons-item" data-action="remove"></a>
-				                	</div>
-			                	</div>
-							</div>
-
-							<div class="card-body">
-
-								<!-- Error validation state -->
-								<div class="form-group">
-									<label class="font-weight-semibold text-danger">Invalid state</label>
-									<div class="form-group-feedback form-group-feedback-right">
-										<input type="text" class="form-control tokenfield-danger" value="Red,blue,green" data-fouc>
-										<div class="form-control-feedback text-danger">
-											<i class="icon-cancel-circle2"></i>
-										</div>
-									</div>
-								</div>
-								<!-- /error validation state -->
-
-
-								<!-- Success validation state -->
-								<div class="form-group">
-									<label class="font-weight-semibold text-success">Valid state</label>
-									<div class="form-group-feedback form-group-feedback-right">
-										<input type="text" class="form-control tokenfield-success" value="Red,blue,green" data-fouc>
-										<div class="form-control-feedback text-success">
-											<i class="icon-checkmark-circle"></i>
-										</div>
-									</div>
-								</div>
-								<!-- /success validation state -->
-
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-header header-elements-inline">
-								<h5 class="card-title">Custom colors</h5>
-								<div class="header-elements">
-									<div class="list-icons">
-				                		<a class="list-icons-item" data-action="collapse"></a>
-				                		<a class="list-icons-item" data-action="reload"></a>
-				                		<a class="list-icons-item" data-action="remove"></a>
-				                	</div>
-			                	</div>
-							</div>
-
-							<div class="card-body">
-
-								<!-- Custom blue color -->
-								<div class="form-group">
-									<label>Custom blue color</label>
-									<input type="text" class="form-control tokenfield-primary" value="Red,blue,green" data-fouc>
-								</div>
-								<!-- /custom blue color -->
-
-
-								<!-- Custom green color -->
-								<div class="form-group">
-									<label>Custom green color</label>
-									<input type="text" class="form-control tokenfield-teal" value="Red,blue,green" data-fouc>
-								</div>
-								<!-- /custom green color -->
-
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /tokenfield basic -->
-
-
-
-				<!-- Bootstrap tags input -->
-				<div class="mb-3 pt-2">
-					<h6 class="mb-0 font-weight-semibold">
-						Bootstrap Tags Input
-					</h6>
-					<span class="text-muted d-block">User interface for managing tags</span>
-				</div>
-
-				<div class="row">
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-header header-elements-inline">
-								<h5 class="card-title">Initialization</h5>
-								<div class="header-elements">
-									<div class="list-icons">
-				                		<a class="list-icons-item" data-action="collapse"></a>
-				                		<a class="list-icons-item" data-action="reload"></a>
-				                		<a class="list-icons-item" data-action="remove"></a>
-				                	</div>
-			                	</div>
-							</div>
-
-							<div class="card-body">
-
-								<!-- Default usage -->
-								<div class="mb-3">
-									<h6 class="font-weight-semibold">Default usage</h6>
-									<p class="mb-3">Tags input is a simple and flexible extension with plenty of useful features and support of Twitter Typeahead library. To initialize tags input, you can use both javascript and data attributes.</p>
-
-									<div class="mb-3">
-										<input type="text" value="Amsterdam,Washington,Sydney,Beijing" class="form-control tags-input" data-fouc>
-									</div>
-
-									<div class="mb-3">
-										<div class="mb-1">Returned values</div>
-										<pre class="val"><code class="language-javascript">"Amsterdam,Washington,Sydney,Beijing"</code></pre>
-									</div>
-
-									<div class="mb-4">
-										<div class="mb-1">Returned items</div>
-										<pre class="items"><code class="language-javascript">["Amsterdam","Washington","Sydney","Beijing"]</code></pre>
-									</div>
-								</div>
-								<!-- /default usage -->
-
-
-								<!-- Using data attributes -->
-								<div class="mb-3">
-									<h6 class="font-weight-semibold">Using data attributes</h6>
-									<p class="mb-3">Just add <code>data-role="tagsinput"</code> to your input field to automatically change it to a tags input field. <span class="font-weight-semibold">Note:</span> currently tags input supports only default options if intinalized via data attributes.</p>
-
-									<div class="mb-3">
-										<input type="text" value="Amsterdam,Washington,Sydney" class="form-control" data-role="tagsinput" data-fouc>
-									</div>
-
-									<div class="mb-3">
-										<div class="mb-1">Returned values</div>
-										<pre class="val"><code class="language-javascript">&nbsp;</code></pre>
-									</div>
-
-									<div class="mb-3">
-										<div class="mb-1">Returned items</div>
-										<pre class="items"><code class="language-javascript">&nbsp;</code></pre>
-									</div>
-								</div>
-								<!-- /using data attributes -->
-
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-header header-elements-inline">
-								<h5 class="card-title">Basic options</h5>
-								<div class="header-elements">
-									<div class="list-icons">
-				                		<a class="list-icons-item" data-action="collapse"></a>
-				                		<a class="list-icons-item" data-action="reload"></a>
-				                		<a class="list-icons-item" data-action="remove"></a>
-				                	</div>
-			                	</div>
-							</div>
-
-							<div class="card-body">
-
-								<!-- Maximum tags -->
-								<div class="mb-3">
-									<h6 class="font-weight-semibold">Maximum tags allowed</h6>
-									<p class="mb-3">When set, no more than the given number of tags are allowed to add (default: undefined). When maxTags is reached, a class 'bootstrap-tagsinput-max' is placed on the tagsinput element.</p>
-
-									<div class="mb-3">
-										<input type="text" value="Amsterdam,Washington,Sydney" class="form-control tagsinput-max-tags" data-fouc>
-									</div>
-
-									<div class="mb-3">
-										<div class="mb-1">Returned values</div>
-										<pre class="val"><code class="language-javascript">"Amsterdam,Washington,Sydney"</code></pre>
-									</div>
-
-									<div class="mb-4">
-										<div class="mb-1">Returned items</div>
-										<pre class="items"><code class="language-javascript">["Amsterdam","Washington","Sydney"]</code></pre>
-									</div>
-								</div>
-								<!-- /maximum tags -->
-
-
-								<!-- Custom tag class -->
-								<div class="mb-3">
-									<h6 class="font-weight-semibold">Custom tags class</h6>
-									<p class="mb-3">Tag element uses basic <code>.badge</code> element markup and supports all color options available for it. Default color alternative is <code>info</code>, to use another color add proper class to <code>tagClass</code> option.</p>
-
-									<div class="mb-3">
-										<input type="text" value="Amsterdam,Washington,Sydney" class="form-control tagsinput-custom-tag-class" data-fouc>
-									</div>
-
-									<div class="mb-3">
-										<div class="mb-1">Returned values</div>
-										<pre class="val"><code class="language-javascript">"Amsterdam,Washington,Sydney"</code></pre>
-									</div>
-
-									<div class="mb-3">
-										<div class="mb-1">Returned items</div>
-										<pre class="items"><code class="language-javascript">["Amsterdam","Washington","Sydney"]</code></pre>
-									</div>
-								</div>
-								<!-- /maximum tags -->
-
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /bootstrap tags input -->
-
-
-				<!-- Tags input options -->
-				<div class="row">
-					<div class="col-md-6">
-
-						<!-- Advanced examples -->
-						<div class="card">
-							<div class="card-header header-elements-inline">
-								<h5 class="card-title">Advanced examples</h5>
-								<div class="header-elements">
-									<div class="list-icons">
-				                		<a class="list-icons-item" data-action="collapse"></a>
-				                		<a class="list-icons-item" data-action="reload"></a>
-				                		<a class="list-icons-item" data-action="remove"></a>
-				                	</div>
-			                	</div>
-							</div>
-
-							<div class="card-body">
-
-								<!-- Typeahead support -->
-								<div class="form-group">
-									<label>Typeahead support</label>
-									<input type="text" value="Washington,Alaska" data-role="tagsinput" class="form-control tagsinput-typeahead" data-fouc>
-								</div>
-								<!-- /typeahead support -->
-
-
-								<!-- Categorizing tags -->
-								<div class="form-group">
-									<label>Categorizing tags</label>
-									<input type="text" class="form-control tagsinput-tag-categorizing" data-fouc>
-								</div>
-								<!-- /categorizing tags -->
-
-
-								<!-- Objects as tags -->
-								<div class="form-group">
-									<label>Objects as tags</label>
-									<input type="text" class="form-control tagsinput-tag-objects" data-fouc>
-								</div>
-								<!-- /objects as tags -->
-
-
-								<!-- Allow dublicates -->
-								<div class="form-group">
-									<label>Allow dublicates</label>
-									<select multiple="multiple" class="form-control tags-input-dublicates" data-fouc>
-										<option value="Amsterdam" selected>Amsterdam</option>
-										<option value="Washington" selected>Washington</option>
-										<option value="Washington" selected>Washington</option>
-									</select>
-								</div>
-								<!-- /allow dublicates -->
-
-							</div>
-						</div>
-						<!-- /advanced examples -->
-
-					</div>
-
-					<div class="col-md-6">
-
-						<!-- Tags input methods -->
-						<div class="card">
-							<div class="card-header header-elements-inline">
-								<h5 class="card-title">Tags input methods</h5>
-								<div class="header-elements">
-									<div class="list-icons">
-				                		<a class="list-icons-item" data-action="collapse"></a>
-				                		<a class="list-icons-item" data-action="reload"></a>
-				                		<a class="list-icons-item" data-action="remove"></a>
-				                	</div>
-			                	</div>
-							</div>
-
-							<div class="card-body">
-
-								<!-- Add tag -->
-								<div class="form-group">
-									<label>Add one tag</label>
-									<div class="input-group">
-										<input type="text" value="Washington,Alaska" class="form-control tagsinput-add-tag" data-fouc>
-										<div class="input-group-append">
-											<button type="button" class="btn btn-light add-tag-button">Add Beijing</button>
-										</div>
-									</div>
-								</div>
-								<!-- /add tag -->
-
-
-								<!-- Remove tag -->
-								<div class="form-group">
-									<label>Remove one tag</label>
-									<div class="input-group">
-										<input type="text" value="Washington,Alaska" class="form-control tagsinput-remove-tag" data-fouc>
-										<div class="input-group-append">
-											<button type="button" class="btn btn-light remove-tag-button">Remove Sydney</button>
-										</div>
-									</div>
-								</div>
-								<!-- /remove tag -->
-
-
-								<!-- Remove all tags -->
-								<div class="form-group">
-									<label>Remove all tags</label>
-									<div class="input-group">
-										<input type="text" value="Washington,Alaska" class="form-control tagsinput-remove-tags" data-fouc>
-										<div class="input-group-append">
-											<button type="button" class="btn btn-light remove-all-tags-button">Remove all</button>
-										</div>
-									</div>
-								</div>
-								<!-- /remove all tags -->
-
-
-								<!-- Destroy tags input -->
-								<div class="form-group">
-									<label>Destroy Tagsinput</label>
-									<div class="input-group">
-										<input type="text" value="Washington,Alaska" class="form-control tagsinput-destroy" data-fouc>
-										<div class="input-group-append">
-											<button type="button" class="btn btn-light destroy-tagsinput-button">Destroy</button>
-										</div>
-									</div>
-								</div>
-								<!-- /destroy tags input -->
-
-							</div>
-						</div>
-						<!-- /tags input methods -->
-
-					</div>
-				</div>
-				<!-- /tags input options -->
-
 			</div>
-			<!-- /content area -->
+		</div>
+		<!--/Sliders Section-->
 
-{%endblock%}
+		<!--BreadCrumb-->
+		<div class="bg-white border-bottom">
+			<div class="container">
+				<div class="page-header">
+					<h4 class="page-title">{% trans "News" %}</h4>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
+						<li class="breadcrumb-item active" aria-current="page">{% trans "News" %}</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<!--/BreadCrumb-->
+
+		<!--Add listing-->
+		<section class="sptb">
+			<div class="container">
+				<div class="row">
+					<div class="col-xl-8 col-lg-8 col-md-12">
+
+						<!--Business Overview-->
+						<div class="card overflow-hidden">
+							<div class="card-body">
+								<div class="item-det mb-4">
+									<a href="#" class="text-dark"><h3>{%print_translated news.title news.title_am LANGUAGE_CODE%}</h3></a>
+									<div class=" d-flex">
+										<ul class="d-flex mb-0">
+											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-person text-muted mr-1">{% trans "By" %}: </i><b>{% print_translated news.company.name news.company.name_am LANGUAGE_CODE %}</b></a></li>
+                                            <li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>{{news.created_date}}</b> </a></li>                                       
+                                        </ul>
+									</div>
+                                </div>
+                                
+
+								<div class="product-slider">
+									<div id="carousel" class="carousel slide" data-ride="carousel">
+										<div class="carousel-inner">
+											<div class="carousel-item active"><img height = "100" src="{{news.get_images.0.image.url}}" alt="{{image.name}}"> </div>  
+											
+                                            {% for image in news.get_images %}
+                                                {% if image.image.url != news.get_images.0.image.url %}
+                                                    <div class="carousel-item "><img height = "100" src="{{image.image.url}}" alt="{{image.name}}"> </div>
+                                                {%endif%}
+                                            {% endfor %}
+										</div>
+										<a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+											<i class="fa fa-angle-left" aria-hidden="true"></i>
+										</a>
+										<a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+											<i class="fa fa-angle-right" aria-hidden="true"></i>
+										</a>
+                                    </div>
+                                </div>
+							</div>
+
+							<div class="card-header">
+								<h3 class="card-title">{% trans "News Description" %}</h3>
+							</div>
+							<div class="card-body pt-0">
+								<div class="mb-0">
+									<p>{% print_translated news.description news.description_am LANGUAGE_CODE %}</p>
+								</div>	
+							</div>
+							
+						</div>
+						<!--/Business Overview-->
+						{% if related_news.count > 0 %}
+						<h3 class="mt-5 mb-4 fs-20">{% print_translated related_message related_message_am LANGUAGE_CODE %} </h3>
+						{% endif %}
+						<!--Related Posts-->
+						<div id="myCarousel5" class="owl-carousel owl-carousel-icons3">
+						
+							<!-- Wrapper for carousel items -->
+							{% for obj in related_news %}
+							<div class="item">
+								<div class="card">
+									<div class="item-card7-imgs">
+										<a href="/collaborations/customer_news_detail/{{obj.id}}/"></a>
+										<img src="{{obj.get_images.0.image.url}}" alt="img" class="cover-image">
+									</div>
+									<form action="/collaborations/customer_news_list/" method="GET"> 
+									<div class="item-card7-overlaytext">
+										<input type="hidden" name="by_category" value = "{{obj.catagory}}" width="0" height="0"/>
+										<h4><button  type = "submit"  style="border: none; background-color: #ff8819; color:white;" class="font-weight-semibold" class="text-dark">{{obj.catagory}}</button> </h4>
+									</div>
+									</form>
+									<div class="card-body">
+										<div class="item-card7-desc">
+											<a  class="text-dark"><h4 class="font-weight-semibold">{% print_translated obj.title obj.title_am LANGUAGE_CODE %} </a>
+										</div>
+										<div class="item-card7-text">
+											<ul class="icon-card mb-0 mt-2">
+												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>{{obj.company.location}}</a></li>
+												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i> {{obj.created_date.date}}</a></li>
+												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{% print_translated obj.company.name obj.company.name_am LANGUAGE_CODE %} </a></li>
+												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i> {{obj.company.phone_number}}</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+								
+							{% endfor %}
+						</div>
+						<!--/Related Posts-->		
+					</div>
+					<!--Right Side Content-->
+					<div class="col-xl-4 col-lg-4 col-md-12">
+						<div class="card overflow-hidden">
+							<div class="card-header">
+								<h3 class="card-title">{% trans "Company Information" %}</h3>
+							</div>
+							<div class="card-body item-user">
+								<div class="profile-details">
+									<div class="profile-pic mb-0 mx-5">
+										<img src="{{news.company.get_image}}" class="brround w-150 h-150" alt="user">
+									</div>
+								</div>
+								<div class="text-center mt-2">
+									<a href="{% url 'userprofile' %}" class="text-dark text-center"><h4 class="mt-0 mb-0 font-weight-semibold">{% print_translated news.company.name news.company.name_am LANGUAGE_CODE %} </h4></a>
+									
+								</div>
+							</div>
+							<div class="profile-user-tabs">
+								<div class="tab-menu-heading border-0 p-0">
+									<div class="tabs-menu1">
+										<ul class="nav">
+											<li class=""><a href="#tab-contact" class="active" data-toggle="tab">{% trans "Contat" %}</a></li>
+											
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="tab-content border-0 bg-white">
+								<div class="tab-pane active" id="tab-contact">
+									<div class="card-body item-user">
+										<h4 class="mb-4">{% trans "Company Contact Info" %}</h4>
+										<div>
+											<h6><span class="font-weight-semibold"><i class="fa fa-map mr-3 mb-2"></i></span><a href="#" class="text-body"> {{news.company.location}}</a></h6>
+											<h6><span class="font-weight-semibold"><i class="fa fa-envelope mr-3 mb-2"></i></span><a href="#" class="text-body"> {{news.created_by.email}}</a></h6>
+											<h6><span class="font-weight-semibold"><i class="fa fa-phone mr-3 mb-2"></i></span><a href="#" class="text-secondary"> {{news.company.phone_number}}</a></h6>
+											
+										</div>
+									</div>
+								</div>
+							
+								<div class="card-footer">
+									<div class="">
+										<a href="{% url 'chat_with' reciever_name=news.created_by.username %}" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i>{% trans "Chat" %}</a>
+										<!-- <a href="#" class="btn btn-secondary mt-1 mb-1" data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> Contact Me</a> -->
+										<a href="/collaborations/customer_news_list/" class="btn btn-light mt-1 mb-1"><i class="fa fa-eye"></i>{% trans "All Listings" %}</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					
+						
+						<form action="{% url 'customer_news_list' %}" method = "GET">
+						<div class = "card">
+							<div class="card-header border-top">
+								<h3 class="card-title">{% trans "Filter by company" %}</h3>
+							</div>
+							<div class="card-body">
+								<div class="filter-product-checkboxs">
+									{% for comp in companies %}
+									<label class="custom-control custom-checkbox mb-2">
+										<input type="checkbox" class="custom-control-input" name="by_company" value="{{comp.name}}">
+										<span class="custom-control-label">
+											{% print_translated comp.name comp.name_am LANGUAGE_CODE %}
+										</span>
+									</label>
+									{% endfor %}
+
+								</div>
+							</div>
+							<div class="card-footer">
+								<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>
+							</div>
+						</div>
+						</form>
+						
+					</div>
+					<!--/Right Side Content-->
+				</div>
+			</div>
+		</section>
+
+		
+
+		
+		{%endblock%}

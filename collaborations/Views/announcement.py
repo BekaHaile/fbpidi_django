@@ -29,7 +29,6 @@ class ListAnnouncement(View):
 				result = FilterByCompanyname(self.request.GET.getlist('by_company'), Announcement.objects.all())
 			else:
 				result = SearchByTitle_All('Announcement', self.request)
-				print("########## ", result)
 			if result['query']  :
 				result['query'] = Announcement.objects.all()
 			data = get_paginated_data(self.request, result['query'])

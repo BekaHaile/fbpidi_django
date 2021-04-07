@@ -1,7 +1,7 @@
 import datetime
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from rest_framework.views import APIView
@@ -13,6 +13,9 @@ from rest_framework import authentication, permissions
 from rest_framework.decorators import permission_classes, authentication_classes,api_view
 
 from company.models import Company, CompanyEvent, EventParticipants
+from company.api.serializers import CompanyInfoSerializer
+
+
 from collaborations.models import (PollsQuestion, PollsResult, Choices, News, NewsImages, Blog, BlogComment,
                                     Announcement, AnnouncementImages, Tender, TenderApplicant, Faqs, JobApplication, 
                                     JobCategory, Project, Research, ResearchProjectCategory, Vacancy, ForumQuestion,
@@ -22,8 +25,7 @@ from collaborations.api.serializers import (PollListSerializer,  ChoiceSerialize
                                             EventListSerializer, BlogSerializer,BlogDetailSerializer, BlogCommentSerializer, AnnouncementSerializer, AnnouncementDetailSerializer, 
                                             TenderSerializer,TenderApplicantSerializer, VacancyListSerializer, JobCategorySerializer,
                                             ResearchProjectCategorySerializer, ProjectSerializer, ResearchSerializer, 
-                                            ForumQuestionSerializer, ForumDetailSerializer, ForumCommentSerializer, CommentReplay, FaqSerializer, JobApplicationSerializer
-                                            )
+                                            ForumQuestionSerializer, ForumDetailSerializer, ForumCommentSerializer, CommentReplay, FaqSerializer, JobApplicationSerializer)
 
 
 ### a dictionay holding model names with model objects, Used to hold a model object for a string
@@ -98,8 +100,8 @@ def FilterByCompanyname(company_list,  query_set):
     try:
         q_object = Q()
         for company_name in company_list:
-            q_object.add( Q(company__name = company_name ), Q.OR )
-            q_object.add( Q(company__name_am = company_name ), Q.OR )
+            q_object.add( Q(company__name__icontains = company_name ), Q.OR )
+            q_object.add( Q(company__name_am__icontains = company_name ), Q.OR )
         query = query_set.filter(q_object).distinct()
         return {'query':query, 'message':f'{query.count()} result Found!', 'message_am': f" {query.count()} ውጤት ተገኝቷል" }
     except Exception as e:
@@ -150,12 +152,34 @@ def get_paginated_data(request, query):
         return Paginator(query, 2).page(1)
 
 
-
 class PollListApiView(generics.ListAPIView):
-    #for the future we will override the get_queryset() method to filter 
-    queryset = PollsQuestion.objects.all()
-    serializer_class = PollListSerializer
-    
+    def get(self, request):
+        result ={}
+        try:
+            if 'by_company' in request.query_params:
+                result = FilterByCompanyname(request.query_params['by_company'].split(','), PollsQuestion.objects.all())
+            elif 'by_no_vote' in request.query_params:
+                result['query'] = PollsQuestion.objects.annotate(num_vote=Count('pollsresult')).order_by('-num_vote')
+                if result['query'].count() > 0:
+                    result['message'] = "Polls in order of number of votes!"
+                    result['message_am'] = "በመራጮች ብዛት ቅደም ተከተል"
+                else:
+                    result['message'] = "No result Found!"
+                    result['message_am'] = "ምንም ውጤት አልተገኘም"
+            else:
+                result = SearchByTitle_All('Polls', request) # this returns all if there is no search key or filter by search
+            companies = []
+            for comp in Company.objects.all():
+                if comp.pollsquestion_set.count()>0:
+                    companies.append(comp)
+            if result['query']==0:
+                result['query'] = PollsQuestion.objects.all()
+                result['message'] = 'No Result Found!'
+            return Response( data = { 'polls':PollListSerializer(result['query'], many =True).data, 'message' : result['message'], 'message_am':result['message_am'],'companies':CompanyInfoSerializer(companies, many =True).data})
+
+        except Exception as e:
+            print("exceptio at polls list ",e)
+            return Response({'error':True, 'message':str(e)})
 
 
 class PollDetailApiView( APIView):
@@ -234,7 +258,6 @@ class NewsListApiView(APIView):
             return Response(data = {'error': True, 'message': f"Exceptin Occured: {str(e)}"})
    
 
-
 class NewsDetailApiView(generics.RetrieveAPIView):
     def get(self, request, ):
         try:
@@ -244,15 +267,26 @@ class NewsDetailApiView(generics.RetrieveAPIView):
             return Response(data = {"error":True, 'message':"News Object not Found!"})
 
 
-
 class EventListApiView(APIView):
     def get(self, request):
         try:
-            data = { 'error': False,'event_list': EventListSerializer(CompanyEvent.objects.all(), many = True).data,}
-            return Response( data, status=status.HTTP_200_OK )
+            if 'by_status' in request.query_params:
+                result = filter_by('status',[request.query_params['by_status']], CompanyEvent.objects.all())
+            elif 'by_company' in request.query_params:
+                result = FilterByCompanyname(request.query_params['by_company'].split(','), CompanyEvent.objects.all())
+            else:
+                result = SearchByTitle_All('Event', request)
+            if result['query'].count() == 0:
+                result['query'] = CompanyEvent.objects.all()
+            
+            eventcompanies = []
+            for comp in Company.objects.all():
+                if comp.companyevent_set.count() > 0:
+                    eventcompanies.append(comp)       
+            return Response( data = { 'error': False,'event_list': EventListSerializer( result['query'], many = True).data, 'message':result['message'],  'message_am':result['message_am'],'event_companies':CompanyInfoSerializer( eventcompanies,many =True).data}, status=status.HTTP_200_OK )
+        
         except Exception as e:
-            data= {'error' :True, 'message':f"Exception Occured: {str(e)}"}
-            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'error' :True, 'message':f"Exception Occured: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class EventDetailApiView(APIView):
@@ -281,32 +315,79 @@ def EventNotifyApiView(request):
                 return Response(data={'error':True, 'message':'Email, event id and number of days to notify are required!'}, status = status.HTTP_205_RESET_CONTENT)
 
                     
+         
+# def get_blog_tags():
+#         blog = Blog.objects.filter(publish = True)
+#         stringlist = []
+#         truestring = []
+#         for b in blog:
+#             splited = b.tag.split(" ")
+#             for split in splited:
+#                 stringlist.append(split)
+#         taglist = set(stringlist)
+#         taglist = list(taglist)
 
-
-
-            
-def get_blog_tags():
-        blog = Blog.objects.filter(publish = True)
-        stringlist = []
-        truestring = []
-        for b in blog:
-            splited = b.tag.split(" ")
-            for split in splited:
-                stringlist.append(split)
-        taglist = set(stringlist)
-        taglist = list(taglist)
-
-        for string in taglist:
-            if string == '':
-                continue
-            truestring.append(string)
-        return truestring
+#         for string in taglist:
+#             if string == '':
+#                 continue
+#             truestring.append(string)
+#         return truestring
     
+
+def set_message(result):
+		if result['query'].count()==0:
+			result['message'] = 'No Result Found!'
+			result['message_am'] = "ምንም ውጤት አልተገኘም"
+		else:
+			result['message'] = f"{result['query'].count()} result found !"
+			result['message_am']  = f"{result['query'].count()} ውጤት ተገኝቷል"
+		return result
+
+def get_tags(lang):
+		blog = Blog.objects.filter(publish=True) 
+		string = ""
+		if(lang=="amharic"):
+			for b in blog:
+				string+=b.tag_am+','
+		if(lang=="english"):
+			for b in blog:
+				string+=b.tag+','
+		string = string[:-1]
+		tag_list = string.split(',')
+		tag_list = set(tag_list)
+		return tag_list
+
 
 class ApiBlogList(APIView):
     def get(self, request):
-        blog = Blog.objects.filter(publish = True)
-        return Response( data = {'error':False, 'blogs':BlogSerializer(blog, many = True).data, 'tags':get_blog_tags()})
+        result ={}
+        if 'by_company' in request.query_params:
+            result = FilterByCompanyname(request.query_params['by_company'].split(','), Blog.objects.filter(publish=True))
+        else:
+            result['query'] = Blog.objects.filter(publish = True)
+            if 'by_title' in request.query_params:
+                q = Q( Q(title__icontains = request.query_params['by_title']) | Q(title_am__icontains = request.query_params['by_title']) )
+                result['query'] = result['query'].filter(q)
+                result = set_message(result)
+            elif 'by_tag' in request.query_params:
+                q = Q( Q(tag__icontains = request.query_params['by_tag']) | Q(tag_am__icontains = request.query_params['by_tag']) )
+                result['query'] = result['query'].filter(q)
+                result = set_message(result)
+            else:
+                result['query'] = Blog.objects.filter(publish=True)
+                result['message']  = "Blogs"
+                result['message_am'] = Blog.model_am
+        tags = get_tags("english")
+        tags_am = get_tags("amharic")
+        companies = []
+        for comp in Company.objects.all():
+            if comp.blog_set.count() > 0:
+                companies.append(comp)
+        # data = get_paginated_data(self.request, result['query'])
+        return Response( data = {'error':False, 'blogs':BlogSerializer(result['query'], many = True).data, 'message':result['message'],  'message_am':result['message_am'],'companies': CompanyInfoSerializer(companies,many = True).data,'tags':tags,'tags_am':tags_am})
+
+		
+        
 
 
 class ApiBlogDetail(APIView):
@@ -316,6 +397,7 @@ class ApiBlogDetail(APIView):
             return Response(data = {'error':False, 'count_comment': blog.countComment(), 'blog':BlogDetailSerializer(blog).data   })
         except Http404:
             return Response(data = {'error':True, 'message': 'Blog Not Found!'})
+
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
@@ -334,7 +416,26 @@ def ApiCreateBlogComment(request):
 class ApiAnnouncementList(generics.ListAPIView):
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
-
+    def get(self, request):
+        try:
+            result = {}
+            if 'by_company' in request.query_params:
+                result = FilterByCompanyname(request.query_params['by_company'].split(','), Announcement.objects.all())
+            else:
+                result = SearchByTitle_All('Announcement', request)
+            if result['query']  :
+                result['query'] = Announcement.objects.all()
+            # data = get_paginated_data(self.request, result['query'])
+            companies = []
+            for comp in Company.objects.all():
+                if comp.announcement_set.count() > 0:
+                    companies.append(comp)
+            return Response(data = {'error':False, 'object_list':AnnouncementSerializer(result['query'], many = True).data, 'message':result['message'], 'message_am':result['message_am'], 'companies':CompanyInfoSerializer( companies,many =True).data})
+        except Exception as e:
+            print ("##Exception in Announcement list ",e)
+            return Response(daa = {'error':True, 'message':e})
+            
+    
 # announcement-detail/  request.query_params['id']
 class ApiAnnouncementDetail(APIView):
     def get(self, request):
@@ -350,7 +451,29 @@ class ApiAnnouncementDetail(APIView):
 
 class ApiTenderList(APIView):
     def get(self, request):
-        return Response(data = {'error':False, 'tenders':TenderSerializer(Tender.objects.all(), many = True).data}, status=status.HTTP_200_OK)
+        try:
+            result = {}       
+            if 'by_status' in request.query_params:
+                result = filter_by('status', [ request.query_params['by_status'] ], Tender.objects.all())
+            elif 'by_company' in request.query_params:
+                by_company = FilterByCompanyname(request.query_params['by_company'].split(','),  Tender.objects.all())
+                result = filter_by('status', ['Open', 'Upcoming'], by_company['query'])
+            elif 'by_document_type' in request.query_params:
+                by_type = filter_by('tender_type', [request.query_params['by_document_type'] ],  Tender.objects.all())
+                result = filter_by('status', ['Open', 'Upcoming'], by_type['query'])
+            else:
+                result = SearchByTitle_All('Tender', request)
+            if  result['query'].count() == 0:
+                result['query'] = Tender.objects.filter( Q(status='Open') | Q(status = 'Upcoming') )
+            companies = []
+            for comp in Company.objects.all():
+                if comp.tender_set.count() > 0:
+                    companies.append(comp)
+            return Response(data = {'error':False, 'tenders':TenderSerializer(result['query'], many =True).data, 'companies': CompanyInfoSerializer(companies, many = True).data, 'message':result['message'], 'message_am':result['message_am']} )
+            
+        except Exception as e:
+            print( "Error while getting tenders",e)
+            return Response(data = {'error':False, 'tenders':TenderSerializer(Tender.objects.all(), many = True).data}, status=status.HTTP_200_OK)
     
 
 class ApiTenderDetail(APIView):
@@ -376,11 +499,30 @@ class ApiTenderDetail(APIView):
 
 class ApiVacancyList(APIView):
     def get(self, request):
-        vacancies = Vacancy.objects.filter(closed = False)
+        # vacancies = Vacancy.objects.filter(closed = False)
+        result = []
         jobcatetory = JobCategory.objects.all()
-        return Response(data = {'error':False, 'vacancies': VacancyListSerializer(vacancies, many= True).data,
-                                'jobcategory':JobCategorySerializer(jobcatetory, many = True).data
-                })
+        companies = []
+        for comp in Company.objects.all():
+            if comp.vacancy_set.count()>0:
+                companies.append(comp)
+
+        if 'by_category' in request.query_params and 'by_title' in request.query_params:
+            q= Q( Q(title__contains = request.query_params['by_title']) | 
+                    Q(title_am__contains = request.query_params['by_title']) )
+            query = Vacancy.objects.filter(q)# search by title then filter by category
+            result = filter_by('category__category_name',request.query_params['by_category'].split(','), query)
+        elif 'by_category' in request.query_params:
+            result = filter_by('category__category_name', request.query_params['by_category'].split(','), Vacancy.objects.all())
+        elif 'by_company' in request.query_params:
+            result = FilterByCompanyname(request.query_params['by_company'].split(','), Vacancy.objects.all())
+        else: 
+            result = SearchByTitle_All('Vacancy', request)
+        if result['query'].count()==0:
+            result['query'] = Vacancy.objects.all()
+        return Response(data = {'error':False, 'vacancies': VacancyListSerializer(result['query'], many= True).data, 'jobcategory':JobCategorySerializer(jobcatetory, many = True).data,
+                                'message':result['message'],  'message_am':result['message_am'], 'companies':CompanyInfoSerializer( companies, many = True).data})
+
 
 
 class ApiVacancyDetail(APIView):
@@ -536,6 +678,7 @@ class ApiForumQuestionDetail(APIView):
             return Response(data = {'error':True, 'message': "Forum object not found"})
         return Response(data = {'error':False, 'forum':ForumDetailSerializer(forum).data, 'user_created':ForumDetailSerializer(user_created, many = True).data})
 
+
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -658,6 +801,8 @@ def ApiCommentReplayAction(request):
 class ApiFaq(generics.ListAPIView):
     queryset = Faqs.objects.all()
     serializer_class = FaqSerializer
+
+
 
 
 

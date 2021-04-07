@@ -213,15 +213,17 @@
 							{%if LANGUAGE_CODE == "en"%}
 							<div class="card-body">
 								<div class="product-tags clearfix">
-									{%for tag in tags%}
+									
 									<ul class="list-unstyled mb-0">
+										{%for tag in tags%}
                                         <li><form action="{% url 'customer_blog_list' %}" method = "GET">
                                             <input type = "hidden" name='by_tag' value="{{tag}}">
                                             <button style="border:none; display:inline;padding:1px " class = "mt-1 ml-1 mb-1 mr-1"  type="submit">{{tag}}</button>
                                             </form>
                                         </li>
+										{%endfor%}
 									</ul>
-									{%endfor%}
+									
 								</div>
 							</div>
 							{%endif%}
@@ -229,12 +231,15 @@
 							{%if LANGUAGE_CODE == "am"%}
 							<div class="card-body">
 								<div class="product-tags clearfix">
-                                    <form action="{% url 'customer_blog_list' %}" method = "GET">
-                                        {%for tag in tags_am%}
+									<ul class="list-unstyled mb-0">
+										{%for tag in tags_am%}
+                                        <li><form action="{% url 'customer_blog_list' %}" method = "GET">
                                             <input type = "hidden" name='by_tag' value="{{tag}}">
-                                            <button style="border:none; display:inline; padding:5px;" class = "mt-1 mr-1 mb-1 ml-1" type="submit">{{tag}}</button>
-                                        {%endfor%}
-                                    </form>
+                                            <button style="border:none; display:inline;padding:1px " class = "mt-1 ml-1 mb-1 mr-1"  type="submit">{{tag}}</button>
+                                            </form>
+                                        </li>
+										{%endfor%}
+									</ul>
 								</div>
 							</div>
 							{%endif%}
