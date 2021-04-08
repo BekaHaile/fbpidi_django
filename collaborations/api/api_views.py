@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from rest_framework.pagination import PageNumberPagination
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions, status
@@ -144,12 +146,28 @@ def filter_by(field_name, field_values, query):
 
 # returns paginated data from a query set
 def get_paginated_data(request, query):
-    page_number = request.GET.get('page', 1)
+    page_number = request.query_params.get('page', 1)
     try:
         return Paginator(query, 2).page(page_number)
     except Exception as e:
         print("exception at get_paginate_data ",e)
         return Paginator(query, 2).page(1)
+
+
+def paginate(request, query, serializer):
+    paginator = PageNumberPagination()
+    paginator.page_size = 1
+    result_page = paginator.paginate_queryset(query, request)
+    return result_page
+
+
+def get_paginator_info(data):
+    try:
+        context = {'page_range': list(data.paginator.page_range), 'next': data.next_page_number() if data.has_next() else None , 'previous' :data.previous_page_number() if data.has_previous() else None,  } 
+        return context 
+    except Exception as e:
+        print('!!!!!!!!!!!!!!!!!',e)
+        return {} 
 
 
 class PollListApiView(generics.ListAPIView):
@@ -175,7 +193,10 @@ class PollListApiView(generics.ListAPIView):
             if result['query']==0:
                 result['query'] = PollsQuestion.objects.all()
                 result['message'] = 'No Result Found!'
-            return Response( data = { 'polls':PollListSerializer(result['query'], many =True).data, 'message' : result['message'], 'message_am':result['message_am'],'companies':CompanyInfoSerializer(companies, many =True).data})
+
+            paginated = get_paginated_data(request, result['query'])
+            return Response( data = {'error':False, 'paginator':get_paginator_info(paginated), 'polls':PollListSerializer(paginated, many =True).data, 'message' : result['message'], 
+                                        'message_am':result['message_am'],'companies':CompanyInfoSerializer(companies, many =True).data})
 
         except Exception as e:
             print("exceptio at polls list ",e)
@@ -227,32 +248,25 @@ class PollDetailApiView( APIView):
 
 class NewsListApiView(APIView):
     def get(self, request):
-        data = {}
+        
         result = []
         try:
             if 'by_category' in request.query_params and 'by_title' in request.query_params:
                 result = SearchCategory_Title('News', request)
-                # data = get_paginated_data(request, result['query'])
-                return Response(data= {'error':False, 'news_list':NewsDetailSerializer( result['query'], many = True).data, 'message':result['message'],  'message_am':result['message_am'],'NEWS_CATAGORY':News.NEWS_CATAGORY})
+                paginated = get_paginated_data(request, result['query'])
+                return Response(data= {'error':False, 'paginator':get_paginator_info(paginated), 'news_list':NewsDetailSerializer( paginated, many = True).data, 'message':result['message'],  'message_am':result['message_am'],'NEWS_CATAGORY':News.NEWS_CATAGORY})
             elif 'by_category' in request.query_params:
                 result = filter_by('catagory', request.query_params['by_category'].split(','), News.objects.all())
             elif 'by_company' in request.query_params:
-                print("$$$$$$$$$$4 ",type(request.query_params['by_company'].split(',')))
                 result = FilterByCompanyname(request.query_params['by_company'].split(','), News.objects.all())
             else: 
                 result = SearchByTitle_All('News', request)
 
             if result['query'].count()==0:
                 result['query'] = News.objects.all()
-            # data = get_paginated_data(self.request, result['query'])
-            # print("$$$$$$ ", request.query_params)
-        
-            # print("###########33", request.query_params['by_category'], ' ')
-            # data['error'] = False
-            # data['news_list'] = NewsDetailSerializer( News.objects.all(), many = True).data
-            # data['news_category'] = News.NEWS_CATAGORY
-            # return Response(data, status=status.HTTP_200_OK)
-            return Response(data= {'error':False, 'news_list': NewsDetailSerializer( result['query'], many = True).data, 'message':result['message'],  'message_am':result['message_am'], 'NEWS_CATAGORY':News.NEWS_CATAGORY})
+            paginated = get_paginated_data(request, result['query'])
+            context = {'error':False,'paginator': get_paginator_info(paginated), 'news_list': NewsDetailSerializer(paginated, many = True).data, 'message':result['message'],  'message_am':result['message_am'], 'NEWS_CATAGORY':News.NEWS_CATAGORY}
+            return Response(data= context )
             
         except Exception as e:
             return Response(data = {'error': True, 'message': f"Exceptin Occured: {str(e)}"})
@@ -283,7 +297,9 @@ class EventListApiView(APIView):
             for comp in Company.objects.all():
                 if comp.companyevent_set.count() > 0:
                     eventcompanies.append(comp)       
-            return Response( data = { 'error': False,'event_list': EventListSerializer( result['query'], many = True).data, 'message':result['message'],  'message_am':result['message_am'],'event_companies':CompanyInfoSerializer( eventcompanies,many =True).data}, status=status.HTTP_200_OK )
+            
+            paginated = get_paginated_data(request, result['query'])
+            return Response( data = { 'error': False, 'paginator': get_paginator_info(paginated), 'event_list': EventListSerializer( paginated, many = True).data, 'message':result['message'],  'message_am':result['message_am'],'event_companies':CompanyInfoSerializer( eventcompanies,many =True).data}, status=status.HTTP_200_OK )
         
         except Exception as e:
             return Response(data={'error' :True, 'message':f"Exception Occured: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
@@ -313,26 +329,7 @@ def EventNotifyApiView(request):
                         participant.save()
                     return Response(data={'error':False}, status=status.HTTP_201_CREATED)
                 return Response(data={'error':True, 'message':'Email, event id and number of days to notify are required!'}, status = status.HTTP_205_RESET_CONTENT)
-
-                    
-         
-# def get_blog_tags():
-#         blog = Blog.objects.filter(publish = True)
-#         stringlist = []
-#         truestring = []
-#         for b in blog:
-#             splited = b.tag.split(" ")
-#             for split in splited:
-#                 stringlist.append(split)
-#         taglist = set(stringlist)
-#         taglist = list(taglist)
-
-#         for string in taglist:
-#             if string == '':
-#                 continue
-#             truestring.append(string)
-#         return truestring
-    
+      
 
 def set_message(result):
 		if result['query'].count()==0:
@@ -342,6 +339,7 @@ def set_message(result):
 			result['message'] = f"{result['query'].count()} result found !"
 			result['message_am']  = f"{result['query'].count()} ውጤት ተገኝቷል"
 		return result
+
 
 def get_tags(lang):
 		blog = Blog.objects.filter(publish=True) 
@@ -383,8 +381,9 @@ class ApiBlogList(APIView):
         for comp in Company.objects.all():
             if comp.blog_set.count() > 0:
                 companies.append(comp)
-        # data = get_paginated_data(self.request, result['query'])
-        return Response( data = {'error':False, 'blogs':BlogSerializer(result['query'], many = True).data, 'message':result['message'],  'message_am':result['message_am'],'companies': CompanyInfoSerializer(companies,many = True).data,'tags':tags,'tags_am':tags_am})
+        paginated = get_paginated_data(request, result['query'])
+        return Response( data = {'error':False, 'paginator':get_paginator_info(paginated), 'blogs':BlogSerializer(paginated, many = True).data, 'message':result['message'],  
+                                'message_am':result['message_am'],'companies': CompanyInfoSerializer(companies,many = True).data,'tags':tags,'tags_am':tags_am})
 
 		
         
@@ -674,14 +673,26 @@ def ApiResearchAction(request):
 
 
 def get_user_created_forums(request):
-    return [] if  request.user.is_anonymous else ForumQuestion.objects.filter(user = request.user)
+    return [] if  request.user.is_anonymous else ForumQuestion.objects.filter(created_by = request.user)
 
 class ApiForumQuestionList(APIView):
     def get(self, request):
-        forum = ForumQuestion.objects.all()
-        user_created = get_user_created_forums(request)
-        return Response(data = {'error':False, 'forums':ForumQuestionSerializer(forum, many = True).data, 'user_created':ForumQuestionSerializer(user_created, many = True).data })
+        try:
+            user_created = get_user_created_forums(request)
+            if 'by_title' in request.query_params:
+                query = ForumQuestion.objects.filter(title__icontains = request.query_params['by_title'])
+                if query.count() > 0:
+                    result = {'query':query, 'message':f'{query.count()} result found!', 'message_am':f'{query.count()} ውጤቶች ተገኝተዋል' }
+                else:
+                    result = {'query':ForumQuestion.objects.all()[:5], 'message':'No result found!', 'message_am':'ምንም ውጤት አልተገኘም' }
+            else:
+                result = {'query':ForumQuestion.objects.all()[:5], 'message':'Forums', 'message_am':'ውይይቶች' }
 
+            return Response(data = {'error':False, 'forums':ForumQuestionSerializer(result['query'], many = True).data, 'user_created':ForumQuestionSerializer(user_created, many = True).data,
+                                'message':result['message'], 'message_am':result['message_am'] })
+        except Exception as e:
+            print('Exception in ApiForumQuestionList ', e)
+            return Response(data = {'error':True, 'message':e})
 
 class ApiForumQuestionDetail(APIView):
     def get(self, request):
