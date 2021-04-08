@@ -38,6 +38,8 @@ from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm,
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
+
+from collaborations.views import SearchByTitle_All, models, get_paginated_data
 from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
 								 VacancyForm,JobCategoryForm,
 								 ForumQuestionForm,CommentForm,CommentReplayForm,
@@ -240,16 +242,23 @@ class CreateForumQuestion(LoginRequiredMixin,View):
 
 class ListForumQuestions(View):
 	def get(self,*args,**kwargs):
-		forum = ForumQuestion.objects.all()
-		print("-------"+str(self.request.user))
-		print(str(forum))
-		if str(self.request.user) != "AnonymousUser":
+		if not self.request.user.is_anonymous:
 			userCreated = ForumQuestion.objects.filter(created_by=self.request.user)
 		else:
 			userCreated = ""
+		if 'by_title' in self.request.GET:
+			query = ForumQuestion.objects.filter(title__icontains = self.request.GET['by_title'])
+			if query.count() > 0:
+				result = {'query':query, 'message':f'{query.count()} result found!', 'message_am':f'{query.count()} ውጤቶች ተገኝተዋል' }
+			else:
+				result = {'query':ForumQuestion.objects.all()[:5], 'message':'No result found!', 'message_am':'ምንም ውጤት አልተገኘም' }
+		else:
+			result = {'query':ForumQuestion.objects.all()[:5], 'message':'Forums', 'message_am':'ውይይቶች' }
+		
+		data = get_paginated_data(self.request, result['query'])
 		template_name = "frontpages/forums/forum_list.html"
-		context = {'forums':forum,'usercreated':userCreated}
-		return render(self.request, template_name,context)
+		context = {'forums': data,'usercreated':userCreated, 'message':result['message'], 'message_am':result['message_am']}
+		return render(self.request, template_name, context)
 
 class EditForumQuestions(View):
 	def get(self,*args,**kwargs):

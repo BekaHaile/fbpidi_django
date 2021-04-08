@@ -524,7 +524,6 @@ class ApiVacancyList(APIView):
                                 'message':result['message'],  'message_am':result['message_am'], 'companies':CompanyInfoSerializer( companies, many = True).data})
 
 
-
 class ApiVacancyDetail(APIView):
     def get(self, request):
         try:
@@ -582,11 +581,26 @@ def get_user_created_researchs(request):
 
 class ApiResearch(APIView):
     def get(self, request):
-        researchs = Research.objects.filter(accepted="APPROVED")
-        category = ResearchProjectCategory.objects.all()
-        user_created = get_user_created_researchs(request)		
-        return Response(data = {'error':False, 'researchs': ResearchSerializer(researchs, many = True).data, "user_created": ResearchSerializer(user_created, many = True).data,
-                                'category':ResearchProjectCategorySerializer(category, many = True).data})
+        try:
+            researchs = Research.objects.filter(accepted="APPROVED")
+            category = ResearchProjectCategory.objects.all()
+            user_created = get_user_created_researchs(request)	
+            result = {}
+            if 'by_category' in request.query_params:
+                result = filter_by("category__cateoryname",request.query_params['by_category'].split(','), Research.objects.filter(accepted="APPROVED"))
+            elif 'by_title' in request.query_params:
+                q = Research.objects.filter(Q(title__icontains = request.query_params['by_title']))
+                if q.count()>0:
+                    result ={ 'query':q, 'message':f"{q.count()} Result found!"}
+                else:
+                    result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
+            else:
+                result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"Researchs",'message_am':"ምርምር"}
+        
+            return Response(data = {'error':False, 'researchs': ResearchSerializer(result['query'], many = True).data, "user_created": ResearchSerializer(user_created, many = True).data,
+                                    'message':result['message'], 'message_am':result['message_am'],'category':ResearchProjectCategorySerializer(category, many = True).data})
+        except Exception as e:
+            return Response({'error': True, 'message' : e})
 
 ##didn't include try except while getting research obj because, in api, id is sent by the code when users click a button
 class ApiResearchDetail(APIView):
