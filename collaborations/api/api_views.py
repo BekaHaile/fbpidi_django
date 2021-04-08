@@ -154,16 +154,9 @@ def get_paginated_data(request, query):
         return Paginator(query, 2).page(1)
 
 
-def paginate(request, query, serializer):
-    paginator = PageNumberPagination()
-    paginator.page_size = 1
-    result_page = paginator.paginate_queryset(query, request)
-    return result_page
-
-
 def get_paginator_info(data):
     try:
-        context = {'page_range': list(data.paginator.page_range), 'next': data.next_page_number() if data.has_next() else None , 'previous' :data.previous_page_number() if data.has_previous() else None,  } 
+        context = {'page_range': list(data.paginator.page_range), 'current':data.number, 'next': data.next_page_number() if data.has_next() else None , 'previous' :data.previous_page_number() if data.has_previous() else None,  } 
         return context 
     except Exception as e:
         print('!!!!!!!!!!!!!!!!!',e)
@@ -385,9 +378,6 @@ class ApiBlogList(APIView):
         return Response( data = {'error':False, 'paginator':get_paginator_info(paginated), 'blogs':BlogSerializer(paginated, many = True).data, 'message':result['message'],  
                                 'message_am':result['message_am'],'companies': CompanyInfoSerializer(companies,many = True).data,'tags':tags,'tags_am':tags_am})
 
-		
-        
-
 
 class ApiBlogDetail(APIView):
     def get(self, request):
@@ -424,12 +414,12 @@ class ApiAnnouncementList(generics.ListAPIView):
                 result = SearchByTitle_All('Announcement', request)
             if result['query']  :
                 result['query'] = Announcement.objects.all()
-            # data = get_paginated_data(self.request, result['query'])
+            paginated = get_paginated_data(request, result['query'])
             companies = []
             for comp in Company.objects.all():
                 if comp.announcement_set.count() > 0:
                     companies.append(comp)
-            return Response(data = {'error':False, 'object_list':AnnouncementSerializer(result['query'], many = True).data, 'message':result['message'], 'message_am':result['message_am'], 'companies':CompanyInfoSerializer( companies,many =True).data})
+            return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'object_list':AnnouncementSerializer(paginated, many = True).data, 'message':result['message'], 'message_am':result['message_am'], 'companies':CompanyInfoSerializer( companies,many =True).data})
         except Exception as e:
             print ("##Exception in Announcement list ",e)
             return Response(daa = {'error':True, 'message':e})
@@ -468,7 +458,9 @@ class ApiTenderList(APIView):
             for comp in Company.objects.all():
                 if comp.tender_set.count() > 0:
                     companies.append(comp)
-            return Response(data = {'error':False, 'tenders':TenderSerializer(result['query'], many =True).data, 'companies': CompanyInfoSerializer(companies, many = True).data, 'message':result['message'], 'message_am':result['message_am']} )
+            
+            paginated = get_paginated_data(request, result['query'])
+            return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'tenders':TenderSerializer(paginated, many =True).data, 'companies': CompanyInfoSerializer(companies, many = True).data, 'message':result['message'], 'message_am':result['message_am']} )
             
         except Exception as e:
             print( "Error while getting tenders",e)
@@ -498,7 +490,7 @@ class ApiTenderDetail(APIView):
 
 class ApiVacancyList(APIView):
     def get(self, request):
-        # vacancies = Vacancy.objects.filter(closed = False)
+        
         result = []
         jobcatetory = JobCategory.objects.all()
         companies = []
@@ -519,7 +511,9 @@ class ApiVacancyList(APIView):
             result = SearchByTitle_All('Vacancy', request)
         if result['query'].count()==0:
             result['query'] = Vacancy.objects.all()
-        return Response(data = {'error':False, 'vacancies': VacancyListSerializer(result['query'], many= True).data, 'jobcategory':JobCategorySerializer(jobcatetory, many = True).data,
+        
+        paginated = get_paginated_data(request, result['query'])
+        return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'vacancies': VacancyListSerializer(paginated, many= True).data, 'jobcategory':JobCategorySerializer(jobcatetory, many = True).data,
                                 'message':result['message'],  'message_am':result['message_am'], 'companies':CompanyInfoSerializer( companies, many = True).data})
 
 
@@ -595,8 +589,9 @@ class ApiResearch(APIView):
                     result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
             else:
                 result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"Researchs",'message_am':"ምርምር"}
-        
-            return Response(data = {'error':False, 'researchs': ResearchSerializer(result['query'], many = True).data, "user_created": ResearchSerializer(user_created, many = True).data,
+
+            paginated = get_paginated_data(request, result['query'])
+            return Response(data = {'error':False, 'paginator':get_paginator_info(paginated) ,'researchs': ResearchSerializer(paginated, many = True).data, "user_created": ResearchSerializer(user_created, many = True).data,
                                     'message':result['message'], 'message_am':result['message_am'],'category':ResearchProjectCategorySerializer(category, many = True).data})
         except Exception as e:
             return Response({'error': True, 'message' : e})
@@ -688,8 +683,9 @@ class ApiForumQuestionList(APIView):
             else:
                 result = {'query':ForumQuestion.objects.all()[:5], 'message':'Forums', 'message_am':'ውይይቶች' }
 
-            return Response(data = {'error':False, 'forums':ForumQuestionSerializer(result['query'], many = True).data, 'user_created':ForumQuestionSerializer(user_created, many = True).data,
-                                'message':result['message'], 'message_am':result['message_am'] })
+            paginated = get_paginated_data(request, result['query'])
+            return Response(data = {'error':False, 'paginator': get_paginator_info(paginated), 'forums':ForumQuestionSerializer(paginated, many = True).data, 
+                            'user_created':ForumQuestionSerializer(user_created, many = True).data,'message':result['message'], 'message_am':result['message_am'] })
         except Exception as e:
             print('Exception in ApiForumQuestionList ', e)
             return Response(data = {'error':True, 'message':e})
@@ -826,6 +822,7 @@ def ApiCommentReplayAction(request):
 class ApiFaq(generics.ListAPIView):
     queryset = Faqs.objects.all()
     serializer_class = FaqSerializer
+    
 
 
 
