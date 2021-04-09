@@ -47,6 +47,7 @@ class SubCategoryForm(forms.ModelForm):
         super(SubCategoryForm,self).__init__(*args,**kwargs)
         self.fields['category_name'].queryset = Category.objects.all()
         self.fields['category_name'].empty_label = "Select Sub Sector"
+        self.fields['uom'].empty_label = "Select Unit of Measurement"
 
    
 
@@ -57,7 +58,7 @@ class SubCategoryForm(forms.ModelForm):
             'icons':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
             'category_name':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'sub_category_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Product Name(English)'}),
-            'uom':forms.TextInput(attrs={'class':'form-control','placeholder':'Unit Of Measurement'}),
+            'uom':forms.Select(attrs={'class':'form-control form-control-uniform','placeholder':'Unit Of Measurement'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),
             'sub_category_name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Product Name(Amharic)'}),
             'description_am':forms.Textarea(attrs={'class':'summernote'}),

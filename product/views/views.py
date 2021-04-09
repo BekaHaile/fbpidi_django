@@ -6,8 +6,10 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.views.generic import View,ListView,UpdateView,CreateView,DetailView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+
 from django.utils import timezone
 from django.http import JsonResponse
 from rest_framework import serializers
@@ -18,9 +20,9 @@ from admin_site.models import Category
 from product.models import *
 from product.forms import *
 from company.models import *
+from company.decorators import company_created
 
-
-
+decorators = [never_cache,company_created()]
 def create_ref_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits,k=30))
 
@@ -28,6 +30,7 @@ def create_invoice(invoice,user):
     return '#INV-'.join(random.choices(string.ascii_uppercase + (invoice.join(user.id))))
 
 # This is class/view is crated for displaying all categories and sub categories 
+@method_decorator(decorators,name='dispatch')
 class CategoryView(LoginRequiredMixin,ListView):
     model = Category
     template_name = "admin/product/categories.html"
@@ -38,6 +41,7 @@ class CategoryView(LoginRequiredMixin,ListView):
         return context
 
 # This class/view is created for displaying category and sub category detail and editing
+
 class CategoryDetail(LoginRequiredMixin,UpdateView):
     model = Category
     form_class = CategoryForm

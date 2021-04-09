@@ -1,20 +1,41 @@
-from functools import wraps
-from urllib.parse import urlparse
-
-from django.conf import settings
-from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.shortcuts import resolve_url
+from django.shortcuts import render,redirect,get_object_or_404
+from django.contrib import messages
 
 
-def company_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url=None):
-    """
-    Decorator for views that checks that the user is has company profile created, redirecting
-    to the Company Creation page if necessary.
-    """
-    actual_decorator = user_passes_test(
-        lambda u: u.is_company_admin and u.get_company() == None,
-        redirect_field_name=redirect_field_name
-    )
-    if function:
-        return actual_decorator(function)
-    return actual_decorator
+
+def company_created():
+    def decorator(view_func):
+        def wrap(request,*args,**kwargs):
+            if request.user.is_company_admin:
+                if request.user.get_company() == None:
+                    return redirect("admin:create_my_company")
+                else:
+                    return view_func(request,*args,**kwargs) 
+            elif request.user.is_superuser:
+                if request.user.get_company() == None:
+                    messages.warning(self.request,"Please Create Your Inistitute Profile")
+                    return redirect("admin:create_fbpidi_company")
+                else:
+                    return view_func(request,*args,**kwargs) 
+            else:
+                return view_func(request,*args,**kwargs) 
+        return wrap
+    return decorator
+
+
+def check_active_company():
+    def decorator(view_func):
+        def wrapper(request,*args,**kwargs):
+            if request.user.is_company_admin:
+                if request.user.get_company() != None:
+                    if request.user.get_company().is_active == False:
+                        return
+                    else:
+                        return view_func(request,*args,**kwargs)
+                else:
+                    return redirect("admin:create_my_company")
+            else:
+                return redirect("admin:create_my_company")
+        return wrapper
+    return decorator
+

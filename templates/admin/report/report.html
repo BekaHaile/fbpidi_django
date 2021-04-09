@@ -4,7 +4,6 @@
 
 <!-- Theme JS files -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
 <!-- /theme JS files -->
@@ -121,9 +120,37 @@
 {% endblock %}
 {%block pagename%}Report List{%endblock%}
 {%block content%}
+<div class="row">
+	<div class="card" style="width: 100%;">
+		<div class="card-body">
+			<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+				<form class="form-inline" method="POST" action="{%url 'admin:get_company_pdf' %}"> 
+					{%csrf_token%}
+				<ul class="list-inline list-inline-condensed mb-0 mr-4">
+					<li class="list-inline-item"> 
+						<select class="form-control" required="required" name="pk" id="">
+							<option value="">Select Company</option>
+							{%for company in companies%}
+							<option value="{{company.id}}">{{company.name}}</option>
+							{%endfor%}
+						</select>
+					</li>
+					 
+				</ul>
 
+				<ul class="list-inline ml-2 mb-0 pull-right" style="float: right;">
+					<li class="list-inline-item"> <button type="submit"class="btn btn-primary text-default">
+							<i class="icon-search4 mr-2"></i>Get Report</a>							 
+					</li>
+				</ul>
+			 </form>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- Content area -->
 <div class="content">
+	
 	<div class="row">
 		<div class="col-lg-4">
 

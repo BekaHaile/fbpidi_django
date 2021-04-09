@@ -7,6 +7,10 @@
 	<!-- links for image cropper -->
 	<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 	<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/fab.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/sticky.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/prism.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/extra_fab.js"></script>
 	<script src="/static/admin/assets/js/company_detail.js"></script>
 	<script>
 		var my_token = "{{csrf_token}}";
@@ -28,12 +32,38 @@
 
 			<!-- Content area -->
 			<div class="content">
-				<ul class="fab-menu fab-menu-fixed fab-menu-bottom-right" data-toggle="modal" data-target="#rating_form">
+				<!-- <ul class="fab-menu fab-menu-fixed fab-menu-bottom-right" data-toggle="modal" data-target="#rating_form">
 					<li>
 						<a class="fab-menu-btn btn bg-teal-400 btn-float rounded-round btn-icon">
 							<i class="fab-icon-open icon-star-full2"></i>
 							<i class="fab-icon-close icon-star-full2"></i>
 						</a>
+					</li>
+				</ul> -->
+				<ul class="fab-menu fab-menu-fixed fab-menu-bottom-right" data-fab-toggle="click" data-fab-state="closed">
+					<li>
+						<a class="fab-menu-btn btn bg-teal-400 btn-float rounded-round btn-icon">
+							<i class="fab-icon-open icon-paragraph-justify3"></i>
+							<i class="fab-icon-close icon-cross2"></i>
+						</a>
+
+						<ul class="fab-menu-inner">
+							<li>
+								<div data-fab-label="Rate Company">
+									<a href="#" data-toggle="modal" data-target="#rating_form" class="btn btn-light rounded-round btn-icon btn-float">
+										<i class="icon-star-full2"></i>
+									</a>
+								</div>
+							</li>
+							<li>
+								<div data-fab-label="Activate/Deactivate">
+									<a href="#" class="btn btn-light rounded-round btn-icon btn-float">
+										<i class="icon-checkmark3"></i>
+									</a>
+								</div>
+							</li>
+							 
+						</ul>
 					</li>
 				</ul>
 				<!-- Inner container -->
@@ -368,9 +398,10 @@
 				$(document).ready(function () {
 					$('#summernote').summernote();
 					$('.summernote').summernote();
-				});
 
-				$("#address_tab").click(function(){
+					$("#id_contact_person").prop("disabled",true);
+
+					$("#address_tab").click(function(){
 						$('select[name="region"]').find('option[value="{{object.get_company_address.region.id}}"]').attr("selected",true);
 						
 						// $("#id_region").val("{{object.get_company_address.region}}".toUpperCase());
@@ -467,6 +498,9 @@
 					document.getElementById("width").value = cropWidth;
 					document.getElementById("height").value = cropHeight;
 				}
+				});
+
+				
 				
 			</script>
 			

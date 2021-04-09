@@ -74,7 +74,7 @@ class Customer(models.Model):
 
 
 class CompanyAdmin(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name="company_admin")
     designation = models.CharField(max_length=200,null=True)
     time_stamp = models.DateTimeField(auto_now_add=True)
 

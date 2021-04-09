@@ -13,8 +13,9 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,
                             CreateUserView,CreateCompanyStaff,
                             GroupView,GroupList)
 # views from admin_site app
-from admin_site.views.views import (AdminIndex,DeleteView,  Polls, CreatePoll, AddChoice,
+from admin_site.views.views import (AdminIndex,  Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice,  DetailPoll)
+from admin_site.views.delete_view import DeleteView
 
 from admin_site.views.dropdowns import *
 
@@ -63,6 +64,7 @@ from company.views.views import *
 from company.views.chart_views import *
 from company.views.report_views import *
 from company.views.company_views import *
+from company.views.pdf_views import *
 
 from accounts.forms import AdminLoginForm
 from chat.views import AdminChatList
@@ -167,6 +169,8 @@ class CustomAdminSite(admin.AdminSite):
             path('update-project-lookup/<pk>/',wrap(UpdateProjectDropdownsMaster.as_view()),name='update_plookup'),
             path('create-region-lookup/',wrap(CreateRegionMaster.as_view()),name='create_region'),
             path('update-region-lookup/<pk>/',wrap(UpdateRegionMaster.as_view()),name='update_region'),
+            path('create-uom-lookup/',wrap(CreateUomMaster.as_view()),name='create_uom'),
+            path('update-uom-lookup/<pk>/',wrap(UpdateUomMaster.as_view()),name='update_uom'),
 
             path("categories/",wrap(CategoryView.as_view()),name="categories"),
             path("create_category/",wrap(CreateCategories.as_view()),name="create_category"),
@@ -302,6 +306,7 @@ class CustomAdminSite(admin.AdminSite):
              path('list_document_by_category/<option>/', wrap(DocumentListing.as_view()), name = "list_document_by_category"),
 
             # Company Report Paths
+            path('get-company-information-pdf/',wrap(GenerateCompanyToPDF.as_view()),name='get_company_pdf'),
             path("report-page/",wrap(ReportPage.as_view()),name="report_page"),
             path('certification-chart/',wrap(certification_chart),name='certification_chart'),
             path('management-tools-chart/',wrap(management_tool_chart),name='mgmt_tools_chart'),

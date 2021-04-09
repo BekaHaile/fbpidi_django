@@ -4,13 +4,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse,JsonResponse
 from django.contrib import messages
 from django.views.generic import (CreateView,View,UpdateView,ListView)
-from django.contrib.auth.decorators import login_required
 from django.contrib.admin import AdminSite
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission,Group
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import views as auth_views
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+
 #from admin_site.perm_mixins import
 
 # third party app imports
@@ -21,7 +23,11 @@ from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,Compan
 from accounts.models import UserProfile,Company,CompanyAdmin,Customer
 from company.models import CompanyStaff,Company
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
+from company.decorators import company_created
 
+# 
+# INDEX VIEW
+decorators = [never_cache, company_created()]
 # Login view for the front end/customer UserProfile
 class LoginView(auth_views.LoginView):
     form_class = FrontLoginForm
@@ -114,28 +120,11 @@ def activate(request, uidb64, token):
         return render(request,'email/confirm_registration_message.html',
         {'message':"Activation link is invalid!"})
 
-
+@method_decorator(decorators,name='dispatch')
 class MyProfileView(LoginRequiredMixin,UpdateView):
     model = UserProfile
     fields = ('first_name', 'last_name','username', 'email', 'phone_number','profile_image')
     template_name = "admin/accounts/user_profile.html"
-
-    def get(self,*args,**kwargs):
-        if self.request.user.is_company_admin:
-            if self.request.user.get_company() == None:
-                return redirect("admin:create_my_company")
-            else:
-                pass 
-        elif self.request.user.is_superuser:
-            if self.request.user.get_company() == None:
-                return redirect("admin:create_fbpidi_company")
-            else:
-                pass
-        else:
-            pass
-        return super().get(self.request,*args,**kwargs)
-        
-
 
     def form_valid(self,form):
         form.save()
@@ -148,6 +137,7 @@ class MyProfileView(LoginRequiredMixin,UpdateView):
 
 
 # to list all users in the admin page
+@method_decorator(decorators,name='dispatch')
 class UserListView(LoginRequiredMixin, ListView):
     model=UserProfile
     template_name = "admin/accounts/users_list.html"
@@ -160,6 +150,7 @@ class UserListView(LoginRequiredMixin, ListView):
 
 
 # to see a users detail profile
+@method_decorator(decorators,name='dispatch')
 class UserDetailView(LoginRequiredMixin, UpdateView):
     model = UserProfile
     fields = ['first_name', 'last_name','username', 'email', 'phone_number','profile_image']
@@ -174,6 +165,7 @@ class UserDetailView(LoginRequiredMixin, UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:user_detail",pk=self.kwargs['pk'])
 
+@method_decorator(decorators,name='dispatch')
 class SuspendUser(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
@@ -189,7 +181,7 @@ class SuspendUser(LoginRequiredMixin,View):
             messages.success(self.request,"The User Does Not Exist")
             return redirect("admin:users_list")
 
-
+@method_decorator(decorators,name='dispatch')
 class CreateCompanyStaff(LoginRequiredMixin,CreateView):
     model=UserProfile
     form_class = CompanyUserCreationForm
@@ -205,6 +197,7 @@ class CreateCompanyStaff(LoginRequiredMixin,CreateView):
         messages.success(self.request,"You Created a User Successfully!")
         return redirect("admin:users_list")
 
+@method_decorator(decorators,name='dispatch')
 class CreateUserView(LoginRequiredMixin, CreateView):
     model=UserProfile
     form_class=AdminCreateUserForm
@@ -217,7 +210,6 @@ class CreateUserView(LoginRequiredMixin, CreateView):
         messages.success(self.request,"You Created a User Successfully!")
         return redirect("admin:users_list")
             
-
 class GroupList(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         groups = Group.objects.all()
