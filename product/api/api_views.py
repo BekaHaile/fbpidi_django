@@ -1,35 +1,29 @@
-from django.core.exceptions import ObjectDoesNotExist
+import random
+import string
 
+from django.utils import timezone
 from django.shortcuts import get_object_or_404
-
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpRequest, Http404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, generics, authentication, permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import status, generics, authentication, permissions
 from rest_framework.decorators import permission_classes, authentication_classes, api_view 
-
 
 from admin_site.models import Category
 from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
-
 from collaborations.models import News
 from collaborations.api.serializers import NewsListSerializer
-
 from company.models import Company
 from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer
-
 from product.models import SubCategory,Product, ProductImage, ProductPrice, Order, OrderProduct, InvoiceRecord
-from product.api.serializer import (ProducteFullSerializer, ProductInfoSerializer, ProductImageSerializer,
-                                     OrderSerializer, OrderProductSerializer, ShippingAddressSerializer)
-        
+from product.api.serializer import (ProductFullSerializer, ProductInfoSerializer, ProductImageSerializer, OrderSerializer, OrderProductSerializer, ShippingAddressSerializer)
+
 from product.forms import CheckoutForm
 
-from django.utils import timezone
-import random
-import string
 
 class ApiCartSummary(APIView):
     authentication_classes = [TokenAuthentication]
@@ -174,41 +168,59 @@ class ApiCheckout(APIView):
 ######### newly added from core.api.api_views
 class ApiProductByCategoryView(APIView):
      def get(self, request):
-         products = Product.objects.filter(category = request.query_params['category_id'])
-         return Response(
-             data ={'count': products.count(),
-                 'products': ProductInfoSerializer(products, many = True).data
-               },
-            status = status.HTTP_200_OK
-         )
+        category = Category.objects.get(id=request.query_params['category_id'])
+        categories = Category.objects.filter(category_type = category.category_type)
+        categories = CategorySerializer( categories, many= True).data
+
+        brands = []
+        for sub_cat in category.sub_category.all():
+            for brand in sub_cat.product_category.all():
+                brands.append(brand)
+        products = Product.objects.filter(brand__in=brands)
+        products = ProductInfoSerializer(products, many = True).data
+        return Response( data ={'error':False, 'count': len(products), 'products': products, 'categories':categories, },)
 
 
 class ApiProductDetailView(APIView):
     def get(self, request):
         try:
             product = get_object_or_404(Product, id = request.query_params['id'])
-            return Response( data = {'error':False, 'product':ProducteFullSerializer(product ).data},)
+            return Response( data = {'error':False, 'product':ProductFullSerializer(product ).data},)
         except Http404:
             return Response(data = {'error': True, 'message':'Product Not Found!'})
 
 
 class ApiProductByMainCategory(APIView):
     def get(self, request):
-        cat= request.query_params['category']
+        brands = []
         products = []
-        if cat == "Beverage" or cat == "Food" :
-            brands = []
-            categories = Category.objects.filter(category_type=cat)
+        if request.query_params['category'] in ['Food', "Beverage", "Pharmaceuticals"]:
+            categories = Category.objects.filter(category_type = request.query_params['category'] )
             for category in categories:
                 for sub_cat in category.sub_category.all():
                     for brand in sub_cat.product_category.all():
                         brands.append(brand)
-            products = Product.objects.filter(fandb_category__in=brands)
-        
-        elif cat == "Pharmaceuticals":
-            products= Product.objects.filter(pharmacy_category__in=Category.objects.filter(category_type="Pharmaceuticals"))
-        elif cat == "all":
+            products = Product.objects.filter(brand__in=brands)
+        else:
+            print("All")
             products = Product.objects.all()
+
+
+        # cat= request.query_params['category']
+        # products = []
+        # if cat == "Beverage" or cat == "Food" :
+        #     brands = []
+        #     categories = Category.objects.filter(category_type=cat)
+        #     for category in categories:
+        #         for sub_cat in category.sub_category.all():
+        #             for brand in sub_cat.product_category.all():
+        #                 brands.append(brand)
+        #     products = Product.objects.filter(fandb_category__in=brands)
+        
+        # elif cat == "Pharmaceuticals":
+        #     products= Product.objects.filter(pharmacy_category__in=Category.objects.filter(category_type="Pharmaceuticals"))
+        # elif cat == "all":
+        #     products = Product.objects.all()
         return Response( data = {'error': False, 'count':products.count(), 'products':ProductInfoSerializer(products, many = True).data})
 
 

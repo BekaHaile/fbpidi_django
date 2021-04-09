@@ -19,7 +19,7 @@ from company.models import Company
 from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer
 
 from product.models import SubCategory,Product, ProductImage, ProductPrice
-from product.api.serializer import ProducteFullSerializer, ProductInfoSerializer, ProductImageSerializer
+from product.api.serializer import ProductFullSerializer, ProductInfoSerializer, ProductImageSerializer
 
 from accounts.models import User,UserProfile, Customer, CompanyAdmin
 from accounts.api.serializers import CustomerCreationSerializer, CustomerDetailSerializer
@@ -100,7 +100,7 @@ class ApiProfileView(APIView):
 #     def get(self, request):
 #         try:
 #             product = get_object_or_404(Product, id = request.data['id'])
-#             return Response( data = {'error':False, 'product':ProducteFullSerializer(product ).data},)
+#             return Response( data = {'error':False, 'product':ProductFullSerializer(product ).data},)
 #         except Http404:
 #             return Response(data = {'error': True, 'message':'Product Not Found!'})
         

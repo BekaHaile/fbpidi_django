@@ -77,10 +77,10 @@ class Product(models.Model):
     def count_likes(self):
         return self.productlike_set.all().count()
 
+    # this returns the Category object for a product using the order => product.brand.subcategory.category
     def get_category(self):
-        # is this like return self.company.category.category_name
-        return [self.pharmacy_category.category_name, self.pharmacy_category.category_name_am]
-        # return self.category.category_name.category_type
+        return self.brand.product_type.category_name
+
     
     class Meta:
         ordering = ('-created_date',)

@@ -501,7 +501,6 @@ class Research(models.Model):
     def save(self):
         if self.created_by.is_staff:
             self.company = self.created_by.get_company()
-            print("##########################Research saved by ", self.company.name)
         super(Research,self).save()
         
     
