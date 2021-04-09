@@ -23,7 +23,7 @@ from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,Compan
 from accounts.models import UserProfile,Company,CompanyAdmin,Customer
 from company.models import CompanyStaff,Company
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
-from company.decorators import company_created
+from admin_site.decorators import company_created
 
 # 
 # INDEX VIEW

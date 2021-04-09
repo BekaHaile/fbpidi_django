@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 
 from django.utils import timezone
@@ -20,7 +21,7 @@ from admin_site.models import Category
 from product.models import *
 from product.forms import *
 from company.models import *
-from company.decorators import company_created
+from admin_site.decorators import company_created
 
 decorators = [never_cache,company_created()]
 def create_ref_code():
