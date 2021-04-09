@@ -122,6 +122,7 @@ class Blog(models.Model):
     def comments(self):
         return self.blogcomment_set.all()
 
+
 class BlogComment(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE,null=False)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=False)
@@ -234,7 +235,6 @@ class JobCategory(models.Model):
         return self.category_name
         
 
-    
 class Vacancy(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     location = models.CharField(max_length=1000)
@@ -356,6 +356,7 @@ class NewsImages(models.Model):
     class Meta:
         ordering = ['-created_date',]
 
+
 class ForumQuestion(models.Model):
     title = models.CharField(max_length=500,null=False)
     description = models.TextField()
@@ -383,7 +384,7 @@ class ForumQuestion(models.Model):
     
 
 class ForumComments(models.Model):
-    forum_question=models.ForeignKey(ForumQuestion,on_delete=models.CASCADE)
+    forum_question = models.ForeignKey(ForumQuestion,on_delete=models.CASCADE)
     comment = models.TextField(null=False)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -446,8 +447,6 @@ class Announcement(models.Model):
     
     model_am = "ማስታወቂያ"
     
-
-
 
 class AnnouncementImages(models.Model):
     announcement = models.ForeignKey(Announcement, on_delete = models.CASCADE)
@@ -517,6 +516,7 @@ class Research(models.Model):
     
     model_am = "ምርምር"
 
+
 class ResearchAttachment(models.Model):
     research = models.ForeignKey(Research, on_delete=models.CASCADE)
     attachement = models.FileField(upload_to="ResearchAttachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
@@ -548,6 +548,7 @@ class Project(models.Model):
         return self.category.cateoryname
     model_am =  "ፕሮጀክት"
 
+
 class Document_Category(models.Model):
     
     title = models.CharField(max_length=250, verbose_name="category title", help_text="category name for documents.")
@@ -575,3 +576,4 @@ class Document(models.Model):
     
     class Meta:
         ordering = ['-created_date']
+

@@ -143,7 +143,6 @@ def Subscribe(request):
             data = json.loads(request.body)
             subscription = CompanySubscription( email=data['email'])
             subscription.save()
-            print("inside the success function")
             return JsonResponse(data={'error':False, 'message':'Successfull Subscription! '}, safe=False )
         except Exception as e:
             return JsonResponse(data={'error':True, 'message':f'The exception is {str(e)}'},  safe=False )
@@ -200,7 +199,7 @@ class CompanyNewsList(ListView):
         try:
             return News.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
         except Exception as e:
-            print( "#######3 the excption is ",e)
+            print( "####### the excption is ",e)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])

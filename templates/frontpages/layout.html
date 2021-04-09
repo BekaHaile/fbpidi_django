@@ -1,5 +1,6 @@
 {%load core_template_tags%}
 {%load i18n%}
+{% get_current_language as LANGUAGE_CODE %}
 <!doctype html>
 <html lang="en" dir="ltr">
 
@@ -353,8 +354,8 @@
                             <li><a href="{% url 'faq' %}">{% trans "Faqs" %}</a></li>
                         </ul>
                     </li>
-                    {% get_fbpidi_id as fbpidi_id %}
-                    <li><span></span><a href="{% url 'contact_company' pk=fbpidi_id %}"> {% trans "Contact Us" %}<span
+                    {% get_fbpidi as fbpidi %}
+                    <li><span></span><a href="{% url 'contact_company' pk=fbpidi.id %}"> {% trans "Contact Us" %}<span
                             class="wsarrow"></span></a></li>
                 </ul>
 
@@ -372,7 +373,7 @@
     <div class="container">
         <div class="section-title center-block text-center">
             <h2>Subscribe To Our Newsletter</h2>
-            <p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+            <p>{% print_translated "Ethiopian Food, Beverage and Pharmaceutical Industry" "የኢትዮጲያ ምግብ፣ መጠጥ እና መድህኒት ቁጥጥር " LANGUAGE_CODE %}</p>
         </div>
         <div class="row">
             <div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
@@ -415,22 +416,22 @@
                     <div class="col-xl-3 col-lg-6 col-md-12">
                         <h6>Popular Listings</h6>
                         <ul class="list-unstyled mb-0">
-                            <li><a href="#"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> Educational
-                                college</a></li>
-                            <li><a href="#"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> Free Lancer for
-                                Web Developer</a></li>
-                            <li><a href="#"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> 2BHK Flat In
-                                Hyderabad</a></li>
-                            <li><a href="#"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> Best
-                                Restaurants in Hyderabad</a></li>
+                            <li><a href="{% url 'customer_news_list' %}"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> 
+                                {% trans "Latest News" %}</a></li>
+                            <li><a  href="{% url 'manufac_category_main' option='all' %}"><i class="fa fa-angle-double-right mr-2 text-secondary"></i>
+                                 {% trans "Companies" %}</a></li>
+                            <li><a href="{% url 'product_category_main' option='all' %}"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> 
+                                {% trans "Latest Products" %}</a></li>
+                            <li><a href="{%url 'project_list'%}"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> 
+                                {% trans "Latest Projects" %}</a></li>
                         </ul>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-md-12">
-                        <h6 class="mt-6 mt-xl-0">Contact</h6>
+                        <h6 class="mt-6 mt-xl-0">FBPIDI Contact</h6>
                         <ul class="list-unstyled mb-0">
                             <li>
-                                <a href="#"><i class="fa fa-home mr-3 text-secondary"></i> Ethiopia, Addis Ababa, Welo
-                                    serfer</a>
+                                <a href="#"><i class="fa fa-home mr-3 text-secondary"></i> Ethiopia, 
+                                    Addis Ababa, Welo Sefer</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-envelope mr-3 fs-12 text-secondary"></i> info@fbpidi.gov.et</a>
