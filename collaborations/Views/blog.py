@@ -245,7 +245,6 @@ def get_tags(lang):
 		tag_list = set(tag_list)
 		return tag_list
 
-
 class BlogList(View):
 	
 	def get(self, *args,**kwargs):
@@ -279,12 +278,10 @@ class BlogList(View):
 				companies.append(comp)
 		data = get_paginated_data(self.request, result['query'])
 		
-		return render(self.request, "frontpages/blog/blog_list.html", {'blogs':data, 'message':result['message'],  'message_am':result['message_am'],
-																				'companies':companies,'tags':tags,'tags_am':tags_am})
+		return render(self.request, "frontpages/blog/blog_list.html", {'blogs':data, 'message':result['message'],  'message_am':result['message_am'],'companies':companies,'tags':tags,'tags_am':tags_am})
 	
 
 class CreateBlogComment(LoginRequiredMixin,View):
-
 	def post(self,*args,**kwargs):
 		form = BlogCommentForm(self.request.POST)
 		blog = Blog.objects.get(id=self.kwargs['id'])
@@ -317,6 +314,6 @@ class BlogDetail(View):
 		comment = BlogCommentForm()
 		tags=self.get_tags("english")
 		tags_am=self.get_tags("amharic")
-		template_name="frontpages/blog-details-right.html" 
+		template_name="frontpages/blog/blog_detail.html" 
 		context = {'blog':blog,'comment':comment,'tags':tags,'tags_am':tags_am}
 		return render(self.request, template_name,context)

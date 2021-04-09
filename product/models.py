@@ -74,6 +74,9 @@ class Product(models.Model):
     def more_images(self):
         return ProductImage.objects.filter(product=self)
 
+    def count_likes(self):
+        return self.productlike_set.all().count()
+
     def get_category(self):
         # is this like return self.company.category.category_name
         return [self.pharmacy_category.category_name, self.pharmacy_category.category_name_am]
@@ -81,6 +84,12 @@ class Product(models.Model):
     
     class Meta:
         ordering = ('-created_date',)
+
+class ProductLike(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+    product = models.ForeignKey(Product, on_delete = models.CASCADE)
+    created_date = models.DateField(auto_now_add=True)
+
 
 class Dose(models.Model):
     dose = models.TextField(verbose_name="Dose in English")
@@ -232,12 +241,24 @@ class ProductInquiry(models.Model):
     quantity = models.IntegerField()
     pieces = models.CharField(max_length=100)
     content = models.TextField()
+    replied = models.BooleanField(default=False)
     attachement = models.FileField(upload_to = "InquiryDocument/", max_length=254, verbose_name="Inquiry document",help_text="pdf, Max size 3MB", blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
     def save(self):
         self.pieces = self.product.brand.product_type.uom
         super(ProductInquiry, self).save()
+
+class ProductInquiryReply(models.Model):
+    inquiry = models.ForeignKey(ProductInquiry, on_delete = models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+    reply = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_date']
+
+
 
 
 class Order(models.Model):
@@ -301,7 +322,7 @@ class InvoiceRecord(models.Model):
 class Review(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name="review")
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
     rating = models.IntegerField()
     review = models.TextField()
     time_stamp = models.DateTimeField(auto_now_add=True)

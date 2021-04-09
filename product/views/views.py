@@ -928,7 +928,7 @@ class p_serializer(serializers.ModelSerializer):
         model = Product
         fields = ("id","name", "name_am",  "image")
 
-
+@login_required
 def FetchInquiryProducts(request):
     data = json.loads(request.body)
     # remove the last , from the incoming string
@@ -936,7 +936,6 @@ def FetchInquiryProducts(request):
     product_ids = prods_id_list.split(",")
     product_list = [int(i) for i in product_ids]
     products = Product.objects.filter(id__in = product_list).distinct()
-    
     return JsonResponse( p_serializer(products, many = True).data, safe = False)
 
 def get_id_list(str_id):
@@ -944,7 +943,9 @@ def get_id_list(str_id):
     product_ids = prods_id_list.split(",")
     return [int(i) for i in product_ids]
 
-class InquiryForm(View):
+    
+
+class InquiryRequest(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
             selected_prods = Product.objects.filter(id__in = get_id_list( self.request.GET['products']) )
@@ -971,19 +972,19 @@ class InquiryForm(View):
         except Exception as e:
             print("@@@ Exception ",e)
             return redirect("index")
-
-# def  InquiryForm(request):
-#     if request.Method == "GET":
-#         data = json.loads(request.body)
-#         prods_id_list = data['products'][:-1] 
-#         product_ids = prods_id_list.split(",")
-#         product_list = [int(i) for i in product_ids]
-#         products = Product.objects.filter(id__in = product_list).distinct()
-#         return render(request, "frontpages/product/inquiry_form", {'products':products})
-
-
     
 
+@login_required
+def LikeProduct(request):
+    try:
+        data = json.loads( request.body )
+        p_like = ProductLike(user = request.user, product = Product.objects.get (id= int(data['p_id'] ) )  )
+        p_like.save()
+        return JsonResponse({'error':False})
+
+    except Exception as e:
+        print("########Exception while tring to like a product ",e)
+        return JsonResponse({'error':True})
 
 
 

@@ -134,11 +134,19 @@
 											</div> 4.0
 										</div>
 										<div class="rating-stars d-flex">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-													<i class="fa fa-heart"></i>
-												</div>
-											</div> 135
+											
+											{% if user.is_authenticated %}
+												
+												{% user_liked_product user product.id  as liked %}
+												{% if liked == True %}
+													<a  class="item-card9-icons1 wishlist" style = "background-color: white;"  > <i style="color:rgb(252, 67, 67);; "class="fa fa-heart"></i></a>
+												{% else %}
+													<a  class="item-card9-icons1 wishlist" style = "background-color: white;"  id="like_{{product.id}}" onclick="like_product('{{product.id}}')"> <i  class="fa fa-heart"></i></a>
+												{% endif %}
+											{% else %}
+											<a   href="/accounts/login/?next=/product/fetch_inquiry_products/"  class="item-card9-icons1 wishlist" style = "background-color: white;"   > <i  class="fa fa-heart"></i></a>
+											{% endif %}
+											<p class = "ml-2" id= "product_like_count">{{product.productlike_set.all.count}}</p> 
 										</div>
 									</div>
 								</div>
@@ -249,7 +257,11 @@
 							<div class="card-footer bg-white">
 								<div class="icons">
 									<a href="#" class="btn btn-info icons"><i class="icon icon-share mr-1"></i> Share Ad</a>
-									<a href="#" class="btn btn-pink icons"><i class="icon icon-heart  mr-1"></i> 678</a>
+
+									<!-- <a href="#" class="btn btn-pink icons"><i class="icon icon-heart  mr-1"></i>  -->
+									<span> </span>
+									</a>
+
 									<!-- <a href="#" class="btn btn-primary icons"><i class="icon icon-printer  mr-1"></i> Print</a> -->
 									<a href="{%url 'add_to_cart' id=product.id%}" class="btn btn-primary icons mb-1 mt-1" ><i class="icon icon-shopping-cart mr-1"></i> Add to Cart</a>
 								</div>
@@ -329,59 +341,67 @@
 										<div class="mb-4">
 											<div class="badge badge-default mb-2">5 <i class="fa fa-star"></i></div>
 											<div class="progress progress-md mb-4 h-4">
-												<div class="progress-bar bg-success w-100">9,232</div>
+												<div class="progress-bar bg-success w-100">{% count_review_rating product 5 %}</div>
 											</div>
 										</div>
 										<div class="mb-4">
 											<div class="badge badge-default mb-2">4 <i class="fa fa-star"></i></div>
 											<div class="progress progress-md mb-4 h-4">
-												<div class="progress-bar bg-info w-80">8,125</div>
+												<div class="progress-bar bg-info w-80">{% count_review_rating product 4 %}</div>
 											</div>
 										</div>
 										<div class="mb-4">
 											<div class="badge badge-default mb-2">3 <i class="fa fa-star"></i></div>
 											<div class="progress progress-md mb-4 h-4">
-												<div class="progress-bar bg-secondary w-60">6,263</div>
+												<div class="progress-bar bg-secondary w-60">{% count_review_rating product 3 %}</div>
 											</div>
 										</div>
 										<div class="mb-4">
 											<div class="badge badge-default mb-2">2 <i class="fa fa-star"></i></div>
 											<div class="progress progress-md mb-4 h-4">
-												<div class="progress-bar bg-primary w-30">3,463</div>
+												<div class="progress-bar bg-primary w-30">{% count_review_rating product 2 %}</div>
 											</div>
 										</div>
 										<div class="mb-5">
 											<div class="badge badge-default mb-2">1 <i class="fa fa-star"></i></div>
 											<div class="progress progress-md mb-4 h-4">
-												<div class="progress-bar bg-orange w-20">1,456</div>
+												<div class="progress-bar bg-orange w-20">{% count_review_rating product 1 %}</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 							<div class="card-body">
-								<h4>{{reviews.count}} Reviews</h4>
-								{%for review in reviews%}
+								{% if product.review_set.all.count > 1 %}
+								<h4>{{product.review_set.all.count}} Reviews</h4>
+								{% else %}
+								<h4>{{reviews.count}} Review</h4>
+								{% endif %}
+								<!-- only top 5 reviews are seen -->
+								{% comment %} {%for review in product.review_set.all|slice:":5"%} {% endcomment %}
+								
+								{%for review in product.review_set.all%}
+								
 								<div class="d-sm-flex mt-3 p-5 sub-review-section border border-bottom-0 br-bl-0 br-br-0">
                                     <div class="d-flex mr-3">
-                                        <a href="#"><img class="media-object brround avatar-md" alt="64x64" src="/static/frontpages/images/faces/male/1.jpg"> </a>
+                                        <a href="#"><img class="media-object brround avatar-md" alt="64x64" src="/static/frontpages/images/clients/unkonwn_user_icon.png"> </a>
                                     </div>
                                     <div class="media-body">
                                         <h5 class="mt-0 mb-1 font-weight-semibold">{{review.name}}
 											<span class="fs-14 ml-0" data-toggle="tooltip" data-placement="top" title="verified"><i class="fa fa-check-circle-o text-success"></i></span>
 											<span class="fs-14 ml-2"> {{review.rating}} <i class="fa fa-star text-yellow"></i></span>
 										</h5>
-										<small class="text-muted"><i class="fa fa-calendar"></i> Dec 21st  <i class=" ml-3 fa fa-clock-o"></i> 13.00 </small>
+										<small class="text-muted"><i class="fa fa-calendar"></i>{{review.time_stamp.date}}  <i class=" ml-3 fa fa-clock-o"></i> {{review.time_stamp.time}} </small>
                                         <p class="font-13  mb-2 mt-2">
-                                           {{review.review}}
+                                           {{review.review|safe|truncatechars_html:20}}
                                         </p>
-										<a href="#" class="mr-2 mt-1"><span class="badge badge-secondary">Helpful</span></a>
+										<!-- <a href="#" class="mr-2 mt-1"><span class="badge badge-secondary">Helpful</span></a>
 										<a href="" class="mr-2 mt-1" data-toggle="modal" data-target="#Comment"><span class="badge badge-light">Comment</span></a>
 										<a href="" class="mr-2 mt-1" data-toggle="modal" data-target="#report"><span  class="badge badge-light">Report</span></a>
 										<div class="btn-group btn-group-sm mb-1 ml-auto float-sm-right mt-1">
 											<button class="btn btn-light" type="button"><i class="fa fa-thumbs-up"></i></button>
 											<button class="btn btn-light" type="button"><i class="fa fa-thumbs-down"></i></button>
-										</div>
+										</div> -->
 									</div>
 								</div>
 								{%endfor%}
@@ -391,8 +411,12 @@
 
 						<div class="card mb-lg-0">
 							<div class="card-header">
+
+								
+								
 								<h3 class="card-title">Add a Review</h3>
 							</div>
+							
 							<div class="card-body">
 								<form action="{% url 'create_review' product=product.id %}" method="POST">{%csrf_token%}
 								<p class="mb-0">Add Your Rating for the Product</p>
@@ -565,4 +589,39 @@
 				$("#id_rating").val(value);
 			}
 		</script>
+			<script>
+				function like_product(p_id)
+				{
+					if (document.getElementById('like_'+p_id).value != "liked")
+					{
+							fetch("{% url 'like_product'  %}",
+						{
+						method:"POST",
+						credentials: 'same-origin',
+						headers:{
+							"content-Type":'application/json',
+							'X-CSRFToken':'{{csrf_token}}'
+						},
+						body:JSON.stringify({
+							'p_id': p_id,
+						})
+						}).then(e => e.json()).then(result=>{
+							if(result['error'] == false){
+								window.alert('Product Liked Successfull')
+								var linear = document.getElementById('like_'+p_id)
+								linear.style['color'] =  "rgb(252, 67, 67)";		
+								linear.value = "liked"
+								let count = parseInt(document.getElementById("product_like_count").innerHTML)
+								document.getElementById("product_like_count").innerHTML = count + 1;
+	
+							}
+							else{
+								window.alert("not like")
+							}   		
+						});
+					}	
+				}
+			
+			</script>
+	
 		{%endblock%}

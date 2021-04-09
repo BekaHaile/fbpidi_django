@@ -50,8 +50,27 @@
 										</div>
 										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{{product.name}}</h4></a>
 										<p>{{product.description|truncatechars_html:100|safe}}</p>
-										<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
-										<a href="#" class="btn btn-primary btn-sm pull-right">{% trans "Contact Supplier" %}</a>
+										<div class = "row">
+											<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
+											{% if user.is_customer %}
+												<div class="ml-auto mt-3 mt-sm-0">
+													<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+														<!-- the add_to_cart is a js function written inside frontpages/layout.html -->
+
+														<div  class="row mt-1 mb-1 mr-2">
+															<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" >
+																<input type="hidden" name="products" value="{{product.id}},">
+																<button class="btn btn-primary btn-sm pull-right mr-3"     id="product_contact_now" type="submit">{% trans "Contact Now" %}</button>
+															</form>
+															<button class="btn btn-primary btn-sm pull-right" style = "background-color: #ff8819; border: 1px solid; border-color: #ff8819; "id = "prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
+														</div>
+													</div>
+												</div>
+											{% else %}
+												<a href="/company/contact/{{object.id}}" class="btn btn-primary btn-sm pull-right ml-9">{% trans "Contact Supplier" %}</a>
+											{% endif %}
+										</div>
+
 									</div>
 								</div>
 							</div>

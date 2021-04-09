@@ -79,11 +79,16 @@
 										</a>
 
 										<div class="dropdown-menu dropdown-menu-right">
-											{%if user.is_admin%}
-											<a href="{%url 'admin:delete' model_name='product' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Product</a>
-											<a href="{%url 'admin:product_detail' option='edit' id=cat.id%}" class="dropdown-item">
-												<i class="icon-pencil"></i>Edit Product</a>
-												{%endif%}
+											{% if user.is_superuser or user.get_compay == cat.company %} 
+												{%if user.is_admin or perms.product.delete_product %}
+												<a href="{%url 'admin:delete' model_name='product' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Product</a>
+												{% endif %}
+												{% if perms.product.change_product %}
+												<a href="{%url 'admin:product_detail' option='edit' id=cat.id%}" class="dropdown-item">
+													<i class="icon-pencil"></i>Edit Product</a>
+												{% endif %}
+											
+											{%endif%}
 											<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
 											<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
 											<a href="#" class="dropdown-item"><i class="icon-file-word"></i> Export to .doc</a> -->
@@ -103,8 +108,10 @@
 			<h5 class="card-title">Products</h5>
 			<div class="header-elements">
 				<div class="list-icons">
+					{% if perms.product.add_product %}
 					<a href="{% url 'admin:create_product'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Product</a>
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -144,13 +151,19 @@
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-right">
-									<a href="{%url 'admin:delete' model_name='product' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Product</a>
-									<a href="{%url 'admin:product_detail' option='edit' id=cat.id%}" class="dropdown-item">
-										<i class="icon-pencil"></i>Edit Product</a>
-									<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
-									<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
-									<a href="#" class="dropdown-item"><i class="icon-file-word"></i> Export to .doc</a> -->
-									
+									{% if user.is_superuser or user.get_compay == cat.company %} 
+										{% if perms.product.delete_product %}
+
+										<a href="{%url 'admin:delete' model_name='product' id=cat.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete Product</a>
+										{% endif %}
+										{% if perms.product.change_product %}
+										<a href="{%url 'admin:product_detail' option='edit' id=cat.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit Product</a>
+										{% endif %}
+										<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
+										<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
+										<a href="#" class="dropdown-item"><i class="icon-file-word"></i> Export to .doc</a> -->
+									{% endif %}
 								</div>
 							</div>
 						</div>

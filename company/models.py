@@ -347,6 +347,11 @@ class CompanyMessage(models.Model):
 	def get_latest_reply(self):
 		return CompanyMessageReply.objects.filter(message = self).first() if CompanyMessageReply.objects.filter(message = self).exists() else None
 
+class CompanyLike(models.Model):
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+	company = models.ForeignKey(Company, on_delete = models.CASCADE)
+	created_date = models.DateField(auto_now_add = True)
+	
 
 class CompanyMessageReply(models.Model):
 	message = models.ForeignKey(CompanyMessage, on_delete = models.CASCADE)

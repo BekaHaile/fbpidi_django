@@ -89,12 +89,18 @@ class BlogSerializer(serializers.ModelSerializer):
         model = Blog
         fields = "__all__"
 
-
+       
 class BlogCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlogComment
         fields = "__all__"
 
+class BlogDetailSerializer(serializers.ModelSerializer):
+    comments_list = BlogCommentSerializer(source= 'comments', many = True, read_only = True)
+    class Meta:
+        model = Blog
+        fields = "__all__"
+ 
 
 class AnnouncementSerializer(serializers.ModelSerializer):
     company = CompanyInfoSerializer(read_only = True)  
@@ -184,7 +190,8 @@ class ForumCommentSerializer(serializers.ModelSerializer):
 
 
 class ForumQuestionSerializer(serializers.ModelSerializer):
-    no_of_comments = serializers.IntegerField(source='countComment', read_only=True)    
+    no_of_comments = serializers.IntegerField(source='countComment', read_only=True)   
+  
     class Meta:
         model = ForumQuestion
         fields = "__all__"

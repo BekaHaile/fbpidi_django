@@ -68,9 +68,23 @@
 										<div class="rating-stars d-flex">
 											<div class="rating-stars-container mr-2">
 												<div class="rating-star sm">
-													<i class="fa fa-heart"></i>
+
+													{% if user.is_authenticated %}
+												
+														{% user_liked_product user product.id  as liked %}
+														{% if liked == True %}
+															<a  class="item-card9-icons1 wishlist" style = "background-color: white;"  > <i style="color:rgb(252, 67, 67);; "class="fa fa-heart"></i></a>
+														{% else %}
+															<a  class="item-card9-icons1 wishlist" style = "background-color: white;"  id="like_{{product.id}}" onclick="like_product('{{product.id}}')"> <i  class="fa fa-heart"></i></a>
+														{% endif %}
+													{% else %}
+													<a   href="/accounts/login/?next=/product/fetch_inquiry_products/"  class="item-card9-icons1 wishlist" style = "background-color: white;"   > <i  class="fa fa-heart"></i></a>
+													{% endif %}
 												</div>
-											</div> 135
+											</div>
+
+											<p id= "product_like_count">{{product.productlike_set.all.count}}</p> 
+
 										</div>
 									</div>
 								</div>
@@ -176,13 +190,44 @@
 										</div>
 									</div>
 								</div>
+								
+																	
 								<div class="card-footer">
-									<div class="">
-										<a href="{% url 'chat_with' reciever_name=product.created_by.username %}" target="blank" class="btn btn-info mt-1 mb-1" title="{% print_translated 'Chat with Manufacturer' 'አምራቹን አግኝ' LANGUAGE_CODE %} "><i class="fa fa-envelope"></i></a>
-										<a href="mailto:{{product.company.contact_person.email}}" title="Contact Manufacturer" class="btn btn-secondary"><i class="fa fa-user"></i></a>
-										<a href="#" class="btn btn-light mt-1 mb-1" title="Make Inquiry"><i class="fa fa-cart-plus"></i></a>
-										<a href="#" class="btn btn-info icons" title="Share Product"><i class="icon icon-share mr-1"></i></a>
-										<a href="#" class="btn btn-pink icons" title="Ad to Favorites"><i class="icon icon-heart  mr-1"></i> 678</a>
+									<div class="row">
+										<a href="{% url 'chat_with' reciever_name=product.created_by.username %}" target="blank" class="btn btn-info ml-1 mr-1" title="{% print_translated 'Chat with Manufacturer' 'አምራቹን አግኝ' LANGUAGE_CODE %} "><i class="fa fa-envelope"></i></a>
+										<a href="mailto:{{product.company.contact_person.email}}" title="Contact Manufacturer" class="btn btn-secondary ml-1 mr-1"><i class="fa fa-user"></i></a>
+										{% if user.is_customer %}
+										<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" class="mr-0" >
+											<input type="hidden" name="products" value="{{product.id}},">
+											<button class="btn btn-lightml-1 ml-1 mr-1" title="Make Inquiry" style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">
+												<i class="fa fa-cart-plus" style = "color:white"></i>
+											</button>
+										</form>
+										{% endif %}
+
+										<a href="#" class="btn btn-info icons ml-1 mr-1" title="Share Product"><i class="icon icon-share "></i></a>
+										
+										{% if user.is_authenticated %}
+											{% user_liked_company user product.company.id  as liked %}
+									
+											{% if liked == True %}
+												<a  class="btn btn-pink icons ml-1 mr-1" style = "color:white" > <i style="color:white; "class="fa fa fa-heart-o"></i>
+													<span id="company_like_count">{{product.company.companylike_set.all.count}}</span>
+												</a>
+												</a>
+											{% else %}
+												<a  class="btn btn-pink icons ml-1 mr-1" id="clike_{{product.company.id}}" onclick="like_company('{{product.company.id}}')" style = "color:white"> <i style="color:white; " class="fa fa fa-heart-o"></i>
+													<span id="company_like_count">{{product.company.companylike_set.all.count}}</span>
+												</a>
+
+											{% endif %}
+										{% else %}
+										<a  href= "/accounts/login/?next=/company/like_company/"  class="btn btn-pink icons ml-1 mr-1" style = "color:white" > <i style="color:white; " class="fa fa fa-heart-o"></i>
+											<span id="company_like_count">{{product.company.companylike_set.all.count}}</span>
+										</a></a>
+
+										{% endif %}
+										
 									</div>
 								</div>
 							</div>
@@ -218,40 +263,82 @@
 		</section>
 		<!--/Add listing-->
 
-		<!-- Newsletter-->
-		<section class="sptb border-top bg-white">
-			<div class="container">
-				<div class="section-title center-block text-center">
-					<h2>Subscribe To Our Newsletter</h2>
-					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
-				</div>
-				<div class="row">
-					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
-						<div class="input-group sub-input mt-0">
-							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
-							<div class="input-group-append ">
-								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
-									Subscribe
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<!--/Newsletter-->
-		<!-- Home Video Modal -->
-		<div class="modal fade" id="homeVideo" tabindex="-1" role="dialog">
-			<div class="modal-dialog modal-lg" role="document">
-				<div class="modal-content">
-					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="pauseVid()"><i class="fa fa-times" aria-hidden="true"></i></button>
-					<div class="embed-responsive embed-responsive-16by9">
-						<video id="gossVideo" class="embed-responsive-item" controls="controls">
-							<source src="/static/frontpages/video/300052515.mp4" type="video/mp4">
-						</video>
-					</div>
-				</div>
-			</div>
-		</div>
+		<script>
+			function like_product(p_id)
+			{
+				if (document.getElementById('like_'+p_id).value != "liked")
+				{
+						fetch("{% url 'like_product'  %}",
+					{
+					method:"POST",
+					credentials: 'same-origin',
+					headers:{
+						"content-Type":'application/json',
+						'X-CSRFToken':'{{csrf_token}}'
+					},
+					body:JSON.stringify({
+						'p_id': p_id,
+					})
+					}).then(e => e.json()).then(result=>{
+						if(result['error'] == false){
+							window.alert('Product Liked Successfull')
+							var linear = document.getElementById('like_'+p_id)
+							linear.style['color'] =  "rgb(252, 67, 67)";		
+							linear.value = "liked"
+							let count = parseInt(document.getElementById("product_like_count").innerHTML)
+							document.getElementById("product_like_count").innerHTML = count + 1;
+
+						}
+						else{
+							window.alert("not like")
+						}   		
+					});
+				}	
+			}
+		
+		</script>
+
+
+			<script>
+				function like_company(c_id)
+				{
+					if (document.getElementById('clike_'+c_id).value != "liked")
+					{
+							fetch("{% url 'like_company'  %}",
+						{
+						method:"POST",
+						credentials: 'same-origin',
+						headers:{
+							"content-Type":'application/json',
+							'X-CSRFToken':'{{csrf_token}}'
+						},
+						body:JSON.stringify({
+							'c_id': c_id,
+						})
+						}).then(e => e.json()).then(result=>{
+							if(result['error'] == false){
+								window.alert('Company Liked Successfull')
+								var likebtn = document.getElementById('clike_'+c_id)
+								// likebtn.style['background-color'] =  "rgb(252, 67, 67)";
+								let count = parseInt(document.getElementById("company_like_count").innerHTML)
+								document.getElementById("company_like_count").innerHTML = count + 1;
+								
+							}
+							else{
+								window.alert("not like")
+							}   		
+						});
+	
+					}
+					
+					
+				}
+			
+			</script>
+	
+
+
+
+		
 
 {%endblock%} 

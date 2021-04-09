@@ -21,10 +21,8 @@
 						<div class="header-elements">
 							<div class="list-icons">
 								
-								{% if perms.company.add_companyevent and user.get_company %}
+								{% if perms.company.add_companyevent  %}
 									<a href="{% url 'admin:create_companyevent' %}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New</a>
-								{% elif perms.company.add_companyevent and not user.get_company %}
-									<a href="{% url 'admin:create_company_profile' %}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>You are not related with any registered company, click here to register a company!  </a>
 								{%endif%}
 							</div>
 							

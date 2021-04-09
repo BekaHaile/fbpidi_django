@@ -77,11 +77,15 @@ Product Packaging Data
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-right">
-									{%if not user.is_superuser%}
-									<a href="{%url 'admin:delete' model_name='production_capacity' id=cat.id%}" onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-									<a href="{%url 'admin:update_production_capacity' pk=cat.id%}" class="dropdown-item">
-										<i class="icon-pencil"></i>Edit</a>
-									{%endif%}
+									{%if not user.is_superuser and cat.company == user.get_company %}
+										{% if perms.product.delete_productioncapacity %}
+										<a href="{%url 'admin:delete' model_name='production_capacity' id=cat.id%}" onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										{% endif %}
+										{% if perms.product.delete_productioncapacity %}
+										<a href="{%url 'admin:update_production_capacity' pk=cat.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										{%endif%}
+									{% endif %}
 								</div>
 							</div>
 						</div>

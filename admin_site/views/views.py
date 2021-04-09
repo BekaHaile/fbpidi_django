@@ -20,7 +20,7 @@ from chat.models import ChatGroup, ChatMessage
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
 from collaborations.models import *
-from company.decorators import company_created
+from admin_site.decorators import company_created
 
 # 
 # INDEX VIEW

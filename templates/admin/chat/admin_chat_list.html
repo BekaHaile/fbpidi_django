@@ -69,8 +69,8 @@
 
                     <div class="btn-group ml-3 mr-lg-3">
                         <button type="button" class="btn btn-light"><a href="#compose_modal" class="dropdown-item" data-toggle="modal" data-target="#compose_modal" ><i class="icon-pencil7"></i> <span class="d-none d-lg-inline-block ml-2">Compose</span></a></button>
-                        <button type="button" class="btn btn-light"><i class="icon-bin"></i> <span class="d-none d-lg-inline-block ml-2">Delete</span></button>
-                        <button type="button" class="btn btn-light"><i class="icon-spam"></i> <span class="d-none d-lg-inline-block ml-2">Spam</span></button>
+                        <!-- <button type="button" class="btn btn-light"><i class="icon-bin"></i> <span class="d-none d-lg-inline-block ml-2">Delete</span></button>
+                        <button type="button" class="btn btn-light"><i class="icon-spam"></i> <span class="d-none d-lg-inline-block ml-2">Spam</span></button> -->
                     </div>
 
                         <!-- Chat compse modal -->
@@ -132,7 +132,15 @@
     <!-- Table -->
     
     <div class="table-responsive">
-        <table class="table table-inbox">										
+        <table class="table table-inbox">
+            <tr class="table-inbox-name">
+                <td>#</td>
+                <td><b>Sender Image</b></td>
+                <td><b>Sender Name</b></td>
+                <td><b class="ml-5">Seen</b></td>
+                <td><b>Message Hint</b></td>
+                <td><b class="ml-5">Date</b></td>
+        </tr>											
             <tbody data-link="row" class="rowlink">
                 {% for message in chat_list %}
                     <!-- if the current user is the receiver of the message -->
@@ -145,35 +153,36 @@
                             <tr style="background-color: rgb(228, 228, 228);"> 
                         {% endif %}
                         <a href = "/chat/with/{{message.sender_name}}/" target = "blank" >
-                            
-                                <td class="table-inbox-checkbox rowlink-skip">
-                                    <a href="/chat/with/{{message.sender_name}}/" target = "blank" ></a>
-                                    <input type="checkbox" class="form-input-styled" data-fouc>
-                                </td>
-                                <td class="table-inbox-star rowlink-skip">
-                                    <a href="#">
-                                        <i class="icon-star-empty3 text-muted"></i>
-                                    </a>
-                                </td>
+                            <td class="table-inbox-name">
+                                {{forloop.counter}}
+                            </td>
+                                
                                 <td class="table-inbox-image">
                                     <img src="{{message.sender_image}}" class="rounded-circle" width="32" height="32" alt="">
-                                    
                                 </td>
                                 <td class="table-inbox-name">
                                     <a href="/chat/with/{{message.sender_name}}/" target = "blank" >
                                         <div class="letter-icon-title text-default"><b>{{message.sender_name}}</b></div>
                                     </a>
                                 </td>
+
+                                <td class="table-inbox-time">
+                                    {% if message.seen %}
+                                        <p class="letter-icon-title text-default  mr-5">Seen</p>
+                                    {% else %}
+                                        <p class="letter-icon-title text-default  mr-5">Unseen</p>
+                                    {% endif %}
+                                </td>
+
                                 <!-- the rest is the same whether the user is a receiver or a sender -->
                                 <td class="table-inbox-message">
-                                    <div class="table-inbox-subject">{{message.message|truncatechars_html:20}}</div>
+                                    <div class="table-inbox-subject">{{message.message|safe|truncatechars_html:20}}</div>
                                     <!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
                                 </td>
-                                <td class="table-inbox-attachment">
-                                    <i class="icon-attachment text-muted"></i>
-                                </td>
+                                
+                               
                                 <td class="table-inbox-time">
-                                    {{message.time}}
+                                    <p class ="mr-5">{{message.time}}</p>
                                 </td>
                             </tr>
                         
@@ -182,15 +191,10 @@
                                 
                                 <tr style="background-color: rgb(228, 228, 228);"> 
                                     <a href="/chat/with/{{message.receiver_name}}/" target = "blank" >
-                                            <td class="table-inbox-checkbox rowlink-skip">
-                                
-                                                <input type="checkbox" class="form-input-styled" data-fouc>
+                                            <td class="table-inbox-name">
+                                                {{forloop.counter}}
                                             </td>
-                                            <td class="table-inbox-star rowlink-skip">
-                                                <a href="#">
-                                                    <i class="icon-star-empty3 text-muted"></i>
-                                                </a>
-                                            </td>
+                                           
                                             <td class="table-inbox-image">
                                                 <img src="{{message.receiver_image}}" class="rounded-circle" width="32" height="32" alt="">
                                                 
@@ -200,19 +204,25 @@
                                                     <div class="letter-icon-title text-default"><b>{{message.receiver_name}}</b></div>
                                                 </a>
                                             </td>
-                                        
+
+                                            <td class="table-inbox-time">
+                                                {% if message.seen %}
+                                                    <p class="letter-icon-title text-default  mr-5">Seen</p>
+                                                {% else %}
+                                                    <p class="letter-icon-title text-default  mr-5">Unseen</p>
+                                                {% endif %}
+                                            </td>
 
                                             <!-- the rest is the same whether the user is a receiver or a sender -->
                                             <td class="table-inbox-message">
                                             
-                                                <div class="table-inbox-subject">{{message.message}} &nbsp;-&nbsp;</div>
+                                                <div class="table-inbox-subject">{{message.message|safe|truncatechars_html:20}} &nbsp;-&nbsp;</div>
                                                 <!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
                                             </td>
-                                            <td class="table-inbox-attachment">
-                                                <i class="icon-attachment text-muted"></i>
-                                            </td>
+                                            
+                                           
                                             <td class="table-inbox-time">
-                                                {{message.time}}
+                                                <p class ="mr-5">{{message.time}}</p>
                                             </td>
                                     </a>
                                 </tr>        

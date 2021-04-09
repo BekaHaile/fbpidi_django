@@ -126,12 +126,24 @@ def file_type( file_url):
 def count_unread_chats(user):
     return ChatMessages.count_unread_chats(user)
 
+@register.simple_tag
+def user_liked_product(user, product):    
+    return True if user.productlike_set.filter(product = product).exists()  else  False
+
+@register.simple_tag
+def user_liked_company(user, company):    
+    return True if user.companylike_set.filter(company = company).exists()  else  False
 
 @register.simple_tag
 def get_fbpidi_id():
     return Company.objects.get(main_category="FBPIDI").id if Company.objects.filter(main_category = "FBPIDI") else None
 
 
+@register.simple_tag
+def count_review_rating(product, rating):
+    return product.review_set.filter(rating = rating).count()
+
+    
 
 
 

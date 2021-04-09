@@ -85,8 +85,14 @@ class CustomAdminSite(admin.AdminSite):
             return update_wrapper(wrapper, view)
 
         my_urls = [
+            # inbox related
             path('inbox_list/', CompanyInboxList.as_view(), name="admin_inbox_list"),
             path('ibox_detail/<pk>/', CompanyInboxDetail.as_view(), name="admin_inbox_detail"),
+
+            # inquiry related
+            path('inquiry_list/', CompanyInquiryList.as_view(), name = "admin_inquiry_list"),
+            path('inquiry_reply/<pk>/', CompanyInquiryReply.as_view(), name="admin_inquiry_reply"),
+
 
             path('forum-list',wrap(ListForumQuestionAdmin.as_view()),name="forum_list"),
             path('forum-form',wrap(CreateForumQuestionAdmin.as_view()),name="forum_form"),

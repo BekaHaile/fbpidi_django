@@ -1,13 +1,17 @@
 {%extends 'frontpages/layout.html'%}
+{%load i18n%}
+{% load core_template_tags %}
 
 {%block content%}
+{% get_current_language as LANGUAGE_CODE %}
 		<!--Breadcrumb-->
 		<section>
 			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Forum </h1>
+
+							<h1 class="">{% print_translated message message_am LANGUAGE_CODE %} </h1>
 							
 						</div>
 					</div>
@@ -23,15 +27,15 @@
 					<!--Left Side Content-->
 					<div class="col-xl-4 col-lg-4 col-md-12">
 						<div class="card">
-						 <form action="{%url 'forum_search' %}" method="POST" enctype="multipart/form-data">
-						 	{%csrf_token%}
+						 <form action="{%url 'forum_list' %}" method="GET" enctype="multipart/form-data">
+						 	
 							<div class="card-body">
 								<div class="input-group">
-									<input type="text" name="search" class="form-control br-tl-3  br-bl-3" placeholder="Search" required>
+									<input type="text" name="by_title" class="form-control br-tl-3  br-bl-3" placeholder="Search" required>
 									<div class="input-group-append ">
 										
 										<button type="submit" class="btn btn-secondary br-tr-3  br-br-3">
-											Search
+											{% trans "Search" %}
 										</button></a>
 									</div>
 								</div>
@@ -41,7 +45,7 @@
 						
 						<div class="card">
 							<div class="card-header">
-                                    <h3 class="card-title">Forums you created </h3> 
+                                    <h3 class="card-title">{% trans "Forums you created" %} </h3> 
 							</div>
 							<div class="card-body p-0">
 								<div class="list-catergory">
@@ -94,21 +98,16 @@
 								<a href="{%url 'forum_form' %}"><button style="padding-left: 40%; padding-right: 40%;" type="submit" 
 								href="{%url 'forum_form' %}" 
 									class="btn btn-primary rounded-round">
-									<h5>Start New Forum Question </h5>
+									<h5>{% trans "Start New Forum Question" %} </h5>
 								</button>
 								</a>
 							</div>
 							</div>
 						</div>
 						<div class="row">
-							<!----
-							title = models.CharField(max_length=500,null=False)
-    description = models.TextField(null=False)
-    detail = models.TextField(null=False)
-    status = models.CharField(max_length=100,null=False)
-    accepted = models.CharField(max_length=100,null=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
--->
+							
+				
+
 							<div class="col-xl-12 col-lg-12 col-md-12">
 								{%for forum in forums%}
 								<div class="card">
@@ -123,14 +122,12 @@
 											</div>
 										</div>
 
-
-
 										<h4 class="font-weight-semibold" >{{forum.description|safe|truncatechars_html:30}}</h4>
 										{% if forum.created_by != user %}
 										<a class="mr2" href="/chat/with/{{forum.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with forum creator"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 										{% endif %}
 
-										<a href="{%url 'forum_detail' id=forum.id %}" class="btn btn-secondary btn-sm">Read More</a>
+										<a href="{%url 'forum_detail' id=forum.id %}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
 									</div>
 								</div>
 								{%endfor%}
@@ -138,20 +135,31 @@
 
                             
 						</div>
-						<div class="d-sm-flex">
-							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>
-							<ul class="pagination mb-lg-0 mb-5 ml-auto">
-								<li class="page-item page-prev disabled">
-									<a class="page-link" href="#" tabindex="-1">Prev</a>
-								</li>
-								<li class="page-item active"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
-								<li class="page-item page-next">
-									<a class="page-link" href="#">Next</a>
-								</li>
-							</ul>
-						</div>
+						{% if forums.has_other_pages %}
+								<div class="center-block text-center">
+									<ul class="pagination mb-5">
+										{% if forums.has_previous %}
+										<li class="page-item page-prev "><a class="page-link" href="?page={{forums.previous_page_number}}" tabindex="-1">{% trans "Prev" %}</a></li>
+										{% else %}
+										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">{% trans "Prev" %}</a></li>
+										{% endif %}
+										
+										{% for i in forums.paginator.page_range %}
+											{% if forums.number == i %}
+													<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+											{% else %}
+													<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+											{% endif %}
+										{% endfor %}
+
+										{% if forums.has_next %}
+										<li class="page-item page-next"><a class="page-link" href="?page={{forums.next_page_number}}">{% trans "Next" %}</a></li>
+										{% else %}
+										<li class="page-item page-next disabled"><a class="page-link" href="#">{% trans "Next" %}</a></li>
+										{% endif %}
+									</ul>
+								</div>
+								{% endif %}
 					</div>
 					<!--/Add Lists-->
 				</div>
