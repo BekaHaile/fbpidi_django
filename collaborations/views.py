@@ -836,3 +836,5 @@ class DocumentListing(LoginRequiredMixin, View):
         except Exception as e:
             print("exceptio at document list ",e)
             return redirect('admin:index')
+
+
