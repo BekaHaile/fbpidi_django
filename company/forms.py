@@ -25,13 +25,35 @@ from company.models import *
 #             'company_condition',
 # )
 
+
 def return_years(company):
+    current_year = 0
+    gc_year = datetime.datetime.today().year
+    month = datetime.datetime.today().month
+    day = datetime.datetime.today().day
+    if month <= 7 and day < 8 or month <= 7:
+        current_year = gc_year-9
+    else:
+        current_year = gc_year - 8
     YEAR_CHOICES=[('','Select Year'),]
-    YEAR_CHOICES += [(r,r) for r in range(company.established_yr, datetime.datetime.today().year-7)]
+    YEAR_CHOICES += [(r,r) for r in range(company.established_yr, current_year+1)]
     return YEAR_CHOICES
 
-YEAR_CHOICES=[('','Select Year'),]
-YEAR_CHOICES += [(r,r) for r in range(2000, datetime.datetime.today().year-7)]
+def in_between(x,min,max):
+    return ((x-min)*(x-max) <= 0)
+
+def return_year_with_quarteryear(company):
+    current_year = 0
+    gc_year = datetime.datetime.today().year
+    month = datetime.datetime.today().month
+    day = datetime.datetime.today().day
+    if in_between(month,10,12) or in_between(month,1,3) or in_between(month,4,6):
+        current_year = gc_year-8
+    else:
+        current_year = gc_year - 9
+    YEAR_CHOICES=[('','Select Year'),]
+    YEAR_CHOICES += [(r,r) for r in range(company.established_yr, current_year+1)]
+    return YEAR_CHOICES
 
 class InvestmentCapitalForm(forms.ModelForm):
     class Meta:
@@ -62,11 +84,15 @@ class EmployeesForm(forms.ModelForm):
 
     # year_emp = forms.IntegerField(label="Year",widget=forms.Select(choices=return_years(company_obj),attrs={
     #             'class':'form-control form-control-uniform'}))
-
+    def __init__(self,*args,**kwargs):
+        self.company = kwargs.pop('company')
+        super(EmployeesForm,self).__init__(*args,**kwargs)
+        self.fields['year_emp'].widget = forms.Select(choices = return_years(self.company),
+                                                    attrs={'class':'form-control form-control-uniform'})
     
     class Meta:
         model=Employees
-        fields = ('employment_type','female','male')
+        fields = ('employment_type','female','male','year_emp')
         widgets = {
             'employment_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_male")'}),
@@ -74,11 +100,21 @@ class EmployeesForm(forms.ModelForm):
         }
 
 class JobCreatedForm(forms.ModelForm):
-    year_job = forms.IntegerField(label="Year",widget=forms.Select(choices=YEAR_CHOICES,
-                attrs={'class':'form-control form-control-uniform'}))
+    
+    def __init__(self,*args,**kwargs):
+        self.company = kwargs.pop('company')
+        super(JobCreatedForm,self).__init__(*args,**kwargs)
+        self.fields['year_job'].widget = forms.Select(choices = return_year_with_quarteryear(self.company),
+                                                    attrs={'class':'form-control form-control-uniform'})
+        self.fields['quarter_job'].widget = forms.Select(choices =[('','Select Quarter'),
+                                                        ('First_Quarter','first Quarter(Jul-Sep)'),
+                                                        ('Second_Quarter','Second Quarter(Oct-Dec)'),
+                                                        ('Third_Quarter','Third Quarter(Jan-Mrrch)'),
+                                                        ('Fourth_Quarter','Fourth Quarter(Apr-June)')],
+                                                    attrs={'class':'form-control form-control-uniform','disabled':'true',})
     class Meta:
         model=JobOpportunities
-        fields = ('job_type','female','male',)
+        fields = ('year_job','quarter_job','job_type','female','male')
         widgets = {
             'job_type':forms.Select(attrs={'class':'form-control form-control-uniform','disabled':'true'}),
             'male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_male")'}),
@@ -86,11 +122,21 @@ class JobCreatedForm(forms.ModelForm):
         }
 
 class EducationStatusForm(forms.ModelForm):
-    year_edu = forms.IntegerField(label="Year",widget=forms.Select(choices=YEAR_CHOICES,
-                attrs={'class':'form-control form-control-uniform'}))
+    
+    def __init__(self,*args,**kwargs):
+        self.company = kwargs.pop('company')
+        super(EducationStatusForm,self).__init__(*args,**kwargs)
+        self.fields['year_edu'].widget = forms.Select(choices = return_year_with_quarteryear(self.company),
+                                                    attrs={'class':'form-control form-control-uniform'})
+        self.fields['quarter_edu'].widget = forms.Select(choices =[('','Select Quarter'),
+                                                        ('First_Quarter','first Quarter(Jul-Sep)'),
+                                                        ('Second_Quarter','Second Quarter(Oct-Dec)'),
+                                                        ('Third_Quarter','Third Quarter(Jan-Mrrch)'),
+                                                        ('Fourth_Quarter','Fourth Quarter(Apr-June)')],
+                                                    attrs={'class':'form-control form-control-uniform','disabled':'true',})
     class Meta:
         model=EducationalStatus
-        fields = ('education_type','female','male',)
+        fields = ('year_edu','quarter_edu','education_type','female','male')
         widgets = {
             'education_type':forms.Select(attrs={'class':'form-control form-control-uniform','disabled':'true'}),
             'male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_male")'}),
@@ -98,36 +144,53 @@ class EducationStatusForm(forms.ModelForm):
         }
 
 class FemalesInPositionForm(forms.ModelForm):
-    year_fem = forms.IntegerField(label="Year",widget=forms.Select(choices=YEAR_CHOICES,
-                attrs={'class':'form-control form-control-uniform'}))
+    
+    def __init__(self,*args,**kwargs):
+        self.company = kwargs.pop('company')
+        super(FemalesInPositionForm,self).__init__(*args,**kwargs)
+        self.fields['year_fem'].widget = forms.Select(choices = return_year_with_quarteryear(self.company),
+                                                    attrs={'class':'form-control form-control-uniform'})
+        self.fields['quarter_fem'].widget = forms.Select(choices =[('','Select Quarter'),
+                                                        ('First_Quarter','first Quarter(Jul-Sep)'),
+                                                        ('Second_Quarter','Second Quarter(Oct-Dec)'),
+                                                        ('Third_Quarter','Third Quarter(Jan-Mrrch)'),
+                                                        ('Fourth_Quarter','Fourth Quarter(Apr-June)')],
+                                                    attrs={'class':'form-control form-control-uniform','disabled':'true',})
     class Meta:
         model=FemalesInPosition
-        fields = ('high_position','med_position',)
+        fields = ('year_fem','quarter_fem','high_position','med_position')
         widgets = {
             'high_position':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_high_position")'}),
             'med_position':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_med_position")'}),
         }
 
 class MarketDestinationForm(forms.ModelForm):
-    year_destn = forms.IntegerField(label="Year",widget=forms.Select(choices=YEAR_CHOICES,
-                attrs={'class':'form-control form-control-uniform'}))
+    
+    def __init__(self,*args,**kwargs):
+        self.company = kwargs.pop('company')
+        super(MarketDestinationForm,self).__init__(*args,**kwargs)
+        self.fields['year_destn'].widget = forms.Select(choices = return_years(self.company),
+                                                    attrs={'class':'form-control form-control-uniform'})
     class Meta:
         model=MarketDestination
-        fields = ('domestic','export')
+        fields = ('domestic','export','year_destn')
         widgets = {
             'domestic':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_domestic")'}),
             'export':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_export")'}),
         }
 
 class MarketTargetForm(forms.ModelForm):
-    year_target = forms.IntegerField(label="Year",
-                widget=forms.Select(choices=YEAR_CHOICES,
-                attrs={'class':'form-control form-control-uniform'}))
+    
+    def __init__(self,*args,**kwargs):
+        self.company = kwargs.pop('company')
+        super(MarketTargetForm,self).__init__(*args,**kwargs)
+        self.fields['year_target'].widget = forms.Select(choices = return_years(self.company),
+                                                    attrs={'class':'form-control form-control-uniform'})
     class Meta:
         model=MarketTarget
         fields = ('further_proc_power','final_consumer','restaurant_and_hotels',
                     'institutions','epsa','hospitals','agents','wholesaler_distributor',
-                    'retailer','other',)
+                    'retailer','other','year_target')
         widgets = {
             'further_proc_power':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_further_proc_power")'}),
             'final_consumer':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_final_consumer")'}),
@@ -142,12 +205,16 @@ class MarketTargetForm(forms.ModelForm):
         }
 
 class SourceAmountIputsForm(forms.ModelForm):
-    year_src = forms.IntegerField(label="Year",widget=forms.Select(choices=YEAR_CHOICES,
-                attrs={'class':'form-control form-control-uniform'}))
+    
+    def __init__(self,*args,**kwargs):
+        self.company = kwargs.pop('company')
+        super(SourceAmountIputsForm,self).__init__(*args,**kwargs)
+        self.fields['year_src'].widget = forms.Select(choices = return_years(self.company),
+                                                    attrs={'class':'form-control form-control-uniform'})
     class Meta:
         model=SourceAmountIputs
         fields = ('import_company','govt_suplied','purchase_from_farmer','purchase_from_union',
-                    'purchase_from_agents','purchase_from_other')
+                    'purchase_from_agents','purchase_from_other','year_src')
         widgets = {
             'import_company':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_import_company")'}),
             'govt_suplied':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_govt_suplied")'}),
@@ -158,12 +225,16 @@ class SourceAmountIputsForm(forms.ModelForm):
         }
 
 class PowerConsumptionForm(forms.ModelForm):
+    def __init__(self,*args,**kwargs):
+        self.company = kwargs.pop('company')
+        super(PowerConsumptionForm,self).__init__(*args,**kwargs)
+        self.fields['year_pc'].widget = forms.Select(choices = return_years(self.company),
+                                                    attrs={'class':'form-control form-control-uniform'})
 
     class Meta:
         model=PowerConsumption
-        fields = ('day','installed_capacity','current_supply')
+        fields = ('year_pc','installed_capacity','current_supply')
         widgets = {
-            'day':forms.DateInput(attrs={'class':'form-control','type':'date'}),
             'installed_capacity':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_installed_capacity")'}),
             'current_supply':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_current_supply")'}),
         }

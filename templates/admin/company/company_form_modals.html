@@ -107,7 +107,11 @@
                             <div class="col-sm-12">
 								The Year is <script>document.write(new Date().getFullYear()-8);</script> E.C
 							</div>
-							<div class="col-sm-12">
+							<div class="col-sm-6">
+								<label for="">{{employees_form.year_emp.label}}</label>
+								 {{employees_form.year_emp}}
+							</div>
+							<div class="col-sm-6">
 								<label for="">{{employees_form.employment_type.label}}</label>
 								 {{employees_form.employment_type}}
 							</div>
@@ -159,12 +163,16 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								<label for="">{{job_created_form.year_job.label}}</label>
 								 {{job_created_form.year_job}}
 							</div>
+							<div class="col-sm-4">
+								<label for="">{{job_created_form.quarter_job.label}}</label>
+								 {{job_created_form.quarter_job}}
+							</div>
 
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								<label for="">{{job_created_form.job_type.label}}</label>
 								 {{job_created_form.job_type}}
 							</div>		
@@ -212,11 +220,15 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
 								<label for="">{{edication_form.year_edu.label}}</label>
 								 {{edication_form.year_edu}}
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-4">
+								<label for="">{{edication_form.quarter_edu.label}}</label>
+								 {{edication_form.quarter_edu}}
+							</div>
+							<div class="col-sm-4">
 								<label for="">{{edication_form.education_type.label}}</label>
 								 {{edication_form.education_type}}
 							</div>
@@ -264,17 +276,25 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
-							<div class="col-sm-4">
+							<div class="col-sm-6">
 								<label for="">{{female_posn_form.year_fem.label}}</label>
 								 {{female_posn_form.year_fem}}
 							</div>
-							<div class="col-sm-4">
+							<div class="col-sm-6">
+								<label for="">{{female_posn_form.quarter_fem.label}}</label>
+								 {{female_posn_form.quarter_fem}}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-6">
 								<label for="">{{female_posn_form.high_position.label}}</label>
 								 {{female_posn_form.high_position}}
 								 <span class="form-text text-muted">{{female_posn_form.high_position.help_text}}</span>
 							</div>
 
-							<div class="col-md-4">
+							<div class="col-md-6">
 								<label>{{female_posn_form.med_position.label}}</label>
 									{{female_posn_form.med_position}}
 									<span class="form-text text-muted">{{female_posn_form.med_position.help_text}}</span>									
@@ -559,8 +579,8 @@
 					<div class="form-group">
 						<div class="row">
 							<div class="col-sm-4">
-								<label for="">{{consumption_form.day.label}}</label>
-								 {{consumption_form.day}}
+								<label for="">{{consumption_form.year_pc.label}}</label>
+								 {{consumption_form.year_pc}}
 							</div>
 							<div class="col-sm-4">
 								<label for="">{{consumption_form.installed_capacity.label}}</label>

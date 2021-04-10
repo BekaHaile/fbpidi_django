@@ -120,7 +120,7 @@ class DosageForm(models.Model):
 class ProductionCapacity(models.Model):	 	
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_production_capacity")	
     product	= models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="production_capacity") 
-    p_date = models.DateField()
+    year = models.IntegerField(default=0)
     install_prdn_capacity	= models.IntegerField(default=0,verbose_name="Installed Production Capacity")		
     atnbl_prdn_capacity = models.FloatField(default=0,verbose_name="Attainable Production Capacity")		
     actual_prdn_capacity = models.FloatField(default=0,verbose_name="Actual Production Capacity")		
@@ -151,7 +151,8 @@ class ProductPackaging(models.Model):
 class ProductionAndSalesPerformance(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_product_perfornamce")
     product	= models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="sales_performance")
-    activity_year	= models.IntegerField()			 
+    activity_year	= models.IntegerField(verbose_name="Production & Sales Performance Year")	
+    half_year = models.CharField(max_length=100,verbose_name="Half Year Data")		 
     production_amount	= models.FloatField(default=0,verbose_name="Total Production Amount")			
     sales_amount	= models.FloatField(default=0,verbose_name="Total Sales Amount")			
     sales_value	= models.FloatField(default=0,verbose_name="Total Sales Value in Birr")
@@ -183,7 +184,8 @@ class InputDemandSupply(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_product_demand")
     product	= models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="product_input_demand_supply")
     input_type	= models.CharField(max_length=255,verbose_name="Input Type")
-    year = models.IntegerField()		
+    year = models.IntegerField(verbose_name="Demand & Supply Year")	
+    half_year = models.CharField(max_length=100,verbose_name="Half Year Data")
     demand	= models.FloatField(default=0,verbose_name="Input Demand")			
     supply	= models.FloatField(default=0,verbose_name="Input Supply")
     created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='demand_created_by',null=True)

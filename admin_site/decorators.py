@@ -35,7 +35,7 @@ def company_is_active():
                 else:
                     return redirect("admin:create_my_company")
             else:
-                return redirect("admin:create_my_company")
+                return view_func(request,*args,**kwargs)
         return wrapper
     return decorator
 

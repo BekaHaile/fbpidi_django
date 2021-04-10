@@ -1,4 +1,7 @@
 $(document).ready(function () {
+    var date = new Date();
+    var current_year = new Date().getFullYear()-8
+
     $(".summernote").summernote();
 
     // 
@@ -431,21 +434,66 @@ $(document).ready(function () {
         });
     });
     $("#id_year_job").change(function(){
-        var year = $(this).val();
-        if(year != ""){
+        var selected_year = $(this).val();
+       
+        
+        if(selected_year != ""){
+            $("#id_quarter_job").prop("disabled",false);
+        }else{
+            $("#id_quarter_job").prop("disabled",true);
+        }
+        if (selected_year == current_year){
+            console.log(date.getMonth()+1);
+            if(date.getMonth()+1 == 4||date.getMonth()+1 == 5||date.getMonth()+1 == 6){
+                var options = "<option value=''>Select Year</option>"
+                            +"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+                            +"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>"
+                            +"<option value='Third_Quarter'>Third Quarter(Jan-March)</option>";
+                $("#id_quarter_job").html(options);
+                
+            }else if(date.getMonth()+1 == 1||date.getMonth()+1 == 2||date.getMonth()+1 == 3){
+                var options = "<option value=''>Select Year</option>"
+                                +"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+                                +"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>";
+                $("#id_quarter_job").html(options);
+
+            }else if(date.getMonth()+1 == 10||date.getMonth()+1 == 11||date.getMonth()+1 == 12){
+                var options = "<option value=''>Select Year</option>"
+                +"<option value='First_Quarter'>First Quarter(July-Sept)</option>";
+                $("#id_quarter_job").html(options);
+
+            }else if(date.getMonth()+1 == 7||date.getMonth()+1 == 8||date.getMonth()+1 == 9){
+                $("#errors_jobs").html("Date for this year Is and this quarter is Inserted You Need to select The Next Year");
+                // var options = "<option value=''>You Need to select The previous Year</option>";
+                $("#id_quarter_job").prop("disabled",true);
+
+            }
+        }else{
+            var options = "<option value=''>Select Year</option>"
+                            +"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+                            +"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>"
+                            +"<option value='Third_Quarter'>Third Quarter(Jan-March)</option>"
+                            +"<option value='Fourth_Quarter'>Fourth Quarter(April-June)</option>";
+                $("#id_quarter_job").html(options);
+        }
+    });
+    $("#id_quarter_job").change(function(){
+        if($(this).val() != ""){
             $("#id_job_type").prop('disabled',false);
         }else{
             $("#id_job_type").prop('disabled',true);
         }
     });
+
     $("#id_job_type").change(function(){
         var year = $("#id_year_job").val();
-        var job_type = $(this).val()
+        var job_type = $(this).val();
+        var quarter_job = $("#id_quarter_job").val();
         $.ajax({
             url: "/admin/check_company_year_data/jobs_created/"+company_id+"/"+year+"/",
             type: "POST",
             headers: { "X-CSRFToken": my_token },
-            data:{'job_type':job_type},
+            data:{'job_type':job_type,'quarter':quarter_job},
             success: function (result) {
                 if (result['error'] == false) {
                     $("#submit_jobs").prop("disabled",false);
@@ -465,21 +513,64 @@ $(document).ready(function () {
         });
     });
     $("#id_year_edu").change(function(){
-        var year = $(this).val();
-        if(year != ""){
+        var selected_year = $(this).val();
+        if(selected_year != ""){
+            $("#id_quarter_edu").prop('disabled',false);
+        }else{
+            $("#id_quarter_edu").prop('disabled',true);
+        }
+        if (selected_year == current_year){
+            console.log(date.getMonth()+1);
+            if(date.getMonth()+1 == 4||date.getMonth()+1 == 5||date.getMonth()+1 == 6){
+                var options = "<option value=''>Select Year</option>"
+                            +"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+                            +"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>"
+                            +"<option value='Third_Quarter'>Third Quarter(Jan-March)</option>";
+                $("#id_quarter_edu").html(options);
+                
+            }else if(date.getMonth()+1 == 1||date.getMonth()+1 == 2||date.getMonth()+1 == 3){
+                var options = "<option value=''>Select Year</option>"
+                                +"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+                                +"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>";
+                $("#id_quarter_edu").html(options);
+
+            }else if(date.getMonth()+1 == 10||date.getMonth()+1 == 11||date.getMonth()+1 == 12){
+                var options = "<option value=''>Select Year</option>"
+                +"<option value='First_Quarter'>First Quarter(July-Sept)</option>";
+                $("#id_quarter_edu").html(options);
+
+            }else if(date.getMonth()+1 == 7||date.getMonth()+1 == 8||date.getMonth()+1 == 9){
+                $("#errors_education").html("Date for this year Is and this quarter is Inserted You Need to select The Next Year");
+                // var options = "<option value=''>You Need to select The previous Year</option>";
+                $("#id_quarter_edu").prop("disabled",true);
+
+            }
+        }else{
+            var options = "<option value=''>Select Year</option>"
+                            +"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+                            +"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>"
+                            +"<option value='Third_Quarter'>Third Quarter(Jan-March)</option>"
+                            +"<option value='Fourth_Quarter'>Fourth Quarter(April-June)</option>";
+                $("#id_quarter_edu").html(options);
+        }
+    });
+    $("#id_quarter_edu").change(function(){
+        if($(this).val() != ""){
             $("#id_education_type").prop('disabled',false);
         }else{
             $("#id_education_type").prop('disabled',true);
         }
     });
+     
     $("#id_education_type").change(function(){
         var year = $("#id_year_edu").val();
         var edu_type = $(this).val();
+        var quarter_edu = $("#id_quarter_edu").val();
         $.ajax({
             url: "/admin/check_company_year_data/education/"+company_id+"/"+year+"/",
             type: "POST",
             headers: { "X-CSRFToken": my_token },
-            data:{'edu_type':edu_type},
+            data:{'edu_type':edu_type,'quarter':quarter_edu},
             success: function (result) {
                 if (result['error'] == false) {
                     $("#submit_education").prop("disabled",false);
@@ -500,15 +591,58 @@ $(document).ready(function () {
         });
     });
 
+    // 
     $("#id_year_fem").change(function(){
-        var year = $(this).val();
+        var selected_year = $(this).val();
+        if(selected_year != ""){
+            $("#id_quarter_fem").prop('disabled',false);
+        }else{
+            $("#id_quarter_fem").prop('disabled',true);
+        }
+        if (selected_year == current_year){
+            console.log(date.getMonth()+1);
+            if(date.getMonth()+1 == 4||date.getMonth()+1 == 5||date.getMonth()+1 == 6){
+                var options = "<option value=''>Select Year</option>"
+                            +"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+                            +"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>"
+                            +"<option value='Third_Quarter'>Third Quarter(Jan-March)</option>";
+                $("#id_quarter_fem").html(options);
+                
+            }else if(date.getMonth()+1 == 1||date.getMonth()+1 == 2||date.getMonth()+1 == 3){
+                var options = "<option value=''>Select Year</option>"
+                                +"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+                                +"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>";
+                $("#id_quarter_fem").html(options);
 
+            }else if(date.getMonth()+1 == 10||date.getMonth()+1 == 11||date.getMonth()+1 == 12){
+                var options = "<option value=''>Select Year</option>"
+                +"<option value='First_Quarter'>First Quarter(July-Sept)</option>";
+                $("#id_quarter_fem").html(options);
+
+            }else if(date.getMonth()+1 == 7||date.getMonth()+1 == 8||date.getMonth()+1 == 9){
+                $("#errors_femaleposn").html("Date for this year and this quarter is Inserted You Need to select The Next Year");
+                // var options = "<option value=''>You Need to select The previous Year</option>";
+                $("#id_quarter_fem").prop("disabled",true);
+
+            }
+        }else{
+            var options = "<option value=''>Select Year</option>"
+                            +"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+                            +"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>"
+                            +"<option value='Third_Quarter'>Third Quarter(Jan-March)</option>"
+                            +"<option value='Fourth_Quarter'>Fourth Quarter(April-June)</option>";
+                $("#id_quarter_fem").html(options);
+        }
+    });
+
+    $("#id_quarter_fem").change(function(){
+        var quarter_fem = $(this).val();
+        var  year = $("#id_year_fem").val();
         $.ajax({
             url: "/admin/check_company_year_data/female_emp/"+company_id+"/"+year+"/",
             type: "POST",
             headers: { "X-CSRFToken": my_token },
-            processData: false,
-            contentType: false,
+            data:{'quarter':quarter_fem},
             success: function (result) {
                 if (result['error'] == false) {
                     $("#submit_femaleposn").prop("disabled",false);
@@ -558,7 +692,7 @@ $(document).ready(function () {
         });
     });
      // 
-     $("#id_day").change(function(){
+     $("#id_year_pc").change(function(){
         var day = $(this).val();
 
         $.ajax({
