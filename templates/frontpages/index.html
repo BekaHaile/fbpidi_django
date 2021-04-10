@@ -4,7 +4,6 @@
 {% block javascript %}
 {% endblock %}
 {%block content%}
-
 {% get_current_language as LANGUAGE_CODE %}
 <!--Sliders Section-->
 <section>
@@ -689,8 +688,9 @@
 								<div class="col-xl-4 col-lg-4 col-md-12">
 									<div class="card mb-xl-0">
 										<div class="item-card8-img  br-tr-4 br-tl-4">
-											<img src="{{news.get_single_image}}" alt="img"
-												class="cover-image">
+											<a href= "{% url 'customer_news_detail' id=news.id %}">
+											<img width= "360" height = "230" src="{{news.get_single_image}}" alt="img"
+												class="cover-image"></a>
 										</div>
 										<div class="item-card8-overlaytext">
 											<h6 class="mb-0">{{news.catagory}}</h6>
@@ -698,17 +698,18 @@
 										<div class="card-body">
 											<div class="item-card8-desc">
 												<p class="text-muted mb-2">{{news.created_date}}</p>
-												<h4 class="font-weight-semibold">{% print_translated news.title news.title_am LANGUAGE_CODE %} </h4>
-												<!-- <p class="mb-0">Lorem ipsum dolor sit amet, quis nostrum exercitationem
-													ullam corporis suscipit laboriosam</p> -->
+												<a href= "{% url 'customer_news_detail' id=news.id %}">
+													<h4 class="font-weight-semibold">{% print_translated news.title news.title_am LANGUAGE_CODE %} </h4>
+												</a>
+											
 											</div>
 										</div>
 										<div class="card-footer">
 											<div class="footerimg d-flex mt-0 mb-0">
 												<div class="d-flex footerimg-l mb-0">
-													
+													<a target = "blank" href = "{% url 'company_home' pk=news.company.id %}">
 													<img src="{{news.company.logo.url}}" alt="image"
-														class="avatar brround  mr-2">
+														class="avatar brround  mr-2"></a>
 													<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
 														{% print_translated news.company.name news.company.name_am LANGUAGE_CODE %}<i class="icon icon-check text-success fs-12 ml-1"
 															data-toggle="tooltip" data-placement="top" title=""

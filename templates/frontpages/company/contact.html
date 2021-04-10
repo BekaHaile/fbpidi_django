@@ -74,22 +74,27 @@
 					<div class="col-lg-4 mb-5 mb-lg-0">
 						<div class="support-service bg-secondary br-2 mb-4 mb-xl-0">
 							<i class="fa fa-phone"></i>
-							<h6>+68 872-627-9735</h6>
-							<P>Free Support!</P>
+							<h6>{{object.phone_number}}</h6>
+							<P>Call Us!</P>
 						</div>
 					</div>
 					<div class="col-lg-4 mb-5 mb-lg-0">
 						<div class="support-service bg-primary br-2 mb-4 mb-xl-0">
 							<i class="fa fa-clock-o"></i>
 							<h6>Mon-Sat(10:00-19:00)</h6>
-							<p>Working Hours!</p>
+							<p>Working Hours! Dummy</p>
 						</div>
 					</div>
 					<div class="col-lg-4">
 						<div class="support-service bg-info br-2">
 							<i class="fa fa-envelope-o"></i>
-							<h6>yourdomain@gmail.com</h6>
-							<p>Support us!</p>
+							
+							{% if object.get_company_address.email %}
+								<h6>{{object.get_company_address.email}}</h6>
+							{% else %}
+								<h6>{{object.contact_person.email}}</h6>
+							{% endif %}
+							<p>Email Us!</p>
 						</div>
 					</div>
 				</div>

@@ -18,7 +18,7 @@ from company.models import Company, InvestmentProject
 from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer, InvestmentProjectserializer
 
 from product.models import SubCategory,Product, ProductImage, ProductPrice
-from product.api.serializer import ProducteFullSerializer, ProductInfoSerializer, ProductImageSerializer
+from product.api.serializer import ProductFullSerializer, ProductInfoSerializer, ProductImageSerializer
 
 from accounts.models import User, Customer, CompanyAdmin
 from accounts.api.serializers import CustomerCreationSerializer, CustomerDetailSerializer
