@@ -64,7 +64,6 @@ INSTALLED_APPS = [
     'company',
     'product',
     'chat',
-
     'social_django',
     'rest_framework_social_oauth2', 
     'oauth2_provider',#for rest_framework social_oauth providers

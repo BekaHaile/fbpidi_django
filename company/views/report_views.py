@@ -14,7 +14,6 @@ from django.utils import timezone
 from django.core import serializers
 from django.db.models import Sum,Count,OuterRef,Exists,Q,F,Avg
 
-
 from company.models import *
 from product.models import *
 from accounts.models import CompanyAdmin,UserProfile
@@ -24,39 +23,13 @@ from company.forms import *
 today = datetime.datetime.today()
 this_year = today.year
 
-def certification_chart(request):
-    labels=[]
-    data=[]
-    queryset = Company.objects.values('certification__name').annotate(Count('id')).order_by('certification').exclude(main_category='FBPIDI')
-    for certification in queryset:
-        labels.append(certification['certification__name'])
-        data.append(certification['id__count'])
-    return JsonResponse({'labels':labels,'data':data})
-
-def company_subsector_chart(request):
-    labels=[]
-    data=[]
-    queryset = Company.objects.values('category__category_name').annotate(Count('id')).order_by('category').exclude(main_category='FBPIDI')
-    for category in queryset:
-        labels.append(category['category__category_name'])
-        data.append(category['id__count'])
-    return JsonResponse({'labels':labels,'data':data})
-
-
-def management_tool_chart(request):
-    labels=[]
-    data=[]
-    queryset = Company.objects.values('management_tools__name').annotate(Count('id')).order_by('management_tools').exclude(main_category='FBPIDI')
-    for tools in queryset:
-        labels.append(tools['management_tools__name'])
-        data.append(tools['id__count'])
-    return JsonResponse({'labels':labels,'data':data})   
 
 class ReportPage(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        return render(self.request,"admin/pages/report.html")
- 
+        return render(self.request,"admin/report/report.html",
+        {'companies':Company.objects.all().exclude(main_category="FBPIDI")})
 
+ 
 
 class CapitalUtilizationReportSector(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -94,7 +67,7 @@ class CapitalUtilizationReportSector(LoginRequiredMixin,View):
             context['flag'] = "capital_utilization"
             context['title'] = self.kwargs['sector'] 
             messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
-            return render(self.request,"admin/company/report_page.html",context)
+            return render(self.request,"admin/report/report_page.html",context)
         else:
             companies_with_data = companies.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))),
                                                     Exists(ProductionCapacity.objects.filter(company=OuterRef('pk')))
@@ -116,7 +89,7 @@ class CapitalUtilizationReportSector(LoginRequiredMixin,View):
             print(capital_util_data)
             context['capital_util_data'] = capital_util_data
             context['flag'] = "capital_utilization"
-            return render(self.request,"admin/company/report_page.html",context)
+            return render(self.request,"admin/report/report_page.html",context)
 
 class ChangeInCapitalUtilization(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -156,7 +129,7 @@ class ChangeInCapitalUtilization(LoginRequiredMixin,View):
             context['flag'] = "change_capital_utilization"
             context['title'] = self.kwargs['sector'] 
             messages.warning(self.request,"Please Fixe Your Request,There is issue in the request")
-            return render(self.request,"admin/company/report_page.html",context)
+            return render(self.request,"admin/report/report_page.html",context)
         else:
             companies_with_data = companies.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))),
                                                     Exists(ProductionCapacity.objects.filter(company=OuterRef('pk')))
@@ -192,7 +165,7 @@ class ChangeInCapitalUtilization(LoginRequiredMixin,View):
              
             context['change_capital_util_data'] = change_capital_util_data
             context['flag'] = "change_capital_utilization"
-            return render(self.request,"admin/company/report_page.html",context)
+            return render(self.request,"admin/report/report_page.html",context)
 
 class AverageExtractionRate(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -217,7 +190,7 @@ class AverageExtractionRate(LoginRequiredMixin,View):
         context['extn_data']=pdata
         context['flag'] = "extraction_data"
         context['products'] = SubCategory.objects.all()
-        return render(self.request,"admin/company/report_page.html",context)
+        return render(self.request,"admin/report/report_page.html",context)
 
 
 class GrossValueOfProduction(LoginRequiredMixin,View):
@@ -259,7 +232,7 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
             context['flag'] = "gross_vp_data"
             context['title'] = self.kwargs['sector'] 
             messages.warning(self.request,"Please Fixe Your Request,There is issue in the request")
-            return render(self.request,"admin/company/report_page.html",context)
+            return render(self.request,"admin/report/report_page.html",context)
         else:
             companies_with_data = companies.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))))
             production_performance_this_year = companies_with_data.values('name').annotate(total=Sum('company_product_perfornamce__sales_value',filter=Q(company_product_perfornamce__activity_year=this_year)))
@@ -317,7 +290,7 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
             context['flag'] = "gross_vp_data"
             context['years'] = {'this_year':this_year,'last_year':this_year-1,'prev_year':this_year-2}
             
-            return render(self.request,"admin/company/report_page.html",context)
+            return render(self.request,"admin/report/report_page.html",context)
 
 
 class AverageUnitPrice(LoginRequiredMixin,View):
@@ -351,13 +324,13 @@ class AverageUnitPrice(LoginRequiredMixin,View):
         context['flag'] = "unit_price_data"
         context['products'] = SubCategory.objects.all()
         print(context)
-        return render(self.request,"admin/company/report_page.html",context)
+        return render(self.request,"admin/report/report_page.html",context)
 
 
 
 class InvestmentCapitalReportView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        template_name="admin/company/report_page.html"
+        template_name="admin/report/report_page.html"
         context = {}
         total_inv_cap_data = []
         if self.kwargs['option'] == 'by_sector':
@@ -374,7 +347,7 @@ class InvestmentCapitalReportView(LoginRequiredMixin,View):
             context['flag'] = "gross_vp_data"
             context['title'] = self.kwargs['sector'] 
             messages.warning(self.request,"Please Fixe Your Request,There is issue in the request")
-            return render(self.request,"admin/company/report_page.html",context)
+            return render(self.request,"admin/report/report_page.html",context)
         else:
             for company in companies:
                 if InvestmentCapital.objects.filter(company=company).exists():
@@ -424,7 +397,7 @@ class ProductionCapacityView(LoginRequiredMixin,View):
         context['produn_data']=pdata
         context['products'] = SubCategory.objects.all()
         context['flag'] = 'production_cap'
-        return render(self.request,"admin/company/report_page.html",context)
+        return render(self.request,"admin/report/report_page.html",context)
   
 class InputAvailablity(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -457,7 +430,7 @@ class InputAvailablity(LoginRequiredMixin,View):
         context['avalilable_input']=total_data
         context['flag'] = "avalilable_input"
         context['products'] = SubCategory.objects.all()
-        return render(self.request,"admin/company/report_page.html",context)
+        return render(self.request,"admin/report/report_page.html",context)
 
 class ShareLocalInputs(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -482,12 +455,12 @@ class ShareLocalInputs(LoginRequiredMixin,View):
         context['input_share']=total_data
         context['flag'] = "input_share"
         context['products'] = SubCategory.objects.all()
-        return render(self.request,"admin/company/report_page.html",context)
+        return render(self.request,"admin/report/report_page.html",context)
 
 
 class CompanyListForReport(LoginRequiredMixin,ListView):
     model=Company
-    template_name = "admin/company/companies_for_report.html"
+    template_name = "admin/report/companies_for_report.html"
 
     def get_queryset(self):
         return Company.objects.all().exclude(main_category="FBPIDI")
@@ -498,7 +471,7 @@ class CompanyListForReport(LoginRequiredMixin,ListView):
 
 class FilterCompanyByMainCategory(LoginRequiredMixin,ListView):
     model = Company
-    template_name = "admin/company/companies_for_report.html"
+    template_name = "admin/report/companies_for_report.html"
 
     def get_queryset(self):
         try:
@@ -519,7 +492,7 @@ class FilterCompanyByMainCategory(LoginRequiredMixin,ListView):
 
 class FilterCompanyByEstablishedYear(LoginRequiredMixin,ListView):
     model = Company
-    template_name = "admin/company/companies_for_report.html"
+    template_name = "admin/report/companies_for_report.html"
 
     def get_queryset(self):
         try:
@@ -541,7 +514,7 @@ class FilterCompanyByEstablishedYear(LoginRequiredMixin,ListView):
 
 class FilterCompanyCategory(LoginRequiredMixin,ListView):
     model = Company
-    template_name = "admin/company/companies_for_report.html"
+    template_name = "admin/report/companies_for_report.html"
 
     def get_queryset(self):
         try:
@@ -570,7 +543,7 @@ class OwnershipReport(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         ownership_data = []
         context = {}
-        template_name = "admin/company/report_page.html"
+        template_name = "admin/report/report_page.html"
         company = Company.objects.all().exclude(main_category="FBPIDI")
         queryset = Company.objects.values('ownership_form').annotate(Count('id')).order_by('ownership_form').exclude(main_category='FBPIDI')
         total = 0
@@ -589,7 +562,7 @@ class OwnershipReport(LoginRequiredMixin,View):
 
 class FilterByTradeLicense(LoginRequiredMixin,ListView):
     model = Company
-    template_name = "admin/company/companies_for_report.html"
+    template_name = "admin/report/companies_for_report.html"
 
     def get_queryset(self):
         return Company.objects.all().exclude(trade_license__in=['',"None"]).exclude(main_category='FBPIDI')
@@ -604,7 +577,7 @@ class FilterByWorkingHour(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         working_hour_data = []
         context = {}
-        template_name = "admin/company/report_page.html"
+        template_name = "admin/report/report_page.html"
         queryset = Company.objects.values('working_hours').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
         total = 0
         for working_hour in queryset:
@@ -621,7 +594,7 @@ class NumberofIndustriesByOption(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = {}
         context['flag'] = "company_count"
-        template_name = "admin/company/companies_for_report.html"
+        template_name = "admin/report/companies_for_report.html"
         if self.kwargs['option'] == 'research':
             context['data'] = Company.objects.all().exclude(conducted_research='').exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who Conducted Research"
@@ -696,7 +669,7 @@ class NumberOfEmployees(LoginRequiredMixin,View):
             context['flag'] = "num_employees"
             context['title'] = self.kwargs['sector'] 
             messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
-            return render(self.request,"admin/company/report_page.html",context)
+            return render(self.request,"admin/report/report_page.html",context)
         else:
             # employees_perm = Employees.objects.values('company__name').annotate(
             #         permanent_male=Sum('male',distinct=True,filter=Q(employment_type__icontains="Permanent")),
@@ -722,7 +695,7 @@ class NumberOfEmployees(LoginRequiredMixin,View):
             context['total_emp_data'] = emp_data_total
             context['flag'] = "num_employees"
             print(context)
-            return render(self.request,'admin/company/report_page.html',context)
+            return render(self.request,'admin/report/report_page.html',context)
 
 class NumberOfEmployeesFemale(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -750,7 +723,7 @@ class NumberOfEmployeesFemale(LoginRequiredMixin,View):
             context['flag'] = "num_employees"
             context['title'] = self.kwargs['sector'] 
             messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
-            return render(self.request,"admin/company/report_page.html",context)
+            return render(self.request,"admin/report/report_page.html",context)
         else:
             for company in companies:
                 employees_perm = Employees.objects.filter(company=company,employment_type__icontains="Permanent")
@@ -767,7 +740,7 @@ class NumberOfEmployeesFemale(LoginRequiredMixin,View):
                 
             context['total_emp_data'] = femal_emp_data
             context['flag'] = "num_employees_female"
-            return render(self.request,'admin/company/report_page.html',context)
+            return render(self.request,'admin/report/report_page.html',context)
 
 
 class NumberOfEmployeesForeign(LoginRequiredMixin,View):
@@ -796,7 +769,7 @@ class NumberOfEmployeesForeign(LoginRequiredMixin,View):
             context['flag'] = "num_employees_foreign"
             context['title'] = self.kwargs['sector'] 
             messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
-            return render(self.request,"admin/company/report_page.html",context)
+            return render(self.request,"admin/report/report_page.html",context)
         else:
             for company in companies:
                 employees_foreign = Employees.objects.filter(company=company,employment_type__icontains="Foreign")
@@ -810,7 +783,7 @@ class NumberOfEmployeesForeign(LoginRequiredMixin,View):
                  
             context['for_emp_data'] = for_emp_data
             context['flag'] = "num_employees_foreign"
-            return render(self.request,'admin/company/report_page.html',context)
+            return render(self.request,'admin/report/report_page.html',context)
 
 class NumberOfJobsCreatedBySubSector(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -836,7 +809,7 @@ class NumberOfJobsCreatedBySubSector(LoginRequiredMixin,View):
             context['flag'] = "num_jobs_created"
             context['title'] = self.kwargs['sector'] 
             messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
-            return render(self.request,"admin/company/report_page.html",context)
+            return render(self.request,"admin/report/report_page.html",context)
         else:
             for company in companies:
                 jobs_created_temp = JobOpportunities.objects.filter(company=company,job_type__icontains="Temporary")
@@ -861,13 +834,13 @@ class NumberOfJobsCreatedBySubSector(LoginRequiredMixin,View):
 
             context['job_created_data'] = job_created_data 
             context['flag'] = "num_jobs_created"
-            return render(self.request,'admin/company/report_page.html',context)
+            return render(self.request,'admin/report/report_page.html',context)
 
 class EduLevelofEmployees(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         education_status_data = []
         context = {}
-        template_name = "admin/company/report_page.html"
+        template_name = "admin/report/report_page.html"
         queryset = EducationalStatus.objects.values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
         total = 0
         for edu_data in queryset:
@@ -879,14 +852,14 @@ class EduLevelofEmployees(LoginRequiredMixin,View):
         context['education_status_data'] = education_status_data
         context['flag'] = 'education_status_data'
         return render(self.request,template_name,context)
-        template_name = "admin/company/companies_for_report.html"
+        template_name = "admin/report/companies_for_report.html"
 
 
 class NumWomenInPosition(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         women_in_pson_level = []
         context = {}
-        template_name = "admin/company/report_page.html"
+        template_name = "admin/report/report_page.html"
         queryset = FemalesInPosition.objects.all()
         # (Sum('high_position'),Sum('med_position'))
         in_med = 0
@@ -910,7 +883,7 @@ class CompanyCertificationData(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         certification_data = []
         context = {}
-        template_name = "admin/company/report_page.html"
+        template_name = "admin/report/report_page.html"
         queryset = Company.objects.values('certification').annotate(Count('id')).order_by('certification').exclude(main_category='FBPIDI')
         total = 0
         for certification in queryset:
@@ -921,13 +894,13 @@ class CompanyCertificationData(LoginRequiredMixin,View):
         context['certification_data'] = certification_data
         context['flag'] = 'certification_data'
         return render(self.request,template_name,context)
-        template_name = "admin/company/companies_for_report.html"
+        template_name = "admin/report/companies_for_report.html"
 
 class CompanyByManagementTools(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         management_tool_data = []
         context = {}
-        template_name = "admin/company/report_page.html"
+        template_name = "admin/report/report_page.html"
         queryset = Company.objects.values('management_tools').annotate(Count('id')).order_by('management_tools').exclude(main_category='FBPIDI')
         total = 0
         for management_tool in queryset:
@@ -943,7 +916,7 @@ class EnergySourceData(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         energy_source_data = []
         context = {}
-        template_name = "admin/company/report_page.html"
+        template_name = "admin/report/report_page.html"
         queryset = Company.objects.values('source_of_energy').annotate(Count('id')).order_by('source_of_energy').exclude(main_category='FBPIDI')
         total = 0
         for energy_source in queryset:
@@ -958,7 +931,7 @@ class EnergySourceData(LoginRequiredMixin,View):
 
 class CompaniesWithCertificate(LoginRequiredMixin,ListView):
     model = Company
-    template_name = "admin/company/companies_for_report.html"
+    template_name = "admin/report/companies_for_report.html"
 
     def get_queryset(self):
         return Company.objects.filter(Exists(Certificates.objects.filter(company=OuterRef('pk')))).exclude(main_category='FBPIDI')
@@ -970,7 +943,7 @@ class CompaniesWithCertificate(LoginRequiredMixin,ListView):
 
 class CompaniesByTarget(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        template_name = 'admin/company/report_page.html'
+        template_name = 'admin/report/report_page.html'
         context = {}
         company = Company.objects.all().exclude(main_category='FBPIDI').order_by('id')
         context['target_data'] = [{'label':"Further Processing Factors",
@@ -999,7 +972,7 @@ class CompaniesByTarget(LoginRequiredMixin,View):
 
 class CompaniesByDestination(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
-        template_name = "admin/company/report_page.html"
+        template_name = "admin/report/report_page.html"
         context = {}
         company = Company.objects.all().exclude(main_category='FBPIDI')
         context['destination_data'] = [{'label':"Exporting ",
@@ -1011,7 +984,7 @@ class CompaniesByDestination(LoginRequiredMixin,View):
         return render(self.request,template_name,context)
 
 class IndustriesByRegionSector(LoginRequiredMixin,ListView):
-    template_name = "admin/company/companies_for_report.html"
+    template_name = "admin/report/companies_for_report.html"
     model = Company
 
     def get_context_data(self,**kwargs):
@@ -1026,7 +999,7 @@ class IndustriesByRegionSector(LoginRequiredMixin,ListView):
         return Company.objects.all().exclude(main_category='FBPIDI')
     
     def post(self,*args,**kwargs):
-        template_name = "admin/company/companies_for_report.html"
+        template_name = "admin/report/companies_for_report.html"
         context = {}
         company = Company.objects.all().exclude(main_category='FBPIDI')
 

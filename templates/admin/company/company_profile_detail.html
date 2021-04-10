@@ -7,6 +7,10 @@
 	<!-- links for image cropper -->
 	<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 	<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/fab.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/sticky.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/ui/prism.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/extra_fab.js"></script>
 	<script src="/static/admin/assets/js/company_detail.js"></script>
 	<script>
 		var my_token = "{{csrf_token}}";
@@ -28,17 +32,68 @@
 
 			<!-- Content area -->
 			<div class="content">
-				<ul class="fab-menu fab-menu-fixed fab-menu-bottom-right" data-toggle="modal" data-target="#rating_form">
+				<!-- <ul class="fab-menu fab-menu-fixed fab-menu-bottom-right" data-toggle="modal" data-target="#rating_form">
 					<li>
 						<a class="fab-menu-btn btn bg-teal-400 btn-float rounded-round btn-icon">
 							<i class="fab-icon-open icon-star-full2"></i>
 							<i class="fab-icon-close icon-star-full2"></i>
 						</a>
 					</li>
+				</ul> -->
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title"> </h5>
+						<div class="header-elements">
+							<div class="list-icons">
+								<a href="#" data-toggle="modal" data-target="#rating_form" class="btn btn-light btn-icon">
+									<i class="icon-star-full2"></i>
+								</a>
+								<a href="{%url 'admin:activate_comapany' pk=object.id%}" class="btn btn-light btn-icon">
+									{%if object.is_active%}
+									<i class="icon-cross2"></i>
+									{%else%}
+									<i class="icon-checkmark3"></i>
+									{%endif%}
+								</a>
+								 
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<ul class="fab-menu fab-menu-fixed fab-menu-bottom-right" data-fab-toggle="click" data-fab-state="closed">
+					<li>
+						<a class="fab-menu-btn btn bg-teal-400 btn-float rounded-round btn-icon">
+							<i class="fab-icon-open icon-paragraph-justify3"></i>
+							<i class="fab-icon-close icon-cross2"></i>
+						</a>
+
+						<ul class="fab-menu-inner">
+							<li>
+								<div data-fab-label="Rate Company">
+									<a href="#" data-toggle="modal" data-target="#rating_form" class="btn btn-light rounded-round btn-icon btn-float">
+										<i class="icon-star-full2"></i>
+									</a>
+								</div>
+							</li>
+							<li>
+								<div data-fab-label="Activate/Deactivate">
+									<a href="{%url 'admin:activate_comapany' pk=object.id%}" class="btn btn-light rounded-round btn-icon btn-float">
+										{%if object.is_active%}
+										<i class="icon-cross2"></i>
+										{%else%}
+										<i class="icon-checkmark3"></i>
+										{%endif%}
+									</a>
+								</div>
+							</li>
+							 
+						</ul>
+					</li>
 				</ul>
 				<!-- Inner container -->
 				<div class="d-md-flex align-items-md-start">
-
+					
 					<!-- Left sidebar component -->
 					<div style="min-height: calc(130vh + 110px); max-height: calc(120vh + 160px);overflow-y: scroll;" class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-left wmin-300 border-0 shadow-0 sidebar-expand-md">
 
@@ -368,9 +423,10 @@
 				$(document).ready(function () {
 					$('#summernote').summernote();
 					$('.summernote').summernote();
-				});
 
-				$("#address_tab").click(function(){
+					$("#id_contact_person").prop("disabled",true);
+
+					$("#address_tab").click(function(){
 						$('select[name="region"]').find('option[value="{{object.get_company_address.region.id}}"]').attr("selected",true);
 						
 						// $("#id_region").val("{{object.get_company_address.region}}".toUpperCase());
@@ -467,6 +523,9 @@
 					document.getElementById("width").value = cropWidth;
 					document.getElementById("height").value = cropHeight;
 				}
+				});
+
+				
 				
 			</script>
 			

@@ -31,7 +31,7 @@ class Company(models.Model):
 	geo_location	= gis_models.PointField(verbose_name="Company Location",null=True)
 	ownership_form = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,
 										verbose_name="Form Of Ownership",related_name="ownership_form")
-	established_yr	= models.IntegerField(verbose_name="Established Year", default=0)
+	established_yr	= models.IntegerField(verbose_name="Established Year",default=0)
 	detail = models.TextField(verbose_name="Company Description in English",default="")
 	detail_am = models.TextField(verbose_name="Company Description in Amharic",default="")
 	contact_person	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True,related_name="contact_person") # contact person
@@ -85,6 +85,7 @@ class Company(models.Model):
 	gas_waste_mgmnt_measure_am	= models.TextField(verbose_name="What measures does your company introduced to reduce its gas and waste management? in amharic",null=True,blank=True)
 	support_required	= models.ManyToManyField(CompanyDropdownsMaster,verbose_name="What kind of support do you need to increase your production and market",related_name="major_challenges")
 	company_condition = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,verbose_name="Status of processing/ industry facility",related_name="company_status")
+	is_active = models.BooleanField(default=False)
 	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_created_by',null=True)
 	created_date	= models.DateTimeField(auto_now_add=True)
 	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_updated_by',null=True)
@@ -146,7 +147,6 @@ class CompanyAddress(models.Model):
 # Company current Investment capital based on the following attributes.
 class InvestmentCapital(models.Model):
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="investment_capital")
-	year = models.IntegerField()
 	machinery_cost	= models.FloatField(default=0)
 	building_cost	= models.FloatField(default=0)
 	working_capital	= models.FloatField(default=0)
@@ -199,7 +199,7 @@ class JobOpportunities(models.Model):
 	JOB_TYPE = [ ('','Select Job Type'),('Permanent','Permanent'),('Temporary','Temporary'),]
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="job_oportunities",null=True,blank=True)
 	project = models.ForeignKey('InvestmentProject',on_delete=models.CASCADE,related_name="project_jobs",null=True,blank=True)
-	year	= models.IntegerField(default=0,)
+	year	= models.IntegerField(default=0)
 	job_type = models.CharField(max_length=20,verbose_name="Types Of Job", choices=JOB_TYPE)
 	male	= models.IntegerField(default=0)
 	female	= models.IntegerField(default=0)	

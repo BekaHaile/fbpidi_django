@@ -6,12 +6,13 @@ from django.views.generic import (View,CreateView,ListView,UpdateView)
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster,RegionMaster
-from admin_site.forms import CompanyDropdownsMasterForm,ProjectDropdownsMasterForm,RegionMasterForm
+from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster,RegionMaster,UomMaster
+from admin_site.forms import CompanyDropdownsMasterForm,ProjectDropdownsMasterForm,RegionMasterForm,UomMasterForm
 from product.models import Dose,DosageForm
 from product.forms import DoseForm,DosageFormForm
 from collaborations.models import JobCategory,ResearchProjectCategory
 from collaborations.forms import JobCategoryForm,ResearchProjectCategoryForm
+
 
 
 class CreateCompanyDropdownsMaster(LoginRequiredMixin,CreateView):
@@ -63,7 +64,10 @@ class AllSettingsPage(LoginRequiredMixin,ListView):
         context['research_category_form'] = ResearchProjectCategoryForm()
         context['region_form'] = RegionMasterForm()
         context['region_list'] = RegionMaster.objects.all()
+        context['uom_form'] = UomMasterForm()
+        context['uom_list'] = UomMaster.objects.all()
         context['flag'] = "company_dropdown"
+        context['title'] = "Settings"
         return context
 
 
@@ -88,6 +92,7 @@ class UpdateProjectDropdownsMaster(LoginRequiredMixin,UpdateView):
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         context['flag'] = "project_dropdown"
+        context['title'] = "Settings"
         return context
 
     def form_valid(self,form):
@@ -121,6 +126,7 @@ class UpdateRegionMaster(LoginRequiredMixin,UpdateView):
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         context['flag'] = "region_dropdown"
+        context['title'] = "Settings"
         return context
 
     def form_valid(self,form):
@@ -131,3 +137,37 @@ class UpdateRegionMaster(LoginRequiredMixin,UpdateView):
     def form_invalid(self,form):
         messages.success(self.request,form.errors)
         return redirect("admin:update_region",pk=self.kwargs['pk'])
+
+
+class CreateUomMaster(LoginRequiredMixin,CreateView):
+    model = UomMaster
+    form_class = UomMasterForm
+
+    def form_valid(self,form):
+        form.save()
+        messages.success(self.request,"Unit of Mesurement Master Added Successfully")
+        return redirect("admin:settings")
+    
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:create_uom")
+
+class UpdateUomMaster(LoginRequiredMixin,UpdateView):
+    model = UomMaster
+    form_class = UomMasterForm
+    template_name = "admin/accounts/check_list_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Settings"
+        context['flag'] = "uom_dropdown"
+        return context
+
+    def form_valid(self,form):
+        form.save()
+        messages.success(self.request,"Unit of Mesurement Updated Successfully")
+        return redirect("admin:settings")
+    
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:update_uom",pk=self.kwargs['pk'])

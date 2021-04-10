@@ -1,6 +1,6 @@
 from django import forms
 
-from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster,RegionMaster
+from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster,RegionMaster,UomMaster
 
 
 class CompanyDropdownsMasterForm(forms.ModelForm):
@@ -19,6 +19,16 @@ class RegionMasterForm(forms.ModelForm):
         widgets={
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Region Name in English'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Region Name in Amharic'}),
+        }
+
+class UomMasterForm(forms.ModelForm):
+    class Meta:
+        model=UomMaster
+        fields = ('name','name_am',)
+        widgets={
+            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Unit of Measurement Short Name in English'}),
+            'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Unit of Measurement Short Name in Amharic'}),
+            'description':forms.TextInput(attrs={'class':'form-control','placeholder':'Unit of Measurement Full Name'}),
         }
 
 class ProjectDropdownsMasterForm(forms.ModelForm):

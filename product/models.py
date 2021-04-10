@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
-from admin_site.models import Category
+from admin_site.models import Category,UomMaster
 from company.models import Company
 
 UOM=(
@@ -16,7 +16,7 @@ class SubCategory(models.Model):
 									blank=True,verbose_name="Sub Sector",related_name="sub_category")
     sub_category_name = models.CharField(max_length=200,verbose_name="Product Name(English)")
     sub_category_name_am = models.CharField(max_length=200,verbose_name="Product Name(Amharic)")
-    uom = models.CharField(max_length=25,verbose_name="Unit of Measurement")
+    uom = models.ForeignKey(UomMaster,on_delete=models.RESTRICT,default=1,related_name='product_unit',verbose_name="Unit of Measurement")
     description = models.TextField(verbose_name="Description (English)",default="")
     description_am = models.TextField(verbose_name="Description (Amharic)",default="")
     icons = models.ImageField( verbose_name="Product Icon")

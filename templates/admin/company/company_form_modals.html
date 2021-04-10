@@ -12,27 +12,19 @@
 					<div class="form-group">
 						<span class="form-text text-warning" id="errors"></span>
 					</div>
+					 
 					<div class="form-group">
 						<div class="row">
-							<div class="col-sm-6">
-								{{inv_capital_form.year_inv.label}}
-								 {{inv_capital_form.year_inv}}
-							</div>
-
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								{{inv_capital_form.machinery_cost.label}}
 								 {{inv_capital_form.machinery_cost}}
 							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								{{inv_capital_form.building_cost.label}}
 								{{inv_capital_form.building_cost}}
 							</div>
 
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								{{inv_capital_form.working_capital.label}}
 								 {{inv_capital_form.working_capital}}
 							</div>
@@ -112,11 +104,10 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
-                            <div class="col-sm-6">
-								<label for="">{{employees_form.year_emp.label}}</label>
-								 {{employees_form.year_emp}}
+                            <div class="col-sm-12">
+								The Year is <script>document.write(new Date().getFullYear()-8);</script> E.C
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<label for="">{{employees_form.employment_type.label}}</label>
 								 {{employees_form.employment_type}}
 							</div>
