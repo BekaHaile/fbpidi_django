@@ -12,7 +12,7 @@ urlpatterns = [
     path("mydash/",ApiProfileView.as_view(),name="api_mydash"),
     #product related urls
     # path("product-detail/", ApiProductDetailView.as_view(),name="api_product_detail"),
-    # path("product-by-category/",ApiProductByCategoryView.as_view(),name="api_product_category"),
+    # path("product-by-category/",ApiProductByCategory.as_view(),name="api_product_category"),
     # path("product-by-main-category/",ApiProductByMainCategory.as_view(),name="api_product_category_main"),
     
     # #Company related urls    

@@ -85,7 +85,7 @@ class ApiProfileView(APIView):
 
 
 #product-by-category/  request.data['category_id']
-# class ApiProductByCategoryView(APIView):
+# class ApiProductByCategory(APIView):
 #      def get(self, request):
 #          products = Product.objects.filter(category = request.data['category_id'])
 #          return Response(

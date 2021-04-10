@@ -85,6 +85,7 @@ class RegionMaster(models.Model):
     def __str__(self):
         return self.name
 
+
 class ProjectDropDownsMaster(models.Model):
     name = models.CharField(max_length=200)
     dropdown_type = models.CharField(choices=(
@@ -109,3 +110,4 @@ class ProjectDropDownsMaster(models.Model):
         
     class Meta:
         ordering = ('-created_date',)
+

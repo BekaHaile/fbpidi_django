@@ -1,6 +1,7 @@
 import random
 import string
 
+from django.db.models import Q
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,10 +16,11 @@ from rest_framework.decorators import permission_classes, authentication_classes
 
 from admin_site.models import Category
 from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
-from collaborations.models import News
-from collaborations.api.serializers import NewsListSerializer
+
+from collaborations.api.api_views import get_paginated_data, get_paginator_info
+
 from company.models import Company
-from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer
+from company.api.serializers import CompanyInfoSerializer
 from product.models import SubCategory,Product, ProductImage, ProductPrice, Order, OrderProduct, InvoiceRecord
 from product.api.serializer import (ProductFullSerializer, ProductInfoSerializer, ProductImageSerializer, OrderSerializer, OrderProductSerializer, ShippingAddressSerializer)
 
@@ -31,16 +33,14 @@ class ApiCartSummary(APIView):
     
     def response(self, request, message = ""):
         try:    
- 
-                order = Order.objects.filter(user=request.user, ordered=False).first()           
-                products = Product.objects.all().order_by("timestamp")[:4]
-                count = 0
-                for product_order in order.products.all():
-                    count += product_order.quantity
-                
-                return { 'error':False, 'data' : {'message': message,'total_orders':count,'orders':OrderSerializer( order).data, 
-                                    'products': ProductInfoSerializer( products, many = True).data
-                                        }, 
+            order = Order.objects.filter(user=request.user, ordered=False).first()           
+            products = Product.objects.all().order_by("timestamp")[:4]
+            count = 0
+            for product_order in order.products.all():
+                count += product_order.quantity
+            return { 'error':False, 'data' : {'message': message,'total_orders':count,'orders':OrderSerializer( order).data, 
+                                'products': ProductInfoSerializer( products, many = True).data
+                                    }, 
                         }
         except Exception as e:
                 return{'error':True, 'message':str(e)}
@@ -165,22 +165,53 @@ class ApiCheckout(APIView):
         order.save()
         return Response(data = {'error':False,'invoice_code':order.invoice.code, 'message':"Successfull"})
 
-######### newly added from core.api.api_views
-class ApiProductByCategoryView(APIView):
+
+
+def filter_products_by_name(products_list, name):
+    return products_list.filter( Q(name= name) | Q(brand__brand_name__icontains = name) | Q(brand__product_type__sub_category_name__icontains=name)).distinct()
+
+class ApiProductByCategory(APIView):
      def get(self, request):
-        category = Category.objects.get(id=request.query_params['category_id'])
-        categories = Category.objects.filter(category_type = category.category_type)
-        categories = CategorySerializer( categories, many= True).data
+        try:
+            category = Category.objects.get(id=request.query_params['category_id'])
+            categories = Category.objects.filter(category_type = category.category_type)
 
-        brands = []
-        for sub_cat in category.sub_category.all():
-            for brand in sub_cat.product_category.all():
-                brands.append(brand)
-        products = Product.objects.filter(brand__in=brands)
-        products = ProductInfoSerializer(products, many = True).data
-        return Response( data ={'error':False, 'count': len(products), 'products': products, 'categories':categories, },)
+            products = Product.objects.filter(brand__product_type__category_name__id = request.query_params['category_id'])
+            if 'by_title' in request.query_params:
+                products = filter_products_by_name( products, request.query_params['by_title'])
+            
+            products = get_paginated_data(request, products) #paginating the final result  
+            return Response( data ={'error':False, 'paginator':get_paginator_info(products),
+                                    'products': ProductInfoSerializer(products, many = True).data, 'categories': CategorySerializer( categories, many= True).data, },)
+        except Exception as e:
+            return Response( data = {'error':True, 'message': f'{str(e)}'})
 
+# this is for listing products by main category(Food, Bevera, pharma or All ) and if from that page a search by_title is requested
+# to list products by Category object use the ApiProductByCategory. It also can filter by name
+class ApiProductByMainCategory(APIView):
+    def get(self, request):
+        try:
+            products = Product.objects.all()
+            categories = Category.objects.all().distinct()
 
+            if 'category' in request.query_params and request.query_params['category'] != 'All': # if All, products without filtering 
+                # category is  one of 'Food', "Beverage", "Pharmaceuticals":
+                products = products.filter(brand__product_type__category_name__category_type = request.query_params['category'])
+                categories = categories.filter(category_type = request.query_params['category'] )
+            if 'by_title' in request.query_params:
+                products = filter_products_by_name(products, request.query_params['by_title'])
+            if 'by_company' in request.query_params:
+                companies = Company.objects.filter( Q(name__in = request.query_params['by_company'].split(',') )| Q(name_am__in =request.query_params['by_company'].split(',')) )
+                products = products.filter(company__in = companies)
+
+            products=get_paginated_data(request, products)
+            return Response( data = {'error': False, 'paginator':get_paginator_info(products), 'count':len(products), 
+                                    'products':ProductInfoSerializer(products, many = True).data, 'categories':CategorySerializer(categories, many= True).data })
+    
+        except Exception as e:
+            return Response(data ={'error':True, 'message':f"{str(e)}"})
+
+        
 class ApiProductDetailView(APIView):
     def get(self, request):
         try:
@@ -190,41 +221,7 @@ class ApiProductDetailView(APIView):
             return Response(data = {'error': True, 'message':'Product Not Found!'})
 
 
-class ApiProductByMainCategory(APIView):
-    def get(self, request):
-        brands = []
-        products = []
-        if request.query_params['category'] in ['Food', "Beverage", "Pharmaceuticals"]:
-            categories = Category.objects.filter(category_type = request.query_params['category'] )
-            for category in categories:
-                for sub_cat in category.sub_category.all():
-                    for brand in sub_cat.product_category.all():
-                        brands.append(brand)
-            products = Product.objects.filter(brand__in=brands)
-        else:
-            print("All")
-            products = Product.objects.all()
-
-
-        # cat= request.query_params['category']
-        # products = []
-        # if cat == "Beverage" or cat == "Food" :
-        #     brands = []
-        #     categories = Category.objects.filter(category_type=cat)
-        #     for category in categories:
-        #         for sub_cat in category.sub_category.all():
-        #             for brand in sub_cat.product_category.all():
-        #                 brands.append(brand)
-        #     products = Product.objects.filter(fandb_category__in=brands)
-        
-        # elif cat == "Pharmaceuticals":
-        #     products= Product.objects.filter(pharmacy_category__in=Category.objects.filter(category_type="Pharmaceuticals"))
-        # elif cat == "all":
-        #     products = Product.objects.all()
-        return Response( data = {'error': False, 'count':products.count(), 'products':ProductInfoSerializer(products, many = True).data})
-
-
-#client/comp-by-main-category/
+#api/comp-by-main-category/
 class ApiCompanyByMainCategoryList(APIView):   
     #  request.query_params['company_type'] should be = manufacturer or supplier, request[product_category = "Beverage", "Food", "Pharmaceuticals", "all"]
     def get(self,request): 
