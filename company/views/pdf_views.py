@@ -47,6 +47,7 @@ class GeneratePdf(View):
 
 class GenerateCompanyToPDF(LoginRequiredMixin,View):
     def post(self, request, *args, **kwargs):
+        context = {}
         template = get_template('admin/report/pdf_template.html')
         company = Company.objects.get(id=self.request.POST['pk'])
         inv_cap =  InvestmentCapital.objects.filter(company=company).annotate(
@@ -54,7 +55,11 @@ class GenerateCompanyToPDF(LoginRequiredMixin,View):
                         building = Sum('building_cost'),
                         working = Sum('working_capital')
                     )
-        context = {'company':company,'inv_capital':inv_cap}
+        today = datetime.datetime.today()
+        this_year = today.year
+        ethio_year = (this_year-8)
+        context = {'company':company,'inv_capital':inv_cap,'years':{'this_yr':ethio_year-1,'last_yr':ethio_year-2,'prev_yr':ethio_year-3}}
+        print(context)
         html = template.render(context)
         pdf = render_to_pdf('admin/report/pdf_template.html', context)
         if pdf:

@@ -27,18 +27,13 @@ from company.models import *
 
 def return_years(company):
     YEAR_CHOICES=[('','Select Year'),]
-    YEAR_CHOICES += [(r,r) for r in range(company.established_year, datetime.date.today().year+8)]
+    YEAR_CHOICES += [(r,r) for r in range(company.established_yr, datetime.datetime.today().year-7)]
     return YEAR_CHOICES
 
 YEAR_CHOICES=[('','Select Year'),]
-YEAR_CHOICES += [(r,r) for r in range(2000, datetime.date.today().year+8)]
+YEAR_CHOICES += [(r,r) for r in range(2000, datetime.datetime.today().year-7)]
 
 class InvestmentCapitalForm(forms.ModelForm):
-
-    year_inv = forms.IntegerField(label="Year",widget=forms.Select( 
-        choices=YEAR_CHOICES,
-                attrs={'class':'form-control form-control-uniform'}))
-
     class Meta:
         model = InvestmentCapital
         fields = (
@@ -64,13 +59,16 @@ class CertificateForm(forms.ModelForm):
         }
 
 class EmployeesForm(forms.ModelForm):
-    year_emp = forms.IntegerField(label="Year",widget=forms.Select(choices=YEAR_CHOICES,
-                attrs={'class':'form-control form-control-uniform'}))
+
+    # year_emp = forms.IntegerField(label="Year",widget=forms.Select(choices=return_years(company_obj),attrs={
+    #             'class':'form-control form-control-uniform'}))
+
+    
     class Meta:
         model=Employees
-        fields = ('employment_type','female','male',)
+        fields = ('employment_type','female','male')
         widgets = {
-            'employment_type':forms.Select(attrs={'class':'form-control form-control-uniform','disabled':'true'}),
+            'employment_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_male")'}),
             'female':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_female")'}),
         }

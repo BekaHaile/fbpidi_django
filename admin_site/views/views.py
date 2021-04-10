@@ -20,11 +20,11 @@ from chat.models import ChatGroup, ChatMessage
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
 from collaborations.models import *
-from admin_site.decorators import company_created
+from admin_site.decorators import company_created,company_is_active
 
 # 
 # INDEX VIEW
-decorators = [never_cache, company_created()]
+decorators = [never_cache, company_created(),company_is_active()]
 @method_decorator(decorators,name='get')
 class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):

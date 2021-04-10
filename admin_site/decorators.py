@@ -23,13 +23,13 @@ def company_created():
     return decorator
 
 
-def check_active_company():
+def company_is_active():
     def decorator(view_func):
         def wrapper(request,*args,**kwargs):
             if request.user.is_company_admin:
                 if request.user.get_company() != None:
                     if request.user.get_company().is_active == False:
-                        return
+                        return redirect("admin:inactive_company")
                     else:
                         return view_func(request,*args,**kwargs)
                 else:

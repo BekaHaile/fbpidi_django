@@ -16,7 +16,7 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,
 from admin_site.views.views import (AdminIndex,  Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice,  DetailPoll)
 from admin_site.views.delete_view import DeleteView
-
+from admin_site.views.errors import *
 from admin_site.views.dropdowns import *
 
 from collaborations.views import (  CreateNews, EditNews, AdminNewsList,AdminCompanyEventList,
@@ -359,7 +359,9 @@ class CustomAdminSite(admin.AdminSite):
             # path('researchprojectcategorys-detail/<model_name>/<id>',wrap(ResearchCategoryDetail.as_view()),name='researchprojectcategory_detail'),
             # path('researchprojectcategorys-form',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
             # path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
-            
+            path("activate-company/<pk>/",wrap(activate_company),name="activate_comapany"),
+            path("404-page/",wrap(error_404),name="error_404"),
+            path("company-inactive-wait/",wrap(company_not_active),name="inactive_company"),
             path('anounce-Detail/<id>/',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
             path('anounce-List',wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),
             path('anounce-form',wrap(CreatAnnouncementAdmin.as_view()),name="anounce_Create"),

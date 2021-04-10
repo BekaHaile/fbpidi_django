@@ -147,7 +147,6 @@ class CompanyAddress(models.Model):
 # Company current Investment capital based on the following attributes.
 class InvestmentCapital(models.Model):
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="investment_capital")
-	year = models.IntegerField()
 	machinery_cost	= models.FloatField(default=0)
 	building_cost	= models.FloatField(default=0)
 	working_capital	= models.FloatField(default=0)
@@ -200,7 +199,7 @@ class JobOpportunities(models.Model):
 	JOB_TYPE = [ ('','Select Job Type'),('Permanent','Permanent'),('Temporary','Temporary'),]
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="job_oportunities",null=True,blank=True)
 	project = models.ForeignKey('InvestmentProject',on_delete=models.CASCADE,related_name="project_jobs",null=True,blank=True)
-	year	= models.IntegerField(default=0,)
+	year	= models.IntegerField(default=0)
 	job_type = models.CharField(max_length=20,verbose_name="Types Of Job", choices=JOB_TYPE)
 	male	= models.IntegerField(default=0)
 	female	= models.IntegerField(default=0)	

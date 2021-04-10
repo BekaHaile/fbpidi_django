@@ -392,16 +392,16 @@ $(document).ready(function () {
             }
         });
     });
-    $("#id_year_emp").change(function(){
-        var year = $(this).val();
-        if(year != ""){
-            $("#id_employment_type").prop('disabled',false);
-        }else{
-            $("#id_employment_type").prop('disabled',true);
-        }
+    // $("#id_year_emp").change(function(){
+    //     var year = $(this).val();
+    //     if(year != ""){
+    //         $("#id_employment_type").prop('disabled',false);
+    //     }else{
+    //         $("#id_employment_type").prop('disabled',true);
+    //     }
         
         
-    });
+    // });
     $("#id_employment_type").change(function(){
         var year = $("#id_year_emp").val();
         var emp_typ = $(this).val();
