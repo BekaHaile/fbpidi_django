@@ -22,6 +22,10 @@ from company.forms import *
 from collaborations.models import *
 from chat.models import  ChatMessages
 
+today = datetime.datetime.today()
+this_year = today.year
+ethio_year = (this_year-8)
+
 class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
     model=Company
     form_class = CompanyProfileForm
@@ -87,7 +91,7 @@ class CreateMyCompanyDetail(LoginRequiredMixin,UpdateView):
         context = super().get_context_data(**kwargs)
         context['inv_capital_form'] = InvestmentCapitalForm
         context['certificate_form'] = CertificateForm
-        context['employees_form'] = EmployeesForm
+        context['employees_form'] = EmployeesForm 
         context['job_created_form'] = JobCreatedForm
         context['edication_form'] = EducationStatusForm
         context['female_posn_form'] = FemalesInPositionForm
@@ -132,7 +136,7 @@ class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
         context = super().get_context_data(**kwargs)
         context['inv_capital_form'] = InvestmentCapitalForm
         context['certificate_form'] = CertificateForm
-        context['employees_form'] = EmployeesForm
+        context['employees_form'] = EmployeesForm 
         context['job_created_form'] = JobCreatedForm
         context['edication_form'] = EducationStatusForm
         context['female_posn_form'] = FemalesInPositionForm
@@ -176,7 +180,7 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
         context = super().get_context_data(**kwargs)
         context['inv_capital_form'] = InvestmentCapitalForm
         context['certificate_form'] = CertificateForm
-        context['employees_form'] = EmployeesForm
+        context['employees_form'] = EmployeesForm 
         context['job_created_form'] = JobCreatedForm
         context['edication_form'] = EducationStatusForm
         context['female_posn_form'] = FemalesInPositionForm
@@ -233,7 +237,7 @@ class CompaniesDetailView(LoginRequiredMixin,UpdateView):
         context['address_form'] = CompanyAddressForm
         context['inv_capital_form'] = InvestmentCapitalForm
         context['certificate_form'] = CertificateForm
-        context['employees_form'] = EmployeesForm
+        context['employees_form'] = EmployeesForm 
         context['job_created_form'] = JobCreatedForm
         context['edication_form'] = EducationStatusForm
         context['female_posn_form'] = FemalesInPositionForm
@@ -291,14 +295,11 @@ class CreateInvestmentCapital(LoginRequiredMixin,CreateView):
 
     def form_valid(self,form):
         try:
-            if InvestmentCapital.objects.filter(year=form.cleaned_data.get("year_inv"),company=Company.objects.get(id=self.kwargs['company'])).exists():
-                return JsonResponse({'error': True, 'message': 'Data For this Year Already Exists'})
-            else:
-                company_inv_cap = form.save(commit=False)
-                company_inv_cap.company = Company.objects.get(id=self.kwargs['company'])
-                company_inv_cap.year = form.cleaned_data.get('year_inv')
-                company_inv_cap.save()
-                return JsonResponse({'error': False, 'message': "Sucessfully Added Investment Capital"})
+            company_inv_cap = form.save(commit=False)
+            company_inv_cap.company = Company.objects.get(id=self.kwargs['company'])
+            company_inv_cap.year = form.cleaned_data.get('year_inv')
+            company_inv_cap.save()
+            return JsonResponse({'error': False, 'message': "Sucessfully Added Investment Capital"})
         except Company.DoesNotExist:
             return JsonResponse({'error': True, 'message': "Company Does Not Exist"})
         except IntegrityError as e:
@@ -346,11 +347,11 @@ class CreateEmployees(LoginRequiredMixin,View):
         form = EmployeesForm(self.request.POST)
         if form.is_valid():
             try:
-                if Employees.objects.filter(year=form.cleaned_data.get("year_emp"),employment_type=form.cleaned_data.get('employment_type'), company=Company.objects.get(id=self.kwargs['company'])).exists():
+                if Employees.objects.filter(year=ethio_year,employment_type=form.cleaned_data.get('employment_type'), company=Company.objects.get(id=self.kwargs['company'])).exists():
                     return JsonResponse({'error': True, 'message': 'Data For this Year Already Exists'})
                 else:
                     employee = form.save(commit=False)
-                    employee.year = form.cleaned_data.get('year_emp')
+                    employee.year = ethio_year
                     employee.company = Company.objects.get(id=self.kwargs['company'])
                     employee.save()
                     return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
@@ -498,8 +499,8 @@ class CheckYearField(LoginRequiredMixin,View):
                 return JsonResponse({"error":False,"message":"You are good to go"})
         elif self.kwargs['model'] == "employee":
             try:
-                employee = Employees.objects.get(company=company,year=self.kwargs['year'],employment_type=self.request.POST['emp_type']) 
-                return JsonResponse({"error":True,"message":"Data For this Year Exists",
+                employee = Employees.objects.get(company=company,year=ethio_year,employment_type=self.request.POST['emp_type']) 
+                return JsonResponse({"error":True,"message":"Data For {} Exists".format(ethio_year),
                                     'data':json.loads(serializers.serialize('json',[employee],ensure_ascii=False))[0]})
             except Employees.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
@@ -953,6 +954,7 @@ class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
         if form.is_valid():
             fbpidi = form.save(commit=False)
             fbpidi.main_category = "FBPIDI"
+            fbpidi.is_active = True
             fbpidi.contact_person = self.request.user
             fbpidi.save()
             return redirect("admin:index")
@@ -977,6 +979,7 @@ class ViewFbpidiCompany(LoginRequiredMixin,UpdateView):
 
     def form_valid(self,form):
         fbpidi = form.save(commit=False)
+        fbpidi.is_active = True
         fbpidi.last_updated_by=self.request.user
         fbpidi.last_updated_date=timezone.now()
         fbpidi.save()
@@ -1039,7 +1042,17 @@ class UpdateSliderImage(LoginRequiredMixin,UpdateView):
  
 #  Company Report Views
 
-
+def activate_company(request,pk):
+    try:
+        company = Company.objects.get(id=pk)
+        if company.is_active == False:
+            company.is_active = True
+        else:
+            company.is_active = False
+        company.save()
+        return redirect("admin:company_detail",pk=pk)
+    except Company.DoesNotExist:
+        return redirect("admin:error_404")
 
 
 ############## newly added, delete this commet after everything has worked right

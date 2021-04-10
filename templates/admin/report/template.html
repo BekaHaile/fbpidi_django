@@ -1,0 +1,134 @@
+<ol id="list">
+  <li><b>GPS Location Reading:</b>({{company.geo_location.x}},{{company.geo_location.y}})</li>
+  <li><b>Company Name:</b> {{company.name}}</li>
+  <li><b>Company Logo</b><img height="200" width="200" src="{{company.logo.path}}" alt="" srcset=""></li>
+  <li><b>Form of Ownership:</b> {{company.ownership_form}}</li>
+  <li><b>Year of Establishment (E.C):   </b>{{company.established_yr}}</li>
+  <li><b>Company Address</b> </li>
+  <div class="row">
+      <div class="col-sm-6 col-md-6 col-lg-6">
+          <ol>
+              <li><b>Region :</b>{{company.company_address.region}}</li>
+              <li><b>City/Town :</b>{{company.company_address.city_town}}</li>
+              <li><b>Sub-City/Zone :</b>{{company.company_address.subcity_zone}}</li>
+              <li><b>Woreda :</b>{{company.company_address.woreda}}</li>
+              <li><b>Kebele :</b>{{company.company_address.kebele}}</li>
+          </ol>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+          <ol>
+              <li><b>Local Area Name :</b>{{company.company_address.local_area}}</li>
+              <li><b>Phone Number :</b>{{company.company_address.phone_number}}</li>
+              <li><b>Fax :</b>{{company.company_address.fax}}</li>
+              <li><b>Email :</b>{{company.company_address.email}}</li>
+              <li><b>Website :</b>{{company.company_address.facebooklink}}</li>
+          </ol>
+
+      </div>
+  </div>
+  
+  <li><b>Contact Person</b> </li>
+  <ol>
+      <li><b>Name :</b>{{company.contact_person.first_name|title}} {{company.contact_person.last_name|title}}</li>
+      <li><b>Responsiblity :</b>{{company.contact_person.company_admin.designation}}</li>
+      <li><b>Mobile :</b>{{company.contact_person.phone_number}}</li>
+      <li><b>Email :</b>{{company.contact_person.email}}</li>
+  </ol>
+  <li><b>Current Total Investment Capital</b>
+      {%for i in inv_capital%}
+      ETB {{i.get_inv_cap}}
+      {%endfor%}
+  </li>
+  <ol>
+      <li><b>Machinery Cost :</b>{%for i in inv_capital%}
+          ETB {{i.machinery}}
+          {%endfor%}</li>
+      <li><b>Building Cost :</b>{%for i in inv_capital%}
+          ETB {{i.building}}
+          {%endfor%}</li>
+      <li><b>Working Capital :</b>{%for i in inv_capital%}
+          ETB {{i.working}}
+          {%endfor%}</li>
+          
+  </ol>
+  <li><b>Does The Company Have Expansion Plan?: </b> {%if company.expansion_plan != 'No'%}<b>Yes</b>{%else%}<b>No</b>{%endif%}</li>
+      <ul>
+          {%if company.expansion_plan != 'No'%}
+          <p>{{company.expansion_plan|safe}}</p>
+          {%endif%}
+      </ul>
+  <li><b>Does The Company Have Valid Certificate of Comptency? : </b>{%if company__certificates != None%}<b>Yes</b>{%else%}<b>No</b>{%endif%}</li>
+  <ul>
+      {%if company__certificates != None%}
+      <p>{{company__certificates|safe}}</p>
+      {%endif%}
+  </ul>
+  <li><b>Do you have valid trade license and market authorization? : </b>
+              {%if company.trande_license != None%}No{%else%}Yes{%endif%}</li>
+              <ul>
+                  {%if company.trade_license%}
+                  <a target="_blank" href="{{company.trade_license.path}}"> Open File</a>
+                  {%endif%}
+              </ul>
+  <li><b>Working Hours Per day : </b>{{company.working_hours.name}} hours</li>
+  <li><b>Types of Products & Production capacity</b></li>
+  <table border="1">
+      <thead>
+          <tr>
+              <th>Product</th>
+              <th>Uom</th>
+              <th>Installed Production capacity</th> 
+              <th>Attainable Prodution capacity</th>
+              <th>Actual Production capacity</th>
+              <th>Production Plan</th>
+              <th>Average Extraction Rate</th>
+          </tr>
+      </thead>
+      <tbody>
+          {%for pc in company.company_production_capacity.all%}
+          <tr>
+              <td>{{pc.product.sub_category_name}}</td>
+              <td>{{pc.product.uom.name}}</td>
+              <td>{{pc.install_prdn_capacity}}</td>
+              <td>{{pc.atnbl_prdn_capacity}}</td>
+              <td>{{pc.install_prdn_capacity}}</td>
+              <td>{{pc.production_plan}}</td>
+              <td>{{pc.extraction_rate}}</td>
+          </tr>
+          {%endfor%}
+      </tbody>
+  </table>
+  <li><b>Inputs needs by products type annually</b></li>
+  <table border="1">
+      <thead>
+          <tr>
+              <th rowspan="1">Product</th>
+              <th rowspan="1">Uom</th>
+              <th rowspan="1">Input</th> 
+              <th rowspan="1">Amount</th>
+              <!-- <th colspan="1">Source of input</th> -->
+          </tr>
+          <!-- <tr>
+              <th colspan="3">Local</th>
+              <th>Import</th>
+          </tr> -->
+      </thead>
+      <tbody>
+          {%for pc in company.company_product_input.all%}
+          <tr>
+              <td>{{pc.product.sub_category_name}}</td>
+              <td>{{pc.product.uom.name}}</td>
+              <td>{{pc.input_name}}</td>
+              <td>{{pc.atnbl_prdn_capacity}}</td>
+              <td>{{pc.install_prdn_capacity}}</td>
+              <td>{{pc.production_plan}}</td>
+              <td>{{pc.extraction_rate}}</td>
+          </tr>
+          {%endfor%}
+      </tbody>
+  </table>
+  <li><b></b></li>
+  <li><b></b></li>
+  <li><b></b></li>
+  <li><b></b></li>
+</ol>
