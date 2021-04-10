@@ -1,11 +1,13 @@
 from rest_framework import serializers
-from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
 from company.models import Company, CompanyAddress, Certificates,  InvestmentProject
-from product.models import Brand, SubCategory
 from accounts.api.serializers import CompanyAdminSerializer, UserInfoSerializer
-from admin_site.models import Category
-from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
-# from product.api.serializer import ProductInfoSerializer
+from product.models import Category, SubCategory, Brand
+
+# these serializers are in admin_site because if we put them in product.api.serializer there will be circular import with company serializers 
+from admin_site.api.serializers import CategorySerializer, SubCategorySerializer, BrandSerializer
+
+
+
 class CompanyAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompanyAddress
@@ -49,28 +51,3 @@ class InvestmentProjectserializer(serializers.ModelSerializer):
     class Meta:
         model = InvestmentProject
         fields = "__all__"
-
-
-    
-
-    
-    # location =
-    # phone_number =
-    # email =
-    # city_town =
-    # 'facebook_link','twiter_link','google_link',
-    # 'company_type',
-    # 'company_type_am',
-    # 'number_of_employees',
-    # 'postal_code',
-    # 'product_category_name',
-    # 'product_category','color',
-
-
-class BrandSerializer(serializers.ModelSerializer):
-    product_type = SubCategorySerializer
-    class Meta:
-        model = Brand
-        fields = ( 'product_type', 'brand_name','brand_name_am')
-
-

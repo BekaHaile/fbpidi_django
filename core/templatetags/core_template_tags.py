@@ -135,8 +135,8 @@ def user_liked_company(user, company):
     return True if user.companylike_set.filter(company = company).exists()  else  False
 
 @register.simple_tag
-def get_fbpidi_id():
-    return Company.objects.get(main_category="FBPIDI").id if Company.objects.filter(main_category = "FBPIDI") else None
+def get_fbpidi():
+    return Company.objects.get(main_category="FBPIDI") if Company.objects.filter(main_category = "FBPIDI") else None
 
 
 @register.simple_tag

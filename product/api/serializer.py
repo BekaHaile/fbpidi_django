@@ -1,11 +1,11 @@
 from rest_framework import serializers
+from product.models import Category, SubCategory, Brand, Product, ProductImage, ProductPrice, Order, OrderProduct, ShippingAddress, InvoiceRecord
 
 from accounts.api.serializers import CompanyAdminSerializer, UserSerializer
+from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer
+# these serializers are in admin_site because if we put them in product.api.serializer there will be circular import with company serializers 
+from admin_site.api.serializers import CategorySerializer, SubCategorySerializer, BrandSerializer
 
-from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
-from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer, BrandSerializer
-
-from product.models import Product, ProductImage, ProductPrice, Order, OrderProduct, ShippingAddress, InvoiceRecord
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,12 +19,12 @@ class ProductPriceSerializer(serializers.ModelSerializer):
         fields = ('price', 'start_date','end_date')
 
 
-class ProducteFullSerializer(serializers.ModelSerializer):
+class ProductFullSerializer(serializers.ModelSerializer):
     company = CompanyInfoSerializer(read_only=True)
-    fandb_category = BrandSerializer(read_only=True)
-    pharmacy_category = CategorySerializer(read_only=True)
-    more_images = serializers.SerializerMethodField('get_more_images')
+    brand = BrandSerializer(read_only = True)
     latest_price = ProductPriceSerializer(source='price', many = False)
+    more_images = serializers.SerializerMethodField('get_more_images')
+    
     class Meta:
         model = Product
         fields = "__all__"
@@ -38,13 +38,12 @@ class ProducteFullSerializer(serializers.ModelSerializer):
 
 class ProductInfoSerializer(serializers.ModelSerializer):
     company = CompanyInfoSerializer(read_only=True)
-    fandb_category = BrandSerializer(read_only = True)
-    pharmacy_category = CategorySerializer
+    brand = BrandSerializer(read_only = True)
     latest_price = ProductPriceSerializer(source='price', many = False)
     class Meta:
         model  = Product
-        fields = ('company','name', 'name_am', 'fandb_category', 'pharmacy_category', 'latest_price', 'uom', 'quantity',
-                'therapeutic_group','dose','description','description_am', 'image')
+        fields = ('id','name', 'name_am','latest_price', 'company', 'brand', 
+                'therapeutic_group','dose','description','description_am', 'image', 'created_date')
 
 
 class OrderProductSerializer(serializers.ModelSerializer):

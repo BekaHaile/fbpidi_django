@@ -76,6 +76,7 @@ class CompanyDropdownsMaster(models.Model):
     class Meta:
         ordering = ('-created_date',)
 
+
 class RegionMaster(models.Model):
     name = models.CharField(max_length=255,verbose_name="Region Name in English")
     name_am = models.CharField(max_length=255,verbose_name="Region Name in Amharic")

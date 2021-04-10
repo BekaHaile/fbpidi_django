@@ -993,6 +993,7 @@ class ProductByCategoryView(ListView):
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['cat_id']).category_type)
+      
         return context
 
     def get_queryset(self):
@@ -1028,7 +1029,7 @@ class ProductByMainCategory(ListView):
                 for sub_cat in category.sub_category.all():
                     for brand in sub_cat.product_category.all():
                         brands.append(brand)
-            return Product.objects.filter(brand__in=brands)
+            return Product.objects.filter(brand__in = brands)
         elif self.kwargs['option'] == "Food":
             categories = Category.objects.filter(category_type="Food")
             for category in categories:
