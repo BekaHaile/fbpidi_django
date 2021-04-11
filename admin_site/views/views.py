@@ -22,13 +22,14 @@ from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 from collaborations.models import *
 from admin_site.decorators import company_created,company_is_active
 
-# 
+
 # INDEX VIEW
 decorators = [never_cache, company_created(),company_is_active()]
 @method_decorator(decorators,name='get')
 class AdminIndex(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         return render(self.request,"admin/index.html",{'title':'FBP-IIMS'})
+        
 
 @method_decorator(decorators,name='dispatch')
 class Polls(LoginRequiredMixin, ListView):
@@ -62,67 +63,11 @@ class CreatePoll(LoginRequiredMixin, CreateView):
 
 
 
-# class CreatePoll(LoginRequiredMixin,View):
-#     def get(self,*args,**kwargs):
-#         check_user_has_company(self.request.user)
-#         return render(self.request,'admin/poll/create_poll.html',{'form':CreatePollForm})
-#     def post(self,*args,**kwargs):
-#         form = CreatePollForm(self.request.POST)  
-#         try:      
-#             if form.is_valid():
-#                 poll =form.save(commit=False)
-#                 poll.created_by = self.request.user
-#                 poll.save()
-#                 messages.success(self.request,"Poll was Successfully Created!")
-#                 return redirect("admin:admin_polls")
-#             else:
-#                 messages.warning(self.request, "Error! Poll was not Created!" )
-#                 return redirect("admin:admin_polls")    
-#         except Exception as e:
-#             print("there is an exception", e)
-#             return redirect("admin:admin_polls")
-
 @method_decorator(decorators,name='dispatch')
 class DetailPoll(LoginRequiredMixin, DetailView):
     model = PollsQuestion
     template_name = "admin/poll/admin_poll_detail.html"
     context_object_name  = "poll"
-
-    # def get(self, *args, **kwargs):  
-    #     if self.kwargs['id'] :
-    #         try:
-    #             poll = PollsQuestion.objects.get(id = self.kwargs['id']  )
-    #             return render(self.request, , {'poll':poll,})
-
-    #         except Exception as e:
-    #             print("exception while showing poll Detail", str(e))
-    #             messages.warning(self.request, "Poll not found")
-    #             return redirect("admin:admin_polls") 
-
-    #     else:
-    #         messages.warning(self.request, "Nothing selected!")
-    #         return redirect("admin:admin_polls")
-
-
-# class AddChoice(LoginRequiredMixin, CreateView):
-#     model = Choices
-#     form_class = CreateChoiceForm
-#     template_name = 'admin/poll/add_choice.html'
-#     template_name_suffix  = '_create_form'
-
-#     def form_valid(self, form):
-#         try:
-#             poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
-#             choice = form.save(commit=False)
-#             choice.created_by = self.request.user
-#             choice.save()
-#             poll.choices.add(choice)
-#             poll.save()
-#             messages.success(self.request,"Choice Successfully Created!")
-#             return redirect("admin:admin_polls")
-
-#         except Exception as e:
-#             print("Poll not found ", e)
 
 @method_decorator(decorators,name='dispatch')
 class AddChoice(LoginRequiredMixin, CreateView):
@@ -166,27 +111,6 @@ class AddChoice(LoginRequiredMixin,View):
         except Exception as e:
             print("Exception at add choice post ",e)
             return redirect('admin:admin_polls')
-
-
-# class EditPoll(LoginRequiredMixin, UpdateView):
-#     model = PollsQuestion
-#     form_class = CreatePollForm
-#     template_name = "admin/poll/create_poll.html"
-#     template_name_suffix = '_update_form'
-#     context_object_name = 'poll'
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['edit'] = True
-#         return context
-        
-#     def form_valid(self, form):
-#         poll = form.save(commit = False)
-#         poll.last_updated_by = self.request.user
-#         poll.last_updated_date = timezone.now()
-#         poll.save()
-#         messages.success(self.request,"Poll has been Edited Successfully!")
-#         return redirect("admin:admin_polls")
 
     
 @method_decorator(decorators,name='dispatch')

@@ -13,7 +13,6 @@ from company.models import Company
 
 
 class CategoryForm(forms.ModelForm):
-
     class Meta:
         model = Category
         fields = ('category_type','category_name','category_name_am','icons')
@@ -343,7 +342,7 @@ class ProductInquiryForm(forms.ModelForm):
             'sender_email':forms.TextInput(attrs={'class':'form-control','placeholder':'Your Email '}),
             'subject':forms.TextInput(attrs={'class':'form-control','placeholder':'subject '}),
             'quantity':forms.NumberInput(attrs={'class':'form-control'}),
-            'content': forms.Textarea(attrs={'class':'summernote','placeholder':'Your inquiry content'}),
+            'content': forms.Textarea(attrs={'class':'summernote form-control','placeholder':'Your inquiry content'}),
             'attachement':forms.FileInput(attrs={'class':'form-control'})
         }
         

@@ -2,35 +2,31 @@
 import os
 import json
 import datetime
-from django.utils import timezone
- 
-from django.shortcuts import get_object_or_404
 
+from django.views import View
 from django.http import Http404
 from django.urls import reverse
-from django.views import View
-from django.db.models import Q, Count
-
-from django.shortcuts import render, redirect, reverse
+from django.utils import timezone 
 from django.contrib import messages
-
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
-									 #redirect with context 
- 
-from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
-
-from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
+from django.db.models import Q, Count
+from django.core.mail import EmailMessage
+from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.shortcuts import render, redirect, reverse
 from accounts.models import User, CompanyAdmin, Company
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
-from django.core.paginator import Paginator
 from django.http import FileResponse, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
+
+
+from admin_site.decorators import company_created,company_is_active
 from accounts.email_messages import sendEventNotification, sendEventClosedNotification, sendTenderEmailNotification
-from wsgiref.util import FileWrapper
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
+from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
+from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
 from collaborations.forms import (BlogsForm, BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm,ForumQuestionForm,CommentForm,CommentReplayForm,NewsForm, CompanyEventForm, EventParticipantForm, 
 								AnnouncementForm,ResearchForm,ResearchProjectCategoryForm, TenderApplicantForm, PollsForm, CreatePollForm, CreateChoiceForm, DocumentForm )
 
@@ -38,14 +34,11 @@ from collaborations.models import ( PollsQuestion, Choices, PollsResult, Tender,
 									JobCategory,ForumQuestion, Faqs, Vacancy, JobApplication, JobCategory, News, NewsImages, ForumComments, 
 									CommentReplay,Announcement,AnnouncementImages,Research,ResearchProjectCategory, Document)
 
-from collaborations.api.serializers import NewsListSerializer
-
-from django.http import JsonResponse
-
 ### a dictionay holding model names with model objects, Used to hold a model object for a string
 models = { 'Research':Research,'Announcement':Announcement, 'Blog':Blog, 'BlogComment':BlogComment, 'Choice':Choices, 'Event':CompanyEvent, 'Tender':Tender, 'TenderApplicant':TenderApplicant, 
             'Forums':ForumQuestion, 'Forum Comments':ForumComments, 'Polls':PollsQuestion, 'News':News, 'Vacancy':Vacancy, 'Job Application':JobApplication, 'Job Category':JobCategory }
 
+decorators = [never_cache, company_created(),company_is_active()]
 
 
 def related_company_title(model_name, obj):
@@ -246,6 +239,7 @@ def change_to_datetime(calender_date):
 
 
 ########## tender related views
+@method_decorator(decorators,name='dispatch')
 class CreateTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:    
@@ -296,7 +290,6 @@ def check_tender_startdate(request, tenders):
             else:
                 print("########## could not send email to open tender ")                 
 
-
 def check_tender_enddate(request, tenders):
     today = timezone.now().date()
     for tender in tenders:
@@ -307,7 +300,7 @@ def check_tender_enddate(request, tenders):
             else:
                 print("could not send email to close tender")                
 
-
+@method_decorator(decorators,name='dispatch')
 class TenderList(LoginRequiredMixin, ListView):
     model = Tender
     template_name = "admin/collaborations/tenders.html"
@@ -321,6 +314,7 @@ class TenderList(LoginRequiredMixin, ListView):
             return Tender.objects.filter(company = self.request.user.get_company()) 
 
 
+@method_decorator(decorators,name='dispatch')
 class TenderDetail(LoginRequiredMixin, DetailView):
     model = Tender
     context_object_name = 'tender'
@@ -330,21 +324,7 @@ class TenderDetail(LoginRequiredMixin, DetailView):
         context['form'] = TenderForm
         return context
 
- 
-class ManageBankAccount(LoginRequiredMixin,View):
-	def post(self,*args,**kwargs):
-		tender = Tender.objects.get(id =self.kwargs['id'])
-		if tender:
-			if self.kwargs['option'] == 'remove':
-				tender.bank_account.remove( CompanyBankAccount.objects.get(id = self.request.POST['remove_bank_account']) )
-			else:
-				tender.bank_account.add( CompanyBankAccount.objects.get(id = self.request.POST['relate_bank_account']) )
-			tender.save()
-			return redirect(f"/admin/edit_tender/{self.kwargs['id']} ")
-		messages.warning(self.request, "Error while Managing Bank Account!")
-		return redirect("admin:tenders")
-
-
+@method_decorator(decorators,name='dispatch')
 class EditTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
@@ -459,7 +439,6 @@ class ApplyForCompanyTender(View):
             return render(self.request, "frontpages/company/company_tender_detail.html", {'obj':tender,'object':tender.company, 'applied':True})
 
 
-
 class ApplyForTender(View):
 	def post(self, *args, **kwargs):
             tender= Tender.objects.get(id = self.kwargs['id']) 
@@ -473,7 +452,7 @@ class ApplyForTender(View):
 
 
 ############ News
-
+@method_decorator(decorators,name='dispatch')
 class CreateNews(LoginRequiredMixin, View):
     def get(self,*args,**kwargs):
         return render(self.request,'admin/collaborations/create_news.html',{'form':NewsForm})
@@ -493,6 +472,7 @@ class CreateNews(LoginRequiredMixin, View):
             messages.warning(self.request, "Error! News not Created!")
 
 
+@method_decorator(decorators,name='dispatch')
 class EditNews(LoginRequiredMixin, View):
     def get(self,*args,**kwargs):
         try:   
@@ -525,7 +505,7 @@ class EditNews(LoginRequiredMixin, View):
             else:
                 messages.warning(self.request, "Error! News not Edited!")
 
-
+@method_decorator(decorators,name='dispatch')
 class AdminNewsList(LoginRequiredMixin, ListView):
     model = News
     template_name = "admin/collaborations/admin_news_list.html"
@@ -591,6 +571,7 @@ class CustomerNewsDetail(View):
 
 ############ Event
 ###Admin side
+@method_decorator(decorators,name='dispatch')
 class AdminCompanyEventList(LoginRequiredMixin, ListView):
     model = CompanyEvent
     template_name = "admin/collaborations/admin_companyevent_list.html"
@@ -603,6 +584,7 @@ class AdminCompanyEventList(LoginRequiredMixin, ListView):
             return CompanyEvent.objects.filter(company =  self.request.user.get_company())
 
 
+@method_decorator(decorators,name='dispatch')
 class CreateCompanyEvent(LoginRequiredMixin, CreateView):
         model = CompanyEvent
         form_class = CompanyEventForm
@@ -632,6 +614,7 @@ def change_to_datetime(calender_date):
     str_date = datetime.datetime.strptime(calender_date, '%m/%d/%Y').strftime('%Y-%m-%d')
     return datetime.datetime.strptime(str_date,'%Y-%m-%d' )
 
+@method_decorator(decorators,name='dispatch')
 class EditCompanyEvent(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):
         return render(self.request, "admin/collaborations/create_events.html",{'edit':True,'event':CompanyEvent.objects.get(id = self.kwargs['pk'])})
@@ -776,6 +759,7 @@ class EventParticipation(LoginRequiredMixin, View):
 
 #########Document
 ###Admin Side
+@method_decorator(decorators,name='dispatch')
 class CreateDocument(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
       
@@ -794,6 +778,7 @@ class CreateDocument(LoginRequiredMixin, View):
             return render(self.request, "admin/document/create_document.html", {'form':DocumentForm})
         
 
+@method_decorator(decorators,name='dispatch')
 class EditDocument(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
@@ -819,7 +804,9 @@ class EditDocument(LoginRequiredMixin, View):
         messages.success(self.request,'Successfully Edited the document!')
         return render(self.request, f"admin/document/list_document_by_category.html", {'documents':Document.objects.filter(category = document.category), 'categories': Document.DOC_CATEGORY})
         
-       
+
+
+@method_decorator(decorators,name='dispatch')      
 class DocumentListing(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         documents = []

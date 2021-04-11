@@ -85,9 +85,11 @@
                                         </div>
 
                                         <div class="row mt-5 mb-5" style="margin-bottom: 20px;">
-                                            <label class="form-label text-dark">Quantity *</label>
-                                            <div class="col-lg-3">
-                                                {{form.quantity}}
+                                            <label class="form-label text-dark">Quantity * </label>
+                                            <div class="col-lg-3 row">
+
+                                                {{form.quantity}} 
+												<p style="display: inline;">{% print_translated products.0.brand.product_type.uom.name products.0.brand.product_type.uom.name_am LANGUAGE_CODE %}</p> 
                                                 </div>
                                         </div>
                                         <div class="row mb-3" style="margin-bottom: 20px;">
