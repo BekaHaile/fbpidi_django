@@ -4,13 +4,19 @@ from django.utils import timezone
 from django.views import View 
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 from accounts.models import User						 
 from collaborations.models import Announcement,AnnouncementImages
 from collaborations.forms import AnnouncementForm
+from admin_site.decorators import company_created,company_is_active
 from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname, get_paginated_data
 from company.models import Company
+
+decorators = [never_cache, company_created(),company_is_active()]
 
 
 ### customer side 
@@ -23,7 +29,6 @@ class AnnouncementDetail(View):
 
 class ListAnnouncement(View):
 	def get(self,*args,**kwargs):
-	
 			result = {}
 			if 'by_company' in self.request.GET:
 				result = FilterByCompanyname(self.request.GET.getlist('by_company'), Announcement.objects.all())
@@ -42,6 +47,7 @@ class ListAnnouncement(View):
 		
 
 #### Announcement related with admin side
+@method_decorator(decorators,name='dispatch')
 class CreatAnnouncementAdmin(LoginRequiredMixin,View): 
 	def get(self,*args,**kwargs):
 		template_name="admin/announcement/announcement_form.html"
@@ -65,6 +71,7 @@ class CreatAnnouncementAdmin(LoginRequiredMixin,View):
 			return redirect("admin:anounce_list")
 
 
+@method_decorator(decorators,name='dispatch')
 class ListAnnouncementAdmin(LoginRequiredMixin, ListView):
 	model = Announcement
 	template_name = "admin/announcement/announcement_list.html"
@@ -74,7 +81,9 @@ class ListAnnouncementAdmin(LoginRequiredMixin, ListView):
 				return Announcement.objects.all()
 			else:
 				return Announcement.objects.filter(company=self.request.user.get_company()) 
-		
+
+
+@method_decorator(decorators,name='dispatch')	
 class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		try:

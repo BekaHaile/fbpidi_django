@@ -21,43 +21,18 @@ import os
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.http import FileResponse, HttpResponse
 
 from accounts.models import User
-from accounts.email_messages import sendEventNotification
-
-from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
-from django.http import HttpResponse, FileResponse
+from admin_site.decorators import company_created,company_is_active
 						 
-from wsgiref.util import FileWrapper
-
-
-
-from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
-
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
-from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
-								 VacancyForm,JobCategoryForm,
-								 ForumQuestionForm,CommentForm,CommentReplayForm,
-								 AnnouncementForm,ResearchForm,
-								 ResearchProjectCategoryForm
-								 )
-
-from collaborations.models import ( Blog, BlogComment,Faqs,
-									Vacancy,JobApplication, JobCategory,
-									ForumQuestion, ForumComments, CommentReplay,
-									Announcement,AnnouncementImages,
-									Research,
-									ResearchProjectCategory
-									
-									)
 from collaborations.forms import (FaqsForm,)
 
 from collaborations.models import ( Faqs, )
 
-
+decorators = [never_cache, company_created(),company_is_active()]
 class FaqList(View):
 	def get(self,*args,**kwargs):
 		template_name="frontpages/faq.html"
@@ -65,6 +40,7 @@ class FaqList(View):
 		context = {'faqs':faq}
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class CreateFaqs(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = FaqsForm()
@@ -89,8 +65,9 @@ class CreateFaqs(LoginRequiredMixin,View):
 			return redirect("admin:admin_Faqs")
 		return render(self.request, "admin/pages/faqs_forms.html",context)
 
+@method_decorator(decorators,name='dispatch')
 class FaqsView(LoginRequiredMixin,View):
-	template_name="admin/pages/blog_list.html"
+
 	def get(self,*args,**kwargs):
 		faqs=Faqs.objects.get(id=self.kwargs['id'])
 		template_name="admin/pages/faqs_detail.html"
@@ -110,6 +87,7 @@ class FaqsView(LoginRequiredMixin,View):
 		messages.success(self.request, "Edited Faqs Successfully")
 		return redirect("admin:admin_Faqs") 
 
+@method_decorator(decorators,name='dispatch')
 class FaqsList(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		if self.request.user.is_superuser:
@@ -123,6 +101,7 @@ class FaqsList(LoginRequiredMixin,View):
 		template_name = "admin/pages/faqs_list.html"
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class FaqPendingList(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		faqs=Faqs.objects.filter(status="PENDDING")
@@ -131,6 +110,8 @@ class FaqPendingList(LoginRequiredMixin,View):
 		template_name = "admin/pages/faqs_list.html"
 		return render(self.request, template_name,context) 
 
+
+@method_decorator(decorators,name='dispatch')
 class FaqApprovdList(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		faqs=Faqs.objects.filter(status="APPROVED")
@@ -139,6 +120,7 @@ class FaqApprovdList(LoginRequiredMixin,View):
 		template_name = "admin/pages/faqs_list.html"
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class FaqApprove(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		faq = Faqs.objects.get(id=self.kwargs['id'])
@@ -146,6 +128,8 @@ class FaqApprove(LoginRequiredMixin, View):
 		faq.save()
 		messages.success(self.request, "Changed Status to APPROVED Successfully")
 		return redirect("admin:admin_Faqs")
+
+@method_decorator(decorators,name='dispatch')
 class FaqPending(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		faq = Faqs.objects.get(id=self.kwargs['id'])
@@ -153,6 +137,8 @@ class FaqPending(LoginRequiredMixin, View):
 		faq.save()
 		messages.success(self.request, "Changed Status to PENDDING Successfully")
 		return redirect("admin:admin_Faqs")
+
+@method_decorator(decorators,name='dispatch')
 class FaqsDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		faq = Faqs.objects.get(id=self.kwargs['id'])

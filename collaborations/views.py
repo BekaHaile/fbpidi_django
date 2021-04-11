@@ -247,7 +247,7 @@ class CreateTender(LoginRequiredMixin,View):
             return render(self.request,'admin/collaborations/create_tender.html',{'form':TenderForm})
         except Exception as e: 
             print("execption at createtender ", str(e))
-            return redirect("admin:index")
+            return redirect("admin:error_404")
     def post(self,*args,**kwargs):
         try:
             form = TenderForm(self.request.POST)       
@@ -277,6 +277,7 @@ class CreateTender(LoginRequiredMixin,View):
                 return redirect("admin:tenders")   
         except Exception as e:
             print("Exception at collaborations.views.CreateTender post" , str (e))
+            messages.warning(self.request, "Could not create Tender")
             return redirect("admin:tenders")
 
 
@@ -333,7 +334,7 @@ class EditTender(LoginRequiredMixin,View):
             return render(self.request,'admin/collaborations/create_tender.html', {'form':TenderEditForm(),'tender':tender,'edit':True})
         except Exception as e:
             print("Exception at Edit Tender,get ", e)
-            return redirect("admin:tenders")
+            return redirect("admin:error_404")
 
     def post(self,*args,**kwargs):  
         form = TenderEditForm(self.request.POST)                       
@@ -455,8 +456,10 @@ class ApplyForTender(View):
 @method_decorator(decorators,name='dispatch')
 class CreateNews(LoginRequiredMixin, View):
     def get(self,*args,**kwargs):
-        return render(self.request,'admin/collaborations/create_news.html',{'form':NewsForm})
-    
+        try:
+            return render(self.request,'admin/collaborations/create_news.html',{'form':NewsForm})
+        except Exception as e:
+            return redirect("admin:error_404")
     def post(self, *args, **kwargs):
         form = NewsForm( self.request.POST) 
         if form.is_valid:
@@ -470,6 +473,7 @@ class CreateNews(LoginRequiredMixin, View):
             return redirect("admin:news_list") 
         else:
             messages.warning(self.request, "Error! News not Created!")
+            return redirect("admin:news_list") 
 
 
 @method_decorator(decorators,name='dispatch')
@@ -482,7 +486,7 @@ class EditNews(LoginRequiredMixin, View):
         except Exception as e: 
             print("execption at create News ", str(e))
             messages.warning(self.request,"Error, Could Not Find the News! ")
-            return redirect("admin:index")
+            return redirect("admin:error_404")
         
     def post(self, *args, **kwargs):
         if self.kwargs['id']:
@@ -504,6 +508,7 @@ class EditNews(LoginRequiredMixin, View):
                 return redirect(f"/admin/news_list/") 
             else:
                 messages.warning(self.request, "Error! News not Edited!")
+                return redirect(f"/admin/news_list/") 
 
 @method_decorator(decorators,name='dispatch')
 class AdminNewsList(LoginRequiredMixin, ListView):
@@ -518,7 +523,7 @@ class AdminNewsList(LoginRequiredMixin, ListView):
                 return News.objects.filter(company=self.request.user.get_company()) 
             except Exception as e:
                 print("Exception while trying to fetch news objects")
-                return redirect("admin:index")
+                return []
 
 
 
@@ -617,7 +622,11 @@ def change_to_datetime(calender_date):
 @method_decorator(decorators,name='dispatch')
 class EditCompanyEvent(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):
-        return render(self.request, "admin/collaborations/create_events.html",{'edit':True,'event':CompanyEvent.objects.get(id = self.kwargs['pk'])})
+        try:
+            return render(self.request, "admin/collaborations/create_events.html",{'edit':True,'event':CompanyEvent.objects.get(id = self.kwargs['pk'])})
+        except Exception as e:
+            return redirect("admin:error_404")
+
 
     def post(self,*args,**kwargs):
         form = CompanyEventForm(self.request.POST,self.request.FILES)
@@ -762,8 +771,11 @@ class EventParticipation(LoginRequiredMixin, View):
 @method_decorator(decorators,name='dispatch')
 class CreateDocument(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-      
-        return render(self.request, "admin/document/create_document.html", {'form':DocumentForm})
+        try:
+            return render(self.request, "admin/document/create_document.html", {'form':DocumentForm})
+        except Exception:
+            return redirect("admin:error_404")
+
     def post(self, args, **kwargs):
         form = DocumentForm(self.request.POST)
         if form.is_valid():
@@ -810,8 +822,7 @@ class EditDocument(LoginRequiredMixin, View):
 class DocumentListing(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         documents = []
-        try:
-            
+        try:     
             if self.kwargs['option'] != 'all':
                 documents =  Document.objects.filter( category = self.kwargs['option'] , company=self.request.user.get_company())
                 if documents.count() != 0:
@@ -819,9 +830,8 @@ class DocumentListing(LoginRequiredMixin, View):
                 else:
                     messages.warning(self.request, f"No documents for {self.kwargs['option']}")
             return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})
-        
         except Exception as e:
             print("exceptio at document list ",e)
-            return redirect('admin:index')
+            return redirect("admin:error_404")
 
 

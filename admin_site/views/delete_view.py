@@ -398,6 +398,5 @@ class DeleteView(LoginRequiredMixin,View):
                     return redirect("admin:tenders")   
         
         except Exception as e:
-                messages.warning(self.request, "Exception while deleting!", str(e))
-                print("#######3Excetion ",e)
-                return redirect("admin:index") 
+                print("#######Excetion While deleting ",e)
+                return redirect("admin:error_404") 

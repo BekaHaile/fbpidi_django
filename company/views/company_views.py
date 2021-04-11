@@ -17,7 +17,7 @@ from django.core import serializers
 
 from company.models import *
 from accounts.models import CompanyAdmin,User
-from accounts.email_messages import sendRelayMessage, sendInquiryReplay
+from accounts.email_messages import sendRelayMessage, sendInquiryReplayEmail
 from product.models import Order,OrderProduct,Product, ProductInquiry,ProductInquiryReply
 
 from company.forms import *
@@ -80,7 +80,7 @@ class CompanyInboxDetail(View):
     def post(self, *args, **kwargs):
         try:
             sender_message = CompanyMessage.objects.get(id = self.kwargs['pk'])
-            reply_message = self.request.POST['reply_message']
+            reply_message = self.request.POST['reply_message2']
             if sendRelayMessage(self.request, sender_message, reply_message): #returns true if the email is sent successfully
                 if sender_message.replied:
                     reply = sender_message.companymessagereply_set.first()
@@ -98,28 +98,29 @@ class CompanyInboxDetail(View):
                 return redirect('admin:admin_inbox_list')
         except Exception as e:
             print("########## Exception at CompanyInboxDetail post ",e)
-            messages.warning(self.request, "Exception while replying. Please try again later.",e)
-            return redirect("admin:index")
+            return redirect("admin:error_404")
 
 
 class CompanyInquiryList(ListView):
     model = ProductInquiry
     template_name = "admin/company/inquiry_list.html"
     def get_queryset(self):
-        if 'replied_only' in self.request.GET:
-            return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id, replied =True)
-        elif 'unreplied_only' in self.request.GET:
-            return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id, replied = False)
-        return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id)
-
-
+        try:
+            if 'replied_only' in self.request.GET:
+                return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id, replied =True)
+            elif 'unreplied_only' in self.request.GET:
+                return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id, replied = False)
+            return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id)
+        except Exception as e:
+            print("!!!!!!!!!!!!!!!!!! Exception inside CompanyInquiryList ",e)
+            return []
 
 class CompanyInquiryReply(View):
     def post(self, *args, **kwargs):
-        
+        try:
             sender_inquiry = ProductInquiry.objects.get(id = self.kwargs['pk'])
             reply_message = self.request.POST['reply_message']
-            if sendInquiryReplay(self.request, sender_inquiry, reply_message): #returns true if the email is sent successfully
+            if sendInquiryReplayEmail(self.request, sender_inquiry, reply_message): #returns true if the email is sent successfully
                 if sender_inquiry.replied:
                     reply = sender_inquiry.productinquiryreply_set.first()
                     reply.reply = reply_message
@@ -134,7 +135,10 @@ class CompanyInquiryReply(View):
             else:
                 messages.warning(self.request, f"Reply couldn't be sent! Please check your connection and try again later.")
                 return redirect('admin:admin_inquiry_list')
-       
+        except Exception as e:
+            print("!!!!!!!!!!!!!!!!!! Exception inside CompanyInquiryReply ",e)
+            return redirect ('admin:error_404')
+
 
 
 def Subscribe(request):
@@ -200,6 +204,7 @@ class CompanyNewsList(ListView):
             return News.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
         except Exception as e:
             print( "####### the excption is ",e)
+            return []
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
@@ -225,6 +230,7 @@ class CompanyEventList(ListView):
             return CompanyEvent.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
         except Exception as e:
             print( "####### while listing company events ",e)
+            return []
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context['object'] = Company.objects.get(id =self.kwargs['pk'])
@@ -473,18 +479,17 @@ class CompanyPollList(ListView):
 
 class CompanyPollDetail(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):
-        message = ""
         context = {}        
         try:
-                poll = PollsQuestion.objects.get(id = self.kwargs['id']  )
-                context ['obj'] = poll
-                context ['object'] = poll.company
-                if poll.pollsresult_set.filter(user = self.request.user).count() > 0:
-                    context ['has_voted'] = True
-                return render(self.request, "frontpages/company/company_poll_detail.html", context)
+            poll = PollsQuestion.objects.get(id = self.kwargs['id']  )
+            context ['obj'] = poll
+            context ['object'] = poll.company
+            if poll.pollsresult_set.filter(user = self.request.user).count() > 0:
+                context ['has_voted'] = True
+            return render(self.request, "frontpages/company/company_poll_detail.html", context)
         except Exception as e:
-                print( "Poll not found ",e)
-                return redirect("polls") 
+            print( "Poll not found ",e)
+            return redirect("polls") 
         
     def post(self,*args,**kwargs):
             try:

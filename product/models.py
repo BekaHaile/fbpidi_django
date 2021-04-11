@@ -246,7 +246,7 @@ class ProductInquiry(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
 
     def save(self):
-        self.pieces = self.product.brand.product_type.uom
+        self.pieces = self.product.brand.product_type.uom.name
         super(ProductInquiry, self).save()
 
 class ProductInquiryReply(models.Model):

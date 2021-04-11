@@ -22,6 +22,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+
 from django.http import FileResponse, HttpResponse
 
 from accounts.models import User
@@ -57,6 +60,12 @@ from collaborations.forms import (ForumQuestionForm,CommentForm,CommentReplayFor
 
 from collaborations.models import ( ForumQuestion, ForumComments,
 									CommentReplay)
+
+from admin_site.decorators import company_created,company_is_active
+
+decorators = [never_cache, company_created(),company_is_active()]
+
+@method_decorator(decorators,name='dispatch')
 class ListForumQuestionAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = ForumQuestion.objects.all()
@@ -64,6 +73,7 @@ class ListForumQuestionAdmin(LoginRequiredMixin ,View):
 		context = {'researchprojectcategorys':form}
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class CreateForumQuestionAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = ForumQuestionForm()
@@ -85,6 +95,7 @@ class CreateForumQuestionAdmin(LoginRequiredMixin, View):
 			return redirect("admin:forum_form")
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class ForumQuestionDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = ForumQuestion.objects.get(id=self.kwargs['id'])
@@ -109,6 +120,7 @@ class ForumQuestionDetail(LoginRequiredMixin,View):
 			return redirect("admin:forum_list")
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class ListForumCommentAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = ForumComments.objects.all()
@@ -116,6 +128,7 @@ class ListForumCommentAdmin(LoginRequiredMixin ,View):
 		context = {'researchprojectcategorys':form}
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class ListForumCommentByIdAdmin(LoginRequiredMixin ,View): 
 	def get(self,*args,**kwargs):
 		form = ForumComments.objects.filter(forum_question=self.kwargs['id'])
@@ -123,6 +136,7 @@ class ListForumCommentByIdAdmin(LoginRequiredMixin ,View):
 		context = {'researchprojectcategorys':form}
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class ListCommentReplayByIdAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = CommentReplay.objects.filter(comment=self.kwargs['id'])
@@ -130,6 +144,7 @@ class ListCommentReplayByIdAdmin(LoginRequiredMixin ,View):
 		context = {'researchprojectcategorys':form}
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class ForumCommentsDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = ForumComments.objects.get(id=self.kwargs['id'])
@@ -150,6 +165,7 @@ class ForumCommentsDetail(LoginRequiredMixin,View):
 			return redirect("admin:forum_comment_list")
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class ListCommentReplayAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = CommentReplay.objects.all()
@@ -157,6 +173,7 @@ class ListCommentReplayAdmin(LoginRequiredMixin ,View):
 		context = {'researchprojectcategorys':form}
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class CommentReplayDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = CommentReplay.objects.get(id=self.kwargs['id'])
@@ -210,9 +227,7 @@ class CreateCommentReplay(LoginRequiredMixin,View):
 			form.comment = main
 			form.created_by = self.request.user
 			form.save()
-			print("this worked")
 			return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
-		print("it didn't worked")
 		template_name = "frontpages/forums/forum_detail.html"
 		return render(self.request, template_name,context)
 
@@ -289,8 +304,6 @@ class SearchForum(View):
 	def get(self,*args,**kwargs):
 		return redirect(reverse("forum_list"))
 	def post(self,*args,**kwargs):
-		print("============")
-		print(self.request.POST["search"])
 		forum = ForumQuestion.objects.filter(title__contains=self.request.POST['search'])
 		template_name = "frontpages/forums/forum_list.html"
 		if str(self.request.user) != "AnonymousUser":
@@ -309,8 +322,6 @@ class ForumQuestionsDetail(View):
 			userCreated = ""
 		comment = CommentForm()
 		commentreplay=CommentReplayForm()
-		print("-----0--------")
-		print(self.request.user)
 		template_name = "frontpages/forums/forum_detail.html"
 		context = {'forum':forum,'commentForm':comment,'commentreplay':commentreplay,'usercreated':userCreated}
 		return render(self.request, template_name,context)

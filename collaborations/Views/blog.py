@@ -14,6 +14,8 @@ from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogCo
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
 from django.contrib import messages
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
 from accounts.models import User, CompanyAdmin, Company
@@ -26,7 +28,7 @@ from django.http import FileResponse, HttpResponse
 
 from accounts.models import User
 from accounts.email_messages import sendEventNotification
-
+from admin_site.decorators import company_created,company_is_active
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
 from django.http import HttpResponse, FileResponse
 		
@@ -67,10 +69,11 @@ from django.core.files.storage import default_storage, FileSystemStorage
 from django.core import files
 
 TEMP_PROFILE_IMAGE_NAME = "temp_profile.png"
+decorators = [never_cache, company_created(),company_is_active()]
 
 
 
-
+@method_decorator(decorators,name='get')
 class ListBlogCommentAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = BlogComment.objects.all()
@@ -78,6 +81,7 @@ class ListBlogCommentAdmin(LoginRequiredMixin ,View):
 		context = {'blogcomments':form}
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='get')
 class AdminBlogComments(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		blogs = BlogComment.objects.filter(blog=self.kwargs['id'])
@@ -85,6 +89,7 @@ class AdminBlogComments(LoginRequiredMixin,View):
 		context={'blogcomments':blogs}
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class BlogCommentDetailAdmin(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = BlogComment.objects.get(id=self.kwargs['id'])
@@ -105,8 +110,8 @@ class BlogCommentDetailAdmin(LoginRequiredMixin,View):
 			return redirect("admin:blogComment_list")
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class CreatBlog(LoginRequiredMixin,View):
-
 	def get(self,*args,**kwargs):
 		form = BlogsForm()
 		template_name="admin/pages/blog_form.html"
@@ -142,6 +147,7 @@ class CreatBlog(LoginRequiredMixin,View):
 			return redirect("admin:admin_Blogs")
 		return render(self.request, "admin/pages/blog_form.html",context)
 
+@method_decorator(decorators,name='dispatch')
 class AdminBlogList(LoginRequiredMixin, ListView):
 	template_name="admin/pages/blog_list.html"
 	model = Blog
@@ -246,7 +252,6 @@ def get_tags(lang):
 		return tag_list
 
 class BlogList(View):
-	
 	def get(self, *args,**kwargs):
 		result ={}
 		if 'by_company' in self.request.GET:
