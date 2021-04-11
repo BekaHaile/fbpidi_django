@@ -1,22 +1,27 @@
 import datetime
 import json
+
+from django.db.models import Q
 from django.urls import reverse
 from django.db import IntegrityError
-from django.forms.models import model_to_dict
 from django.utils import timezone
+from django.contrib import messages
+from django.forms.models import model_to_dict
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse,JsonResponse
-from django.contrib import messages
+
 from django.views.generic import CreateView,UpdateView,ListView,View,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from django.utils import timezone
 from django.core import serializers
 
 from company.models import *
 from accounts.models import CompanyAdmin,User
+from admin_site.decorators import company_created,company_is_active
 from accounts.email_messages import sendRelayMessage, sendInquiryReplayEmail
 from product.models import Order,OrderProduct,Product, ProductInquiry,ProductInquiryReply
 
@@ -24,6 +29,8 @@ from company.forms import *
 from collaborations.models import *
 from chat.models import ChatMessages
 from collaborations.forms import EventParticipantForm,TenderApplicantForm,CreateJobApplicationForm, BlogCommentForm
+
+decorators = [never_cache, company_created(),company_is_active()]
 
 
 
@@ -64,6 +71,7 @@ class CompanyContact(CreateView):
         return redirect(f"/company/contact/{self.kwargs['pk']}/")
 
 
+@method_decorator(decorators,name='dispatch')
 class CompanyInboxList(ListView):
     model = CompanyMessage
     template_name = "admin/company/inbox_list.html"
@@ -76,6 +84,7 @@ class CompanyInboxList(ListView):
         return CompanyMessage.objects.filter(company = self.request.user.get_company().id)
 
 
+@method_decorator(decorators,name='dispatch')
 class CompanyInboxDetail(View):
     def post(self, *args, **kwargs):
         try:
@@ -115,6 +124,8 @@ class CompanyInquiryList(ListView):
             print("!!!!!!!!!!!!!!!!!! Exception inside CompanyInquiryList ",e)
             return []
 
+
+@method_decorator(decorators,name='dispatch')
 class CompanyInquiryReply(View):
     def post(self, *args, **kwargs):
         try:

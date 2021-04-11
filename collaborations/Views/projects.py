@@ -27,12 +27,12 @@ from django.http import FileResponse, HttpResponse
 
 from accounts.models import User
 from accounts.email_messages import sendEventNotification
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
-from django.http import HttpResponse, FileResponse
-						 
-from wsgiref.util import FileWrapper
 
+from admin_site.decorators import company_created,company_is_active
 
 
 from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
@@ -61,7 +61,8 @@ from collaborations.models import ( Research, Project,
 									)
 
 # ------------ Project Admin side
-
+decorators = [never_cache, company_created(),company_is_active()]
+@method_decorator(decorators,name='dispatch')
 class ListProjectAdmin(LoginRequiredMixin, ListView):
 	model = Project
 	template_name = "admin/researchproject/project_list.html"
@@ -79,7 +80,7 @@ class ListProjectAdmin(LoginRequiredMixin, ListView):
 	# 	context = {'researchs':form,'pending':pending}
 	# 	return render(self.request, template_name,context)
 
-
+@method_decorator(decorators,name='dispatch')
 class CreateProjectAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		template_name = "admin/researchproject/project_form.html"
@@ -101,7 +102,7 @@ class CreateProjectAdmin(LoginRequiredMixin, View):
 			messages.warning(self.request, "Couldn't create Project. Exception occured!")
 			return redirect("admin:project_list")
 
-
+@method_decorator(decorators,name='dispatch')
 class ProjectDetailAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Project.objects.get(id=self.kwargs['id'])
@@ -240,6 +241,7 @@ class EditProject(View):
 			return redirect("project_list")
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class CreateProject(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = ProjectForm()

@@ -2,15 +2,23 @@ import json
 
 from django.views import View
 from django.db.models import Q
+from django.contrib import messages
 from django.http import Http404, JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
+
 from accounts.models import UserProfile
-from django.contrib import messages
 from chat.models import ChatMessages
 from chat.serializer import ChatMessagesSerializer
+
+from admin_site.decorators import company_created,company_is_active
+
+decorators = [never_cache, company_created(),company_is_active()]
+
 
 #checks if a requested user does exist in the database
 @login_required
@@ -19,7 +27,7 @@ def check_username(request, username):
         u = get_object_or_404(UserProfile, username = username)
         return JsonResponse({'result':True}, safe =False, )
     except Http404:
-        related = UserProfile.objects.filter(username__icontains = username)[:3]
+        related = UserProfile.objects.filter(username__icontains = username)[:4]
         result = {'result':False,'related':[]}
         for u in related:
             result['related'].append( u.username )
@@ -100,9 +108,13 @@ class CustomerChatList( LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         return render(self.request, 'frontpages/chat/chat_list.html', {'chat_list':get_grouped_chats(self.request.user, None)})
 
+@method_decorator(decorators,name='dispatch')
 class AdminChatList( LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        return render(self.request, 'admin/chat/admin_chat_list.html', {'chat_list':get_grouped_chats(self.request.user, None)})
+        try:
+            return render(self.request, 'admin/chat/admin_chat_list.html', {'chat_list':get_grouped_chats(self.request.user, None)})
+        except Exception:
+            return redirect('admin:error_404')
 
 def get_grouped_chats(user, excluded_user = None):
         if excluded_user !=None:
