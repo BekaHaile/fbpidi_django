@@ -121,7 +121,7 @@
 {%block pagename%}Report List{%endblock%}
 {%block content%}
 <div class="row">
-	<div class="card" style="width: 100%;">
+	<div class="card" style="width: 100%;height: 80px;">
 		<div class="card-body">
 			<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
 				<form class="form-inline" method="POST" action="{%url 'admin:get_company_pdf' %}"> 
@@ -140,10 +140,16 @@
 
 				<ul class="list-inline ml-2 mb-0 pull-right" style="float: right;">
 					<li class="list-inline-item"> <button type="submit"class="btn btn-primary text-default">
-							<i class="icon-search4 mr-2"></i>Get Report</a>							 
+							<i class="icon-file-text2 mr-2"></i>Generate Company Report</button>							 
 					</li>
 				</ul>
+				
 			 </form>
+			 <ul class="list-inline ml-2 mb-0 pull-right" style="float: right;">
+				<li class="list-inline-item"> <a href="{%url 'admin:all_report_page'%}" class="btn btn-primary text-default">
+						<i class="icon-file-text3 mr-2"></i>Generate Customized Report</a>							 
+				</li>
+			</ul>
 			</div>
 		</div>
 	</div>
@@ -308,7 +314,7 @@
 						</div>
 					</div>
 				</div>
-				<!-- <div class="col-md-12 col-sm-12">
+				<div class="col-md-12 col-sm-12">
 					<div class="card bg-pink-400" >
 						<div class="card-body " >
 							<ul class="nav nav-pills nav-justified">						
@@ -320,7 +326,7 @@
 							</div>
 						</div>
 					</div>
-				</div> -->
+				</div>
 			</div>
 		</div>
 

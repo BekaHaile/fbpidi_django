@@ -131,16 +131,17 @@ class CompanyAddress(models.Model):
 	city_town = models.CharField(max_length=255, verbose_name="City Town")
 	subcity_zone = models.CharField(max_length=255, verbose_name="Subcity zone")
 	woreda = models.CharField(max_length=255, verbose_name="Woreda")
-	kebele = models.CharField(max_length=255, verbose_name="Kebele",null=True,blank=True)
-	local_area = models.CharField(max_length=255, verbose_name="Local Area",null=True,blank=True)
+	kebele = models.CharField(max_length=255, verbose_name="Kebele",default="")
+	local_area = models.CharField(max_length=255, verbose_name="Local Area",default="")
 	phone_number = models.CharField(max_length=255, verbose_name="Phone Number")
-	fax = models.CharField(max_length=255, verbose_name="Fax",null=True,blank=True)
-	email = models.EmailField(verbose_name="Email Link", max_length=255,null=True,blank=True)
-	facebooklink = models.CharField(verbose_name="Facebook Link", max_length=255,null=True,blank=True)
-	twiterlink = models.CharField(verbose_name="Twiter Link", max_length=255,null=True,blank=True)
-	instagramlink = models.CharField(verbose_name="Instagram Link", max_length=255,null=True,blank=True)
-	linkedinlink = models.CharField(verbose_name="Linkedin Link", max_length=255,null=True,blank=True)
-	googlelink = models.CharField(verbose_name="Google Link", max_length=255,null=True,blank=True)
+	fax = models.CharField(max_length=255, verbose_name="Fax",default="")
+	email = models.EmailField(verbose_name="Email Link", max_length=255,default="")
+	website = models.CharField(max_length=250,verbose_name="Website Link",default="")
+	facebooklink = models.CharField(verbose_name="Facebook Link", max_length=255,default="")
+	twiterlink = models.CharField(verbose_name="Twiter Link", max_length=255,default="")
+	instagramlink = models.CharField(verbose_name="Instagram Link", max_length=255,default="")
+	linkedinlink = models.CharField(verbose_name="Linkedin Link", max_length=255,default="")
+	googlelink = models.CharField(verbose_name="Google Link", max_length=255,default="")
 	timestamp = models.DateField(auto_now_add=True)
 
 
@@ -171,7 +172,7 @@ class Certificates(models.Model):
 # Source and Amount of product input materials
 class SourceAmountIputs(models.Model):		
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="source_amount_inputs",default=0)
-	year =  models.IntegerField()
+	year_src =  models.IntegerField()
 	import_company	= models.FloatField(default=0,verbose_name="Imported By Company",help_text="(Ton/Year)")
 	govt_suplied	= models.FloatField(default=0,verbose_name="Government Supplied",help_text="(Ton/Year)")
 	purchase_from_farmer	= models.FloatField(default=0,verbose_name="Direct purchase from Farmers",help_text="(Ton/Year)")
@@ -188,7 +189,7 @@ class Employees(models.Model):
 				('Foreign Employee','Foreign Employee')]
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="employees",null=True,blank=True)
 	projct = models.ForeignKey('InvestmentProject',on_delete=models.CASCADE,related_name="project_employees",null=True,blank=True)
-	year	= models.IntegerField(default=0,)
+	year_emp	= models.IntegerField(default=0,verbose_name="Employement Year")
 	employment_type	= models.CharField(max_length=200,verbose_name="The Employment Type", choices=EMP_TYPE)	
 	male	= models.IntegerField(default=0,verbose_name="Number Of Male Employees")	
 	female	= models.IntegerField(default=0,verbose_name="Number of Female Employees")	
@@ -199,7 +200,8 @@ class JobOpportunities(models.Model):
 	JOB_TYPE = [ ('','Select Job Type'),('Permanent','Permanent'),('Temporary','Temporary'),]
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="job_oportunities",null=True,blank=True)
 	project = models.ForeignKey('InvestmentProject',on_delete=models.CASCADE,related_name="project_jobs",null=True,blank=True)
-	year	= models.IntegerField(default=0)
+	year_job	= models.IntegerField(default=0,verbose_name="Job Created Year")
+	quarter_job = models.CharField(max_length=100,verbose_name="Quarter Year")
 	job_type = models.CharField(max_length=20,verbose_name="Types Of Job", choices=JOB_TYPE)
 	male	= models.IntegerField(default=0)
 	female	= models.IntegerField(default=0)	
@@ -211,7 +213,8 @@ class EducationalStatus(models.Model):
 	EDUCATION_TYP = (('','Select Education Type'),('12th Graduate below','12th Graduate below'),('Deploma TVET','Deploma TVET'),('Degree','Degree'),('Masters','Masters'),('PhD','PhD'),)
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="educational_status",null=True,blank=True)
 	project = models.ForeignKey('InvestmentProject',on_delete=models.CASCADE,related_name="project_edu_stat",null=True,blank=True)
-	year = models.IntegerField()
+	year_edu = models.IntegerField(default=0,verbose_name="Educational Status Year")
+	quarter_edu = models.CharField(max_length=100,verbose_name="Quarter Year")
 	education_type	= models.CharField(verbose_name="Education Level ",choices=EDUCATION_TYP, max_length=2000)		
 	male	= models.IntegerField(default=0)		
 	female	= models.IntegerField(default=0)
@@ -219,16 +222,19 @@ class EducationalStatus(models.Model):
 
 # Number of Female Employees in high positions
 class FemalesInPosition(models.Model):
-    company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="females_high_positions")
-    year = models.IntegerField()
-    high_position = models.IntegerField(default=0,verbose_name="High level position ",help_text="(CEO, Managerial positions)")
-    med_position = models.IntegerField(default=0,verbose_name="Medium level position",help_text="(Department heads)")
-    timestamp = models.DateField(auto_now_add=True)
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="females_high_positions")
+	year_fem = models.IntegerField(verbose_name="Female Employees Year")
+	quarter_fem = models.CharField(max_length=100,verbose_name="Quarter Year")
+	high_position = models.IntegerField(default=0,verbose_name="High level position ",help_text="Female in (CEO, Managerial positions)")
+	med_position = models.IntegerField(default=0,verbose_name="Medium level position",help_text=" Female in (Department heads)")
+	high_position_male = models.IntegerField(default=0,verbose_name="Male in High level position ",help_text="Male in (CEO, Managerial positions)")
+	med_position_male = models.IntegerField(default=0,verbose_name="Male in Medium level position",help_text="Male in (Department heads)")
+	timestamp = models.DateField(auto_now_add=True)
     
 # Yearly Marget Target In percent
 class MarketTarget(models.Model):
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="market_target",default=0)
-	year	= models.IntegerField(default=0,)
+	year_target	= models.IntegerField(default=0,verbose_name="Market Target Year")
 	further_proc_power 	= models.FloatField(verbose_name="Further processing factors ",default=0)	
 	final_consumer	= models.FloatField(verbose_name="Final consumers ",default=0)	
 	restaurant_and_hotels = models.FloatField(verbose_name="Restaurant and Hotels ",default=0)	
@@ -244,7 +250,7 @@ class MarketTarget(models.Model):
 # Yearly market destinations
 class MarketDestination(models.Model):
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="market_destination",default=0)
-	year	= models.IntegerField(default=0,)
+	year_destn	= models.IntegerField(default=0,verbose_name="Market Destination Year")
 	domestic = models.FloatField(verbose_name="Domestic %",default=0)	
 	export	= models.FloatField(verbose_name="Export %",default=0)
 	timestamp = models.DateField(auto_now_add=True)
@@ -252,7 +258,7 @@ class MarketDestination(models.Model):
 # Daily Power consumption
 class PowerConsumption(models.Model):
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="power_consumption",default=0)
-	day	= models.DateField(verbose_name="Day",)
+	year_pc	= models.IntegerField(default=0,verbose_name="Power Consumption Year")
 	installed_capacity = models.FloatField(verbose_name="Installed Capacity EP demand",help_text="kilowatt-hour (kWh) per day", default=0)	
 	current_supply = models.FloatField(verbose_name="Currently Supplying EP",help_text="kilowatt-hour (kWh) per day", default=0)	
 	timestamp = models.DateField(auto_now_add=True)

@@ -48,7 +48,7 @@ Product Packaging Data
 			<thead>
 				<tr>
 					<th>Company</th>
-					<th>Date</th>
+					<th>Year</th>
 					<th>Product</th>
 					<th>Installed Capacity</th>
 					<th>Attainable</th>
@@ -61,7 +61,7 @@ Product Packaging Data
 				{%for cat in object_list%}
 				<tr>
 					<td>{{cat.company.name}}</td>
-					<td>{{cat.p_date|date}}</td>
+					<td>{{cat.year}}</td>
 					<td>{{cat.product.sub_category_name}}</td>
 					<td>{{cat.install_prdn_capacity}}</td>
 					<td>
@@ -233,6 +233,7 @@ Product Packaging Data
 				<tr>
 					<th>Company</th>
 					<th>Year</th>
+					<th>Half Year</th>
 					<th>Product</th>
 					<th>Production</th>
 					<th>Sales Amount</th>
@@ -245,6 +246,7 @@ Product Packaging Data
 				<tr>
 					<td>{{cat.company.name}}</td>
 					<td>{{cat.activity_year}}</td>
+					<td>{{cat.half_year}}</td>
 					<td>{{cat.product.sub_category_name}}</td>
 					<td>{{cat.production_amount}} {{cat.product.uom}}</td>
 					<td>{{cat.sales_amount}} {{cat.product.uom}}</td>

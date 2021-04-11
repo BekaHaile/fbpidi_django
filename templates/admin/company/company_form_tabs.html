@@ -83,6 +83,10 @@
 				<div class="form-group">
 					<div class="row">
 						<div class="col-sm-4">
+							<label for="">{{address_form.website.label}}</label>
+							 {{address_form.website}}
+						</div>
+						<div class="col-sm-4">
 							<label for="">{{address_form.facebooklink.label}}</label>
 							 {{address_form.facebooklink}}
 						</div>
@@ -92,20 +96,21 @@
 							 <span class="form-text text-muted">{{address_form.twiterlink.help_text}}</span>
 						</div>
 
-						<div class="col-md-4">
-							<label>{{address_form.instagramlink.label}}</label>
-								{{address_form.instagramlink}}
-								<span class="form-text text-muted">{{address_form.instagramlink.help_text}}</span>									
-						</div>		
+							
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-md-4">
+							<label>{{address_form.instagramlink.label}}</label>
+								{{address_form.instagramlink}}
+								<span class="form-text text-muted">{{address_form.instagramlink.help_text}}</span>									
+						</div>	
+						<div class="col-sm-4">
 							<label for="">{{address_form.linkedinlink.label}}</label>
 							 {{address_form.linkedinlink}}
 						</div>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<label for="">{{address_form.googlelink.label}}</label>
 							 {{address_form.googlelink}}
 							 <span class="form-text text-muted">{{address_form.googlelink.help_text}}</span>
@@ -255,7 +260,7 @@
 				<tbody>
 					{%for emp in object.employees.all%}
 					<tr>
-						<td>{{emp.year}}</td>
+						<td>{{emp.year_emp}}</td>
 						<td>{{emp.employment_type}}</td>
 						<td>{{emp.female}}</td>
 						<td>{{emp.male}}</td>
@@ -301,6 +306,7 @@
 				<thead>
 					<tr>
 						<th>Year</th>
+						<th>Quarter</th>
 						<th>Employement Type</th>
 						<th>Females</th>
 						<th>Male</th>
@@ -311,7 +317,8 @@
 				<tbody>
 					{%for job in object.job_oportunities.all%}
 					<tr>
-						<td>{{job.year}}</td>
+						<td>{{job.year_job}}</td>
+						<td>{{job.quarter_job}}</td>
 						<td>{{job.job_type}}</td>
 						<td>{{job.female}}</td>
 						<td>{{job.male}}</td>
@@ -358,6 +365,7 @@
 				<thead>
 					<tr>
 						<th>Year</th>
+						<th>Quarter</th>
 						<th>Education Type</th>
 						<th>Females</th>
 						<th>Male</th>
@@ -368,7 +376,8 @@
 				<tbody>
 					{%for edu in object.educational_status.all%}
 					<tr>
-						<td>{{edu.year}}</td>
+						<td>{{edu.year_edu}}</td>
+						<td>{{edu.quarter_edu}}</td>
 						<td>{{edu.education_type}}</td>
 						<td>{{edu.female}}</td>
 						<td>{{edu.male}}</td>
@@ -413,8 +422,8 @@
 			 <table class="table table-hover">
 				<thead>
 					<tr>
-						<th>#</th>
-						<th>Year</th>
+						<th>year</th>
+						<th>Quarter</th>
 						<th>High Level Position</th>
 						<th>Med Level Position</th>
 						<th>Created Date</th>
@@ -424,8 +433,8 @@
 				<tbody>
 					{%for fem in object.females_high_positions.all%}
 					<tr>
-						<td>{{forloop.counter}}</td>
-						<td>{{fem.year}}</td>
+						<td>{{fem.year_fem}}</td>
+						<td>{{fem.quarter_fem}}</td>
 						<td>{{fem.high_position}}</td>
 						<td>{{fem.med_position}}</td>
 						<td>{{fem.timestamp|date}}</td>
@@ -486,7 +495,7 @@
 					{%for srcamnt in object.source_amount_inputs.all%}
 					<tr>
 						<td>{{forloop.counter}}</td>
-						<td>{{srcamnt.year}}</td>
+						<td>{{srcamnt.year_src}}</td>
 						<td>{{srcamnt.import_company}}</td>
 						<td>{{srcamnt.govt_suplied}}</td>
 						<td>{{srcamnt.purchase_from_farmer}}</td>
@@ -552,7 +561,7 @@
 					{%for mt in object.market_target.all%}
 					<tr>
 						<td>{{forloop.counter}}</td>
-						<td>{{mt.year}}</td>
+						<td>{{mt.year_target}}</td>
 						<td>{{mt.further_proc_power}}</td>
 						<td>{{mt.final_consumer}}</td>
 						<td>{{mt.restaurant_and_hotels}}</td>
@@ -616,7 +625,7 @@
 					{%for md in object.market_destination.all%}
 					<tr>
 						<td>{{forloop.counter}}</td>
-						<td>{{md.year}}</td>
+						<td>{{md.year_destn}}</td>
 						<td>{{md.domestic}}</td>
 						<td>{{md.export}}</td>
 						<td>{{md.timestamp|date}}</td>
@@ -662,7 +671,7 @@
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>Date</th>
+						<th>Year</th>
 						<th>Installed Capacity</th>
 						<th>Current Supply</th>
 						<th>Created Date</th>
@@ -673,7 +682,7 @@
 					{%for pc in object.power_consumption.all%}
 					<tr>
 						<td>{{forloop.counter}}</td>
-						<td>{{pc.day}}</td>
+						<td>{{pc.year_pc}}</td>
 						<td>{{pc.installed_capacity}}</td>
 						<td>{{pc.current_supply}}</td>
 						<td>{{pc.timestamp|date}}</td>

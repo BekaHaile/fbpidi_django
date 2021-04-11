@@ -123,7 +123,10 @@ def change_util_total(data,option):
             x += d['pa_this']
             y += d['pa_last']
             a += d['apc']
-        total = (x-y)/a
+        if a == 0:
+            total = (x-y)
+        else:
+            total = (x-y)/a
 
     return round(total,2)
 
