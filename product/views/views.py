@@ -1,6 +1,7 @@
 import random
 import string
 import json
+import datetime
 
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views.generic import View,ListView,UpdateView,CreateView,DetailView
@@ -22,6 +23,12 @@ from product.models import *
 from product.forms import *
 from company.models import *
 from admin_site.decorators import company_created
+
+def get_current_year():
+    this_year = datetime.datetime.today().year
+    return int(this_year-9)
+
+
 
 decorators = [never_cache,company_created()]
 def create_ref_code():
@@ -400,22 +407,24 @@ class CreateProductionCapacity(LoginRequiredMixin,CreateView):
     
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreateProductionCapacity,self).get_form_kwargs()
+        
         if self.request.user.is_superuser:
             kwargs.update({'product':SubCategory.objects.all()})
         elif self.request.user.is_company_admin:
-            kwargs.update({'product':SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())})
+            kwargs.update({'company': Company.objects.get(contact_person=self.request.user),
+            'product':SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())})
         elif self.request.user.is_company_staff:
-            kwargs.update({'product':SubCategory.objects.filter(category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all())})
+            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company,
+            'product':SubCategory.objects.filter(category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all())})
         return kwargs
 
     def form_valid(self,form):
-        if ProductionCapacity.objects.filter(company=self.request.user.get_company(),product=SubCategory.objects.get(id=form.cleaned_data.get('product').id),p_date=form.cleaned_data.get('p_date')).exists():
-            messages.warning(self.request,"Data For this Day already exists")
+        if ProductionCapacity.objects.filter(company=self.request.user.get_company(),product=SubCategory.objects.get(id=form.cleaned_data.get('product').id),year=form.cleaned_data.get("year")).exists():
+            messages.warning(self.request,"Data For this Year already exists")
             return redirect("admin:create_production_capacity")
         else:
             pc = form.save(commit=False)
             pc.company = self.request.user.get_company()
-            pc.p_date = datetime.datetime.now()
             pc.created_by = self.request.user
             pc.save()
             messages.success(self.request,"Production Capacity Created")
@@ -441,9 +450,9 @@ class UpdateProductionCapacity(LoginRequiredMixin,UpdateView):
         if self.request.user.is_superuser:
             kwargs.update({'product':SubCategory.objects.all()})
         elif self.request.user.is_company_admin:
-            kwargs.update({'product':SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())})
+            kwargs.update({'company': Company.objects.get(contact_person=self.request.user),'product':SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())})
         elif self.request.user.is_company_staff:
-            kwargs.update({'product':SubCategory.objects.filter(category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all())})
+            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company,'product':SubCategory.objects.filter(category_name__in=CompanyStaff.objects.get(user=self.request.user).company.category.all())})
         return kwargs
 
     def form_valid(self,form):
@@ -501,7 +510,7 @@ class CreateSalesPerformance(LoginRequiredMixin,CreateView):
     def form_valid(self,form):
         if ProductionAndSalesPerformance.objects.filter(company=self.request.user.get_company(),
             product=SubCategory.objects.get(id=form.cleaned_data.get('product').id)
-            ,activity_year=form.cleaned_data.get('activity_year')).exists():
+            ,activity_year=form.cleaned_data.get('activity_year'),half_year=form.cleaned_data.get('half_year')).exists():
             messages.warning(self.request,"Data For this Year already exists")
             return redirect("admin:create_sales_performance")
         else:
@@ -767,7 +776,7 @@ class CreateInputDemandSupply(LoginRequiredMixin,CreateView):
     def form_valid(self,form):
         if InputDemandSupply.objects.filter(company=self.request.user.get_company(),
                             product=form.cleaned_data.get('product').id,
-                            year=form.cleaned_data.get('year'),input_type=form.cleaned_data.get('input_type')).exists():
+                            year=form.cleaned_data.get('year'),half_year=form.cleaned_data.get("half_year"),input_type=form.cleaned_data.get('input_type')).exists():
             messages.warning(self.request,"Data For this Year already exists")
             return redirect("admin:create_demand_supply")
         else:

@@ -19,7 +19,7 @@
 					<div class="card-header header-elements-inline">
 						<h5 class="card-title">Sectors & Sub Sectors</h5>
 						<div class="header-elements">
-							{% if user.is_superuser or perms.product.add_subcategory %}
+							{% if user.is_superuser and perms.product.add_subcategory %}
 							<div class="list-icons">
 								<a href="{%url 'admin:create_category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Category</a>
 							</div>
@@ -81,7 +81,7 @@
 					<div class="card">
 						<div class="card-header header-elements-inline">
 							<h5 class="card-title">Product</h5>
-							{% if user.is_superuser or perms.product.add_subcategory %}
+							{% if user.is_superuser and perms.product.add_subcategory %}
 							<div class="header-elements">
 								<div class="list-icons">
 									<a href="{%url 'admin:create_subcategory'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Product</a>
@@ -145,7 +145,7 @@
 					<div class="card">
 						<div class="card-header header-elements-inline">
 							<h5 class="card-title">Product Brands</h5>
-							{%if not user.is_superuser or perms.product.add_brand %}
+							{%if not user.is_superuser and perms.product.add_brand %}
 							<div class="header-elements">
 								<div class="list-icons">
 									<a href="{%url 'admin:create_brand'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New Brand</a>

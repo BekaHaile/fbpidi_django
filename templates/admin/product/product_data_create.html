@@ -135,8 +135,60 @@ Product Packaging Data Form
 </div>
 <!-- /content area -->
 <script>
+	function in_between(num,min,max){
+		return ((num-min)*(num-max) <= 0);
+	}
 	$(document).ready(function () {
+		var date = new Date()
+		var current_year = date.getFullYear()-8;
+		var current_month = date.getMonth()+1;
 		$(".summernote").summernote();
+		$("#id_activity_year").change(function(){
+			if($(this).val() != ""){
+				$("#id_half_year").prop("disabled",false);
+			}else{
+				$("#id_half_year").prop("disabled",true);
+			}
+			if($(this).val() == current_year){
+				if(in_between(current_month,1,6)){
+					var option = "<option value=''>Select Half Year</option>"
+                		+"<option value='First_Half'>First Half (July-Dec)</option>";
+					$("#id_half_year").html(option);
+				}else if(in_between(current_month,7,12)){
+					var option = "<option value=''>You will insert this half data in the next year</option>";
+					$("#id_half_year").html(option);
+				}
+			}else{
+				var option = "<option value=''>Select Half Year</option>"
+                		+"<option value='First_Half'>First Half (July-Dec)</option>"
+						+"<option value='Second_Half'>Second Half (Jan-June)</option>";
+					$("#id_half_year").html(option);
+			}
+		
+		});
+		$("#id_year").change(function(){
+			if($(this).val() != ""){
+				$("#id_half_year").prop("disabled",false);
+			}else{
+				$("#id_half_year").prop("disabled",true);
+			}
+			if($(this).val() == current_year){
+				if(in_between(current_month,1,6)){
+					var option = "<option value=''>Select Half Year</option>"
+                		+"<option value='First_Half'>First Half (July-Dec)</option>";
+					$("#id_half_year").html(option);
+				}else if(in_between(current_month,7,12)){
+					var option = "<option value=''>You will insert this half data in the next year</option>";
+					$("#id_half_year").html(option);
+				}
+			}else{
+				var option = "<option value=''>Select Half Year</option>"
+                		+"<option value='First_Half'>First Half (July-Dec)</option>"
+						+"<option value='Second_Half'>Second Half (Jan-June)</option>";
+					$("#id_half_year").html(option);
+			}
+		
+		});
 	});
 </script>
 {%endblock%}

@@ -1009,6 +1009,7 @@ Number of Industries By Market Target
 								<tr>
 									<th>#</th>
 									<th>Company</th>
+									<th>Product</th>
 									<th>{{years.prev_year}} GVP</th>
 									<th>{{years.last_year}} GVP</th>
 									<th>{{years.this_year}} GVP</th>	
@@ -1025,9 +1026,10 @@ Number of Industries By Market Target
 								<tr>
 									<td>{{forloop.counter}}</td>
 									<td>{{fd.company}}</td>
-									<td>ETB {{fd.gvp_data.prev_yr|floatformat:2}}</td>
-									<td>ETB {{fd.gvp_data.last_yr|floatformat:2}}</td>
-									<td>ETB {{fd.gvp_data.this_yr|floatformat:2}}</td>
+									<td>{{fd.product}}</td>
+									<td>ETB {%if fd.prev_yr == None%}0.00{%else%}{{fd.prev_yr|floatformat:2}}{%endif%}</td>
+									<td>ETB {%if fd.last_yr == None%}0.00{%else%}{{fd.last_yr|floatformat:2}}{%endif%}</td>
+									<td>ETB {%if fd.this_yr == None%}0.00{%else%}{{fd.this_yr|floatformat:2}}{%endif%}</td>
 									{%if sector != 'all'%}
 									<td>{{sector}}</td>
 									{%endif%}
@@ -1038,18 +1040,19 @@ Number of Industries By Market Target
 								{%endfor%}
 								
 							</tbody>
-							<tr>
+							<!-- <tr>
 								<td>Total</td>
 								<td></td>
 								<td></td><td></td>
 									{%if sector != 'all'%}
 									<td></td>
+									<td></td>
 									{%endif%}
 									{%if sub_sector%}
 									<td></td>
 									{%endif%}
-								<td>{{gvp_data|get_sum}}</td>
-							</tr>
+								<td> </td>
+							</tr> -->
 						</table>
 					</div> 
 				</div>

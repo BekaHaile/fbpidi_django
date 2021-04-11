@@ -20,8 +20,17 @@ from accounts.models import CompanyAdmin,UserProfile
 
 from company.forms import *
 
-today = datetime.datetime.today()
-this_year = today.year
+def get_current_year():
+    current_year = 0
+    gc_year = datetime.datetime.today().year
+    month = datetime.datetime.today().month
+    day = datetime.datetime.today().day
+
+    if month <= 7 and day < 8 or month <= 7:
+        current_year = gc_year-9
+    else:
+        current_year = gc_year - 8
+    return current_year
 
 
 class ReportPage(LoginRequiredMixin,View):
@@ -72,18 +81,14 @@ class CapitalUtilizationReportSector(LoginRequiredMixin,View):
             companies_with_data = companies.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))),
                                                     Exists(ProductionCapacity.objects.filter(company=OuterRef('pk')))
                                                     )
-            # data=ProductionAndSalesPerformance.objects.values('product__sub_category_name').annotate(
-            #         total_amnt_prdn=Sum('product__sales_performance__production_amount',distinct=True,filter=Q(product=F('product'))), 
-            #         actual_prdn=Sum('product__production_capacity__actual_prdn_capacity',distinct=True,filter=Q(product=F('product')))) 
             for company in companies_with_data:
-                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year).distinct('product')
-                production_capacity_this_year = ProductionCapacity.objects.filter(company=company).distinct('product')
-
+                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=get_current_year()).values('product','product__sub_category_name','company__name').annotate(all_data=Sum('production_amount'))
+                production_capacity_this_year = ProductionCapacity.objects.filter(company=company,year=get_current_year())
                 
                 for (performance,capacity) in zip(production_performance_this_year,production_capacity_this_year):
-                    if performance.product == capacity.product:
+                    if performance['product'] == capacity.product.id:
                         capital_util_data.append({
-                            'company':company.name,'product':performance.product.sub_category_name,'production_amount':performance.production_amount,
+                            'company':company.name,'product':performance['product__sub_category_name'],'production_amount':performance['all_data'],
                             'actual_production':capacity.actual_prdn_capacity
                         })
             print(capital_util_data)
@@ -135,34 +140,32 @@ class ChangeInCapitalUtilization(LoginRequiredMixin,View):
                                                     Exists(ProductionCapacity.objects.filter(company=OuterRef('pk')))
                                                     )
             for company in companies_with_data:
-                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year).distinct('product')
-                production_performance_last_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1).distinct('product')
-                production_capacity_this_year = ProductionCapacity.objects.filter(company=company).distinct('product')
+                production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=get_current_year()).values('product','product__sub_category_name','product__uom','company__name').annotate(all_data=Sum('production_amount'))
+                production_performance_last_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=get_current_year()-1).values('product','product__sub_category_name','product__uom','company__name').annotate(all_data=Sum('production_amount'))
+                production_capacity_this_year = ProductionCapacity.objects.filter(company=company,year=get_current_year())
 
                 if production_performance_last_year.exists():
                     for (performance_this,performance_last,capacity) in zip(production_performance_this_year,production_performance_last_year,production_capacity_this_year):
-                        if performance_this.product == capacity.product or performance_last.product == capacity.product:
+                        if performance_this['product'] == capacity.product.id or performance_last['product'] == capacity.product.id:
                             change_capital_util_data.append({
                                 'company':company.name,
-                                'product':performance_this.product.sub_category_name,
-                                'unit':performance_this.product.uom,
-                                'pa_this':performance_this.production_amount,
-                                'pa_last':performance_last.production_amount,
+                                'product':performance_this['product__sub_category_name'],
+                                'unit':performance_this['product__uom'],
+                                'pa_this':performance_this['all_data'],
+                                'pa_last':performance_last['all_data'],
                                 'apc':capacity.actual_prdn_capacity
                             })
                 else:
                     for (performance_this,capacity) in zip(production_performance_this_year,production_capacity_this_year):
-                        if performance_this.product == capacity.product:
+                        if performance_this['product'] == capacity.product.id:
                             change_capital_util_data.append({
                                 'company':company.name,
-                                'product':performance_this.product.sub_category_name,
-                                'unit':performance_this.product.uom,
-                                'pa_this':performance_this.production_amount,
+                                'product':performance_this['product__sub_category_name'],
+                                'unit':performance_this['product__uom'],
+                                'pa_this':performance_this['all_data'],
                                 'pa_last':0,
                                 'apc':capacity.actual_prdn_capacity
                             })
-                     
-             
             context['change_capital_util_data'] = change_capital_util_data
             context['flag'] = "change_capital_utilization"
             return render(self.request,"admin/report/report_page.html",context)
@@ -198,9 +201,9 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
         # Gross value of production = (Sum(total_prodn_thisyrs)/Sum(actual_produn_capacity*260))*100
         # Sectors,Sub-Sectors and Products
         gvp_data = []
-        pp_today=0
-        pp_last=0
-        pp_prev = 0
+        gvp_today= {}
+        gvp_last=0
+        gvp_prev = 0
         context = {}         
         companies = None
         if self.kwargs['option'] == 'by_sector':
@@ -235,60 +238,25 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
             return render(self.request,"admin/report/report_page.html",context)
         else:
             companies_with_data = companies.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))))
-            production_performance_this_year = companies_with_data.values('name').annotate(total=Sum('company_product_perfornamce__sales_value',filter=Q(company_product_perfornamce__activity_year=this_year)))
-            production_performance_this_last = companies_with_data.values('name').annotate(total=Sum('company_product_perfornamce__sales_value',filter=Q(company_product_perfornamce__activity_year=this_year-1)))
-            production_performance_this_pre = companies_with_data.values('name').annotate(total=Sum('company_product_perfornamce__sales_value',filter=Q(company_product_perfornamce__activity_year=this_year-2)))
-            
-            for (p_this,p_last,p_prev) in zip(production_performance_this_year,production_performance_this_last,production_performance_this_pre):
-                    if p_this['total'] == None:
-                        pp_today = 0
-                    else:
-                        pp_today = p_this['total']
-                    if p_last['total'] == None:
-                        pp_last = 0
-                    else:
-                        pp_last = p_last['total']
-                    if p_prev['total'] == None:
-                        pp_prev = 0
-                    else:
-                        pp_prev = p_prev['total']
-                    gvp_data.append({'company':p_this['name'],'data':float(pp_today+pp_last+pp_prev),'gvp_data':{
-                        'this_yr':pp_today,'last_yr':pp_last,'prev_yr':pp_prev
-                    } })
-
-            # for company in companies_with_data:
-            #     production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year).annotate(total=Sum('sales_value'))
-            #     production_performance_this_last = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-1).annotate(total=Sum('sales_value')) 
-            #     production_performance_this_pre = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=this_year-2).annotate(total=Sum('sales_value')) 
-
-            #     # for (p_this,p_last,p_prev) in zip(production_performance_this_year,production_performance_this_last,production_performance_this_pre):
-            #     #         pp_today += p_this.sales_value
-            #     #         pp_last += p_last.sales_value
-            #     #         pp_prev += p_prev.sales_value
-            #     #         print(p_this,p_last,p_prev)
-
-            #     # print(production_performance_this_year)
-
-            #     if production_performance_this_year.exists():
-            #         for p in production_performance_this_year:
-            #             pp_today = p.total 
-                        
-            #     if production_performance_this_last.exists():
-            #         for p in production_performance_this_last:
-            #             pp_last = p.total
-                         
-            #     if production_performance_this_pre.exists():
-            #         for p in production_performance_this_pre:
-            #             pp_prev = p.total
-                        
-
-                # gvp_data.append({'company':company.name,'data':float(pp_today+pp_last+pp_prev),'gvp_data':{
-                #     'this_yr':pp_today,'last_yr':pp_last,'prev_yr':pp_prev
-                # } })
-            # print(gvp_data)
+            for company in companies_with_data:
+                perform_data = ProductionAndSalesPerformance.objects.filter(
+                        company=company).values('company__name','product__sub_category_name').annotate(
+                            total_this_year=Sum('sales_value',filter=Q(activity_year=get_current_year())),
+                            total_last_year=Sum('sales_value',filter=Q(activity_year=get_current_year()-1)),
+                            total_prev_year=Sum('sales_value',filter=Q(activity_year=get_current_year()-2))
+                        )
+                for gvp_index in perform_data:
+                    gvp_data.append({
+                        'company':company.name,
+                        'product':gvp_index['product__sub_category_name'],
+                        'this_yr':gvp_index['total_this_year'],
+                        'last_yr':gvp_index['total_last_year'],
+                        'pref_yr':gvp_index['total_prev_year'],
+                    })
+            print(gvp_data)
             context['gvp_data'] = gvp_data
             context['flag'] = "gross_vp_data"
-            context['years'] = {'this_year':this_year,'last_year':this_year-1,'prev_year':this_year-2}
+            context['years'] = {'this_year':get_current_year(),'last_year':get_current_year()-1,'prev_year':get_current_year()-2}
             
             return render(self.request,"admin/report/report_page.html",context)
 
@@ -308,22 +276,22 @@ class AverageUnitPrice(LoginRequiredMixin,View):
         prodn_total = 0
         for product in products:
             pup = 0
-            spp = ProductionAndSalesPerformance.objects.filter(product=product,activity_year=this_year)
+            spp = ProductionAndSalesPerformance.objects.filter(product=product,activity_year=get_current_year()).values('product').annotate(
+                total_sales_amnt=Sum('sales_amount'),total_sales=Sum('sales_value'))
+
             if spp.exists():
                 for aup in spp:
-                    price_total = aup.sales_value
-                    prodn_total = aup.sales_amount
-                
-                if prodn_total == 0:
-                    pup = float(price_total/1)
-                else:
-                    pup = float(price_total/prodn_total)
+                    price_total = aup['total_sales']
+                    prodn_total = aup['total_sales_amnt']
+            if prodn_total == 0:
+                pup = float(price_total/1)
+            else:
+                pup = float(price_total/prodn_total)
 
             average_price_data.append({'product':product.sub_category_name,'data':pup})
         context['price_data']=average_price_data
         context['flag'] = "unit_price_data"
         context['products'] = SubCategory.objects.all()
-        print(context)
         return render(self.request,"admin/report/report_page.html",context)
 
 
@@ -382,18 +350,6 @@ class ProductionCapacityView(LoginRequiredMixin,View):
             pdata = ProductionCapacity.objects.filter(product__id=self.kwargs['product']).values('product__sub_category_name','product__uom').annotate(total_prdn_capacity=Sum('install_prdn_capacity')*260,total_actual=Sum('actual_prdn_capacity')*260).order_by('product')
             context['title']= SubCategory.objects.get(id=self.kwargs['product']).sub_category_name
 
-        # total_data = []
-        # prodn_total = 0
-        # actual_total = 0
-        # pdata = ProductionCapacity.objects.values('product__sub_category_name','product__uom').annotate(total_prdn_capacity=Sum('install_prdn_capacity')*260,total_actual=Sum('actual_prdn_capacity')*260).order_by('product')
-
-        # for product in products:
-        #     for aup in ProductionCapacity.objects.filter(product=product):
-        #         prodn_total +=float(aup.install_prdn_capacity*260)
-        #         actual_total +=float(aup.actual_prdn_capacity*260)
-
-        #     total_data.append({'product':product.sub_category_name,'unit':product.uom,'total_data':{'installed':prodn_total,'actual':actual_total}})
-
         context['produn_data']=pdata
         context['products'] = SubCategory.objects.all()
         context['flag'] = 'production_cap'
@@ -415,11 +371,14 @@ class InputAvailablity(LoginRequiredMixin,View):
         demand = 0
         av_inp = 0
         for product in products:
-            inp_dem_sups = InputDemandSupply.objects.filter(product=product)
+            inp_dem_sups = InputDemandSupply.objects.filter(product=product,year=get_current_year()).values('product').annotate(
+                demand=Sum('demand'),supply = Sum('supply')
+            )
+            print(inp_dem_sups)
             if inp_dem_sups.exists():
                 for aup in inp_dem_sups:
-                    demand += aup.demand
-                    supply += aup.supply
+                    demand += aup['demand']
+                    supply += aup['supply']
 
                 if demand == 0:
                     av_inp=float(supply/1)
@@ -812,8 +771,8 @@ class NumberOfJobsCreatedBySubSector(LoginRequiredMixin,View):
             return render(self.request,"admin/report/report_page.html",context)
         else:
             for company in companies:
-                jobs_created_temp = JobOpportunities.objects.filter(company=company,job_type__icontains="Temporary")
-                jobs_created_permanent = JobOpportunities.objects.filter(company=company,job_type__icontains="Permanent")
+                jobs_created_temp = JobOpportunities.objects.filter(company=company,job_type__icontains="Temporary",year_job=get_current_year())
+                jobs_created_permanent = JobOpportunities.objects.filter(company=company,job_type__icontains="Permanent",year_job=get_current_year())
                
                 temp_male = 0
                 temp_female = 0
@@ -841,7 +800,7 @@ class EduLevelofEmployees(LoginRequiredMixin,View):
         education_status_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = EducationalStatus.objects.values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
+        queryset = EducationalStatus.objects.filter(year_edu=get_current_year()).values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
         total = 0
         for edu_data in queryset:
             total += int(edu_data['female__sum']+edu_data['male__sum'])
@@ -860,7 +819,7 @@ class NumWomenInPosition(LoginRequiredMixin,View):
         women_in_pson_level = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = FemalesInPosition.objects.all()
+        queryset = FemalesInPosition.objects.filter(year_fem=get_current_year())
         # (Sum('high_position'),Sum('med_position'))
         in_med = 0
         in_high = 0

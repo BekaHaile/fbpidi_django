@@ -11,6 +11,36 @@ from admin_site.models import Category
 from company.models import Company
 
 
+def return_year(start_year):
+    current_year = 0
+    gc_year = datetime.datetime.today().year
+    month = datetime.datetime.today().month
+    day = datetime.datetime.today().day
+    print(month)
+    if month <= 7 and day < 8 or month <= 7:
+        current_year = gc_year-9
+    else:
+        current_year = gc_year - 8
+    YEAR_CHOICES=[('','Select Year'),]
+    YEAR_CHOICES += [(r,r) for r in range(start_year, current_year+1)]
+    return YEAR_CHOICES
+
+def in_between(x,min,max):
+    return ((x-min)*(x-max) <= 0)
+
+def return_year_with_halfyear(start_year):
+    current_year = 0
+    gc_year = datetime.datetime.today().year
+    month = datetime.datetime.today().month
+    day = datetime.datetime.today().day
+    if in_between(month,1,6):
+        current_year = gc_year-8
+    else:
+        current_year = gc_year - 9
+    YEAR_CHOICES=[('','Select Year'),]
+    YEAR_CHOICES += [(r,r) for r in range(start_year, current_year+1)]
+    return YEAR_CHOICES
+
 
 class CategoryForm(forms.ModelForm):
 
@@ -156,13 +186,19 @@ class ProductionCapacityForm(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         self.product = kwargs.pop("product")
+        self.company = kwargs.pop("company")
         super(ProductionCapacityForm,self).__init__(*args,**kwargs)
         self.fields['product'].queryset = self.product
         self.fields['product'].empty_label = "Select A Product"
+        self.fields['year'].empty_label = "Select Year"
+        self.fields['year'].widget = forms.Select(choices=
+            return_year(self.company.established_yr),
+            attrs={'class':'form-control form-control-uniform'}
+            )
 
     class Meta:
         model=ProductionCapacity
-        fields = ('product','install_prdn_capacity','atnbl_prdn_capacity',
+        fields = ('product','year','install_prdn_capacity','atnbl_prdn_capacity',
                     'actual_prdn_capacity','production_plan','extraction_rate')
         widgets = {
             'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),
@@ -195,13 +231,6 @@ class ProductPackagingForm(forms.ModelForm):
             'wastage':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_wastage")'}),
         }
 
-def return_year(start_year):
-    YEAR_CHOICES=[('','Select Year'),]
-    YEAR_CHOICES += [(r,r) for r in range(start_year, datetime.date.today().year+1)]
-    return YEAR_CHOICES
-
-YEAR_CHOICES=[('','Select Year'),]
-YEAR_CHOICES += [(r,r) for r in range(2000, datetime.date.today().year+1)]
 
 class SalesPerformanceForm(forms.ModelForm):
     # activity_year = forms.IntegerField(label="Activity Year",widget=forms.Select(choices=YEAR_CHOICES,
@@ -213,15 +242,19 @@ class SalesPerformanceForm(forms.ModelForm):
         super(SalesPerformanceForm,self).__init__(*args,**kwargs)
         self.fields['activity_year'].empty_label = "Select Year"
         self.fields['activity_year'].widget = forms.Select(choices=
-            return_year(self.company.established_yr),
+            return_year_with_halfyear(self.company.established_yr),
             attrs={'class':'form-control form-control-uniform'}
             )
         self.fields['product'].queryset = self.product
         self.fields['product'].empty_label = "Select Product"
+        self.fields['half_year'].widget=forms.Select(choices=[('','Select Half Year'),
+                                                            ('First_Half','First Half (July-Dec)'),
+                                                            ('Second_Half','Second Half (Jan-June)')],
+                                                            attrs={'disabled':'true','class':'form-control form-control-uniform'})
 
     class Meta:
         model=ProductionAndSalesPerformance
-        fields = ('product','activity_year','production_amount','sales_amount','sales_value')
+        fields = ('product','activity_year','half_year','production_amount','sales_amount','sales_value')
         widgets = {
             'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'production_amount':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_production_amount")'}),
@@ -242,10 +275,11 @@ class AnualInputNeedForm(forms.ModelForm):
             )
         self.fields['product'].queryset = self.product
         self.fields['product'].empty_label = "Select Product"
+        self.fields['input_unit'].empty_label = "Select Unit of Measurement"
 
     class Meta:
         model=AnnualInputNeed
-        fields = ('product','input_name','year','is_active_input','amount','local_input','import_input')
+        fields = ('product','input_name','input_unit','year','is_active_input','amount','local_input','import_input')
         widgets = {
             'input_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Input Type'}),
             'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),
@@ -267,15 +301,20 @@ class InputDemandSupplyForm(forms.ModelForm):
         super(InputDemandSupplyForm,self).__init__(*args,**kwargs)
         self.fields['year'].empty_label = "Select Year"
         self.fields['year'].widget = forms.Select(choices=
-            return_year(self.company.established_yr),
+            return_year_with_halfyear(self.company.established_yr),
             attrs={'class':'form-control form-control-uniform'}
             )
         self.fields['product'].queryset = self.product
         self.fields['product'].empty_label = "Select Product"
+        self.fields['input_unit'].empty_label = "Select Unit of Measurement"
+        self.fields['half_year'].widget=forms.Select(choices=[('','Select Half Year'),
+                                                            ('First_Half','First Half (July-Dec)'),
+                                                            ('Second_Half','Second Half (Jan-June)')],
+                                                            attrs={'disabled':'true','class':'form-control form-control-uniform'})
 
     class Meta:
         model=InputDemandSupply
-        fields = ('product','input_type','year','demand','supply')
+        fields = ('product','input_type','input_unit','year','half_year','demand','supply')
         widgets = {
             'input_type':forms.TextInput(attrs={'class':'form-control','placeholder':'Input Type '}),
             'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),
