@@ -353,7 +353,7 @@ class CreateEmployees(LoginRequiredMixin,View):
         form = EmployeesForm(self.request.POST,company=Company.objects.get(id=self.kwargs['company']))
         if form.is_valid():
             try:
-                if Employees.objects.filter(year=ethio_year,employment_type=form.cleaned_data.get('employment_type'), company=Company.objects.get(id=self.kwargs['company'])).exists():
+                if Employees.objects.filter(year_emp=form.cleaned_data.get('year_emp'),employment_type=form.cleaned_data.get('employment_type'), company=Company.objects.get(id=self.kwargs['company'])).exists():
                     return JsonResponse({'error': True, 'message': 'Data For this Year Already Exists'})
                 else:
                     employee = form.save(commit=False)
@@ -501,7 +501,7 @@ class CheckYearField(LoginRequiredMixin,View):
         if self.kwargs['model'] == "employee":
             try:
                 employee = Employees.objects.get(company=company,year_emp=self.kwargs['year'],employment_type=self.request.POST['emp_type']) 
-                return JsonResponse({"error":True,"message":"Data For {} Exists".format(ethio_year),
+                return JsonResponse({"error":True,"message":"Data For this Year Exists",
                                     'data':json.loads(serializers.serialize('json',[employee],ensure_ascii=False))[0]})
             except Employees.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})

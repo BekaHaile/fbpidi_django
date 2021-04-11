@@ -13,7 +13,7 @@ def company_created():
                     return view_func(request,*args,**kwargs) 
             elif request.user.is_superuser:
                 if request.user.get_company() == None:
-                    messages.warning(self.request,"Please Create Your Inistitute Profile")
+                    messages.warning(request,"Please Create Your Inistitute Profile")
                     return redirect("admin:create_fbpidi_company")
                 else:
                     return view_func(request,*args,**kwargs) 

@@ -1,0 +1,584 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+{%load static%}
+{%load pdf_template_tags%}
+<html>
+    <head>
+        <title>{{company.name}}</title>  
+        <link href="/static/admin/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="/static/admin/assets/css/bootstrap_limitless.min.css" rel="stylesheet" type="text/css">
+        <link href="/static/admin/assets/css/layout.min.css" rel="stylesheet" type="text/css">
+        <link href="/static/admin/assets/css/components.min.css" rel="stylesheet" type="text/css">
+        <link href="/static/admin/assets/css/colors.min.css" rel="stylesheet" type="text/css">
+        <!-- /global stylesheets -->
+    
+        <!-- Core JS files -->
+        <script src="/static/admin/global_assets/js/main/jquery.min.js"></script>
+        <style type="text/css">
+            body {
+                font-weight: 100;
+                font-size: 12px;
+                font-family: Arial, Helvetica, sans-serif
+            }
+            table{
+                margin-top: 10px;
+                margin-bottom: 10px;
+                font-stretch: condensed;
+                font-size: 10px;
+            }
+            th{
+                padding-top: 2px;
+                padding-right: 2px;
+                padding-left: 2px;
+                align-items: stretch;
+            }
+            td{
+                padding-top: 2px;
+            }
+            #hrItem {
+                border: none;
+                height: 1px;
+                /* Set the hr color */
+                color: #333; /* old IE */
+                background-color: #fff; /* Modern Browsers */
+            }
+            @page {
+                size: a4 portrait;
+                @frame header_frame {           /* Static Frame */
+                    -pdf-frame-content: header_content;
+                    left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+                }
+                @frame content_frame {          /* Content Frame */
+                    left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+                }
+                @frame footer_frame {           /* Another static Frame */
+                    -pdf-frame-content: footer_content;
+                    left: 450pt; width: 512pt; top: 772pt; height: 20pt;
+                }
+                
+            }
+            
+        </style>
+    </head>
+    <body>
+    <div id="header_content">
+          <h3>{{company.name|title}}</h3>
+        <hr id="hrItem">
+    </div>
+    
+    <div id="footer_content">        
+        <i>Page <pdf:pagenumber> Of <pdf:pagecount></i>
+    </div>
+    <div>
+        <ol>
+            <li><b>GPS Location Reading:</b>({{company.geo_location.x}},{{company.geo_location.y}})</li>
+            <li><b>Company Name:</b> {{company.name}}</li>
+                <tr><td><b>Company Logo</b></td><td><img height="200" width="200" src="{{company.logo.path}}" alt="" srcset=""></td></tr>
+            <li><b>Form of Ownership:</b> {{company.ownership_form}}</li>
+            <li><b>Year of Establishment (E.C):   </b>{{company.established_yr}}</li>
+            <li><b>Company Address</b> </li>
+                <ol>
+                <table>
+                <tbody>
+                <tr><td><li><b>Region :</b>{{company.company_address.region}}</li>
+                        <li><b>City/Town :</b>{{company.company_address.city_town}}</li>
+                        <li><b>Sub-City/Zone :</b>{{company.company_address.subcity_zone}}</li>
+                        <li><b>Woreda :</b>{{company.company_address.woreda}}</li>
+                        <li><b>Kebele :</b>{{company.company_address.kebele}}</li>
+                    </td> 
+                    <td><li><b>Local Area Name :</b>{{company.company_address.local_area}}</li>
+                        <li><b>Phone Number :</b>{{company.company_address.phone_number}}</li>
+                        <li><b>Fax :</b>{{company.company_address.fax}}</li>
+                        <li><b>Email :</b>{{company.company_address.email}}</li>
+                        <li><b>Website :</b>{{company.company_address.facebooklink}}</li></td></tr>
+                </tbody>
+                </table>
+                    
+                        
+                </ol>
+                
+            <li><b>Contact Person</b> </li>
+                <ol>
+                    <li><b>Name :</b>{{company.contact_person.first_name|title}} {{company.contact_person.last_name|title}}</li>
+                    <li><b>Responsiblity :</b>{{company.contact_person.company_admin.designation}}</li>
+                    <li><b>Mobile :</b>{{company.contact_person.phone_number}}</li>
+                    <li><b>Email :</b>{{company.contact_person.email}}</li>
+                </ol>
+            <li><b>Current Total Investment Capital : </b>{%for i in inv_capital%}ETB {{i.get_inv_cap}}{%endfor%}</li>
+                <ol>
+                    <li><b>Machinery Cost :</b>{%for i in inv_capital%}
+                        ETB {{i.machinery}}
+                        {%endfor%}</li>
+                    <li><b>Building Cost :</b>{%for i in inv_capital%}
+                        ETB {{i.building}}
+                        {%endfor%}</li>
+                    <li><b>Working Capital :</b>{%for i in inv_capital%}
+                        ETB {{i.working}}
+                        {%endfor%}</li>
+                </ol>
+            <li><b>Does The Company Have Expansion Plan?: </b> {%if company.expansion_plan != 'No'%}<b>Yes</b>{%else%}<b>No</b>{%endif%}</li>
+                <ul>
+                    {%if company.expansion_plan != 'No'%}
+                    <p>{{company.expansion_plan|safe}}</p>
+                    {%endif%}
+                </ul>
+            <li><b>Does The Company Have Valid Certificate of Comptency? : </b>{%if company__certificates != None%}<b>Yes</b>{%else%}<b>No</b>{%endif%}</li>
+                <ul>
+                    {%if company__certificates != None%}
+                    <p>{{company__certificates|safe}}</p>
+                    {%endif%}
+                </ul>
+            <li><b>Do you have valid trade license and market authorization? : </b>{%if company.trande_license != None%}No{%else%}Yes{%endif%}</li>
+                 
+            <li><b>Working Hours Per day : </b>{{company.working_hours.name}} hours</li>
+            <li><b>Types of Products & Production capacity</b></li>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Uom (Ton, Litter, pcs, doze, roll)</th>
+                            <th>Installed Production capacity</th> 
+                            <th>Attainable Prodution capacity</th>
+                            <th>Actual Production capacity</th>
+                            <th>Production Plan</th>
+                            <th>Average Extraction Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for pc in production_capacity%}
+                        <tr>
+                            <td>{{pc.product.sub_category_name}}</td>
+                            <td>{{pc.product.uom.name}} {{pc.product.uom.name}}</td>
+                            <td>{{pc.install_prdn_capacity}} {{pc.product.uom.name}}</td>
+                            <td>{{pc.atnbl_prdn_capacity}} {{pc.product.uom.name}}</td>
+                            <td>{{pc.install_prdn_capacity}} {{pc.product.uom.name}}</td>
+                            <td>{{pc.production_plan}} {{pc.product.uom.name}}</td>
+                            <td>{{pc.extraction_rate}}</td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            <li><b>Inputs needs by products type annually</b></li>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">Product</th>
+                            <th rowspan="2">Input</th>
+                            <th rowspan="2">Uom (Ton, Litter, pcs, doze, roll)</th>
+                            <th rowspan="2">Amount per day</th>
+                            <th colspan="2">Source of Input in %</th>
+                        </tr>
+                        <tr>
+                            
+                            <th>Local</th>
+                            <th>Import</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for pc in anual_input_need%}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{pc.product.sub_category_name}}</td>
+                            <td>{{pc.input_name}}</td>
+                            <td>{{pc.input_unit.name}}</td>
+                            <td>{{pc.amount}}</td>
+                            <td>{{pc.local_input}}</td>
+                            <td>{{pc.import_input}}</td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            <li><b>Production  and Sales  performance for the last 3  years</b></li>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th rowspan="3">No</th>
+                            <th rowspan="3">Product</th>
+                            <th rowspan="3">UOM</th>
+                            <th rowspan="2" colspan="3">Total production every 6 month </th>
+                            <th  colspan="6">Total Sales in (Birr) (R) 6 month</th>
+                        </tr>
+                        <tr>
+                            <th  colspan="3">Amount in (Ton, Litter, pcs, doze, roll)</th>
+                            <th  colspan="3">Value in ( birr)</th>
+                        </tr>
+                        <tr>
+                            <th>{{years.prev_yr}}</th>
+                            <th>{{years.last_yr}}</th>
+                            <th>{{years.this_yr}}</th>
+                            <th>{{years.prev_yr}}</th>
+                            <th>{{years.last_yr}}</th>
+                            <th>{{years.this_yr}}</th>
+                            <th>{{years.prev_yr}}</th>
+                            <th>{{years.last_yr}}</th>
+                            <th>{{years.this_yr}}</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for spp in sales_perfornamce%}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{spp.product__sub_category_name}}</td>
+                            <td>{{spp.product__uom__name}}</td>
+                            <td>{%if spp.prdn_prev_year == None%} 0 {{spp.product__uom__name}} {%else%} {{spp.prdn_prev_year}} {{spp.product__uom__name}}{%endif%}</td>
+                            <td>{%if spp.prdn_last_year == None%} 0 {{spp.product__uom__name}} {%else%} {{spp.prdn_last_year}} {{spp.product__uom__name}}{%endif%}</td>
+                            <td>{%if spp.prdn_this_year == None%} 0 {{spp.product__uom__name}} {%else%} {{spp.prdn_this_year}} {{spp.product__uom__name}}{%endif%}</td>
+                            
+                            <td>{%if spp.amnt_prev_year == None%} 0 {{spp.product__uom__name}} {%else%} {{spp.amnt_prev_year}} {{spp.product__uom__name}}{%endif%}</td>
+                            <td>{%if spp.amnt_last_year == None%} 0 {{spp.product__uom__name}} {%else%} {{spp.amnt_last_year}} {{spp.product__uom__name}}{%endif%}</td>
+                            <td>{%if spp.amnt_this_year == None%} 0 {{spp.product__uom__name}} {%else%} {{spp.amnt_this_year}} {{spp.product__uom__name}}{%endif%}</td>
+                            
+                            <td>{%if spp.sales_prev_year == None%} 0 {{spp.product__uom__name}} {%else%} {{spp.sales_prev_year}} {{spp.product__uom__name}}{%endif%}</td>
+                            <td>{%if spp.seles_last_year == None%} 0 {{spp.product__uom__name}} {%else%} {{spp.seles_last_year}} {{spp.product__uom__name}}{%endif%}</td>
+                            <td>{%if spp.sales_this_year == None%} 0 {{spp.product__uom__name}} {%else%} {{spp.sales_this_year}} {{spp.product__uom__name}}{%endif%}</td>
+                            
+                            
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            <li><b>Product input demand and supply last 3  years </b></li>
+                <table border="1">
+                <thead>
+                    <tr>
+                        <th rowspan="2">No.</th>
+                        <th rowspan="2">Products</th>
+                        <th rowspan="2">Inputs</th>
+                        <th rowspan="2">Unit of Measurment</th>
+                        <th colspan="2">{{years.prev_yr}}</th>
+                        <th colspan="2">{{years.last_yr}}</th>
+                        <th colspan="2">{{years.this_yr}}</th>
+                    </tr>
+                    <tr>
+                        <th>Demand</th>
+                        <th>Supply</th>
+                        <th>Demand</th>
+                        <th>Supply</th>
+                        <th>Demand</th>
+                        <th>Supply</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for pds in demand_supply%}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{pds.product__sub_category_name}}</td>
+                            <td>{{pds.input_type}}</td>
+                            <td>{{pds.input_unit__name}}</td>
+                            <td>{%if pds.demand_prev_year == None%} 0 {{pds.input_unit__name}}{%else%} {{pds.demand_prev_year}} {{pds.input_unit__name}} {%endif%}</td>
+                            <td>{%if pds.supply_prev_year == None%} 0 {{pds.input_unit__name}}{%else%} {{pds.supply_prev_year}} {{pds.input_unit__name}} {%endif%}</td>
+                            
+                            <td>{%if pds.demand_last_year == None%} 0 {{pds.input_unit__name}}{%else%} {{pds.demand_last_year}} {{pds.input_unit__name}} {%endif%}</td>
+                            <td>{%if pds.supply_last_year == None%} 0 {{pds.input_unit__name}}{%else%} {{pds.supply_last_year}} {{pds.input_unit__name}} {%endif%}</td>
+                            
+                            <td>{%if pds.demand_this_year == None%} 0 {{pds.input_unit__name}}{%else%} {{pds.demand_this_year}} {{pds.input_unit__name}} {%endif%}</td>
+                            <td>{%if pds.supply_this_year == None%} 0 {{pds.input_unit__name}}{%else%} {{pds.supply_this_year}} {{pds.input_unit__name}} {%endif%}</td>
+                            
+                        </tr>
+                    {%endfor%}
+                </tbody>
+                </table>
+            <li><b>Types of packaging</b></li>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">No.</th>
+                            <th rowspan="2">Products</th>
+                            <th rowspan="2">List of Packaging</th>
+                            <th rowspan="2">Unit of Measurment</th>
+                            <th colspan="3">Categories of Pacakging</th>
+                            <th rowspan="2">Amount</th>
+                            <th colspan="2"> Src of Input</th>
+                            <th rowspan="2">Wastage %</th>
+                        </tr>
+                        <tr>
+                            <th>Primary</th>
+                            <th>Secondary</th>
+                            <th>Teritiary</th>
+                            <th>Local</th>
+                            <th>Import</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for pkg in company.company_product_packaging.all%}
+                            <td>{{forloop.counter}}</td>
+                            <td>{{pkg.product.sub_category_name}}</td>
+                            <td>{{pkg.packaging}}</td>
+                            <td>{{pkg.product.uom}}</td>
+                            <td>{%if pkg.category == 'Primary'%}&checkmark;{%else%}&cross;{%endif%}</td>
+                            <td>{%if pkg.category == 'Secondary'%}&checkmark;{%else%}&cross;{%endif%}</td>
+                            <td>{%if pkg.category == 'Teritiary'%}&checkmark;{%else%}&cross;{%endif%}</td>
+                            <td>{{pkg.amount}}</td>
+                            <th>{{pkg.local_input}}</th>
+                            <td>{{pkg.import_input}}</td>
+                            <td>{{pkg.wastage}}</td>
+                        {%endfor%}
+                    </tbody>
+                        
+                </table>
+            <li><b>Do you have organizational structure? : </b> {%if company.orgn_strct != None%}No{%else%}Yes{%endif%}</li>
+            <li><b>Number of Employees </b></li>
+                <table>
+                    <thead><tr><th colspan="2"><b>Permanent</b></th> <th colspan="2"><b>Temporary</b> </th> <th colspan="2"><b>Foreign Employees</b></th></tr></thead>
+                    <tbody>
+                        <tr>
+                           <td>Male</td>
+                           <td>{{employees.male_perm}}</td>
+                           <td>Male</td>
+                           <td>{{employees.male_temp}}</td>
+                           <td>Male</td>
+                           <td>{{employees.male_foreign}}</td>
+                        </tr>
+                        <tr>
+                           <td>Female</td>
+                           <td>{{employees.female_perm}}</td>
+                           <td>Female</td>
+                           <td>{{employees.female_temp}}</td>
+                           <td>Female</td>
+                           <td>{{employees.female_foreign}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            <li><b>New jobs created this year</b></li>
+                <table>
+                    <thead><tr><th colspan="2"><b>Permanent</b></th> <th colspan="2"><b>Temporary</b> </th></tr></thead>
+                    <tbody>
+                        <tr>
+                           <td>Male</td>
+                           <td>{{jobs_created.male_perm}}</td>
+                           <td>Male</td>
+                           <td>{{jobs_created.male_temp}}</td>
+                            
+                        </tr>
+                        <tr>
+                           <td>Female</td>
+                           <td>{{jobs_created.female_perm}}</td>
+                           <td>Female</td>
+                           <td>{{jobs_created.female_temp}}</td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            <li><b>Employees Educational Status</b></li>
+            <table>
+                    <thead><tr><th><b>Educational Status</b></th> <th><b>Male</b> </th><th><b>Female</b></th> </tr></thead>
+                    <tbody>
+                    {%for es in edu_status%}
+                        <tr>
+                           <td>{{es.education_type}}</td>
+                           <td>{{es.male__sum}}</td>
+                           <td>{{es.female__sum}}</td>
+                            
+                        </tr>
+                    {%endfor%}
+                    </tbody>
+                </table>
+            <li><b>Number of both sex in position levels</b></li>
+                <table border="1">
+                    <thead><tr>
+                        <th>No</th><th>Level of Position</th><th>Number</th>
+                    </tr></thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>High level position 
+                            (CEO, Managerial positions )</td> 
+                            <td>{% get_fem_emp_sum num_sex_posn.female_in_high num_sex_posn.male_in_high %}</td>
+                            </tr>
+                            <tr>
+                            <td>2</td>
+                            <td>Medium level position 
+                            (Department heads)</td>
+                            <td>{% get_fem_emp_sum num_sex_posn.female_in_med num_sex_posn.male_in_med %}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            <li><b>Sources and amount of your inputs</b></li>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <ol>
+                                    <li><b>Imported by company</b> : <b style="text-decoration:underlined;">{{src_amnt.import_company}} Ton/Year</b> </li>
+                                    <li><b>Government supplied </b> : <b style="text-decoration:underlined;">{{src_amnt.govt_suplied}} Ton/Year</b> </li>
+                                    <li><b>Direct purchase from Farmers</b> : <b style="text-decoration:underlined;">{{src_amnt.purchase_from_farmer}} Ton/Year</b> </li>
+                                    <li><b>Purchase from Cooperative unions</b> : <b style="text-decoration:underlined;">{{src_amnt.purchase_from_union}} Ton/Year</b></li>
+                                    <li><b>Purchase from Commission Agents </b> : <b style="text-decoration:underlined;">{{src_amnt.purchase_from_agents}} Ton/Year</b></li>
+                                    <li><b>Other </b> : <b style="text-decoration:underlined;">{{src_amnt.purchase_from_other}} Ton/Year</b></li>
+                                </ol>
+                                
+                            </td>
+                             
+                        </tr>        
+                    </tbody>
+                </table>
+            <li><b>Do you have quality control laboratory? : </b>{%if company.lab_test_analysis == None%}No{%else%}Yes{%endif%}</li>
+            {%if company.lab_test_analysis != None%}
+            <li><b>What are the major laboratory test analysis you do?:</b></li>
+                <ol>
+                    {% for lbdata in company.lab_test_analysis.all %}
+                        <li><b>{{lbdata.name}}</b></li>
+                    {%endfor%}
+                </ol>
+                   
+            {%endif%}
+            {%if company.lab_equipment != None%}
+            <li><b>What major laboratory equipment do you have? :</b></li>
+                <ol>
+                    {% for lbdata in company.lab_equipment.all %}
+                        <li><b>{{lbdata.name}}</b></li>
+                    {%endfor%}
+                </ol>
+            {%endif%}
+            <li><b>Does the company outsource test parameters and contract agreement?</b> {%if company.outsourced_test_param == None or company.outsourced_test_param == ""%}No{%else%}Yes{%endif%}</li>
+                {%if company.outsourced_test_param != None%}
+                    <div>
+                        {{company.outsourced_test_param|safe}}
+                    </div>
+                {%endif%}
+            <li><b>Which certificate have you received?</b></li>
+                    <ol>
+                        {%for cert in company.certification.all%}
+                            <li><b>{{cert.name|title}}</b></li>
+                        {%endfor%}
+                    </ol>
+            <li><b>Does your company conduct Research and Development? : </b> {%if company.conducted_research == None or company.conducted_research == ""%}No{%else%}Yes{%endif%}</li>
+                    {%if company.conducted_research != None%}
+                        <div>
+                            {{company.conducted_research|safe}}
+                        </div>
+                    {%endif%}
+            <li><b>Do you have new product developed? : </b> {%if company.new_product_developed == None or company.new_product_developed == ""%}No{%else%}Yes{%endif%}</li>
+                    {%if company.new_product_developed != None%}
+                        <div>
+                            {{company.new_product_developed|safe}}
+                        </div>
+                    {%endif%}
+            <li><b>Which management tools do you apply?</b></li>
+                <ol>
+                    {%for mgmt in company.management_tools.all%}
+                        <li><b>{{mgmt.name|title}}</b></li>
+                    {%endfor%}
+                </ol>
+            <li><b>Where do you sell your products?</b></li>
+            <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <ol>
+                                    <li><b>Domestic  </b> : <b style="text-decoration:underlined;">{{market_destin.domestic}} %</b> </li>
+                                    <li><b>Export  </b> : <b style="text-decoration:underlined;">{{market_destin.export}} %</b> </li>
+                                </ol>
+                                    
+                            </td>
+                             
+                        </tr>        
+                    </tbody>
+                </table>
+            <li><b>Target market in percent (%) </b></li>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                            <ol>
+                                <li><b>Further processing factors</b> : <b style="text-decoration:underlined;">{{market_target.further_proc_power}}</b> </li>
+                                <li><b>Final consumers </b> : <b style="text-decoration:underlined;">{{market_target.final_consumer}}</b> </li>
+                                <li><b>Restaurant and hotels </b> : <b style="text-decoration:underlined;">{{market_target.restaurant_and_hotels}}</b> </li>
+                                <li><b>Institutions (University, military, cooperatives)</b> : <b style="text-decoration:underlined;">{{market_target.institutions}}</b></li>
+                                <li><b>EPSA </b> : <b style="text-decoration:underlined;">{{market_target.epsa}}</b></li>
+                                <li><b>Hospitals </b> : <b style="text-decoration:underlined;">{{market_target.hospitals}}</b></li>
+                                <li><b>Agents </b> : <b style="text-decoration:underlined;">{{market_target.agents}}</b> </li>
+                                <li><b>Wholesaler/ Distributer</b> : <b style="text-decoration:underlined;">{{market_target.wholesaler_distributor}}</b></li>
+                                <li><b>Retailer </b> : <b style="text-decoration:underlined;">{{market_target.retailer}}</b></li>
+                                <li><b>Other </b> : <b style="text-decoration:underlined;">{{market_target.other}}</b></li>
+                            </ol>
+                                
+                            </td>
+                             
+                        </tr>        
+                    </tbody>
+                </table>
+            <li><b>Do you have properly available infrastructure?</b></li>
+                <ol>
+                    <li><b>Electric Power Supply : </b> {%if company.electric_power%}Yes{%else%}No{%endif%}</li>
+                    <li><b>Water Supply : </b> {%if company.water_supply%}Yes{%else%}No{%endif%}</li>
+                    <li><b>Telecom : </b> {%if company.telecom%}Yes{%else%}No{%endif%}</li>
+                </ol>
+            <li><b>How many kilowatt-hour electric power you use per day?</b></li>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Installed capacity electric power demand kilowatt-hour (kWh) per day</th>
+                            <th>Currently supplying electric power kilowatt-hour (kWh) per day</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{power_c.installed_capacity}}</td>
+                            <td>{{power_c.current_supply}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            <li><b>Does the company have Marketing Department section? </b> {%if company.marketing_department%}Yes{%else%}No{%endif%}</li>
+            <li><b>Do you use E-Commerce? </b> {%if company.e_commerce%}Yes{%else%}No{%endif%}</li>
+            <li><b>Do you adopt any active data base system? </b> {%if company.active_database%}Yes{%else%}No{%endif%}</li>
+            <li><b>Does the company have waste treatment and disposal system? </b> {%if company.waste_trtmnt_system == None or company.waste_trtmnt_system == ""%}No{%else%}Yes{%endif%}</li>
+                {%if company.waste_trtmnt_system != None or company.waste_trtmnt_system != ""%}
+                    <div>
+                        {{company.waste_trtmnt_system|safe}}
+                    </div>
+                {%endif%}
+            <li><b>Do you have effluent treatment plant? </b> {%if company.efluent_treatment_plant%}Yes{%else%}No{%endif%}</li>
+            <li><b>Does the company have Environmental management plan? </b> {%if company.env_mgmt_plan%}Yes{%else%}No{%endif%}</li>
+            <li><b>What source of energy does the company use?</b></li>
+                <ol>
+                    {%for mgmt in company.source_of_energy.all%}
+                        <li><b>{{mgmt.name|title}}</b></li>
+                    {%endfor%}
+                </ol>
+            <li><b>Does your company measure its gas /carbon/ emission to the environment? </b> {%if company.gas_carb_emision == None or company.gas_carb_emision == ""%}No{%else%}Yes{%endif%}</li>
+               {%if company.gas_carb_emision != None or company.gas_carb_emision != ""%}
+                    <div>
+                        {{company.gas_carb_emision|safe}}
+                    </div>
+                {%endif%}
+            <li><b>Does the company allot 5% of the compound for greenery? </b> {%if company.compound_allot%}Yes{%else%}No{%endif%}</li>
+            <li><b>Is there any environmental issue complaint with the local community? </b> {%if company.comunity_compliant == None or company.comunity_compliant == ""%}No{%else%}Yes{%endif%}</li>
+               {%if company.comunity_compliant != None or company.comunity_compliant != ""%}
+                    <div>
+                        {{company.comunity_compliant|safe}}
+                    </div>
+                {%endif%}
+            <li><b>Does the company have Environmental and social focal person? </b> {%if company.env_focal_person%}Yes{%else%}No{%endif%}</li>
+            <li><b>Does the company have safety professionals? </b> {%if company.safety_profesional%}Yes{%else%}No{%endif%}</li>
+            <li><b>Do you have proper notification procedure to inform EFDA regarding proper disposal? </b> {%if company.notification_procedure%}Yes{%else%}No{%endif%}</li>
+            <li><b>Industry university linkage</b> {%if company.university_linkage == None or company.university_linkage == ""%}No{%else%}Yes{%endif%}</li>
+               {%if company.university_linkage != None or company.university_linkage != ""%}
+                    <div>
+                        {{company.university_linkage|safe}}
+                    </div>
+                {%endif%}
+            <li><b>Is there a Recall system due to quality issue? </b> {%if company.recall_system%}Yes{%else%}No{%endif%}</li>
+            <li><b>What quality defect frequently observed in your product?</b></li>
+                    <div>
+                        {{company.quality_defects|safe}}
+                    </div>
+            <li><b>What measures does your company introduced to reduce its gas and waste management?</b></li>
+                    <div>
+                    {{company.gas_waste_mgmnt_measure|safe}}
+                    </div>
+            <li><b>What kind of support do you need to increase your production and market</b></li>
+                <ol>
+                    {%for mgmt in company.support_required.all%}
+                        <li><b>{{mgmt.name|title}}</b></li>
+                    {%endfor%}
+                </ol>
+            <li><b></b></li>
+            <li><b></b></li>
+            <li><b></b></li>
+        </ol>
+            
+    </div>
+    </body>
+</html>

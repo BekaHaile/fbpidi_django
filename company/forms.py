@@ -94,7 +94,7 @@ class EmployeesForm(forms.ModelForm):
         model=Employees
         fields = ('employment_type','female','male','year_emp')
         widgets = {
-            'employment_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'employment_type':forms.Select(attrs={'class':'form-control form-control-uniform','disabled':'true'}),
             'male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_male")'}),
             'female':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_female")'}),
         }
@@ -158,10 +158,12 @@ class FemalesInPositionForm(forms.ModelForm):
                                                     attrs={'class':'form-control form-control-uniform','disabled':'true',})
     class Meta:
         model=FemalesInPosition
-        fields = ('year_fem','quarter_fem','high_position','med_position')
+        fields = ('year_fem','quarter_fem','high_position','med_position','high_position_male','med_position_male')
         widgets = {
             'high_position':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_high_position")'}),
             'med_position':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_med_position")'}),
+            'high_position_male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_high_position_male")'}),
+            'med_position_male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_med_position_male")'}),
         }
 
 class MarketDestinationForm(forms.ModelForm):
@@ -335,7 +337,7 @@ class CompanyAddressForm(forms.ModelForm):
     class Meta:
         model=CompanyAddress
         fields = ('region','city_town','subcity_zone','woreda','kebele','local_area',
-                    'phone_number','fax','email','facebooklink','twiterlink','instagramlink',
+                    'phone_number','fax','email','website','facebooklink','twiterlink','instagramlink',
                     'linkedinlink','googlelink')
         
         widgets = {
@@ -348,6 +350,7 @@ class CompanyAddressForm(forms.ModelForm):
             'phone_number':forms.TextInput(attrs={'class':'form-control','placeholder':'Phone Number', "data-mask": "+251-99999-9999"}),
             'fax':forms.TextInput(attrs={'class':'form-control','placeholder':'Fax'}),
             'email':forms.EmailInput(attrs={'class':'form-control','placeholder':'Email Address'}),
+            'website':forms.TextInput(attrs={'class':'form-control','placeholder':'Website Link'}),
             'facebooklink':forms.TextInput(attrs={'class':'form-control','placeholder':'Facebook Account Link'}),
             'twiterlink':forms.TextInput(attrs={'class':'form-control','placeholder':'Twitter Account Link'}),
             'instagramlink':forms.TextInput(attrs={'class':'form-control','placeholder':'Instagram Link'}),

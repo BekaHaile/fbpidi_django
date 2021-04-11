@@ -77,13 +77,16 @@ $(document).ready(function () {
             success: function (result) {
                 if (result['error'] == false) {
                     // $("#inv_capital_form_modal").modal("hide");
-                    $("#errors").html(result['message']);
+                    $("#success_invcap").html(result['message']);
+                    $("#errors_invcap").empty();
                 } else {
-                    $("#errors").html(result['message']);
+                    $("#errors_invcap").html(result['message']);
+                    $("#success_invcap").empty();
                 }
             },
             error: function (error) {
-
+                $("#errors_invcap").html(error['statusText']);
+                $("#success_invcap").empty();
             }
         });
     });
@@ -101,13 +104,16 @@ $(document).ready(function () {
             contentType: false,
             success: function (result) {
                 if (result['error'] == false) {
-                    $("#errors_certificate").html(result['message']);
+                    $("#errors_certificate").empty();
+                    $("#success_certificate").html(result['message']);
                 } else {
+                    $("#success_certificate").empty();
                     $("#errors_certificate").html(result['message']);
                 }
             },
             error: function (error) {
-
+                $("#success_certificate").empty();
+                $("#errors_certificate").html(error['statusText']);
             }
         });
 
@@ -125,14 +131,17 @@ $(document).ready(function () {
             contentType: false,
             success: function (result) {
                 if (result['error'] == false) {
-                    $("#errors_employee").html(result['message']);
+                    $("#success_employee").html(result['message']);
+                    $("#errors_employee").empty();
                     // $("#employees_form_modal").modal("hide");
                 } else {
                     $("#errors_employee").html(result['message']);
+                    $("#success_employee").empty();
                 }
             },
             error: function (error) {
-
+                $("#errors_employee").html(error['statusText']);
+                $("#success_employee").empty();
             }
         });
 
@@ -150,14 +159,17 @@ $(document).ready(function () {
             contentType: false,
             success: function (result) {
                 if (result['error'] == false) {
-                    $("#errors_jobs").html(result['message']);
+                    $("#success_jobs").html(result['message']);
+                    $("#errors_jobs").empty();
                     // $("#createdjob_form_modal").modal("hide");
                 } else {
                     $("#errors_jobs").html(result['message']);
+                    $("#success_jobs").empty();
                 }
             },
             error: function (error) {
-
+                $("#errors_jobs").html(error['statusText']);
+                $("#success_jobs").empty();
             }
         });
 
@@ -176,14 +188,17 @@ $(document).ready(function () {
             success: function (result) {
                 console.log(result);
                 if (result['error'] == false) {
-                    $("#errors_education").html(result['message']);
+                    $("#success_education").html(result['message']);
+                    $("#errors_education").empty();
                     // $("#education_status_form_modal").modal("hide");
                 } else {
                     $("#errors_education").html(result['message']);
+                    $("#success_education").empty();
                 }
             },
             error: function (error) {
-
+                $("#errors_education").html(error['statusText']);
+                $("#success_education").empty();
             }
         });
 
@@ -202,13 +217,16 @@ $(document).ready(function () {
             success: function (result) {
                 if (result['error'] == false) {
                     // $("#femaleposn_form_modal").modal("hide");
-                    $("#errors_femaleposn").html(result['message']);
+                    $("#success_femaleposn").html(result['message']);
+                    $("#errors_femaleposn").empty();
                 } else {
+                    $("#success_femaleposn").empty();
                     $("#errors_femaleposn").html(result['message']);
                 }
             },
             error: function (error) {
-
+                $("#success_femaleposn").empty();
+                $("#errors_femaleposn").html(error['statusText']);
             }
         });
 
@@ -228,13 +246,16 @@ $(document).ready(function () {
                 console.log(result);
                 if (result['error'] == false) {
                     // $("#srcamnt_input_form_modal").modal("hide");
-                    $("#errors_input").html(result['message']);
+                    $("#errors_input").empty();
+                    $("#success_input").html(result['message']);
                 } else {
                     $("#errors_input").html(result['message']);
+                    $("#success_input").empty();
                 }
             },
             error: function (error) {
-                console.log(error)
+                $("#errors_input").html(error['statusText']);
+                $("#success_input").empty();
             }
         });
 
@@ -253,13 +274,16 @@ $(document).ready(function () {
             success: function (result) {
                 if (result['error'] == false) {
                     // $("#destination_form_modal").modal("hide");
-                    $("#errors_destination").html(result['message']);
+                    $("#errors_destination").empty();
+                    $("#success_destination").html(result['message']);
                 } else {
+                    $("#success_destination").empty();
                     $("#errors_destination").html(result['message']);
                 }
             },
             error: function (error) {
-
+                $("#success_destination").empty();
+                $("#errors_destination").html(error['statusText']);
             }
         });
 
@@ -278,12 +302,16 @@ $(document).ready(function () {
             success: function (result) {
                 if (result['error'] == false) {
                     // $("#target_form_modal").modal("hide");
-                    $("#errors_target").html(result['message']);
+                    $("#errors_target").empty();
+                    $("#success_target").html(result['message']);
                 } else {
+                    $("#success_target").empty();
                     $("#errors_target").html(result['message']);
                 }
             },
             error: function (error) {
+                $("#success_target").empty();
+                $("#errors_target").html(error['statusText']);
 
             }
         });
@@ -303,14 +331,17 @@ $(document).ready(function () {
             success: function (result) {
                 if (result['error'] == false) {
                     // $("#power_consumption_form_modal").modal("hide");
-                    $("#errors_powerc").html(result['message']);
+                    $("#errors_powerc").empty();
+                    $("#success_powerc").html(result['message']);
                 } else {
                     $("#errors_powerc").html(result['message']);
+                    $("#succes_powerc").empty();
 
                 }
             },
             error: function (error) {
-
+                $("#errors_powerc").html(error['statusText']);
+                $("#succes_powerc").empty();
             }
         });
 
@@ -328,14 +359,17 @@ $(document).ready(function () {
             contentType: false,
             success: function (result) {
                 if (result['error'] == false) {
-                    $("#error_span").html(result['message']);
+                    $("#error_span").empty();
+                    $("#success_span").html(result['message']);
                     // $("#address_form_modal").modal("hide");
                 } else {
                     $("#error_span").html(result['message']);
+                    $("#success_span").empty();
                 }
             },
             error: function (error) {
-
+                $("#error_span").html(error['statusText']);
+                $("#success_span").empty();
             }
         });
 
@@ -353,14 +387,17 @@ $(document).ready(function () {
             contentType: false,
             success: function (result) {
                 if (result['error'] == false) {
-                    $("#error_span").html(result['message']);
+                    $("#error_span").empty();
+                    $("#success_span").html(result['message']);
                     // $("#address_form_modal").modal("hide");
                 } else {
                     $("#error_span").html(result['message']);
+                    $("#success_span").empty();
                 }
             },
             error: function (error) {
-
+                $("#error_span").html(error['statusText']);
+                $("#success_span").empty();
             }
         });
 
@@ -395,16 +432,16 @@ $(document).ready(function () {
             }
         });
     });
-    // $("#id_year_emp").change(function(){
-    //     var year = $(this).val();
-    //     if(year != ""){
-    //         $("#id_employment_type").prop('disabled',false);
-    //     }else{
-    //         $("#id_employment_type").prop('disabled',true);
-    //     }
+    $("#id_year_emp").change(function(){
+        var year = $(this).val();
+        if(year != ""){
+            $("#id_employment_type").prop('disabled',false);
+        }else{
+            $("#id_employment_type").prop('disabled',true);
+        }
         
         
-    // });
+    });
     $("#id_employment_type").change(function(){
         var year = $("#id_year_emp").val();
         var emp_typ = $(this).val();

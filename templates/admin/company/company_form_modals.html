@@ -10,7 +10,8 @@
 				{%csrf_token%}
 				<div class="modal-body">
 					<div class="form-group">
-						<span class="form-text text-warning" id="errors"></span>
+						<span class="form-text text-warning" id="errors_invcap"></span>
+						<span class="form-text text-success" id="success_invcap"></span>
 					</div>
 					 
 					<div class="form-group">
@@ -55,6 +56,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<span class="form-text text-warning" id="errors_certificate"></span>
+						<span class="form-text text-success" id="success_certificate"></span>
 					</div>
 					<div class="form-group">
 						<div class="row">
@@ -101,11 +103,11 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<span class="form-text text-warning" id="errors_employee"></span>
+						<span class="form-text text-success" id="success_employee"></span>
 					</div>
 					<div class="form-group">
 						<div class="row">
                             <div class="col-sm-12">
-								The Year is <script>document.write(new Date().getFullYear()-8);</script> E.C
 							</div>
 							<div class="col-sm-6">
 								<label for="">{{employees_form.year_emp.label}}</label>
@@ -160,6 +162,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<span class="form-text text-warning" id="errors_jobs"></span>
+						<span class="form-text text-success" id="success_jobs"></span>
 					</div>
 					<div class="form-group">
 						<div class="row">
@@ -217,6 +220,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<span class="form-text text-warning" id="errors_education"></span>
+						<span class="form-text text-success" id="success_education"></span>
 					</div>
 					<div class="form-group">
 						<div class="row">
@@ -273,6 +277,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<span class="form-text text-warning" id="errors_femaleposn"></span>
+						<span class="form-text text-success id="success_femaleposn"></span>
 					</div>
 					<div class="form-group">
 						<div class="row">
@@ -298,6 +303,21 @@
 								<label>{{female_posn_form.med_position.label}}</label>
 									{{female_posn_form.med_position}}
 									<span class="form-text text-muted">{{female_posn_form.med_position.help_text}}</span>									
+							</div>		
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-6">
+								<label for="">{{female_posn_form.high_position_male.label}}</label>
+								 {{female_posn_form.high_position_male}}
+								 <span class="form-text text-muted">{{female_posn_form.high_position_male.help_text}}</span>
+							</div>
+
+							<div class="col-md-6">
+								<label>{{female_posn_form.med_position_male.label}}</label>
+									{{female_posn_form.med_position_male}}
+									<span class="form-text text-muted">{{female_posn_form.med_position_male.help_text}}</span>									
 							</div>		
 						</div>
 					</div>
@@ -328,6 +348,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<span class="form-text text-warning" id="errors_input"></span>
+						<span class="form-text text-success" id="success_input"></span>
 					</div>
 					<div class="form-group">
 						<div class="row">
@@ -412,6 +433,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<span class="form-text text-warning" id="errors_target"></span>
+						<span class="form-text text-success" id="success_target"></span>
 					</div>
 					<div class="form-group">
 						<div class="row">
@@ -528,6 +550,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<span class="form-text text-warning" id="errors_destination"></span>
+						<span class="form-text text-success" id="success_destination"></span>
 					</div>
 					<div class="form-group">
 						<div class="row">
@@ -575,6 +598,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<span class="form-text text-warning" id="errors_powerc"></span>
+						<span class="form-text text-success" id="success_powerc"></span>
 					</div>
 					<div class="form-group">
 						<div class="row">
@@ -622,6 +646,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<span class="form-text text-warning" id="error_span"></span>
+						<span class="form-text text-success" id="success_span"></span>
 					</div>
 					<div class="form-group">
 						<div class="row">
@@ -682,6 +707,11 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
+							
+							<div class="col-sm-4">
+								<label for="">{{address_form.website.label}}</label>
+								 {{address_form.website}}
+							</div>
 							<div class="col-sm-4">
 								<label for="">{{address_form.facebooklink.label}}</label>
 								 {{address_form.facebooklink}}
@@ -691,21 +721,21 @@
 								 {{address_form.twiterlink}}
 								 <span class="form-text text-muted">{{address_form.twiterlink.help_text}}</span>
 							</div>
-
-							<div class="col-md-4">
-								<label>{{address_form.instagramlink.label}}</label>
-									{{address_form.instagramlink}}
-									<span class="form-text text-muted">{{address_form.instagramlink.help_text}}</span>									
-							</div>		
+							
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-md-4">
+								<label>{{address_form.instagramlink.label}}</label>
+									{{address_form.instagramlink}}
+									<span class="form-text text-muted">{{address_form.instagramlink.help_text}}</span>									
+							</div>	
+							<div class="col-sm-4">
 								<label for="">{{address_form.linkedinlink.label}}</label>
 								 {{address_form.linkedinlink}}
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								<label for="">{{address_form.googlelink.label}}</label>
 								 {{address_form.googlelink}}
 								 <span class="form-text text-muted">{{address_form.googlelink.help_text}}</span>

@@ -65,6 +65,7 @@ from company.views.chart_views import *
 from company.views.report_views import *
 from company.views.company_views import *
 from company.views.pdf_views import *
+from company.views.all_report_view import *
 
 from accounts.forms import AdminLoginForm
 from chat.views import AdminChatList
@@ -313,6 +314,8 @@ class CustomAdminSite(admin.AdminSite):
 
             # Company Report Paths
             path('get-company-information-pdf/',wrap(GenerateCompanyToPDF.as_view()),name='get_company_pdf'),
+            path("get-al-company-report/",wrap(GenerateAllCompanyPdf.as_view()),name="generate_all_report"),
+            path('get-all-report-page/',wrap(AllReportPage.as_view()),name="all_report_page"),
             path("report-page/",wrap(ReportPage.as_view()),name="report_page"),
             path('certification-chart/',wrap(certification_chart),name='certification_chart'),
             path('management-tools-chart/',wrap(management_tool_chart),name='mgmt_tools_chart'),

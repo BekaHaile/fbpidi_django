@@ -275,10 +275,11 @@ class AnualInputNeedForm(forms.ModelForm):
             )
         self.fields['product'].queryset = self.product
         self.fields['product'].empty_label = "Select Product"
+        self.fields['input_unit'].empty_label = "Select Unit of Measurement"
 
     class Meta:
         model=AnnualInputNeed
-        fields = ('product','input_name','year','is_active_input','amount','local_input','import_input')
+        fields = ('product','input_name','input_unit','year','is_active_input','amount','local_input','import_input')
         widgets = {
             'input_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Input Type'}),
             'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),
@@ -305,6 +306,7 @@ class InputDemandSupplyForm(forms.ModelForm):
             )
         self.fields['product'].queryset = self.product
         self.fields['product'].empty_label = "Select Product"
+        self.fields['input_unit'].empty_label = "Select Unit of Measurement"
         self.fields['half_year'].widget=forms.Select(choices=[('','Select Half Year'),
                                                             ('First_Half','First Half (July-Dec)'),
                                                             ('Second_Half','Second Half (Jan-June)')],
@@ -312,7 +314,7 @@ class InputDemandSupplyForm(forms.ModelForm):
 
     class Meta:
         model=InputDemandSupply
-        fields = ('product','input_type','year','half_year','demand','supply')
+        fields = ('product','input_type','input_unit','year','half_year','demand','supply')
         widgets = {
             'input_type':forms.TextInput(attrs={'class':'form-control','placeholder':'Input Type '}),
             'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),
