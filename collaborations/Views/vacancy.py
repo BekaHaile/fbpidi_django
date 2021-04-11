@@ -109,7 +109,7 @@ class ApplicantList(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		vacancy=Vacancy.objects.filter(created_by=self.request.user)
 		context = {'vacancy':vacancy}
-		template_name = "admin/pages/vacancy_list.html"
+		template_name = "admin/vacancy/vacancy_list.html"
 		return render(self.request, template_name,context)
 
 class Applicantinfo(LoginRequiredMixin,View):
@@ -118,7 +118,7 @@ class Applicantinfo(LoginRequiredMixin,View):
 		jobapplicant=JobApplication.objects.filter(vacancy=self.kwargs['id']) 
 		vacancyDetail = Vacancy.objects.get(id=self.kwargs['id'])
 		context = {'jobapplicant':jobapplicant,'vacancy':self.kwargs['id'],'vacancyDetail':vacancyDetail}
-		template_name = "admin/pages/applicant_list.html"
+		template_name = "admin/vacancy/applicant_list.html"
 		return render(self.request, template_name,context)
 
 class ApplicantListDetail(LoginRequiredMixin,View):
@@ -126,7 +126,7 @@ class ApplicantListDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		applicant=JobApplication.objects.get(id=self.kwargs['id'])
 		context = {'applicant':applicant}
-		template_name = "admin/pages/applicant_detail.html"
+		template_name = "admin/vacancy/applicant_detail.html"
 		return render(self.request, template_name,context)
 
 
@@ -148,7 +148,7 @@ class CreateVacancyCategory(LoginRequiredMixin,CreateView):
 class JobCategoryDetail(LoginRequiredMixin,UpdateView):
 	model = JobCategory
 	form_class = JobCategoryForm
-	template_name = "admin/pages/jobCategory_detail.html"
+	template_name = "admin/vacancy/jobCategory_detail.html"
 
 	def form_valid(self,form):
 		form.save()
@@ -177,7 +177,7 @@ class VacancyDetail(LoginRequiredMixin,View):
 		vacancy = VacancyForm() 
 		#print(str(self.kwargs['id'])+"-----------------"+str(form.categoryName))
 		context = {'form':form,'jobcategory':jobcategory,"vacancy":vacancy}
-		return render(self.request,"admin/pages/job_detail.html",context)
+		return render(self.request,"admin/vacancy/job_detail.html",context)
 	def post(self,*args,**kwarges):
 		form = VacancyForm(self.request.POST,self.request.FILES)
 		context = {'form':form}
@@ -207,14 +207,14 @@ class VacancyDetail(LoginRequiredMixin,View):
 			form = JobCategory()
 			context = {'form':form}
 			return redirect("admin:Job_list")
-		return render(self.request,"admin/pages/job_detail.html",context)
+		return render(self.request,"admin/vacancy/job_detail.html",context)
 
 class SuperAdminVacancyList(LoginRequiredMixin,View):
 	
 	def get(self,*args,**kwargs):
 		vacancy=Vacancy.objects.all()
 		context = {'vacancy':vacancy}
-		template_name = "admin/pages/super_job_list.html"
+		template_name = "admin/vacancy/super_job_list.html"
 		return render(self.request, template_name,context)
 
 class AdminVacancyList(LoginRequiredMixin,View):
@@ -222,13 +222,13 @@ class AdminVacancyList(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		if self.request.user.is_superuser:
 			vacancy = Vacancy.objects.all()
-			template_name="admin/pages/job_list.html"
+			template_name="admin/vacancy/job_list.html"
 			context={'vacancy':vacancy}
 			return render(self.request, template_name,context)
 		else:
 			vacancy=Vacancy.objects.filter(created_by=self.request.user)
 			context = {'vacancy':vacancy}
-			template_name = "admin/pages/job_list.html"
+			template_name = "admin/vacancy/job_list.html"
 			return render(self.request, template_name,context)
 
 ## show form
@@ -241,12 +241,12 @@ class CreateVacancy(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		vacancy = VacancyForm()
 		context = {'vacancy':vacancy}
-		template = "admin/pages/job_form.html"
+		template = "admin/vacancy/job_form.html"
 		return render(self.request,template,context)
 	def post(self,*args,**kwargs):
 		form = VacancyForm(self.request.POST,self.request.FILES)
 		context = {'vacancy':form}
-		template = "admin/pages/job_form.html"
+		template = "admin/vacancy/job_form.html"
 		if form.is_valid():
 			category = JobCategory.objects.get(id=self.request.POST['category'],)
 			vacancy=form.save(commit=False)
@@ -265,7 +265,7 @@ class CreateVacancy(LoginRequiredMixin, View):
 			messages.success(self.request, "New vacancy Added Successfully")
 			vacancy = VacancyForm()
 			context = {'vacancy':vacancy}
-			return render(self.request,"admin/pages/job_form.html",context)
+			return render(self.request,"admin/vacancy/job_form.html",context)
 
 #apply to a job
 class CreateApplication(LoginRequiredMixin,View):
@@ -280,7 +280,7 @@ class CreateApplication(LoginRequiredMixin,View):
 				
 		job = CreateJobApplicationForm()
 		jobcategory = JobCategory.objects.all()
-		template_name="frontpages/job_apply.html"
+		template_name="frontpages/vacancy/job_apply.html"
 		context={'job':job,'vacancy':vacancy,'category':jobcategory}
 		return render(self.request, template_name,context) 
 
@@ -302,7 +302,7 @@ class CategoryBasedSearch(View):
 		vacancy = Vacancy.objects.filter(category=self.kwargs['id'],closed=False) 
 		cateory = JobCategory.objects.get(id=self.kwargs['id'])
 		jobcategory = JobCategory.objects.all()
-		template_name="frontpages/vacancy_list.html"
+		template_name="frontpages/vacancy/vacancy_list.html"
 		context = {'vacancys':vacancy,'category':jobcategory,'message':'Vacancies on '+str(cateory)}
 		return render(self.request, template_name,context)
 
@@ -320,8 +320,7 @@ class VacancyList(View):
 				  Q(title_am__contains = self.request.GET['by_title']) )
 			query = Vacancy.objects.filter(q)# search by title then filter by category
 			result = filter_by('category__category_name',self.request.GET.getlist('by_category'), query)
-			# data = get_paginated_data(self.request, result['query'])
-			# return render(self.request, "frontpages/vacancy/vacancy_list.html", {'vacancys':data, 'message':result['message'],  'message_am':result['message_am'],'category':category})
+			
 		elif 'by_category' in self.request.GET:
 			result = filter_by('category__category_name', self.request.GET.getlist('by_category'), Vacancy.objects.all())
 		elif 'by_company' in self.request.GET:
@@ -335,21 +334,12 @@ class VacancyList(View):
 		#what ever the result is, paginate it and send
 		data = get_paginated_data(self.request, result['query'])
 		return render(self.request, "frontpages/vacancy/vacancy_list.html", {'vacancys':data, 'message':result['message'],  'message_am':result['message_am'], 'category':category, 'companies':companies})
-        
-        
-# class VacancyList(View):
-# 	def get(self,*args,**kwargs):
-# 			jobcategory = JobCategory.objects.all()
-# 			vacancy = Vacancy.objects.filter(closed=False)
-# 			template_name="frontpages/vacancy_list.html" 
-# 			context = {'vacancys':vacancy,'category':jobcategory,'message':'All Vacancys '}
-# 			return render(self.request, template_name,context)
-		
+        		
 class VacancyMoreDetail(View):
 	def get(self,*args,**kwargs):
 		vac = Vacancy.objects.get(id=self.kwargs['id'],closed=False)
 		jobcategory = JobCategory.objects.all()
-		template_name="frontpages/vacancy_detail.html"
+		template_name="frontpages/vacancy/vacancy_detail.html"
 		context = {'vacancy':vac,'category':jobcategory,'message':'Vacancy Detail'}
 		return render(self.request, template_name,context)
 

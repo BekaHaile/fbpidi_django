@@ -1,0 +1,89 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+<!-- /theme JS files -->
+
+{% endblock %}
+{%block pagename%}Job Cateory{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	<!-- Page length options main category -->
+	
+	<!-- /page length options -->
+
+	<!-- Page length options sub-category-->
+	
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">Job Cateory</h5>
+			<div class="header-elements">
+				<div class="list-icons">
+					{% if perms.collaborations.add_jobcategoty %} 
+					<a href="{% url 'admin:JobCategory_form'%}" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Job cateory</a>
+							{%endif%}
+				</div>
+			</div>
+		</div>
+
+		<table class="table datatable-show-all">
+			<thead>
+				<tr>
+					<th>User</th>
+					<th>timestamp</th>
+					<th>categoryName</th>
+					<th>categoryName Amharic</th>
+					<th class="text-center">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				{%for form in forms%}
+				<tr>
+					<td>{{form.user}}</td>
+					<td>{{form.timestamp}}</td>
+					<td>{{form.categoryName}}</td>
+					<td>{{form.categoryName_am}}</td>
+					<td class="text-center">
+						<div class="list-icons">
+							<div class="dropdown">
+								<a href="#" class="list-icons-item" data-toggle="dropdown">
+									<i class="icon-menu9"></i>
+								</a>
+									
+								<div class="dropdown-menu dropdown-menu-right">
+									{% if user.is_superuser or user.get_company == form.user.get_company %}
+									{% if perms.collaborations.delete_jobcategory %}
+									<a href="{%url 'admin:delete' model_name='JobCategory' id=form.id%}" class="dropdown-item" onclick="return confirm('Warning:\n If You delete this the Vacanies under this will be deleted')"><i class="icon-trash"></i>Delete JobCategory</a>
+									{%endif%}
+									{%endif%}
+									{% if user.is_superuser or user.get_company == form.user.get_company %}
+									{% if perms.collaborations.change_jobcategory %}
+									<a href="{%url 'admin:Category_form'  model_name='JobCategory' id=form.id%}" class="dropdown-item" >
+										<i class="icon-pencil"></i>Edit JobCategory</a>
+										{%endif%}
+										{%endif%}
+									
+									
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+	<!-- /page length options -->
+
+
+</div>
+<!-- /content area -->
+{%endblock%}

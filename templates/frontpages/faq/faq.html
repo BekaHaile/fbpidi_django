@@ -1,0 +1,51 @@
+{%extends 'frontpages/layout.html'%}
+
+{%load i18n%}
+{%load core_template_tags%} 
+
+{%block content%}
+
+{% get_current_language as LANGUAGE_CODE %}
+		<!--Sliders Section-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="../../assets/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white ">
+							<h1 class="">{% trans "FAQ" %}</h1>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Sliders Section-->
+
+		<!--Faq section-->
+		<section class="sptb">
+			<div class="container">
+				{%for faq in faqs%}
+				<div class="panel-group1" id="accordion2">
+					<div class="panel panel-default mb-4 border p-0">
+						<div class="panel-heading1">
+							<h4 class="panel-title1">
+								<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#faq{{faq.id}}" aria-expanded="false">{% print_translated faq.questions|safe faq.questions_am|safe LANGUAGE_CODE%}</a>
+							</h4>
+						</div>
+						<div id="faq{{faq.id}}" class="panel-collapse collapse active" role="tabpanel" aria-expanded="false">
+							<div class="panel-body bg-white">
+								{% print_translated faq.answers|safe faq.answers_am|safe LANGUAGE_CODE%}
+
+							</div>
+						</div>
+					</div>
+					
+
+				</div>
+				{%endfor%}
+			</div>
+		</section>
+		<!--/Faq section-->
+
+		
+{%endblock%}
