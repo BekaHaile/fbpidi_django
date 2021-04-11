@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from rest_framework.pagination import PageNumberPagination
+
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -148,18 +148,18 @@ def filter_by(field_name, field_values, query):
 def get_paginated_data(request, query):
     page_number = request.query_params.get('page', 1)
     try:
-        return Paginator(query, 2).page(page_number)
+        return Paginator(query, 1).page(page_number)
     except Exception as e:
         print("exception at get_paginate_data ",e)
         return Paginator(query, 2).page(1)
 
 
-def get_paginator_info(data):
+def get_paginator_info(paginated_data):
     try:
-        context = {'page_range': list(data.paginator.page_range), 'current':data.number, 'next': data.next_page_number() if data.has_next() else None , 'previous' :data.previous_page_number() if data.has_previous() else None,  } 
+        context = {'page_range': list(paginated_data.paginator.page_range), 'current':paginated_data.number, 'next': paginated_data.next_page_number() if paginated_data.has_next() else None , 'previous' :paginated_data.previous_page_number() if paginated_data.has_previous() else None,  } 
         return context 
     except Exception as e:
-        print('!!!!!!!!!!!!!!!!!',e)
+        print('!!!!!!!!!!!!!!!!! Exception in geting paginator info',e)
         return {} 
 
 
