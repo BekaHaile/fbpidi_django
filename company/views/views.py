@@ -984,6 +984,7 @@ class UpdateProjectState(LoginRequiredMixin,UpdateView):
 class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = {}
+        print("##################")
         context['form'] = InistituteForm
         if self.request.user.is_superuser:
             return render(self.request,"admin/company/company_form_fbpidi.html",context)

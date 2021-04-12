@@ -31,6 +31,7 @@
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
+					<th>#</th>
 					<th>Blog</th>
 					<th>Blog-author</th>
 					<th>User</th>
@@ -43,7 +44,7 @@
 			<tbody>
 				{%for blogcomment in blogcomments%}
 				<tr>
-					
+					<tr>{{forloop.counter}}</tr>
 					<td>{{blogcomment.blog|safe|truncatechars_html:20}}</td>
 					<td>{{blogcomment.blog.created_by.username}}</td>
 					<td>{{blogcomment.created_by.username}}</td>

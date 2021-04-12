@@ -46,6 +46,8 @@ from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
 								 AnnouncementForm,ResearchForm,
 								 ResearchProjectCategoryForm
 								 )
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 
 from collaborations.models import ( Blog, BlogComment,Faqs,
 									Vacancy,JobApplication, JobCategory,
@@ -56,11 +58,12 @@ from collaborations.models import ( Blog, BlogComment,Faqs,
 									
 									)
 from collaborations.forms import (JobCategoryForm, VacancyForm, CreateJobApplicationForm)
-
+from admin_site.decorators import company_created,company_is_active
 from collaborations.models import ( Vacancy,JobApplication,JobCategory )
 from collaborations.views import filter_by, SearchCategory_Title, get_paginated_data, FilterByCompanyname,SearchByTitle_All, models, search_title_related
 
 
+decorators = [never_cache, company_created(),company_is_active()]
 
 class Download(LoginRequiredMixin,View):
 	def get(self, *args, **kwargs):
@@ -76,16 +79,13 @@ class Download(LoginRequiredMixin,View):
 			return redirect("admin:Applicant_info")
 		return response
 
-
+@method_decorator(decorators,name='dispatch')
 class CloseVacancy(LoginRequiredMixin,View):
-	
 	def get(self,*args,**kwargs):
 		vacancy=Vacancy.objects.get(id=self.kwargs['id'])
 		status = self.kwargs['closed']
-		print("============="+str(status))
 		if status== "True":
 			vacancy.closed = False
-			print("iii")
 			vacancy.last_updated_by = self.request.user
 			vacancy.last_updated_date = timezone.now()
 			messages.success(self.request, "Vacancy Opened Successfully")
@@ -94,7 +94,6 @@ class CloseVacancy(LoginRequiredMixin,View):
 				return redirect("admin:super_Job_list")
 		else:
 			vacancy.closed = True
-			print("lll")
 			vacancy.last_updated_by = self.request.user
 			vacancy.last_updated_date = timezone.now()
 			messages.success(self.request, "Vacancy Closed Successfully")
@@ -104,16 +103,16 @@ class CloseVacancy(LoginRequiredMixin,View):
 		
 		return redirect("admin:Job_list")
 
-class ApplicantList(LoginRequiredMixin,View):
-	
+@method_decorator(decorators,name='get')
+class ApplicantList(LoginRequiredMixin,View):	
 	def get(self,*args,**kwargs):
-		vacancy=Vacancy.objects.filter(created_by=self.request.user)
+		vacancy=Vacancy.objects.filter(company= self.request.user.get_company())
 		context = {'vacancy':vacancy}
 		template_name = "admin/vacancy/vacancy_list.html"
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='get')
 class Applicantinfo(LoginRequiredMixin,View):
-	
 	def get(self,*args,**kwargs):
 		jobapplicant=JobApplication.objects.filter(vacancy=self.kwargs['id']) 
 		vacancyDetail = Vacancy.objects.get(id=self.kwargs['id'])
@@ -121,8 +120,8 @@ class Applicantinfo(LoginRequiredMixin,View):
 		template_name = "admin/vacancy/applicant_list.html"
 		return render(self.request, template_name,context)
 
-class ApplicantListDetail(LoginRequiredMixin,View):
-	
+@method_decorator(decorators,name='get')
+class ApplicantListDetail(LoginRequiredMixin,View):	
 	def get(self,*args,**kwargs):
 		applicant=JobApplication.objects.get(id=self.kwargs['id'])
 		context = {'applicant':applicant}
@@ -130,6 +129,7 @@ class ApplicantListDetail(LoginRequiredMixin,View):
 		return render(self.request, template_name,context)
 
 
+@method_decorator(decorators,name='dispatch')
 class CreateVacancyCategory(LoginRequiredMixin,CreateView):
 	model = JobCategory
 	form_class = JobCategoryForm
@@ -145,6 +145,7 @@ class CreateVacancyCategory(LoginRequiredMixin,CreateView):
 		messages.warning(self.request,form.errors)
 		return redirect("admin:settings")
 
+@method_decorator(decorators,name='dispatch')
 class JobCategoryDetail(LoginRequiredMixin,UpdateView):
 	model = JobCategory
 	form_class = JobCategoryForm
@@ -159,11 +160,10 @@ class JobCategoryDetail(LoginRequiredMixin,UpdateView):
 		messages.warning(self.request,form.errors)
 		return redirect("admin:settings")
 	
-	
+@method_decorator(decorators,name='dispatch')
 class VacancyDetail(LoginRequiredMixin,View):
 	def company_admin(self,*args,**kwarges):
 		force = Company.objects.get(created_by=self.request.user)
-		print("----------------"+str(force))
 		return force
 	def get(self,*args,**kwargs):
 		form = Vacancy.objects.get(id=self.kwargs['id'])
@@ -184,7 +184,6 @@ class VacancyDetail(LoginRequiredMixin,View):
 		if form.is_valid():
 			vacancy = Vacancy.objects.get(id=self.kwargs['id'])
 			vacancy.last_updated_by=self.request.user
-			print("-----+++++-------"+str(form.cleaned_data.get('employement_type')))
 			vacancy.company=self.request.user.get_company()
 			vacancy.last_updated_date = timezone.now()
 			vacancy.location=form.cleaned_data.get('location')
@@ -209,14 +208,15 @@ class VacancyDetail(LoginRequiredMixin,View):
 			return redirect("admin:Job_list")
 		return render(self.request,"admin/vacancy/job_detail.html",context)
 
+@method_decorator(decorators,name='get')
 class SuperAdminVacancyList(LoginRequiredMixin,View):
-	
 	def get(self,*args,**kwargs):
 		vacancy=Vacancy.objects.all()
 		context = {'vacancy':vacancy}
 		template_name = "admin/vacancy/super_job_list.html"
 		return render(self.request, template_name,context)
 
+@method_decorator(decorators,name='get')
 class AdminVacancyList(LoginRequiredMixin,View):
 	
 	def get(self,*args,**kwargs):
@@ -232,6 +232,7 @@ class AdminVacancyList(LoginRequiredMixin,View):
 			return render(self.request, template_name,context)
 
 ## show form
+@method_decorator(decorators,name='dispatch')
 class CreateVacancy(LoginRequiredMixin, View):
 
 	def company_admin(self,*args,**kwarges):

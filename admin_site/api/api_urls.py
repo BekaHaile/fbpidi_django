@@ -10,23 +10,13 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,RolesView,UserLo
 
 
 # views from admin_site app
-from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,
-                        EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
+from admin_site.views import (AdminIndex,DeleteView, Polls, CreatePoll, AddChoice,EditPoll,EditChoice, DeletePoll, DetailPoll, DeleteChoice)
 
 
-from collaborations.views import ( 
-                        AdminNewsList, CreateNews, EditNews,  NewsDetail,
+from collaborations.views import ( AdminNewsList, CreateNews, EditNews,  NewsDetail,TenderList, CreateTender, TenderDetail, EditTender,  DeleteTender)
+from collaborations.Views.blog import(CreatBlog,AdminBlogList,BlogView, )
 
-                        TenderList, CreateTender, TenderDetail, EditTender,  DeleteTender, ManageBankAccount
-
-                        )
-from collaborations.Views.blog import(
-                        CreatBlog,AdminBlogList,BlogView, )
-
-from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,
-                            ProductDetailView,AddProductImage,CreatePrice,CategoryView
-                            )
-
+from product.views import (CreateCategories,CategoryDetail, AdminProductListView,CreateProductView,ProductDetailView,AddProductImage,CreatePrice,CategoryView)
 from collaborations.Views.announcement import (AnnouncementDetail,ListAnnouncement,)  
                             
 from company.views import (
