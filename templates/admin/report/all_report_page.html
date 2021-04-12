@@ -213,7 +213,7 @@
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %}</td>
+									<td>{% get_share od.data total_certification %}</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -242,7 +242,7 @@
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %}</td>
+									<td>{% get_share od.data total_managment %}</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -271,7 +271,7 @@
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %}</td>
+									<td>{% get_share od.data total_energy %}</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -309,7 +309,7 @@
 
 				<div class="card">
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">Industries By Market Destination Data</h5>
+						<h5 class="card-title">Industries By Market Target Data</h5>
 					</div>
 					<div class="card-body">
 						 
@@ -336,7 +336,7 @@
 
 				<div class="card">
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">Women in Positions Data</h5>
+						<h5 class="card-title">Female Employees in High Positions Levels Data</h5>
 					</div>
 					<div class="card-body">
 						 
@@ -344,18 +344,22 @@
 							<thead>
 								<tr>
 									<th>#</th>
+									<th>Company</th>
 									<th>Positions</th>
 									<th>Employees</th>
 									<th>Share %</th>
+									<th>Sector</th>
 								</tr>
 							</thead>
 							<tbody>
 								{%for od in women_in_pson_level%}
 								<tr>
 									<td>{{forloop.counter}}</td>
+									<td>{{od.company}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %} %</td>
+									<td>{% get_share od.data total_fem_posn %} %</td>
+									<td>{{od.sector}}</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -365,7 +369,7 @@
 
 				<div class="card">
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">Working Hour Data</h5>
+						<h5 class="card-title">Companies by Working Hour Data</h5>
 					</div>
 					<div class="card-body">
 						 
@@ -384,7 +388,7 @@
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}} Hours</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %} %</td>
+									<td>{% get_share od.data total_wh %} %</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -400,25 +404,28 @@
 							<thead>
 								<tr>
 									<th>#</th>
+									<th>Company</th>
 									<th>Product</th>
 									<th>Installed Production Capacity</th>
 									<th>Actual Production Capacity</th>
+									<th>Sector</th>
 								</tr>
 							</thead>
 							<tbody>
 								{%for d in produn_data%}
 								<tr>
 									<td>{{forloop.counter}}</td>
+									<td>{{d.company}}</td>
 									<td>
-										 {{d.product__sub_category_name}}
+										 {{d.product}}
 									</td>
 									<td>
-										{{d.total_prdn_capacity}} {{d.product__uom}}
+										{{d.total_prdn_capacity}} {{d.uom}}
 									</td>
 									<td>
-										{{d.total_actual}}  {{d.product__uom}}
+										{{d.total_actual}}  {{d.uom}}
 									</td>
-									 
+									<td>{{d.sector}}</td>
 								</tr>
 								 {%endfor%}
 								 
@@ -437,6 +444,7 @@
 							<thead>
 								<tr>
 									<th>#</th>
+									<th>Company</th>
 									<th>Product</th>
 									<th>Available Inputs</th>
 								</tr>
@@ -445,6 +453,7 @@
 								{%for d in avalilable_input%}
 								<tr>
 									<td>{{forloop.counter}}</td>
+									<th>{{d.company}}</th>
 									<td>
 										 {{d.product}}
 									</td>
@@ -458,6 +467,8 @@
 							<tr>
 								<td></td>
 								<td>Total</td>
+								<td></td>
+
 								<td>{{avalilable_input|get_sum|floatformat:2}}</td>
 							</tr>
 						</table>
@@ -473,7 +484,9 @@
 							<thead>
 								<tr>
 									<th>#</th>
+									<th>Company</th>
 									<th>Product</th>
+									<th>Input Name</th>
 									<th>Share of Inputs</th>
 								</tr>
 							</thead>
@@ -481,9 +494,11 @@
 								{%for d in input_share%}
 								<tr>
 									<td>{{forloop.counter}}</td>
+									<td>{{d.company}}</td>
 									<td>
 										 {{d.product}}
 									</td>
+									<td>{{d.input}}</td>
 									<td>
 										{{d.data|floatformat:2}} {{d.unit}}
 									</td>
@@ -492,7 +507,9 @@
 								 
 							</tbody>
 							<tr>
+								<td></td>
 								<td>Total</td>
+								<td></td>
 								<td></td>
 								<td>{{input_share|get_sum|floatformat:2}}</td>
 							</tr>
@@ -533,7 +550,7 @@
 									<td>{{fd.actual_production}}</td>
 									<td>{% get_capital_util fd.production_amount fd.actual_production %} %</td>
 									{%if sector != 'all'%}
-									<td>{{sector}}</td>
+									<td>{{fd.sector}}</td>
 									{%endif%}
 									{%if sub_sector%}
 									<td>{{sub_sector}}</td>
@@ -631,15 +648,19 @@
 						<table class="table datatable-basic">
 							<thead>
 								<tr>
+									<th>#</th>
+									<th>Company</th>
 									<th>Product</th>
 									<th>Average Extraction Rate</th>
 								</tr>
 							</thead>
 							<tbody>
-								{%for fd in extn_data%}
+								{%for fd in extraction_rate%}
 								<tr>
-									<td>{{fd.product__sub_category_name}}</td>
-									<td>{{fd.avg_extraction_rate|floatformat:2}} {{fd.product__uom}}</td>
+									<td>{{forloop.counter}}</td>
+									<td>{{fd.company}}</td>
+									<td>{{fd.product}}</td>
+									<td>{{fd.extraction_rate|floatformat:2}} {{fd.unit}}</td>
 								</tr>
 								{%endfor%}
 								
