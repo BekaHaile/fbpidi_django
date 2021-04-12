@@ -16,15 +16,19 @@ import os
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage
 from accounts.email_messages import sendEventNotification
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 
 from django.contrib.sites.shortcuts import get_current_site
 from collaborations.forms import (ResearchForm,ResearchProjectCategoryForm)
 from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname
-
+from admin_site.decorators import company_created,company_is_active
 from collaborations.models import Research,ResearchAttachment,ResearchProjectCategory
 from django.utils import timezone
 
+decorators = [never_cache, company_created(),company_is_active()]
 
+@method_decorator(decorators,name='dispatch')
 class CreateResearchCategory(LoginRequiredMixin, CreateView):
 	model = ResearchProjectCategory
 	form_class = ResearchProjectCategoryForm
@@ -40,7 +44,7 @@ class CreateResearchCategory(LoginRequiredMixin, CreateView):
 		messages.warning(self.request,form.errors)
 		return redirect("admin:settings")
 
-
+@method_decorator(decorators,name='dispatch')
 class ResearchCategoryDetail(LoginRequiredMixin,UpdateView):
 	model = ResearchProjectCategory
 	form_class = ResearchProjectCategoryForm
@@ -59,7 +63,7 @@ class ResearchCategoryDetail(LoginRequiredMixin,UpdateView):
 		return redirect("admin:settings")
 	   
 
-
+@method_decorator(decorators,name='get')
 class ListResearchAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		context ={}
@@ -70,7 +74,7 @@ class ListResearchAdmin(LoginRequiredMixin ,View):
 		template_name = "admin/researchproject/research_list.html"
 		return render(self.request, template_name,context)
 
-
+@method_decorator(decorators,name='get')
 class ListPendingResearchAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.filter(accepted="PENDING")
@@ -79,6 +83,7 @@ class ListPendingResearchAdmin(LoginRequiredMixin ,View):
 		return render(self.request, template_name,context)
 
 
+@method_decorator(decorators,name='get')
 class ResearchDetailView(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
@@ -87,6 +92,7 @@ class ResearchDetailView(LoginRequiredMixin, View):
 		return render(self.request, template_name,context)
 
 
+@method_decorator(decorators,name='dispatch')
 class CreateResearchAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = ResearchForm()
@@ -119,6 +125,7 @@ class CreateResearchAdmin(LoginRequiredMixin, View):
 		return redirect("admin:settings")
 
 
+@method_decorator(decorators,name='get')
 class ResearchApprove(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
@@ -127,7 +134,7 @@ class ResearchApprove(LoginRequiredMixin, View):
 		messages.success(self.request, "Changed Status to APPROVED Successfully")
 		return redirect("admin:research_view",id=self.kwargs['id'])
 
-
+@method_decorator(decorators,name='get')
 class ResearchPending(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
@@ -136,7 +143,7 @@ class ResearchPending(LoginRequiredMixin, View):
 		messages.success(self.request, "Changed Status to PENDING Successfully")
 		return redirect("admin:research_view",id=self.kwargs['id'])
 
-
+@method_decorator(decorators,name='dispatch')
 class ResearchDetailAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
@@ -170,6 +177,7 @@ class ResearchDetailAdmin(LoginRequiredMixin, View):
 		return render(self.request, template_name,context)
 
 
+# customer side
 class ListResearch(View):
 	def get(self,*args,**kwargs):
 		result = {}
@@ -243,7 +251,6 @@ class ResearchDetail(View):
 		return render(self.request, template_name,context)
 
 class EditResearch(View):
-
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
 		if str(self.request.user) != "AnonymousUser":

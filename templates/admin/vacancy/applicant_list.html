@@ -1,0 +1,78 @@
+{%extends 'admin/base_site.html'%}
+{% block extrastyle %}
+
+<!-- Theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+<!-- /theme JS files -->
+
+{% endblock %}
+{%block pagename%}Applicants{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	<!-- Page length options main category -->
+	
+	<!-- /page length options -->
+
+	<!-- Page length options sub-category-->
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h5 class="card-title">Applicants of <b>{{jobapplicant.0.vacancy}}</b></h5>
+			<div class="header-elements">
+				<div class="list-icons">
+					{% if vacancyDetail.closed == True %}
+			<a href="{%url 'admin:close' id=vacancy closed=True %}" class="btn bg-teal btn-sm rounded-round"> Open the Vacancy</a>
+			{%else %}
+			<a href="{%url 'admin:close' id=vacancy closed=False %}" class="btn bg-teal btn-sm rounded-round"> Close the Vacancy</a>
+			{%endif%}
+
+				</div>
+			</div>
+		</div>
+
+		<table class="table datatable-show-all">
+			<thead>
+				<tr>
+					<th>status</th>
+					<th>grade</th>
+					<th>experiance</th>
+					<th>timestamp </th>
+					<th>User </th>
+					<th>institiute </th>
+					<th>Action </th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				{%for job in jobapplicant%}
+				<tr> 
+					
+					<td>{{job.status}}</td>
+					
+					<td>{{job.grade}}</td>
+					<td>{{job.experiance}}</td>
+					<td>{{job.created_date}}</td>
+					<td>
+						{{job.created_by.username}}
+					</td>
+					<td>
+						{{job.institiute}}
+					</td>
+					<td>
+						<a href="{%url 'admin:applicant_detail' id=job.id %}" class="btn bg-teal btn-sm rounded-round">Applicant information</a>
+					</td>
+					
+					
+
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
+	
+<!-- /content area -->
+{%endblock%}

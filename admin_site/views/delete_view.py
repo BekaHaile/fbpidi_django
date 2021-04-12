@@ -1,23 +1,28 @@
-
 import os
+from django.db.models import Q
 from django.utils import timezone
-from django.shortcuts import render,redirect,get_object_or_404
-from django.views.generic import View, ListView, DetailView, CreateView, UpdateView
 from django.contrib import messages
+from django.utils.decorators import method_decorator
+from django.core.exceptions import ObjectDoesNotExist
+from django.views.decorators.cache import never_cache
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render,redirect,get_object_or_404
+from django.views.generic import View, ListView, DetailView, CreateView, UpdateView
+
+
 # 
-from product import models
 from product.models import *
-from accounts.models import UserProfile
-from company.models import Company,CompanyEvent, HomePageSlider, InvestmentProject
 from admin_site.models import *
-from chat.models import ChatGroup, ChatMessage
-
 from collaborations.models import *
-from django.db.models import Q
+from accounts.models import UserProfile
+from chat.models import ChatGroup, ChatMessage
+from admin_site.decorators import company_created,company_is_active
+from company.models import Company, CompanyEvent, HomePageSlider, InvestmentProject
 
+decorators = [never_cache, company_created(),company_is_active()]
+
+@method_decorator(decorators,name='dispatch')
 class DeleteView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         message = ""
@@ -393,6 +398,5 @@ class DeleteView(LoginRequiredMixin,View):
                     return redirect("admin:tenders")   
         
         except Exception as e:
-                messages.warning(self.request, "Exception while deleting!", str(e))
-                print("#######3Excetion ",e)
-                return redirect("admin:index") 
+                print("#######Excetion While deleting ",e)
+                return redirect("admin:error_404") 
