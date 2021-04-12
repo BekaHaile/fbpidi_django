@@ -109,7 +109,7 @@ class CompanyInboxDetail(View):
             print("########## Exception at CompanyInboxDetail post ",e)
             return redirect("admin:error_404")
 
-
+@method_decorator(decorators,name='dispatch')
 class CompanyInquiryList(ListView):
     model = ProductInquiry
     template_name = "admin/company/inquiry_list.html"
