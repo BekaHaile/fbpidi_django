@@ -9,11 +9,11 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">{% trans "Vacancy" %} </h1>
+							<h1 class="">{% trans "Vacancy" %}  </h1>
 							<ol class="breadcrumb text-center">
-								{%if message %} 
+								{%if message %}
 									{{message}}
-								{%endif%}
+								{%endif%} 
 							</ol>
 						</div>
 					</div>
@@ -26,29 +26,10 @@
 		<section class="sptb">
 			<div class="container">
 				<div class="row">
-					<div class="col-xl-3 col-lg-3 col-md-3">
-					</div>
-					<div class="col-xl-9 col-lg-12 col-md-12">
-						
-								
-								{% if messages %}
-								{% for message in messages %}
-								<div class="alert alert-warning" role="alert">
-									<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-									<span class="font-weight-semibold">{{message}}</span>
-								</div>
-
-								{% endfor %}
-								{% endif %}
-						
-						</div>
-				</div>
-				<div class="row">
-
 					<div class="col-xl-3 col-lg-12 col-md-12">
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">{% trans "Categories" %}</h3>
+								<h3 class="card-title">{% trans "Categories" %} </h3>
 							</div>
 							{%for cat in category%}
 							<div class="card-body p-0">
@@ -67,45 +48,61 @@
 							</div>
 							{%endfor%}
 							
-						</div> </div> 
+						</div> </div>
 								
-						
+
 							
 					<div class="col-xl-9 col-lg-12 col-md-12">
-						{%for vacancy in vacancys%}
 						
 
 						<div class="col-lg-12">
 
                             <div class="card position-relative">
                                 <div class="card-header py-3">
-                                	
                                     <h3 class="card-title">{% print_translated vacancy.title|safe vacancy.title_am|safe LANGUAGE_CODE%}</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
-                                       <b>{% trans "cateory" %}</b>: <code>{{vacancy.category|safe}}</code>
+                                       <b>{% trans "Cateory" %} </b>: <code>{{vacancy.category|safe}}</code>
                                     </div>
                                     <div class="mb-3">
-                                    <b>{% trans "Employee Type" %}</b>:{{vacancy.employement_type}}</div>
+                                    <b>Employee Type</b>:{{vacancy.employement_type}}</div>
                                     <div class="mb-4">
+                                    	<b>{% trans "Campany" %} </b>:{{vacancy.company}} 
+                                    </div>
+                                    <div class='mb-4'>
+                                    	<b>{% trans "Location" %} </b>:{{vacancy.location}}
+                                    </div>
+                                    <div class='mb-4'>
+                                    	<b>{% trans "Salary" %} </b>:{{vacancy.salary}}
+                                    </div>
 
-                                    	<b>Campany</b>:{{vacancy.company}} 
-										<a class="mr-2" style = " margin-left: 10px; margin-right: 10px;" target = "blank" href="/chat/with/{{vacancy.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-										
-	
+                                    <div class='mb-4'>
+                                    	
+                                    	<b>{% trans "Requirement" %} </b>:
+                                    	{% print_translated vacancy.requirement|safe vacancy.requirement_am|safe LANGUAGE_CODE%}
+                                    </div>
+                                    <div class='mb-4'>
+                                    	
+                                    	<b>{% trans "Starting date" %} </b>:{{vacancy.starting_date}}
+                                    </div>
+                                    <div class='mb-4'>
+                                    	
+                                    	<b>{% trans "Ending date" %} </b>:{{vacancy.ending_date}}
+                                    </div>
+                                    <div class='mb-4'>
+                                    	
+                                    	<b>{% trans "Description" %} </b>:
+                                    	{% print_translated vacancy.description|safe vacancy.description_am|safe LANGUAGE_CODE%}
                                     </div>
                                     
-								</div>
-								
+                                </div>
                                 <div class="card-footer">
-								<a href="{%url 'vacancy_detail' id=vacancy.id%}" class="btn btn-secondary">{% trans "View job details" %}</a>
-								<a href="{%url 'applications'  model_name='Vacancy' id=vacancy.id%}" class="btn btn-secondary">{% trans "Apply" %}</a>
+								<a href="{%url 'applications'  model_name='Vacancy' id=vacancy.id%}" class="btn btn-secondary">{% trans "Apply" %} </a>
 							</div>
                             </div>
 
                         </div>
-						{%endfor%}
 						 
 
 

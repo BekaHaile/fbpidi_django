@@ -60,7 +60,7 @@ from collaborations.models import ( Faqs, )
 
 class FaqList(View):
 	def get(self,*args,**kwargs):
-		template_name="frontpages/faq.html"
+		template_name="frontpages/faq/faq.html"
 		faq = Faqs.objects.filter(status="APPROVED")
 		context = {'faqs':faq}
 		return render(self.request, template_name,context)
@@ -69,7 +69,7 @@ class CreateFaqs(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = FaqsForm()
 		context = {'form':form}
-		return render(self.request,"admin/pages/faqs_forms.html",context)
+		return render(self.request,"admin/faq/faqs_forms.html",context)
 
 	def post(self,*args,**kwargs):
 		form = FaqsForm(self.request.POST)
@@ -87,13 +87,12 @@ class CreateFaqs(LoginRequiredMixin,View):
 			context = {'form':form}
 			messages.success(self.request, "New Faqs Added Successfully")
 			return redirect("admin:admin_Faqs")
-		return render(self.request, "admin/pages/faqs_forms.html",context)
+		return render(self.request, "admin/faq/faqs_forms.html",context)
 
 class FaqsView(LoginRequiredMixin,View):
-	template_name="admin/pages/blog_list.html"
 	def get(self,*args,**kwargs):
 		faqs=Faqs.objects.get(id=self.kwargs['id'])
-		template_name="admin/pages/faqs_detail.html"
+		template_name="admin/faq/faqs_detail.html"
 		context={'faq':faqs}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
@@ -120,7 +119,7 @@ class FaqsList(LoginRequiredMixin,View):
 			faqs=Faqs.objects.filter(created_by=self.request.user)
 			pending = ""
 		context = {'faqs':faqs,'pending':pending}
-		template_name = "admin/pages/faqs_list.html"
+		template_name = "admin/faq/faqs_list.html"
 		return render(self.request, template_name,context)
 
 class FaqPendingList(LoginRequiredMixin,View):
@@ -128,7 +127,7 @@ class FaqPendingList(LoginRequiredMixin,View):
 		faqs=Faqs.objects.filter(status="PENDDING")
 		pending = Faqs.objects.filter(status="PENDDING").count()
 		context = {'faqs':faqs,'pending':pending}
-		template_name = "admin/pages/faqs_list.html"
+		template_name = "admin/faq/faqs_list.html"
 		return render(self.request, template_name,context) 
 
 class FaqApprovdList(LoginRequiredMixin,View):
@@ -136,7 +135,7 @@ class FaqApprovdList(LoginRequiredMixin,View):
 		faqs=Faqs.objects.filter(status="APPROVED")
 		pending = Faqs.objects.filter(status="PENDDING").count()
 		context = {'faqs':faqs,'pending':pending}
-		template_name = "admin/pages/faqs_list.html"
+		template_name = "admin/faq/faqs_list.html"
 		return render(self.request, template_name,context)
 
 class FaqApprove(LoginRequiredMixin, View):
@@ -157,5 +156,5 @@ class FaqsDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		faq = Faqs.objects.get(id=self.kwargs['id'])
 		context = {'forms':faq}
-		template_name = "admin/pages/faqs_view.html"
+		template_name = "admin/faq/faqs_view.html"
 		return render(self.request, template_name,context)
