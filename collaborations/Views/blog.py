@@ -114,7 +114,7 @@ class BlogCommentDetailAdmin(LoginRequiredMixin,View):
 class CreatBlog(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = BlogsForm()
-		template_name="admin/pages/blog_form.html"
+		template_name="admin/blog/blog/blog_form.html"
 		context={'form':form}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
@@ -145,11 +145,11 @@ class CreatBlog(LoginRequiredMixin,View):
 			blog = form.save(self.request.user,company,x,y,w,h,tag_list,tag_list_am)
 			messages.success(self.request, "Added New Blog Successfully")
 			return redirect("admin:admin_Blogs")
-		return render(self.request, "admin/pages/blog_form.html",context)
+		return render(self.request, "admin/blog/blog/blog_form.html",context)
 
 @method_decorator(decorators,name='dispatch')
 class AdminBlogList(LoginRequiredMixin, ListView):
-	template_name="admin/pages/blog_list.html"
+	template_name="admin/blog/blog/blog_list.html"
 	model = Blog
 	context_object_name = 'blogs'
 	def get_queryset(self):
@@ -185,12 +185,12 @@ class BlogView(LoginRequiredMixin,View):
 
 	def get(self,*args,**kwargs):
 		blogs = Blog.objects.get(id=self.kwargs['id']) 
-		template_name="admin/pages/blog_detail.html"
+		template_name="admin/blog/blog/blog_detail.html"
 		blog = BlogsForm()
 		choices = ['Food','Beverage','Pharmaceutical']
 		choices_am = [ 'ምግብ', 'መጠጥ', 'መድሀኒት']
 		context = {'form':blogs,"choices":choices, "choices_am":choices_am}
-		return render(self.request, "admin/pages/blog_detail.html",context)
+		return render(self.request, "admin/blog/blog/blog_detail.html",context)
 	def post(self,*args,**kwargs):
 		form = BlogsEdit(self.request.POST,self.request.FILES)
 		context={'form':form}
@@ -225,7 +225,7 @@ class BlogView(LoginRequiredMixin,View):
 				blogedit.save(self.request.user,self.kwargs['id'],x,y,w,h,blog)
 				messages.success(self.request, "Edited Blogs Successfully")
 				return redirect("admin:admin_Blogs")
-		return render(self.request, "admin/pages/blog_detail.html",context)
+		return render(self.request, "admin/blog/blog/blog_detail.html",context)
 
 
 def set_message(result):

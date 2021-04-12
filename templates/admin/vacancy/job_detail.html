@@ -1,0 +1,184 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/anytime.min.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.date.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.time.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/pickadate/legacy.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/notifications/jgrowl.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/picker_date.js"></script>
+
+{% endblock %}
+{%block pagename%}Edit Vacancy{%endblock%}
+{%block content%}
+
+<!-- Content area -->
+<div class="content">
+
+	 
+	<div class="card">
+
+		<div class="card-body">
+
+			<form action="" method="POST" enctype="multipart/form-data">
+				<fieldset class="mb-3 ml-3 mr-3">
+					<legend class="text-uppercase font-size-sm font-weight-bold">Edit Vacancy</legend>
+					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
+					{{form.errors}}
+					{%csrf_token%}
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Vacancy Title (English)*</label>
+						<div class="col-lg-9">
+							<input type="text" name="title" class="form-control" value="{{form.title}} " required="True">
+						 
+							
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Vacancy Title (Amharic)*</label>
+							<div class="col-lg-9">
+							<input type="text" name="title_am" class="form-control" value="{{form.title_am}}" id=""  required="True">
+						</div>
+							
+					</div> 
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Vacancy Description (English)*</label>
+						
+							<div class="col-lg-9">
+							<textarea type="text" name="description" class="summernote"  id="">{{form.description|safe}}</textarea> 
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Vacancy Description (Amharic)*</label>
+						
+							<div class="col-lg-9">
+							<textarea type="text" name="description_am" class="summernote"  id="">{{form.description_am|safe}}</textarea>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Vacancy Requirement (English)*</label>
+						<div class="col-lg-9">
+								<textarea class="summernote" name="requirement" value="">{{form.requirement|safe}}</textarea>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Vacancy Requirement (Amharic)*</label>
+						<div class="col-lg-9">
+								<textarea  value="" class="summernote" name="requirement_am" >{{form.requirement_am|safe}}</textarea>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Location  *</label>
+						<div class="col-lg-9">
+								<textarea value="" class="form-control" name="location" > {{form.location|safe}}</textarea>
+						</div>
+							
+					</div> 
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Salary *</label>
+						<div class="col-lg-9">
+								<input value="{{form.salary}}" class="form-control" name="salary" type="number"></input>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Category Name *</label>
+						<div class="col-lg-9">
+							<select required name="category" class="form-control form-control-uniform" data-fouc>
+								<option value="{{form.category.id}}">{{form.category}}</option>
+								{%for cat_names in jobcategory%}
+									{%if cat_names == form.category %}
+									{%else%}
+									<option value="{{cat_names.id}}">{{cat_names}}</option>
+									{%endif%}
+								{%endfor%}
+								 
+							</select>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3"> Employement Type *</label>
+						<div class="col-lg-9">
+						<select required name="employement_type" class="form-control form-control-uniform" data-fouc>
+							<option value="{{form.employement_type}}">{{form.employement_type}}</option>
+							
+								{%if form.employement_type == "Temporary" %}
+								<option value="Permanent">Permanent</option>
+								<option value="Contract">Contract</option>
+								{%endif%}
+								{%if form.employement_type == "Permanent" %}
+								<option value="Temporary">Temporary</option>
+								<option value="Contract">Contract</option>
+								{%endif%}
+								{%if form.employement_type == "Contract"  %}
+								<option value="Temporary">Temporary</option>
+								<option value="Permanent">Permanent</option>
+								{%endif%}
+							
+							 
+						</select>
+					</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Start Date  *</label>
+						<div class="col-lg-9">
+							<span class="input-group-prepend">
+											<span class="input-group-text"><i class="icon-calendar22"></i></span>
+										
+								<input type="text" name ="starting_date" class="form-control daterange-single" value="{{form.stating_date}}">
+							</span>
+						</div>
+							
+					</div>
+
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Ending Date  *</label>
+						<div class="col-lg-9">
+							<span class="input-group-prepend">
+											<span class="input-group-text"><i class="icon-calendar22"></i></span>
+										
+								<input type="text" name ="ending_date" class="form-control daterange-single" value="{{form.ending_date}}">
+							</span>
+						</div>
+							
+					</div>
+
+
+					
+
+				</fieldset>
+
+				<div class="text-right">
+					<button style="padding-left: 10%; padding-right: 10%;" type="submit"
+						class="btn btn-primary rounded-round" onclick="return confirm('are you sure you Done with editing')">Submit </button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$('#summernote').summernote();
+		$('.summernote').summernote();
+		$('#datetimepicker1').datetimepicker();
+	});
+
+</script>
+{%endblock%}
