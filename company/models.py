@@ -220,6 +220,11 @@ class EducationalStatus(models.Model):
 	female	= models.IntegerField(default=0)
 	timestamp = models.DateField(auto_now_add=True)	
 
+	def sum_male_female(self):
+		return int(self.male + self.female)
+	
+	total_edu = property(sum_male_female)
+
 # Number of Female Employees in high positions
 class FemalesInPosition(models.Model):
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="females_high_positions")

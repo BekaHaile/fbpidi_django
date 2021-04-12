@@ -102,9 +102,7 @@
 									<th>Building Cost</th>
 									<th>Working Capital</th>
 									<th>Investment Capital</th>
-									{%if sector != 'all'%}
 									<th>Sector</th>
-									{%endif%}
 								</tr>
 							</thead>
 							<tbody>
@@ -116,9 +114,7 @@
 									<td>ETB {{id.building}}</td>
 									<td>ETB {{id.working}}</td>
 									<td>ETB {{id.total_inv_cap}}</td>
-									{%if sector != 'all'%}
-									<td>{{sector}}</td>
-									{%endif%}
+									<td>{{id.sector}}</td>
 								</tr>
 								{%endfor%}
 								
@@ -130,9 +126,7 @@
 								<td>ETB {% get_inv_cap_sum inv_cap_data 'building' %}</td>
 								<td>ETB {% get_inv_cap_sum inv_cap_data 'working' %}</td>
 								<td>ETB {% get_inv_cap_sum inv_cap_data  'total' %}</td>
-								{%if sector != 'all'%}
 									<td></td>
-									{%endif%}
 							</tr>
 						</table>
 					</div>
@@ -159,7 +153,7 @@
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total%} %</td>
+									<td>{% get_share od.data total_ownership%} %</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -177,18 +171,20 @@
 							<thead>
 								<tr>
 									<th>#</th>
+									<th>Company</th>
 									<th>Educational Status</th>
-									<th>Employees</th>
-									<th>Share %</th>
+									<th>Employees Count</th>
+									<th>Sector</th>
 								</tr>
 							</thead>
 							<tbody>
 								{%for od in education_status_data%}
 								<tr>
 									<td>{{forloop.counter}}</td>
+									<td>{{od.company}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %}</td>
+									<td>{{od.sector}}</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -978,17 +974,65 @@
 			<script>
 				$(document).ready(function(){
 					$("#sector").change(function(){
-						$("#sub_sector").prop("disabled",false);
+
+						if($(this).val() != ""){
+							$.ajax({
+								url:"/admin/get-sub-sectors/"+$(this).val()+"/",
+								type:"GET",
+								success:function(result){
+									var sub_sectors = result['sub_sectors'];
+									var sector_data = "<option value=' '>Select Sub Sectors</option>";
+									if(sub_sectors.length>0){
+										
+										$.each(sub_sectors, function(index) {
+											sector_data+="<option value='"+sub_sectors[index].pk+"'>"+sub_sectors[index].fields.category_name+"</option>";
+									  	});
+									  $("#sub_sector").html(sector_data);
+									}else{
+										$("#sub_sector").html("<option value=' '>No Data Available</option>");
+									}
+								},
+								error:function(error){
+
+								}
+							});
+							$("#sub_sector").prop("disabled",false);
+						}else{
+							$("#sub_sector").prop("disabled",true);
+						}
+
 					});
 					$("#sub_sector").change(function(){
-						$("#product").prop("disabled",false);
+						if($(this).val() != ""){
+							$.ajax({
+								url:"/admin/get-products-sectors/"+$(this).val()+"/",
+								type:"GET",
+								success:function(result){
+									var products = result['products'];
+									var sector_data = "<option value=' '>Select Products</option>";
+									if(products.length>0){
+										
+										$.each(products, function(index) {
+											sector_data+="<option value='"+products[index].pk+"'>"+products[index].fields.sub_category_name+"</option>";
+									  	});
+									  $("#product").html(sector_data);
+									}else{
+										$("#product").html("<option value=' '>No Data Available</option>");
+									}
+								},
+								error:function(error){
+
+								}
+
+							});
+							$("#product").prop("disabled",false);
+						}else{
+							$("#product").prop("disabled",true);
+						}
 					});
 					$('.datatable-basic').DataTable(
 						{
-							dom: 'Bfrtip',
-							buttons: [
-								'csv', 'excel', 'pdf', 'print'
-							]
+							dom: 'Bfrtip', 
 						}
 					);
 				});
