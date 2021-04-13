@@ -564,7 +564,7 @@ class NumberofIndustriesByOption(LoginRequiredMixin,View):
             context['data'] =  Company.objects.all().exclude(new_product_developed='').exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who Developed New Product"
         elif self.kwargs['option'] == 'expansion_plan':
-            context['data'] =  Company.objects.all().exclude(expansion_plan='No').exclude(main_category='FBPIDI')
+            context['data'] =  Company.objects.all().exclude(expansion_plan='').exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who has Expansion Plan"
         elif self.kwargs['option'] == 'waste_trtmt_system':
             context['data'] =  Company.objects.all().exclude(waste_trtmnt_system='').exclude(main_category='FBPIDI')
@@ -583,7 +583,7 @@ class NumberofIndustriesByOption(LoginRequiredMixin,View):
             context['label'] = "Number of Industries Who has Environmental Management Plan"
         elif self.kwargs['option'] == 'focal_person':
             context['data'] =  Company.objects.filter(env_focal_person=True).exclude(main_category='FBPIDI')
-            context['label'] = "Number of Industries Who has have Environmental Focal person"
+            context['label'] = "Number of Industries Who has Environmental Focal person"
         elif self.kwargs['option'] == 'saftey_profesional':
             context['data'] =  Company.objects.filter(safety_profesional=True).exclude(main_category='FBPIDI')
             context['label'] = "Number of Industries Who has Saftey Professional"
