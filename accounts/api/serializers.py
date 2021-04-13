@@ -9,22 +9,23 @@ from django.db import transaction
 
 class UserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type':'password'}, write_only=True)
+    
     class Meta:
         model = UserProfile
         fields = ('id', 'username', 'first_name','last_name', 'email', 'password', 
-                    'password2', 'phone_number', 'profile_image',)
+                    'password2', 'phone_number',)
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = UserProfile(email=validated_data['email'],  username=validated_data['username'],
                     first_name=validated_data['first_name'], last_name=validated_data['last_name'],
-                    phone_number=validated_data['phone_number'], profile_image=validated_data['profile_image'])
+                    phone_number=validated_data['phone_number'])
         
         if validated_data['password'] != validated_data['password2']:
             raise serializers.ValidationError({'password': 'Password1 and Password2 must mutch!!'})
         
         user.set_password(validated_data['password'])
-        user.save()#####
+        user.save()
         return user
 
 class UserInfoSerializer(serializers.ModelSerializer):

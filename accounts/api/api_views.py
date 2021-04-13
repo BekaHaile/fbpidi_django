@@ -22,25 +22,31 @@ from social_django.utils import psa
 class CustomerSignUpView(APIView):
     def post(self, request):
             data = {}
-            user_serializer = UserSerializer (data = request.data)
-            if user_serializer.is_valid():
-                customer_serializer = CustomerCreationSerializer(data = request.data)
-            
-                if customer_serializer.is_valid():
-                        user = user_serializer.create(validated_data = request.data) 
-                        customer = customer_serializer.save(user = user)
-                        data['error']=False    
-                        data['message'] = "Successfully registered a new Customer user."
-                        data['customer']  = CustomerCreationSerializer(customer).data
-                        data['token'] = Token.objects.get(user = user).key    
+            try:
+                user_serializer = UserSerializer (data = request.data)
+                if user_serializer.is_valid():
+                    customer_serializer = CustomerCreationSerializer(data = request.data)
+                    if customer_serializer.is_valid():
+                            user = user_serializer.create(validated_data = request.data) 
+                            if 'profile_image' in request.data:
+                                user.profile_image = request.data['profile_image']
+                           
+                            customer = customer_serializer.save(user = user)
+                            data['error']=False    
+                            data['message'] = "Successfully registered a new Customer user."
+                            data['customer']  = CustomerCreationSerializer(customer).data
+                            data['token'] = Token.objects.get(user = user).key    
+                    else:
+                            data['error']  =True
+                            data['message'] = dict(customer_serializer.errors).values()
+
                 else:
-                        data = customer_serializer.errors
-                        data['error']  =True
-                
-            else:
-                data = user_serializer.errors
-                data['error'] = True
-            return Response(data=data)
+                    data['error'] = True
+                    data['message'] = dict(user_serializer.errors).values()
+                return Response(data=data)
+            except Exception as e:
+                print("################## ",e)
+                return Response(data = {'error ':True})
 
 
 

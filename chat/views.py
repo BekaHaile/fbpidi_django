@@ -59,12 +59,18 @@ def chat_ajax_handler(request, id):
 def chat_with(request, reciever_name):
     try:
         other_user= UserProfile.objects.get(username=reciever_name)
+        if other_user == request.user:
+            messages.warning (request, "You can't Chat with your self!")
+            if request.user.is_customer:
+                return redirect('customer_chat_list')
+            else:
+                return redirect("admin:admin_chat_list")
     except Exception as e:
         print("Exception at chat with ",e)
         if request.user.is_customer:
             return redirect('customer_chat_list')
         else:
-            return redirect("admin:view_company_profile")
+            return redirect("admin:admin_chat_list")
     messages = []
     if request.method == 'GET':
         q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) ) | 
