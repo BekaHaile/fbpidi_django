@@ -30,14 +30,14 @@
 
 			<!-- Content area -->
 			<div class="content">
-
+				<!-- search bar -->
 				<div class="card">
 					<div class="card-body">
 						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
-							<form class="form-inline" method="POST"> {%csrf_token%}
+							<form class="form-inline" action="{%url 'admin:all_report_page'%}" method="POST"> {%csrf_token%}
 							<ul class="list-inline list-inline-condensed mb-0 mr-4">
 								<li class="list-inline-item"> 
-									<select class="form-control" name="region" id="">
+									<select class="form-control" name="region" id="region">
 										<option value="">Select Region</option>
 										{%for region in regions%}
 										<option value="{{region.id}}">{{region}}</option>
@@ -53,19 +53,13 @@
 									</select>
 								</li>
 								<li class="list-inline-item"> 
-									<select class="form-control" disabled name="sub_sector" id="sub_sector">
+									<select class="form-control" name="sub_sector" id="sub_sector">
 										<option value="">Select Sub sectors</option>
-										{%for sub_sector in sub_sectors%}
-										<option value="{{sub_sector.id}}">{{sub_sector}}</option>
-										{%endfor%}
 									</select>
 								</li> 
 								<li class="list-inline-item"> 
-									<select class="form-control" disabled name="product" id="product">
+									<select class="form-control" name="product" id="product">
 										<option value="">Select Product</option>
-										{%for product in products%}
-										<option value="{{product.id}}">{{product}}</option>
-										{%endfor%}
 									</select>
 								</li> 
 								 
@@ -77,7 +71,7 @@
 								<li class="list-inline-item"> <button title="Filter Data" type="submit"class="btn btn-primary text-default">
 										<i class="icon-search4"></i></button>									 
 								</li>
-								<li class="list-inline-item"> <a href="#" title="Generate Report" class="btn btn-success text-default">
+								<li class="list-inline-item"> <a id="generatepdf" href="#" title="Generate Report" class="btn btn-success text-default">
 									<i class="icon-file-pdf" style="color: white;"></i></a>
 							    </li>
 							</ul>
@@ -86,6 +80,50 @@
 						</div>
 					</div>
 				</div>
+				<!-- tables -->
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">Number of Industries By Region & sector Distribution</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company Name</th>
+									<th>Sector</th>
+									<th>Sub-Sector</th>
+									<th>Region</th>
+ 								</tr>
+							</thead>
+							<tbody>
+								{%for company in company_list%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{company.name}}</td>
+									<td><a href="#">{{company.main_category}}</a></td>
+									<td>
+										{%for category in company.category.all%}
+										<a href="#">{{category.category_name}}</a>,
+										{%endfor%}
+									</td>
+									<td>{{company.company_address.region.name}}</td>
+ 								</tr>
+								 
+								 {%endfor%}
+								 
+							</tbody>
+							<tr>
+								<td></td>
+								<td>Total</td>
+								<td></td><td></td> {%if product%}<td></td>{%endif%}
+								<td>{{company_list.count}} Companies</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+				
 
 				<div class="card">
 					<div class="card-header header-elements-inline">
@@ -157,6 +195,33 @@
 								</tr>
 								 {%endfor%}
 							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">Companies Based on Established Year</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Established Year</th>
+									<th>Companies</th>
+ 								</tr>
+							</thead>
+							<tbody id="tbody">
+								{%for d in established_year_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{d.label}}</td>
+									<td>{{d.data}}</td>
+ 								</tr>
+								 {%endfor%}
+
+							</tbody>
+							  
 						</table>
 					</div>
 				</div>
@@ -989,6 +1054,33 @@
 						</table>
 					</div> 
 				</div>
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">Number of Industries with Ecomerce,who Conducted Research,who has laboratory...</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Classification</th>
+									<th>Companies</th>
+ 								</tr>
+							</thead>
+							<tbody id="tbody">
+								{%for d in filter_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{d.label}}</td>
+									<td>{{d.data.count}}</td>
+ 								</tr>
+								 {%endfor%}
+
+							</tbody>
+							  
+						</table>
+					</div>
+				</div>
 				 
 			</div>
 			<!-- /content area -->
@@ -1002,7 +1094,7 @@
 								type:"GET",
 								success:function(result){
 									var sub_sectors = result['sub_sectors'];
-									var sector_data = "<option value=' '>Select Sub Sectors</option>";
+									var sector_data = "<option value=''>Select Sub Sectors</option>";
 									if(sub_sectors.length>0){
 										
 										$.each(sub_sectors, function(index) {
@@ -1010,16 +1102,16 @@
 									  	});
 									  $("#sub_sector").html(sector_data);
 									}else{
-										$("#sub_sector").html("<option value=' '>No Data Available</option>");
+										$("#sub_sector").html("<option value=''>No Data Available</option>");
 									}
 								},
 								error:function(error){
 
 								}
 							});
-							$("#sub_sector").prop("disabled",false);
+							// $("#sub_sector").prop("disabled",false);
 						}else{
-							$("#sub_sector").prop("disabled",true);
+							// $("#sub_sector").prop("disabled",true);
 						}
 
 					});
@@ -1030,7 +1122,7 @@
 								type:"GET",
 								success:function(result){
 									var products = result['products'];
-									var sector_data = "<option value=' '>Select Products</option>";
+									var sector_data = "<option value=''>Select Products</option>";
 									if(products.length>0){
 										
 										$.each(products, function(index) {
@@ -1038,7 +1130,7 @@
 									  	});
 									  $("#product").html(sector_data);
 									}else{
-										$("#product").html("<option value=' '>No Data Available</option>");
+										$("#product").html("<option value=''>No Data Available</option>");
 									}
 								},
 								error:function(error){
@@ -1046,10 +1138,31 @@
 								}
 
 							});
-							$("#product").prop("disabled",false);
+							// $("#product").prop("disabled",false);
 						}else{
-							$("#product").prop("disabled",true);
+							// $("#product").prop("disabled",true);
 						}
+					});
+					$("#generatepdf").click(function(){
+						var region = $("#region").val();
+						var sector = $("#sector").val();
+						var sub_sector = $("#sub_sector").val();
+						var product = $("#product").val();
+						if(region == ''){
+							region = 'all';
+						}
+						if(sector == ''){
+							sector = 'all';
+						}
+						if(sub_sector ==''){
+							sub_sector = 'all';
+						}
+						if(product==''){
+							product = 'all';
+						}
+
+						url = '/admin/get-al-company-report/'+region+'/'+sector+'/'+sub_sector+'/'+product+'/';
+						window.open(url,'_blank');
 					});
 					$('.datatable-basic').DataTable(
 						{

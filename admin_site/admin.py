@@ -314,7 +314,7 @@ class CustomAdminSite(admin.AdminSite):
 
             # Company Report Paths
             path('get-company-information-pdf/',wrap(GenerateCompanyToPDF.as_view()),name='get_company_pdf'),
-            path("get-al-company-report/",wrap(GenerateAllCompanyPdf.as_view()),name="generate_all_report"),
+            path("get-al-company-report/<region>/<sector>/<sub_sector>/<product>/",wrap(GenerateAllCompanyPdf.as_view()),name="generate_all_report"),
             path('get-all-report-page/',wrap(AllReportPage.as_view()),name="all_report_page"),
             path("report-page/",wrap(ReportPage.as_view()),name="report_page"),
             path('certification-chart/',wrap(certification_chart),name='certification_chart'),
