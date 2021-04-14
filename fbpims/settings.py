@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'useraudit',
     'rest_framework',
     'rest_framework.authtoken',
+    'background_task',
     #'floppyforms',
 
 ]

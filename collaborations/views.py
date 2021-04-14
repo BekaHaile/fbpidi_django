@@ -24,7 +24,6 @@ from django.views.generic import CreateView, UpdateView, DeleteView, DetailView,
 
 
 from admin_site.decorators import company_created,company_is_active
-from accounts.email_messages import sendEventNotification, sendEventClosedNotification, sendTenderEmailNotification
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
 from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
 from collaborations.forms import (BlogsForm, BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm,ForumQuestionForm,CommentForm,CommentReplayForm,NewsForm, CompanyEventForm, EventParticipantForm, 
@@ -279,27 +278,7 @@ class CreateTender(LoginRequiredMixin,View):
             print("Exception at collaborations.views.CreateTender post" , str (e))
             messages.warning(self.request, "Could not create Tender")
             return redirect("admin:tenders")
-
-
-def check_tender_startdate(request, tenders):
-    today = timezone.now().date()
-    for tender in tenders:
-        if tender.start_date.date() <= today and tender.status != 'Open':
-            if sendTenderEmailNotification(request, tender.created_by, tender, f"IIMP system has changed the status of the Tender titled '{tender.title}' to 'Open'. This occurs when the start date you set for a tender has reached.\n Then the system will automatically change the status for data consistency ."):
-                tender.status = "Open"
-                tender.save()
-            else:
-                print("########## could not send email to open tender ")                 
-
-def check_tender_enddate(request, tenders):
-    today = timezone.now().date()
-    for tender in tenders:
-        if tender.end_date.date() == today and tender.status != 'Closed':
-            if sendTenderEmailNotification(request, tender.created_by, tender, f"IIMP system has changed the status of the Tender titled '{tender.title}' to 'Closed'. This occurs when the end date you set for a tender has reached. \n Then the system will automatically change the status for data consistency ."):
-                tender.status = "Closed"
-                tender.save() 
-            else:
-                print("could not send email to close tender")                
+            
 
 @method_decorator(decorators,name='dispatch')
 class TenderList(LoginRequiredMixin, ListView):
@@ -307,8 +286,6 @@ class TenderList(LoginRequiredMixin, ListView):
     template_name = "admin/collaborations/tenders.html"
     context_object_name = 'tenders'  
     def get_queryset(self):
-        check_tender_startdate(self.request, Tender.objects.filter( status='Upcoming') )
-        check_tender_enddate(self.request, Tender.objects.filter( Q(status = 'Open') | Q(status = 'Upcoming') )  )
         if self.request.user.is_superuser:
             return Tender.objects.all() 
         else:
@@ -658,32 +635,6 @@ class EditCompanyEvent(LoginRequiredMixin,View):
             return redirect('admin:admin_companyevent_list')
 
 
-
-####### Event customer side
-def check_event_participation(request, event_participants):
-        today = timezone.now().date()
-        for participant in event_participants:
-            if participant.notify_on <= today: #lesser than is used, because if we check event participation notification once a day and 
-                                                      # if the system could not send on the notify date, then it will send even if the notify me date has passed, but the event is in upcoming status
-                if sendEventNotification(request, participant):
-                    participant.notified = True
-                    participant.save()
-                else:
-                    print("Couldn't send event notification ")
-
-
-def check_event_enddate(request, open_events):
-    today = timezone.now().date()
-    for event in open_events: 
-        if today >= event.end_date.date():
-            print("event closed found ", event.title, " ", event.end_date, " ", event.end_date.date())
-            if sendEventClosedNotification(request, event):
-                event.status = "Closed"
-                event.save()        
-            else:
-                print("Couldn't send Email to close event")
-
-
 class CustomerEventList(View):
 	def get(self, *agrs, **kwargs):
  
@@ -697,10 +648,7 @@ class CustomerEventList(View):
             if result['query'].count() == 0:
                 result['query'] = CompanyEvent.objects.all()
             data = get_paginated_data(self.request, result['query'])
-            #12345 make it background
-            check_event_enddate(self.request, CompanyEvent.objects.filter( status = 'Upcoming') )
-            event_participants = EventParticipants.objects.filter(notified = False, event__status = "Upcoming")
-            check_event_participation(self.request, event_participants)
+
             eventcompanies = []
             for comp in Company.objects.all():
                 if comp.companyevent_set.count() > 0:

@@ -30,7 +30,6 @@ from core.views import IndexView, ProfileView
 
 from django.views.generic import TemplateView
 
-
 def create_url_string():
     return ''.join(random.choices(string.ascii_letters + string.digits,k=100))
 
@@ -46,6 +45,7 @@ urlpatterns = [
 
     ### web urls
     path("", include('core.urls') ), #has index url and other non-app related templates
+
     path("mydash/",ProfileView.as_view(),name="mydash"),
 
     

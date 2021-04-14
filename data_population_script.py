@@ -28,13 +28,7 @@ from django.db import connection, reset_queries
 import time
 import functools
 from django.utils import timezone
-
-
-def set_token_for_existing_users():
-    for user in User.objects.all():
-        print("setting token for ", user.username)
-        Token.objects.get_or_create(user=user)
-
+from background_task.models import Task
 
 def query_debugger(func):
     @functools.wraps(func)
@@ -51,8 +45,6 @@ def query_debugger(func):
         return result
     return inner_func
 
-
-  
 @query_debugger
 def with_select():
     for i in range(5):
@@ -69,49 +61,8 @@ def with_out():
         for m in n:
             print(m.title, " ", m.company.company_name),'\n'
 
-def tags():
-    b = Blog.objects.all()
-    tags = b[0]
-    print(list(tags.tag))
-    for tag in tags.tag:
-        print(tag)
-    string= ""
 
 if __name__ == '__main__':    
-   u = Company.objects.get(name__icontains = "coca")
-   t = Tender.objects.first()
-   v = Vacancy.objects.first()
-   print(VacancyListSerializer(v).data)
-#    i= CompanyAdmin.objects.last()
-#    print(CompanyAdminSerializer (i).data)
-#    a = CompanyAddress.objects.get(id = 4)
-#    print(CompanyInfoSerializer(u).data)
-
-
-   # u = Company.objects.get(name__icontains = "coca")
-   # print(u.phone_number())
-   # add_banks()  
-   #tags()
-   one =['Beverage']
-   two = ['Food', 'Beverage', 'Pharmaceutical']
-   for tag in two:
-    if not tag in one:
-        print("Done")
-
-
- 
-    # n = CompanyEvent.objects.first()
-    # d = n.start_date - timedelta(days=1)
-    # print(Company.objects.get(id =1))
-
-    # for n in EventParticipants.objects.all():
-    #    print(n.patricipant_email, " on ", n.event, n.timestamp)
-
-    # u = User.objects.get(id = 1)
-    # c = ChatMessages.objects.filter( Q(sender = u)| )
-    
-
-
-    
-    
-    
+    Task.objects.all().delete()
+    print("Deleted all")
+    print(Task.objects.all())

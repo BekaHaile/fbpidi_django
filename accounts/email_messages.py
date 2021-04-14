@@ -43,12 +43,9 @@ def sendWelcomeEmail(request,user):
     return email
 
 
-def sendEventNotification(request, participant):
-    
-    current_site = get_current_site(request)
+def sendEventParticipationNotification(participant):
     mail_message = f'The Event titled "{participant.event.title}" Will start on {participant.event.start_date.date()}.'
     mail_subject = f'Event Notification From IIMP'
-    to_email = participant.patricipant_email
     email = EmailMessage(mail_subject, mail_message, to=[participant.patricipant_email])
     email.content_subtype = "html"  
     try:
@@ -56,15 +53,13 @@ def sendEventNotification(request, participant):
         print("Event notification Email sent to ", participant.patricipant_email)
         return True
     except Exception as e:
-        print("Exception While Sending Email ", str(e))
+        print(f"Exception While Sending Email to {participant.patricipant_email} Due to the following exception \n =>", str(e))
         return False
 
-def sendEventClosedNotification(request, event):
-    current_site = get_current_site(request)
-    mail_message = f"IIMP system has changed the status of the Event titled '{event.title}'. This occurs when the creator of the event didn't change the status ."
+
+def sendEventNotification(event, message):
     mail_subject = f'Event Notification From IIMP'
-    to_email = event.created_by.email
-    email = EmailMessage(mail_subject, mail_message, to=[event.created_by.email])
+    email = EmailMessage(mail_subject, message, to=[event.created_by.email])
     email.content_subtype = "html"  
     try:
         email.send()
@@ -74,20 +69,17 @@ def sendEventClosedNotification(request, event):
         print("Exception While Sending Email ", str(e))
         return False
     
-    
-def sendTenderEmailNotification(request, user, tender, message):
-    current_site = get_current_site(request)
-    mail_message = message
+
+def sendTenderEmailNotification(user_email, tender, message):
     mail_subject = f'Tender Notification From IIMP'
-    to_email = user.email
-    email = EmailMessage(mail_subject, mail_message, to=[user.email])
+    email = EmailMessage(mail_subject, message, to=[user_email])
     email.content_subtype = "html"  
     try:
         email.send()
-        print("Email sent to ", user.email)
+        print("Tender Email sent to ", user_email)
         return True
     except Exception as e:
-        print("Exception While Sending Email ", str(e))
+        print("Exception While Sending Tender Email ", str(e))
         return False
 
 
