@@ -24,7 +24,6 @@ from django.views.generic import CreateView, UpdateView, DeleteView, DetailView,
 
 
 from admin_site.decorators import company_created,company_is_active
-from accounts.email_messages import sendEventNotification, sendEventClosedNotification, sendTenderEmailNotification
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
 from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
 from collaborations.forms import (BlogsForm, BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm,ForumQuestionForm,CommentForm,CommentReplayForm,NewsForm, CompanyEventForm, EventParticipantForm, 
@@ -279,25 +278,7 @@ class CreateTender(LoginRequiredMixin,View):
             print("Exception at collaborations.views.CreateTender post" , str (e))
             messages.warning(self.request, "Could not create Tender")
             return redirect("admin:tenders")
-
-
-# def check_tender_startdate():
-#     today = timezone.now().date()
-#     for tender in tenders:
-#         if tender.start_date.date() <= today and tender.status != 'Open':
-#             tender.status = "Open"
-#             tender.save()
-#             sendTenderEmailNotification(user_email= tender.created_by.email, tender= tender, message= f"IIMP system has changed the status of the Tender titled '{tender.title}' to 'Open'. This occurs when the start date you set for a tender has reached.\n Then the system will automatically change the status for data consistency ."):
             
-# def check_tender_enddate(request, tenders):
-#     today = timezone.now().date()
-#     for tender in tenders:
-#         if tender.end_date.date() == today and tender.status != 'Closed':
-#             if sendTenderEmailNotification(request, tender.created_by, tender, f"IIMP system has changed the status of the Tender titled '{tender.title}' to 'Closed'. This occurs when the end date you set for a tender has reached. \n Then the system will automatically change the status for data consistency ."):
-#                 tender.status = "Closed"
-#                 tender.save() 
-#             else:
-#                 print("could not send email to close tender")                
 
 @method_decorator(decorators,name='dispatch')
 class TenderList(LoginRequiredMixin, ListView):
@@ -305,7 +286,6 @@ class TenderList(LoginRequiredMixin, ListView):
     template_name = "admin/collaborations/tenders.html"
     context_object_name = 'tenders'  
     def get_queryset(self):
-        # check_tender_enddate(self.request, Tender.objects.filter( Q(status = 'Open') | Q(status = 'Upcoming') )  )
         if self.request.user.is_superuser:
             return Tender.objects.all() 
         else:

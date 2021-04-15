@@ -43,7 +43,7 @@ def sendWelcomeEmail(request,user):
     return email
 
 
-def sendEventNotification(participant):
+def sendEventParticipationNotification(participant):
     mail_message = f'The Event titled "{participant.event.title}" Will start on {participant.event.start_date.date()}.'
     mail_subject = f'Event Notification From IIMP'
     email = EmailMessage(mail_subject, mail_message, to=[participant.patricipant_email])
@@ -57,10 +57,9 @@ def sendEventNotification(participant):
         return False
 
 
-def sendEventClosedNotification(event):
-    mail_message = f"IIMP system has changed the status of the Event titled '{event.title}'. This occurs when the creator of the event didn't change the status ."
+def sendEventNotification(event, message):
     mail_subject = f'Event Notification From IIMP'
-    email = EmailMessage(mail_subject, mail_message, to=[event.created_by.email])
+    email = EmailMessage(mail_subject, message, to=[event.created_by.email])
     email.content_subtype = "html"  
     try:
         email.send()

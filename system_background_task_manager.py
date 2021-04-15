@@ -5,7 +5,8 @@ import django
 django.setup()
 
 from background_task.models import Task, CompletedTask
-from collaborations.tasks import check_event_enddate, check_event_participation, check_tender_startdate
+from collaborations.tasks import (check_event_startdate, check_event_enddate, check_event_participation, check_tender_startdate, 
+                                  check_tender_enddate, clear_completed_tasks )
 
 DAILY = 60 * 60 * 24 # seconds
 WEEKLY = DAILY * 7
@@ -13,19 +14,20 @@ THREE  = 3
 
 # key: value pair for background task verbose name: background_task method
 BACKGROUND_TASK_DICTIONARY = {
+    'CLEAR_COMPLETED_TASKS': clear_completed_tasks,
+
     'EVENT_PARTICIPATION': check_event_participation,
+    'EVENT_START_DATE':check_event_startdate,
     'EVENT_END_DATE': check_event_enddate,
+
     'TENDER_START_DATE': check_tender_startdate,
-    'TENDER_END_DATE': None,
+    'TENDER_END_DATE': check_tender_enddate,
 }
 
 def clear_background_tasks():
     Task.objects.all().delete()
     print("Successfully cleared all background tasks")
     
-def clear_completed_tasks():
-    CompletedTask.objects.all().delete()
-    print("Completed tasks cleared successfully")
 
 
 # the following functions call the same background tasks as the '__main__', but they can be called from other apps, like the admin_site
@@ -36,14 +38,14 @@ def clear_completed_tasks():
 
 def start_task(task_verbose_name, repeat = 10):
     if not Task.objects.filter(verbose_name=task_verbose_name).exists():
-        print("creating new task")
+        print(f"creating new task with verbose name {task_verbose_name} ")
         background_task_method = BACKGROUND_TASK_DICTIONARY [ task_verbose_name ]
         # this is when the background task is created with a verbose name, so that we can identify it later for updating or aborting it.
         background_task_method(verbose_name = task_verbose_name, repeat = repeat )
         return True
 
     else:
-        print("task already exists")
+        print(f"task with verbose name {task_verbose_name} already exists")
         task = Task.objects.get(verbose_name=task_verbose_name)
         task.repeat = repeat
         task.save()
@@ -65,11 +67,16 @@ def abort(task_verbose_name):
     
 
 if __name__ == '__main__':    
-    # clear_background_tasks()
-    # clear_completed_tasks()
+
     print("Starting the background tasks ....")
+    for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
+        start_task(task_verbose_name=verbose_name, repeat = Task.HOURLY) 
+
+    # start_task(task_verbose_name='CLEAR_COMPLETED_TASKS', repeat = 10) # clears the completed tasks from database every 10 sec
     # abort(task_verbose_name='TENDER_START_DATE')
-    start_task(task_verbose_name='TENDER_START_DATE', repeat = 2)
+    # start_task(task_verbose_name='EVENT_START_DATE', repeat = 2)
+    # start_task(task_verbose_name='EVENT_END_DATE', repeat = 2)
+    
     # abort(task_verbose_name='EVENT_PARTICIPATION')
     
     
