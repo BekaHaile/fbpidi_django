@@ -87,9 +87,14 @@
 		                        	<div class="mt-4 mb-3 row">
 		                                {%for file in forms.researchfiles%}
 					                <div class="col-sm-6 col-lg-3">
-					                	<a style="margin-bottom:10" href="{%url 'admin:delete' model_name='ResearchAttachment' id=file.id%}" style="color: rgb(175, 13, 13);"   onclick="return confirm ('Are you sure you want to delete this Document?')">
-													<i class="icon-trash"></i>
-												</a>
+										{% if user.is_superuser or user.get_company == file.research.company %}
+											{% if perms.collaborations.delete_researchattachment %}
+
+											<a style="margin-bottom:10" href="{%url 'admin:delete' model_name='ResearchAttachment' id=file.id%}" style="color: rgb(175, 13, 13);"   onclick="return confirm ('Are you sure you want to delete this Document?')">
+														<i class="icon-trash"></i>
+													</a>
+													{% endif %}
+										{% endif %}
 					                    <div class="card">
 					                        <div class="card-img-actions m-1">
 					                        	

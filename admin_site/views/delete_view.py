@@ -18,7 +18,8 @@ from collaborations.models import *
 from accounts.models import UserProfile
 from chat.models import ChatGroup, ChatMessage
 from admin_site.decorators import company_created,company_is_active
-from company.models import Company, CompanyEvent, HomePageSlider, InvestmentProject
+from company.models import (Company, CompanyEvent, HomePageSlider, InvestmentProject, InvestmentCapital, Certificates,PowerConsumption,
+                            Employees,JobOpportunities,FemalesInPosition, EducationalStatus,SourceAmountIputs,MarketTarget,MarketDestination)
 
 decorators = [never_cache, company_created(),company_is_active()]
 
@@ -35,7 +36,6 @@ class DeleteView(LoginRequiredMixin,View):
                 # return redirect("admin:p_categories",option='category') 
                 return redirect("admin:categories")
             elif self.kwargs['model_name'] == 'sub_category':
-                
                 sub_category=SubCategory.objects.get(id=self.kwargs['id']) 
                 sub_category.delete()
                 message = "Sub category Deleted"
@@ -77,6 +77,78 @@ class DeleteView(LoginRequiredMixin,View):
                 message ="Production And Sales Performance Deleted"
                 messages.success(self.request,message)
                 return redirect("admin:sales_performance")
+            elif self.kwargs['model_name'] == 'InvestmentCapital':
+                investmentcapital = InvestmentCapital.objects.get(id=self.kwargs['id'])
+                company_id  = investmentcapital.company.id
+                investmentcapital.delete()
+                message ="Investment Capital Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:update_company_info",pk=company_id)
+            elif self.kwargs['model_name'] == 'Certificates':
+                certificate = Certificates.objects.get(id=self.kwargs['id'])
+                company_id  = certificate.company.id
+                certificate.delete()
+                message ="Certificate Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:update_company_info",pk=company_id)
+            elif self.kwargs['model_name'] == 'Employees':
+                obj = Employees.objects.get(id=self.kwargs['id'])
+                company_id  = obj.company.id
+                obj.delete()
+                message ="Employee Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:update_company_info",pk=company_id)
+            elif self.kwargs['model_name'] == 'JobOpportunities':
+                obj = JobOpportunities.objects.get(id=self.kwargs['id'])
+                company_id  = obj.company.id
+                obj.delete()
+                message ="Employee Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:update_company_info",pk=company_id) 
+            elif self.kwargs['model_name'] == 'EducationalStatus':
+                obj = EducationalStatus.objects.get(id=self.kwargs['id'])
+                company_id  = obj.company.id
+                obj.delete()
+                message ="Employee Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:update_company_info",pk=company_id) 
+            elif self.kwargs['model_name'] == 'FemalesInPosition':
+                obj = FemalesInPosition.objects.get(id=self.kwargs['id'])
+                company_id  = obj.company.id
+                obj.delete()
+                message ="Employee Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:update_company_info",pk=company_id) 
+            elif self.kwargs['model_name'] == 'SourceAmountIputs':
+                obj = SourceAmountIputs.objects.get(id=self.kwargs['id'])
+                company_id  = obj.company.id
+                obj.delete()
+                message ="SourceAmountIputs Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:update_company_info",pk=company_id)
+            elif self.kwargs['model_name'] == 'MarketTarget':
+                obj = MarketTarget.objects.get(id=self.kwargs['id'])
+                company_id  = obj.company.id
+                obj.delete()
+                message ="MarketTarget Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:update_company_info",pk=company_id)    
+            elif self.kwargs['model_name'] == 'MarketDestination':
+                obj = MarketDestination.objects.get(id=self.kwargs['id'])
+                company_id  = obj.company.id
+                obj.delete()
+                message ="MarketDestination Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:update_company_info",pk=company_id)
+            elif self.kwargs['model_name'] == 'PowerConsumption':
+                obj = PowerConsumption.objects.get(id=self.kwargs['id'])
+                company_id  = obj.company.id
+                obj.delete()
+                message ="PowerConsumption Deleted"
+                messages.success(self.request,message)
+                return redirect("admin:update_company_info",pk=company_id)
+
+
             elif self.kwargs['model_name'] == 'packaging':
                 packaging = ProductPackaging.objects.get(id=self.kwargs['id'])
                 packaging.delete()
