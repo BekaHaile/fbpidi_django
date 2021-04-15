@@ -61,11 +61,13 @@ from collaborations.Views.forums import(ListForumQuestionAdmin,CreateForumQuesti
 from product.views.views import *
                             
 from company.views.views import *
+from company.views.project_views import *
 from company.views.chart_views import *
 from company.views.report_views import *
 from company.views.company_views import *
 from company.views.pdf_views import *
 from company.views.all_report_view import *
+from company.views.project_report import *
 
 from accounts.forms import AdminLoginForm
 from chat.views import AdminChatList
@@ -295,10 +297,14 @@ class CustomAdminSite(admin.AdminSite):
             path("update_investment_project/<pk>/",wrap(UpdateInvestmentProject.as_view()) ,name='update_project'),
             
             path("craete_land-usage/<project>/",wrap(CreateLandUsage.as_view()) ,name='create_land_use'),
+            path("craete_land-aqsn/<project>/",wrap(CreateLandAcqsn.as_view()) ,name='create_land_acqsn'),
+            path("craete_land-innv-capital/<project>/",wrap(CreateInvestmentCapitalForProject.as_view()) ,name='create_inv_cap_project'),
             path("create_product_quantity/<project>/",wrap(CreateProductQty.as_view()) ,name='create_product_qty'),
             path("create_project_state/<project>/",wrap(CreateProjectState.as_view()) ,name='create_project_state'),
 
             path("update_land-usage/<pk>/",wrap(UpdateLandUsage.as_view()) ,name='update_land_use'),
+            path("update_land-aqsn/<pk>/",wrap(UpdateLandAcqsn.as_view()) ,name='update_land_aqsn'),
+            path("update_inv-capital/<pk>/",wrap(UpdateInvestmentCapitalForProject.as_view()) ,name='update_inv_cap_project'),
             path("update_product_quantity/<pk>/",wrap(UpdateProductQty.as_view()) ,name='update_product_qty'),
             path("update_project_state/<pk>/",wrap(UpdateProjectState.as_view()) ,name='update_project_state'),
 
@@ -316,6 +322,7 @@ class CustomAdminSite(admin.AdminSite):
             path('get-company-information-pdf/',wrap(GenerateCompanyToPDF.as_view()),name='get_company_pdf'),
             path("get-al-company-report/<region>/<sector>/<sub_sector>/<product>/",wrap(GenerateAllCompanyPdf.as_view()),name="generate_all_report"),
             path('get-all-report-page/',wrap(AllReportPage.as_view()),name="all_report_page"),
+             path('get-all-report-page-project/',wrap(ProjectReport.as_view()),name="project_report"),
             path("report-page/",wrap(ReportPage.as_view()),name="report_page"),
             path('certification-chart/',wrap(certification_chart),name='certification_chart'),
             path('management-tools-chart/',wrap(management_tool_chart),name='mgmt_tools_chart'),

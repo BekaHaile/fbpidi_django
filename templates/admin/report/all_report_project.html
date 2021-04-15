@@ -1,0 +1,1202 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags %}
+{%load admin_template_tags%}
+{% block extrastyle %}
+
+	<!-- Theme JS files -->
+	 <script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+	<script src=" https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js "></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+	 
+	<!-- /theme JS files -->
+	<style>
+		li{
+			list-style-type: none;
+		}
+	</style>
+ 
+{% endblock %}
+
+{%block pagename%} <a href="{%url 'admin:report_page'%}">Reports</a> > All Reports{%endblock%} 
+
+{%block content%}
+
+			<!-- Content area -->
+			<div class="content">
+				<!-- search bar -->
+				<div class="card">
+					<div class="card-body">
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<form class="form-inline" action="{%url 'admin:all_report_page'%}" method="POST"> {%csrf_token%}
+							<ul class="list-inline list-inline-condensed mb-0 mr-4">
+								<li class="list-inline-item"> 
+									<select class="form-control" name="region" id="region">
+										<option value="">Select Region</option>
+										{%for region in regions%}
+										<option value="{{region.id}}">{{region}}</option>
+										{%endfor%}
+									</select>
+								</li>
+								<li class="list-inline-item"> 
+									<select class="form-control" name="sector" id="sector">
+										<option value="">Select Sector</option>
+										<option value='Food' >Food</option>
+										<option value='Beverage' >Beverage</option>
+										<option value='Pharmaceuticals' >Pharmaceutical</option>
+									</select>
+								</li>
+								<li class="list-inline-item"> 
+									<select class="form-control" name="sub_sector" id="sub_sector">
+										<option value="">Select Sub sectors</option>
+									</select>
+								</li> 
+								<li class="list-inline-item"> 
+									<select class="form-control" name="product" id="product">
+										<option value="">Select Product</option>
+									</select>
+								</li> 
+								 
+								 
+								 
+							</ul>
+
+							<ul class="list-inline ml-2 mb-0">
+								<li class="list-inline-item"> <button title="Filter Data" type="submit"class="btn btn-primary text-default">
+										<i class="icon-search4"></i></button>									 
+								</li>
+								<li class="list-inline-item"> <a id="generatepdf" href="#" title="Generate Report" class="btn btn-success text-default">
+									<i class="icon-file-pdf" style="color: white;"></i></a>
+							    </li>
+							</ul>
+						 </form>
+						  
+						</div>
+					</div>
+				</div>
+				<!-- tables -->
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">Number of Investment Project By Region & sectors Distribution</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Invstment Project</th>
+									<th>Sector</th>
+									<th>Sub-Sector</th>
+									<th>Region</th>
+ 								</tr>
+							</thead>
+							<tbody>
+								{%for project in projects%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{project.project_name}}</td>
+									<td><a href="#">{{project.sector}}</a></td>
+									<td>
+										{%for category in project.product_type.all%}
+										<a href="#">{{category.category_name}}</a>,
+										{%endfor%}
+									</td>
+									<td>{{project.project_address.region.name}}</td>
+ 								</tr>
+								 
+								 {%endfor%}
+								 
+							</tbody>
+							<tr>
+								<td></td>
+								<td>Total</td>
+								<td></td><td></td> {%if product%}<td></td>{%endif%}
+								<td>{{projects.count}} projects</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Ownership Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Forms Of OwnerShip</th>
+									<th>Investment Projects</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in ownership_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total_ownership%} %</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Total Investment capital by sector</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Investment Project</th>
+									<th>Machinery Cost</th>
+									<th>Building Cost</th>
+									<th>Working Capital</th>
+									<th>Investment Capital</th>
+									<th>Sector</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for id in inv_cap_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{id.project}}</td>
+									<td>ETB {{id.machinery}}</td>
+									<td>ETB {{id.building}}</td>
+									<td>ETB {{id.working}}</td>
+									<td>ETB {{id.total_inv_cap}}</td>
+									<td>{{id.sector}}</td>
+								</tr>
+								{%endfor%}
+								
+							</tbody>
+							<tr>
+								<td></td>
+								<td>Total</td>
+								<td>ETB {% get_inv_cap_sum inv_cap_data 'machinery' %}</td>
+								<td>ETB {% get_inv_cap_sum inv_cap_data 'building' %}</td>
+								<td>ETB {% get_inv_cap_sum inv_cap_data 'working' %}</td>
+								<td>ETB {% get_inv_cap_sum inv_cap_data  'total' %}</td>
+									<td></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Number of Expansion & New Projects</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Classification</th>
+									<th>Investment Projects</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in classification_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total_class%} %</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">Companies Based on Established Year</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Established Year</th>
+									<th>Companies</th>
+ 								</tr>
+							</thead>
+							<tbody id="tbody">
+								{%for d in established_year_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{d.label}}</td>
+									<td>{{d.data}}</td>
+ 								</tr>
+								 {%endfor%}
+
+							</tbody>
+							  
+						</table>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Educational Status Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company</th>
+									<th>Educational Status</th>
+									<th>Employees Count</th>
+									<th>Sector</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in education_status_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.company}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{{od.sector}}</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Industries By Certification Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Certifications</th>
+									<th>Companies</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in certification_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total_certification %}</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Industries By Management Tools Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Management Tools</th>
+									<th>Companies</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in management_tool_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total_managment %}</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Industries By Energy Source Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Source of Energy</th>
+									<th>Companies</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in energy_source_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total_energy %}</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Industries By Market Destination Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Market Destination</th>
+									<th>Companies</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in destination_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Industries By Market Target Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Market Target</th>
+									<th>Companies</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in target_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Female Employees in High Positions Levels Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company</th>
+									<th>Positions</th>
+									<th>Employees</th>
+									<th>Share %</th>
+									<th>Sector</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in women_in_pson_level%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.company}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total_fem_posn %} %</td>
+									<td>{{od.sector}}</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Companies by Working Hour Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Working Hours</th>
+									<th>Companies Count</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in working_hour_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}} Hours</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total_wh %} %</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				 
+				<div class="card">
+					<div class="card-body">
+						<h5 class="mb-3">Production Capacity Data</h5>
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company</th>
+									<th>Product</th>
+									<th>Installed Production Capacity</th>
+									<th>Actual Production Capacity</th>
+									<th>Sector</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for d in produn_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{d.company}}</td>
+									<td>
+										 {{d.product}}
+									</td>
+									<td>
+										{{d.total_prdn_capacity}} {{d.uom}}
+									</td>
+									<td>
+										{{d.total_actual}}  {{d.uom}}
+									</td>
+									<td>{{d.sector}}</td>
+								</tr>
+								 {%endfor%}
+								 
+							</tbody>
+							 
+						</table>
+						 
+					</div>
+				</div>
+
+				 
+				<div class="card">
+					<div class="card-body">
+						<h5 class="mb-3">Available Inputs Data</h5>
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company</th>
+									<th>Product</th>
+									<th>Available Inputs</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for d in avalilable_input%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<th>{{d.company}}</th>
+									<td>
+										 {{d.product}}
+									</td>
+									<td>
+										{{d.data|floatformat:2}} {{d.unit}}
+									</td>
+								</tr>
+								 {%endfor%}
+								 
+							</tbody>
+							<tr>
+								<td></td>
+								<td>Total</td>
+								<td></td>
+
+								<td>{{avalilable_input|get_sum|floatformat:2}}</td>
+							</tr>
+						</table>
+						 
+					</div>
+				</div>
+
+				 
+				<div class="card">
+					<div class="card-body">
+						<h5 class="mb-3">Share of Local Inputs</h5>
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company</th>
+									<th>Product</th>
+									<th>Input Name</th>
+									<th>Share of Inputs</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for d in input_share%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{d.company}}</td>
+									<td>
+										 {{d.product}}
+									</td>
+									<td>{{d.input}}</td>
+									<td>
+										{{d.data|floatformat:2}} {{d.unit}}
+									</td>
+								</tr>
+								 {%endfor%}
+								 
+							</tbody>
+							<tr>
+								<td></td>
+								<td>Total</td>
+								<td></td>
+								<td></td>
+								<td>{{input_share|get_sum|floatformat:2}}</td>
+							</tr>
+						</table>
+						 
+					</div>
+				</div>
+
+				 
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Capital Utilization Data</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Product</th>
+									<th>Production Amount</th> 
+									<th>Actual Production</th>
+									<th>Capital Utilization Data</th>
+									{%if sector != 'all'%}
+									<th>Sector</th>
+									{%endif%}
+									{%if sub_sector%}
+									<th>Sub Sector</th>
+									{%endif%}
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in capital_util_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.product}}</td>
+									<td>{{fd.production_amount}}</td>
+									<td>{{fd.actual_production}}</td>
+									<td>{% get_capital_util fd.production_amount fd.actual_production %} %</td>
+									{%if sector != 'all'%}
+									<td>{{fd.sector}}</td>
+									{%endif%}
+									{%if sub_sector%}
+									<td>{{sub_sector}}</td>
+									{%endif%}
+								</tr>
+								{%endfor%}
+								
+							</tbody>
+							<tr>
+								<td>Total</td>
+								<td></td>
+								<td>{{capital_util_data|get_total_prodn|floatformat:2}}</td>
+								<td>{{capital_util_data|get_total_actual|floatformat:2}}</td>
+								<td>{%get_capital_util capital_util_data|get_total_prodn|floatformat:2 capital_util_data|get_total_actual|floatformat:2 %} %</td>
+								{%if sector != 'all'%}
+								<td></td>
+								{%endif%}
+								{%if sub_sector%}
+								<td></td>
+								{%endif%}
+								
+							</tr>
+						</table>
+					</div> 
+				</div>
+
+				 
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Change in Capital Utilization</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Product</th>
+									<th>This Year Production Amount</th>
+									<th>Last Year Production Amount</th>
+									<th>Actual Production Amount</th>
+									<th>Change in Capital Utilization</th>
+									{%if sector != 'all'%}
+									<th>Sector</th>
+									{%endif%}
+									{%if sub_sector%}
+									<th>Sub Sector</th>
+									{%endif%}
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in change_capital_util_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>{{fd.product}}</td>
+									<td>{{fd.pa_this|floatformat:2}} {{unit}}</td>
+									<td>{{fd.pa_last}} {{unit}}</td>
+									<td>{{fd.apc}} {{unit}}</td>
+									<td>{%change_capital_util fd.pa_this fd.pa_last fd.apc%} %</td>
+									{%if sector != 'all'%}
+									<td>{{sector}}</td>
+									{%endif%}
+									{%if sub_sector%}
+									<td>{{sub_sector}}</td>
+									{%endif%}
+								</tr>
+								{%endfor%}
+								 
+							</tbody>
+							<tr>
+								<td>Total</td>
+								<td></td>
+								<td>{%change_util_total change_capital_util_data 'thisyear'%}</td>
+								<td>{%change_util_total change_capital_util_data 'lastyear'%}</td>
+								<td>{%change_util_total change_capital_util_data 'apc'%}</td>
+								<td>{%change_util_total change_capital_util_data 'total'%} %</td>
+								{%if sector != 'all'%}
+									<td> </td>
+									{%endif%}
+									{%if sub_sector%}
+									<td> </td>
+									{%endif%}
+							</tr>
+						</table>
+					</div> 
+				</div>
+
+				 
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h3 class="card-title">Average Extraction Rate</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company</th>
+									<th>Product</th>
+									<th>Average Extraction Rate</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in extraction_rate%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{fd.company}}</td>
+									<td>{{fd.product}}</td>
+									<td>{{fd.extraction_rate|floatformat:2}} {{fd.unit}}</td>
+								</tr>
+								{%endfor%}
+								
+							</tbody>
+							 
+						</table>
+					</div> 
+				</div>
+
+				 
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h3 class="card-title">Average Unit Price</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Product</th>
+									<th>Average Unit Price</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in price_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{fd.product}}</td>
+									<td>ETB {{fd.data|floatformat:2}}</td>
+								</tr>
+								{%endfor%}
+								
+							</tbody>
+							<!-- <tr>
+								<td>Total</td>
+								<td></td>
+								<td>ETB {{price_data|get_sum|floatformat:2}}</td>
+							</tr> -->
+						</table>
+					</div> 
+				</div>
+
+				 
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h3 class="card-title">Gross Value of Production</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company</th>
+									<th>Product</th>
+									<th>{{years.prev_year}} GVP</th>
+									<th>{{years.last_year}} GVP</th>
+									<th>{{years.this_year}} GVP</th>	
+									{%if sector != 'all'%}
+									<th>Sector</th>
+									{%endif%}
+									{%if sub_sector%}
+									<th>Sub Sector</th>
+									{%endif%}
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in gvp_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{fd.company}}</td>
+									<td>{{fd.product}}</td>
+									<td>ETB {%if fd.prev_yr == None%}0.00{%else%}{{fd.prev_yr|floatformat:2}}{%endif%}</td>
+									<td>ETB {%if fd.last_yr == None%}0.00{%else%}{{fd.last_yr|floatformat:2}}{%endif%}</td>
+									<td>ETB {%if fd.this_yr == None%}0.00{%else%}{{fd.this_yr|floatformat:2}}{%endif%}</td>
+									{%if sector != 'all'%}
+									<td>{{sector}}</td>
+									{%endif%}
+									{%if sub_sector%}
+									<td>{{sub_sector}}</td>
+									{%endif%}
+								</tr>
+								{%endfor%}
+								
+							</tbody>
+							<!-- <tr>
+								<td>Total</td>
+								<td></td>
+								<td></td><td></td>
+									{%if sector != 'all'%}
+									<td></td>
+									<td></td>
+									{%endif%}
+									{%if sub_sector%}
+									<td></td>
+									{%endif%}
+								<td> </td>
+							</tr> -->
+						</table>
+					</div> 
+				</div>
+
+				 
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Number of Employees</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company</th>
+									<th>Permanent Employees</th>
+									<th>Temporary Employees</th>
+									<th>Total</th>
+									{%if sector != 'all'%}
+									<th>Sector</th>
+									{%endif%}
+									{%if sub_sector%}
+									<th>Sub Sector</th>
+									{%endif%}
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in total_emp_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{fd.company}}</td>
+									<td>{{fd.perm_emp}}</td>
+									<td>{{fd.temp_emp}}</td>
+									<td>{{fd.data}}</td>
+									{%if sector != 'all'%}
+									<td>{{sector}}</td>
+									{%endif%}
+									{%if sub_sector%}
+									<td>{{sub_sector}}</td>
+									{%endif%}
+								</tr>
+								{%endfor%}
+								
+							</tbody>
+							<tr>
+								<td></td>
+								<td>Total</td>
+								<td></td><td></td>
+								{%if sector != 'all'%}
+								<td> </td>
+								{%endif%}
+								{%if sub_sector%}
+								<td> </td>
+								{%endif%}
+								<td>{{total_emp_data|get_sum}}</td>
+							</tr>
+						</table>
+					</div> 
+				</div>
+
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Number of Female Employees</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company</th>
+									<th>Permanent Employees</th>
+									<th>Temporary Employees</th>
+									<th>Total</th>
+									{%if sector != 'all'%}
+									<th>Sector</th>
+									{%endif%}
+									{%if sub_sector%}
+									<th>Sub Sector</th>
+									{%endif%}
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in total_emp_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{fd.company}}</td>
+									<td>{{fd.perm_emp}}</td>
+									<td>{{fd.temp_emp}}</td>
+									<td>{{fd.data}}</td>
+									{%if sector != 'all'%}
+									<td>{{sector}}</td>
+									{%endif%}
+									{%if sub_sector%}
+									<td>{{sub_sector}}</td>
+									{%endif%}
+								</tr>
+								{%endfor%}
+								
+							</tbody>
+							<tr>
+								<td></td>
+								<td>Total</td>
+								<td></td><td></td>
+								{%if sector != 'all'%}
+								<td> </td>
+								{%endif%}
+								{%if sub_sector%}
+								<td> </td>
+								{%endif%}
+								<td>{{total_emp_data|get_sum}}</td>
+							</tr>
+						</table>
+					</div> 
+				</div>
+				  
+
+				 
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Number of Foreign Employees</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company</th>
+									<th>Female Employees</th>
+									<th>Male Employees</th>
+									<th>Total</th>
+									{%if sector != 'all'%}
+									<th>Sector</th>
+									{%endif%}
+									{%if sub_sector%}
+									<th>Sub Sector</th>
+									{%endif%}
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in for_emp_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{fd.company}}</td>
+									<td>{{fd.for_female}}</td>
+									<td>{{fd.for_male}}</td>
+									<td>{{fd.data}}</td>
+									{%if sector != 'all'%}
+									<td>{{sector}}</td>
+									{%endif%}
+									{%if sub_sector%}
+									<td>{{sub_sector}}</td>
+									{%endif%}
+								</tr>
+								{%endfor%}
+								
+							</tbody>
+							<tr>
+								<td></td>
+								<td>Total</td>
+								<td></td><td></td>
+								{%if sector != 'all'%}
+								<td> </td>
+								{%endif%}
+								{%if sub_sector%}
+								<td></td>
+								{%endif%}
+								<td>{{for_emp_data|get_sum}}</td>
+							</tr>
+						</table>
+					</div> 
+				</div>
+
+				 
+				<div class="card">
+					 
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Number of Jobs Created</h5>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>Company</th>
+									<th>Job Types</th>
+									<th>Male</th>
+									<th>Female</th>
+									{%if sector != 'all'%}
+									<th>Sector</th>
+									{%endif%}
+									{%if sub_sector%}
+									<th>Sub Sector</th>
+									{%endif%}
+								</tr>
+							</thead>
+							<tbody>
+								{%for fd in job_created_data%}
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>Temporary</td>
+									<td>{{fd.data.temporary_male}}</td>
+									<td>{{fd.data.temporary_female}}</td>
+									{%if sector != 'all'%}
+									<td>{{sector}}</td>
+									{%endif%}
+									{%if sub_sector%}
+									<td>{{sub_sector}}</td>
+									{%endif%}
+								</tr>
+								<tr>
+									<td>{{fd.company}}</td>
+									<td>Permanent</td>
+									<td>{{fd.data.permanent_male}}</td>
+									<td>{{fd.data.permanent_female}}</td>
+									{%if sector != 'all'%}
+									<td>{{sector}}</td>
+									{%endif%}
+									{%if sub_sector%}
+									<td>{{sub_sector}}</td>
+									{%endif%}
+								</tr>
+								{%endfor%}
+								 
+							</tbody>
+						</table>
+					</div> 
+				</div>
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">Number of Industries with Ecomerce,who Conducted Research,who has laboratory...</h3>
+					</div>
+					<div class="card-body">
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Classification</th>
+									<th>Companies</th>
+ 								</tr>
+							</thead>
+							<tbody id="tbody">
+								{%for d in filter_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{d.label}}</td>
+									<td>{{d.data.count}}</td>
+ 								</tr>
+								 {%endfor%}
+
+							</tbody>
+							  
+						</table>
+					</div>
+				</div>
+				 
+			</div>
+			<!-- /content area -->
+			<script>
+				$(document).ready(function(){
+					$("#sector").change(function(){
+
+						if($(this).val() != ""){
+							$.ajax({
+								url:"/admin/get-sub-sectors/"+$(this).val()+"/",
+								type:"GET",
+								success:function(result){
+									var sub_sectors = result['sub_sectors'];
+									var sector_data = "<option value=''>Select Sub Sectors</option>";
+									if(sub_sectors.length>0){
+										
+										$.each(sub_sectors, function(index) {
+											sector_data+="<option value='"+sub_sectors[index].pk+"'>"+sub_sectors[index].fields.category_name+"</option>";
+									  	});
+									  $("#sub_sector").html(sector_data);
+									}else{
+										$("#sub_sector").html("<option value=''>No Data Available</option>");
+									}
+								},
+								error:function(error){
+
+								}
+							});
+							// $("#sub_sector").prop("disabled",false);
+						}else{
+							// $("#sub_sector").prop("disabled",true);
+						}
+
+					});
+					$("#sub_sector").change(function(){
+						if($(this).val() != ""){
+							$.ajax({
+								url:"/admin/get-products-sectors/"+$(this).val()+"/",
+								type:"GET",
+								success:function(result){
+									var products = result['products'];
+									var sector_data = "<option value=''>Select Products</option>";
+									if(products.length>0){
+										
+										$.each(products, function(index) {
+											sector_data+="<option value='"+products[index].pk+"'>"+products[index].fields.sub_category_name+"</option>";
+									  	});
+									  $("#product").html(sector_data);
+									}else{
+										$("#product").html("<option value=''>No Data Available</option>");
+									}
+								},
+								error:function(error){
+
+								}
+
+							});
+							// $("#product").prop("disabled",false);
+						}else{
+							// $("#product").prop("disabled",true);
+						}
+					});
+					$("#generatepdf").click(function(){
+						var region = $("#region").val();
+						var sector = $("#sector").val();
+						var sub_sector = $("#sub_sector").val();
+						var product = $("#product").val();
+						if(region == ''){
+							region = 'all';
+						}
+						if(sector == ''){
+							sector = 'all';
+						}
+						if(sub_sector ==''){
+							sub_sector = 'all';
+						}
+						if(product==''){
+							product = 'all';
+						}
+
+						url = '/admin/get-al-company-report/'+region+'/'+sector+'/'+sub_sector+'/'+product+'/';
+						window.open(url,'_blank');
+					});
+					$('.datatable-basic').DataTable(
+						{
+							dom: 'Bfrtip', 
+						}
+					);
+				});
+			</script>
+			 
+{%endblock%}

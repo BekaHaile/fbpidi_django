@@ -11,7 +11,7 @@
 
 <link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
 <script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
-
+{{media}}
 {% endblock %}
 {%block pagename%}Investment Project Form {%endblock%}
 {%block content%}
@@ -45,7 +45,25 @@
 							{{form.project_name_am}}
 						</div>					
 				</div>
-				 
+				<div class="form-group row">
+					<label for="">{{form.geo_location.label}}</label>
+				</div>
+				<div class="form-group row">
+						{{form.geo_location}}	
+						<span class="form-text text-warning">{{form.geo_location.errors}}</span>				
+				</div>
+				<div class="form-group row">
+					<div class="col-md-6">
+						<label for="">{{form.ownership_form.label}}</label>
+						{{form.ownership_form}}
+						<span class="form-text text-warning">{{form.ownership_form.errors}}</span>
+					</div>
+					<div class="col-md-6">
+						<label for="">{{form.established_yr.label}}</label>
+						{{form.established_yr}}
+						<span class="form-text text-warning">{{form.established_yr.errors}}</span>
+					</div>
+				</div>
 				 
 				<div class="form-group row">
 					<div class="col-md-4">

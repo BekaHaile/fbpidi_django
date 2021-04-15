@@ -126,7 +126,8 @@ class Company(models.Model):
 
 # Company Address Model
 class CompanyAddress(models.Model):
-	company = models.OneToOneField(Company,on_delete=models.CASCADE,related_name="company_address")
+	company = models.OneToOneField(Company,on_delete=models.CASCADE,related_name="company_address",null=True,blank=True)
+	project = models.OneToOneField('InvestmentProject',on_delete=models.CASCADE,related_name="project_address",null=True,blank=True)
 	region = models.ForeignKey(RegionMaster, verbose_name="Rigion",on_delete=models.RESTRICT)
 	city_town = models.CharField(max_length=255, verbose_name="City Town")
 	subcity_zone = models.CharField(max_length=255, verbose_name="Subcity zone")
@@ -147,7 +148,8 @@ class CompanyAddress(models.Model):
 
 # Company current Investment capital based on the following attributes.
 class InvestmentCapital(models.Model):
-	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="investment_capital")
+	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="investment_capital",null=True,blank=True)
+	project = models.ForeignKey('InvestmentProject',on_delete=models.CASCADE,related_name="project_investment_capital",null=True,blank=True)
 	machinery_cost	= models.FloatField(default=0)
 	building_cost	= models.FloatField(default=0)
 	working_capital	= models.FloatField(default=0)
@@ -290,6 +292,10 @@ class InvestmentProject(models.Model):
 	image = models.ImageField(verbose_name="Project Image",blank=True,null=True)
 	project_name = models.CharField(max_length=255,default="",verbose_name="Investment Company Name All Capital Letters")
 	project_name_am = models.CharField(max_length=255,default="",verbose_name="Investment Company Name in amharic")
+	geo_location	= gis_models.PointField(verbose_name="Investment Project Location",null=True)
+	ownership_form = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,
+										verbose_name="Form Of Ownership",related_name="ownership_form_project")
+	established_yr	= models.IntegerField(verbose_name="Established Year (E.C)",default=0)
 	owner_share	= models.FloatField(default=0,verbose_name="Owners Equity Share in %")
 	bank_share	= models.FloatField(default=0,verbose_name="Bank Equity Share in %")
 	capital_in_dollary	= models.FloatField(default=0,verbose_name="Capital required In Dollar")
@@ -301,7 +307,7 @@ class InvestmentProject(models.Model):
 	product_type = models.ManyToManyField(Category,related_name="project_product_types")
 	site_location_name = models.CharField(verbose_name="Site location street name", max_length=200,null=True,blank=True)
 	distance_f_strt	= models.FloatField(default=0,verbose_name="Distance of the Site from the Street")
-	land_acquisition = models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT, related_name="land_aquisition", verbose_name="Land Acquisition",null=True,blank=True)
+	# land_acquisition = models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT, related_name="land_aquisition", verbose_name="Land Acquisition",null=True,blank=True)
 	project_classification	= models.ForeignKey(ProjectDropDownsMaster, on_delete=models.CASCADE,related_name="project_classification",verbose_name="Project Classification",null=True,blank=True)
 	contact_person	=  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT,null=True,blank=True)
 	remaining_work	= models.TextField(verbose_name="Remaining Work To be done in English ",null=True,blank=True)
@@ -332,9 +338,15 @@ class InvestmentProject(models.Model):
 	last_updated_date	= models.DateTimeField(null=True)
 	expired	= models.BooleanField(default=False)
 
+class LandAquisition(models.Model):
+	project = models.OneToOneField(InvestmentProject,on_delete=models.CASCADE,related_name="land_aquisition")
+	its_own = models.FloatField(default=0,verbose_name="Its Own.")
+	lease = models.FloatField(default=0,verbose_name="Lease.")
+	rent = models.FloatField(default=0,verbose_name="Rent.")
+	timestamp = models.DateTimeField(auto_now_add=True)
 	
 class LandUsage(models.Model):
-	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="land_usage")
+	project = models.OneToOneField(InvestmentProject,on_delete=models.CASCADE,related_name="land_usage")
 	total_land_size = models.FloatField(verbose_name="Total land size in meter square")	 
 	production_building = models.FloatField(verbose_name="production building in meter square")	 
 	office_building = models.FloatField(verbose_name="production building in meter square")	 
