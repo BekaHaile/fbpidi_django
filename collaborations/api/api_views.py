@@ -611,7 +611,7 @@ class ApiCreateResearch(APIView):
     permission_classes =([IsAuthenticated])
     def get(self, request):
         category = ResearchProjectCategory.objects.all()
-        user_created = Research.objects.filter(user = request.user, accepted = "APPROVED")
+        user_created = Research.objects.filter(created_by=  request.user, accepted = "APPROVED")
         return Response(data = {'error':False, 'category':ResearchProjectCategorySerializer(category, many = True).data, 
                                 'user_created':ResearchSerializer(user_created,many = True).data})
     
@@ -619,11 +619,11 @@ class ApiCreateResearch(APIView):
         form = ResearchForm(request.POST, request.FILES)
         if form.is_valid():
             research = form.save(commit = False)
-            if request.user.is_customer:
-                research.accepted = "PENDING"
-            else:
+            if request.user.is_superuser:
                 research.accepted = "APPROVED"
-            research.user = request.user
+            else:
+                research.accepted = "PENDING"
+            research.created_by = request.user
             if request.FILES:
                 research.attachements = request.FILES['attachements']
             research.save()

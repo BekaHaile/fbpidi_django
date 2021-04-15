@@ -10,7 +10,7 @@ from background_task.models import Task, CompletedTask
 @background
 def clear_completed_tasks():
     print("____________________")
-    CompletedTask.objects.all().delete()    
+    CompletedTask.objects.all().delete()  
     print("Completed tasks cleared successfully")
 
 
@@ -28,7 +28,7 @@ def check_event_startdate():
                 event.save()
                 success+=1
                 sendEventNotification( event= event,  message = f"IIMP system has changed the status of the Event titled '{event.title}'. This occurs when the creator of the event didn't change the status .")
-        print(f"Finished automatic Events Opening process, checked {events.count()} Upcoming tenders and successfully Opened {success} tenders. ", timezone.now().date())
+        print(f"Finished automatic Events Opening process, checked {events.count()} Upcoming tenders and successfully Opened {success} Events. ", timezone.now(),"ssssssss")
     else:
         print("Tried to automatically Open Events, but no Tender was Found!")
 
@@ -55,7 +55,7 @@ def check_event_enddate():
                 event.status = "Closed"
                 event.save() 
                 sendEventNotification(event = event, message = f"IIMP system has changed the status of the Event titled '{event.title}'. This occurs when the creator of the event didn't change the status .")
-        print("Finished automatic Event Closing process for ", timezone.now().date())
+        print("Finished automatic Event Closing process for ", timezone.now())
     else:
         print("Tried to check enddates of Events, but no Company Event was Found!")
 

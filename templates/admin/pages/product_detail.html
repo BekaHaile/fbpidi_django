@@ -112,9 +112,11 @@
 													<a href="{{pd_img.image.url}}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round" data-popup="lightbox" rel="group">
 														<i class="icon-plus3"></i>
 													</a>
-													{% if perms.product.delete_productimage}
-													<a href="{%url 'admin:delete' model_name='product_image' id=pd_img.id%}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
-														<i class="icon-trash"></i>
+													{% if user.is_superuser or user.get_company = pd_img.product.company %}
+														{% if perms.product.delete_productimage}
+														<a href="{%url 'admin:delete' model_name='product_image' id=pd_img.id%}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+															<i class="icon-trash"></i>
+														{% endif %}
 													{% endif %}
 													</a>
 												</div>
