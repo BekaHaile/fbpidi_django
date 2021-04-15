@@ -11,7 +11,7 @@
 
 <link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
 <script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
-
+{{media}}
 {% endblock %}
 {%block pagename%}Investment Project Form {%endblock%}
 {%block content%}
@@ -43,8 +43,49 @@
 		</div>
 		<hr>
 		<div>
-			{%if object.land_usage.all%}
-			<p class="text text-primary p-4 m-1">			Investment Land Size and Usage </p>
+			{%if inv_cap_data%}
+			<h3 class="text text-primary p-4 m-1 card-title">Investment Project Investment Capital </h3>
+			<form id="invcap_form" action="{%url 'admin:update_inv_cap_project' pk=inv_cap_data.id%}" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					{{inv_capital_form|crispy}}
+				</div>
+
+				<div class="modal-footer">
+					<button type="submit" id="" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+			{%else%}
+			<a href="#" data-toggle="modal" data-target='#inv_capital_form_modal'  class="float-right btn btn-warning btn-md m-2">Add Investment Capital</a>
+			{%endif%}
+
+		</div>
+		<hr>
+		<div>
+			{%if land_aqsn_data %}
+			<h3 class="text text-primary p-4 m-1 card-title">Investment Project Land Acquisition </h3>
+			<form id="invcap_form" action="{%url 'admin:update_land_aqsn' pk=land_aqsn_data.id%}" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					{{land_aquisition|crispy}}
+				</div>
+
+				<div class="modal-footer">
+					<button type="submit" id="" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+			{%else%}
+			
+			<a href="#" data-toggle="modal" data-target='#land_aqsn_form_modal'  class="float-right btn btn-warning btn-md m-2">Add Land Acquisition</a>
+			{%endif%}
+
+		</div>
+		<hr>
+		<div>
+			{%if land_usage_data%}
+			<h3 class="text text-primary p-4 m-1 card-title">Investment Land Size and Usage </h3>
 			<form id="usage_form" action="{%url 'admin:update_land_use' pk=land_usage_data.id%}" enctype="multipart/form-data" method="POST">
 				{%csrf_token%}
 				
@@ -53,18 +94,18 @@
 				</div>
 
 				<div class="modal-footer">
-					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
 					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
 				</div>
 			</form>
 			{%else%}
-			<a href="#" data-toggle="modal" data-target='#usage_form_modal'  class="float-right btn btn-warning btn-md m-2">Add Land Usage</a>
+			
+			<a href="#" data-toggle="modal" data-target='#usage_form_modal'  class="float-right btn btn-warning btn-md m-2">{{object.land_usage.all.count}}Add Land Usage</a>
 			{%endif%}
 			
 		</div>
 		<hr>
-		  {%if object.project_state.all%}
-		  <p class="text text-primary p-4 m-1">Project State form</p>
+		  {%if project_state%}
+		  <h3 class="text text-primary p-4 m-1 card-title">Project State form</h3>
 		  <div>
 			<form id="usage_form" action="{%url 'admin:update_project_state'  pk=project_state.id%}" enctype="multipart/form-data" method="POST">
 				{%csrf_token%}
@@ -74,12 +115,13 @@
 				</div>
 
 				<div class="modal-footer">
-					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
 					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
 				</div>
 			</form>
 		 </div>
-<hr>		  {%else%}
+
+		<hr>	
+	  {%else%}
 		  <hr>
 		<div>
 			<a href="#" data-toggle="modal" data-target='#status_form_modal' class="float-right btn btn-warning btn-md m-2">Add  Project State</a>
@@ -92,29 +134,31 @@
 		</div>
 		<hr>
 		<div>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Product</th>
-						<th>Expected Normal Capacity</th>
-						<th>Espected anual Sales</th>
-						<th>Local Share</th>
-						<th>Export share</th>
-					</tr>
-				</thead>
-				<tbody>
-					{%for lu in object.project_product_qty.all%}
-					<tr>
-						<td>{{lu.product_tobe_produced}}</td>
-						<td>{{lu.expected_normal_capacity}}</td>
-						<td>{{lu.expected_anual_sales}}</td>
-						<td>{{lu.local_share}}</td>
-						<td>{{lu.export_share}}</td>
-	
-					</tr>
-					{%endfor%}
-				</tbody>
-			</table>
+			<div class="card-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Product</th>
+							<th>Expected Normal Capacity</th>
+							<th>Espected anual Sales</th>
+							<th>Local Share</th>
+							<th>Export share</th>
+						</tr>
+					</thead>
+					<tbody>
+						{%for lu in object.project_product_qty.all%}
+						<tr>
+							<td>{{lu.product_tobe_produced}}</td>
+							<td>{{lu.expected_normal_capacity}}</td>
+							<td>{{lu.expected_anual_sales}}</td>
+							<td>{{lu.local_share}}</td>
+							<td>{{lu.export_share}}</td>
+		
+						</tr>
+						{%endfor%}
+					</tbody>
+				</table>
+			</div>
 		</div>
 		<hr>
 	</div>
@@ -122,6 +166,69 @@
 
 </div>
 <!-- /content area -->
+<div id="inv_capital_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Investment Capital Data For Investment Project</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<form id="inv_capital_form" action="{%url 'admin:create_inv_cap_project' project=object.id%}" method="POST">
+
+				{%csrf_token%}
+				<div class="modal-body">
+				
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-4">
+								{{inv_capital_form.machinery_cost.label}}
+								 {{inv_capital_form.machinery_cost}}
+							</div>
+							<div class="col-sm-4">
+								{{inv_capital_form.building_cost.label}}
+								{{inv_capital_form.building_cost}}
+							</div>
+
+							<div class="col-sm-4">
+								{{inv_capital_form.working_capital.label}}
+								 {{inv_capital_form.working_capital}}
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_inv_capital" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div id="land_aqsn_form_modal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Land Acquisition Data</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<span></span>
+			<form id="usage_form" action="{%url 'admin:create_land_acqsn' project=object.id%}" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+				<div class="modal-body">
+					{{land_aquisition|crispy}}
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 <div id="usage_form_modal" class="modal fade" tabindex="-1">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -210,6 +317,15 @@
 		$("#id_hremployment_training").val("{{project_state.hremployment_training}}");
 		$("#id_testproduct").val("{{project_state.testproduct}}");
 		$("#id_certification").val("{{project_state.certification}}");
+		// 
+		$("#id_machinery_cost").val("{{inv_cap_data.machinery_cost}}");
+		$("#id_building_cost").val("{{inv_cap_data.building_cost}}");
+		$("#id_working_capital").val("{{inv_cap_data.working_capital}}");
+		// 
+		$("#id_its_own").val("{{land_aqsn_data.its_own}}");
+		$("#id_lease").val("{{land_aqsn_data.lease}}");
+		$("#id_rent").val("{{land_aqsn_data.rent}}");
+
 	});
 </script>
 {%endblock%}

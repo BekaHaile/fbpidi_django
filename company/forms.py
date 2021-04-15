@@ -644,6 +644,19 @@ class LandUsageForm(forms.ModelForm):
             'other':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_other")'}),
         }
 
+class LandAquisitionForm(forms.ModelForm):
+    class Meta:
+        model = LandAquisition
+        fields = (
+            'its_own','lease','rent'
+        )
+        widgets = {
+             'its_own':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_its_own")'}),
+            'lease':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_lease")'}),
+            'rent':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_rent")'}),
+        }
+
+
 class InvestmentProjectForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
         self.contact_person = kwargs.pop('contact_person')
@@ -652,15 +665,18 @@ class InvestmentProjectForm(forms.ModelForm):
         self.fields['contact_person'].queryset = self.contact_person
         self.fields['project_classification'].empty_label = "Select Project Classification"
         self.fields['project_classification'].queryset = ProjectDropDownsMaster.objects.filter(dropdown_type="Project Classification")
+        self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
+        self.fields['ownership_form'].empty_label = "Select Form of Ownership"
 
     class Meta:
         model=InvestmentProject
-        fields = ('project_name','project_name_am','image','owner_share','bank_share','capital_in_dollary',
+        fields = ('project_name','project_name_am','image','ownership_form','established_yr','geo_location','owner_share','bank_share','capital_in_dollary',
             'investment_license','issued_date','sector','project_classification',
             'contact_person','description','description_am',
             )
         widgets = {
             'image':forms.FileInput(attrs={}),
+            'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
             'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),
             'owner_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_owner_share")'}),
@@ -673,6 +689,8 @@ class InvestmentProjectForm(forms.ModelForm):
             'contact_person':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),
             'description_am':forms.Textarea(attrs={'class':'summernote'}),
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
+            'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
         }
 
 class InvestmentProjectForm_ForSuperAdmin(forms.ModelForm):
@@ -682,16 +700,21 @@ class InvestmentProjectForm_ForSuperAdmin(forms.ModelForm):
         self.fields['company'].queryset = Company.objects.all()
         self.fields['project_classification'].empty_label = "Select Project Classification"
         self.fields['project_classification'].queryset = ProjectDropDownsMaster.objects.filter(dropdown_type="Project Classification")
-
+        self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
+        self.fields['ownership_form'].empty_label = "Select Form of Ownership"
+        
     class Meta:
         model=InvestmentProject
-        fields = ('company','project_name','project_name_am','image','owner_share','bank_share','capital_in_dollary',
+        fields = ('company','project_name','project_name_am','image','ownership_form','established_yr','geo_location','owner_share','bank_share','capital_in_dollary',
             'investment_license','issued_date','sector','project_classification',
             'description','description_am',
             )
         widgets = {
             'company':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'image':forms.FileInput(),
+            'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
+            'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
             'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),
             'owner_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_owner_share")'}),
@@ -712,8 +735,6 @@ class InvestmentProjectDetailForm(forms.ModelForm):
         self.sector = kwargs.pop("sector")
         super(InvestmentProjectDetailForm,self).__init__(*args,**kwargs)
         self.fields['product_type'].queryset = Category.objects.filter(category_type=self.sector)
-        self.fields['land_acquisition'].queryset = ProjectDropDownsMaster.objects.filter(dropdown_type="Land Acquisition")
-        self.fields['land_acquisition'].empty_label = "Select Land Acquisition"
         self.fields['technology'].empty_label = "Select Technology to be Used"
         self.fields['technology'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Technology")
         self.fields['automation'].empty_label = "Select Automation"
@@ -727,7 +748,7 @@ class InvestmentProjectDetailForm(forms.ModelForm):
         model = InvestmentProject
         fields = (
             'product_type','site_location_name',
-            'distance_f_strt','land_acquisition','remaining_work',
+            'distance_f_strt','remaining_work',
             'remaining_work_am','major_problems','major_problems_am','operational_time','annual_raw_material',
             'annual_raw_material_am','power_need','water_suply','cond_provided_for_wy',
             'cond_provided_for_wy_am','target_market','env_impac_ass_doc','capital_utilization',
@@ -737,7 +758,6 @@ class InvestmentProjectDetailForm(forms.ModelForm):
             'product_type':forms.SelectMultiple(attrs={'class':'form-control form-control-uniform'}),
             'site_location_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Site Location Name'}),
             'distance_f_strt':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_distance_f_strt")'}),
-            'land_acquisition':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'remaining_work':forms.Textarea(attrs={'class':'summernote'}),
             'remaining_work_am':forms.Textarea(attrs={'class':'summernote'}),
             'major_problems':forms.Textarea(attrs={'class':'summernote'}),
@@ -764,8 +784,8 @@ class InvestmentProjectDetailForm_Admin(forms.ModelForm):
         self.contact_person = kwargs.pop("contact_person")
         super(InvestmentProjectDetailForm_Admin,self).__init__(*args,**kwargs)
         self.fields['product_type'].queryset = Category.objects.filter(category_type=self.sector)
-        self.fields['land_acquisition'].queryset = ProjectDropDownsMaster.objects.filter(dropdown_type="Land Acquisition")
-        self.fields['land_acquisition'].empty_label = "Select Land Acquisition"
+        self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
+        self.fields['ownership_form'].empty_label = "Select Form of Ownership"
         self.fields['technology'].empty_label = "Select Technology to be Used"
         self.fields['technology'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Technology")
         self.fields['automation'].empty_label = "Select Automation"
@@ -781,7 +801,7 @@ class InvestmentProjectDetailForm_Admin(forms.ModelForm):
         model = InvestmentProject
         fields = (
             'product_type','site_location_name','contact_person',
-            'distance_f_strt','land_acquisition','remaining_work',
+            'distance_f_strt','ownership_form','remaining_work',
             'remaining_work_am','major_problems','major_problems_am','operational_time','annual_raw_material',
             'annual_raw_material_am','power_need','water_suply','cond_provided_for_wy',
             'cond_provided_for_wy_am','target_market','env_impac_ass_doc','capital_utilization',
@@ -791,7 +811,6 @@ class InvestmentProjectDetailForm_Admin(forms.ModelForm):
             'product_type':forms.SelectMultiple(attrs={'class':'form-control form-control-uniform'}),
             'site_location_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Site Location Name'}),
             'distance_f_strt':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_distance_f_strt")'}),
-            'land_acquisition':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'remaining_work':forms.Textarea(attrs={'class':'summernote'}),
             'remaining_work_am':forms.Textarea(attrs={'class':'summernote'}),
             'major_problems':forms.Textarea(attrs={'class':'summernote'}),
@@ -820,8 +839,8 @@ class ProjectUpdateForm(forms.ModelForm):
         self.contact_person = kwargs.pop('contact_person')
         super(ProjectUpdateForm,self).__init__(*args,**kwargs)
         self.fields['product_type'].queryset = Category.objects.filter(category_type=self.sector)
-        self.fields['land_acquisition'].queryset = ProjectDropDownsMaster.objects.filter(dropdown_type="Land Acquisition")
-        self.fields['land_acquisition'].empty_label = "Select Land Acquisition"
+        self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
+        self.fields['ownership_form'].empty_label = "Select Ownership Form"
         self.fields['technology'].empty_label = "Select Technology to be Used"
         self.fields['technology'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Technology")
         self.fields['automation'].empty_label = "Select Automation"
@@ -837,10 +856,10 @@ class ProjectUpdateForm(forms.ModelForm):
 
     class Meta:
         model = InvestmentProject
-        fields = ('project_name','project_name_am','image','owner_share','bank_share','capital_in_dollary',
+        fields = ('project_name','project_name_am','image','ownership_form','established_yr','geo_location','owner_share','bank_share','capital_in_dollary',
             'investment_license','issued_date','sector','project_classification',
             'contact_person','description','description_am','product_type','site_location_name',
-            'distance_f_strt','land_acquisition','remaining_work',
+            'distance_f_strt','remaining_work',
             'remaining_work_am','major_problems','major_problems_am','operational_time','annual_raw_material',
             'annual_raw_material_am','power_need','water_suply','cond_provided_for_wy',
             'cond_provided_for_wy_am','target_market','env_impac_ass_doc','capital_utilization',
@@ -848,6 +867,9 @@ class ProjectUpdateForm(forms.ModelForm):
         )
         widgets = {
             'image':forms.FileInput(),
+            'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
+            'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
             'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),
             'owner_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_owner_share")'}),
@@ -863,7 +885,6 @@ class ProjectUpdateForm(forms.ModelForm):
             'product_type':forms.SelectMultiple(attrs={'class':'form-control form-control-uniform'}),
             'site_location_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Site Location Name'}),
             'distance_f_strt':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_distance_f_strt")'}),
-            'land_acquisition':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'remaining_work':forms.Textarea(attrs={'class':'summernote'}),
             'remaining_work_am':forms.Textarea(attrs={'class':'summernote'}),
             'major_problems':forms.Textarea(attrs={'class':'summernote'}),
