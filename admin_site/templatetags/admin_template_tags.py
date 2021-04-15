@@ -139,7 +139,10 @@ def get_percent(x,y):
 @register.simple_tag
 def get_share(data,total):
     print(type(data),type(total))
-    return round(float(int(data)/int(total))*100,2)
+    if total > 0:
+        return round(float(int(data)/int(total))*100,2)
+    else:
+        return round(float(int(data)/int(1))*100,2)
 
 @register.simple_tag
 def user_create_button(user):
