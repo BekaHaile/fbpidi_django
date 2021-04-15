@@ -81,7 +81,7 @@ Product Packaging Data
 										{% if perms.product.delete_productioncapacity %}
 										<a href="{%url 'admin:delete' model_name='production_capacity' id=cat.id%}" onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
 										{% endif %}
-										{% if perms.product.delete_productioncapacity %}
+										{% if perms.product.change_productioncapacity %}
 										<a href="{%url 'admin:update_production_capacity' pk=cat.id%}" class="dropdown-item">
 											<i class="icon-pencil"></i>Edit</a>
 										{%endif%}
@@ -203,10 +203,14 @@ Product Packaging Data
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-right">
-									{%if not user.is_superuser%}
-									<a href="{%url 'admin:delete' model_name='input_demand_supply' id=cat.id%}" onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-									<a href="{%url 'admin:update_demand_supply' pk=cat.id%}" class="dropdown-item">
-										<i class="icon-pencil"></i>Edit</a>
+									{%if not user.is_superuser and cat.company == user.get_company %}
+										{% if perms.product.delete_inputdemandsupply %}
+											<a href="{%url 'admin:delete' model_name='input_demand_supply' id=cat.id%}" onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										{% endif %}
+										{% if perms.product.change_inputdemandsupply %}
+											<a href="{%url 'admin:update_demand_supply' pk=cat.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										{% endif %}
 									{%endif%}
 								</div>
 							</div>
@@ -263,10 +267,14 @@ Product Packaging Data
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-right">
-									{%if not user.is_superuser%}
-									<a href="{%url 'admin:delete' model_name='sales_performance' id=cat.id%}" onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-									<a href="{%url 'admin:update_sales_performance' pk=cat.id%}" class="dropdown-item">
-										<i class="icon-pencil"></i>Edit</a>
+									{%if not user.is_superuser and cat.company == user.get_company %}
+										{% if perms.product.delete_productionandsalesperformance %}
+										<a href="{%url 'admin:delete' model_name='sales_performance' id=cat.id%}" onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										{% endif %}
+										{% if perms.product.change_productionandsalesperformance %}
+										<a href="{%url 'admin:update_sales_performance' pk=cat.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										{% endif %}
 									{%endif%}
 								</div>
 							</div>
@@ -322,14 +330,19 @@ Product Packaging Data
 								<a href="#" class="list-icons-item" data-toggle="dropdown">
 									<i class="icon-menu9"></i>
 								</a>
-								{%if not user.is_superuser%}
+								
 								<div class="dropdown-menu dropdown-menu-right">
-									<a href="{%url 'admin:delete' model_name='packaging' id=cat.id%}" onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-									<a href="{%url 'admin:update_packaging' pk=cat.id%}" class="dropdown-item">
+									{%if not user.is_superuser and cat.company == user.get_company %}
+										{% if perms.product.delete_productpackaging %}
+											<a href="{%url 'admin:delete' model_name='packaging' id=cat.id%}" onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										{% endif %}
+										{% if perms.product.change_productpackaging %}
+										<a href="{%url 'admin:update_packaging' pk=cat.id%}" class="dropdown-item">
 										<i class="icon-pencil"></i>Edit</a>
-									
+										{% endif %}
+									{%endif%}
 								</div>
-								{%endif%}
+								
 							</div>
 						</div>
 					</td>
