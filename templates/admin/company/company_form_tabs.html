@@ -131,8 +131,10 @@
 		<div class="card-header header-elements-sm-inline">
 			<h6 class="card-title">Yearly Investment Capital Data</h6>
 			<div class="list-icons">
+				{% if perms.company.add_investmentcapital %}
 				<a href="#" data-toggle="modal" data-target="#inv_capital_form_modal" class="btn bg-teal btn-sm rounded-round"><i
 						class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
 			</div>
 		</div>
 
@@ -164,9 +166,15 @@
 									</a>
 	
 									<div class="dropdown-menu dropdown-menu-right">
-										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-										<a href="{%url 'admin:update_inv_capital' pk=inv_cap.id%}" class="dropdown-item">
-											<i class="icon-pencil"></i>Edit</a>
+										{% if user.is_superuser or user.get_company == inv_cap.company %}
+											{% if perms.company.delete_investmentcapital %}
+												<a href="{% url 'admin:delete' model_name='InvestmentCapital' id=inv_cap.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_investmentcapital %}
+												<a href="{%url 'admin:update_inv_capital' pk=inv_cap.id%}" class="dropdown-item">
+												<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
 										 
 									</div>
 								</div>
@@ -186,8 +194,10 @@
 		<div class="card-header header-elements-sm-inline">
 			<h6 class="card-title">Competency Certificate Data</h6>
 			<div class="list-icons">
+				{% if perms.company.add_certificates %}
 				<a href="#" data-toggle="modal" data-target="#certificate_form_modal" class="btn bg-teal btn-sm rounded-round"><i
 						class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
 			</div>
 		</div>
 
@@ -217,9 +227,15 @@
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-right">
-									<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-									<a href="{%url 'admin:update_comp_certificate' pk=cert.id%}" class="dropdown-item">
-										<i class="icon-pencil"></i>Edit</a>
+									{% if user.is_superuser or user.get_company == cert.company %}
+										{% if perms.company.delete_certificates %}
+											<a href="{% url 'admin:delete' model_name='Certificates' id=cert.id %}" onclick="return confirm ('Are you sure you want to delete this?')"  class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										{% endif %}
+										{% if perms.company.change_certificates %}
+											<a href="{%url 'admin:update_comp_certificate' pk=cert.id%}" class="dropdown-item">
+											<i class="icon-pencil"></i>Edit</a>
+										{% endif %}
+									{% endif %}
 									 
 								</div>
 							</div>
@@ -240,8 +256,10 @@
 		<div class="card-header header-elements-sm-inline">
 			<h6 class="card-title">Yearly Number Of Employees Based on their Employment Type</h6>
 			<div class="list-icons">
-				<a href="#" data-toggle="modal" data-target="#employees_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+				{% if perms.company.add_employees %}
+					<a href="#" data-toggle="modal" data-target="#employees_form_modal" class="btn bg-teal btn-sm rounded-round"><i
 						class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
 			</div>
 		</div>
 
@@ -273,9 +291,15 @@
 									</a>
 	
 									<div class="dropdown-menu dropdown-menu-right">
-										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-										<a href="{%url 'admin:update_employees' pk=emp.id%}" class="dropdown-item">
-											<i class="icon-pencil"></i>Edit</a>
+										{% if user.is_superuser or user.get_company == emp.company %}
+											{% if perms.company.delete_employees %}
+												<a href="{% url 'admin:delete' model_name='Employees' id=inv_cap.id %}" onclick="return confirm ('Are you sure you want to delete this?')"  class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_employees %}
+												<a href="{%url 'admin:update_employees' pk=emp.id%}" class="dropdown-item">
+												<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
 										 
 									</div>
 								</div>
@@ -296,8 +320,10 @@
 		<div class="card-header header-elements-sm-inline">
 			<h6 class="card-title">Jobs Created Each Year</h6>
 			<div class="list-icons">
-				<a href="#" data-toggle="modal" data-target="#createdjob_form_modal" class="btn bg-teal btn-sm rounded-round"><i
-						class="icon-add mr-2"></i>Add New Data</a>
+				{% if perms.company.add_jobopportunities %}
+					<a href="#" data-toggle="modal" data-target="#createdjob_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
 			</div>
 		</div>
 
@@ -331,9 +357,15 @@
 									</a>
 	
 									<div class="dropdown-menu dropdown-menu-right">
-										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-										<a href="{%url 'admin:update_jobs_created' pk=job.id%}" class="dropdown-item">
-											<i class="icon-pencil"></i>Edit</a>
+										{% if user.is_superuser or user.get_company == job.company %}
+											{% if perms.company.delete_jobopportunities %}
+												<a href="{% url 'admin:delete' model_name='JobOpportunities' id=job.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_jobopportunities %}
+												<a href="{%url 'admin:update_jobs_created' pk=job.id%}" class="dropdown-item">
+													<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
 										 
 									</div>
 								</div>
@@ -355,8 +387,10 @@
 		<div class="card-header header-elements-sm-inline">
 			<h6 class="card-title">Employees Educational Status</h6>
 			<div class="list-icons">
+				{% if perms.company.add_educationalstatus %}
 				<a href="#" data-toggle="modal" data-target="#education_status_form_modal" class="btn bg-teal btn-sm rounded-round"><i
 						class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
 			</div>
 		</div>
 
@@ -390,10 +424,15 @@
 									</a>
 	
 									<div class="dropdown-menu dropdown-menu-right">
-										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-										<a href="{%url 'admin:update_education_status' pk=edu.id%}" class="dropdown-item">
-											<i class="icon-pencil"></i>Edit</a>
-										 
+										{% if user.is_superuser or user.get_company == edu.company %}
+											{% if perms.company.delete_educationalstatus %}
+												<a href="{% url 'admin:delete' model_name='EducationalStatus' id=edu.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_educationalstatus %}
+												<a href="{%url 'admin:update_education_status' pk=edu.id%}" class="dropdown-item">
+													<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
 									</div>
 								</div>
 							</div>
@@ -413,8 +452,10 @@
 		<div class="card-header header-elements-sm-inline">
 			<h6 class="card-title">Number of females employees in position levels</h6>
 			<div class="list-icons">
+				{% if perms.company.add_femalesinposition %}
 				<a href="#" data-toggle="modal" data-target="#femaleposn_form_modal" class="btn bg-teal btn-sm rounded-round"><i
 						class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
 			</div>
 		</div>
 
@@ -446,9 +487,15 @@
 									</a>
 	
 									<div class="dropdown-menu dropdown-menu-right">
-										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-										<a href="{%url 'admin:update_female_posn' pk=fem.id%}" class="dropdown-item">
-											<i class="icon-pencil"></i>Edit</a>
+										{% if user.is_superuser or user.get_company == fem.company %}
+											{% if perms.company.delete_femalesinposition %}
+												<a href="{% url 'admin:delete' model_name='FemalesInPosition' id=fem.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_femalesinposition %}	
+												<a href="{%url 'admin:update_female_posn' pk=fem.id%}" class="dropdown-item">
+													<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
 										 
 									</div>
 								</div>
@@ -471,8 +518,10 @@
 		<div class="card-header header-elements-sm-inline">
 			<h6 class="card-title">Sources and amount of your inputs per Year</h6>
 			<div class="list-icons">
-				<a href="#" data-toggle="modal" data-target="#srcamnt_input_form_modal" class="btn bg-teal btn-sm rounded-round"><i
-						class="icon-add mr-2"></i>Add New Data</a>
+				{% if perms.company.add_sourceamountiputs %}
+					<a href="#" data-toggle="modal" data-target="#srcamnt_input_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
 			</div>
 		</div>
 
@@ -510,9 +559,15 @@
 									</a>
 	
 									<div class="dropdown-menu dropdown-menu-right">
-										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-										<a href="{%url 'admin:update_srcamnt_inputs' pk=srcamnt.id%}" class="dropdown-item">
-											<i class="icon-pencil"></i>Edit</a>
+										{% if user.is_superuser or user.get_company == srcamnt.company %}
+											{% if perms.company.delete_sourceamountiputs %}
+												<a href="{% url 'admin:delete' model_name='SourceAmountIputs' id=srcamnt.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_sourceamountiputs %}
+												<a href="{%url 'admin:update_srcamnt_inputs' pk=srcamnt.id%}" class="dropdown-item">
+													<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
 										 
 									</div>
 								</div>
@@ -533,8 +588,10 @@
 		<div class="card-header header-elements-sm-inline">
 			<h6 class="card-title">Target market in percent (%) </h6>
 			<div class="list-icons">
+				{% if perms.company.add_markettarget %}
 				<a href="#" data-toggle="modal" data-target="#target_form_modal" class="btn bg-teal btn-sm rounded-round"><i
 						class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
 			</div>
 		</div>
 
@@ -581,9 +638,15 @@
 									</a>
 	
 									<div class="dropdown-menu dropdown-menu-right">
-										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-										<a href="{%url 'admin:update_target' pk=mt.id%}" class="dropdown-item">
-											<i class="icon-pencil"></i>Edit</a>
+										{% if user.is_superuser or user.get_company == mt.company %}
+											{% if perms.company.delete_markettarget %}
+												<a href="{% url 'admin:delete' model_name='MarketTarget' id=mt.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_markettarget %}
+											<a href="{%url 'admin:update_target' pk=mt.id%}" class="dropdown-item">
+												<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
 										 
 									</div>
 								</div>
@@ -604,8 +667,10 @@
 		<div class="card-header header-elements-sm-inline">
 			<h6 class="card-title">Market destination Data</h6>
 			<div class="list-icons">
+				{% if perms.company.add_marketdestination %}
 				<a href="#" data-toggle="modal" data-target="#destination_form_modal" class="btn bg-teal btn-sm rounded-round"><i
 						class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
 			</div>
 		</div>
 
@@ -637,9 +702,15 @@
 									</a>
 	
 									<div class="dropdown-menu dropdown-menu-right">
-										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-										<a href="{%url 'admin:update_destination' pk=md.id%}" class="dropdown-item">
+										{% if user.is_superuser or user.get_company == md.company %}
+											{% if perms.company.delete_marketdestination %}
+												<a href="{% url 'admin:delete' model_name='MarketDestination' id=md.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_marketdestination %}
+												<a href="{%url 'admin:update_destination' pk=md.id%}" class="dropdown-item">
 											<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
 										 
 									</div>
 								</div>
@@ -661,8 +732,13 @@
 		<div class="card-header header-elements-sm-inline">
 			<h6 class="card-title">Daily Power Consumption data</h6>
 			<div class="list-icons">
-				<a href="#" data-toggle="modal" data-target="#power_consumption_form_modal" class="btn bg-teal btn-sm rounded-round"><i
-						class="icon-add mr-2"></i>Add New Data</a>
+				
+					{% if perms.company.add_powerconsumption %}
+					<a href="#" data-toggle="modal" data-target="#power_consumption_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Data</a>
+
+					{% endif %}
+				
 			</div>
 		</div>
 
@@ -694,9 +770,15 @@
 									</a>
 	
 									<div class="dropdown-menu dropdown-menu-right">
-										<a href="#" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-										<a href="{%url 'admin:update_power_consumed' pk=pc.id%}" class="dropdown-item">
-											<i class="icon-pencil"></i>Edit</a>
+										{% if user.is_superuser or user.get_company == pc.company %}
+											{% if perms.company.delete_powerconsumption %}
+												<a href="{% url 'admin:delete' model_name='PowerConsumption' id=pc.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_powerconsumption %}
+											<a href="{%url 'admin:update_power_consumed' pk=pc.id%}" class="dropdown-item">
+												<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
 										 
 									</div>
 								</div>

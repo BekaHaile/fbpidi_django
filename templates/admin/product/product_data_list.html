@@ -102,7 +102,7 @@ Product Packaging Data
 			<h5 class="card-title">Annual Input Need data</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					{%if not user.is_superuser%}
+					{%if not user.is_superuser and perms.product.add_annualinputneed%}
 					<a href="{%url 'admin:create_anual_inp_need'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Data</a>
 					{%endif%}
@@ -141,10 +141,14 @@ Product Packaging Data
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-right">
-									{%if not user.is_superuser%}
-									<a href="{%url 'admin:delete' model_name='anual_input_need' id=cat.id%}" onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-									<a href="{%url 'admin:update_anual_inp_need' pk=cat.id%}" class="dropdown-item">
+									{%if not user.is_superuser and cat.company == user.get_company %}
+										{% if perms.product.delete_annualinputneed %}
+										<a href="{%url 'admin:delete' model_name='anual_input_need' id=cat.id%}" onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+										{% endif %}
+										{% if perms.product.change_annualinputneed %}
+										<a href="{%url 'admin:update_anual_inp_need' pk=cat.id%}" class="dropdown-item">
 										<i class="icon-pencil"></i>Edit</a>
+										{% endif %}
 									{%endif%}
 								</div>
 							</div>
