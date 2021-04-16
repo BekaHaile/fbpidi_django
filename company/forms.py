@@ -166,6 +166,39 @@ class FemalesInPositionForm(forms.ModelForm):
             'med_position_male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_med_position_male")'}),
         }
 
+# Project Employees Form
+class EmployeesFormProject(forms.ModelForm):
+    class Meta:
+        model=Employees
+        fields = ('employment_type','female','male')
+        widgets = {
+            'employment_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_male")'}),
+            'female':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_female")'}),
+        }
+
+class JobCreatedFormProject(forms.ModelForm):
+    class Meta:
+        model=JobOpportunities
+        fields = ('job_type','female','male')
+        widgets = {
+            'job_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_male")'}),
+            'female':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_female")'}),
+        }
+
+class EducationStatusFormProject(forms.ModelForm):    
+    class Meta:
+        model=EducationalStatus
+        fields = ('education_type','female','male')
+        widgets = {
+            'education_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_male")'}),
+            'female':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_female")'}),
+        }
+
+
+
 class MarketDestinationForm(forms.ModelForm):
     
     def __init__(self,*args,**kwargs):
@@ -611,23 +644,23 @@ class ProjectStatusForm(forms.ModelForm):
         )
         widgets = {
             'percentage_construction_performance':forms.TextInput(
-                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_percentage_construction_performance")'}),
+                attrs={'class': 'form-control','placeholder':'Costruction Performance', 'onkeyup': 'isNumber("id_percentage_construction_performance")'}),
             'machinery_purchase_performance':forms.TextInput(
-                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_machinery_purchase_performance")'}),
+                attrs={'class': 'form-control','placeholder':'Machinery Purchase Performance', 'onkeyup': 'isNumber("id_machinery_purchase_performance")'}),
             'factory_building_performance':forms.TextInput(
-                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_factory_building_performance")'}),
+                attrs={'class': 'form-control','placeholder':'Factory Building Performance', 'onkeyup': 'isNumber("id_factory_building_performance")'}),
             'machinery_installation':forms.TextInput(
-                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_machinery_installation")'}),
+                attrs={'class': 'form-control','placeholder':'Machinery Installation', 'onkeyup': 'isNumber("id_machinery_installation")'}),
             'commissioning_work':forms.TextInput(
-                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_commissioning_work")'}),
+                attrs={'class': 'form-control','placeholder':'Commissioning Work','onkeyup': 'isNumber("id_commissioning_work")'}),
             'rawmaterial_preparation':forms.TextInput(
-                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_rawmaterial_preparation")'}),
+                attrs={'class': 'form-control','placeholder':'Raw Material Operation' ,'onkeyup': 'isNumber("id_rawmaterial_preparation")'}),
             'hremployment_training':forms.TextInput(
-                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_hremployment_training")'}),
+                attrs={'class': 'form-control', 'placeholder':'HR Employment Training','onkeyup': 'isNumber("id_hremployment_training")'}),
             'testproduct':forms.TextInput(
-                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_testproduct")'}),
+                attrs={'class': 'form-control','placeholder':'Test Product', 'onkeyup': 'isNumber("id_testproduct")'}),
             'certification':forms.TextInput(
-                attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_certification")'}),
+                attrs={'class': 'form-control','placeholder':'Certification', 'onkeyup': 'isNumber("id_certification")'}),
         }
 
 class LandUsageForm(forms.ModelForm):
@@ -637,11 +670,11 @@ class LandUsageForm(forms.ModelForm):
             'total_land_size','production_building','office_building','warehouse','other',
         )
         widgets = {
-            'total_land_size':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_total_land_size")'}),
-            'production_building':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_production_building")'}),
-            'office_building':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_office_building")'}),
-            'warehouse':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_warehouse")'}),
-            'other':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_other")'}),
+            'total_land_size':forms.TextInput(attrs={'class': 'form-control','placeholder':'Total Land Size', 'onkeyup': 'isNumber("id_total_land_size")'}),
+            'production_building':forms.TextInput(attrs={'class': 'form-control','placeholder':'Production Building', 'onkeyup': 'isNumber("id_production_building")'}),
+            'office_building':forms.TextInput(attrs={'class': 'form-control','placeholder':'Office Building', 'onkeyup': 'isNumber("id_office_building")'}),
+            'warehouse':forms.TextInput(attrs={'class': 'form-control','placeholder':'Warehouse', 'onkeyup': 'isNumber("id_warehouse")'}),
+            'other':forms.TextInput(attrs={'class': 'form-control','placeholder':'Others', 'onkeyup': 'isNumber("id_other")'}),
         }
 
 class LandAquisitionForm(forms.ModelForm):
@@ -868,7 +901,7 @@ class ProjectUpdateForm(forms.ModelForm):
         widgets = {
             'image':forms.FileInput(),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
-            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 600, 'map_height': 400}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
             'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),

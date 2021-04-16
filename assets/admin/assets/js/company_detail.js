@@ -335,7 +335,7 @@ $(document).ready(function () {
                     $("#success_powerc").html(result['message']);
                 } else {
                     $("#errors_powerc").html(result['message']);
-                    $("#succes_powerc").empty();
+                    $("#success_powerc").empty();
 
                 }
             },
