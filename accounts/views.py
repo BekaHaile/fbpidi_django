@@ -22,7 +22,7 @@ from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,Compan
                             AdminCreateUserForm,GroupCreationForm,FrontLoginForm)
 from accounts.models import UserProfile,Company,CompanyAdmin,Customer
 from company.models import CompanyStaff,Company
-from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
+from accounts.email_messages import sendEmailVerification,sendWelcomeEmail, sendApiWelcomeEmail
 from admin_site.decorators import company_created
 
 # 
@@ -119,6 +119,20 @@ def activate(request, uidb64, token):
     else:
         return render(request,'email/confirm_registration_message.html',
         {'message':"Activation link is invalid!"})
+
+# 
+def api_activate(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = UserProfile._default_manager.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, UserProfile.DoesNotExist):
+        user = None
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        sendApiWelcomeEmail(request,user,acctivated = True)
+    else:
+        sendApiWelcomeEmail(request,user,acctivated = False)
 
 @method_decorator(decorators,name='dispatch')
 class MyProfileView(LoginRequiredMixin,UpdateView):

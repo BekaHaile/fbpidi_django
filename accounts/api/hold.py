@@ -3,7 +3,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
-from accounts.models import UserProfile,Company,CompanyAdmin,Customer
+from accounts.models import User,Company,CompanyAdmin,Customer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -20,50 +20,38 @@ from requests.exceptions import HTTPError
 from social_django.utils import psa
 
 class CustomerSignUpView(APIView):
-
     def post(self, request):
             data = {}
             try:
                 user_serializer = UserSerializer (data = request.data)
                 if user_serializer.is_valid():
-                    data = self.continue_registration(request)
-                else:
-                    errors = dict(user_serializer.errors)
-                    if len(errors)== 1 and 'username' in errors.keys() and errors['username'][0] == "A user with that username already exists.":
-                        user = UserProfile.objects.get(username = request.data['username'])
-                        if user.is_active: # if there exist an active user with same username
-                            return Response(data={'error':True, 'message':"A user with that username already exists."})
-                        else: #if there has been a user with same username, but forsome reason is not active currently
-                            print("last login ", user.last_login)
-                            data = self.continue_registration(request)
+                    customer_serializer = CustomerCreationSerializer(data = request.data)
+                    if customer_serializer.is_valid():
+                            user = user_serializer.create(validated_data = request.data) 
+                            if 'profile_image' in request.data:
+                                user.profile_image = request.data['profile_image']
+                           
+                            customer = customer_serializer.save(user = user)
+                            if sendApiEmailVerification(request, customer): 
+                                data['error']=False    
+                                data['message'] = "Please check your email and verify your email address"
+                            else:
+                                data['error']=True
+                                data['message'] ="Error while sending Verification Email, try signing up again!"
+                            # data['message'] = "Successfully registered a new Customer user."
+                            # data['customer']  = CustomerCreationSerializer(customer).data
+                            # data['token'] = Token.objects.get(user = user).key    
                     else:
-                        data = {'error': True, 'message' :dict(user_serializer.errors).values() }
+                            data['error']  =True
+                            data['message'] = dict(customer_serializer.errors).values()
+
+                else:
+                    data['error'] = True
+                    data['message'] = dict(user_serializer.errors).values()
                 return Response(data=data)
             except Exception as e:
                 print("################## ",e)
                 return Response(data = {'error ':True})
-
-    # either new user or a user retrying signup with same username, so his username exists but is_active = False
-    def continue_registration(self, request):
-        customer_serializer = CustomerCreationSerializer(data = request.data)
-        if customer_serializer.is_valid():
-            user_serializer = UserSerializer (data = request.data)
-            if not UserProfile.objects.filter(username = request.data['username']).exists():#brand new user(first signup attempt)
-                user = user_serializer.create(validated_data = request.data)
-                if 'profile_image' in request.data:
-                    user.profile_image = request.data['profile_image']
-                customer = customer_serializer.save(user = user)
-            else:
-                user = UserProfile.objects.get(username = request.data['username'])            
-            
-            if sendApiEmailVerification(request, user): 
-                data = {'error':False,'message': "Please check your email and verify your email address"}
-            else:
-                data = {'error':True, 'message':"Error while sending Verification Email, try signing up again!"}
-        else:
-            data = {'error':True, 'message': dict(customer_serializer.errors).values()}
-        return data
-                
 
 
 class CompleteEmailVerification(APIView):
