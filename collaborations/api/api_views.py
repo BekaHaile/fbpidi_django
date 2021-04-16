@@ -192,7 +192,7 @@ class PollListApiView(generics.ListAPIView):
                                         'message_am':result['message_am'],'companies':CompanyInfoSerializer(companies, many =True).data})
 
         except Exception as e:
-            print("exceptio at polls list ",e)
+            print("exception at polls list ",e)
             return Response({'error':True, 'message':str(e)})
 
 

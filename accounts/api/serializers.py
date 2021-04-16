@@ -24,6 +24,11 @@ class UserSerializer(serializers.ModelSerializer):
         if validated_data['password'] != validated_data['password2']:
             raise serializers.ValidationError({'password': 'Password1 and Password2 must mutch!!'})
         
+        user.is_staff = False
+        user.is_active = False
+        user.is_customer = True
+        user.is_superuser = False
+        user.is_company_admin = False      
         user.set_password(validated_data['password'])
         user.save()
         return user
@@ -49,14 +54,6 @@ class CustomerCreationSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def save(self, user):
-        user = user
-        user.is_staff = False
-        user.is_superuser = False
-        user.is_customer = True
-        user.is_company_admin = False
-        user.is_active = True
-        user.save()
-        
         customer = Customer.objects.create(user = user)
         customer.save()
         return customer

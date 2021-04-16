@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from django.db.models import Q
 
 from rest_framework.views import APIView
 from rest_framework import status, generics, authentication, permissions
@@ -23,22 +24,41 @@ from product.api.serializer import ProductFullSerializer, ProductInfoSerializer,
 from accounts.models import User, Customer, CompanyAdmin
 from accounts.api.serializers import CustomerCreationSerializer, CustomerDetailSerializer
 
-
+from collaborations.api.api_views import get_paginated_data, get_paginator_info
 #api/comp-by-main-category/
 class ApiCompanyByMainCategoryList(APIView):   
-    #  request.query_params['company_type'] should be = manufacturer or supplier, request[product_category = "Beverage", "Food", "Pharmaceuticals", "all"]
+    #  request[main_category = "Beverage", "Food", "Pharmaceuticals", "All"]
     def get(self,request): 
-        product_category = request.query_params['product_category']    
-        companies = []
-        # companies = Company.objects.filter(company_type= request.query_params['company_type']) #all companies with 
-        if product_category != "all": # if it is "Beverage" or "Food" or "Pharmaceuticals"
-            companies = Company.objects.filter(category__category_type = product_category  )
+        main_category = request.query_params['main_category']  
+        if ',' in main_category:# if multiple categories are selected
+            categories = request.query_params['main_category'].split(',')
+            companies =    Company.objects.filter(main_category__in = categories)
+        elif main_category != "All":
+            companies = Company.objects.filter(main_category = main_category)
         else:
             companies = Company.objects.all()
-            # companies = companies.filter(product_category__category_name__category_type = product_category)
-        return Response(
-            data = {'error':False, 'count' : companies.count(), 'companies': CompanyInfoSerializer(companies, many =True).data},
-            status= status.HTTP_200_OK)
+        paginated = get_paginated_data(request, companies)
+        subsectors = Category.objects.all()
+        return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'count' : companies.count(), 'companies': CompanyInfoSerializer(paginated, many =True).data, 
+                                'message':'Companies', 'message_am': 'ድርጅቶች', 'sub_sectors': CategorySerializer(subsectors, many = True).data})
+
+class ApiSearchCompany(APIView):
+    def get(self,request):
+        try:
+            companies = Company.objects.all()
+            if 'by_title' in request.query_params:
+                companies = Company.objects.filter(Q(name__icontains=request.query_params['by_title'])|Q(name_am__icontains=request.query_params['by_title'])|Q(company_product__name=request.query_params['by_title'])).distinct()
+            if 'by_subsector' in request.query_params:
+                companies = companies.filter(category__id=request.query_params['by_subsector'])
+            # companies = companies.exclude(main_category='FBPIDI') #if this were on top of the first if, it means it has to fetch data just to exclude it
+            paginated = get_paginated_data(request, companies)
+            subsectors = Category.objects.all()
+            count = companies.count()
+            return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'count' : count, 'companies': CompanyInfoSerializer(paginated, many =True).data, 
+                                    'message':f'{count} result found!', 'message_am': f'{count} ውጤት ተገኝቷል!', 'sub_sectors': CategorySerializer(subsectors, many = True).data})
+        except Exception as e:
+            print("Exception inside ApisearchCompany ",e)
+            return Response(data = {'error':True, 'message':str(e)})
 
 
 class ApiCompanyDetailView(APIView):
@@ -57,6 +77,7 @@ class ApiProject(APIView):
             return Response(data = {'error':False, 'projects': InvestmentProjectserializer(projects, many = True).data})
         except Exception as e:
             return Response(data ={'error':True, 'message':str(e)})
+
 
 class ApiProjectDetail(APIView):
     def get(self, request):
