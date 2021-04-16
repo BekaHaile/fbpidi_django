@@ -33,7 +33,6 @@ def sendApiEmailVerification(request,user):
     try:
         current_site = get_current_site(request)
         mail_subject = 'Email Verification Required.'
-        print("Current site = ", current_site, "\ndomain = ",current_site.domain, "\nuid = ", urlsafe_base64_encode(force_bytes(user.pk)),"\ntoken")
         message = get_template('email/api_acct_activation_email.html').render({
             'user': user,
             'domain': current_site.domain,
@@ -90,7 +89,6 @@ def sendEventParticipationNotification(participant):
     email.content_subtype = "html"  
     try:
         email.send()
-        print("Event notification Email sent to ", participant.patricipant_email)
         return True
     except Exception as e:
         print(f"Exception While Sending Email to {participant.patricipant_email} Due to the following exception \n =>", str(e))

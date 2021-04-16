@@ -31,11 +31,10 @@ class CustomerSignUpView(APIView):
                     errors = dict(user_serializer.errors)
                     if len(errors)== 1 and 'username' in errors.keys() and errors['username'][0] == "A user with that username already exists.":
                         user = UserProfile.objects.get(username = request.data['username'])
-                        if user.is_active: # if there exist an active user with same username
-                            return Response(data={'error':True, 'message':"A user with that username already exists."})
-                        else: #if there has been a user with same username, but forsome reason is not active currently
-                            print("last login ", user.last_login)
+                        if user.is_active == False and user.last_login == None: # if the user has tried to signup and failed and trying again
                             data = self.continue_registration(request)
+                        else: #if there has been a user with same username, but forsome reason is not active currently
+                            return Response(data={'error':True, 'message':"A user with that username already exists."})
                     else:
                         data = {'error': True, 'message' :dict(user_serializer.errors).values() }
                 return Response(data=data)
