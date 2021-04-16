@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 
@@ -49,7 +50,7 @@ class CategoryView(LoginRequiredMixin,ListView):
         return context
 
 # This class/view is created for displaying category and sub category detail and editing
-
+@method_decorator(decorators,name='dispatch')
 class CategoryDetail(LoginRequiredMixin,UpdateView):
     model = Category
     form_class = CategoryForm
@@ -63,6 +64,7 @@ class CategoryDetail(LoginRequiredMixin,UpdateView):
         return context
 
 # This class/view is created for creating new categories
+@method_decorator(decorators,name='dispatch')
 class CreateCategories(LoginRequiredMixin,CreateView):
     cat_list_am = { "Food":'ምግብ',"Beverage":'መጠጥ',"Pharmaceuticals":'መድሃኒት' }
     model = Category
@@ -81,7 +83,7 @@ class CreateCategories(LoginRequiredMixin,CreateView):
         context = super().get_context_data(**kwargs)
         context['category'] = True
         return context
-
+@method_decorator(decorators,name='dispatch')
 class SubCategoryView(LoginRequiredMixin,ListView):
     model = SubCategory
     template_name = "admin/product/categories.html"
@@ -100,6 +102,7 @@ class SubCategoryView(LoginRequiredMixin,ListView):
         return context
 
 # This class/view is created for displaying category and sub category detail and editing
+@method_decorator(decorators,name='dispatch')
 class SubCategoryDetail(LoginRequiredMixin,UpdateView):
     model = SubCategory
     form_class = SubCategoryForm
@@ -123,6 +126,7 @@ class SubCategoryDetail(LoginRequiredMixin,UpdateView):
         return redirect("admin:edit_subcategory",pk=self.kwargs['pk']) 
 
 # This class/view is created for creating new categories
+@method_decorator(decorators,name='dispatch')
 class CreateSubCategories(LoginRequiredMixin,CreateView):
     model = SubCategory
     form_class = SubCategoryForm
@@ -147,7 +151,7 @@ class CreateSubCategories(LoginRequiredMixin,CreateView):
 
 
 
-
+@method_decorator(decorators,name='dispatch')
 class BrandView(LoginRequiredMixin,ListView):
     model = Brand
     template_name = "admin/product/categories.html"
@@ -166,6 +170,7 @@ class BrandView(LoginRequiredMixin,ListView):
         return context
 
 # This class/view is created for displaying category and sub category detail and editing
+@method_decorator(decorators,name='dispatch')
 class BrandDetail(LoginRequiredMixin,UpdateView):
     model = Brand
     form_class = BrandForm
@@ -198,6 +203,7 @@ class BrandDetail(LoginRequiredMixin,UpdateView):
         return redirect("admin:edit_brand",pk=self.kwargs['pk'])
 
 # This class/view is created for creating new brands
+@method_decorator(decorators,name='dispatch')
 class CreateBrand(LoginRequiredMixin,CreateView):
     model = Brand
     form_class = BrandForm
@@ -232,7 +238,7 @@ class CreateBrand(LoginRequiredMixin,CreateView):
         return redirect("admin:create_brand")
 
 
-
+@method_decorator(decorators,name='dispatch')
 class AdminProductListView(LoginRequiredMixin,ListView):
     model = Product
     template_name = "admin/product/product_list.html"
@@ -245,6 +251,7 @@ class AdminProductListView(LoginRequiredMixin,ListView):
         elif self.request.user.is_company_staff:
             return Product.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
 
+@method_decorator(decorators,name='dispatch')
 class CreateProductView(LoginRequiredMixin,CreateView):
     model=Product
     form_class = ProductCreationForm
@@ -267,7 +274,7 @@ class CreateProductView(LoginRequiredMixin,CreateView):
         return redirect("admin:admin_products")
     
 
-
+@method_decorator(decorators,name='dispatch')
 class ProductUpdateView(LoginRequiredMixin,UpdateView):
     model = Product
     form_class = ProductCreationForm
@@ -292,6 +299,7 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
         messages.success(self.request,"Product Update Successfully!")
         return redirect("admin:admin_products")
 
+@method_decorator(decorators,name='dispatch')
 class AddProductImage(LoginRequiredMixin,CreateView):
     model=ProductImage
     form_class = ProductImageForm
@@ -304,7 +312,7 @@ class AddProductImage(LoginRequiredMixin,CreateView):
         messages.success(self.request,"Image Added Successfully!")
         return redirect("admin:product_detail",pk=product.id)
 
-
+@method_decorator(decorators,name='dispatch')
 class CreatePrice(LoginRequiredMixin,CreateView):
     model = ProductPrice
     form_class = ProductPriceForm
@@ -317,7 +325,7 @@ class CreatePrice(LoginRequiredMixin,CreateView):
         messages.success(self.request,"New Product Price Added Successfully!")
         return redirect("admin:product_detail",pk=product.id)
 
-
+@method_decorator(decorators,name='dispatch')
 class CreateDose(LoginRequiredMixin,CreateView):
     model = Dose
     form_class = DoseForm
@@ -329,7 +337,7 @@ class CreateDose(LoginRequiredMixin,CreateView):
         messages.success(self.request,"Product Dose Created Successfully!")
         return redirect("admin:settings")
 
- 
+@method_decorator(decorators,name='dispatch')
 class UpdateDose(LoginRequiredMixin,UpdateView):
     model = Dose
     form_class = DoseForm
@@ -348,6 +356,7 @@ class UpdateDose(LoginRequiredMixin,UpdateView):
         messages.success(self.request,"Product Dose Updated Successfully!")
         return redirect("admin:settings")
 
+@method_decorator(decorators,name='dispatch')
 class CreateDosageForm(LoginRequiredMixin,CreateView):
     model = DosageForm
     form_class = DosageFormForm
@@ -359,7 +368,7 @@ class CreateDosageForm(LoginRequiredMixin,CreateView):
         messages.success(self.request,"Product Dosage Form Created Successfully!")
         return redirect("admin:settings")
 
-
+@method_decorator(decorators,name='dispatch')
 class UpdateDosageForm(LoginRequiredMixin,UpdateView):
     model = DosageForm
     form_class = DosageFormForm
@@ -378,7 +387,7 @@ class UpdateDosageForm(LoginRequiredMixin,UpdateView):
         messages.success(self.request,"Product Dosage Form Updated Successfully!")
         return redirect("admin:settings")
 
-
+@method_decorator(decorators,name='dispatch')
 class ListProductionCapacity(LoginRequiredMixin,ListView):
     model = ProductionCapacity
     template_name = "admin/product/product_data_list.html"
@@ -395,6 +404,7 @@ class ListProductionCapacity(LoginRequiredMixin,ListView):
         context['flag'] = "production_capacity"
         return context
 
+@method_decorator(decorators,name='dispatch')
 class CreateProductionCapacity(LoginRequiredMixin,CreateView):
     model=ProductionCapacity
     form_class=ProductionCapacityForm
@@ -434,7 +444,7 @@ class CreateProductionCapacity(LoginRequiredMixin,CreateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:create_production_capacity")
 
-
+@method_decorator(decorators,name='dispatch')
 class UpdateProductionCapacity(LoginRequiredMixin,UpdateView):
     model=ProductionCapacity
     form_class = ProductionCapacityForm
@@ -467,7 +477,7 @@ class UpdateProductionCapacity(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_production_capacity",pk=self.kwargs['pk'])
 
-
+@method_decorator(decorators,name='dispatch')
 class ListSalesPerformance(LoginRequiredMixin,ListView):
     model = ProductionAndSalesPerformance
     template_name = "admin/product/product_data_list.html"
@@ -483,6 +493,7 @@ class ListSalesPerformance(LoginRequiredMixin,ListView):
         context['flag'] = "sales_performance"
         return context
 
+@method_decorator(decorators,name='dispatch')
 class CreateSalesPerformance(LoginRequiredMixin,CreateView):
     model=ProductionAndSalesPerformance
     form_class=SalesPerformanceForm
@@ -525,7 +536,7 @@ class CreateSalesPerformance(LoginRequiredMixin,CreateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:create_sales_performance")
 
-
+@method_decorator(decorators,name='dispatch')
 class UpdateSalesPerformance(LoginRequiredMixin,UpdateView):
     model=ProductionAndSalesPerformance
     form_class = SalesPerformanceForm
@@ -562,7 +573,7 @@ class UpdateSalesPerformance(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_sales_performance",pk=self.kwargs['pk'])
 
-
+@method_decorator(decorators,name='dispatch')
 class ListPackaging(LoginRequiredMixin,ListView):
     model = ProductPackaging
     template_name = "admin/product/product_data_list.html"
@@ -578,6 +589,7 @@ class ListPackaging(LoginRequiredMixin,ListView):
         context['flag'] = "packaging"
         return context
 
+@method_decorator(decorators,name='dispatch')
 class CreatePackaging(LoginRequiredMixin,CreateView):
     model=ProductPackaging
     form_class=ProductPackagingForm
@@ -611,6 +623,7 @@ class CreatePackaging(LoginRequiredMixin,CreateView):
         return redirect('admin:create_packaging')
 
 
+@method_decorator(decorators,name='dispatch')
 class UpdatePackaging(LoginRequiredMixin,UpdateView):
     model=ProductPackaging
     form_class = ProductPackagingForm
@@ -643,6 +656,7 @@ class UpdatePackaging(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_packaging",pk=self.kwargs['pk'])
 
+@method_decorator(decorators,name='dispatch')
 class ListAnualInputNeed(LoginRequiredMixin,ListView):
     model = AnnualInputNeed
     template_name = "admin/product/product_data_list.html"
@@ -658,6 +672,7 @@ class ListAnualInputNeed(LoginRequiredMixin,ListView):
         context['flag'] = "anual_input_need"
         return context
 
+@method_decorator(decorators,name='dispatch')
 class CreateAnualInputNeed(LoginRequiredMixin,CreateView):
     model=AnnualInputNeed
     form_class=AnualInputNeedForm
@@ -695,7 +710,7 @@ class CreateAnualInputNeed(LoginRequiredMixin,CreateView):
             messages.success(self.request,"Anual Input Need Created")
             return redirect("admin:anual_input_need")
 
-
+@method_decorator(decorators,name='dispatch')
 class UpdateAnualInputNeed(LoginRequiredMixin,UpdateView):
     model=AnnualInputNeed
     form_class = AnualInputNeedForm
@@ -733,7 +748,7 @@ class UpdateAnualInputNeed(LoginRequiredMixin,UpdateView):
         return redirect("admin:update_anual_inp_need",pk=self.kwargs['id'])
 
 
-
+@method_decorator(decorators,name='dispatch')
 class ListInputDemandSupply(LoginRequiredMixin,ListView):
     model = InputDemandSupply
     template_name = "admin/product/product_data_list.html"
@@ -749,6 +764,7 @@ class ListInputDemandSupply(LoginRequiredMixin,ListView):
         context['flag'] = "demand_supply"
         return context
 
+@method_decorator(decorators,name='dispatch')
 class CreateInputDemandSupply(LoginRequiredMixin,CreateView):
     model=InputDemandSupply
     form_class=InputDemandSupplyForm
@@ -791,7 +807,7 @@ class CreateInputDemandSupply(LoginRequiredMixin,CreateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:create_demand_supply")
 
-
+@method_decorator(decorators,name='dispatch')
 class UpdateInputDemandSupply(LoginRequiredMixin,UpdateView):
     model=InputDemandSupply
     form_class = InputDemandSupplyForm
@@ -831,7 +847,7 @@ class UpdateInputDemandSupply(LoginRequiredMixin,UpdateView):
 
 
 
-# 
+@method_decorator(decorators,name='dispatch') 
 class AddToCartView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         product = get_object_or_404(Product,id=kwargs['id'])
@@ -1094,6 +1110,7 @@ class ProductDetailView(DetailView):
         context['reviews'] = Review.objects.filter(product=Product.objects.get(id=self.kwargs['pk']))
         context['form'] = ReviewForm
         return context
+
 
 class CreateReview(CreateView):
     model=Review

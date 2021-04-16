@@ -7,6 +7,9 @@ from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse,JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+
 from django.contrib import messages
 from django.views.generic import CreateView,UpdateView,ListView,View,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,9 +21,13 @@ from company.models import *
 from accounts.models import CompanyAdmin,UserProfile
 from product.models import Order,OrderProduct,Product
 
+from admin_site.decorators import company_created,company_is_active
+
+
 from company.forms import *
 
-
+decorators = [never_cache, company_created(),company_is_active()]
+@method_decorator(decorators,name='dispatch')
 class ListInvestmentProject(LoginRequiredMixin,ListView):
     model = InvestmentProject
     template_name = "admin/company/project_list.html"
@@ -33,7 +40,7 @@ class ListInvestmentProject(LoginRequiredMixin,ListView):
         elif self.request.user.is_company_staff:
             return InvestmentProject.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
 
-
+@method_decorator(decorators,name='dispatch')
 class CreateMyInvestmentProject(LoginRequiredMixin,CreateView):
     model = InvestmentProject
     form_class = InvestmentProjectForm
@@ -60,7 +67,7 @@ class CreateMyInvestmentProject(LoginRequiredMixin,CreateView):
         return redirect("admin:create_project_detail",pk=project.id)
 
 
-
+@method_decorator(decorators,name='dispatch')
 class CreateInvestmentProject(LoginRequiredMixin,CreateView):
     model = InvestmentProject
     form_class = InvestmentProjectForm_ForSuperAdmin
@@ -73,6 +80,8 @@ class CreateInvestmentProject(LoginRequiredMixin,CreateView):
         messages.success(self.request,'Investment Project Created,Please Complete The Following!')
         return redirect("admin:create_project_detail_admin",pk=project.id)
 
+
+@method_decorator(decorators,name='dispatch')
 class CreateInvestmentProjectDetail(LoginRequiredMixin,UpdateView):
     model=InvestmentProject
     form_class=InvestmentProjectDetailForm
@@ -92,6 +101,7 @@ class CreateInvestmentProjectDetail(LoginRequiredMixin,UpdateView):
         messages.success(self.request,"Project Detail Added Succesfully")
         return redirect("admin:project_list")
 
+@method_decorator(decorators,name='dispatch')
 class CreateInvestmentProjectDetail_Admin(LoginRequiredMixin,UpdateView):
     model=InvestmentProject
     form_class=InvestmentProjectDetailForm_Admin
@@ -116,6 +126,7 @@ class CreateInvestmentProjectDetail_Admin(LoginRequiredMixin,UpdateView):
         messages.success(self.request,"Project Detail Added Succesfully")
         return redirect("admin:project_list")
 
+@method_decorator(decorators,name='dispatch')
 class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
     model=InvestmentProject
     form_class = ProjectUpdateForm
@@ -170,6 +181,7 @@ class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_project",pk=self.kwargs['pk'])
 
+@method_decorator(decorators,name='dispatch')
 class CreateLandUsage(LoginRequiredMixin,CreateView):
     model=LandUsage
     form_class = LandUsageForm
@@ -180,6 +192,8 @@ class CreateLandUsage(LoginRequiredMixin,CreateView):
         lu.save()
         return redirect("admin:update_project",pk=self.kwargs['project'])
 
+
+@method_decorator(decorators,name='dispatch')
 class UpdateLandUsage(LoginRequiredMixin,UpdateView):
     model=LandUsage
     form_class = LandUsageForm
@@ -188,6 +202,7 @@ class UpdateLandUsage(LoginRequiredMixin,UpdateView):
         form.save()
         return redirect("admin:update_project",pk=LandUsage.objects.get(id=self.kwargs['pk']).project.id)
 
+@method_decorator(decorators,name='dispatch')
 class CreateProductQty(LoginRequiredMixin,CreateView):
     model=ProjectProductQuantity
     form_class = ProjectProductForm
@@ -198,7 +213,7 @@ class CreateProductQty(LoginRequiredMixin,CreateView):
         pp.save()
         return redirect("admin:update_project",pk=self.kwargs['project'])
 
-
+@method_decorator(decorators,name='dispatch')
 class UpdateProductQty(LoginRequiredMixin,UpdateView):
     model=ProjectProductQuantity
     form_class = ProjectProductForm
@@ -207,6 +222,8 @@ class UpdateProductQty(LoginRequiredMixin,UpdateView):
         form.save()
         return redirect("admin:update_project",pk=ProjectProductQuantity.objects.get(id=self.kwargs['pk']).project.id)
 
+
+@method_decorator(decorators,name='dispatch')
 class CreateProjectState(LoginRequiredMixin,CreateView):
     model=ProjectState
     form_class = ProjectStatusForm
@@ -217,7 +234,7 @@ class CreateProjectState(LoginRequiredMixin,CreateView):
         ps.save()
         return redirect("admin:update_project",pk=self.kwargs['project'])
 
-
+@method_decorator(decorators,name='dispatch')
 class UpdateProjectState(LoginRequiredMixin,UpdateView):
     model=ProjectState
     form_class = ProjectStatusForm
@@ -231,6 +248,8 @@ class UpdateProjectState(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_project")
 
+
+@method_decorator(decorators,name='dispatch')
 class CreateInvestmentCapitalForProject(LoginRequiredMixin,CreateView):
     model = InvestmentCapital
     form_class = InvestmentCapitalForm
@@ -250,6 +269,7 @@ class CreateInvestmentCapitalForProject(LoginRequiredMixin,CreateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_project",pk=self.kwargs['project'])
 
+@method_decorator(decorators,name='dispatch')
 class UpdateInvestmentCapitalForProject(LoginRequiredMixin,UpdateView):
     model = InvestmentCapital
     form_class = InvestmentCapitalForm
@@ -263,7 +283,7 @@ class UpdateInvestmentCapitalForProject(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_project",pk=InvestmentCapital.objects.get(id=self.kwargs['pk']).project.id)
 
-
+@method_decorator(decorators,name='dispatch')
 class CreateLandAcqsn(LoginRequiredMixin,CreateView):
     model=LandAquisition
     form_class = LandAquisitionForm
@@ -279,6 +299,7 @@ class CreateLandAcqsn(LoginRequiredMixin,CreateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_project",pk=self.kwargs['project'])
 
+@method_decorator(decorators,name='dispatch')
 class UpdateLandAcqsn(LoginRequiredMixin,UpdateView):
     model=LandAquisition
     form_class = LandAquisitionForm

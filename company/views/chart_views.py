@@ -1,11 +1,16 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Sum,Count
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 
 from admin_site.models import CompanyDropdownsMaster
+from admin_site.decorators import company_created,company_is_active
+
 from company.models import Company
+decorators = [never_cache, company_created(),company_is_active()]
 
-
+# @method_decorator(decorators,name='dispatch')
 def certification_chart(request):
     labels=[]
     data=[]

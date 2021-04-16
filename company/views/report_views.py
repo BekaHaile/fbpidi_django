@@ -12,13 +12,17 @@ from django.views.generic import CreateView,UpdateView,ListView,View,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.core import serializers
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.db.models import Sum,Count,OuterRef,Exists,Q,F,Avg
 
 from company.models import *
 from product.models import *
 from accounts.models import CompanyAdmin,UserProfile
+from admin_site.decorators import company_created,company_is_active
 
 from company.forms import *
+decorators = [never_cache, company_created(),company_is_active()]
 
 def get_current_year():
     current_year = 0
@@ -32,14 +36,14 @@ def get_current_year():
         current_year = gc_year - 8
     return current_year
 
-
+@method_decorator(decorators,name='dispatch')
 class ReportPage(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         return render(self.request,"admin/report/report.html",
         {'companies':Company.objects.all().exclude(main_category="FBPIDI")})
 
  
-
+@method_decorator(decorators,name='dispatch')
 class CapitalUtilizationReportSector(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         # capital utilization = (Sum(total_prodn_thisyrs)/Sum(actual_produn_capacity*260))*100
@@ -96,6 +100,8 @@ class CapitalUtilizationReportSector(LoginRequiredMixin,View):
             context['flag'] = "capital_utilization"
             return render(self.request,"admin/report/report_page.html",context)
 
+
+@method_decorator(decorators,name='dispatch')
 class ChangeInCapitalUtilization(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         # capital utilization = (Sum(total_prodn_3-total_prodn_1yrs)/Sum(actual_produn_capacity*260))*100
@@ -170,6 +176,7 @@ class ChangeInCapitalUtilization(LoginRequiredMixin,View):
             context['flag'] = "change_capital_utilization"
             return render(self.request,"admin/report/report_page.html",context)
 
+@method_decorator(decorators,name='dispatch')
 class AverageExtractionRate(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         pdata = None
@@ -195,7 +202,7 @@ class AverageExtractionRate(LoginRequiredMixin,View):
         context['products'] = SubCategory.objects.all()
         return render(self.request,"admin/report/report_page.html",context)
 
-
+@method_decorator(decorators,name='dispatch')
 class GrossValueOfProduction(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         # Gross value of production = (Sum(total_prodn_thisyrs)/Sum(actual_produn_capacity*260))*100
@@ -260,7 +267,7 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
             
             return render(self.request,"admin/report/report_page.html",context)
 
-
+@method_decorator(decorators,name='dispatch')
 class AverageUnitPrice(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         products = None
@@ -295,7 +302,7 @@ class AverageUnitPrice(LoginRequiredMixin,View):
         return render(self.request,"admin/report/report_page.html",context)
 
 
-
+@method_decorator(decorators,name='dispatch')
 class InvestmentCapitalReportView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         template_name="admin/report/report_page.html"
@@ -336,7 +343,7 @@ class InvestmentCapitalReportView(LoginRequiredMixin,View):
         context['flag'] = 'inv_cap'
         return render(self.request,template_name,context)
 
-
+@method_decorator(decorators,name='dispatch')
 class ProductionCapacityView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         pdata = None
@@ -355,6 +362,7 @@ class ProductionCapacityView(LoginRequiredMixin,View):
         context['flag'] = 'production_cap'
         return render(self.request,"admin/report/report_page.html",context)
   
+@method_decorator(decorators,name='dispatch')  
 class InputAvailablity(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         products = None
@@ -391,6 +399,7 @@ class InputAvailablity(LoginRequiredMixin,View):
         context['products'] = SubCategory.objects.all()
         return render(self.request,"admin/report/report_page.html",context)
 
+@method_decorator(decorators,name='dispatch')
 class ShareLocalInputs(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         products = None
@@ -416,7 +425,7 @@ class ShareLocalInputs(LoginRequiredMixin,View):
         context['products'] = SubCategory.objects.all()
         return render(self.request,"admin/report/report_page.html",context)
 
-
+@method_decorator(decorators,name='dispatch')
 class CompanyListForReport(LoginRequiredMixin,ListView):
     model=Company
     template_name = "admin/report/companies_for_report.html"
@@ -428,6 +437,8 @@ class CompanyListForReport(LoginRequiredMixin,ListView):
         context = super().get_context_data(**kwargs)
         return context
 
+
+@method_decorator(decorators,name='dispatch')
 class FilterCompanyByMainCategory(LoginRequiredMixin,ListView):
     model = Company
     template_name = "admin/report/companies_for_report.html"
@@ -448,7 +459,7 @@ class FilterCompanyByMainCategory(LoginRequiredMixin,ListView):
         context['title'] = "Companies By Sector"
         return context
 
-
+@method_decorator(decorators,name='dispatch')
 class FilterCompanyByEstablishedYear(LoginRequiredMixin,ListView):
     model = Company
     template_name = "admin/report/companies_for_report.html"
@@ -471,6 +482,7 @@ class FilterCompanyByEstablishedYear(LoginRequiredMixin,ListView):
         context['title'] = "Companies By Established Year"
         return context
 
+@method_decorator(decorators,name='dispatch')
 class FilterCompanyCategory(LoginRequiredMixin,ListView):
     model = Company
     template_name = "admin/report/companies_for_report.html"
@@ -498,6 +510,7 @@ class FilterCompanyCategory(LoginRequiredMixin,ListView):
         context['title'] = "Companies By Sector"
         return context
 
+@method_decorator(decorators,name='dispatch')
 class OwnershipReport(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         ownership_data = []
@@ -518,7 +531,7 @@ class OwnershipReport(LoginRequiredMixin,View):
         context['flag'] = 'ownership_data'
         return render(self.request,template_name,context)
 
-
+@method_decorator(decorators,name='dispatch')
 class FilterByTradeLicense(LoginRequiredMixin,ListView):
     model = Company
     template_name = "admin/report/companies_for_report.html"
@@ -532,6 +545,7 @@ class FilterByTradeLicense(LoginRequiredMixin,ListView):
         return context
 
 
+@method_decorator(decorators,name='dispatch')
 class FilterByWorkingHour(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         working_hour_data = []
@@ -548,7 +562,7 @@ class FilterByWorkingHour(LoginRequiredMixin,View):
         context['flag'] = 'working_hour_data'
         return render(self.request,template_name,context)
          
-
+@method_decorator(decorators,name='dispatch')
 class NumberofIndustriesByOption(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = {}
@@ -600,7 +614,7 @@ class NumberofIndustriesByOption(LoginRequiredMixin,View):
         return render(self.request,template_name,context)
 
 
-
+@method_decorator(decorators,name='dispatch')
 class NumberOfEmployees(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         total_perm_emp = 0
@@ -656,6 +670,7 @@ class NumberOfEmployees(LoginRequiredMixin,View):
             print(context)
             return render(self.request,'admin/report/report_page.html',context)
 
+@method_decorator(decorators,name='dispatch')
 class NumberOfEmployeesFemale(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         total_perm_emp = 0
@@ -701,7 +716,7 @@ class NumberOfEmployeesFemale(LoginRequiredMixin,View):
             context['flag'] = "num_employees_female"
             return render(self.request,'admin/report/report_page.html',context)
 
-
+@method_decorator(decorators,name='dispatch')
 class NumberOfEmployeesForeign(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         total_for_emp_m=0
@@ -744,6 +759,7 @@ class NumberOfEmployeesForeign(LoginRequiredMixin,View):
             context['flag'] = "num_employees_foreign"
             return render(self.request,'admin/report/report_page.html',context)
 
+@method_decorator(decorators,name='dispatch')
 class NumberOfJobsCreatedBySubSector(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         job_created_data=[]
@@ -795,6 +811,8 @@ class NumberOfJobsCreatedBySubSector(LoginRequiredMixin,View):
             context['flag'] = "num_jobs_created"
             return render(self.request,'admin/report/report_page.html',context)
 
+
+@method_decorator(decorators,name='dispatch')
 class EduLevelofEmployees(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         education_status_data = []
@@ -813,7 +831,7 @@ class EduLevelofEmployees(LoginRequiredMixin,View):
         return render(self.request,template_name,context)
         template_name = "admin/report/companies_for_report.html"
 
-
+@method_decorator(decorators,name='dispatch')
 class NumWomenInPosition(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         women_in_pson_level = []
@@ -837,7 +855,7 @@ class NumWomenInPosition(LoginRequiredMixin,View):
         return render(self.request,template_name,context)
 
 
-
+@method_decorator(decorators,name='dispatch')
 class CompanyCertificationData(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         certification_data = []
@@ -855,6 +873,7 @@ class CompanyCertificationData(LoginRequiredMixin,View):
         return render(self.request,template_name,context)
         template_name = "admin/report/companies_for_report.html"
 
+@method_decorator(decorators,name='dispatch')
 class CompanyByManagementTools(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         management_tool_data = []
@@ -871,6 +890,7 @@ class CompanyByManagementTools(LoginRequiredMixin,View):
         context['flag'] = 'management_tool_data'
         return render(self.request,template_name,context)
 
+@method_decorator(decorators,name='dispatch')
 class EnergySourceData(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         energy_source_data = []
@@ -888,6 +908,8 @@ class EnergySourceData(LoginRequiredMixin,View):
         context['flag'] = 'energy_source_data'
         return render(self.request,template_name,context)
 
+
+@method_decorator(decorators,name='dispatch')
 class CompaniesWithCertificate(LoginRequiredMixin,ListView):
     model = Company
     template_name = "admin/report/companies_for_report.html"
@@ -900,6 +922,8 @@ class CompaniesWithCertificate(LoginRequiredMixin,ListView):
         context['title'] = "Companies Having Valid Certificate of Competency"
         return context
 
+
+@method_decorator(decorators,name='dispatch')
 class CompaniesByTarget(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         template_name = 'admin/report/report_page.html'
@@ -928,7 +952,7 @@ class CompaniesByTarget(LoginRequiredMixin,View):
         context['flag'] = "target_data"
         return render(self.request,template_name,context)
 
-
+@method_decorator(decorators,name='dispatch')
 class CompaniesByDestination(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         template_name = "admin/report/report_page.html"
@@ -942,6 +966,8 @@ class CompaniesByDestination(LoginRequiredMixin,View):
         context['flag'] = "destination_data"
         return render(self.request,template_name,context)
 
+
+@method_decorator(decorators,name='dispatch')
 class IndustriesByRegionSector(LoginRequiredMixin,ListView):
     template_name = "admin/report/companies_for_report.html"
     model = Company
@@ -988,7 +1014,7 @@ class IndustriesByRegionSector(LoginRequiredMixin,ListView):
         
         
 
-
+@method_decorator(decorators,name='dispatch')
 class ExportCSV(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
