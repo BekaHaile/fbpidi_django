@@ -315,13 +315,13 @@ class CreatePowerConsumption(LoginRequiredMixin,CreateView):
     form_class = PowerConsumptionForm
 
     def get_form_kwargs(self,*args,**kwargs):
-        kwargs = super(UpdateJobsCreated,self).get_form_kwargs()
+        kwargs = super(CreatePowerConsumption,self).get_form_kwargs()
         kwargs.update({'company': Company.objects.get(id=self.kwargs['company'])})
         return kwargs
 
     def form_valid(self,form):
         try:
-            if PowerConsumption.objects.filter(day=form.cleaned_data.get("day"),company=Company.objects.get(id=self.kwargs['company'])).exists():
+            if PowerConsumption.objects.filter(year_pc=form.cleaned_data.get("year_pc"),company=Company.objects.get(id=self.kwargs['company'])).exists():
                 return JsonResponse({'error': True, 'message': 'Data For this Date Already Exists'})
             else:
                 power_consm = form.save(commit=False)
@@ -332,6 +332,7 @@ class CreatePowerConsumption(LoginRequiredMixin,CreateView):
                 return JsonResponse({'error':True,'message':"Data For this Day Already Exists"})
         except Company.DoesNotExist:
             return JsonResponse({'error': True, 'message': "Company Does Not Exist"})
+        
             
     def form_invalid(self,form):
         return JsonResponse({'error': True, 'message': "Power consumption with this Day already exists."}) 
