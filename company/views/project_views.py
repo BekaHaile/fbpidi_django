@@ -83,6 +83,20 @@ class CreateInvestmentProjectDetail(LoginRequiredMixin,UpdateView):
         kwargs.update({'sector': InvestmentProject.objects.get(id=self.kwargs['pk']).sector})
         return kwargs
     
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['inv_capital_form'] = InvestmentCapitalForm
+        context['employees_form'] = EmployeesFormProject
+        context['job_created_form'] = JobCreatedFormProject
+        context['edication_form'] = EducationStatusFormProject
+        context['land_aquisition'] = LandAquisitionForm
+        context['usage_form'] = LandUsageForm
+        context['pstate_form'] = ProjectStatusForm
+        context['product_form'] = ProjectProductForm
+        context['address_form'] = CompanyAddressForm
+        return context
+
+    
     def form_valid(self,form):
         project=form.save(commit=False)
         project.product_type.set(form.cleaned_data.get('product_type'))
@@ -91,6 +105,10 @@ class CreateInvestmentProjectDetail(LoginRequiredMixin,UpdateView):
         project.save()
         messages.success(self.request,"Project Detail Added Succesfully")
         return redirect("admin:project_list")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_project_detail",pk=self.kwargs['pk'])
 
 class CreateInvestmentProjectDetail_Admin(LoginRequiredMixin,UpdateView):
     model=InvestmentProject
@@ -107,6 +125,19 @@ class CreateInvestmentProjectDetail_Admin(LoginRequiredMixin,UpdateView):
                 ) })
         return kwargs
     
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['inv_capital_form'] = InvestmentCapitalForm
+        context['employees_form'] = EmployeesFormProject
+        context['job_created_form'] = JobCreatedFormProject
+        context['edication_form'] = EducationStatusFormProject
+        context['land_aquisition'] = LandAquisitionForm
+        context['usage_form'] = LandUsageForm
+        context['pstate_form'] = ProjectStatusForm
+        context['product_form'] = ProjectProductForm
+        context['address_form'] = CompanyAddressForm
+        return context
+    
     def form_valid(self,form):
         project=form.save(commit=False)
         project.product_type.set(form.cleaned_data.get('product_type'))
@@ -115,6 +146,10 @@ class CreateInvestmentProjectDetail_Admin(LoginRequiredMixin,UpdateView):
         project.save()
         messages.success(self.request,"Project Detail Added Succesfully")
         return redirect("admin:project_list")
+
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:create_project_detail_admin",pk=self.kwargs['pk'])
 
 class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
     model=InvestmentProject
@@ -131,11 +166,15 @@ class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
+        context['inv_capital_form'] = InvestmentCapitalForm
+        context['employees_form'] = EmployeesFormProject
+        context['job_created_form'] = JobCreatedFormProject
+        context['edication_form'] = EducationStatusFormProject
+        context['land_aquisition'] = LandAquisitionForm
         context['usage_form'] = LandUsageForm
         context['pstate_form'] = ProjectStatusForm
         context['product_form'] = ProjectProductForm
-        context['inv_capital_form'] = InvestmentCapitalForm
-        context['land_aquisition'] = LandAquisitionForm
+        context['address_form'] = CompanyAddressForm
         try:
             context['land_usage_data'] = LandUsage.objects.get(project=self.kwargs['pk'])
         except LandUsage.DoesNotExist:
@@ -147,7 +186,7 @@ class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
             context['land_aqsn_data']=None
         
         try:
-            context['inv_cap_data'] = InvestmentCapital.objects.get(project=self.kwargs['pk'])
+            context['inv_cap_data'] = InvestmentCapital.objects.filter(project=self.kwargs['pk']).latest('timestamp')
         except InvestmentCapital.DoesNotExist:
             context['inv_cap_data']=None
         
@@ -175,10 +214,15 @@ class CreateLandUsage(LoginRequiredMixin,CreateView):
     form_class = LandUsageForm
 
     def form_valid(self,form):
-        lu = form.save(commit=False)
-        lu.project = InvestmentProject.objects.get(id=self.kwargs['project'])
-        lu.save()
-        return redirect("admin:update_project",pk=self.kwargs['project'])
+        try:
+            lu = form.save(commit=False)
+            lu.project = InvestmentProject.objects.get(id=self.kwargs['project'])
+            lu.save()
+            return JsonResponse({'error':False,'message':'Created Successfully!!!'})
+        except InvestmentProject.DoesNotExist:
+            return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
+        except IntegrityError as e:
+            return JsonResponse({'error':True,'message':'Data Already Exists'})
 
 class UpdateLandUsage(LoginRequiredMixin,UpdateView):
     model=LandUsage
@@ -193,35 +237,53 @@ class CreateProductQty(LoginRequiredMixin,CreateView):
     form_class = ProjectProductForm
 
     def form_valid(self,form):
-        pp = form.save(commit=False)
-        pp.project = InvestmentProject.objects.get(id=self.kwargs['project'])
-        pp.save()
-        return redirect("admin:update_project",pk=self.kwargs['project'])
-
+        try:
+            pp = form.save(commit=False)
+            pp.project = InvestmentProject.objects.get(id=self.kwargs['project'])
+            pp.save()
+            return JsonResponse({'error':False,'message':'Created Successfully!!!'})
+        except InvestmentProject.DoesNotExist:
+            return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
 
 class UpdateProductQty(LoginRequiredMixin,UpdateView):
     model=ProjectProductQuantity
     form_class = ProjectProductForm
+    template_name = "admin/company/project_data_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['flag'] = "product_quantity" 
+        return context
 
     def form_valid(self,form):
         form.save()
         return redirect("admin:update_project",pk=ProjectProductQuantity.objects.get(id=self.kwargs['pk']).project.id)
+    
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:update_product_qty",pk=self.kwargs['pk'])
 
 class CreateProjectState(LoginRequiredMixin,CreateView):
     model=ProjectState
     form_class = ProjectStatusForm
 
     def form_valid(self,form):
-        ps = form.save(commit=False)
-        ps.project = InvestmentProject.objects.get(id=self.kwargs['project'])
-        ps.save()
-        return redirect("admin:update_project",pk=self.kwargs['project'])
+        try:
+            ps = form.save(commit=False)
+            ps.project = InvestmentProject.objects.get(id=self.kwargs['project'])
+            ps.save()
+            return JsonResponse({'error':False,'message':'Project Status Created Successfully!!!'})
+        except InvestmentProject.DoesNotExist:
+            return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
+        except IntegrityError as e:
+            return JsonResponse({'error':True,'message':'Data Already Exists'})
+
 
 
 class UpdateProjectState(LoginRequiredMixin,UpdateView):
     model=ProjectState
     form_class = ProjectStatusForm
-
+    template_name = "admin/company/project_data_update.html"
 
     def form_valid(self,form):
         form.save()
@@ -241,10 +303,9 @@ class CreateInvestmentCapitalForProject(LoginRequiredMixin,CreateView):
             project_invcap = form.save(commit=False)
             project_invcap.project = InvestmentProject.objects.get(id=self.kwargs['project'])
             project_invcap.save()
-            messages.success(self.request,"Investment Capital Added")
-            return redirect("admin:update_project",pk=self.kwargs['project'])
+            return JsonResponse({'error':False,'message':'Investment Capital Data Added'})
         except InvestmentProject.DoesNotExist:
-            return redirect("admin:error_404")
+            return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
             
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
@@ -253,6 +314,7 @@ class CreateInvestmentCapitalForProject(LoginRequiredMixin,CreateView):
 class UpdateInvestmentCapitalForProject(LoginRequiredMixin,UpdateView):
     model = InvestmentCapital
     form_class = InvestmentCapitalForm
+    template_name = "admin/company/project_data_update.html"
 
     def form_valid(self,form):
         form.save()
@@ -269,15 +331,18 @@ class CreateLandAcqsn(LoginRequiredMixin,CreateView):
     form_class = LandAquisitionForm
 
     def form_valid(self,form):
-        la = form.save(commit=False)
-        la.project = InvestmentProject.objects.get(id=self.kwargs['project'])
-        la.save()
-        messages.success(self.request,"Land Acquisition data added")
-        return redirect("admin:update_project",pk=self.kwargs['project'])
+        try:
+            la = form.save(commit=False)
+            la.project = InvestmentProject.objects.get(id=self.kwargs['project'])
+            la.save()
+            return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
+        except InvestmentProject.DoesNotExist:
+            return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
+        except IntegrityError as e:
+            return JsonResponse({'error':True,'message':'Land Acquisition Data already Exists'})
 
     def form_invalid(self,form):
-        messages.warning(self.request,form.errors)
-        return redirect("admin:update_project",pk=self.kwargs['project'])
+        return JsonResponse({'error':True,'message':form.errors})
 
 class UpdateLandAcqsn(LoginRequiredMixin,UpdateView):
     model=LandAquisition
@@ -291,3 +356,162 @@ class UpdateLandAcqsn(LoginRequiredMixin,UpdateView):
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_project",pk=LandAquisition.objects.get(id=self.kwargs['pk']).project.id)
+
+
+class CreateEmployeesProject(LoginRequiredMixin,View):
+    def post(self,*args,**kwargs):
+        form = EmployeesFormProject(self.request.POST)
+        if form.is_valid():
+            try:
+                if Employees.objects.filter(employment_type=form.cleaned_data.get('employment_type'), projct=InvestmentProject.objects.get(id=self.kwargs['project'])).exists():
+                    return JsonResponse({'error': True, 'message': 'Data For this Category Already Exists'})
+                else:
+                    employee = form.save(commit=False)
+                    employee.projct = InvestmentProject.objects.get(id=self.kwargs['project'])
+                    employee.save()
+                    return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
+            except IntegrityError as e:
+                return JsonResponse({'error':True,'message':"Employee Data For this Category Already Exists"})
+            except Company.DoesNotExist:
+                return JsonResponse({'error':True,'message':'Project Does Not Exist'})
+        else:
+            return JsonResponse({'error': True, 'message': form.errors})  
+
+class CreateJobsCreatedProject(LoginRequiredMixin,View):
+    def post(self,*args,**kwargs):
+        form = JobCreatedFormProject(self.request.POST)
+        if form.is_valid():
+            try:
+                if JobOpportunities.objects.filter(job_type=form.cleaned_data.get('job_type'),project=InvestmentProject.objects.get(id=self.kwargs['project'])).exists():
+                    return JsonResponse({'error': True, 'message': 'Data For this Category Already Exists'})
+                else:
+                    jobs = form.save(commit=False)
+                    jobs.project = InvestmentProject.objects.get(id=self.kwargs['project'])
+                    jobs.save()
+                    return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
+            except IntegrityError as e:
+                return JsonResponse({'error':True,'message':"Data For this Category Already Exists"})
+            except Company.DoesNotExist:
+                return JsonResponse({'error':True,'message':'Project Does Not Exist'})
+        else:
+            return JsonResponse({'error': True, 'message': form.errors})     
+
+class CreateEducationStatusProject(LoginRequiredMixin,View):
+    def post(self,*args,**kwargs):
+        form = EducationStatusFormProject(self.request.POST)
+        if form.is_valid():
+            try:
+                if EducationalStatus.objects.filter(education_type=form.cleaned_data.get('education_type'),project=InvestmentProject.objects.get(id=self.kwargs['project'])).exists():
+                    return JsonResponse({'error': True, 'message': 'Data For this Education Type Already Exists'})
+                else:
+                    education = form.save(commit=False)
+                    education.project = InvestmentProject.objects.get(id=self.kwargs['project'])
+                    education.save()
+                    return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
+            except IntegrityError as e:
+                return JsonResponse({'error':True,'message':"Data For this Category Already Exists"})
+            except Company.DoesNotExist:
+                return JsonResponse({'error':True,'message':'Project Does Not Exist'})
+        else:
+            return JsonResponse({'error': True, 'message': form.errors}) 
+
+class UpdateEmployeesProject(LoginRequiredMixin,UpdateView):
+    model = Employees
+    form_class = EmployeesFormProject
+    template_name = "admin/company/project_data_update.html"
+
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['flag'] = "employeees" 
+        return context
+    
+    def form_valid(self,form):
+        data = form.save()
+        messages.success(self.request,"Employees Data Updated")
+        return redirect("admin:update_project",pk=data.project.id)
+
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:update_project",pk=Employees.objects.get(id=self.kwargs['pk']).projct.id)
+
+
+class UpdateJobsCreatedProject(LoginRequiredMixin,UpdateView):
+    model = JobOpportunities
+    form_class = JobCreatedFormProject
+    template_name = "admin/company/project_data_update.html"
+
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['flag'] = "job_oportunity" 
+        return context
+    
+    def form_valid(self,form):
+        data = form.save()
+        messages.success(self.request,"Jobs Created Data Updated")
+        return redirect("admin:update_project",pk=data.project.id)
+
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:update_project",pk=JobOpportunities.objects.get(id=self.kwargs['pk']).project.id)
+
+class UpdateEducationStatusProject(LoginRequiredMixin,UpdateView):
+    model = EducationalStatus
+    form_class = EducationStatusFormProject
+    template_name = "admin/company/project_data_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['flag'] = "education" 
+        return context
+    
+    def form_valid(self,form):
+        data = form.save()
+        messages.success(self.request,"Education Status Data Updated")
+        return redirect("admin:update_project",pk=data.project.id)
+
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:update_project",pk=EducationalStatus.objects.get(id=self.kwargs['pk']).project.id)
+
+class CreateProjectAddress(LoginRequiredMixin,CreateView):
+    model = CompanyAddress
+    form_class = CompanyAddressForm
+
+    def form_valid(self,form):
+        try:
+            address = form.save(commit=False)
+            address.project = InvestmentProject.objects.get(id=self.kwargs['project'])
+            address.save()
+            return JsonResponse({'error':False,'message':'Investment Project Address Saved Successfully'})
+        except IntegrityError as e:
+            return JsonResponse({'error':True,'message':'Investment Project Address is Already Added'})
+        
+
+
+class CheckYearFieldProject(LoginRequiredMixin,View):
+    def post(self,*args,**kwargs):
+        project = InvestmentProject.objects.get(id=self.kwargs['project'])
+        if self.kwargs['model'] == "employee":
+            try:
+                employee = Employees.objects.get(projct=project,employment_type=self.request.POST['emp_type']) 
+                return JsonResponse({"error":True,"message":"Data For this Category Exists",
+                                    'data':json.loads(serializers.serialize('json',[employee],ensure_ascii=False))[0]})
+            except Employees.DoesNotExist:
+                return JsonResponse({"error":False,"message":"You are good to go"})
+        elif self.kwargs['model'] == "jobs_created":
+            try:
+                jobs = JobOpportunities.objects.get(project=project,job_type=self.request.POST['job_type']) 
+                return JsonResponse({"error":True,"message":"Data For this Year Exists",
+                                    'data':json.loads(serializers.serialize('json',[jobs],ensure_ascii=False))[0]})
+            except JobOpportunities.DoesNotExist:
+                return JsonResponse({"error":False,"message":"You are good to go"})
+        elif self.kwargs['model'] == "education":
+            try:
+                education = EducationalStatus.objects.get(project=project,education_type=self.request.POST['edu_type']) 
+                return JsonResponse({"error":True,"message":"Data For this Year Exists",
+                                    'data':json.loads(serializers.serialize('json',[education],ensure_ascii=False))[0]})
+            except EducationalStatus.DoesNotExist:
+                return JsonResponse({"error":False,"message":"You are good to go"})
+         

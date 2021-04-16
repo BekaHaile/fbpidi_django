@@ -76,11 +76,11 @@ class AllReportPage(LoginRequiredMixin,View):
                                     'data':ownership['id__count']})
 
         # Educational status data
+        total_edu = 0
         for company in companies:
             queryset_edu = EducationalStatus.objects.filter(
                 company=company,year_edu=get_current_year()).values('education_type').annotate(
                      Sum('male'),Sum('female'),total_edu=Sum('male')+Sum('female') ).order_by('education_type')
-            total_edu = 0
             fem_edu = 0
             male_edu = 0
             for edu_data in queryset_edu:
@@ -89,7 +89,7 @@ class AllReportPage(LoginRequiredMixin,View):
                 # total_edu += int(+)
                 education_status_data.append({'company':company.name,'sector':company.main_category,'label':edu_data['education_type'],
                                         'data':int(edu_data['female__sum']+edu_data['male__sum'])})
-        total_edu = fem_edu+male_edu
+            total_edu = fem_edu+male_edu
         queryset_cert = companies.values('certification').annotate(Count('id')).order_by('certification') 
         certification_data = []
         total_certification = 0
@@ -430,6 +430,21 @@ class AllReportPage(LoginRequiredMixin,View):
                                     'data':companies.filter(market_target__retailer__gt=0,market_target__year_target=get_current_year()).distinct('id').count()},
                                  
                                 ]
+        femal_emp_data = []
+        for company in companies:
+            employees_perm = Employees.objects.filter(company=company,employment_type__icontains="Permanent")
+            employees_temp = Employees.objects.filter(company=company,employment_type__icontains="Temporary")
+            
+            for ep in employees_perm:
+                total_perm_emp = (ep.female)
+            
+            for et in employees_temp:
+                total_temp_emp = (et.female)
+            
+            total = total_perm_emp+total_temp_emp
+            femal_emp_data.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
+            
+        context['total_fem_emp_data'] = femal_emp_data
         context['total_energy'] = total_energy
         context['energy_source_data'] = energy_source_data
         context['total_managment'] = total_managment
@@ -492,11 +507,11 @@ class AllReportPage(LoginRequiredMixin,View):
                                     'data':ownership['id__count']})
 
         # Educational status data
+        total_edu = 0
         for company in companies:
             queryset_edu = EducationalStatus.objects.filter(
                 company=company,year_edu=get_current_year()).values('education_type').annotate(
                      Sum('male'),Sum('female'),total_edu=Sum('male')+Sum('female') ).order_by('education_type')
-            total_edu = 0
             fem_edu = 0
             male_edu = 0
             for edu_data in queryset_edu:
@@ -505,7 +520,7 @@ class AllReportPage(LoginRequiredMixin,View):
                 # total_edu += int(+)
                 education_status_data.append({'company':company.name,'sector':company.main_category,'label':edu_data['education_type'],
                                         'data':int(edu_data['female__sum']+edu_data['male__sum'])})
-        total_edu = fem_edu+male_edu
+            total_edu = fem_edu+male_edu
         queryset_cert = companies.values('certification').annotate(Count('id')).order_by('certification') 
         certification_data = []
         total_certification = 0
@@ -802,6 +817,21 @@ class AllReportPage(LoginRequiredMixin,View):
                     {'data':companies.filter(established_yr__lte='2010',established_yr__gte='2006').count(),'label':"2006- 2010 E.C"},
                     {'data':companies.filter(established_yr__gte='2011').count(),'label':"After 2011 E.C"},
                 ]
+        femal_emp_data = []
+        for company in companies:
+            employees_perm = Employees.objects.filter(company=company,employment_type__icontains="Permanent")
+            employees_temp = Employees.objects.filter(company=company,employment_type__icontains="Temporary")
+            
+            for ep in employees_perm:
+                total_perm_emp = (ep.female)
+            
+            for et in employees_temp:
+                total_temp_emp = (et.female)
+            
+            total = total_perm_emp+total_temp_emp
+            femal_emp_data.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
+            
+        context['total_fem_emp_data'] = femal_emp_data
         context['total_count'] = companies.count()
         context['company_list'] = companies
         context['job_created_data'] = job_created_data 

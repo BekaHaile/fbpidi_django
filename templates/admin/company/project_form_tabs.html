@@ -1,0 +1,516 @@
+{%load crispy_forms_tags%}
+<div class="tab-pane fade" id="address">
+
+	<!-- Available hours -->
+	<div class="card">
+		<div class="card-header header-elements-inline">
+			<h6 class="card-title">Investment Project Address</h6>
+			<div class="header-elements">
+				<div class="list-icons">
+					<a class="list-icons-item" data-action="collapse"></a>
+					<a class="list-icons-item" data-action="reload"></a>
+					<a class="list-icons-item" data-action="remove"></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="card-body">
+			<form {%if object.get_project_address%} id="address_form_update"{%else%}id="company_address_form"{%endif%} action="#" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				<div class="form-group">
+					<div class="row">
+						<div class="col-12"><span class="form-text text-warning" id="error_span"></span></div>
+					</div>
+					
+				</div>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-sm-4">
+							<label for="">{{address_form.region.label}}</label>
+							 {{address_form.region}}
+						</div>
+						<div class="col-sm-4">
+							<label for="">{{address_form.city_town.label}}</label>
+							 {{address_form.city_town}}
+							 <span class="form-text text-muted">{{address_form.city_town.help_text}}</span>
+						</div>
+
+						<div class="col-md-4">
+							<label>{{address_form.subcity_zone.label}}</label>
+								{{address_form.subcity_zone}}
+								<span class="form-text text-muted">{{address_form.subcity_zone.help_text}}</span>									
+						</div>		
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-sm-4">
+							<label for="">{{address_form.woreda.label}}</label>
+							 {{address_form.woreda}}
+						</div>
+						<div class="col-sm-4">
+							<label for="">{{address_form.kebele.label}}</label>
+							 {{address_form.kebele}}
+							 <span class="form-text text-muted">{{address_form.kebele.help_text}}</span>
+						</div>
+
+						<div class="col-md-4">
+							<label>{{address_form.local_area.label}}</label>
+								{{address_form.local_area}}
+								<span class="form-text text-muted">{{address_form.local_area.help_text}}</span>									
+						</div>		
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-sm-4">
+							<label for="">{{address_form.phone_number.label}}</label>
+							 {{address_form.phone_number}}
+						</div>
+						<div class="col-sm-4">
+							<label for="">{{address_form.fax.label}}</label>
+							 {{address_form.fax}}
+							 <span class="form-text text-muted">{{address_form.fax.help_text}}</span>
+						</div>
+
+						<div class="col-md-4">
+							<label>{{address_form.email.label}}</label>
+								{{address_form.email}}
+								<span class="form-text text-muted">{{address_form.email.help_text}}</span>									
+						</div>		
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-sm-4">
+							<label for="">{{address_form.website.label}}</label>
+							 {{address_form.website}}
+						</div>
+						<div class="col-sm-4">
+							<label for="">{{address_form.facebooklink.label}}</label>
+							 {{address_form.facebooklink}}
+						</div>
+						<div class="col-sm-4">
+							<label for="">{{address_form.twiterlink.label}}</label>
+							 {{address_form.twiterlink}}
+							 <span class="form-text text-muted">{{address_form.twiterlink.help_text}}</span>
+						</div>
+
+							
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-4">
+							<label>{{address_form.instagramlink.label}}</label>
+								{{address_form.instagramlink}}
+								<span class="form-text text-muted">{{address_form.instagramlink.help_text}}</span>									
+						</div>	
+						<div class="col-sm-4">
+							<label for="">{{address_form.linkedinlink.label}}</label>
+							 {{address_form.linkedinlink}}
+						</div>
+						<div class="col-sm-4">
+							<label for="">{{address_form.googlelink.label}}</label>
+							 {{address_form.googlelink}}
+							 <span class="form-text text-muted">{{address_form.googlelink.help_text}}</span>
+						</div>
+					</div>
+				</div>
+
+				<button type="submit" id="submit_address" class="btn bg-primary">Submit form</button>
+
+			</form>
+		</div>
+	</div>
+	<!-- /available hours -->
+
+</div>
+<div class="tab-pane fade show" id="inv_capital_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Yearly Investment Capital Data</h6>
+			<div class="list-icons">
+				{% if perms.company.add_investmentcapital %}
+				<a href="#" data-toggle="modal" data-target="#inv_capital_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover ">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Machinery Cost</th>
+						<th>Building Cost</th>
+						<th>Working Capital</th>
+						<th>created Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>{{inv_cap_data.machinery_cost}}</td>
+						<td>{{inv_cap_data.building_cost}}</td>
+						<td>{{inv_cap_data.working_capital}}</td>
+						<td>{{inv_cap_data.timestamp|date}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										{% if user.is_superuser or user.get_company == inv_cap_data.company %}
+											{% if perms.company.delete_investmentcapital %}
+												<a href="{% url 'admin:delete' model_name='InvestmentCapital' id=inv_cap_data.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_investmentcapital %}
+												<a href="{%url 'admin:update_inv_capital' pk=inv_cap_data.id%}" class="dropdown-item">
+												<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+  
+<div class="tab-pane fade show" id="employees_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Number Of Employees Based on their Employment Type</h6>
+			<div class="list-icons">
+				{% if perms.company.add_employees %}
+					<a href="#" data-toggle="modal" data-target="#employees_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Employement Type</th>
+						<th>Females</th>
+						<th>Male</th>
+						<th>created Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for emp in object.project_employees.all%}
+					<tr>
+						<td>{{emp.employment_type}}</td>
+						<td>{{emp.female}}</td>
+						<td>{{emp.male}}</td>
+						<td>{{emp.timestamp|date}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										{% if user.is_superuser or user.get_company == emp.projct.company %}
+											{% if perms.company.delete_employees %}
+												<a href="{% url 'admin:delete' model_name='Employees' id=emp.id %}" onclick="return confirm ('Are you sure you want to delete this?')"  class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_employees %}
+												<a href="{%url 'admin:update_employees_project' pk=emp.id%}" class="dropdown-item">
+												<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+ 
+
+<div class="tab-pane fade show" id="createdjob_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Jobs Created Each Year</h6>
+			<div class="list-icons">
+				{% if perms.company.add_jobopportunities %}
+					<a href="#" data-toggle="modal" data-target="#createdjob_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Employement Type</th>
+						<th>Females</th>
+						<th>Male</th>
+						<th>created Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for job in object.project_jobs.all%}
+					<tr>
+						<td>{{job.job_type}}</td>
+						<td>{{job.female}}</td>
+						<td>{{job.male}}</td>
+						<td>{{job.timestamp|date}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										{% if user.is_superuser or user.get_company == job.project.company %}
+											{% if perms.company.delete_jobopportunities %}
+												<a href="{% url 'admin:delete' model_name='JobOpportunities' id=job.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_jobopportunities %}
+												<a href="{%url 'admin:update_jobs_created_project' pk=job.id%}" class="dropdown-item">
+													<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+
+
+
+<div class="tab-pane fade show" id="education_status_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Employees Educational Status</h6>
+			<div class="list-icons">
+				{% if perms.company.add_educationalstatus %}
+				<a href="#" data-toggle="modal" data-target="#education_status_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+						class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Education Type</th>
+						<th>Females</th>
+						<th>Male</th>
+						<th>created Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for edu in object.project_edu_stat.all%}
+					<tr>
+						<td>{{edu.education_type}}</td>
+						<td>{{edu.female}}</td>
+						<td>{{edu.male}}</td>
+						<td>{{edu.timestamp|date}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										{% if user.is_superuser or user.get_company == edu.project.company %}
+											{% if perms.company.delete_educationalstatus %}
+												<a href="{% url 'admin:delete' model_name='EducationalStatus' id=edu.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_educationalstatus %}
+												<a href="{%url 'admin:update_education_status_project' pk=edu.id%}" class="dropdown-item">
+													<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+
+ 
+<div class="tab-pane fade show" id="land_aqsn_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Land Acquisition</h6>
+			<div class="list-icons">
+				{% if perms.company.add_landaquisition %}
+					<a href="#" data-toggle="modal" data-target="#land_aqsn_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Data</a>
+				{% endif %}
+			</div>
+		</div>
+
+		<div class="card-body">
+			<form action="{%url 'admin:update_land_aqsn' pk=land_aqsn_data.id%}" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+					{{land_aquisition|crispy}}
+				<div class="modal-footer">
+					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>		 
+	</div>
+
+</div>
+
+
+<div class="tab-pane fade show" id="land_usage_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Land Usage</h6>
+			 
+		</div>
+
+		<div class="card-body">
+			<form action="{%url 'admin:update_land_use' pk=land_usage_data.id%}" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				
+					{{usage_form|crispy}}
+
+				<div class="modal-footer">
+					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>		 
+	</div>
+
+</div>
+
+
+<div class="tab-pane fade show" id="project_state_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Project State</h6>
+		</div>
+
+		<div class="card-body">
+			<form action="{%url 'admin:update_project_state' pk=project_state.id%}" enctype="multipart/form-data" method="POST">
+				{%csrf_token%}
+				 
+					{{pstate_form|crispy}}
+			
+				<div class="modal-footer">
+					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
+				</div>
+			</form>
+		</div>		 
+	</div>
+
+</div>
+ 
+
+
+<div class="tab-pane fade show" id="project_quantity_form_tab">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Product Quantity</h6>
+			<div class="list-icons">
+				
+					{% if perms.company.add_projectproductquantity %}
+					<a href="#" data-toggle="modal" data-target="#product_form_modal" class="btn bg-teal btn-sm rounded-round"><i
+							class="icon-add mr-2"></i>Add New Data</a>
+
+					{% endif %}
+				
+			</div>
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Product Type</th>
+						<th>Expected Nominal Capacity</th>
+						<th>Annual sales</th>
+						<th>Local Share %</th>
+						<th>Export Share %</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for pc in object.project_product_qty.all%}
+					<tr>
+						<td>{{forloop.counter}}</td>
+						<td>{{pc.product_tobe_produced}}</td>
+						<td>{{pc.expected_normal_capacity}}</td>
+						<td>{{pc.expected_anual_sales}}</td>
+						<td>{{pc.local_share}}</td>
+						<td>{{pc.export_share}}</td>
+						<td class="text-center">
+							<div class="list-icons">
+								<div class="dropdown">
+									<a href="#" class="list-icons-item" data-toggle="dropdown">
+										<i class="icon-menu9"></i>
+									</a>
+	
+									<div class="dropdown-menu dropdown-menu-right">
+										{% if user.is_superuser or user.get_company == pc.project.company %}
+											{% if perms.company.delete_projectproductquantity %}
+												<a href="{% url 'admin:delete' model_name='ProductQuantity' id=pc.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{% endif %}
+											{% if perms.company.change_projectproductquantity %}
+											<a href="{%url 'admin:update_product_qty' pk=pc.id%}" class="dropdown-item">
+												<i class="icon-pencil"></i>Edit</a>
+											{% endif %}
+										{% endif %}
+										 
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+ 

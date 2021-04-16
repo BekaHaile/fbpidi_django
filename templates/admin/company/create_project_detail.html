@@ -9,6 +9,12 @@
 <script src="/static/admin/global_assets/js/plugins/extensions/cookie.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_wizard.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+<script src="/static/admin/assets/js/project_detail.js"></script>
+
+<script>
+	var my_token = "{{csrf_token}}";
+	var project_id = "{{object.id}}";
+</script>
 
 {% endblock %}
 {%block pagename%}Investment Project Form for: {{object.company.name}}{%endblock%}
@@ -29,8 +35,7 @@
 			</div>
 		</div>
 		<div class="card-body">
-			<form id="project_detail_form" class="wizard-form steps-enable-all" 
-				action="{%url 'admin:create_project_detail' pk=object.id%}"
+			<form id="project_detail_form" class="wizard-form steps-enable-all"  action="#" 
 				method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
 				<!-- {{form.errors}} -->
 				<!-- {{form|crispy}} -->
@@ -39,31 +44,112 @@
 					<hr>
 						
 					<div class="form-group row">
-						<div class="col-md-6">
+						<div class="col-md-4">
 							<label class="font-weight-semibold" for="">{{form.product_type.label}}</label>
 							{{form.product_type}}
 							<span class="form-text text-warning">{{form.product_type.errors}}</span>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-4">
 							<label class="font-weight-semibold" for="">{{form.site_location_name.label}}</label>
 							{{form.site_location_name}}
 							<span class="form-text text-warning">{{form.site_location_name.errors}}</span>
+						</div>
+						<div class="col-md-4">
+							<label>{{form.distance_f_strt.label}}</label>
+								{{form.distance_f_strt}}
+								<span class="form-text text-warning">{{form.distance_f_strt.errors}}</span>
 						</div>
 						
 					</div>
 					<hr>
 					<div class="form-group row">
-							<div class="col-md-6">
-								<label>{{form.distance_f_strt.label}}</label>
-									{{form.distance_f_strt}}
-									<span class="form-text text-warning">{{form.distance_f_strt.errors}}</span>
-							</div>
-							<div class="col-md-6">
-								<label>{{form.land_acquisition.label}}</label>
-									{{form.land_acquisition}}
-									<span class="form-text text-warning">{{form.land_acquisition.errors}}</span>
-							</div>					
+						<div class="col-md-12">
+							<label class="font-weight-semibold" for="">Product Quantity</label>
+							<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+									data-toggle="modal" data-target="#product_form_modal" id="">
+								<i class="fa fa-plus"> </i>
+							</button>
+						</div>
 					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">Number Of Employees</label>
+							<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+									data-toggle="modal" data-target="#employees_form_modal" id="">
+								<i class="fa fa-plus"> </i>
+							</button>
+						</div>
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">New Job Created </label>
+							
+							<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+									data-toggle="modal" data-target="#createdjob_form_modal" id="">
+								<i class="fa fa-plus"> </i>
+							</button>
+						</div>
+						
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">Employees Educational Status</label>
+							<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+									data-toggle="modal" data-target="#education_status_form_modal" id="">
+								<i class="fa fa-plus"> </i>
+							</button>
+						</div>
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">Land Acquisition</label>
+								<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+										data-toggle="modal" data-target="#land_aqsn_form_modal" id="">
+									<i class="fa fa-plus"> </i>
+								</button>
+						</div>
+						
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">Current Investment Capital In Birr?</label>
+							<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+									data-toggle="modal" data-target="#inv_capital_form_modal" id="">
+								<i class="fa fa-plus"> </i>
+							</button>
+						</div>
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">Land Usage</label>
+							
+							<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+									data-toggle="modal" data-target="#land_usage_form_modal" id="">
+								<i class="fa fa-plus"> </i>
+							</button>
+						</div>
+						
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">Add Company Address</label>
+							<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+									data-toggle="modal" data-target="#address_form_modal" id="">
+								<i class="fa fa-plus"> </i>
+							</button>
+						</div>
+						<div class="col-md-6">
+							<label class="font-weight-semibold" for="">Project State</label>
+							
+							<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
+									data-toggle="modal" data-target="#status_form_modal" id="">
+								<i class="fa fa-plus"> </i>
+							</button>
+						</div>
+						
+					</div>
+					<hr>
+					</fieldset>
+					<h6>The Second Tab</h6>
+					<fieldset>
 					<hr>
 					<div class="form-group row">
 						<div class="col-md-12">
@@ -112,6 +198,10 @@
 						
 					</div>
 					<hr>
+						</fieldset>
+						<h6>The Third Tab</h6>
+						<fieldset>
+					<hr>
 					<div class="form-group row">
 						<div class="col-md-12">
 							<label class="font-weight-semibold" for="">{{form.annual_raw_material.label}}</label>
@@ -148,6 +238,10 @@
 						</div>
 							
 					</div>
+					<hr>
+						</fieldset>
+						<h6>The Fourth Tab</h6>
+						<fieldset>
 					<hr>
 					<div class="form-group row">
 						<div class="col-md-6">
@@ -207,7 +301,7 @@
 </div>
 <!-- /content area -->
 <!-- MOdal Area Start -->
- 
+{%include 'admin/company/project_form_modals.html'%}
  <script>
 	 $(document).ready(function(){
 		 $('.summernote').summernote();
