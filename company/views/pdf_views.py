@@ -3,12 +3,17 @@ import datetime
 from django.http import HttpResponse
 from django.views.generic import View,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.template.loader import get_template
 from django.db.models import *
+from admin_site.decorators import company_created,company_is_active
 
 from company.render import render_to_pdf 
 from company.models import *
 from product.models import *
+
+decorators = [never_cache, company_created(),company_is_active()]
 
 def get_current_year():
     current_year = 0
@@ -22,6 +27,7 @@ def get_current_year():
         current_year = gc_year - 8
     return current_year
 
+@method_decorator(decorators,name='get')
 class GenerateAllCompanyPdf(View):
     def get(self, request, *args, **kwargs):
         context = {}
@@ -452,7 +458,7 @@ class GenerateAllCompanyPdf(View):
           
 
 
-
+@method_decorator(decorators,name='dispatch')
 class GenerateCompanyToPDF(LoginRequiredMixin,View):
     def post(self, request, *args, **kwargs):
         context = {}
@@ -560,7 +566,7 @@ class GenerateCompanyToPDF(LoginRequiredMixin,View):
             return response
         return HttpResponse("Not found")
 
-
+@method_decorator(decorators,name='dispatch')
 class GenerateProjectPdf(View):
     def get(self, request, *args, **kwargs):
         context = {}

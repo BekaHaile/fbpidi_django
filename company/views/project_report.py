@@ -17,8 +17,12 @@ from django.db.models import Sum,Count,OuterRef,Exists,Q,F,Avg
 from company.models import *
 from product.models import *
 from accounts.models import CompanyAdmin,UserProfile
+from admin_site.decorators import company_created,company_is_active
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 
 from company.forms import *
+decorators = [never_cache, company_created(),company_is_active()]
 
 def get_current_year():
     current_year = 0
@@ -32,7 +36,7 @@ def get_current_year():
         current_year = gc_year - 8
     return current_year
 
-
+@method_decorator(decorators,name='get')
 class ProjectReport(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = {}

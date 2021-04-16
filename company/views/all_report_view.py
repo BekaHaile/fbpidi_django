@@ -7,6 +7,8 @@ from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse,JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.contrib import messages
 from django.views.generic import CreateView,UpdateView,ListView,View,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,7 +20,11 @@ from company.models import *
 from product.models import *
 from accounts.models import CompanyAdmin,UserProfile
 
+from admin_site.decorators import company_created,company_is_active
+
 from company.forms import *
+
+decorators = [never_cache, company_created(),company_is_active()]
 
 def get_current_year():
     current_year = 0
@@ -42,6 +48,7 @@ def get_products(request,sub_sector):
         'products':json.loads(serializers.serialize('json',SubCategory.objects.filter(category_name=sub_sector),ensure_ascii=False))
         })
 
+@method_decorator(decorators,name='dispatch')
 class AllReportPage(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context={}

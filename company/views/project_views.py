@@ -7,6 +7,9 @@ from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse,JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+
 from django.contrib import messages
 from django.views.generic import CreateView,UpdateView,ListView,View,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,9 +21,13 @@ from company.models import *
 from accounts.models import CompanyAdmin,UserProfile
 from product.models import Order,OrderProduct,Product
 
+from admin_site.decorators import company_created,company_is_active
+
+
 from company.forms import *
 
-
+decorators = [never_cache, company_created(),company_is_active()]
+@method_decorator(decorators,name='dispatch')
 class ListInvestmentProject(LoginRequiredMixin,ListView):
     model = InvestmentProject
     template_name = "admin/company/project_list.html"
@@ -33,7 +40,7 @@ class ListInvestmentProject(LoginRequiredMixin,ListView):
         elif self.request.user.is_company_staff:
             return InvestmentProject.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
 
-
+@method_decorator(decorators,name='dispatch')
 class CreateMyInvestmentProject(LoginRequiredMixin,CreateView):
     model = InvestmentProject
     form_class = InvestmentProjectForm
@@ -60,7 +67,7 @@ class CreateMyInvestmentProject(LoginRequiredMixin,CreateView):
         return redirect("admin:create_project_detail",pk=project.id)
 
 
-
+@method_decorator(decorators,name='dispatch')
 class CreateInvestmentProject(LoginRequiredMixin,CreateView):
     model = InvestmentProject
     form_class = InvestmentProjectForm_ForSuperAdmin
@@ -73,6 +80,8 @@ class CreateInvestmentProject(LoginRequiredMixin,CreateView):
         messages.success(self.request,'Investment Project Created,Please Complete The Following!')
         return redirect("admin:create_project_detail_admin",pk=project.id)
 
+
+@method_decorator(decorators,name='dispatch')
 class CreateInvestmentProjectDetail(LoginRequiredMixin,UpdateView):
     model=InvestmentProject
     form_class=InvestmentProjectDetailForm
@@ -110,6 +119,7 @@ class CreateInvestmentProjectDetail(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:create_project_detail",pk=self.kwargs['pk'])
 
+@method_decorator(decorators,name='dispatch')
 class CreateInvestmentProjectDetail_Admin(LoginRequiredMixin,UpdateView):
     model=InvestmentProject
     form_class=InvestmentProjectDetailForm_Admin
@@ -151,6 +161,8 @@ class CreateInvestmentProjectDetail_Admin(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:create_project_detail_admin",pk=self.kwargs['pk'])
 
+
+@method_decorator(decorators,name='dispatch')
 class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
     model=InvestmentProject
     form_class = ProjectUpdateForm
@@ -209,6 +221,7 @@ class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_project",pk=self.kwargs['pk'])
 
+@method_decorator(decorators,name='dispatch')
 class CreateLandUsage(LoginRequiredMixin,CreateView):
     model=LandUsage
     form_class = LandUsageForm
@@ -224,6 +237,8 @@ class CreateLandUsage(LoginRequiredMixin,CreateView):
         except IntegrityError as e:
             return JsonResponse({'error':True,'message':'Data Already Exists'})
 
+
+@method_decorator(decorators,name='dispatch')
 class UpdateLandUsage(LoginRequiredMixin,UpdateView):
     model=LandUsage
     form_class = LandUsageForm
@@ -232,6 +247,7 @@ class UpdateLandUsage(LoginRequiredMixin,UpdateView):
         form.save()
         return redirect("admin:update_project",pk=LandUsage.objects.get(id=self.kwargs['pk']).project.id)
 
+@method_decorator(decorators,name='dispatch')
 class CreateProductQty(LoginRequiredMixin,CreateView):
     model=ProjectProductQuantity
     form_class = ProjectProductForm
@@ -245,6 +261,7 @@ class CreateProductQty(LoginRequiredMixin,CreateView):
         except InvestmentProject.DoesNotExist:
             return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
 
+@method_decorator(decorators,name='dispatch')
 class UpdateProductQty(LoginRequiredMixin,UpdateView):
     model=ProjectProductQuantity
     form_class = ProjectProductForm
@@ -263,6 +280,8 @@ class UpdateProductQty(LoginRequiredMixin,UpdateView):
         messages.success(self.request,form.errors)
         return redirect("admin:update_product_qty",pk=self.kwargs['pk'])
 
+
+@method_decorator(decorators,name='dispatch')
 class CreateProjectState(LoginRequiredMixin,CreateView):
     model=ProjectState
     form_class = ProjectStatusForm
@@ -279,7 +298,7 @@ class CreateProjectState(LoginRequiredMixin,CreateView):
             return JsonResponse({'error':True,'message':'Data Already Exists'})
 
 
-
+@method_decorator(decorators,name='dispatch')
 class UpdateProjectState(LoginRequiredMixin,UpdateView):
     model=ProjectState
     form_class = ProjectStatusForm
@@ -293,6 +312,8 @@ class UpdateProjectState(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_project")
 
+
+@method_decorator(decorators,name='dispatch')
 class CreateInvestmentCapitalForProject(LoginRequiredMixin,CreateView):
     model = InvestmentCapital
     form_class = InvestmentCapitalForm
@@ -311,6 +332,7 @@ class CreateInvestmentCapitalForProject(LoginRequiredMixin,CreateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_project",pk=self.kwargs['project'])
 
+@method_decorator(decorators,name='dispatch')
 class UpdateInvestmentCapitalForProject(LoginRequiredMixin,UpdateView):
     model = InvestmentCapital
     form_class = InvestmentCapitalForm
@@ -325,7 +347,7 @@ class UpdateInvestmentCapitalForProject(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_project",pk=InvestmentCapital.objects.get(id=self.kwargs['pk']).project.id)
 
-
+@method_decorator(decorators,name='dispatch')
 class CreateLandAcqsn(LoginRequiredMixin,CreateView):
     model=LandAquisition
     form_class = LandAquisitionForm
@@ -344,6 +366,7 @@ class CreateLandAcqsn(LoginRequiredMixin,CreateView):
     def form_invalid(self,form):
         return JsonResponse({'error':True,'message':form.errors})
 
+@method_decorator(decorators,name='dispatch')
 class UpdateLandAcqsn(LoginRequiredMixin,UpdateView):
     model=LandAquisition
     form_class = LandAquisitionForm
@@ -357,7 +380,7 @@ class UpdateLandAcqsn(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_project",pk=LandAquisition.objects.get(id=self.kwargs['pk']).project.id)
 
-
+@method_decorator(decorators,name='dispatch')
 class CreateEmployeesProject(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
         form = EmployeesFormProject(self.request.POST)
@@ -377,6 +400,7 @@ class CreateEmployeesProject(LoginRequiredMixin,View):
         else:
             return JsonResponse({'error': True, 'message': form.errors})  
 
+@method_decorator(decorators,name='dispatch')
 class CreateJobsCreatedProject(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
         form = JobCreatedFormProject(self.request.POST)
@@ -396,6 +420,7 @@ class CreateJobsCreatedProject(LoginRequiredMixin,View):
         else:
             return JsonResponse({'error': True, 'message': form.errors})     
 
+@method_decorator(decorators,name='dispatch')
 class CreateEducationStatusProject(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
         form = EducationStatusFormProject(self.request.POST)
@@ -415,6 +440,7 @@ class CreateEducationStatusProject(LoginRequiredMixin,View):
         else:
             return JsonResponse({'error': True, 'message': form.errors}) 
 
+@method_decorator(decorators,name='dispatch')
 class UpdateEmployeesProject(LoginRequiredMixin,UpdateView):
     model = Employees
     form_class = EmployeesFormProject
@@ -435,7 +461,7 @@ class UpdateEmployeesProject(LoginRequiredMixin,UpdateView):
         messages.success(self.request,form.errors)
         return redirect("admin:update_project",pk=Employees.objects.get(id=self.kwargs['pk']).projct.id)
 
-
+@method_decorator(decorators,name='dispatch')
 class UpdateJobsCreatedProject(LoginRequiredMixin,UpdateView):
     model = JobOpportunities
     form_class = JobCreatedFormProject
@@ -456,6 +482,7 @@ class UpdateJobsCreatedProject(LoginRequiredMixin,UpdateView):
         messages.success(self.request,form.errors)
         return redirect("admin:update_project",pk=JobOpportunities.objects.get(id=self.kwargs['pk']).project.id)
 
+@method_decorator(decorators,name='dispatch')
 class UpdateEducationStatusProject(LoginRequiredMixin,UpdateView):
     model = EducationalStatus
     form_class = EducationStatusFormProject
@@ -475,6 +502,7 @@ class UpdateEducationStatusProject(LoginRequiredMixin,UpdateView):
         messages.success(self.request,form.errors)
         return redirect("admin:update_project",pk=EducationalStatus.objects.get(id=self.kwargs['pk']).project.id)
 
+@method_decorator(decorators,name='dispatch')
 class CreateProjectAddress(LoginRequiredMixin,CreateView):
     model = CompanyAddress
     form_class = CompanyAddressForm
@@ -489,7 +517,7 @@ class CreateProjectAddress(LoginRequiredMixin,CreateView):
             return JsonResponse({'error':True,'message':'Investment Project Address is Already Added'})
         
 
-
+@method_decorator(decorators,name='dispatch')
 class CheckYearFieldProject(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
         project = InvestmentProject.objects.get(id=self.kwargs['project'])

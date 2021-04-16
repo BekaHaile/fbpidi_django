@@ -121,7 +121,7 @@ class CompanyInquiryList(ListView):
                 return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id, replied = False)
             return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id)
         except Exception as e:
-            print("!!!!!!!!!!!!!!!!!! Exception inside CompanyInquiryList ",e)
+            print("@@@@@@ Exception inside CompanyInquiryList ",e)
             return []
 
 
