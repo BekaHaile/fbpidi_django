@@ -1,0 +1,75 @@
+{%extends 'admin/base_site.html'%}
+{%load crispy_forms_tags%}
+{% block extrastyle %}
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+{% endblock %}
+{%block pagename%}
+{%if flag == "inv_capital"%}
+Investment Capital Data
+{%elif flag == "employees"%}
+Company Employees Data
+{%elif flag == "job_oportunity"%}
+Yearly Jobs Created Data
+{%elif flag == "education"%}
+Employees Education Status Data
+{%elif flag == "product_quantity"%}
+Product Quantity
+{%endif%}
+{%endblock%}
+{%block content%}
+
+	<!-- Content area -->
+	<div class="content">
+		<!-- Starting step -->
+		<div class="card">
+			<div class="card-header bg-white header-elements-inline">
+				<h6 class="card-title">
+					{%if flag == "inv_capital"%}
+					Update Investment Capital
+					{%elif flag == "employees"%}
+					Investment Project Employees Data
+					{%elif flag == "job_oportunity"%}
+					Update Jobs Created by the Project Data
+					{%elif flag == "education"%}
+					Update Employees Education Status Data
+					{%elif flag == "product_quantity"%}
+					Update Project Product Quantity Data
+					{%endif%}
+
+
+				</h6>
+				 
+			</div>
+	
+			<div class="card-body">
+				<form  {%if flag == "inv_capital"%}
+						action="{%url 'admin:update_inv_cap_project' pk=object.id%}"
+						{%elif flag == "employees"%}
+						action="{%url 'admin:update_employees_project' pk=object.id%}"
+						{%elif flag == "job_oportunity"%}
+						action="{%url 'admin:update_jobs_created_project' pk=object.id%}"
+						{%elif flag == "education"%}
+						action="{%url 'admin:update_education_status_project' pk=object.id%}"
+						{%elif flag == "product_quantity"%}
+						action="{%url 'admin:update_product_qty' pk=object.id%}"
+						{%endif%} method="POST" enctype="multipart/form-data" data-fouc>
+					{%csrf_token%}
+				 	{{form|crispy}}
+				<input type="submit" name="" class="btn btn-primary" value="Submit Form" id="">
+			</form>
+			</div>
+		</div>
+		<!-- /starting step -->
+	
+	</div>
+	 
+
+<!-- /content area -->
+<script>
+	$(document).ready(function () {
+		$(".summernote").summernote();
+	});
+</script>
+{%endblock%}

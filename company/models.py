@@ -194,7 +194,7 @@ class Employees(models.Model):
 	year_emp	= models.IntegerField(default=0,verbose_name="Employement Year")
 	employment_type	= models.CharField(max_length=200,verbose_name="The Employment Type", choices=EMP_TYPE)	
 	male	= models.IntegerField(default=0,verbose_name="Number Of Male Employees")	
-	female	= models.IntegerField(default=0,verbose_name="Number of Female Employees")	
+	female	= models.IntegerField(default=0,verbose_name="Female Employees")	
 	timestamp = models.DateField(auto_now_add=True)
 
 # New Jobs Created Every Year
@@ -230,6 +230,7 @@ class EducationalStatus(models.Model):
 # Number of Female Employees in high positions
 class FemalesInPosition(models.Model):
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="females_high_positions")
+	project = models.ForeignKey('InvestmentProject',on_delete=models.CASCADE,related_name="project_fem_posn",null=True,blank=True)
 	year_fem = models.IntegerField(verbose_name="Female Employees Year")
 	quarter_fem = models.CharField(max_length=100,verbose_name="Quarter Year")
 	high_position = models.IntegerField(default=0,verbose_name="High level position ",help_text="Female in (CEO, Managerial positions)")
@@ -304,9 +305,9 @@ class InvestmentProject(models.Model):
 	description = models.TextField(verbose_name="Investment Project Description in English",null=True)
 	description_am = models.TextField(verbose_name="Investment Project Description in amharic",null=True)
 	sector	= models.CharField(choices=CAT_LIST,max_length=50, verbose_name="Project Sector")
-	product_type = models.ManyToManyField(Category,related_name="project_product_types")
+	product_type = models.ManyToManyField(Category,verbose_name="Sub Sector",related_name="project_product_types")
 	site_location_name = models.CharField(verbose_name="Site location street name", max_length=200,null=True,blank=True)
-	distance_f_strt	= models.FloatField(default=0,verbose_name="Distance of the Site from the Street")
+	distance_f_strt	= models.FloatField(default=0,verbose_name="Distance of the Site from the Street in Meter")
 	# land_acquisition = models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT, related_name="land_aquisition", verbose_name="Land Acquisition",null=True,blank=True)
 	project_classification	= models.ForeignKey(ProjectDropDownsMaster, on_delete=models.CASCADE,related_name="project_classification",verbose_name="Project Classification",null=True,blank=True)
 	contact_person	=  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT,null=True,blank=True)
@@ -321,22 +322,28 @@ class InvestmentProject(models.Model):
 	water_suply	= models.FloatField(default=0,verbose_name="Water Supply",null=True,blank=True)
 	cond_provided_for_wy = models.TextField(verbose_name="Special Conditions Provided for women and youth in english",null=True,blank=True)
 	cond_provided_for_wy_am = models.TextField(verbose_name="Special Conditions Provided for women and youth in amharic",null=True,blank=True)
-	target_market =	models.TextField(verbose_name="If  you have export  write target market (Destination)",null=True)
+	target_market =	models.TextField(verbose_name="If  you have export  write target market (Destination)",null=True,blank=True)
 	env_impac_ass_doc =	models.FileField(max_length=254, verbose_name="Environmental Impact assessment document",
 													help_text="Images and Pdf files less than 10MB", 
 													validators=[FileExtensionValidator(allowed_extensions=allowed_file_extensions)],
-													upload_to="company/project/",
-													blank=True)
+													upload_to="company/project/",null=True,blank=True)
 	capital_utilization	= models.FloatField(default=0,verbose_name="Capital Utilization")
 	technology	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="technology",null=True,blank=True, verbose_name="Technology going to be applied")
 	automation	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="automation",null=True,blank=True, verbose_name="Automation",)
 	mode_of_project	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="project_mode",null=True,blank=True,verbose_name="Mode of Project")
 	facility_design	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="facility",null=True,blank=True,verbose_name="Facility design")
+	# project_complete = models.BooleanField(default=False)
 	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='project_created_by')
 	created_date	= models.DateTimeField(auto_now_add=True)
 	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='project_updated_by',null=True,blank=True)
 	last_updated_date	= models.DateTimeField(null=True)
 	expired	= models.BooleanField(default=False)
+
+	def get_project_address(self):
+		try:
+			return CompanyAddress.objects.get(project=self)
+		except Exception as e:
+			return None
 
 class LandAquisition(models.Model):
 	project = models.OneToOneField(InvestmentProject,on_delete=models.CASCADE,related_name="land_aquisition")
@@ -349,9 +356,9 @@ class LandUsage(models.Model):
 	project = models.OneToOneField(InvestmentProject,on_delete=models.CASCADE,related_name="land_usage")
 	total_land_size = models.FloatField(verbose_name="Total land size in meter square")	 
 	production_building = models.FloatField(verbose_name="production building in meter square")	 
-	office_building = models.FloatField(verbose_name="production building in meter square")	 
-	warehouse = models.FloatField(verbose_name="Ware house in meter square")	 
-	other = models.FloatField(verbose_name="production building in meter square")
+	office_building = models.FloatField(verbose_name="Office building in meter square")	 
+	warehouse = models.FloatField(verbose_name="Warehouse in meter square")	 
+	other = models.FloatField(verbose_name="Others building in meter square")
 	timestamp = models.DateTimeField(auto_now_add=True)	 
 
 # messages from users to a company through the contact us form
@@ -393,7 +400,7 @@ class CompanySubscription(models.Model):
 
 
 class ProjectState(models.Model):
-	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="project_state")
+	project = models.OneToOneField(InvestmentProject,on_delete=models.CASCADE,related_name="project_state")
 	percentage_construction_performance = models.FloatField(verbose_name="percentage of construction performance" )	
 	machinery_purchase_performance = models.FloatField(verbose_name="machinery Purchase Performance" )	
 	factory_building_performance = models.FloatField(verbose_name="factory Building Performance")	
@@ -409,7 +416,7 @@ class ProjectState(models.Model):
 class ProjectProductQuantity(models.Model):
 	project = models.ForeignKey(InvestmentProject,on_delete=models.CASCADE,related_name="project_product_qty")
 	product_tobe_produced = models.CharField(max_length=255,verbose_name="Product to be Produced (after implementation)")
-	expected_normal_capacity = models.FloatField(default=0,verbose_name="Expected Normal Capacity (installed)")
+	expected_normal_capacity = models.FloatField(default=0,verbose_name="Expected Nominal Capacity (installed)")
 	expected_anual_sales = models.FloatField(default=0,verbose_name="Expected Anual Sales USD (After Investment)")
 	local_share = models.FloatField(default=0,verbose_name=" %\ Local Share")
 	export_share = models.FloatField(default=0,verbose_name=" %\ Export Share ")

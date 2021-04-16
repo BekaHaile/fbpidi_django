@@ -276,9 +276,11 @@ class CustomAdminSite(admin.AdminSite):
             path("create_power_consumption/<company>/",wrap(CreatePowerConsumption.as_view()),name="create_power_consumed"),
             path("update_power_consumption/<pk>/",wrap(UpdatePowerConsumption.as_view()),name="update_power_consumed"),
             path("create_company_address/<company>/",wrap(CreateCompanyAddress.as_view()),name="create_company_address"),
+            path("create_project_address/<project>/",wrap(CreateProjectAddress.as_view()),name="create_project_address"),
             path("update_company_address/<pk>/",wrap(UpdateCompanyAddress.as_view()),name="update_company_address"),
             path("update_company_info/<pk>",wrap(ViewMyCompanyProfile.as_view()),name="update_company_info"),
             path("check_company_year_data/<model>/<company>/<year>/",wrap(CheckYearField.as_view()),name="check_year_data"),
+            path("check_project_year_data/<model>/<project>/",wrap(CheckYearFieldProject.as_view()),name="check_project_year_data"),
 
             path("create_slider_image/<company>/",wrap(CreateSliderImage.as_view()),name="create_slider"),
             path("update_slider_image/<pk>/",wrap(UpdateSliderImage.as_view()),name="update_slider"),
@@ -308,6 +310,14 @@ class CustomAdminSite(admin.AdminSite):
             path("update_product_quantity/<pk>/",wrap(UpdateProductQty.as_view()) ,name='update_product_qty'),
             path("update_project_state/<pk>/",wrap(UpdateProjectState.as_view()) ,name='update_project_state'),
 
+            path("create_employees-project/<project>/",wrap(CreateEmployeesProject.as_view()),name="create_employees_project"),
+            path("update_employees-project/<pk>/",wrap(UpdateEmployeesProject.as_view()),name="update_employees_project"),
+            path("create_jobs_created-project/<project>/",wrap(CreateJobsCreatedProject.as_view()),name="create_jobs_created_project"),
+            path("update_jobs_created-project/<pk>/",wrap(UpdateJobsCreatedProject.as_view()),name="update_jobs_created_project"),
+            path("create_education_status-project/<project>/",wrap(CreateEducationStatusProject.as_view()),name="create_education_status_project"),
+            path("update_education_status-project/<pk>/",wrap(UpdateEducationStatusProject.as_view()),name="update_education_status_project"),
+           
+
             path("create_fbpidi_company/",wrap(CreateFbpidiCompanyProfile.as_view()),name="create_fbpidi_company"),
             path("view_fbpidi_company/<pk>/",wrap(ViewFbpidiCompany.as_view()),name="view_fbpidi_company"),
             
@@ -320,9 +330,10 @@ class CustomAdminSite(admin.AdminSite):
 
             # Company Report Paths
             path('get-company-information-pdf/',wrap(GenerateCompanyToPDF.as_view()),name='get_company_pdf'),
-            path("get-al-company-report/<region>/<sector>/<sub_sector>/<product>/",wrap(GenerateAllCompanyPdf.as_view()),name="generate_all_report"),
+            path("get-all-company-report/<region>/<sector>/<sub_sector>/<product>/",wrap(GenerateAllCompanyPdf.as_view()),name="generate_all_report"),
+            path("get-all-project-report/<region>/<sector>/<sub_sector>/<product>/",wrap(GenerateProjectPdf.as_view()),name="generate_project_report"),
             path('get-all-report-page/',wrap(AllReportPage.as_view()),name="all_report_page"),
-             path('get-all-report-page-project/',wrap(ProjectReport.as_view()),name="project_report"),
+            path('get-all-report-page-project/',wrap(ProjectReport.as_view()),name="project_report"),
             path("report-page/",wrap(ReportPage.as_view()),name="report_page"),
             path('certification-chart/',wrap(certification_chart),name='certification_chart'),
             path('management-tools-chart/',wrap(management_tool_chart),name='mgmt_tools_chart'),

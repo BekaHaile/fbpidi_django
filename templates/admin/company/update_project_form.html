@@ -1,331 +1,322 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags%}
 {% block extrastyle %}
-<script src="/static/admin/global_assets/js/plugins/forms/wizards/steps.min.js"></script>
-<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script>
+	var my_token = "{{csrf_token}}";
+	var project_id = "{{object.id}}";
+	var address_id = "{{object.get_project_address.id}}";
+</script>
+<!-- Theme JS files -->
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
-<script src="/static/admin/global_assets/js/plugins/forms/inputs/inputmask.js"></script>
-<script src="/static/admin/global_assets/js/plugins/forms/validation/validate.min.js"></script>
+<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/static/admin/global_assets/js/demo_pages/user_pages_profile.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
-
-
+<script src="/static/admin/assets/js/project_detail.js"></script>
+ 
 <link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
 <script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
-{{media}}
+<!-- /theme JS files -->
+{{form.media}}
 {% endblock %}
-{%block pagename%}Investment Project Form {%endblock%}
+{%block pagename%}Investment Project  - Profile{%endblock%}
 {%block content%}
+	
 
-<!-- Content area -->
-<div class="content">
-	<!-- Starting step -->
-	<div class="card">
-		<div class="card-header bg-white header-elements-inline">
-			<h6 class="card-title">Update Investment Project</span></h6>
-			<div class="header-elements">
-				<div class="list-icons">
-					<a class="list-icons-item" data-action="collapse"></a>
-					<a class="list-icons-item" data-action="reload"></a>
-					<a class="list-icons-item" data-action="remove"></a>
-				</div>
-			</div>
-		</div>
-		<div class="card-body m-2">
-			<form id="companyform" action="{%url 'admin:update_project' pk=object.id%}"
-					method="POST" enctype="multipart/form-data" data-fouc>{%csrf_token%}
-				<fieldset>
-					{{form|crispy}}
-				</fieldset>
-				<div class="float-right">
-					<button class="btn btn-primary pl-4 pr-4" type="submit"><span>Save Changes   </span><i class="icon-check"></i> </button>
-				</div>
-			</form>
-		</div>
-		<hr>
-		<div>
-			{%if inv_cap_data%}
-			<h3 class="text text-primary p-4 m-1 card-title">Investment Project Investment Capital </h3>
-			<form id="invcap_form" action="{%url 'admin:update_inv_cap_project' pk=inv_cap_data.id%}" enctype="multipart/form-data" method="POST">
-				{%csrf_token%}
-				
-				<div class="modal-body">
-					{{inv_capital_form|crispy}}
-				</div>
+			<!-- Content area -->
+			<div class="content">
 
-				<div class="modal-footer">
-					<button type="submit" id="" class="btn bg-primary">Submit form</button>
-				</div>
-			</form>
-			{%else%}
-			<a href="#" data-toggle="modal" data-target='#inv_capital_form_modal'  class="float-right btn btn-warning btn-md m-2">Add Investment Capital</a>
-			{%endif%}
+				<!-- Inner container -->
+				<div class="d-flex align-items-start flex-column flex-md-row">
 
-		</div>
-		<hr>
-		<div>
-			{%if land_aqsn_data %}
-			<h3 class="text text-primary p-4 m-1 card-title">Investment Project Land Acquisition </h3>
-			<form id="invcap_form" action="{%url 'admin:update_land_aqsn' pk=land_aqsn_data.id%}" enctype="multipart/form-data" method="POST">
-				{%csrf_token%}
-				
-				<div class="modal-body">
-					{{land_aquisition|crispy}}
-				</div>
+					<!-- Left content -->
+					<div class="tab-content w-100 overflow-auto order-2 order-md-1" 
+						style="min-height: calc(120vh + 110px); max-height: calc(120vh + 140px);overflow-y: scroll;">
 
-				<div class="modal-footer">
-					<button type="submit" id="" class="btn bg-primary">Submit form</button>
-				</div>
-			</form>
-			{%else%}
-			
-			<a href="#" data-toggle="modal" data-target='#land_aqsn_form_modal'  class="float-right btn btn-warning btn-md m-2">Add Land Acquisition</a>
-			{%endif%}
+						<div class="tab-pane fade active show" id="profile">
+							<div class="card">
+								<div class="card-header header-elements-sm-inline">
+									<h6 class="card-title">You Can Edit/Update Your Investment Project Profile Here</h6>
+								</div>
 
-		</div>
-		<hr>
-		<div>
-			{%if land_usage_data%}
-			<h3 class="text text-primary p-4 m-1 card-title">Investment Land Size and Usage </h3>
-			<form id="usage_form" action="{%url 'admin:update_land_use' pk=land_usage_data.id%}" enctype="multipart/form-data" method="POST">
-				{%csrf_token%}
-				
-				<div class="modal-body">
-					{{usage_form|crispy}}
-				</div>
-
-				<div class="modal-footer">
-					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
-				</div>
-			</form>
-			{%else%}
-			
-			<a href="#" data-toggle="modal" data-target='#usage_form_modal'  class="float-right btn btn-warning btn-md m-2">{{object.land_usage.all.count}}Add Land Usage</a>
-			{%endif%}
-			
-		</div>
-		<hr>
-		  {%if project_state%}
-		  <h3 class="text text-primary p-4 m-1 card-title">Project State form</h3>
-		  <div>
-			<form id="usage_form" action="{%url 'admin:update_project_state'  pk=project_state.id%}" enctype="multipart/form-data" method="POST">
-				{%csrf_token%}
-				
-				<div class="modal-body">
-					{{pstate_form|crispy}}
-				</div>
-
-				<div class="modal-footer">
-					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
-				</div>
-			</form>
-		 </div>
-
-		<hr>	
-	  {%else%}
-		  <hr>
-		<div>
-			<a href="#" data-toggle="modal" data-target='#status_form_modal' class="float-right btn btn-warning btn-md m-2">Add  Project State</a>
-		</div>
-		 
-		<hr>
-		{%endif%}
-		<div>
-			<a href="#" data-toggle="modal" data-target='#product_form_modal' class="float-right btn btn-warning btn-md m-2">Add  Product Quantity</a>
-		</div>
-		<hr>
-		<div>
-			<div class="card-body">
-				<table class="table">
-					<thead>
-						<tr>
-							<th>Product</th>
-							<th>Expected Normal Capacity</th>
-							<th>Espected anual Sales</th>
-							<th>Local Share</th>
-							<th>Export share</th>
-						</tr>
-					</thead>
-					<tbody>
-						{%for lu in object.project_product_qty.all%}
-						<tr>
-							<td>{{lu.product_tobe_produced}}</td>
-							<td>{{lu.expected_normal_capacity}}</td>
-							<td>{{lu.expected_anual_sales}}</td>
-							<td>{{lu.local_share}}</td>
-							<td>{{lu.export_share}}</td>
-		
-						</tr>
-						{%endfor%}
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<hr>
-	</div>
-	<!-- /starting step -->
-
-</div>
-<!-- /content area -->
-<div id="inv_capital_form_modal" class="modal fade" tabindex="-1">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Investment Capital Data For Investment Project</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<form id="inv_capital_form" action="{%url 'admin:create_inv_cap_project' project=object.id%}" method="POST">
-
-				{%csrf_token%}
-				<div class="modal-body">
-				
-					<div class="form-group">
-						<div class="row">
-							<div class="col-sm-4">
-								{{inv_capital_form.machinery_cost.label}}
-								 {{inv_capital_form.machinery_cost}}
-							</div>
-							<div class="col-sm-4">
-								{{inv_capital_form.building_cost.label}}
-								{{inv_capital_form.building_cost}}
+								<div class="card-body">
+									 <form id='update_project_form' action="#" enctype="multipart/form-data" method="post">
+										{%csrf_token%}
+										{{form|crispy}}
+										<div>
+											<button id="submit_update" type="submit" class="btn btn-success btn-md">Save Chages <i class="fa fa-mark"></i></button>
+										</div>
+									</form>
+								</div>
+								<div class="card-footer">
+									 
+								</div>
 							</div>
 
-							<div class="col-sm-4">
-								{{inv_capital_form.working_capital.label}}
-								 {{inv_capital_form.working_capital}}
-							</div>
+					    </div>
+						{%include 'admin/company/project_form_tabs.html'%}
+					    
+
+					</div>
+					<!-- /left content -->
+
+
+					<!-- Right sidebar component -->
+					<div class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-right wmin-300 border-0 shadow-0 order-1 order-md-2 sidebar-expand-md">
+
+						<!-- Sidebar content -->
+						<div class="sidebar-content">
+							
+					    	<!-- /user card -->
+							<div class="card">
+								<div class="card-header bg-transparent header-elements-inline">
+									<span class="card-title font-weight-semibold">Additional Investment Project Data</span>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+				                		</div>
+			                		</div>
+								</div>
+
+								<div class="card-body p-0">
+									<ul class="nav nav-sidebar my-2">
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#profile" class="nav-link">
+												<i class="icon-office"></i>
+												Project Information
+											</a>
+										</li>
+										<li class="nav-item">
+											{%if object.get_project_address%}
+											<a href="#" id="edit_address" data-toggle="tab" data-target="#address" class="nav-link">
+												<i class="icon-phone"></i>
+												Investment Project Address 
+											</a>
+											{%else%}
+											<a href="#" data-toggle="tab" data-target="#address" class="nav-link">
+												<i class="icon-phone"></i>
+												Investment Project Address
+											</a>
+											{%endif%}
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#inv_capital_form_tab" class="nav-link">
+												<i class="icon-cash3"></i>
+												Investment Capital
+											</a>
+										</li>
+										 
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#employees_form_tab" class="nav-link">
+												<i class="icon-users4"></i>
+												Employees
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#createdjob_form_tab" class="nav-link">
+												<i class="icon-task"></i>
+												Created Jobs
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#education_status_form_tab" class="nav-link">
+												<i class="icon-user-tie"></i>
+												Employee Education Status
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										 
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#land_aqsn_form_tab" class="nav-link">
+												<i class="icon-stack2"></i>
+												Land Acquisition
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#land_usage_form_tab" class="nav-link">
+												<i class="icon-power2"></i>
+												Land Usage
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#project_state_form_tab" class="nav-link">
+												<i class="icon-location3"></i>
+												Project State
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" data-toggle="tab" data-target="#project_quantity_form_tab" class="nav-link">
+												<i class="icon-target "></i>
+												Product Quantity
+												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+											</a>
+										</li>
+										
+									</ul>
+								</div>
+							</div> 
+							<!-- /balance changes -->
+
+						</div>
+						<!-- /sidebar content -->
+
+					</div>
+					<!-- /right sidebar component -->
+
+				</div>
+				<!-- /inner container -->
+
+			</div>
+			<!-- /content area -->
+			{%include 'admin/company/project_form_modals.html'%}
+		<!-- Modal Area End -->
+				<div class="modal fade" id="modalCrop">
+					<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+						<img src="" id="image" style="max-width: 100%;">
+						</div>
+						<div class="modal-footer">
+						<button type="button" id= "cancel-btn" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button type="button" id="js-crop-and-upload-button" class="btn btn-primary js-crop-and-upload">Save Croped</button>
 						</div>
 					</div>
+					</div>
+				</div>
+			 <script>
+				$(document).ready(function(){
+					$("#edit_address").click(function(){
+						$('select[name="region"]').find('option[value="{{object.get_project_address.region.id}}"]').attr("selected",true);
+						$("#id_city_town").val("{{object.get_project_address.city_town}}".toUpperCase());
+						$("#id_subcity_zone").val("{{object.get_project_address.subcity_zone}}".toUpperCase());
+						$("#id_woreda").val("{{object.get_project_address.woreda}}".toUpperCase());
+						$("#id_kebele").val("{{object.get_project_address.kebele}}".toUpperCase());
+						$("#id_local_area").val("{{object.get_project_address.local_area}}".toUpperCase());
+						$("#id_phone_number").val("{{object.get_project_address.phone_number}}".toUpperCase());
+						$("#id_fax").val("{{object.get_project_address.fax}}".toUpperCase());
+						$("#id_email").val("{{object.get_project_address.email}}".toUpperCase());
+						$("#id_facebooklink").val("{{object.get_project_address.facebooklink}}".toUpperCase());
+						$("#id_twiterlink").val("{{object.get_project_address.twiterlink}}".toUpperCase());
+						$("#id_instagramlink").val("{{object.get_project_address.instagramlink}}".toUpperCase());
+						$("#id_linkedinlink").val("{{object.get_project_address.linkedinlink}}".toUpperCase());
+						$("#id_googlelink").val("{{object.get_project_address.googlelink}}".toUpperCase());
+					});
+					$("#id_total_land_size").val("{{land_usage_data.total_land_size}}");
+					$("#id_production_building").val("{{land_usage_data.production_building}}");
+					$("#id_office_building").val("{{land_usage_data.office_building}}");
+					$("#id_warehouse").val("{{land_usage_data.warehouse}}");
+					$("#id_other").val("{{land_usage_data.other}}");
+					// 
+					$("#id_percentage_construction_performance").val("{{project_state.percentage_construction_performance}}");
+					$("#id_machinery_purchase_performance").val("{{project_state.machinery_purchase_performance}}");
+					$("#id_factory_building_performance").val("{{project_state.factory_building_performance}}");
+					$("#id_machinery_installation").val("{{project_state.machinery_installation}}");
+					$("#id_commissioning_work").val("{{project_state.commissioning_work}}");
+					$("#id_rawmaterial_preparation").val("{{project_state.rawmaterial_preparation}}");
+					$("#id_hremployment_training").val("{{project_state.hremployment_training}}");
+					$("#id_testproduct").val("{{project_state.testproduct}}");
+					$("#id_certification").val("{{project_state.certification}}");
+					// 
+					$("#id_machinery_cost").val("{{inv_cap_data.machinery_cost}}");
+					$("#id_building_cost").val("{{inv_cap_data.building_cost}}");
+					$("#id_working_capital").val("{{inv_cap_data.working_capital}}");
+					// 
+					$("#id_its_own").val("{{land_aqsn_data.its_own}}");
+					$("#id_lease").val("{{land_aqsn_data.lease}}");
+					$("#id_rent").val("{{land_aqsn_data.rent}}");
+					var cropper;
+					var imageFile;
+					var baseb4ImageString;
+					var cropX;
+					var cropY;
+					var cropWidth;
+					var cropHeight;
 
-				</div>
+					var imageField = document.getElementById('#id_logo')
+					var modalCropEdit = document.getElementById('image')
+					var force = document.getElementById('force')
+					$("#id_logo").change(function () {
+						if (this.files && this.files[0]) {
 
-				<div class="modal-footer">
-					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-					<button type="submit" id="submit_inv_capital" class="btn bg-primary">Submit form</button>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-<div id="land_aqsn_form_modal" class="modal fade" tabindex="-1">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Land Acquisition Data</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<span></span>
-			<form id="usage_form" action="{%url 'admin:create_land_acqsn' project=object.id%}" enctype="multipart/form-data" method="POST">
-				{%csrf_token%}
-				
-				<div class="modal-body">
-					{{land_aquisition|crispy}}
-				</div>
+							var reader = new FileReader();
+							reader.onload = function (e) {
 
-				<div class="modal-footer">
-					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-<div id="usage_form_modal" class="modal fade" tabindex="-1">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Land size and usage</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<span></span>
-			<form id="usage_form" action="{%url 'admin:create_land_use' project=object.id%}" enctype="multipart/form-data" method="POST">
-				{%csrf_token%}
-				
-				<div class="modal-body">
-					{{usage_form|crispy}}
-				</div>
+								$("#image").attr("src", e.target.result);
+								$("#modalCrop").modal("show");
+							}
+							reader.readAsDataURL(this.files[0])
 
-				<div class="modal-footer">
-					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-<div id="status_form_modal" class="modal fade" tabindex="-1">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">The current state of the project </h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<span></span>
-			<form id="usage_form" action="{%url 'admin:create_project_state'  project=object.id%}" enctype="multipart/form-data" method="POST">
-				{%csrf_token%}
-				
-				<div class="modal-body">
-					{{pstate_form|crispy}}
-				</div>
+						}
+					});
+					
+					$("#modalCrop").on("shown.bs.modal", function () {
+						modalCropEdit = document.getElementById('image')
+						cropper = new Cropper(modalCropEdit, {
+							viewMode: 1,
+							aspectRatio: 1 / 1,
+							minCropBoxWidth: 200,
+							minCropBoxHeight: 200,
+							built: function () {
+								$("#image").cropper('setCropBoxData', { width: 640 });
+							},
+							cropmove: function () {
+								$("#image").cropper('setCropBoxData', { width: 640 });
+							},
 
-				<div class="modal-footer">
-					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
+							crop(event) {
+								setImageCropProperties(
+									image,
+									event.detail.x,
+									event.detail.y,
+									event.detail.width,
+									event.detail.height)
+							}
+						})
+					})
 
-<div id="product_form_modal" class="modal fade" tabindex="-1">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Product Quantity</h5>
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<span></span>
-			<form id="usage_form" action="{%url 'admin:create_product_qty'  project=object.id%}" enctype="multipart/form-data" method="POST">
-				{%csrf_token%}
-				
-				<div class="modal-body">
-					{{product_form|crispy}}
-				</div>
 
-				<div class="modal-footer">
-					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-<script>
-	$(document).ready(function () {
-		$(".summernote").summernote();
- 		$("#id_total_land_size").val("{{land_usage_data.total_land_size}}");
-		$("#id_production_building").val("{{land_usage_data.production_building}}");
-		$("#id_office_building").val("{{land_usage_data.office_building}}");
-		$("#id_warehouse").val("{{land_usage_data.warehouse}}");
-		$("#id_other").val("{{land_usage_data.other}}");
-		// 
- 		$("#id_percentage_construction_performance").val("{{project_state.percentage_construction_performance}}");
-		$("#id_machinery_purchase_performance").val("{{project_state.machinery_purchase_performance}}");
-		$("#id_factory_building_performance").val("{{project_state.factory_building_performance}}");
-		$("#id_machinery_installation").val("{{project_state.machinery_installation}}");
-		$("#id_commissioning_work").val("{{project_state.commissioning_work}}");
-		$("#id_rawmaterial_preparation").val("{{project_state.rawmaterial_preparation}}");
-		$("#id_hremployment_training").val("{{project_state.hremployment_training}}");
-		$("#id_testproduct").val("{{project_state.testproduct}}");
-		$("#id_certification").val("{{project_state.certification}}");
-		// 
-		$("#id_machinery_cost").val("{{inv_cap_data.machinery_cost}}");
-		$("#id_building_cost").val("{{inv_cap_data.building_cost}}");
-		$("#id_working_capital").val("{{inv_cap_data.working_capital}}");
-		// 
-		$("#id_its_own").val("{{land_aqsn_data.its_own}}");
-		$("#id_lease").val("{{land_aqsn_data.lease}}");
-		$("#id_rent").val("{{land_aqsn_data.rent}}");
+					function setImageCropProperties(image, x, y, width, height) {
+						imageFile = image;
+						// console.log(imageFile)
+						cropX = x;
+						cropY = y;
+						cropWidth = width;
+						cropHeight = height;
+					}
+					function cropImage(x, y, width, height) {
+						var x = document.getElementById("id_x")
+						x.value = cropX
 
-	});
-</script>
+						var y = document.getElementById("id_y")
+						y.value = cropY
+
+						var width = document.getElementById("id_width")
+						width.value = cropWidth
+
+						var height = document.getElementById("id_height")
+						height.value = cropHeight
+					
+					}
+					var confirm = document.getElementById("js-crop-and-upload-button")
+					confirm.addEventListener("click", function (event) {
+
+						cropImage(cropX, cropY, cropWidth, cropHeight)
+						$("#modalCrop").modal("hide");
+
+					});
+
+
+				 });
+
+
+			 </script>
 {%endblock%}
