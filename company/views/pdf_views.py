@@ -566,7 +566,7 @@ class GenerateCompanyToPDF(LoginRequiredMixin,View):
             return response
         return HttpResponse("Not found")
 
-
+@method_decorator(decorators,name='dispatch')
 class GenerateProjectPdf(View):
     def get(self, request, *args, **kwargs):
         context = {}
