@@ -24,6 +24,7 @@ class PollsQuestion(models.Model):
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="poll_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
 
     
     model_am = "ምርጫዎች"
@@ -106,7 +107,9 @@ class Blog(models.Model):
     publish = models.BooleanField(null=False,default=False)
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="blog_updated_by")
     last_updated_date = models.DateTimeField(null=True)
+    is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
+
 
     model_am =  "ብሎጎች" 
 
@@ -130,6 +133,7 @@ class BlogComment(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="BlogComment_updated_by")
     last_updated_date = models.DateTimeField(null=True)
+    is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
 
     class Meta:
@@ -150,7 +154,7 @@ class Faqs(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
-
+    is_active = models.BooleanField(default=False)
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="faq_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
@@ -184,6 +188,7 @@ class Tender(models.Model):
     end_date = models.DateTimeField(verbose_name="Tender end date")
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="tender_updated_by")
     last_updated_date = models.DateTimeField(null=True)
+    is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
     
     def get_applications(self):
@@ -211,6 +216,7 @@ class TenderApplicant(models.Model):
     company_name = models.CharField(verbose_name="first_name", max_length=50)
     company_tin_number = models.CharField(verbose_name="first_name", max_length=50)
     tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
+
     timestamp = models.DateTimeField(auto_now_add=True)
 
   
@@ -254,6 +260,7 @@ class Vacancy(models.Model):
     created_date = models.DateTimeField(auto_now_add=True,editable=False)
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="vacancy_updated_by")
     last_updated_date = models.DateTimeField(null=True)
+    is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
 
     class Meta:
@@ -315,6 +322,7 @@ class News(models.Model):
     ), verbose_name="News Catagory, the choices are ")
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="news_updated_by")
     last_updated_date = models.DateTimeField(null=True)
+    is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
 
     model_am ="ዜናዎች"
@@ -362,6 +370,7 @@ class ForumQuestion(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="forum_question_updated_by")
     last_updated_date = models.DateTimeField(null=True)
+    is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
 
 
@@ -387,6 +396,7 @@ class ForumComments(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="forum_comments_updated_by")
     last_updated_date = models.DateTimeField(null=True)
+    is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
 
     def __str__(self):
@@ -430,6 +440,7 @@ class Announcement(models.Model):
     description_am = models.TextField(null=False)
     last_updated_by = models.ForeignKey (settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, blank=True, null = True, related_name="announcemnt_updated")
     last_updated_date = models.DateTimeField(blank=True, null = True)
+    is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
 
     class Meta:
@@ -492,6 +503,7 @@ class Research(models.Model):
     category = models.ForeignKey(ResearchProjectCategory, on_delete = models.CASCADE)
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="research_updated_by")
     last_updated_date = models.DateTimeField(null=True)
+    is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
     company = models.ForeignKey(Company, on_delete = models.CASCADE, blank=True, null = True)
 
@@ -531,6 +543,7 @@ class Project(models.Model):
     last_updated_by = models.ForeignKey (settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, blank=True, null = True, related_name="project_updated")
     last_updated_date = models.DateTimeField(blank=True, null = True)
     expired = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
 
 
     class Meta:
