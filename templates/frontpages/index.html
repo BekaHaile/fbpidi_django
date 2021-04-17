@@ -254,9 +254,11 @@
 														<div  class="row mt-1 mb-1 mr-2">
 															<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" >
 																<input type="hidden" name="products" value="{{product.id}},">
-																<button class="btn btn-primary btn-sm pull-right mr-3"     id="product_contact_now" type="submit">{% trans "Contact Now" %}</button>
+																<button class="btn btn-primary btn-sm pull-right mr-3"     id="product_contact_now" type="submit">{% trans "Inquiry Now" %}</button>
 															</form>
-															<button class="btn btn-primary btn-sm pull-right" style = "background-color: #ff8819; border: 1px solid; border-color: #ff8819; "id = "prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
+															<button class="btn btn-primary btn-sm pull-right" style = "background-color: #ff8819; border: 1px solid;  color: white; border-color: #ff8819; ">
+																<a target = "blank" href="/company/contact/{{product.company.id}}/" style = "color: white" class="">{% trans "Contact Supplier" %}</a>
+															</button>
 														</div>
 													</div>
 												</div>
@@ -379,9 +381,27 @@
 												class="icon icon-check text-success fs-12 ml-1" data-toggle="tooltip"
 												data-placement="top" title="verified"></i></h5>
 									</div>
-									<div class="mt-2 footerimg-r ml-auto">
-										<a href="#" class="text-pink" data-toggle="tooltip" data-placement="top"
-											title="Remove from Wishlist"><i class="fa fa-heart"></i></a>
+									<div id ="company_list"class="mt-2 footerimg-r ml-auto">
+										{% if user.is_authenticated %}
+											{% user_liked_company user company.id  as liked %}
+											{% if liked == True %}
+											<a  class="text-pink" data-toggle="tooltip" data-placement="top" title="You Liked Company"><i class="fa fa-heart"></i></a>
+											<!-- <a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a> -->
+											{% else %}
+											<a  href=""  id="like_{{company.id}}" name="like_{{company.id}}" onclick="like_company('{{company.id}}')" data-toggle="tooltip" data-placement="top" title="Like This Company"><i class="fa fa-heart"></i></a>
+											
+											
+											{% endif %}
+										{% else %}
+										<a href = "/accounts/login/?next=/company/like_company"   id="like_{{company.id}}" data-toggle="tooltip" data-placement="top" title="You have to Login to Like"><i class="fa fa-heart"></i></a>
+											
+										<!-- <a  href= "/accounts/login/?next=/company/like_company"  class="item-card9-icons1 wishlist"  > <i style="color:white; " class="fa fa fa-heart-o"></i></a> -->
+
+										{% endif %}
+
+
+										<!-- <a href="#" class="text-pink" data-toggle="tooltip" data-placement="top"
+											title="Remove from Wishlist"><i class="fa fa-heart"></i></a> -->
 									</div>
 								</div>
 							</div>
@@ -846,5 +866,47 @@
 	</div>
 </section>
 <!--/Download App-->
+<script>
+	function like_company(c_id)
+	{
+		if (document.getElementById('like_'+c_id).value != "liked")
+		{
+				fetch("{% url 'like_company'  %}",
+			{
+			method:"POST",
+			credentials: 'same-origin',
+			headers:{
+				"content-Type":'application/json',
+				'X-CSRFToken':'{{csrf_token}}'
+			},
+			body:JSON.stringify({
+				'c_id': c_id,
+			})
+			}).then(e => e.json()).then(result=>{
+				if(result['error'] == false){
+					var heart = document.getElementsByName('like_'+c_id)
+					heart.forEach(h=>{
+						h.class = "text-pink";
+						h.value = "liked"
+						console.log("hello")
+					})
+					window.alert('Company Liked Successfull')
+					
+					
+					
+				}
+				else{
+					window.alert("not like")
+				}   		
+			});
+
+		}
+		
+		
+	}
+
+</script>
+
+
 
 {%endblock%}
