@@ -538,7 +538,7 @@ class ApiVacancyApplication(APIView):
     def get(self, request):
         try:
             vacancy = get_object_or_404(Vacancy, id = int(request.query_params['id']))
-            if JobApplication.objects.filter(vacancy=vacancy, user=request.user).exists():
+            if JobApplication.objects.filter(vacancy=vacancy, created_by=request.user).exists():
                 return Response(data = {'error':True, 'message': "You can't apply to the same vacancy Twice"})
             jobcategory = JobCategory.objects.all()
         except Http404:
@@ -550,14 +550,14 @@ class ApiVacancyApplication(APIView):
     def post(self, request):
         try:
             vacancy = get_object_or_404(Vacancy, id = int(request.data['id']))
-            if JobApplication.objects.filter(vacancy=vacancy, user=request.user).exists():
+            if JobApplication.objects.filter(vacancy=vacancy, created_by=request.user).exists():
                 return Response(data = {'error':True, 'message': "You can't apply to the same vacancy Twice"})
         except Http404:
             return Response(data = {'error': True , 'message':'Vacancy Not Found!'})
         form = CreateJobApplicationForm(request.POST,request.FILES)
         if form.is_valid():
             job =  form.save(commit=False)
-            job.user = request.user
+            job.created_by = request.user
             job.vacancy =  Vacancy.objects.get(id =request.data['id'])
             job.save()
             return Response(data = {'error':False, 'application': JobApplicationSerializer(job).data })
@@ -624,8 +624,8 @@ class ApiCreateResearch(APIView):
             else:
                 research.accepted = "PENDING"
             research.created_by = request.user
-            if request.FILES:
-                research.attachements = request.FILES['attachements']
+            if 'atttachements' in request.data:
+                research.attachements = request.data['attachements']
             research.save()
             return Response(data = {'error':False, 'researchs': ResearchSerializer(research).data})
         return Response(data ={'error':True, 'message': f"Invaid inputs to create a research!{form.errors}"})

@@ -263,7 +263,8 @@
 									</a>
 
 									<!-- <a href="#" class="btn btn-primary icons"><i class="icon icon-printer  mr-1"></i> Print</a> -->
-									<a href="{%url 'add_to_cart' id=product.id%}" class="btn btn-primary icons mb-1 mt-1" ><i class="icon icon-shopping-cart mr-1"></i> Add to Cart</a>
+									<!-- <a href="{%url 'add_to_cart' id=product.id%}" class="btn btn-primary icons mb-1 mt-1" ><i class="icon icon-shopping-cart mr-1"></i> Add to Cart</a> -->
+									<button class="btn btn-secondary br-tr-3 br-br-3 " id = "prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
 								</div>
 							</div>
 						</div>

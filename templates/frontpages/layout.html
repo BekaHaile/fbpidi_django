@@ -677,10 +677,15 @@ function set_inquiry_display(){
                 let selected_ids = get_int_ids(localStorage.getItem('prods'))
                 selected_ids.forEach(i => {
                  document.getElementById('prod_'+i).disabled = true;
+                 
+                 buttons = document.getElementsByName('prod_'+i)
+                 buttons.forEach(b=>
+                {
+                    b.disabled = true
+                })
                  //disabling the button in the grid view
-                 if(document.getElementById('gprod_'+i))
-                    document.getElementById('gprod_'+i).disabled = true;
-                
+                //  if(document.getElementById('gprod_'+i))
+                //     document.getElementById('gprod_'+i).disabled = true;
                 })
             }
         }
@@ -735,18 +740,36 @@ function remove_prod_from_cart(p_id){
     localStorage.setItem('prods', cart_ids.replace(prod_id, ''))
     fetch_products()
     
-    // if this function is called inside product list webpage refresh the view 
-    if( document.getElementById('prod_'+p_id)){
-        document.getElementById('prod_'+p_id).disabled = false
-        // for the grid button
-        if(document.getElementById('gprod_'+p_id))
-            document.getElementById('gprod_'+p_id).disabled = false
+    // if this function is called inside product list webpage refresh the view
+    buttons = document.getElementsByName('prod_'+i)
+        buttons.forEach(b=>
+    {
+        b.disabled = false
+    })
+    // if( document.getElementById('prod_'+p_id)){
+    //     document.getElementById('prod_'+p_id).disabled = false
+    //     // for the grid button
+    //     if(document.getElementById('gprod_'+p_id))
+    //         document.getElementById('gprod_'+p_id).disabled = false
 
 
-    }
+    // }
     
 }
-
+function enable_buttons(button_name){
+    buttons = document.getElementsByName(button_name)
+    buttons.forEach(b=>
+                {
+                    b.disabled = false
+                })
+}
+function  disable_buttons(button_name){
+    buttons = document.getElementsByName(button_name)
+    buttons.forEach(b=>
+                {
+                    b.disabled = true
+                })
+}
 function add_to_cart(product_id){
     if("{{user.is_authenticated}}"=="True"){
             if(localStorage.getItem("prods") == null)
@@ -756,9 +779,10 @@ function add_to_cart(product_id){
                 var p = localStorage.getItem("prods")+product_id+","
                 localStorage.setItem("prods", p) ;
                 // then disable the Add to Basket for that specific product
-                document.getElementById('prod_'+product_id).disabled = true
-                if(document.getElementById('gprod_'+product_id))
-                    document.getElementById('gprod_'+product_id).disabled = true
+                disable_buttons('prod_'+i)
+                // document.getElementById('prod_'+product_id).disabled = true
+                // if(document.getElementById('gprod_'+product_id))
+                //     document.getElementById('gprod_'+product_id).disabled = true
             }
    
             fetch_products();

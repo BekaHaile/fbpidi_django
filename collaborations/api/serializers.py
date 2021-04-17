@@ -104,10 +104,15 @@ class BlogDetailSerializer(serializers.ModelSerializer):
 
 class AnnouncementSerializer(serializers.ModelSerializer):
     company = CompanyInfoSerializer(read_only = True)  
-
+    images = serializers.SerializerMethodField('get_images')
     class Meta:
         model = Announcement
         fields = "__all__"
+    def get_images(self, announcement):
+        images = []
+        for announcement_image in announcement.announcementimages():
+            images.append(announcement_image.image.url)
+        return images        
 
 
 class AnnouncementDetailSerializer(serializers.ModelSerializer):
