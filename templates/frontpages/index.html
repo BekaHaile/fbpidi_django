@@ -751,13 +751,13 @@
 					</div>
 					<div class="card-body p-0">
 						<ul class="list-group widget-spec">
-							{%for category in categories%}
-							{%if category.category_type == "Food"%}
+							{%for category in product_type%}
+							{%if category.category_name.category_type == "Food"%}
 							<li class="">
 								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">
-									{% print_translated category.category_name category.category_name_am LANGUAGE_CODE%}</a>
+									{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
 								<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">
-									{{category.id|product_count_bycategory}}</span>
+									{{category.id|product_count_by_subcategory}}</span>
 							</li>
 							{%endif%}
 							{%endfor%}
@@ -777,12 +777,12 @@
 					</div>
 					<div class="card-body p-0">
 						<ul class="list-unstyled widget-spec">
-							{%for category in categories%}
-							{%if category.category_type == "Beverage"%}
+							{%for category in product_type%}
+							{%if category.category_name.category_type == "Beverage"%}
 							<li class="">
-								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.category_name category.category_name_am LANGUAGE_CODE%}</a>
+								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
 								<span
-									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_bycategory}}</span>
+									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_by_subcategory}}</span>
 							</li>
 							{%endif%}
 							{%endfor%}
@@ -802,12 +802,12 @@
 					</div>
 					<div class="card-body p-0">
 						<ul class="list-unstyled widget-spec">
-							{%for category in categories%}
-							{%if category.category_type == "Pharmaceuticals"%}
+							{%for category in product_type%}
+							{%if category.category_name.category_type == "Pharmaceuticals"%}
 							<li class="">
-								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.category_name category.category_name_am LANGUAGE_CODE%}</a>
+								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
 								<span
-									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_bycategory}}</span>
+									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_by_subcategory}}</span>
 							</li>
 							{%endif%}
 							{%endfor%}

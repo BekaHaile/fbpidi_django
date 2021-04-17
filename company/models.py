@@ -31,7 +31,7 @@ class Company(models.Model):
 	geo_location	= gis_models.PointField(verbose_name="Company Location",null=True)
 	ownership_form = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,
 										verbose_name="Form Of Ownership",related_name="ownership_form")
-	established_yr	= models.IntegerField(verbose_name="Established Year",default=0)
+	established_yr	= models.IntegerField(verbose_name="Established Year (E.C)",default=0)
 	detail = models.TextField(verbose_name="Company Description in English",default="")
 	detail_am = models.TextField(verbose_name="Company Description in Amharic",default="")
 	contact_person	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True,related_name="contact_person") # contact person
@@ -300,6 +300,7 @@ class InvestmentProject(models.Model):
 	owner_share	= models.FloatField(default=0,verbose_name="Owners Equity Share in %")
 	bank_share	= models.FloatField(default=0,verbose_name="Bank Equity Share in %")
 	capital_in_dollary	= models.FloatField(default=0,verbose_name="Capital required In Dollar")
+	owners_nationality = models.CharField(max_length=200,verbose_name="Nationality of Owner/s",default="")
 	investment_license	= models.CharField(max_length=200, verbose_name="Investment License Code")
 	issued_date	= models.DateField()
 	description = models.TextField(verbose_name="Investment Project Description in English",null=True)
@@ -307,7 +308,7 @@ class InvestmentProject(models.Model):
 	sector	= models.CharField(choices=CAT_LIST,max_length=50, verbose_name="Project Sector")
 	product_type = models.ManyToManyField(Category,verbose_name="Sub Sector",related_name="project_product_types")
 	site_location_name = models.CharField(verbose_name="Site location street name", max_length=200,null=True,blank=True)
-	distance_f_strt	= models.FloatField(default=0,verbose_name="Distance of the Site from the Street in Meter")
+	distance_f_strt	= models.FloatField(default=0,verbose_name="Distance of the Site from the Street in Km")
 	# land_acquisition = models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT, related_name="land_aquisition", verbose_name="Land Acquisition",null=True,blank=True)
 	project_classification	= models.ForeignKey(ProjectDropDownsMaster, on_delete=models.CASCADE,related_name="project_classification",verbose_name="Project Classification",null=True,blank=True)
 	contact_person	=  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT,null=True,blank=True)

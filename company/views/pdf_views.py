@@ -34,6 +34,10 @@ class GenerateAllCompanyPdf(View):
         total_inv_cap_data = []
         ownership_data = []
         education_status_data = []
+        current_year= get_current_year()
+        if self.kwargs['year'] != 'all':
+            current_year = self.kwargs['year']
+
         companies = Company.objects.all().exclude(main_category='FBPIDI').order_by('id')
         products = SubCategory.objects.all()
         if self.kwargs['region'] != "all":
@@ -80,7 +84,7 @@ class GenerateAllCompanyPdf(View):
         total_edu = 0
         for company in companies:
             queryset_edu = EducationalStatus.objects.filter(
-                company=company,year_edu=get_current_year()).values('education_type').annotate(
+                company=company,year_edu=current_year).values('education_type').annotate(
                      Sum('male'),Sum('female'),total_edu=Sum('male')+Sum('female') ).order_by('education_type')
             
             fem_edu = 0
@@ -119,7 +123,7 @@ class GenerateAllCompanyPdf(View):
         total_fem_posn = 0
         for company in companies:
             queryset_female_posn = FemalesInPosition.objects.filter(
-                    company=company,year_fem=get_current_year()).values('company__name').annotate(
+                    company=company,year_fem=current_year).values('company__name').annotate(
                         high_position=Sum('high_position'),med_position=Sum('med_position')
                     )
             in_med = 0
@@ -141,7 +145,7 @@ class GenerateAllCompanyPdf(View):
                                     'data':working_hour['id__count']})
         prodn_data = []
         for company in companies:
-            pdata = ProductionCapacity.objects.filter(company=company,year=get_current_year()).values('product__sub_category_name','product__uom__name').annotate(total_prdn_capacity=Sum('install_prdn_capacity')*260,total_actual=Sum('actual_prdn_capacity')*260).order_by('product')
+            pdata = ProductionCapacity.objects.filter(company=company,year=current_year).values('product__sub_category_name','product__uom__name').annotate(total_prdn_capacity=Sum('install_prdn_capacity')*260,total_actual=Sum('actual_prdn_capacity')*260).order_by('product')
             for p in pdata:
                 prodn_data.append({
                     'company':company,
@@ -157,7 +161,7 @@ class GenerateAllCompanyPdf(View):
         product = ""
         unit = ""
         for company in companies:
-            inp_dem_sups = InputDemandSupply.objects.filter(company=company,year=get_current_year()).values('product__sub_category_name','input_unit__name').annotate(
+            inp_dem_sups = InputDemandSupply.objects.filter(company=company,year=current_year).values('product__sub_category_name','input_unit__name').annotate(
                 demand=Sum('demand'),supply = Sum('supply')
             )
             if inp_dem_sups.exists():
@@ -177,7 +181,7 @@ class GenerateAllCompanyPdf(View):
                                     'data':av_inp*100})
         local_share_data = []
         for company in companies:
-            ann_inp_need = AnnualInputNeed.objects.filter(company=company,year=get_current_year()).values(
+            ann_inp_need = AnnualInputNeed.objects.filter(company=company,year=current_year).values(
                                             'company__name','company__main_category','input_name',
                                             'product__sub_category_name','input_unit__name').annotate(
                                                 local_share = Sum('local_input',output=models.FloatField())).order_by('product')
@@ -189,8 +193,8 @@ class GenerateAllCompanyPdf(View):
                                                     )
         capital_util_data = []
         for company in companies_with_data:
-            production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=get_current_year()).values('product','product__sub_category_name','company__name').annotate(all_data=Sum('production_amount'))
-            production_capacity_this_year = ProductionCapacity.objects.filter(company=company,year=get_current_year())
+            production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=current_year).values('product','product__sub_category_name','company__name').annotate(all_data=Sum('production_amount'))
+            production_capacity_this_year = ProductionCapacity.objects.filter(company=company,year=current_year)
             
             for (performance,capacity) in zip(production_performance_this_year,production_capacity_this_year):
                 if performance['product'] == capacity.product.id:
@@ -200,9 +204,9 @@ class GenerateAllCompanyPdf(View):
                     })
         change_capital_util_data = []
         for company in companies_with_data:
-            production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=get_current_year()).values('product','product__sub_category_name','product__uom','company__name').annotate(all_data=Sum('production_amount'))
-            production_performance_last_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=get_current_year()-1).values('product','product__sub_category_name','product__uom','company__name').annotate(all_data=Sum('production_amount'))
-            production_capacity_this_year = ProductionCapacity.objects.filter(company=company,year=get_current_year())
+            production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=current_year).values('product','product__sub_category_name','product__uom','company__name').annotate(all_data=Sum('production_amount'))
+            production_performance_last_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=current_year-1).values('product','product__sub_category_name','product__uom','company__name').annotate(all_data=Sum('production_amount'))
+            production_capacity_this_year = ProductionCapacity.objects.filter(company=company,year=current_year)
 
             if production_performance_last_year.exists():
                 for (performance_this,performance_last,capacity) in zip(production_performance_this_year,production_performance_last_year,production_capacity_this_year):
@@ -230,7 +234,7 @@ class GenerateAllCompanyPdf(View):
                         })
         extraction_rate = []
         for company in companies:
-            padata = ProductionCapacity.objects.filter(company=company,year=get_current_year()).values('product__sub_category_name','product__uom__name').annotate(avg_extraction_rate=Avg('extraction_rate')).order_by('product')
+            padata = ProductionCapacity.objects.filter(company=company,year=current_year).values('product__sub_category_name','product__uom__name').annotate(avg_extraction_rate=Avg('extraction_rate')).order_by('product')
             for p in padata:
                 extraction_rate.append(
                     {
@@ -243,7 +247,7 @@ class GenerateAllCompanyPdf(View):
         average_price_data = []
         for product in products:
             pup = 0
-            spp = ProductionAndSalesPerformance.objects.filter(product=product,activity_year=get_current_year()).values('product').annotate(
+            spp = ProductionAndSalesPerformance.objects.filter(product=product,activity_year=current_year).values('product').annotate(
                 total_sales_amnt=Sum('sales_amount'),total_sales=Sum('sales_value'))
 
             if spp.exists():
@@ -260,9 +264,9 @@ class GenerateAllCompanyPdf(View):
         for company in companies_with_data:
             perform_data = ProductionAndSalesPerformance.objects.filter(
                     company=company).values('company__name','product__sub_category_name').annotate(
-                        total_this_year=Sum('sales_value',filter=Q(activity_year=get_current_year())),
-                        total_last_year=Sum('sales_value',filter=Q(activity_year=get_current_year()-1)),
-                        total_prev_year=Sum('sales_value',filter=Q(activity_year=get_current_year()-2))
+                        total_this_year=Sum('sales_value',filter=Q(activity_year=current_year)),
+                        total_last_year=Sum('sales_value',filter=Q(activity_year=current_year-1)),
+                        total_prev_year=Sum('sales_value',filter=Q(activity_year=current_year-2))
                     )
             for gvp_index in perform_data:
                 gvp_data.append({
@@ -301,8 +305,8 @@ class GenerateAllCompanyPdf(View):
             for_emp_data.append({'company':company.name,'data':total,'for_male':total_for_emp_m,'for_female':total_for_emp_f})
         job_created_data = []
         for company in companies:
-            jobs_created_temp = JobOpportunities.objects.filter(company=company,job_type__icontains="Temporary",year_job=get_current_year())
-            jobs_created_permanent = JobOpportunities.objects.filter(company=company,job_type__icontains="Permanent",year_job=get_current_year())
+            jobs_created_temp = JobOpportunities.objects.filter(company=company,job_type__icontains="Temporary",year_job=current_year)
+            jobs_created_permanent = JobOpportunities.objects.filter(company=company,job_type__icontains="Permanent",year_job=current_year)
             
             temp_male = 0
             temp_female = 0
@@ -396,7 +400,7 @@ class GenerateAllCompanyPdf(View):
         context['for_emp_data'] = for_emp_data
         context['total_emp_data'] = emp_data_total
         context['gvp_data'] = gvp_data
-        context['years'] = {'this_year':get_current_year(),'last_year':get_current_year()-1,'prev_year':get_current_year()-2}        
+        context['years'] = {'this_year':current_year,'last_year':current_year-1,'prev_year':current_year-2}        
         context['price_data']=average_price_data
         context['extraction_rate'] = extraction_rate
         context['change_capital_util_data'] = change_capital_util_data
@@ -409,28 +413,28 @@ class GenerateAllCompanyPdf(View):
         context['total_fem_posn'] = total_fem_posn
         context['women_in_pson_level'] = women_in_pson_level
         context['destination_data'] = [{'label':"Exporting ",
-                                        'data':companies.filter(market_destination__export__gt=0,market_destination__year_destn=get_current_year()).count()},
+                                        'data':companies.filter(market_destination__export__gt=0,market_destination__year_destn=current_year).count()},
                                         {'label':"Local/Domestic",
-                                        'data':companies.filter(market_destination__domestic__gt=0,market_destination__year_destn=get_current_year()).count()}
+                                        'data':companies.filter(market_destination__domestic__gt=0,market_destination__year_destn=current_year).count()}
                                     ]
         context['target_data'] = [{'label':"Further Processing Factors",
-                                        'data':companies.filter(market_target__further_proc_power__gt=0,market_target__year_target=get_current_year()).distinct('id').count()},
+                                        'data':companies.filter(market_target__further_proc_power__gt=0,market_target__year_target=current_year).distinct('id').count()},
                                     {'label':"Final Consumers",
-                                        'data':companies.filter(market_target__final_consumer__gt=0,market_target__year_target=get_current_year()).distinct('id').count()},
+                                        'data':companies.filter(market_target__final_consumer__gt=0,market_target__year_target=current_year).distinct('id').count()},
                                     {'label':"Restaurant & Hotels",
-                                    'data':companies.filter(market_target__restaurant_and_hotels__gt=0,market_target__year_target=get_current_year()).distinct('id').count()},
+                                    'data':companies.filter(market_target__restaurant_and_hotels__gt=0,market_target__year_target=current_year).distinct('id').count()},
                                     {'label':"Institutions",
-                                    'data':companies.filter(market_target__institutions__gt=0,market_target__year_target=get_current_year()).distinct('id').count()},
+                                    'data':companies.filter(market_target__institutions__gt=0,market_target__year_target=current_year).distinct('id').count()},
                                     {'label':"EPSA",
-                                    'data':companies.filter(market_target__epsa__gt=0,market_target__year_target=get_current_year()).distinct('id').count()},
+                                    'data':companies.filter(market_target__epsa__gt=0,market_target__year_target=current_year).distinct('id').count()},
                                     {'label':"Hospitals",
-                                    'data':companies.filter(market_target__hospitals__gt=0,market_target__year_target=get_current_year()).distinct('id').count()},
+                                    'data':companies.filter(market_target__hospitals__gt=0,market_target__year_target=current_year).distinct('id').count()},
                                     {'label':"Agents",
-                                    'data':companies.filter(market_target__agents__gt=0,market_target__year_target=get_current_year()).distinct('id').count()},
+                                    'data':companies.filter(market_target__agents__gt=0,market_target__year_target=current_year).distinct('id').count()},
                                     {'label':"Wholesaler/Distributor",
-                                    'data':companies.filter(market_target__wholesaler_distributor__gt=0,market_target__year_target=get_current_year()).distinct('id').count()},
+                                    'data':companies.filter(market_target__wholesaler_distributor__gt=0,market_target__year_target=current_year).distinct('id').count()},
                                     {'label':"Retailor",
-                                    'data':companies.filter(market_target__retailer__gt=0,market_target__year_target=get_current_year()).distinct('id').count()},
+                                    'data':companies.filter(market_target__retailer__gt=0,market_target__year_target=current_year).distinct('id').count()},
                                  
                                 ]
         context['total_energy'] = total_energy
@@ -444,6 +448,7 @@ class GenerateAllCompanyPdf(View):
         context['total_ownership'] = total_ownership
         context['ownership_data'] = ownership_data
         context['inv_cap_data'] = total_inv_cap_data
+        context['current_year'] = current_year
         pdf = render_to_pdf('admin/report/all_report_pdf.html', context)
         if pdf:
             response = HttpResponse(pdf, content_type='application/pdf')
@@ -740,6 +745,54 @@ class GenerateProjectPdf(View):
             filename = "%s.pdf" %("Investment Project")
             content = "inline; filename='%s'" %(filename)
             download = request.GET.get("download")
+            if download:
+                content = "attachment; filename='%s'" %(filename)
+            response['Content-Disposition'] = content
+            return response
+        return HttpResponse("Not found")
+
+
+
+@method_decorator(decorators,name='dispatch')
+class GenerateProjectToPDF(LoginRequiredMixin,View):
+    def get(self, *args, **kwargs):
+        context = {}
+        project = InvestmentProject.objects.get(id=self.kwargs['pk'])
+        inv_cap =  InvestmentCapital.objects.filter(project=project).annotate(
+                        machinery = Sum('machinery_cost'),
+                        building = Sum('building_cost'),
+                        working = Sum('working_capital')
+                    )
+        employees = Employees.objects.filter(projct=project).aggregate(
+            male_temp = Sum('male',filter=Q(employment_type__icontains="Temporary")),
+            female_temp=Sum('female',filter=Q(employment_type__icontains="Temporary")),
+            male_perm = Sum('male',filter=Q(employment_type__icontains="Permanent")),
+            female_perm=Sum('female',filter=Q(employment_type__icontains="Permanent")),
+            male_foreign = Sum('male',filter=Q(employment_type__icontains="Foreign")),
+            female_foreign=Sum('female',filter=Q(employment_type__icontains="Foreign")),
+            )
+        jobs_created = JobOpportunities.objects.filter(project=project).aggregate(
+            male_temp = Sum('male',filter=Q(job_type__icontains="Temporary")),
+            female_temp=Sum('female',filter=Q(job_type__icontains="Temporary")),
+            male_perm = Sum('male',filter=Q(job_type__icontains="Permanent")),
+            female_perm=Sum('female',filter=Q(job_type__icontains="Permanent")),
+            )
+        edu_status = EducationalStatus.objects.filter(project=project).values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
+        
+        context = {
+                'project':project,
+                'inv_capital':inv_cap,
+                'employees':employees,
+                'jobs_created':jobs_created,
+                'edu_status':edu_status,
+            }
+
+        pdf = render_to_pdf('admin/report/project_pdf.html', context)
+        if pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = "%s.pdf" %(project.project_name.upper())
+            content = "inline; filename='%s'" %(filename)
+            download = self.request.GET.get("download")
             if download:
                 content = "attachment; filename='%s'" %(filename)
             response['Content-Disposition'] = content

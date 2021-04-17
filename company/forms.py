@@ -703,7 +703,7 @@ class InvestmentProjectForm(forms.ModelForm):
 
     class Meta:
         model=InvestmentProject
-        fields = ('project_name','project_name_am','image','ownership_form','established_yr','geo_location','owner_share','bank_share','capital_in_dollary',
+        fields = ('project_name','project_name_am','image','ownership_form','established_yr','owners_nationality','geo_location','owner_share','bank_share','capital_in_dollary',
             'investment_license','issued_date','sector','project_classification',
             'contact_person','description','description_am',
             )
@@ -711,6 +711,7 @@ class InvestmentProjectForm(forms.ModelForm):
             'image':forms.FileInput(attrs={}),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
+            'owners_nationality':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Owners Nationality'}),
             'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),
             'owner_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_owner_share")'}),
             'bank_share':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_bank_share")'}),
@@ -738,7 +739,7 @@ class InvestmentProjectForm_ForSuperAdmin(forms.ModelForm):
         
     class Meta:
         model=InvestmentProject
-        fields = ('company','project_name','project_name_am','image','ownership_form','established_yr','geo_location','owner_share','bank_share','capital_in_dollary',
+        fields = ('company','project_name','project_name_am','image','ownership_form','established_yr','owners_nationality','geo_location','owner_share','bank_share','capital_in_dollary',
             'investment_license','issued_date','sector','project_classification',
             'description','description_am',
             )
@@ -747,6 +748,7 @@ class InvestmentProjectForm_ForSuperAdmin(forms.ModelForm):
             'image':forms.FileInput(),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
+            'owners_nationality':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Owners Nationality'}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
             'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),

@@ -229,6 +229,14 @@
 			$("#modalCrop").modal("hide");
 
 		});
+		$("#id_established_yr").blur(function(){
+				var e_year = $(this).val();
+				var current_year = new Date().getFullYear()-8;
+				if(e_year > current_year){
+					$(this).val(current_year);
+				}else{
+				}
+			});
 	});
 </script>
 {%endblock%}

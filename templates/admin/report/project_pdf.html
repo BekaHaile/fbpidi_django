@@ -1,0 +1,268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+{%load static%}
+{%load pdf_template_tags%}
+<html>
+    <head>
+        <title>{{project.project_name}}</title>  
+        <style type="text/css">
+            body {
+                font-weight: 100;
+                font-size: 12px;
+                font-family: Arial, Helvetica, sans-serif
+            }
+            table{
+                margin-top: 10px;
+                margin-bottom: 10px;
+                font-stretch: condensed;
+                font-size: 10px;
+            }
+            th{
+                padding-top: 2px;
+                padding-right: 2px;
+                padding-left: 2px;
+                align-items: stretch;
+            }
+            td{
+                padding-top: 2px;
+            }
+            #hrItem {
+                border: none;
+                height: 1px;
+                /* Set the hr color */
+                color: #333; /* old IE */
+                background-color: #fff; /* Modern Browsers */
+            }
+            @page {
+                size: a4 portrait;
+                @frame header_frame {           /* Static Frame */
+                    -pdf-frame-content: header_content;
+                    left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+                }
+                @frame content_frame {          /* Content Frame */
+                    left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+                }
+                @frame footer_frame {           /* Another static Frame */
+                    -pdf-frame-content: footer_content;
+                    left: 450pt; width: 512pt; top: 772pt; height: 20pt;
+                }
+                
+            }
+            
+        </style>
+    </head>
+    <body>
+    <div id="header_content">
+          <h3>{{project.project_name|title}} ----------------------------------------------------------------------------------------------------------------- {{project.company.name}}</h3>
+        <hr id="hrItem">
+    </div>
+    
+    <div id="footer_content">        
+        <i>Page <pdf:pagenumber> Of <pdf:pagecount></i>
+    </div>
+    <div>
+        <ol>
+            <li><b>GPS Location Reading:</b>({{project.geo_location.x}},{{project.geo_location.y}})</li>
+            <li><b>Company Name:</b> {{project.project_name}}</li>
+                <tr><td><b>Company Logo</b></td><td><img height="200" width="200" src="{{project.image.path}}" alt="" srcset=""></td></tr>
+            <li><b>Form of Ownership:</b> {{project.ownership_form}}</li>
+            <li><b>Year of Establishment (E.C):   </b>{{project.established_yr}}</li>
+            <li><b>Investment Project Address</b> </li>
+                <ol>
+                <table>
+                <tbody>
+                <tr><td><li><b>Region :</b>{{project.project_address.region}}</li>
+                        <li><b>City/Town :</b>{{project.project_address.city_town}}</li>
+                        <li><b>Sub-City/Zone :</b>{{project.project_address.subcity_zone}}</li>
+                        <li><b>Woreda :</b>{{project.project_address.woreda}}</li>
+                        <li><b>Kebele :</b>{{project.project_address.kebele}}</li>
+                    </td> 
+                    <td><li><b>Local Area Name :</b>{{project.project_address.local_area}}</li>
+                        <li><b>Phone Number :</b>{{project.project_address.phone_number}}</li>
+                        <li><b>Fax :</b>{{project.project_address.fax}}</li>
+                        <li><b>Email :</b>{{project.project_address.email}}</li>
+                        <li><b>Website :</b>{{project.company_address.facebooklink}}</li></td></tr>
+                </tbody>
+                </table>
+                    
+                        
+                </ol>
+                
+            
+            <li><b>Current Total Investment Capital : </b>{%for i in inv_capital%}ETB {{i.get_inv_cap}}{%endfor%}</li>
+                <ol>
+                    <li><b>Machinery Cost :</b>{%for i in inv_capital%}
+                        ETB {{i.machinery}}
+                        {%endfor%}</li>
+                    <li><b>Building Cost :</b>{%for i in inv_capital%}
+                        ETB {{i.building}}
+                        {%endfor%}</li>
+                    <li><b>Working Capital :</b>{%for i in inv_capital%}
+                        ETB {{i.working}}
+                        {%endfor%}</li>
+                </ol>
+            <li><b>Equity Share</b></li>
+                <ol>
+                    <li><b>Owners : &nbsp;</b><i style="text-decoration: underline;">{{project.owner_share}}</i>%</li>
+                    <li><b>Bank Loan : &nbsp;</b><i style="text-decoration: underline;">{{project.bank_share}}</i>%</li>
+                </ol>
+            <li><b>Capital required in dollar</b>:&nbsp; <i style="text-decoration: underline;">$ {{project.capital_in_dollary}}</i></li>
+            <li><b>Nationality of the owner /s</b>:&nbsp; <i style="text-decoration: underline;"> {{project.owners_nationality}}</i></li>
+            <li><b>Investment License Number : &nbsp;</b><i style="text-decoration: underline;">{{project.investment_license}}</i> <b>Date of issuance : &nbsp; </b> <i style="text-decoration: underline;">{{project.issued_date}}</i></li>
+            <li><b>Sector : &nbsp;</b> {{project.sector}}</li>
+            <li><b>Product Type : &nbsp;</b> </li>
+                <ol>
+                    {%for ptype in project.product_type.all%}
+                        <li><i>{{ptype.category_name}}</i></li>
+                    {%endfor%}
+                </ol>
+            <li><b>Project Classification : &nbsp;</b> {{project.project_classification.name}}</li>
+            <li><b>Contact Person</b> </li>
+                <ol>
+                    <li><b>Name :</b>{{project.contact_person.first_name|title}} {{company.contact_person.last_name|title}}</li>
+                    <li><b>Responsiblity :</b>{{project.contact_person.company_admin.designation}}</li>
+                    <li><b>Mobile :</b>{{project.contact_person.phone_number}}</li>
+                    <li><b>Email :</b>{{project.contact_person.email}}</li>
+                </ol>
+            <li><b>The site location from the main road is : </b><i style="text-decoration: underline;">{{project.distance_f_strt}}</i>km.
+                        <b>locations specific name : </b> <i style="text-decoration: underline;">{{project.site_location_name}}</i></li>
+            <li><b>Land acquisition</b></li>
+                <ol>
+                    <li><b>Its Own : </b> <i style="text-decoration: underline;">{{project.land_aquisition.its_own}}</i></li>
+                    <li><b>Lease : </b> <i style="text-decoration: underline;">{{project.land_aquisition.lease}}</i></li>
+                    <li><b>Rent : </b> <i style="text-decoration: underline;">{{project.land_aquisition.rent}}</i></li>
+                </ol>
+            <li><b>Land Size and Usage</b></li>
+                <ol>
+                    <li><b>Total Land Size : </b> <i style="text-decoration: underline;">{{project.land_usage.total_land_size}}</i></li>
+                    <li><b>Production Building : </b> <i style="text-decoration: underline;">{{project.land_usage.production_building}}</i></li>
+                    <li><b>Office Building : </b> <i style="text-decoration: underline;">{{project.land_usage.office_building}}</i></li>
+                    <li><b>Warehouse : </b> <i style="text-decoration: underline;">{{project.land_usage.warehouse}}</i></li>
+                    <li><b>Other : </b> <i style="text-decoration: underline;">{{project.land_usage.other}}</i></li>
+                </ol>
+            <li><b>The current state of the project </b></li>
+                <ol>
+                    <li><b>Percentage of civil and foundation construction performance : </b> <i style="text-decoration: underline;">{{project.project_state.percentage_construction_performance}}</i></li>
+                    <li><b>Machinery Purchase Performance : </b> <i style="text-decoration: underline;">{{project.project_state.machinery_purchase_performance}}</i></li>
+                    <li><b>Factory building construction performance : </b> <i style="text-decoration: underline;">{{project.project_state.factory_building_performance}}</i></li>
+                    <li><b>Machinery Installation Performance (Percentage) : </b> <i style="text-decoration: underline;">{{project.project_state.machinery_installation}}</i></li>
+                    <li><b>Commissioning Work : </b> <i style="text-decoration: underline;">{{project.project_state.commissioning_work}}</i></li>
+                    <li><b>Raw Material Preparation : </b> <i style="text-decoration: underline;">{{project.project_state.rawmaterial_preparation}}</i></li>
+                    <li><b>HR Employment and Training : </b> <i style="text-decoration: underline;">{{project.project_state.hremployment_training}}</i></li>
+                    <li><b>Test product  : </b> <i style="text-decoration: underline;">{{project.project_state.testproduct}}</i></li>
+                    <li><b>certification : </b> <i style="text-decoration: underline;">{{project.project_state.certification}}</i></li>
+                </ol>
+            <li><b>List of remaining works and time schedule</b></li>
+                <div> {{project.remaining_work|safe}}</div>
+            <li><b>List of major problems that need to be addressed</b></li>
+                <div> {{project.major_problems|safe}}</div>
+            <li><b>Planed time to be operational : </b> <i style="text-decoration: underline;">{{project.operational_time}}</i></li>
+            <li><b>Product (quantity)</b></li>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Product Type</th>
+                            <th>Expected Nominal Capacity</th>
+                            <th>Annual sales</th>
+                            <th>Local Share %</th>
+                            <th>Export Share %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for pc in project.project_product_qty.all%}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{pc.product_tobe_produced}}</td>
+                            <td>{{pc.expected_normal_capacity}}</td>
+                            <td>{{pc.expected_anual_sales}}</td>
+                            <td>{{pc.local_share}}</td>
+                            <td>{{pc.export_share}}</td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            <li><b>Annual raw material demand and type</b></li>
+                <div> {{project.annual_raw_material|safe}}</div>
+            <li><b>Power need in (kwh) : </b> <i style="text-decoration: underline;">{{project.power_need}}</i></li>
+            <li><b>Water supply (meter cube) : </b> <i style="text-decoration: underline;">{{project.water_suply}}</i></li>
+            <li><b>Number of Employees </b></li>
+                <table>
+                    <thead><tr><th colspan="2"><b>Permanent</b></th> <th colspan="2"><b>Temporary</b> </th> <th colspan="2"><b>Foreign Employees</b></th></tr></thead>
+                    <tbody>
+                        <tr>
+                           <td>Male</td>
+                           <td>{{employees.male_perm}}</td>
+                           <td>Male</td>
+                           <td>{{employees.male_temp}}</td>
+                           <td>Male</td>
+                           <td>{{employees.male_foreign}}</td>
+                        </tr>
+                        <tr>
+                           <td>Female</td>
+                           <td>{{employees.female_perm}}</td>
+                           <td>Female</td>
+                           <td>{{employees.female_temp}}</td>
+                           <td>Female</td>
+                           <td>{{employees.female_foreign}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            <li><b>Planed and recruited</b></li>
+                <table>
+                    <thead><tr><th colspan="2"><b>Permanent</b></th> <th colspan="2"><b>Temporary</b> </th></tr></thead>
+                    <tbody>
+                        <tr>
+                           <td>Male</td>
+                           <td>{{jobs_created.male_perm}}</td>
+                           <td>Male</td>
+                           <td>{{jobs_created.male_temp}}</td>
+                            
+                        </tr>
+                        <tr>
+                           <td>Female</td>
+                           <td>{{jobs_created.female_perm}}</td>
+                           <td>Female</td>
+                           <td>{{jobs_created.female_temp}}</td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            <li><b>Employees Educational Status</b></li>
+            <table>
+                    <thead><tr><th><b>Educational Status</b></th> <th><b>Male</b> </th><th><b>Female</b></th> </tr></thead>
+                    <tbody>
+                    {%for es in edu_status%}
+                        <tr>
+                           <td>{{es.education_type}}</td>
+                           <td>{{es.male__sum}}</td>
+                           <td>{{es.female__sum}}</td>
+                            
+                        </tr>
+                    {%endfor%}
+                    </tbody>
+                </table>
+             
+            <li><b>Special conditions provided for women and youth in the project  </b> </li>
+                <div>{{project.cond_provided_for_wy|safe}}</div>
+            <li><b>If  you have export  write target market (Destination)</b></li>
+                    <div>
+                        {{project.target_market|safe}}
+                    </div>
+            <li><b>Does the project have Environmental impact assessment document? </b> {%if project.env_impac_ass_doc == None or project.env_impac_ass_doc == ""%}No{%else%}Yes{%endif%}</li>
+               {%if project.env_impac_ass_doc != None or project.env_impac_ass_doc != ""%}
+                    <div>
+                        {{project.env_impac_ass_doc|safe}}
+                    </div>
+                {%endif%}
+            <li><b>Capital utilization</b></li>
+                    <div>Evidence shows that from the total investment the investor so far has invested <b style="text-decoration: underline;">{{project.capital_utilization}}</b> Birr to the project.</div>
+            <li><b>Technology going to be applied : </b> <i style="text-decoration: underline;">{{project.technology.name}}</i></li>
+            <li><b>Automated : </b> <i style="text-decoration: underline;">{{project.automation.name}}</i></li>
+            <li><b>Mode of Project : </b> <i style="text-decoration: underline;">{{project.mode_of_project.name}}</i></li>
+            <li><b>Facility Design : </b> <i style="text-decoration: underline;">{{project.facility_design.name}}</i></li>
+            
+        </ol>
+            
+    </div>
+    </body>
+</html>

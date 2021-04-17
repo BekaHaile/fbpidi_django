@@ -53,15 +53,20 @@
 						<span class="form-text text-warning">{{form.geo_location.errors}}</span>				
 				</div>
 				<div class="form-group row">
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<label for="">{{form.ownership_form.label}}</label>
 						{{form.ownership_form}}
 						<span class="form-text text-warning">{{form.ownership_form.errors}}</span>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<label for="">{{form.established_yr.label}}</label>
 						{{form.established_yr}}
 						<span class="form-text text-warning">{{form.established_yr.errors}}</span>
+					</div>
+					<div class="col-md-4">
+						<label for="">{{form.owners_nationality.label}}</label>
+						{{form.owners_nationality}}
+						<span class="form-text text-warning">{{form.owners_nationality.errors}}</span>
 					</div>
 				</div>
 				 
@@ -232,6 +237,14 @@
 			$("#modalCrop").modal("hide");
 
 		});
+		$("#id_established_yr").blur(function(){
+				var e_year = $(this).val();
+				var current_year = new Date().getFullYear()-8;
+				if(e_year > current_year){
+					$(this).val(current_year);
+				}else{
+				}
+			});
 	});
 </script>
 {%endblock%}
