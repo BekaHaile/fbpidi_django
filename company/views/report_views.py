@@ -36,6 +36,7 @@ def get_current_year():
         current_year = gc_year - 8
     return current_year
 
+
 @method_decorator(decorators,name='dispatch')
 class ReportPage(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):

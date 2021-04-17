@@ -68,8 +68,15 @@ def product_count_bycategory(category):
     #     return Product.objects.filter(pharmacy_category=category).count()
     # elif category.category_type == "Food" or category.category_type == "Beverage":
         
-
-
+@register.filter
+def product_count_by_subcategory(sub_category):
+    try:
+        sub_category = SubCategory.objects.get(id=sub_category)
+        product = Product.objects.filter(brand__product_type=sub_category).count()
+        return product
+    except Exception as e:
+        return 0
+        
 @register.filter
 def count_food_and_beverage_products(category):
     category = Category.objects.get(id=category)

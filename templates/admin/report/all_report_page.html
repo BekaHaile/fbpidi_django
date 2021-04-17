@@ -45,6 +45,14 @@
 									</select>
 								</li>
 								<li class="list-inline-item"> 
+									<select class="form-control" name="year" id="year">
+										<option value="">Select Year</option>
+										{%for year in years%}
+										<option value="{{year.0}}">{{year.0}}</option>
+										{%endfor%}
+									</select>
+								</li>
+								<li class="list-inline-item"> 
 									<select class="form-control" name="sector" id="sector">
 										<option value="">Select Sector</option>
 										<option value='Food' >Food</option>
@@ -1148,6 +1156,8 @@
 						var sector = $("#sector").val();
 						var sub_sector = $("#sub_sector").val();
 						var product = $("#product").val();
+						var year = $("#year").val();
+
 						if(region == ''){
 							region = 'all';
 						}
@@ -1160,8 +1170,11 @@
 						if(product==''){
 							product = 'all';
 						}
+						if(year == ''){
+							year='all';
+						}
 
-						url = '/admin/get-all-company-report/'+region+'/'+sector+'/'+sub_sector+'/'+product+'/';
+						url = '/admin/get-all-company-report/'+region+'/'+sector+'/'+sub_sector+'/'+product+"/"+year+'/';
 						window.open(url,'_blank');
 					});
 					$('.datatable-basic').DataTable(
