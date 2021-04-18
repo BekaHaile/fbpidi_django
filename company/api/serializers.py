@@ -23,7 +23,7 @@ class CompanyCertificatesSerializer(serializers.ModelSerializer):
 class CompanyFullSerializer(serializers.ModelSerializer):
     # product_category_name = serializers.CharField(source='get_product_category_type')
 
-    created_by = CompanyAdminSerializer(read_only=True)
+    contact_person = UserInfoSerializer(read_only=True)
     company_address = CompanyAddressSerializer(source = 'get_company_address', read_only=True)
     class Meta:
         model = Company
@@ -34,16 +34,21 @@ class CompanyFullSerializer(serializers.ModelSerializer):
 # used for serializing multiple companies, like listing
 class CompanyInfoSerializer(serializers.ModelSerializer):
     # product_category_name = serializers.CharField(source='get_product_category_type')
-    created_by = CompanyAdminSerializer(read_only=True)
+    contact_person = UserInfoSerializer(read_only=True)
     company_address = CompanyAddressSerializer(source = 'get_company_address', many =False, read_only=True)
     company_certificates = CompanyCertificatesSerializer(source = 'get_company_certificates', many = True, read_only=True)
     category = CategorySerializer(source= 'get_company_category' , many =True, read_only = True) #b/c it is a manytomanyrelation
     
     class Meta:
         model = Company
-        fields = ('id','created_by','name','name_am','logo','geo_location','category', 'certification','established_yr', 'company_address','company_certificates')
+        fields = ('id','contact_person','name','name_am','logo','geo_location','category', 'certification','established_yr', 'company_address','company_certificates')
 
 
+class CompanyNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = ('id','name','name_am','logo')
+        
 class InvestmentProjectserializer(serializers.ModelSerializer):
     company =  CompanyInfoSerializer(read_only = True)
     contact_person = UserInfoSerializer(read_only=True)

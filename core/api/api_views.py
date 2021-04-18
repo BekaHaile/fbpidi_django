@@ -46,43 +46,45 @@ class ApiProfileView(APIView):
         except Http404:
             return Response(data = {"error": True, 'message':"Customer Not Found!"})
     def post(self, request ):
-        user_detail = Customer.objects.get(user=request.user)
-        user = UserProfile.objects.get(id=request.user.id)
-        
-        if request.data['first_name'] != None:
-            user.first_name = request.data['first_name']
-        if request.data['last_name'] != None:
-            user.last_name = request.data['last_name']
-        if request.data['phone_number'] != None:
-            user.phone_number = request.data['phone_number']
-        if request.data['email'] != None:
-            user.email = request.data['email']
+        try:
+            user_detail = Customer.objects.get(user=request.user)
+            user = UserProfile.objects.get(id=request.user.id)
             
-        if self.request.FILES.get('profile_image') != None:
-            user.profile_image = request.FILES.get('profile_image')
-            user_detail.profile_image = request.FILES.get('profile_image')
-        user.save()
-        if request.data['address'] != None:
-            user_detail.address = request.data['address']
-        if request.data['city'] != None:
-            user_detail.city = request.data['city']
-        if request.data['postal_code'] != None:
-            user_detail.postal_code = request.data['postal_code']
-        if request.data['country'] != None:
-            user_detail.country = request.data['country']
-        if request.data['facebook_link'] != None:
-            user_detail.facebook_link = request.data['facebook_link']
-        if request.data['google_link'] != None:
-            user_detail.google_link = request.data['google_link']
-        if request.data['twitter_link'] != None:
-            user_detail.twiter_link = request.data['twitter_link']
-        if request.data['pinterest_link'] != None:
-            user_detail.pintrest_link = request.data['pinterest_link']
-        if request.data['bio'] != None:
-            user_detail.bio = request.data['bio']
-        user_detail.save()
-        return Response(data  ={'error':False, 'user': CustomerDetailSerializer(user_detail).data})
-
+            if request.data['first_name'] != None:
+                user.first_name = request.data['first_name']
+            if request.data['last_name'] != None:
+                user.last_name = request.data['last_name']
+            if request.data['phone_number'] != None:
+                user.phone_number = request.data['phone_number']
+            if request.data['email'] != None:
+                user.email = request.data['email']
+                
+            if 'profile_image' in self.request.data and self.request.data['profile_image'] != None:
+                user.profile_image = request.data['profile_image']
+                user_detail.profile_image = request.data['profile_image']
+            user.save()
+            if request.data['address'] != None:
+                user_detail.address = request.data['address']
+            if request.data['city'] != None:
+                user_detail.city = request.data['city']
+            if request.data['postal_code'] != None:
+                user_detail.postal_code = request.data['postal_code']
+            if request.data['country'] != None:
+                user_detail.country = request.data['country']
+            if request.data['facebook_link'] != None:
+                user_detail.facebook_link = request.data['facebook_link']
+            if request.data['google_link'] != None:
+                user_detail.google_link = request.data['google_link']
+            if request.data['twitter_link'] != None:
+                user_detail.twiter_link = request.data['twitter_link']
+            if request.data['pinterest_link'] != None:
+                user_detail.pintrest_link = request.data['pinterest_link']
+            if request.data['bio'] != None:
+                user_detail.bio = request.data['bio']
+            user_detail.save()
+            return Response(data  ={'error':False, 'user': CustomerDetailSerializer(user_detail).data})
+        except Exception as e:
+            return Response(data = {'error':True, 'message':str(e)})
 
 #product-by-category/  request.data['category_id']
 # class ApiProductByCategory(APIView):

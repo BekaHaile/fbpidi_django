@@ -388,6 +388,7 @@ class CustomAdminSite(admin.AdminSite):
             # path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
             path("activate-company/<pk>/",wrap(activate_company),name="activate_comapany"),
             path("404-page/",wrap(error_404),name="error_404"),
+            path("500-page/",wrap(error_500), name="error_500"),
             path("company-inactive-wait/",wrap(company_not_active),name="inactive_company"),
             path('anounce-Detail/<id>/',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
             path('anounce-List',wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),

@@ -201,7 +201,7 @@ class ApiProductByMainCategory(APIView):
             if 'by_title' in request.query_params:
                 products = filter_products_by_name(products, request.query_params['by_title'])
             if 'by_company' in request.query_params:
-                companies = Company.objects.filter( Q(name__in = request.query_params['by_company'].split(',') )| Q(name_am__in =request.query_params['by_company'].split(',')) )
+                companies = Company.objects.filter( Q(name__in = request.query_params['by_company'].split(',')[:-1] )| Q(name_am__in =request.query_params['by_company'].split(',')[:-1]) )
                 products = products.filter(company__in = companies)
 
             products=get_paginated_data(request, products)
