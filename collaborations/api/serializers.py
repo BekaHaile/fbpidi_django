@@ -5,7 +5,7 @@ from collaborations.models import (PollsQuestion, PollsResult, Choices, News, Ne
                                     JobCategory, Project, Research, ResearchProjectCategory, Vacancy, ForumQuestion,
                                     ForumComments, CommentReplay, ResearchAttachment)
 from company.models import Company, CompanyEvent
-from company.api.serializers import CompanyFullSerializer, CompanyInfoSerializer
+from company.api.serializers import CompanyFullSerializer, CompanyInfoSerializer, CompanyNameSerializer
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -251,6 +251,7 @@ class ForumDetailSerializer(serializers.ModelSerializer):
 
 
 class FaqSerializer(serializers.ModelSerializer):
+    company = CompanyNameSerializer(read_only =True)
     class Meta:
         model = Faqs
         fields = "__all__"

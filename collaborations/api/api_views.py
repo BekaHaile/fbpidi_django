@@ -601,10 +601,6 @@ class ApiVacancyApplication(APIView):
         #     return Response(data ={'error':True, 'message': form.errors}, )
 
 
-# def get_user_created_projects(request):   
-#         return [] if  request.user.is_anonymous else Project.objects.filter(user = request.user, accepted="APPROVED")
-
-
 def get_user_created_researchs(request):
         return [] if  request.user.is_anonymous else Research.objects.filter(created_by = request.user)
 
@@ -671,19 +667,7 @@ class ApiCreateResearch(APIView):
         except Exception as e:
             return Response(data ={'error':True, 'message':f"exception occured {str(e)}"})
 
-        # form = ResearchForm(request.POST, request.FILES)
-        # if form.is_valid():
-        #     research = form.save(commit = False)
-        #     if request.user.is_superuser:
-        #         research.accepted = "APPROVED"
-        #     else:
-        #         research.accepted = "PENDING"
-        #     research.created_by = request.user
-        #     if 'atttachements' in request.data:
-        #         research.attachements = request.data['attachements']
-        #     research.save()
-        #     return Response(data = {'error':False, 'researchs': ResearchSerializer(research).data})
-        # return Response(data ={'error':True, 'message': f"Invaid inputs to create a research!{form.errors}"})
+        
 
 
 @api_view(['POST'])
@@ -723,8 +707,14 @@ def ApiResearchAction(request):
             return Response(data = {'error':True, 'messsage':f"Invalid Inputs {str(e)}"})  
 
 
+class ApiProjectList(APIView):
+    def get(self, request):
+        pass
+
+
 def get_user_created_forums(request):
     return [] if  request.user.is_anonymous else ForumQuestion.objects.filter(created_by = request.user)
+
 
 class ApiForumQuestionList(APIView):
     def get(self, request):
@@ -745,6 +735,7 @@ class ApiForumQuestionList(APIView):
         except Exception as e:
             print('Exception in ApiForumQuestionList ', e)
             return Response(data = {'error':True, 'message':e})
+
 
 class ApiForumQuestionDetail(APIView):
     def get(self, request):
@@ -858,7 +849,7 @@ def ApiCommentReplayAction(request):
                     reply.save()
                 else:
                     return Response(data = {'error':True, 'message':'Invalid input {str(serializer.errors)}'})
-            else:#if option = 'edit'
+            else:#if option = 'edit' or delete
                 try:
                     reply = get_object_or_404(CommentReplay, id = request.data['id'])
                 except Http404:
@@ -879,10 +870,25 @@ def ApiCommentReplayAction(request):
             return Response(data = {'error':True, 'messsage':f"Invalid Inputs {str(e)}"})
 
 
-class ApiFaq(generics.ListAPIView):
-    queryset = Faqs.objects.all()
-    serializer_class = FaqSerializer
-    
+class ApiFaq(APIView):
+    def get(self, request):
+        try:
+            if 'by_title' in request.query_params:
+                title = request.query_params['by_title']
+                query = Faqs.objects.filter( Q(questions__icontains = title) | Q(questions_am__icontains = title)).filter(status ="APPROVED")
+            elif 'by_company' in request.query_params:
+                company = request.query_params['by_company']
+                query = Faqs.objects.filter(Q(company__name = company) | Q(company__name_am = company) ).filter(status ="APPROVED")
+            else:
+                query = Faqs.objects.filter(status ="APPROVED")
+            paginated = get_paginated_data(request, query)
+            if query.count() == 0:
+                return Response(data ={'error':False, 'paginator':get_paginator_info(paginated), 'faqs':[], 'message':'No result found!', 'message_am':'ምንም ውጤት አልተገኘም'})
+            
+            return Response(data ={'error':False, 'paginator':get_paginator_info(paginated), 'faqs':FaqSerializer(paginated, many =True).data, 'message': f"{query.count()} result found!", "message_am":f"{query.count()} ውጤት ተገኝቷል"})
+            
+        except Exception as e:
+            return Response (data = {'error':True, 'message':f"{str(e)}"})
 
 
 
