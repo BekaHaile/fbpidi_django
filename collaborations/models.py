@@ -315,8 +315,8 @@ class News(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default = 1)
     title = models.CharField(max_length=500, null = False)
     title_am = models.CharField(max_length=500, null = False)
-    description = models.TextField( verbose_name="News Description(English)" )
-    description_am = models.TextField( verbose_name="News Description(Amharic)" )
+    description = models.TextField( verbose_name="News Description(English)",blank =False, null = False )
+    description_am = models.TextField( verbose_name="News Description(Amharic)",blank =False, null = False )
     catagory = models.CharField( max_length=30, choices = (('',"select Category"),
         ('Bevearage','Bevearage'), ('Business','Business'), ('Food','Food'),('Job Related','Job Related'),
     ), verbose_name="News Catagory, the choices are ")
@@ -324,6 +324,7 @@ class News(models.Model):
     last_updated_date = models.DateTimeField(null=True)
     is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
+    
 
     model_am ="ዜናዎች"
 

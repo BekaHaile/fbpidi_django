@@ -342,6 +342,7 @@ class ProductImageForm(forms.ModelForm):
         }
 
 class ReviewForm(forms.ModelForm):
+    
     class Meta:
         model = Review
         fields = (
@@ -350,7 +351,7 @@ class ReviewForm(forms.ModelForm):
         widgets = {
             'rating':forms.TextInput(attrs={'type':'hidden'}),
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Your Name'}),
-            'email':forms.TextInput(attrs={'class':'form-control','placeholder':'Your Email'}),
+            'email':forms.EmailInput(attrs={'class':'form form-control','placeholder':'Your Email'}),
             'review':forms.Textarea(attrs={'class':'form-control','placeholder':'Your Message Here','row':'3'}),
         }
 
