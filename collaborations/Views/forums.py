@@ -286,6 +286,7 @@ class EditForumQuestions(View):
 		context = {'forum':forum,'usercreated':userCreated}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
+		print("############# ", self.kwargs)
 		form = ForumQuestionForm(self.request.POST,self.request.FILES)
 		userCreated = ForumQuestion.objects.filter(created_by=self.request.user)
 		template_name = "frontpages/forums/forum_edit.html"
@@ -297,7 +298,7 @@ class EditForumQuestions(View):
 			forum.last_updated_by = self.request.user
 			forum.last_updated_date = timezone.now()
 			forum.save() 
-			return redirect(reverse("forum_detail",kwargs={'id':str(self.kwargs['forum'])}))
+			return redirect(reverse("forum_detail",kwargs={'id':self.kwargs['id']}))
 		return render(self.request, template_name,context)
 
 class SearchForum(View):

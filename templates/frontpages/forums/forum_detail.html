@@ -1,6 +1,9 @@
 {%extends 'frontpages/layout.html'%}
-
+{% load i18n %}
+{%load core_template_tags%}
 {%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+
 		<!--Breadcrumb-->
 		<section>
 			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
@@ -31,7 +34,7 @@
 									<div class="input-group-append ">
 										
 										<button type="submit" class="btn btn-secondary br-tr-3  br-br-3">
-											Search
+											{% trans "Search" %}
 										</button></a>
 									</div>
 								</div>
@@ -40,7 +43,7 @@
 						</div>
 						<div class="card">
 							<div class="card-header">
-                                    <h3 class="card-title">Forums you created </h3> 
+                                    <h3 class="card-title">{% trans "Forums you created" %} </h3> 
 							</div>
 							<div class="card-body p-0">
 								<div class="list-catergory">
@@ -90,7 +93,7 @@
                                     <h3 class="card-title">{{forum.title}}</h3> 
                                 </div>
 
-                                 <div class="mb-0" style ="margin-left: 20px;" "margin-top: : 20px;">
+                                 <div class="mb-0" style ="margin-left: 20px; margin-top : 20px;">
 	                                 <div class="item7-card-desc d-flex mb-3" >
 	                                 	<ul class="d-flex mb-0">
 	                                 		<li class="mr-5">
@@ -124,7 +127,7 @@
                             <div class="col-xl-12 col-lg-12 col-md-12">
                             	<div class="card"> 
                             		{%if forum.comments%}
-                            		<h3 class="card-title" style ="margin-left: 10px;" "margin-bottom: : 20px;" >Comments</h3>
+                            		<h3 class="card-title mb-2 mt-2 ml-3"  >{% trans "Comments" %}</h3>
                             		{%endif%}
                             		<div class="card-body">
                             	{% for comment in forum.comments%}
@@ -337,20 +340,7 @@
 						
                             
 						</div>
-						<div class="d-sm-flex">
-							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>
-							<ul class="pagination mb-lg-0 mb-5 ml-auto">
-								<li class="page-item page-prev disabled">
-									<a class="page-link" href="#" tabindex="-1">Prev</a>
-								</li>
-								<li class="page-item active"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
-								<li class="page-item page-next">
-									<a class="page-link" href="#">Next</a>
-								</li>
-							</ul>
-						</div>
+						
 					</div>
 					<!--/Add Lists-->
 				</div>
