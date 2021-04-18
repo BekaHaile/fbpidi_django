@@ -196,6 +196,7 @@
 									<div class="row">
 										<a href="{% url 'chat_with' reciever_name=product.created_by.username %}" target="blank" class="btn btn-info ml-1 mr-1" title="{% print_translated 'Chat with Manufacturer' 'አምራቹን አግኝ' LANGUAGE_CODE %} "><i class="fa fa-envelope"></i></a>
 										<a href="mailto:{{product.company.contact_person.email}}" title="Contact Manufacturer" class="btn btn-secondary ml-1 mr-1"><i class="fa fa-user"></i></a>
+										
 										{% if user.is_customer %}
 										<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" class="mr-0" >
 											<input type="hidden" name="products" value="{{product.id}},">

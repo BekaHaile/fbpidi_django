@@ -385,10 +385,10 @@
 										{% if user.is_authenticated %}
 											{% user_liked_company user company.id  as liked %}
 											{% if liked == True %}
-											<a  class="text-pink" data-toggle="tooltip" data-placement="top" title="You Liked Company"><i class="fa fa-heart"></i></a>
+												<a  class="text-pink" data-toggle="tooltip" data-placement="top" title="You Liked Company"><i class="fa fa-heart"></i></a>
 											<!-- <a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a> -->
 											{% else %}
-											<a  href=""  id="like_{{company.id}}" name="like_{{company.id}}" onclick="like_company('{{company.id}}')" data-toggle="tooltip" data-placement="top" title="Like This Company"><i class="fa fa-heart"></i></a>
+												<a  href=""  id="like_{{company.id}}" name="like_{{company.id}}" onclick="like_company('{{company.id}}')" data-toggle="tooltip" data-placement="top" title="Like This Company"><i class="fa fa-heart"></i></a>
 											
 											
 											{% endif %}

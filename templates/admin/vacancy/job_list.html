@@ -36,36 +36,30 @@
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
-
+					<th>#</th>
+					<th>Title</th>
+					<th>Job Category</th>
+					<th>salary</th>
 					<th>company</th>
 					<th>location </th>
-					<th>salary</th>
-
-
-					<th>starting_date</th>
-					<th>title</th>
 					<th>Closed</th>
 					<th>Applicants</th>
 					<th class="text-center">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
-				{%for vacancy in vacancy%}
+				{%for vacancy in object_list%}
 				<tr>
-					
+					<td>{{forloop.counter}}</td>
+					<td>{{vacancy.title|safe|truncatechars_html:10}}</td>
+					<td>{{vacancy.category.category_name}}</td>
+					<td>{{vacancy.salary|safe}}</td>
 					<td>{{vacancy.company|safe|truncatechars_html:10}}</td>
 					<td>{{vacancy.location|safe|truncatechars_html:10}}</td>
-					<td>{{vacancy.salary|safe}}</td>
-
-					<td>{{vacancy.starting_date|safe}}</td>
-					<td>{{vacancy.title|safe|truncatechars_html:10}}</td>
 					<td>{{vacancy.closed}}</td>
-					<th>{% if user.is_superuser or user == vacancy.user %}
-							<a href="{% url 'admin:Applicant_info' id=vacancy.id %}">
-							<i class="icon-eye"></i> {{vacancy.countApplicant}}</a> 
-						{%else%}
-							<i class="icon-eye"></i>
-						{%endif%}
+					<th>
+						<a href="{% url 'admin:Applicant_info' id=vacancy.id %}">
+						<i class="icon-eye"></i> {{vacancy.countApplicant}}</a> 
 					</th>
 					<td class="text-center">
 						<div class="list-icons">
@@ -75,17 +69,16 @@
 								</a>
 									
 								<div class="dropdown-menu dropdown-menu-right">
-									{% if user.is_superuser or user.get_company == vacancy.user.get_company %}
-									{% if perms.collaborations.delete_vacancy %}
-									<a href="{%url 'admin:delete' model_name='Vacancy' id=vacancy.id%}" class="dropdown-item" onclick="return confirm('are you sure you want to delete this')"><i class="icon-trash"></i>Delete Vacancy</a>
-									{%endif%}
-									{%endif%}
-									{% if user.is_superuser or user.get_company == vacancy.user.get_company %}
-									{% if perms.collaborations.change_vacancy %}
-									<a href="{%url 'admin:job_detail'  model_name='Vacancy' id=vacancy.id%}" class="dropdown-item"  >
-										<i class="icon-pencil"></i>Edit Vacancy</a>
+									{% if user.is_superuser or user.get_company == vacancy.company%}
+										{% if perms.collaborations.delete_vacancy %}
+										<a href="{%url 'admin:delete' model_name='Vacancy' id=vacancy.id%}" class="dropdown-item" onclick="return confirm('are you sure you want to delete this')"><i class="icon-trash"></i>Delete Vacancy</a>
+										{%endif%}
 									
-									{%endif%}
+										{% if perms.collaborations.change_vacancy %}
+										<a href="{%url 'admin:job_detail'  model_name='Vacancy' id=vacancy.id%}" class="dropdown-item"  >
+											<i class="icon-pencil"></i>Edit Vacancy</a>
+										
+										{%endif%}
 									{%endif%}
 								</div>
 							</div>

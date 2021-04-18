@@ -186,7 +186,7 @@
 																						<input type="hidden" name="products" value="{{product.id}},">
 																						<button class="btn btn-secondary br-tr-3 br-br-3 mr-3"  style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Inquiry" %}</button>
 																					</form>
-																					<button class="btn btn-secondary br-tr-3 br-br-3" id = "prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
+																					<button class="btn btn-secondary br-tr-3 br-br-3" name = "prod_{{product.id}}" id = "prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
 																				</div>
 
 																			</div>
@@ -281,9 +281,9 @@
 																					<div  class="row mt-1 mb-1 ml-2">
 																						<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" >
 																							<input type="hidden" name="products" value="{{product.id}},">
-																							<button class="btn btn-secondary br-tr-3 br-br-3 mr-3" style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Contact Now" %}</button>
+																							<button class="btn btn-secondary br-tr-3 br-br-3 mr-3" style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Inquiry" %}</button>
 																						</form>
-																						<button class="btn btn-secondary br-tr-3 br-br-3 " id = "gprod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
+																						<button class="btn btn-secondary br-tr-3 br-br-3 " name ="prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
 																					</div>
 																				</div>
 																			</div>

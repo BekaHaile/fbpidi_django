@@ -438,19 +438,23 @@ class CreateNews(LoginRequiredMixin, View):
         except Exception as e:
             return redirect("admin:error_404")
     def post(self, *args, **kwargs):
-        form = NewsForm( self.request.POST) 
-        if form.is_valid:
-            news = form.save(commit=False)
-            news.created_by = self.request.user
-            news.save()
-            for image in self.request.FILES.getlist('images'):
-                imag = NewsImages(created_by=self.request.user, created_date=timezone.now(), news=news, name = image.name, image = image)
-                imag.save()
-            messages.success(self.request, "News Created Successfully!")
-            return redirect("admin:news_list") 
-        else:
-            messages.warning(self.request, "Error! News not Created!")
-            return redirect("admin:news_list") 
+        try:
+            form = NewsForm( self.request.POST) 
+            if form.is_valid:
+                news = form.save(commit=False)
+                news.created_by = self.request.user
+                news.save()
+                for image in self.request.FILES.getlist('images'):
+                    imag = NewsImages(created_by=self.request.user, created_date=timezone.now(), news=news, name = image.name, image = image)
+                    imag.save()
+                messages.success(self.request, "News Created Successfully!")
+                return redirect("admin:news_list") 
+            else:
+                messages.warning(self.request, "Error! News not Created!")
+                return redirect("admin:news_list") 
+        except Exception as e:
+            print("@@@@@@ Exception while creating News ",form.errors)
+            return redirect("admin:error_500")
 
 
 @method_decorator(decorators,name='dispatch')

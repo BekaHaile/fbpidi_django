@@ -31,7 +31,7 @@ class ApiCompanyByMainCategoryList(APIView):
     def get(self,request): 
         main_category = request.query_params['main_category']  
         if ',' in main_category:# if multiple categories are selected
-            categories = request.query_params['main_category'].split(',')
+            categories = request.query_params['main_category'].split(',')[:-1]
             companies =    Company.objects.filter(main_category__in = categories)
         elif main_category != "All":
             companies = Company.objects.filter(main_category = main_category)
