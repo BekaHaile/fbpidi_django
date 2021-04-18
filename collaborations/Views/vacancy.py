@@ -209,27 +209,12 @@ class VacancyDetail(LoginRequiredMixin,View):
 		return render(self.request,"admin/vacancy/job_detail.html",context)
 
 @method_decorator(decorators,name='get')
-class SuperAdminVacancyList(LoginRequiredMixin,View):
-	def get(self,*args,**kwargs):
-		vacancy=Vacancy.objects.all()
-		context = {'vacancy':vacancy}
-		template_name = "admin/vacancy/super_job_list.html"
-		return render(self.request, template_name,context)
-
-@method_decorator(decorators,name='get')
-class AdminVacancyList(LoginRequiredMixin,View):
+class AdminVacancyList(LoginRequiredMixin,ListView):
+	model = Vacancy
+	template_name= "admin/vacancy/job_list.html"
+	def get_queryset(self):
+		return  Vacancy.objects.all() if self.request.user.is_superuser else  Vacancy.objects.filter(company=self.request.user.get_company())
 	
-	def get(self,*args,**kwargs):
-		if self.request.user.is_superuser:
-			vacancy = Vacancy.objects.all()
-			template_name="admin/vacancy/job_list.html"
-			context={'vacancy':vacancy}
-			return render(self.request, template_name,context)
-		else:
-			vacancy=Vacancy.objects.filter(created_by=self.request.user)
-			context = {'vacancy':vacancy}
-			template_name = "admin/vacancy/job_list.html"
-			return render(self.request, template_name,context)
 
 ## show form
 @method_decorator(decorators,name='dispatch')
@@ -266,7 +251,7 @@ class CreateVacancy(LoginRequiredMixin, View):
 			messages.success(self.request, "New vacancy Added Successfully")
 			vacancy = VacancyForm()
 			context = {'vacancy':vacancy}
-			return render(self.request,"admin/vacancy/job_form.html",context)
+			return redirect("admin:Job_list")
 
 #apply to a job
 class CreateApplication(LoginRequiredMixin,View):

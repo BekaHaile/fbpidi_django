@@ -1,4 +1,5 @@
 import datetime
+from django.utils import timezone
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
@@ -20,12 +21,12 @@ from company.api.serializers import CompanyInfoSerializer, CompanyNameSerializer
 
 from collaborations.models import (PollsQuestion, PollsResult, Choices, News, NewsImages, Blog, BlogComment,
                                     Announcement, AnnouncementImages, Tender, TenderApplicant, Faqs, JobApplication, 
-                                    JobCategory, Project, Research, ResearchProjectCategory, Vacancy, ForumQuestion,
+                                    JobCategory, Project, Research, ResearchAttachment, ResearchProjectCategory, Vacancy, ForumQuestion,
                                     ForumComments, CommentReplay, Faqs)
 from collaborations.forms import CreateJobApplicationForm, ForumQuestionForm, CommentForm, CommentReplayForm, ResearchForm
-from collaborations.api.serializers import (PollListSerializer,PollDetailSerializer,  ChoiceSerializer, NewsListSerializer, NewsDetailSerializer, 
+from collaborations.api.serializers import (PollListSerializer,PollDetailSerializer,  ChoiceSerializer, NewsListSerializer, NewsDetailSerializer, JobApplicationCreationSerializer,
                                             EventListSerializer, BlogSerializer,BlogDetailSerializer, BlogCommentSerializer, AnnouncementSerializer, AnnouncementDetailSerializer, 
-                                            TenderSerializer,TenderApplicantSerializer, VacancyListSerializer, JobCategorySerializer,
+                                            TenderSerializer,TenderApplicantSerializer, VacancyListSerializer, JobCategorySerializer,ResearchCreationSerializer,
                                             ResearchProjectCategorySerializer, ProjectSerializer, ResearchSerializer, 
                                             ForumQuestionSerializer, ForumDetailSerializer, ForumCommentSerializer, CommentReplay, FaqSerializer, JobApplicationSerializer)
 
@@ -504,7 +505,6 @@ class ApiVacancyList(APIView):
             query = Vacancy.objects.filter(q)# search by title then filter by category
             result = filter_by('category__category_name',request.query_params['by_category'].split(',')[:-1], query)
         elif 'by_category' in request.query_params:
-            
             result = filter_by('category__category_name', request.query_params['by_category'].split(',')[:-1], Vacancy.objects.all())
         elif 'by_company' in request.query_params:
             result = FilterByCompanyname(request.query_params['by_company'].split(',')[:-1], Vacancy.objects.all())
@@ -523,7 +523,6 @@ class ApiVacancyDetail(APIView):
             jobcategory = JobCategory.objects.all()
         except Http404:
             return Response(data = {'error': True , 'message':'Vacancy object does not exist!'})
-        
         return Response(data = {'error':False, 'vacancy':VacancyListSerializer(vacancy).data, 'jobcategory': JobCategorySerializer(jobcategory, many = True).data} )
     
     #12345 applying for vacancy can be handled here , first z front end will make the user to login to apply
@@ -553,15 +552,32 @@ class ApiVacancyApplication(APIView):
                 return Response(data = {'error':True, 'message': "You can't apply to the same vacancy Twice"})
         except Http404:
             return Response(data = {'error': True , 'message':'Vacancy Not Found!'})
-        form = CreateJobApplicationForm(request.POST,request.FILES)
-        if form.is_valid():
-            job =  form.save(commit=False)
-            job.created_by = request.user
-            job.vacancy =  Vacancy.objects.get(id =request.data['id'])
-            job.save()
-            return Response(data = {'error':False, 'application': JobApplicationSerializer(job).data })
+        serializer = JobApplicationCreationSerializer(data=request.data)
+        if serializer.is_valid():
+            application =  serializer.create(validated_data=request.data)
+            application.created_by = request.user
+            application.save()
+            return Response(data = {'error':False, 'application': JobApplicationSerializer(application).data })
         else:
-            return Response(data ={'error':True, 'message': form.errors}, )
+            return Response(data ={'error':True, 'message': f"{serializer.errors}"} )
+
+        # try:
+        #     vacancy = get_object_or_404(Vacancy, id = int(request.data['id']))
+        #     if JobApplication.objects.filter(vacancy=vacancy, created_by=request.user).exists():
+        #         return Response(data = {'error':True, 'message': "You can't apply to the same vacancy Twice"})
+        # except Http404:
+        #     return Response(data = {'error': True , 'message':'Vacancy Not Found!'})
+        # form = CreateJobApplicationForm(request.POST,request.FILES)
+        # if form.is_valid():
+        #     application =  form.save(commit=False)
+        #     application.created_by = request.user
+        #     application.cv = request.data['cv']
+        #     application.
+        #     application.vacancy =  Vacancy.objects.get(id =request.data['id'])
+        #     application.save()
+        #     return Response(data = {'error':False, 'application': JobApplicationSerializer(application).data })
+        # else:
+        #     return Response(data ={'error':True, 'message': form.errors}, )
 
 
 # def get_user_created_projects(request):   
@@ -569,9 +585,9 @@ class ApiVacancyApplication(APIView):
 
 
 def get_user_created_researchs(request):
-        return [] if  request.user.is_anonymous else Research.objects.filter(user = request.user, accepted="APPROVED")
+        return [] if  request.user.is_anonymous else Research.objects.filter(created_by = request.user)
 
-class ApiResearch(APIView):
+class ApiResearchList(APIView):
     def get(self, request):
         try:
             researchs = Research.objects.filter(accepted="APPROVED")
@@ -581,11 +597,11 @@ class ApiResearch(APIView):
             if 'by_category' in request.query_params:
                 result = filter_by("category__cateoryname",request.query_params['by_category'].split(',')[:-1], Research.objects.filter(accepted="APPROVED"))
             elif 'by_title' in request.query_params:
-                q = Research.objects.filter(Q(title__icontains = request.query_params['by_title']))
+                q = Research.objects.filter(title__icontains = request.query_params['by_title'], accepted="APPROVED").distinct()
                 if q.count()>0:
-                    result ={ 'query':q, 'message':f"{q.count()} Result found!"}
+                    result ={ 'query':q, 'message':f"{q.count()} Result found!",'message_am':f"{q.count()} ውጤት ተገኝቷል!"}
                 else:
-                    result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
+                    result = {'query':[],'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
             else:
                 result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"Researchs",'message_am':"ምርምር"}
 
@@ -598,8 +614,11 @@ class ApiResearch(APIView):
 ##didn't include try except while getting research obj because, in api, id is sent by the code when users click a button
 class ApiResearchDetail(APIView):
     def get(self, request):
-        research = Research.objects.get(id = request.query_params['id'])
-        category = ResearchProjectCategory.objects.all()
+        try:
+            research = get_object_or_404( Research, id = request.query_params['id'])
+            category = ResearchProjectCategory.objects.all()
+        except Http404:
+            return Response(data ={'error':True, 'message':"Object Doesn't Exist"})
         user_created = get_user_created_researchs(request)
         return Response(data = {'error':False, 'research': ResearchSerializer(research).data, "user_created": ResearchSerializer(user_created, many = True).data,
                                 'category':ResearchProjectCategorySerializer(category, many = True).data})
@@ -610,24 +629,40 @@ class ApiCreateResearch(APIView):
     permission_classes =([IsAuthenticated])
     def get(self, request):
         category = ResearchProjectCategory.objects.all()
-        user_created = Research.objects.filter(created_by=  request.user, accepted = "APPROVED")
+        user_created = get_user_created_researchs(request)
         return Response(data = {'error':False, 'category':ResearchProjectCategorySerializer(category, many = True).data, 
                                 'user_created':ResearchSerializer(user_created,many = True).data})
     
     def post(self, request):
-        form = ResearchForm(request.POST, request.FILES)
-        if form.is_valid():
-            research = form.save(commit = False)
-            if request.user.is_superuser:
-                research.accepted = "APPROVED"
-            else:
-                research.accepted = "PENDING"
-            research.created_by = request.user
-            if 'atttachements' in request.data:
-                research.attachements = request.data['attachements']
-            research.save()
-            return Response(data = {'error':False, 'researchs': ResearchSerializer(research).data})
-        return Response(data ={'error':True, 'message': f"Invaid inputs to create a research!{form.errors}"})
+        try:
+            serializer = ResearchCreationSerializer(data =request.data)
+            if serializer.is_valid():
+                research = serializer.create(validated_data=request.data)
+                research.created_by = request.user
+                research.accepted = "PENDING" if request.user.is_customer else "APPROVED"
+                research.save()
+                if 'attachements' in request.data:
+                    print("attachements found!")
+                    attachement = ResearchAttachment(research = research, attachement = request.data['attachements'])
+                    attachement.save()
+                return Response(data = {'error':False, 'research': ResearchSerializer(research).data})
+            return Response(data ={'error':True, 'message': f"Invaid inputs to create a research!{form.errors}"})
+        except Exception as e:
+            return Response(data ={'error':True, 'message':f"exception occured {str(e)}"})
+
+        # form = ResearchForm(request.POST, request.FILES)
+        # if form.is_valid():
+        #     research = form.save(commit = False)
+        #     if request.user.is_superuser:
+        #         research.accepted = "APPROVED"
+        #     else:
+        #         research.accepted = "PENDING"
+        #     research.created_by = request.user
+        #     if 'atttachements' in request.data:
+        #         research.attachements = request.data['attachements']
+        #     research.save()
+        #     return Response(data = {'error':False, 'researchs': ResearchSerializer(research).data})
+        # return Response(data ={'error':True, 'message': f"Invaid inputs to create a research!{form.errors}"})
 
 
 @api_view(['POST'])
@@ -641,9 +676,8 @@ def ApiResearchAction(request):
                  research= get_object_or_404(Research, id = request.data['id'])
             except Http404:
                 return Response(data={'error':True, 'message': 'Research object not Found!' })
-            print(research.user.id, " ", request.user.id)   
             
-            if research.user == request.user:
+            if research.created_by == request.user:
                 if request.data['option'] == 'delete':
                     research.delete()
                     return Response(data = {'error':False, 'researchs':ResearchSerializer( Research.objects.all(),many =True ).data})  
@@ -654,16 +688,18 @@ def ApiResearchAction(request):
                     research.detail = request.data['detail']
                     status = request.data['status']
                     category = request.data['category']
-                    if request.FILES:
-                        research.attachements = request.FILES['attachements']  
-                    research.save()   
-                    return Response(data= {'error':False, 'research': ForumDetailSerializer(research).data})
+                    research.save()
+                    if 'attachements' in request.data and request.data['attachements'] != '':
+                        doc = research.researchattachment_set.first() 
+                        doc.attachement= request.data['attachements'] 
+                        doc.timestamp = timezone.now()
+                        doc.save()    
+                    return Response(data= {'error':False, 'research': ResearchSerializer(research).data})
         
             else:
                 return Response( data = {'error':True, 'message': "You can't edit others comment" })
         else:
             return Response(data = {'error':True, 'messsage':"Invalid Inputs"})  
-
 
 
 def get_user_created_forums(request):

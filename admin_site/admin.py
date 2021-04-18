@@ -27,8 +27,7 @@ from collaborations.Views.faq import(CreateFaqs,FaqsView,FaqsList,FaqPendingList
                                     FaqApprove,FaqPending,FaqsDetail)
 
 from collaborations.Views.vacancy import(CreateVacancy,AdminVacancyList,VacancyDetail,CreateVacancyCategory,
-                        JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
-                        SuperAdminVacancyList,ApplicantListDetail,)
+                        JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,ApplicantListDetail,)
 from collaborations.Views.projects import(
 
                         ListProjectAdmin,CreateProjectAdmin,ProjectDetailAdmin,
@@ -139,7 +138,6 @@ class CustomAdminSite(admin.AdminSite):
            
             path("vacancy-form/",wrap(CreateVacancy.as_view()),name="Job_form"),
             path("vacancy-list/",wrap(AdminVacancyList.as_view()),name="Job_list"),
-            path("vacancy-list-super/",wrap(SuperAdminVacancyList.as_view()),name="super_Job_list"),
             path("vacancy-applicant-info/<id>",wrap(ApplicantListDetail.as_view()),name="applicant_detail"),
             path("vacancy-detail/<model_name>/<id>",wrap(VacancyDetail.as_view()),name="job_detail"),
            

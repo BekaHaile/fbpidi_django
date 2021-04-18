@@ -3,7 +3,7 @@ from accounts.api.serializers import UserSerializer, UserInfoSerializer
 from collaborations.models import (PollsQuestion, PollsResult, Choices, News, NewsImages, Blog, BlogComment,
                                     Announcement, AnnouncementImages, Tender, TenderApplicant, Faqs, JobApplication, 
                                     JobCategory, Project, Research, ResearchProjectCategory, Vacancy, ForumQuestion,
-                                    ForumComments, CommentReplay)
+                                    ForumComments, CommentReplay, ResearchAttachment)
 from company.models import Company, CompanyEvent
 from company.api.serializers import CompanyFullSerializer, CompanyInfoSerializer
 
@@ -151,6 +151,7 @@ class JobCategorySerializer(serializers.ModelSerializer):
         fields = ("id", "category_name", "category_name_am")
 
 
+
 class VacancyListSerializer(serializers.ModelSerializer):
     company = CompanyInfoSerializer(read_only =True)
     category_name = serializers.CharField(source='get_category_name')
@@ -159,9 +160,25 @@ class VacancyListSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
 
+class ResearchCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Research
+        fields  = ('title','description','status','category')
+    
+    def create(self, validated_data):
+        category = ResearchProjectCategory.objects.get(id = validated_data['category'])
+        research = Research(title = validated_data['title'], description= validated_data['description'],
+        status = validated_data['status'], category= category)
+        return research
+
+class ResearchAttachmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResearchAttachment
+        fields = ("attachement","timestamp",)
 
 class ResearchSerializer(serializers.ModelSerializer):
-        category_name = serializers.CharField(source = 'get_category_name')
+        category_name = serializers.CharField(source = 'get_category_name', )
+        attachements = ResearchAttachmentSerializer(source = 'researchfiles',read_only=True, many=True)
         class Meta:
             model = Research
             fields = "__all__"
@@ -221,3 +238,14 @@ class JobApplicationSerializer(serializers.ModelSerializer):
         model = JobApplication
         fields = '__all__'
 
+class JobApplicationCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobApplication
+        fields = ('status', 'bio','cv', 'documents','experiance','grade','institiute','field',) 
+    
+    def create(self, validated_data):
+        vacancy = Vacancy.objects.get(id = validated_data['id'])
+        application = JobApplication(vacancy = vacancy, status =validated_data['status'],
+        bio=validated_data['bio'], cv=validated_data['cv'],documents=validated_data['documents'],experiance=validated_data['experiance'],
+        grade=validated_data['grade'],field=validated_data['field'], institiute=validated_data['institiute'])
+        return application
