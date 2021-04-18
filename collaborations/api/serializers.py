@@ -207,7 +207,7 @@ class CommentReplayCreationSerializer(serializers.ModelSerializer):
         model =CommentReplay
         fields = ("content","comment")
     def create(self, validated_data):
-        comment = ForumComments.objects.get(id = validated_data['comment_id'])
+        comment = ForumComments.objects.get(id = validated_data['comment'])
         return CommentReplay(comment = comment, content = validated_data['content'])
 
 class ForumCommentSerializer(serializers.ModelSerializer):

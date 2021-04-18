@@ -2,7 +2,7 @@ from django.urls import path,include
 
 from collaborations.api.api_views import (PollListApiView, PollDetailApiView, NewsListApiView, NewsDetailApiView, 
         EventListApiView, EventDetailApiView, EventNotifyApiView, ApiAnnouncementList, ApiAnnouncementDetail,
-        ApiBlogList, ApiBlogDetail, ApiCreateBlogComment, ApiTenderList, ApiTenderDetail, ApiVacancyList,
+        ApiBlogList, ApiBlogDetail, ApiBlogCommentAction, ApiTenderList, ApiTenderDetail, ApiVacancyList,
         ApiVacancyDetail, ApiVacancyApplication, ApiResearchList, ApiResearchDetail,
         ApiForumQuestionList, ApiForumQuestionDetail, ApiCreateForumQuestion, ApiCommentAction, ApiCommentReplayAction,
         ApiCreateResearch, ApiResearchAction, ApiFaq)
@@ -40,7 +40,7 @@ urlpatterns = [
     path("faqs/",ApiFaq.as_view(),name="api_faq"),
     path("blog-list/",ApiBlogList.as_view(),name="api_cusomer_blog_list"),
     path("blog-details/",ApiBlogDetail.as_view(),name="api_blog_details"),
-    path("blog-comment/",ApiCreateBlogComment,name="api_comment"),
+    path("blog-comment/",ApiBlogCommentAction,name="api_comment"),
 
     path("vacancy_list/",ApiVacancyList.as_view(),name="api_vacancy_list"),
     path("vacancy_apply/",ApiVacancyApplication.as_view(),name="api_vacanvy_apply"),

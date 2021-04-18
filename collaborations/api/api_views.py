@@ -369,7 +369,7 @@ class ApiBlogList(APIView):
                 companies.append(comp)
         paginated = get_paginated_data(request, result['query'])
         return Response( data = {'error':False, 'paginator':get_paginator_info(paginated), 'blogs':BlogSerializer(paginated, many = True).data, 'message':result['message'],  
-                                'message_am':result['message_am'],'companies': CompanyInfoSerializer(companies,many = True).data,'tags':tags,'tags_am':tags_am})
+                                'message_am':result['message_am'],'companies': CompanyNameSerializer(companies,many = True).data,'tags':tags,'tags_am':tags_am})
 
 
 class ApiBlogDetail(APIView):
@@ -384,14 +384,35 @@ class ApiBlogDetail(APIView):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def ApiCreateBlogComment(request):
+def ApiBlogCommentAction(request):
     try:
-        blog = Blog.objects.get(id = request.data['id'])
-    except Exception:
-        return Response(data = {'error':True, 'message':"Blog Not Found!"})
-    comment = BlogComment(blog=blog, sender = request.user, content = request.data['content'])
-    comment.save()
-    return Response(data = {'error':False, 'message':"Successfully Commented on blog!"})
+        if request.data['option'] == "create":
+            try:
+                blog = Blog.objects.get(id = request.data['blog'])
+            except Exception as e:
+                return Response(data = {'error':True, 'message':"Blog Not Found!"})
+            comment = BlogComment(blog=blog, created_by = request.user, content = request.data['content'])
+            comment.save()
+            return Response(data = {'error':False, 'message':"Successfully Commented on blog!", 'blog':BlogDetailSerializer(blog).data})
+        else: #for edit and delete
+            try:
+                blog_comment = get_object_or_404(BlogComment, id =request.data['id'] )
+            except Http404:
+                return Response(data = {'error':True, 'message':"Object doesn't Exist"})
+            if blog_comment.created_by == request.user:
+                if request.data['option'] == "edit":
+                    blog_comment.content = request.data['content']
+                    blog_comment.last_updated_date = timezone.now()
+                    blog_comment.save() 
+                    return Response(data = {'error':False, 'blog':BlogDetailSerializer(blog_comment.blog).data})
+                else:
+                    blog = blog_comment.blog
+                    blog_comment.delete()
+                    return Response(data = {'error':False, 'blog':BlogDetailSerializer(blog).data})
+            else:
+                return Response(data = {'error':True, 'message':"You have no permission to chage this Comment!"})
+    except Exception as e:
+        return Response(data = {'error':True, 'message':f'{str(e)}'})
 
 
 # announcement-list/  
@@ -823,37 +844,39 @@ def ApiCommentAction(request):
 @permission_classes([IsAuthenticated])
 def ApiCommentReplayAction(request): 
         #create or edit depending on request.data['option']
-        form = CommentReplayForm(request.POST, request.FILES)
-        if form.is_valid:
-            replay =CommentReplay
+        
+        try:
             if request.data['option'] == 'create':
-                replay = form.save(commit =False) #sets content
-                replay.user = request.user
                 try:
-                    replay.comment = ForumComments.objects.get(id = request.data['comment_id'])
+                    comment = get_object_or_404(ForumComments, id = request.data['comment'])
                 except:
                     return Response(data={'error':True, 'message': 'comment object not Found!' })
-                if request.FILES:
-                    replay.attachements = request.FILES['attachements']
+                serializer =CommentReplayCreationSerializer(data = request.data)
+                if serializer.is_valid():
+                    reply = serializer.create(request.data)
+                    reply.created_by= request.user
+                    reply.save()
+                else:
+                    return Response(data = {'error':True, 'message':'Invalid input {str(serializer.errors)}'})
             else:#if option = 'edit'
                 try:
-                    replay = get_object_or_404(CommentReplay, id = request.data['id'])
+                    reply = get_object_or_404(CommentReplay, id = request.data['id'])
                 except Http404:
                     return Response(data={'error':True, 'message': 'Reply object not Found!' })
-                if replay.user == request.user and request.data['option'] == 'delete':
-                    forum = replay.comment.forum_question
-                    replay.delete()
+                if reply.created_by == request.user and request.data['option'] == 'delete':
+                    forum = reply.comment.forum_question
+                    reply.delete()
                     return Response(data={'error':False, 'forum':ForumDetailSerializer(forum).data})
-                elif replay.user == request.user and request.data['option'] == 'edit':
-                    replay.content = request.data['content']
-                    if request.FILES:
-                        replay.attachements = request.FILES['attachements']
+                elif reply.created_by == request.user and request.data['option'] == 'edit':
+                    reply.content = request.data['content']
+                    reply.last_updated_by = request.user
+                    reply.last_updated_date = timezone.now()
+                    reply.save()
                 else:
-                    return Response(data = {'error':True, 'message':"You can't edit others replay!"})  
-            replay.save()
-            return Response(data= {'error':False, 'forum': ForumDetailSerializer(replay.comment.forum_question).data})
-        else:
-            return Response(data = {'error':True, 'messsage':"Invalid Inputs"})
+                    return Response(data = {'error':True, 'message':"You can't edit others reply!"})  
+            return Response(data= {'error':False, 'forum': ForumDetailSerializer(reply.comment.forum_question).data})
+        except Exception as e:
+            return Response(data = {'error':True, 'messsage':f"Invalid Inputs {str(e)}"})
 
 
 class ApiFaq(generics.ListAPIView):
