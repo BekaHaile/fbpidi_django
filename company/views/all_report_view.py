@@ -138,6 +138,7 @@ class AllReportPage(LoginRequiredMixin,View):
                 energy_source_data.append({'label':CompanyDropdownsMaster.objects.get(id=energy_source['source_of_energy']).name,
                                     'data':energy_source['id__count']})
         women_in_pson_level = []
+        total_fem_posn = 0
         for company in companies:
             queryset_female_posn = FemalesInPosition.objects.filter(
                     company=company,year_fem=get_current_year()).values('company__name').annotate(
@@ -145,7 +146,7 @@ class AllReportPage(LoginRequiredMixin,View):
                     )
             in_med = 0
             in_high = 0
-            total_fem_posn = 0
+            
             for women_data in queryset_female_posn:
                 in_high = int(women_data['high_position'])
                 in_med = int(women_data['med_position'])
@@ -578,6 +579,7 @@ class AllReportPage(LoginRequiredMixin,View):
                 energy_source_data.append({'label':CompanyDropdownsMaster.objects.get(id=energy_source['source_of_energy']).name,
                                     'data':energy_source['id__count']})
         women_in_pson_level = []
+        total_fem_posn = 0
         for company in companies:
             queryset_female_posn = FemalesInPosition.objects.filter(
                     company=company,year_fem=current_year).values('company__name').annotate(
@@ -585,7 +587,7 @@ class AllReportPage(LoginRequiredMixin,View):
                     )
             in_med = 0
             in_high = 0
-            total_fem_posn = 0
+            
             for women_data in queryset_female_posn:
                 in_high = int(women_data['high_position'])
                 in_med = int(women_data['med_position'])
