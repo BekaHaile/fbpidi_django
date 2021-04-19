@@ -89,11 +89,11 @@ class AllReportPage(LoginRequiredMixin,View):
                         'sector':company.main_category
                     })
         # form of ownership
-        queryset = companies.values('ownership_form').annotate(Count('id')).order_by('ownership_form') 
+        queryset = companies.values('ownership_form__name').annotate(Count('id')).order_by('ownership_form') 
         total_ownership = 0
         for ownership in queryset:
             total_ownership += int(ownership['id__count'])
-            ownership_data.append({'label':CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']),
+            ownership_data.append({'label':ownership['ownership_form__name'],
                                     'data':ownership['id__count']})
 
         # Educational status data
