@@ -23,7 +23,7 @@ urlpatterns = [
     path("forum_detail/", ApiForumQuestionDetail.as_view(), name = 'api_forum_detail'),
     path("forum_action/", ApiCreateForumQuestion, name = "api_forum_create"),
     path('forum_comment_action/', ApiCommentAction, name = "api_comment_action"),
-    path('forum_comment_replay_action/', ApiCommentReplayAction, name = "api_comment_replay_action"),
+    path('forum_comment_reply_action/', ApiCommentReplayAction, name = "api_comment_replay_action"),
     
     #announcement 
     path("announcement-list/",ApiAnnouncementList.as_view(),name="api_announcement_list"),
