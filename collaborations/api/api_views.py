@@ -26,8 +26,8 @@ from collaborations.models import (PollsQuestion, PollsResult, Choices, News, Ne
 from collaborations.forms import CreateJobApplicationForm, ForumQuestionForm, CommentForm, CommentReplayForm, ResearchForm
 from collaborations.api.serializers import (PollListSerializer,PollDetailSerializer,  ChoiceSerializer, NewsListSerializer, NewsDetailSerializer, JobApplicationCreationSerializer,
                                             EventListSerializer, BlogSerializer,BlogDetailSerializer, BlogCommentSerializer, AnnouncementSerializer, AnnouncementDetailSerializer, 
-                                            TenderSerializer,TenderApplicantSerializer, VacancyListSerializer, JobCategorySerializer,ResearchCreationSerializer,
-                                            ResearchProjectCategorySerializer, ProjectSerializer, ResearchSerializer, 
+                                            TenderSerializer,TenderApplicantSerializer, VacancyListSerializer, JobCategorySerializer,ResearchCreationSerializer,ForumCommentCreationSerializer,
+                                            ResearchProjectCategorySerializer, ProjectSerializer, ResearchSerializer, ForumCreationSerializer,CommentReplayCreationSerializer,
                                             ForumQuestionSerializer, ForumDetailSerializer, ForumCommentSerializer, CommentReplay, FaqSerializer, JobApplicationSerializer)
 
 
@@ -369,7 +369,7 @@ class ApiBlogList(APIView):
                 companies.append(comp)
         paginated = get_paginated_data(request, result['query'])
         return Response( data = {'error':False, 'paginator':get_paginator_info(paginated), 'blogs':BlogSerializer(paginated, many = True).data, 'message':result['message'],  
-                                'message_am':result['message_am'],'companies': CompanyInfoSerializer(companies,many = True).data,'tags':tags,'tags_am':tags_am})
+                                'message_am':result['message_am'],'companies': CompanyNameSerializer(companies,many = True).data,'tags':tags,'tags_am':tags_am})
 
 
 class ApiBlogDetail(APIView):
@@ -384,14 +384,35 @@ class ApiBlogDetail(APIView):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def ApiCreateBlogComment(request):
+def ApiBlogCommentAction(request):
     try:
-        blog = Blog.objects.get(id = request.data['id'])
-    except Exception:
-        return Response(data = {'error':True, 'message':"Blog Not Found!"})
-    comment = BlogComment(blog=blog, sender = request.user, content = request.data['content'])
-    comment.save()
-    return Response(data = {'error':False, 'message':"Successfully Commented on blog!"})
+        if request.data['option'] == "create":
+            try:
+                blog = Blog.objects.get(id = request.data['blog'])
+            except Exception as e:
+                return Response(data = {'error':True, 'message':"Blog Not Found!"})
+            comment = BlogComment(blog=blog, created_by = request.user, content = request.data['content'])
+            comment.save()
+            return Response(data = {'error':False, 'message':"Successfully Commented on blog!", 'blog':BlogDetailSerializer(blog).data})
+        else: #for edit and delete
+            try:
+                blog_comment = get_object_or_404(BlogComment, id =request.data['id'] )
+            except Http404:
+                return Response(data = {'error':True, 'message':"Object doesn't Exist"})
+            if blog_comment.created_by == request.user:
+                if request.data['option'] == "edit":
+                    blog_comment.content = request.data['content']
+                    blog_comment.last_updated_date = timezone.now()
+                    blog_comment.save() 
+                    return Response(data = {'error':False, 'blog':BlogDetailSerializer(blog_comment.blog).data})
+                else:
+                    blog = blog_comment.blog
+                    blog_comment.delete()
+                    return Response(data = {'error':False, 'blog':BlogDetailSerializer(blog).data})
+            else:
+                return Response(data = {'error':True, 'message':"You have no permission to chage this Comment!"})
+    except Exception as e:
+        return Response(data = {'error':True, 'message':f'{str(e)}'})
 
 
 # announcement-list/  
@@ -580,10 +601,6 @@ class ApiVacancyApplication(APIView):
         #     return Response(data ={'error':True, 'message': form.errors}, )
 
 
-# def get_user_created_projects(request):   
-#         return [] if  request.user.is_anonymous else Project.objects.filter(user = request.user, accepted="APPROVED")
-
-
 def get_user_created_researchs(request):
         return [] if  request.user.is_anonymous else Research.objects.filter(created_by = request.user)
 
@@ -650,19 +667,7 @@ class ApiCreateResearch(APIView):
         except Exception as e:
             return Response(data ={'error':True, 'message':f"exception occured {str(e)}"})
 
-        # form = ResearchForm(request.POST, request.FILES)
-        # if form.is_valid():
-        #     research = form.save(commit = False)
-        #     if request.user.is_superuser:
-        #         research.accepted = "APPROVED"
-        #     else:
-        #         research.accepted = "PENDING"
-        #     research.created_by = request.user
-        #     if 'atttachements' in request.data:
-        #         research.attachements = request.data['attachements']
-        #     research.save()
-        #     return Response(data = {'error':False, 'researchs': ResearchSerializer(research).data})
-        # return Response(data ={'error':True, 'message': f"Invaid inputs to create a research!{form.errors}"})
+        
 
 
 @api_view(['POST'])
@@ -670,8 +675,7 @@ class ApiCreateResearch(APIView):
 @permission_classes([IsAuthenticated])
 def ApiResearchAction(request): 
     # edit depending on request.data['option']
-        form = ResearchForm(request.POST, request.FILES)
-        if form.is_valid:    
+        try:
             try:
                  research= get_object_or_404(Research, id = request.data['id'])
             except Http404:
@@ -688,6 +692,8 @@ def ApiResearchAction(request):
                     research.detail = request.data['detail']
                     status = request.data['status']
                     category = request.data['category']
+                    research.last_updated_by= request.user
+                    research.last_updated_date = timezone.now()
                     research.save()
                     if 'attachements' in request.data and request.data['attachements'] != '':
                         doc = research.researchattachment_set.first() 
@@ -695,15 +701,20 @@ def ApiResearchAction(request):
                         doc.timestamp = timezone.now()
                         doc.save()    
                     return Response(data= {'error':False, 'research': ResearchSerializer(research).data})
-        
             else:
                 return Response( data = {'error':True, 'message': "You can't edit others comment" })
-        else:
-            return Response(data = {'error':True, 'messsage':"Invalid Inputs"})  
+        except Exception as e:
+            return Response(data = {'error':True, 'messsage':f"Invalid Inputs {str(e)}"})  
+
+
+class ApiProjectList(APIView):
+    def get(self, request):
+        pass
 
 
 def get_user_created_forums(request):
     return [] if  request.user.is_anonymous else ForumQuestion.objects.filter(created_by = request.user)
+
 
 class ApiForumQuestionList(APIView):
     def get(self, request):
@@ -725,6 +736,7 @@ class ApiForumQuestionList(APIView):
             print('Exception in ApiForumQuestionList ', e)
             return Response(data = {'error':True, 'message':e})
 
+
 class ApiForumQuestionDetail(APIView):
     def get(self, request):
         try:
@@ -740,37 +752,38 @@ class ApiForumQuestionDetail(APIView):
 @permission_classes([IsAuthenticated])
 def ApiCreateForumQuestion(request): 
     #create or edit depending on request.data['option']
-        form = ForumQuestionForm(request.POST, request.FILES)
-        if form.is_valid:
-            forum =ForumQuestion
+        try:
             if request.data['option'] == 'create':
-                forum = form.save(commit =False) #sets title and description
-                forum.user = request.user
-                if request.FILES:
-                    forum.attachements = request.FILES['attachements']
+                serializer = ForumCreationSerializer(data = request.data)
+                if serializer.is_valid():
+                    forum = serializer.create(validated_data = request.data)
+                    forum.created_by = request.user
+                    if 'attachements' in request.data:
+                        forum.attachements = request.data['attachements']
+                    forum.save()
             else:#if option = 'edit' or 'delete'
                 try:
                     forum = get_object_or_404(ForumQuestion, id = request.data['id'])
                 except Http404:
                     return Response(data={'error':True, 'message': 'Forum object not Found!' })
-                if forum.user == request.user and request.data['option'] == 'delete':
+                if forum.created_by == request.user and request.data['option'] == 'delete':
                     forum.delete()
-                    return Response(data = {'error':False, 
-                                            'forums':ForumQuestionSerializer( ForumQuestion.objects.all(),many =True ).data})  
+                    return Response(data = {'error':False, 'forums':ForumQuestionSerializer( ForumQuestion.objects.all(),many =True ).data})  
 
-                elif forum.user == request.user and request.data['option'] == 'edit':
+                elif forum.created_by == request.user and request.data['option'] == 'edit':
                     forum.title = request.data['title']
                     forum.description = request.data['description']
-                    if request.FILES:
-                        forum.attachements = request.FILES['attachements']        
+                    if 'attachements' in request.data and request.data['attachements'] != '':
+                        forum.attachements = request.data['attachements']
+                    forum.last_updated_by= request.user
+                    forum.last_updated_date = timezone.now()
+                    forum.save()        
                 else:
                     return Response( data = {'error':True, 'message': "You can't edit others comment" })
-
-            #save for forum object created at create and edit        
-            forum.save()
+         
             return Response(data= {'error':False, 'forum': ForumDetailSerializer(forum).data})
-        else:
-            return Response(data = {'error':True, 'messsage':"Invalid Inputs"})  
+        except Exception as e:
+            return Response(data = {'error':True, 'messsage':f"Invalid Inputs {str(e)}"})  
 
 
 @api_view(['POST'])
@@ -778,41 +791,42 @@ def ApiCreateForumQuestion(request):
 @permission_classes([IsAuthenticated])
 def ApiCommentAction(request): 
         #create or edit depending on request.data['option']
-        form = CommentForm(request.POST, request.FILES)
-        
-        if form.is_valid:
-            comment =ForumComments
+        try:
+            
             if request.data['option'] == 'create':
                 try:
-                    forum_question = get_object_or_404(ForumQuestion, id = request.data['forum_id'])
+                    forum_question = get_object_or_404(ForumQuestion, id = request.data['forum_question'])
                 except Http404:
                     return Response(data = {'error':True, 'message':'Forum Not Found!'})
+                serializer = ForumCommentCreationSerializer(data = request.data)
+                if serializer.is_valid():
+                    comment = serializer.create(validated_data=request.data) 
+                    comment.created_by = request.user
+                    comment.save()
+                else:
+                    return Response(data= {'error':True, 'message':str(serializer.errors)}) 
 
-                comment = form.save(commit =False) #sets title and description
-                comment.user = request.user
-                comment.forum_question = forum_question
-                if request.FILES:
-                    comment.attachements = request.FILES['attachements']  # saving is done at last (works for both create and edit)
             else:#if option = 'edit' or delete
                 try:
                     comment = get_object_or_404(ForumComments, id = request.data['id'])
                 except Http404:
                     return Response(data={'error':True, 'message': 'Comment object not Found!' })
 
-                if comment.user == request.user and request.data['option'] == 'delete':
+                if comment.created_by == request.user and request.data['option'] == 'delete':
                     forum = comment.forum_question
                     comment.delete()
                     return Response(data={'error':False, 'forum':ForumDetailSerializer(forum).data})
-                elif comment.user == request.user and request.data['option'] == 'edit':
+                elif comment.created_by == request.user and request.data['option'] == 'edit':
                     comment.comment = request.data['comment']
-                    if request.FILES:
-                        comment.attachements = request.FILES['attachements']
+                    comment.last_updated_by = request.user
+                    comment.last_updated_date = timezone.now()
+                    comment.save()
                 else:
                     return Response(data = {'error':True, 'message':"You can't edit others comment!"})  
-            comment.save()
+            
             return Response(data= {'error':False, 'forum': ForumDetailSerializer(comment.forum_question).data})
-        else:
-            return Response(data = {'error':True, 'messsage':"Invalid Inputs"})
+        except Exception as e:
+            return Response(data = {'error':True, 'messsage':f"Invalid Inputs {str(e)}"})
 
 
 
@@ -821,43 +835,60 @@ def ApiCommentAction(request):
 @permission_classes([IsAuthenticated])
 def ApiCommentReplayAction(request): 
         #create or edit depending on request.data['option']
-        form = CommentReplayForm(request.POST, request.FILES)
-        if form.is_valid:
-            replay =CommentReplay
+        
+        try:
             if request.data['option'] == 'create':
-                replay = form.save(commit =False) #sets content
-                replay.user = request.user
                 try:
-                    replay.comment = ForumComments.objects.get(id = request.data['comment_id'])
+                    comment = get_object_or_404(ForumComments, id = request.data['comment'])
                 except:
                     return Response(data={'error':True, 'message': 'comment object not Found!' })
-                if request.FILES:
-                    replay.attachements = request.FILES['attachements']
-            else:#if option = 'edit'
+                serializer =CommentReplayCreationSerializer(data = request.data)
+                if serializer.is_valid():
+                    reply = serializer.create(request.data)
+                    reply.created_by= request.user
+                    reply.save()
+                else:
+                    return Response(data = {'error':True, 'message':'Invalid input {str(serializer.errors)}'})
+            else:#if option = 'edit' or delete
                 try:
-                    replay = get_object_or_404(CommentReplay, id = request.data['id'])
+                    reply = get_object_or_404(CommentReplay, id = request.data['id'])
                 except Http404:
                     return Response(data={'error':True, 'message': 'Reply object not Found!' })
-                if replay.user == request.user and request.data['option'] == 'delete':
-                    forum = replay.comment.forum_question
-                    replay.delete()
+                if reply.created_by == request.user and request.data['option'] == 'delete':
+                    forum = reply.comment.forum_question
+                    reply.delete()
                     return Response(data={'error':False, 'forum':ForumDetailSerializer(forum).data})
-                elif replay.user == request.user and request.data['option'] == 'edit':
-                    replay.content = request.data['content']
-                    if request.FILES:
-                        replay.attachements = request.FILES['attachements']
+                elif reply.created_by == request.user and request.data['option'] == 'edit':
+                    reply.content = request.data['content']
+                    reply.last_updated_by = request.user
+                    reply.last_updated_date = timezone.now()
+                    reply.save()
                 else:
-                    return Response(data = {'error':True, 'message':"You can't edit others replay!"})  
-            replay.save()
-            return Response(data= {'error':False, 'forum': ForumDetailSerializer(replay.comment.forum_question).data})
-        else:
-            return Response(data = {'error':True, 'messsage':"Invalid Inputs"})
+                    return Response(data = {'error':True, 'message':"You can't edit others reply!"})  
+            return Response(data= {'error':False, 'forum': ForumDetailSerializer(reply.comment.forum_question).data})
+        except Exception as e:
+            return Response(data = {'error':True, 'messsage':f"Invalid Inputs {str(e)}"})
 
 
-class ApiFaq(generics.ListAPIView):
-    queryset = Faqs.objects.all()
-    serializer_class = FaqSerializer
-    
+class ApiFaq(APIView):
+    def get(self, request):
+        try:
+            if 'by_title' in request.query_params:
+                title = request.query_params['by_title']
+                query = Faqs.objects.filter( Q(questions__icontains = title) | Q(questions_am__icontains = title)).filter(status ="APPROVED")
+            elif 'by_company' in request.query_params:
+                company = request.query_params['by_company']
+                query = Faqs.objects.filter(Q(company__name = company) | Q(company__name_am = company) ).filter(status ="APPROVED")
+            else:
+                query = Faqs.objects.filter(status ="APPROVED")
+            paginated = get_paginated_data(request, query)
+            if query.count() == 0:
+                return Response(data ={'error':False, 'paginator':get_paginator_info(paginated), 'faqs':[], 'message':'No result found!', 'message_am':'ምንም ውጤት አልተገኘም'})
+            
+            return Response(data ={'error':False, 'paginator':get_paginator_info(paginated), 'faqs':FaqSerializer(paginated, many =True).data, 'message': f"{query.count()} result found!", "message_am":f"{query.count()} ውጤት ተገኝቷል"})
+            
+        except Exception as e:
+            return Response (data = {'error':True, 'message':f"{str(e)}"})
 
 
 

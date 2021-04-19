@@ -5,7 +5,7 @@ from collaborations.models import (PollsQuestion, PollsResult, Choices, News, Ne
                                     JobCategory, Project, Research, ResearchProjectCategory, Vacancy, ForumQuestion,
                                     ForumComments, CommentReplay, ResearchAttachment)
 from company.models import Company, CompanyEvent
-from company.api.serializers import CompanyFullSerializer, CompanyInfoSerializer
+from company.api.serializers import CompanyFullSerializer, CompanyInfoSerializer, CompanyNameSerializer
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -202,6 +202,13 @@ class CommentReplaySerializer(serializers.ModelSerializer):
         model = CommentReplay
         fields = "__all__"
 
+class CommentReplayCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =CommentReplay
+        fields = ("content","comment")
+    def create(self, validated_data):
+        comment = ForumComments.objects.get(id = validated_data['comment'])
+        return CommentReplay(comment = comment, content = validated_data['content'])
 
 class ForumCommentSerializer(serializers.ModelSerializer):
     no_or_replays = serializers.IntegerField(source='count_comment_replays',read_only=True)
@@ -210,6 +217,15 @@ class ForumCommentSerializer(serializers.ModelSerializer):
         model =  ForumComments
         fields = "__all__"
 
+class ForumCommentCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =ForumComments
+        fields = ("forum_question","comment")
+
+    def create(self, validated_data):
+        forum_question = ForumQuestion.objects.get(id = validated_data['forum_question'])
+        return ForumComments(forum_question = forum_question, comment = validated_data['comment'])
+
 
 class ForumQuestionSerializer(serializers.ModelSerializer):
     no_of_comments = serializers.IntegerField(source='countComment', read_only=True)   
@@ -217,6 +233,13 @@ class ForumQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ForumQuestion
         fields = "__all__"
+
+class ForumCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ForumQuestion
+        fields = ('title','description')
+    def create(self, validated_data):
+        return ForumQuestion(title = validated_data['title'], description = validated_data['description'])
 
 
 class ForumDetailSerializer(serializers.ModelSerializer):
@@ -228,6 +251,7 @@ class ForumDetailSerializer(serializers.ModelSerializer):
 
 
 class FaqSerializer(serializers.ModelSerializer):
+    company = CompanyNameSerializer(read_only =True)
     class Meta:
         model = Faqs
         fields = "__all__"

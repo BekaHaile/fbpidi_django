@@ -89,7 +89,7 @@ class CompanyInboxDetail(View):
     def post(self, *args, **kwargs):
         try:
             sender_message = CompanyMessage.objects.get(id = self.kwargs['pk'])
-            reply_message = self.request.POST['reply_message2']
+            reply_message = self.request.POST['reply_message']
             if sendRelayMessage(self.request, sender_message, reply_message): #returns true if the email is sent successfully
                 if sender_message.replied:
                     reply = sender_message.companymessagereply_set.first()

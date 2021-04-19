@@ -206,18 +206,16 @@
 										</form>
 										{% endif %}
 
-										<a href="#" class="btn btn-info icons ml-1 mr-1" title="Share Product"><i class="icon icon-share "></i></a>
 										
 										{% if user.is_authenticated %}
 											{% user_liked_company user product.company.id  as liked %}
-									
 											{% if liked == True %}
-												<a  class="btn btn-pink icons ml-1 mr-1" style = "color:white" > <i style="color:white; "class="fa fa fa-heart-o"></i>
+												<a  class="btn btn-pink icons ml-1 mr-1"title="You Liked This Product" style = "color:white" > <i style="color:white; "class="fa fa fa-heart-o"></i>
 													<span id="company_like_count">{{product.company.companylike_set.all.count}}</span>
 												</a>
 												</a>
 											{% else %}
-												<a  class="btn btn-pink icons ml-1 mr-1" id="clike_{{product.company.id}}" onclick="like_company('{{product.company.id}}')" style = "color:white"> <i style="color:white; " class="fa fa fa-heart-o"></i>
+												<a  class="btn btn-pink icons ml-1 mr-1" title="Like Product" id="clike_{{product.company.id}}" onclick="like_company('{{product.company.id}}')" style = "color:white"> <i style="color:white; " class="fa fa fa-heart-o"></i>
 													<span id="company_like_count">{{product.company.companylike_set.all.count}}</span>
 												</a>
 

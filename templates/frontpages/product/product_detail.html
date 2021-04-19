@@ -255,16 +255,14 @@
 								</div>
 							</div>
 							<div class="card-footer bg-white">
-								<div class="icons">
-									<a href="#" class="btn btn-info icons"><i class="icon icon-share mr-1"></i> Share Ad</a>
-
-									<!-- <a href="#" class="btn btn-pink icons"><i class="icon icon-heart  mr-1"></i>  -->
-									<span> </span>
-									</a>
-
-									<!-- <a href="#" class="btn btn-primary icons"><i class="icon icon-printer  mr-1"></i> Print</a> -->
-									<!-- <a href="{%url 'add_to_cart' id=product.id%}" class="btn btn-primary icons mb-1 mt-1" ><i class="icon icon-shopping-cart mr-1"></i> Add to Cart</a> -->
-									<button class="btn btn-secondary br-tr-3 br-br-3 " id = "prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
+								<div class="icons row">
+									{% if user.is_customer %}
+									<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" >
+										<input type="hidden" name="products" value="{{product.id}},">
+										<button class="btn btn-secondary br-tr-3 br-br-3 mr-3" style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Inquiry Now" %}</button>
+									</form>
+									<button class="btn btn-secondary br-tr-3 br-br-3 " name ="prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
+									{% endif %}
 								</div>
 							</div>
 						</div>
@@ -422,7 +420,7 @@
 								<form action="{% url 'create_review' product=product.id %}" method="POST">{%csrf_token%}
 								<p class="mb-0">Add Your Rating for the Product</p>
 								<div class="rating-stars mb-4 mt-0 d-flex">
-									<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="2">
+									<input type="number" class="rating-value star" id="rating" name = "rating" value="2">
 									<div class="rating-stars-container mr-2">
 										<div onclick="addRating(1)" class="rating-star sm fs-16">
 											<i class="fa fa-star"></i>
@@ -453,7 +451,7 @@
 									<div class="form-group">
 										{{form.review}}
 									</div>
-									<button type="submit" class="btn btn-secondary">Send Reply</button>
+									<button type="submit" class="btn btn-secondary">Send Review</button>
 								</div>
 								</form>
 							</div>
@@ -501,11 +499,14 @@
 									</div>
 								</div>
 								<div class="card-footer">
-									<div class="">
+									<div class="row">
 										
-										<a href="{% url 'chat_with' reciever_name=product.created_by.username %}" target="blank" class="btn btn-info mt-1 mb-1"><i class="fa fa-envelope"></i> {% trans "Chat" %}</a>
-										<a href="mailto:{{product.company.contact_person.email}}" class="btn btn-secondary mt-1 mb-1" data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> Contact Me</a>
-										<a href="#" class="btn btn-light mt-1 mb-1"><i class="fa fa-eye"></i>Inquiry</a>
+										<a href="{% url 'chat_with' reciever_name=product.created_by.username %}" target="blank" class="btn btn-info mt-1 mb-1 mr-3"><i class="fa fa-envelope"></i> {% trans "Chat" %}</a>
+										<a href="{% url 'contact_company' pk=fbpidi.id %}"class="btn btn-secondary mt-1 mb-1 mr-3" data-toggle="modal" data-target="#contact"><i class="fa fa-user"></i> {% trans "Contact Us" %}</a>
+										
+										
+
+								
 									</div>
 								</div>
 							</div>
@@ -587,7 +588,7 @@
 			//   });
 			// }
 			function addRating(value){
-				$("#id_rating").val(value);
+				$("#rating").val(value);
 			}
 		</script>
 			<script>
