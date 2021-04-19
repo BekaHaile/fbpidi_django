@@ -1083,10 +1083,10 @@ class SearchProduct(View):
     def post(self,*args,**kwargs):
         template_name = "frontpages/product/product_category.html"
         products = Product.objects.all()
-        
         if self.request.POST['name'] != '':
-            products = Product.objects.filter(Q(name=self.request.POST['name'])|Q(brand__brand_name__icontains=self.request.POST['name'])|Q(brand__product_type__sub_category_name__icontains=self.request.POST['name'])
-                                    )
+            products = Product.objects.filter(
+                Q(name__icontains=self.request.POST['name'])|Q(name_am__icontains=self.request.POST['name'])|Q(brand__brand_name__icontains=self.request.POST['name'])|Q(brand__product_type__sub_category_name__icontains=self.request.POST['name'])
+                ).distinct()
         try:
             if self.request.POST['sector'] !='' or self.request.POST['sector'] != "Select":
                 products = products.filter(Q(brand__product_type__category_name__id=self.request.POST['sector']))
