@@ -120,36 +120,7 @@ $(document).ready(function () {
         });
 
     });
-    $("#land_aquistion_form").submit(function (e) {
-        e.preventDefault();
-        $form = $(this);
-        var formData = new FormData(this);
-        $.ajax({
-            url: "/admin/craete_land-aqsn/"+project_id+"/",
-            type: "POST",
-            headers: { "X-CSRFToken": my_token },
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (result) {
-                console.log(result);
-                if (result['error'] == false) {
-                    $("#success_aqsn").html(result['message']);
-                    $("#errors_aqsn").empty();
-                    // $("#education_status_form_modal").modal("hide");
-                } else {
-                    $("#errors_aqsn").html(result['message']);
-                    $("#success_aqsn").empty();
-                }
-            },
-            error: function (error) {
-                $("#errors_aqsn").html(error['statusText']);
-                $("#success_aqsn").empty();
-            }
-        });
 
-    });
-    
     $("#usage_form").submit(function (e) {
         e.preventDefault();
         $form = $(this);

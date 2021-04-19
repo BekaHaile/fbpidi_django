@@ -142,13 +142,6 @@
 										</li>
 										 
 										<li class="nav-item">
-											<a href="#" data-toggle="tab" data-target="#land_aqsn_form_tab" class="nav-link">
-												<i class="icon-stack2"></i>
-												Land Acquisition
-												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
-											</a>
-										</li>
-										<li class="nav-item">
 											<a href="#" data-toggle="tab" data-target="#land_usage_form_tab" class="nav-link">
 												<i class="icon-power2"></i>
 												Land Usage
@@ -247,6 +240,14 @@
 					$("#id_its_own").val("{{land_aqsn_data.its_own}}");
 					$("#id_lease").val("{{land_aqsn_data.lease}}");
 					$("#id_rent").val("{{land_aqsn_data.rent}}");
+					$("#id_established_yr").blur(function(){
+						var e_year = $(this).val();
+						var current_year = new Date().getFullYear()-8;
+						if(e_year > current_year){
+							$(this).val(current_year);
+						}else{
+						}
+					});
 					var cropper;
 					var imageFile;
 					var baseb4ImageString;
