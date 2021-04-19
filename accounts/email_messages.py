@@ -11,7 +11,6 @@ def sendEmailVerification(request,user):
     try:
         current_site = get_current_site(request)
         mail_subject = 'Email Verification Required.'
-        print("Current site = ", current_site, "\ndomain = ",current_site.domain, "\nuid = ", urlsafe_base64_encode(force_bytes(user.pk)),"\ntoken")
         message = get_template('email/acct_activate_email.html').render({
             'user': user,
             'domain': current_site.domain,

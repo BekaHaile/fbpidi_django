@@ -163,16 +163,9 @@
                                             <form target="blank"  action = "{% url 'inquiry_form' %}" method = "GET" >
                                                 <input type= "hidden" id="list_of_prod_ids" name ="products" value="" >
                                                 <button class="btn mt-4" id="btn_send_inquiry" style = "background-color: orange; color:white; display: none;"><b>Send Inquiry</b></button> 
-                                            </form>
-
-                                            <form>
+                                            </form>  
                                             <button class="btn mt-4" id="btn_clear_cart" onclick="clear_cart()" style = "background-color: rgb(169, 64, 8); color:white;display: none;">Clear Cart</button> 
-                                            </form>
-                                  
                                     </div>
-                                
-                    
-                                   
                                 </div>
                             </li>
                            
@@ -654,7 +647,7 @@
 
 
 
-<!-- start of script for cart  -->
+<!-- start of script for cart for customer users only -->
 <script>
 fetch_products()
 
@@ -676,11 +669,8 @@ function set_inquiry_display(){
             {
                 let selected_ids = get_int_ids(localStorage.getItem('prods'))
                 selected_ids.forEach(i => {
-                 document.getElementById('prod_'+i).disabled = true;
-                 //disabling the button in the grid view
-                 if(document.getElementById('gprod_'+i))
-                    document.getElementById('gprod_'+i).disabled = true;
-                
+                    buttons = document.getElementsByName('prod_'+i)
+                    buttons.forEach(b=>{b.disabled = true})
                 })
             }
         }
@@ -692,15 +682,9 @@ function set_inquiry_display(){
         document.getElementById("btn_send_inquiry").style['display'] = "none"
         document.getElementById("btn_clear_cart").style['display'] = "none"
         document.getElementById("list_of_prod_ids").value = ""
-        //enable all "Add to Cart" buttons for all products
-        // if(document.getElementById("product_contact_now"))
-        //     {
-        //         let prods = "{{object_list}}"
-        //         prods.forEach(product =>{document.getElementById("prod_"+product.id).disabled = false})
-        //     }
-        
          }
 }
+
 
 function count_products(){
     if(localStorage.getItem("prods") == null || localStorage.getItem("prods")=="")
@@ -712,8 +696,7 @@ function count_products(){
 
 // converts the string ids to an array or product ids
 function get_int_ids(str_ids)
-{
-       
+{  
         let prod_ids = str_ids.split(",");
         // since the last element of the string ids will be ',' like "1, 34, 23, ": we need to cut it off from the string by using pop()
         let x = prod_ids.pop()
@@ -725,6 +708,12 @@ function get_int_ids(str_ids)
 
 function clear_cart(){
     // remove the product ids from cart
+    if ( document.getElementById('product_contact_now' ))
+            {
+                let selected_ids = get_int_ids(localStorage.getItem('prods'))
+                selected_ids.forEach(i => {enable_buttons('prod_'+i)})
+            }
+        
     localStorage.removeItem('prods')
     set_inquiry_display()
 }
@@ -734,33 +723,30 @@ function remove_prod_from_cart(p_id){
     let prod_id = p_id.toString()+","
     localStorage.setItem('prods', cart_ids.replace(prod_id, ''))
     fetch_products()
-    
-    // if this function is called inside product list webpage refresh the view 
-    if( document.getElementById('prod_'+p_id)){
-        document.getElementById('prod_'+p_id).disabled = false
-        // for the grid button
-        if(document.getElementById('gprod_'+p_id))
-            document.getElementById('gprod_'+p_id).disabled = false
+    // if this function is called inside product list webpage refresh the view
+    enable_buttons('prod_'+p_id)
+}
 
+function enable_buttons(button_name){
+    buttons = document.getElementsByName(button_name)
+    buttons.forEach(b=>{b.disabled = false })
+}
 
-    }
-    
+function  disable_buttons(button_name){
+    buttons = document.getElementsByName(button_name)
+    buttons.forEach(b=>{b.disabled = true})
 }
 
 function add_to_cart(product_id){
     if("{{user.is_authenticated}}"=="True"){
             if(localStorage.getItem("prods") == null)
-                localStorage.setItem("prods",product_id+",")
-                
+                localStorage.setItem("prods",product_id+",")   
             else{ 
                 var p = localStorage.getItem("prods")+product_id+","
                 localStorage.setItem("prods", p) ;
                 // then disable the Add to Basket for that specific product
-                document.getElementById('prod_'+product_id).disabled = true
-                if(document.getElementById('gprod_'+product_id))
-                    document.getElementById('gprod_'+product_id).disabled = true
+                disable_buttons('prod_'+product_id)
             }
-   
             fetch_products();
         }
     else{
@@ -857,7 +843,6 @@ function append_product_cart(product){
 
 }
 
-  
 </script>
 <!-- End of Script for cart -->
 

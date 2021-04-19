@@ -117,8 +117,13 @@
 
         <li class="nav-item dropdown">
             <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
+                
                <i class="fa fa-envelope"></i>
-                <span id = "num_unread_inbox" class="badge badge-pill bg-warning-400 ml-auto ml-md-0"></span>
+               {% count_unread_inbox user.get_company as unread_inbox %}
+               
+                {% if unread_inbox > 0 %}
+                <span id = "num_unread_inbox" class="badge badge-pill bg-warning-400 ml-auto ml-md-0">{{unread_inbox}}</span>
+                {% endif %}
             </a>
             <div style = "padding: 10px;   width: 300px;"  class="dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
                 <div class="dropdown-content-header">
@@ -157,7 +162,7 @@
                <a href="{%url 'admin:update_company_info' pk=user|get_company_id%}" class="dropdown-item"><i class="icon-coins"></i> My Company</a>
                {%endif%}
                
-                <a href="{% url 'admin:admin_chat_list' %}" class="dropdown-item"><i class="icon-comment-discussion"></i> My Messages  <span id = "num_unread_messages" class="badge badge-pill bg-blue ml-auto"></span></a>
+                <a href="{% url 'admin:admin_chat_list' %}" class="dropdown-item"><i class="icon-comment-discussion"></i> My Chats  <span id = "num_unread_messages" class="badge badge-pill bg-blue ml-auto"></span></a>
                <!-- <a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages <span id = "unread_messages" class="badge badge-pill bg-blue ml-auto">{{unread_messages_count}}</span></a> -->
                <div class="dropdown-divider"></div>
                 <a href="{% url 'admin:password_change' %}" class="dropdown-item"><i class="icon-cog5"></i>Change Password</a>

@@ -1123,4 +1123,5 @@ class CreateReview(CreateView):
         return redirect('product_detail',pk=self.kwargs['product'])
     
     def form_invalid(self,form):
+        print("invalid form ",form.errors)
         return redirect('product_detail',pk=self.kwargs['product'])

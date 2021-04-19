@@ -1,4 +1,5 @@
 import datetime
+from django.utils import timezone
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
@@ -15,18 +16,18 @@ from rest_framework import authentication, permissions
 from rest_framework.decorators import permission_classes, authentication_classes,api_view
 
 from company.models import Company, CompanyEvent, EventParticipants
-from company.api.serializers import CompanyInfoSerializer
+from company.api.serializers import CompanyInfoSerializer, CompanyNameSerializer
 
 
 from collaborations.models import (PollsQuestion, PollsResult, Choices, News, NewsImages, Blog, BlogComment,
                                     Announcement, AnnouncementImages, Tender, TenderApplicant, Faqs, JobApplication, 
-                                    JobCategory, Project, Research, ResearchProjectCategory, Vacancy, ForumQuestion,
+                                    JobCategory, Project, Research, ResearchAttachment, ResearchProjectCategory, Vacancy, ForumQuestion,
                                     ForumComments, CommentReplay, Faqs)
 from collaborations.forms import CreateJobApplicationForm, ForumQuestionForm, CommentForm, CommentReplayForm, ResearchForm
-from collaborations.api.serializers import (PollListSerializer,  ChoiceSerializer, NewsListSerializer, NewsDetailSerializer, 
+from collaborations.api.serializers import (PollListSerializer,PollDetailSerializer,  ChoiceSerializer, NewsListSerializer, NewsDetailSerializer, JobApplicationCreationSerializer,
                                             EventListSerializer, BlogSerializer,BlogDetailSerializer, BlogCommentSerializer, AnnouncementSerializer, AnnouncementDetailSerializer, 
-                                            TenderSerializer,TenderApplicantSerializer, VacancyListSerializer, JobCategorySerializer,
-                                            ResearchProjectCategorySerializer, ProjectSerializer, ResearchSerializer, 
+                                            TenderSerializer,TenderApplicantSerializer, VacancyListSerializer, JobCategorySerializer,ResearchCreationSerializer,ForumCommentCreationSerializer,
+                                            ResearchProjectCategorySerializer, ProjectSerializer, ResearchSerializer, ForumCreationSerializer,CommentReplayCreationSerializer,
                                             ForumQuestionSerializer, ForumDetailSerializer, ForumCommentSerializer, CommentReplay, FaqSerializer, JobApplicationSerializer)
 
 
@@ -90,8 +91,7 @@ def SearchByTitle_All(model_name, request ):
             query = model.objects.filter( Q(title__icontains = filter_key) | Q(title_am__icontains = filter_key) |Q(description__icontains = filter_key ) | Q(description_am__icontains = filter_key) ).distinct() 
             # if there is no match for the filter_key or there is no filter_key at all
             if query.count() == 0: 
-                query = model.objects.all()
-                return { 'query': query, 'message': f"No match containing '{filter_key}'!", 'message_am': f"ካስገቡት ቃል '{filter_key}' ጋር የሚገናኝ አልተገኘም፡፡ !" }       
+                return { 'query': [], 'message': f"No match containing '{filter_key}'!", 'message_am': f"ካስገቡት ቃል '{filter_key}' ጋር የሚገናኝ አልተገኘም፡፡ !" }       
             return { 'query': query, 'message': f"{query.count()} result found!", 'message_am': f"{query.count()} ውጤት ተገኝቷል!" }
     except Exception as e:
         print("Exception at SearchBYTitle_All", str(e))
@@ -116,7 +116,7 @@ def SearchCategory_Title(model_name, request):
     Uses both search by title and filter by category at once
     """
     result = SearchByTitle_All(model_name, request) #returns matching objects by title and title_am, if none all objects
-    category_name =  request.query_params['by_category'].split(',')
+    category_name =  request.query_params['by_category'].split(',')[:-1]
     if category_name[0] == 'All':
             return {'query':result['query'],'message':f"{result['query'].count()} {request.GET['by_title']} result found !", 
                                             'message_am': f"{result['query'].count()} ውጤት ተገኝቷል",
@@ -136,10 +136,12 @@ def filter_by(field_name, field_values, query):
     for value in field_values:
         if value == 'All':
             break
+        print(field_name," ",value)
         kwargs ['{0}__{1}'.format(field_name, 'contains')] = value
         q.add(Q(**kwargs),Q.OR)
         kwargs = {}
     result = query.filter(q)
+    
     if not result.count() == 0:
         return {'query':result,'message':f"{result.count()} result found!",'searched_category':'All','message_am':f"{result.count()} ተገኝቷል! " ,'searched_name': field_name }
     return {'query':result, 'message':f"No results Found!", 'message_am':f" ምንም ውጤት አልተገኘም፡፡ !" ,'searched_category':'All', 'searched_name': field_name }
@@ -168,7 +170,7 @@ class PollListApiView(generics.ListAPIView):
         result ={}
         try:
             if 'by_company' in request.query_params:
-                result = FilterByCompanyname(request.query_params['by_company'].split(','), PollsQuestion.objects.all())
+                result = FilterByCompanyname(request.query_params['by_company'].split(',')[:-1], PollsQuestion.objects.all())
             elif 'by_no_vote' in request.query_params:
                 result['query'] = PollsQuestion.objects.annotate(num_vote=Count('pollsresult')).order_by('-num_vote')
                 if result['query'].count() > 0:
@@ -184,12 +186,11 @@ class PollListApiView(generics.ListAPIView):
                 if comp.pollsquestion_set.count()>0:
                     companies.append(comp)
             if result['query']==0:
-                result['query'] = PollsQuestion.objects.all()
                 result['message'] = 'No Result Found!'
 
             paginated = get_paginated_data(request, result['query'])
             return Response( data = {'error':False, 'paginator':get_paginator_info(paginated), 'polls':PollListSerializer(paginated, many =True).data, 'message' : result['message'], 
-                                        'message_am':result['message_am'],'companies':CompanyInfoSerializer(companies, many =True).data})
+                                        'message_am':result['message_am'],'companies':CompanyNameSerializer(companies, many =True).data})
 
         except Exception as e:
             print("exception at polls list ",e)
@@ -207,7 +208,7 @@ class PollDetailApiView( APIView):
             poll = get_object_or_404(PollsQuestion, id = id)
         except Http404:
             return Response(data = {'error':True, 'message':"Poll object not Found!"})
-        data = {'data': PollListSerializer(poll).data}
+        data = {'data': PollDetailSerializer(poll).data}
         if user == poll.created_by:
             data['error'] = True
             data['message'] = "You can not vote on this poll, since you are the creator of the poll."
@@ -222,21 +223,17 @@ class PollDetailApiView( APIView):
         return Response(data = {'data':data})
         
     def post(self, request):
-            data = {}
             try:
                 selected_choice = Choices.objects.get( id = request.data['selected_choice'])
                 poll = PollsQuestion.objects.get(id = request.data['id'])
             except Http404:
                 return Response(data={'error':True, 'message':'poll or selected choice not Found'})
             try:
-                result = PollsResult(created_by = request.user, poll=poll, choice=selected_choice, remark= request.data['remark'])
+                result = PollsResult(user = request.user, poll=poll, choice=selected_choice, remark= request.data['remark'])
                 result.save()
-                data['message'] = 'Successfully Voted!'
-                return Response(data = data)
+                return Response(data = {'error':False, 'message':"Successfully Voted!"})
             except Exception as e:
-                data['error'] = True
-                data['message'] = "can't vote twice!"
-                return Response(data=data)
+                return Response(data={'error':True,'message': f"can't vote twice! ,{str(e)}"})
 
 
 class NewsListApiView(APIView):
@@ -249,14 +246,12 @@ class NewsListApiView(APIView):
                 paginated = get_paginated_data(request, result['query'])
                 return Response(data= {'error':False, 'paginator':get_paginator_info(paginated), 'news_list':NewsDetailSerializer( paginated, many = True).data, 'message':result['message'],  'message_am':result['message_am'],'NEWS_CATAGORY':News.NEWS_CATAGORY})
             elif 'by_category' in request.query_params:
-                result = filter_by('catagory', request.query_params['by_category'].split(','), News.objects.all())
+                result = filter_by('catagory', request.query_params['by_category'].split(',')[:-1], News.objects.all())
             elif 'by_company' in request.query_params:
-                result = FilterByCompanyname(request.query_params['by_company'].split(','), News.objects.all())
+                result = FilterByCompanyname(request.query_params['by_company'].split(',')[:-1], News.objects.all())
             else: 
                 result = SearchByTitle_All('News', request)
 
-            if result['query'].count()==0:
-                result['query'] = News.objects.all()
             paginated = get_paginated_data(request, result['query'])
             context = {'error':False,'paginator': get_paginator_info(paginated), 'news_list': NewsDetailSerializer(paginated, many = True).data, 'message':result['message'],  'message_am':result['message_am'], 'NEWS_CATAGORY':News.NEWS_CATAGORY}
             return Response(data= context )
@@ -280,19 +275,17 @@ class EventListApiView(APIView):
             if 'by_status' in request.query_params:
                 result = filter_by('status',[request.query_params['by_status']], CompanyEvent.objects.all())
             elif 'by_company' in request.query_params:
-                result = FilterByCompanyname(request.query_params['by_company'].split(','), CompanyEvent.objects.all())
+                result = FilterByCompanyname(request.query_params['by_company'].split(',')[:-1], CompanyEvent.objects.all())
             else:
                 result = SearchByTitle_All('Event', request)
-            if result['query'].count() == 0:
-                result['query'] = CompanyEvent.objects.all()
-            
+
             eventcompanies = []
             for comp in Company.objects.all():
                 if comp.companyevent_set.count() > 0:
                     eventcompanies.append(comp)       
             
             paginated = get_paginated_data(request, result['query'])
-            return Response( data = { 'error': False, 'paginator': get_paginator_info(paginated), 'event_list': EventListSerializer( paginated, many = True).data, 'message':result['message'],  'message_am':result['message_am'],'event_companies':CompanyInfoSerializer( eventcompanies,many =True).data}, status=status.HTTP_200_OK )
+            return Response( data = { 'error': False, 'paginator': get_paginator_info(paginated), 'event_list': EventListSerializer( paginated, many = True).data, 'message':result['message'],  'message_am':result['message_am'],'companies':CompanyNameSerializer( eventcompanies,many =True).data}, status=status.HTTP_200_OK )
         
         except Exception as e:
             return Response(data={'error' :True, 'message':f"Exception Occured: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
@@ -353,7 +346,7 @@ class ApiBlogList(APIView):
     def get(self, request):
         result ={}
         if 'by_company' in request.query_params:
-            result = FilterByCompanyname(request.query_params['by_company'].split(','), Blog.objects.filter(publish=True))
+            result = FilterByCompanyname(request.query_params['by_company'].split(',')[:-1], Blog.objects.filter(publish=True))
         else:
             result['query'] = Blog.objects.filter(publish = True)
             if 'by_title' in request.query_params:
@@ -376,7 +369,7 @@ class ApiBlogList(APIView):
                 companies.append(comp)
         paginated = get_paginated_data(request, result['query'])
         return Response( data = {'error':False, 'paginator':get_paginator_info(paginated), 'blogs':BlogSerializer(paginated, many = True).data, 'message':result['message'],  
-                                'message_am':result['message_am'],'companies': CompanyInfoSerializer(companies,many = True).data,'tags':tags,'tags_am':tags_am})
+                                'message_am':result['message_am'],'companies': CompanyNameSerializer(companies,many = True).data,'tags':tags,'tags_am':tags_am})
 
 
 class ApiBlogDetail(APIView):
@@ -391,14 +384,35 @@ class ApiBlogDetail(APIView):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def ApiCreateBlogComment(request):
+def ApiBlogCommentAction(request):
     try:
-        blog = Blog.objects.get(id = request.data['id'])
-    except Exception:
-        return Response(data = {'error':True, 'message':"Blog Not Found!"})
-    comment = BlogComment(blog=blog, sender = request.user, content = request.data['content'])
-    comment.save()
-    return Response(data = {'error':False, 'message':"Successfully Commented on blog!"})
+        if request.data['option'] == "create":
+            try:
+                blog = Blog.objects.get(id = request.data['blog'])
+            except Exception as e:
+                return Response(data = {'error':True, 'message':"Blog Not Found!"})
+            comment = BlogComment(blog=blog, created_by = request.user, content = request.data['content'])
+            comment.save()
+            return Response(data = {'error':False, 'message':"Successfully Commented on blog!", 'blog':BlogDetailSerializer(blog).data})
+        else: #for edit and delete
+            try:
+                blog_comment = get_object_or_404(BlogComment, id =request.data['id'] )
+            except Http404:
+                return Response(data = {'error':True, 'message':"Object doesn't Exist"})
+            if blog_comment.created_by == request.user:
+                if request.data['option'] == "edit":
+                    blog_comment.content = request.data['content']
+                    blog_comment.last_updated_date = timezone.now()
+                    blog_comment.save() 
+                    return Response(data = {'error':False, 'blog':BlogDetailSerializer(blog_comment.blog).data})
+                else:
+                    blog = blog_comment.blog
+                    blog_comment.delete()
+                    return Response(data = {'error':False, 'blog':BlogDetailSerializer(blog).data})
+            else:
+                return Response(data = {'error':True, 'message':"You have no permission to chage this Comment!"})
+    except Exception as e:
+        return Response(data = {'error':True, 'message':f'{str(e)}'})
 
 
 # announcement-list/  
@@ -409,7 +423,7 @@ class ApiAnnouncementList(generics.ListAPIView):
         try:
             result = {}
             if 'by_company' in request.query_params:
-                result = FilterByCompanyname(request.query_params['by_company'].split(','), Announcement.objects.all())
+                result = FilterByCompanyname(request.query_params['by_company'].split(',')[:-1], Announcement.objects.all())
             else:
                 result = SearchByTitle_All('Announcement', request)
             if result['query']  :
@@ -419,7 +433,7 @@ class ApiAnnouncementList(generics.ListAPIView):
             for comp in Company.objects.all():
                 if comp.announcement_set.count() > 0:
                     companies.append(comp)
-            return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'object_list':AnnouncementSerializer(paginated, many = True).data, 'message':result['message'], 'message_am':result['message_am'], 'companies':CompanyInfoSerializer( companies,many =True).data})
+            return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'object_list':AnnouncementSerializer(paginated, many = True).data, 'message':result['message'], 'message_am':result['message_am'], 'companies':CompanyNameSerializer( companies,many =True).data})
         except Exception as e:
             print ("##Exception in Announcement list ",e)
             return Response(daa = {'error':True, 'message':e})
@@ -445,22 +459,30 @@ class ApiTenderList(APIView):
             if 'by_status' in request.query_params:
                 result = filter_by('status', [ request.query_params['by_status'] ], Tender.objects.all())
             elif 'by_company' in request.query_params:
-                by_company = FilterByCompanyname(request.query_params['by_company'].split(','),  Tender.objects.all())
+                by_company = FilterByCompanyname(request.query_params['by_company'].split(',')[:-1],  Tender.objects.all())
                 result = filter_by('status', ['Open', 'Upcoming'], by_company['query'])
             elif 'by_document_type' in request.query_params:
                 by_type = filter_by('tender_type', [request.query_params['by_document_type'] ],  Tender.objects.all())
                 result = filter_by('status', ['Open', 'Upcoming'], by_type['query'])
+            elif 'by_title' in request.query_params:
+                by_title=Tender.objects.filter( Q(title__icontains=request.query_params['by_title'])|Q(title_am__icontains=request.query_params['by_title']) ).distinct()
+                result = filter_by('status', ['Open', 'Upcoming'], by_title)
             else:
-                result = SearchByTitle_All('Tender', request)
-            if  result['query'].count() == 0:
                 result['query'] = Tender.objects.filter( Q(status='Open') | Q(status = 'Upcoming') )
+                if result['query'].count() > 0:
+                    result['message'] = f"{result['query'].count()} result Found"
+                    result['message_am'] = f"{result['query'].count()} ተገኝቷል!"
+                else:
+                    result['message'] = "No result Found"
+                    result['message_am'] = "ምንም ውጤት አልተገኝም!"
+
             companies = []
             for comp in Company.objects.all():
                 if comp.tender_set.count() > 0:
                     companies.append(comp)
             
             paginated = get_paginated_data(request, result['query'])
-            return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'tenders':TenderSerializer(paginated, many =True).data, 'companies': CompanyInfoSerializer(companies, many = True).data, 'message':result['message'], 'message_am':result['message_am']} )
+            return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'tenders':TenderSerializer(paginated, many =True).data, 'companies': CompanyNameSerializer(companies, many = True).data, 'message':result['message'], 'message_am':result['message_am']} )
             
         except Exception as e:
             print( "Error while getting tenders",e)
@@ -502,19 +524,17 @@ class ApiVacancyList(APIView):
             q= Q( Q(title__contains = request.query_params['by_title']) | 
                     Q(title_am__contains = request.query_params['by_title']) )
             query = Vacancy.objects.filter(q)# search by title then filter by category
-            result = filter_by('category__category_name',request.query_params['by_category'].split(','), query)
+            result = filter_by('category__category_name',request.query_params['by_category'].split(',')[:-1], query)
         elif 'by_category' in request.query_params:
-            result = filter_by('category__category_name', request.query_params['by_category'].split(','), Vacancy.objects.all())
+            result = filter_by('category__category_name', request.query_params['by_category'].split(',')[:-1], Vacancy.objects.all())
         elif 'by_company' in request.query_params:
-            result = FilterByCompanyname(request.query_params['by_company'].split(','), Vacancy.objects.all())
+            result = FilterByCompanyname(request.query_params['by_company'].split(',')[:-1], Vacancy.objects.all())
         else: 
             result = SearchByTitle_All('Vacancy', request)
-        if result['query'].count()==0:
-            result['query'] = Vacancy.objects.all()
         
         paginated = get_paginated_data(request, result['query'])
         return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'vacancies': VacancyListSerializer(paginated, many= True).data, 'jobcategory':JobCategorySerializer(jobcatetory, many = True).data,
-                                'message':result['message'],  'message_am':result['message_am'], 'companies':CompanyInfoSerializer( companies, many = True).data})
+                                'message':result['message'],  'message_am':result['message_am'], 'companies':CompanyNameSerializer( companies, many = True).data})
 
 
 class ApiVacancyDetail(APIView):
@@ -524,7 +544,6 @@ class ApiVacancyDetail(APIView):
             jobcategory = JobCategory.objects.all()
         except Http404:
             return Response(data = {'error': True , 'message':'Vacancy object does not exist!'})
-        
         return Response(data = {'error':False, 'vacancy':VacancyListSerializer(vacancy).data, 'jobcategory': JobCategorySerializer(jobcategory, many = True).data} )
     
     #12345 applying for vacancy can be handled here , first z front end will make the user to login to apply
@@ -538,7 +557,7 @@ class ApiVacancyApplication(APIView):
     def get(self, request):
         try:
             vacancy = get_object_or_404(Vacancy, id = int(request.query_params['id']))
-            if JobApplication.objects.filter(vacancy=vacancy, user=request.user).exists():
+            if JobApplication.objects.filter(vacancy=vacancy, created_by=request.user).exists():
                 return Response(data = {'error':True, 'message': "You can't apply to the same vacancy Twice"})
             jobcategory = JobCategory.objects.all()
         except Http404:
@@ -550,29 +569,42 @@ class ApiVacancyApplication(APIView):
     def post(self, request):
         try:
             vacancy = get_object_or_404(Vacancy, id = int(request.data['id']))
-            if JobApplication.objects.filter(vacancy=vacancy, user=request.user).exists():
+            if JobApplication.objects.filter(vacancy=vacancy, created_by=request.user).exists():
                 return Response(data = {'error':True, 'message': "You can't apply to the same vacancy Twice"})
         except Http404:
             return Response(data = {'error': True , 'message':'Vacancy Not Found!'})
-        form = CreateJobApplicationForm(request.POST,request.FILES)
-        if form.is_valid():
-            job =  form.save(commit=False)
-            job.user = request.user
-            job.vacancy =  Vacancy.objects.get(id =request.data['id'])
-            job.save()
-            return Response(data = {'error':False, 'application': JobApplicationSerializer(job).data })
+        serializer = JobApplicationCreationSerializer(data=request.data)
+        if serializer.is_valid():
+            application =  serializer.create(validated_data=request.data)
+            application.created_by = request.user
+            application.save()
+            return Response(data = {'error':False, 'application': JobApplicationSerializer(application).data })
         else:
-            return Response(data ={'error':True, 'message': form.errors}, )
+            return Response(data ={'error':True, 'message': f"{serializer.errors}"} )
 
-
-# def get_user_created_projects(request):   
-#         return [] if  request.user.is_anonymous else Project.objects.filter(user = request.user, accepted="APPROVED")
+        # try:
+        #     vacancy = get_object_or_404(Vacancy, id = int(request.data['id']))
+        #     if JobApplication.objects.filter(vacancy=vacancy, created_by=request.user).exists():
+        #         return Response(data = {'error':True, 'message': "You can't apply to the same vacancy Twice"})
+        # except Http404:
+        #     return Response(data = {'error': True , 'message':'Vacancy Not Found!'})
+        # form = CreateJobApplicationForm(request.POST,request.FILES)
+        # if form.is_valid():
+        #     application =  form.save(commit=False)
+        #     application.created_by = request.user
+        #     application.cv = request.data['cv']
+        #     application.
+        #     application.vacancy =  Vacancy.objects.get(id =request.data['id'])
+        #     application.save()
+        #     return Response(data = {'error':False, 'application': JobApplicationSerializer(application).data })
+        # else:
+        #     return Response(data ={'error':True, 'message': form.errors}, )
 
 
 def get_user_created_researchs(request):
-        return [] if  request.user.is_anonymous else Research.objects.filter(user = request.user, accepted="APPROVED")
+        return [] if  request.user.is_anonymous else Research.objects.filter(created_by = request.user)
 
-class ApiResearch(APIView):
+class ApiResearchList(APIView):
     def get(self, request):
         try:
             researchs = Research.objects.filter(accepted="APPROVED")
@@ -580,13 +612,13 @@ class ApiResearch(APIView):
             user_created = get_user_created_researchs(request)	
             result = {}
             if 'by_category' in request.query_params:
-                result = filter_by("category__cateoryname",request.query_params['by_category'].split(','), Research.objects.filter(accepted="APPROVED"))
+                result = filter_by("category__cateoryname",request.query_params['by_category'].split(',')[:-1], Research.objects.filter(accepted="APPROVED"))
             elif 'by_title' in request.query_params:
-                q = Research.objects.filter(Q(title__icontains = request.query_params['by_title']))
+                q = Research.objects.filter(title__icontains = request.query_params['by_title'], accepted="APPROVED").distinct()
                 if q.count()>0:
-                    result ={ 'query':q, 'message':f"{q.count()} Result found!"}
+                    result ={ 'query':q, 'message':f"{q.count()} Result found!",'message_am':f"{q.count()} ውጤት ተገኝቷል!"}
                 else:
-                    result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
+                    result = {'query':[],'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
             else:
                 result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"Researchs",'message_am':"ምርምር"}
 
@@ -599,8 +631,11 @@ class ApiResearch(APIView):
 ##didn't include try except while getting research obj because, in api, id is sent by the code when users click a button
 class ApiResearchDetail(APIView):
     def get(self, request):
-        research = Research.objects.get(id = request.query_params['id'])
-        category = ResearchProjectCategory.objects.all()
+        try:
+            research = get_object_or_404( Research, id = request.query_params['id'])
+            category = ResearchProjectCategory.objects.all()
+        except Http404:
+            return Response(data ={'error':True, 'message':"Object Doesn't Exist"})
         user_created = get_user_created_researchs(request)
         return Response(data = {'error':False, 'research': ResearchSerializer(research).data, "user_created": ResearchSerializer(user_created, many = True).data,
                                 'category':ResearchProjectCategorySerializer(category, many = True).data})
@@ -611,24 +646,28 @@ class ApiCreateResearch(APIView):
     permission_classes =([IsAuthenticated])
     def get(self, request):
         category = ResearchProjectCategory.objects.all()
-        user_created = Research.objects.filter(created_by=  request.user, accepted = "APPROVED")
+        user_created = get_user_created_researchs(request)
         return Response(data = {'error':False, 'category':ResearchProjectCategorySerializer(category, many = True).data, 
                                 'user_created':ResearchSerializer(user_created,many = True).data})
     
     def post(self, request):
-        form = ResearchForm(request.POST, request.FILES)
-        if form.is_valid():
-            research = form.save(commit = False)
-            if request.user.is_superuser:
-                research.accepted = "APPROVED"
-            else:
-                research.accepted = "PENDING"
-            research.created_by = request.user
-            if request.FILES:
-                research.attachements = request.FILES['attachements']
-            research.save()
-            return Response(data = {'error':False, 'researchs': ResearchSerializer(research).data})
-        return Response(data ={'error':True, 'message': f"Invaid inputs to create a research!{form.errors}"})
+        try:
+            serializer = ResearchCreationSerializer(data =request.data)
+            if serializer.is_valid():
+                research = serializer.create(validated_data=request.data)
+                research.created_by = request.user
+                research.accepted = "PENDING" if request.user.is_customer else "APPROVED"
+                research.save()
+                if 'attachements' in request.data:
+                    print("attachements found!")
+                    attachement = ResearchAttachment(research = research, attachement = request.data['attachements'])
+                    attachement.save()
+                return Response(data = {'error':False, 'research': ResearchSerializer(research).data})
+            return Response(data ={'error':True, 'message': f"Invaid inputs to create a research!{form.errors}"})
+        except Exception as e:
+            return Response(data ={'error':True, 'message':f"exception occured {str(e)}"})
+
+        
 
 
 @api_view(['POST'])
@@ -636,15 +675,13 @@ class ApiCreateResearch(APIView):
 @permission_classes([IsAuthenticated])
 def ApiResearchAction(request): 
     # edit depending on request.data['option']
-        form = ResearchForm(request.POST, request.FILES)
-        if form.is_valid:    
+        try:
             try:
                  research= get_object_or_404(Research, id = request.data['id'])
             except Http404:
                 return Response(data={'error':True, 'message': 'Research object not Found!' })
-            print(research.user.id, " ", request.user.id)   
             
-            if research.user == request.user:
+            if research.created_by == request.user:
                 if request.data['option'] == 'delete':
                     research.delete()
                     return Response(data = {'error':False, 'researchs':ResearchSerializer( Research.objects.all(),many =True ).data})  
@@ -655,20 +692,29 @@ def ApiResearchAction(request):
                     research.detail = request.data['detail']
                     status = request.data['status']
                     category = request.data['category']
-                    if request.FILES:
-                        research.attachements = request.FILES['attachements']  
-                    research.save()   
-                    return Response(data= {'error':False, 'research': ForumDetailSerializer(research).data})
-        
+                    research.last_updated_by= request.user
+                    research.last_updated_date = timezone.now()
+                    research.save()
+                    if 'attachements' in request.data and request.data['attachements'] != '':
+                        doc = research.researchattachment_set.first() 
+                        doc.attachement= request.data['attachements'] 
+                        doc.timestamp = timezone.now()
+                        doc.save()    
+                    return Response(data= {'error':False, 'research': ResearchSerializer(research).data})
             else:
                 return Response( data = {'error':True, 'message': "You can't edit others comment" })
-        else:
-            return Response(data = {'error':True, 'messsage':"Invalid Inputs"})  
+        except Exception as e:
+            return Response(data = {'error':True, 'messsage':f"Invalid Inputs {str(e)}"})  
 
+
+class ApiProjectList(APIView):
+    def get(self, request):
+        pass
 
 
 def get_user_created_forums(request):
     return [] if  request.user.is_anonymous else ForumQuestion.objects.filter(created_by = request.user)
+
 
 class ApiForumQuestionList(APIView):
     def get(self, request):
@@ -690,6 +736,7 @@ class ApiForumQuestionList(APIView):
             print('Exception in ApiForumQuestionList ', e)
             return Response(data = {'error':True, 'message':e})
 
+
 class ApiForumQuestionDetail(APIView):
     def get(self, request):
         try:
@@ -705,37 +752,38 @@ class ApiForumQuestionDetail(APIView):
 @permission_classes([IsAuthenticated])
 def ApiCreateForumQuestion(request): 
     #create or edit depending on request.data['option']
-        form = ForumQuestionForm(request.POST, request.FILES)
-        if form.is_valid:
-            forum =ForumQuestion
+        try:
             if request.data['option'] == 'create':
-                forum = form.save(commit =False) #sets title and description
-                forum.user = request.user
-                if request.FILES:
-                    forum.attachements = request.FILES['attachements']
+                serializer = ForumCreationSerializer(data = request.data)
+                if serializer.is_valid():
+                    forum = serializer.create(validated_data = request.data)
+                    forum.created_by = request.user
+                    if 'attachements' in request.data:
+                        forum.attachements = request.data['attachements']
+                    forum.save()
             else:#if option = 'edit' or 'delete'
                 try:
                     forum = get_object_or_404(ForumQuestion, id = request.data['id'])
                 except Http404:
                     return Response(data={'error':True, 'message': 'Forum object not Found!' })
-                if forum.user == request.user and request.data['option'] == 'delete':
+                if forum.created_by == request.user and request.data['option'] == 'delete':
                     forum.delete()
-                    return Response(data = {'error':False, 
-                                            'forums':ForumQuestionSerializer( ForumQuestion.objects.all(),many =True ).data})  
+                    return Response(data = {'error':False, 'forums':ForumQuestionSerializer( ForumQuestion.objects.all(),many =True ).data})  
 
-                elif forum.user == request.user and request.data['option'] == 'edit':
+                elif forum.created_by == request.user and request.data['option'] == 'edit':
                     forum.title = request.data['title']
                     forum.description = request.data['description']
-                    if request.FILES:
-                        forum.attachements = request.FILES['attachements']        
+                    if 'attachements' in request.data and request.data['attachements'] != '':
+                        forum.attachements = request.data['attachements']
+                    forum.last_updated_by= request.user
+                    forum.last_updated_date = timezone.now()
+                    forum.save()        
                 else:
                     return Response( data = {'error':True, 'message': "You can't edit others comment" })
-
-            #save for forum object created at create and edit        
-            forum.save()
+         
             return Response(data= {'error':False, 'forum': ForumDetailSerializer(forum).data})
-        else:
-            return Response(data = {'error':True, 'messsage':"Invalid Inputs"})  
+        except Exception as e:
+            return Response(data = {'error':True, 'messsage':f"Invalid Inputs {str(e)}"})  
 
 
 @api_view(['POST'])
@@ -743,41 +791,42 @@ def ApiCreateForumQuestion(request):
 @permission_classes([IsAuthenticated])
 def ApiCommentAction(request): 
         #create or edit depending on request.data['option']
-        form = CommentForm(request.POST, request.FILES)
-        
-        if form.is_valid:
-            comment =ForumComments
+        try:
+            
             if request.data['option'] == 'create':
                 try:
-                    forum_question = get_object_or_404(ForumQuestion, id = request.data['forum_id'])
+                    forum_question = get_object_or_404(ForumQuestion, id = request.data['forum_question'])
                 except Http404:
                     return Response(data = {'error':True, 'message':'Forum Not Found!'})
+                serializer = ForumCommentCreationSerializer(data = request.data)
+                if serializer.is_valid():
+                    comment = serializer.create(validated_data=request.data) 
+                    comment.created_by = request.user
+                    comment.save()
+                else:
+                    return Response(data= {'error':True, 'message':str(serializer.errors)}) 
 
-                comment = form.save(commit =False) #sets title and description
-                comment.user = request.user
-                comment.forum_question = forum_question
-                if request.FILES:
-                    comment.attachements = request.FILES['attachements']  # saving is done at last (works for both create and edit)
             else:#if option = 'edit' or delete
                 try:
                     comment = get_object_or_404(ForumComments, id = request.data['id'])
                 except Http404:
                     return Response(data={'error':True, 'message': 'Comment object not Found!' })
 
-                if comment.user == request.user and request.data['option'] == 'delete':
+                if comment.created_by == request.user and request.data['option'] == 'delete':
                     forum = comment.forum_question
                     comment.delete()
                     return Response(data={'error':False, 'forum':ForumDetailSerializer(forum).data})
-                elif comment.user == request.user and request.data['option'] == 'edit':
+                elif comment.created_by == request.user and request.data['option'] == 'edit':
                     comment.comment = request.data['comment']
-                    if request.FILES:
-                        comment.attachements = request.FILES['attachements']
+                    comment.last_updated_by = request.user
+                    comment.last_updated_date = timezone.now()
+                    comment.save()
                 else:
                     return Response(data = {'error':True, 'message':"You can't edit others comment!"})  
-            comment.save()
+            
             return Response(data= {'error':False, 'forum': ForumDetailSerializer(comment.forum_question).data})
-        else:
-            return Response(data = {'error':True, 'messsage':"Invalid Inputs"})
+        except Exception as e:
+            return Response(data = {'error':True, 'messsage':f"Invalid Inputs {str(e)}"})
 
 
 
@@ -786,43 +835,60 @@ def ApiCommentAction(request):
 @permission_classes([IsAuthenticated])
 def ApiCommentReplayAction(request): 
         #create or edit depending on request.data['option']
-        form = CommentReplayForm(request.POST, request.FILES)
-        if form.is_valid:
-            replay =CommentReplay
+        
+        try:
             if request.data['option'] == 'create':
-                replay = form.save(commit =False) #sets content
-                replay.user = request.user
                 try:
-                    replay.comment = ForumComments.objects.get(id = request.data['comment_id'])
+                    comment = get_object_or_404(ForumComments, id = request.data['comment'])
                 except:
                     return Response(data={'error':True, 'message': 'comment object not Found!' })
-                if request.FILES:
-                    replay.attachements = request.FILES['attachements']
-            else:#if option = 'edit'
+                serializer =CommentReplayCreationSerializer(data = request.data)
+                if serializer.is_valid():
+                    reply = serializer.create(request.data)
+                    reply.created_by= request.user
+                    reply.save()
+                else:
+                    return Response(data = {'error':True, 'message':'Invalid input {str(serializer.errors)}'})
+            else:#if option = 'edit' or delete
                 try:
-                    replay = get_object_or_404(CommentReplay, id = request.data['id'])
+                    reply = get_object_or_404(CommentReplay, id = request.data['id'])
                 except Http404:
                     return Response(data={'error':True, 'message': 'Reply object not Found!' })
-                if replay.user == request.user and request.data['option'] == 'delete':
-                    forum = replay.comment.forum_question
-                    replay.delete()
+                if reply.created_by == request.user and request.data['option'] == 'delete':
+                    forum = reply.comment.forum_question
+                    reply.delete()
                     return Response(data={'error':False, 'forum':ForumDetailSerializer(forum).data})
-                elif replay.user == request.user and request.data['option'] == 'edit':
-                    replay.content = request.data['content']
-                    if request.FILES:
-                        replay.attachements = request.FILES['attachements']
+                elif reply.created_by == request.user and request.data['option'] == 'edit':
+                    reply.content = request.data['content']
+                    reply.last_updated_by = request.user
+                    reply.last_updated_date = timezone.now()
+                    reply.save()
                 else:
-                    return Response(data = {'error':True, 'message':"You can't edit others replay!"})  
-            replay.save()
-            return Response(data= {'error':False, 'forum': ForumDetailSerializer(replay.comment.forum_question).data})
-        else:
-            return Response(data = {'error':True, 'messsage':"Invalid Inputs"})
+                    return Response(data = {'error':True, 'message':"You can't edit others reply!"})  
+            return Response(data= {'error':False, 'forum': ForumDetailSerializer(reply.comment.forum_question).data})
+        except Exception as e:
+            return Response(data = {'error':True, 'messsage':f"Invalid Inputs {str(e)}"})
 
 
-class ApiFaq(generics.ListAPIView):
-    queryset = Faqs.objects.all()
-    serializer_class = FaqSerializer
-    
+class ApiFaq(APIView):
+    def get(self, request):
+        try:
+            if 'by_title' in request.query_params:
+                title = request.query_params['by_title']
+                query = Faqs.objects.filter( Q(questions__icontains = title) | Q(questions_am__icontains = title)).filter(status ="APPROVED")
+            elif 'by_company' in request.query_params:
+                company = request.query_params['by_company']
+                query = Faqs.objects.filter(Q(company__name = company) | Q(company__name_am = company) ).filter(status ="APPROVED")
+            else:
+                query = Faqs.objects.filter(status ="APPROVED")
+            paginated = get_paginated_data(request, query)
+            if query.count() == 0:
+                return Response(data ={'error':False, 'paginator':get_paginator_info(paginated), 'faqs':[], 'message':'No result found!', 'message_am':'ምንም ውጤት አልተገኘም'})
+            
+            return Response(data ={'error':False, 'paginator':get_paginator_info(paginated), 'faqs':FaqSerializer(paginated, many =True).data, 'message': f"{query.count()} result found!", "message_am":f"{query.count()} ውጤት ተገኝቷል"})
+            
+        except Exception as e:
+            return Response (data = {'error':True, 'message':f"{str(e)}"})
 
 
 

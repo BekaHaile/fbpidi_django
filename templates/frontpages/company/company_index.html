@@ -164,7 +164,7 @@
 													{% if liked == True %}
 														<a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
 													{% else %}
-														<a  href="" class="item-card9-icons1 wishlist" id="like_{{product.id}}" onclick="like_product('{{product.id}}')" value=""> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+														<a   class="item-card9-icons1 wishlist" name ="like_{{product.id}}" id ="like_{{product.id}}"  onclick="like_product('{{product.id}}')" value=""> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
 													{% endif %}
 												{% else %}
 													<a href="/accounts/login/?next=/product/fetch_inquiry_products/" class="item-card9-icons1 wishlist"   value=""> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
@@ -455,11 +455,16 @@
 					}).then(e => e.json()).then(result=>{
 						if(result['error'] == false){
 							
-							var linear = document.getElementById('like_'+p_id)
-							var grid = document.getElementById('glike_'+p_id)
+							var hearts = document.getElementsByName('like_'+p_id)
+							hearts.forEach(h=>{
+								h.style['background-color'] =  "rgb(252, 67, 67)";
+								h.value = "liked"
+							}
+							)
+							
+							// var grid = document.getElementById('glike_'+p_id)
 
-							linear.style['background-color'] =  "rgb(252, 67, 67)";
-							linear.value = "liked"
+							
 							window.alert('Product Liked Successfull')
 							
 						}

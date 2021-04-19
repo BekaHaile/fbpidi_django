@@ -27,8 +27,7 @@ from collaborations.Views.faq import(CreateFaqs,FaqsView,FaqsList,FaqPendingList
                                     FaqApprove,FaqPending,FaqsDetail)
 
 from collaborations.Views.vacancy import(CreateVacancy,AdminVacancyList,VacancyDetail,CreateVacancyCategory,
-                        JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,
-                        SuperAdminVacancyList,ApplicantListDetail,)
+                        JobCategoryDetail,ApplicantList,Applicantinfo,CloseVacancy,Download,ApplicantListDetail,)
 from collaborations.Views.projects import(
 
                         ListProjectAdmin,CreateProjectAdmin,ProjectDetailAdmin,
@@ -139,7 +138,6 @@ class CustomAdminSite(admin.AdminSite):
            
             path("vacancy-form/",wrap(CreateVacancy.as_view()),name="Job_form"),
             path("vacancy-list/",wrap(AdminVacancyList.as_view()),name="Job_list"),
-            path("vacancy-list-super/",wrap(SuperAdminVacancyList.as_view()),name="super_Job_list"),
             path("vacancy-applicant-info/<id>",wrap(ApplicantListDetail.as_view()),name="applicant_detail"),
             path("vacancy-detail/<model_name>/<id>",wrap(VacancyDetail.as_view()),name="job_detail"),
            
@@ -386,6 +384,7 @@ class CustomAdminSite(admin.AdminSite):
             # path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
             path("activate-company/<pk>/",wrap(activate_company),name="activate_comapany"),
             path("404-page/",wrap(error_404),name="error_404"),
+            path("500-page/",wrap(error_500), name="error_500"),
             path("company-inactive-wait/",wrap(company_not_active),name="inactive_company"),
             path('anounce-Detail/<id>/',wrap(AnnouncementDetailAdmin.as_view()),name="anounce_Detail"),
             path('anounce-List',wrap(ListAnnouncementAdmin.as_view()),name="anounce_list"),

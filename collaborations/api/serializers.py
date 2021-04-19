@@ -3,9 +3,9 @@ from accounts.api.serializers import UserSerializer, UserInfoSerializer
 from collaborations.models import (PollsQuestion, PollsResult, Choices, News, NewsImages, Blog, BlogComment,
                                     Announcement, AnnouncementImages, Tender, TenderApplicant, Faqs, JobApplication, 
                                     JobCategory, Project, Research, ResearchProjectCategory, Vacancy, ForumQuestion,
-                                    ForumComments, CommentReplay)
+                                    ForumComments, CommentReplay, ResearchAttachment)
 from company.models import Company, CompanyEvent
-from company.api.serializers import CompanyFullSerializer, CompanyInfoSerializer
+from company.api.serializers import CompanyFullSerializer, CompanyInfoSerializer, CompanyNameSerializer
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -104,10 +104,15 @@ class BlogDetailSerializer(serializers.ModelSerializer):
 
 class AnnouncementSerializer(serializers.ModelSerializer):
     company = CompanyInfoSerializer(read_only = True)  
-
+    images = serializers.SerializerMethodField('get_images')
     class Meta:
         model = Announcement
         fields = "__all__"
+    def get_images(self, announcement):
+        images = []
+        for announcement_image in announcement.announcementimages():
+            images.append(announcement_image.image.url)
+        return images        
 
 
 class AnnouncementDetailSerializer(serializers.ModelSerializer):
@@ -146,6 +151,7 @@ class JobCategorySerializer(serializers.ModelSerializer):
         fields = ("id", "category_name", "category_name_am")
 
 
+
 class VacancyListSerializer(serializers.ModelSerializer):
     company = CompanyInfoSerializer(read_only =True)
     category_name = serializers.CharField(source='get_category_name')
@@ -154,9 +160,25 @@ class VacancyListSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
 
+class ResearchCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Research
+        fields  = ('title','description','status','category')
+    
+    def create(self, validated_data):
+        category = ResearchProjectCategory.objects.get(id = validated_data['category'])
+        research = Research(title = validated_data['title'], description= validated_data['description'],
+        status = validated_data['status'], category= category)
+        return research
+
+class ResearchAttachmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResearchAttachment
+        fields = ("attachement","timestamp",)
 
 class ResearchSerializer(serializers.ModelSerializer):
-        category_name = serializers.CharField(source = 'get_category_name')
+        category_name = serializers.CharField(source = 'get_category_name', )
+        attachements = ResearchAttachmentSerializer(source = 'researchfiles',read_only=True, many=True)
         class Meta:
             model = Research
             fields = "__all__"
@@ -180,6 +202,13 @@ class CommentReplaySerializer(serializers.ModelSerializer):
         model = CommentReplay
         fields = "__all__"
 
+class CommentReplayCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =CommentReplay
+        fields = ("content","comment")
+    def create(self, validated_data):
+        comment = ForumComments.objects.get(id = validated_data['comment'])
+        return CommentReplay(comment = comment, content = validated_data['content'])
 
 class ForumCommentSerializer(serializers.ModelSerializer):
     no_or_replays = serializers.IntegerField(source='count_comment_replays',read_only=True)
@@ -188,6 +217,15 @@ class ForumCommentSerializer(serializers.ModelSerializer):
         model =  ForumComments
         fields = "__all__"
 
+class ForumCommentCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =ForumComments
+        fields = ("forum_question","comment")
+
+    def create(self, validated_data):
+        forum_question = ForumQuestion.objects.get(id = validated_data['forum_question'])
+        return ForumComments(forum_question = forum_question, comment = validated_data['comment'])
+
 
 class ForumQuestionSerializer(serializers.ModelSerializer):
     no_of_comments = serializers.IntegerField(source='countComment', read_only=True)   
@@ -195,6 +233,13 @@ class ForumQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ForumQuestion
         fields = "__all__"
+
+class ForumCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ForumQuestion
+        fields = ('title','description')
+    def create(self, validated_data):
+        return ForumQuestion(title = validated_data['title'], description = validated_data['description'])
 
 
 class ForumDetailSerializer(serializers.ModelSerializer):
@@ -206,6 +251,7 @@ class ForumDetailSerializer(serializers.ModelSerializer):
 
 
 class FaqSerializer(serializers.ModelSerializer):
+    company = CompanyNameSerializer(read_only =True)
     class Meta:
         model = Faqs
         fields = "__all__"
@@ -216,3 +262,14 @@ class JobApplicationSerializer(serializers.ModelSerializer):
         model = JobApplication
         fields = '__all__'
 
+class JobApplicationCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobApplication
+        fields = ('status', 'bio','cv', 'documents','experiance','grade','institiute','field',) 
+    
+    def create(self, validated_data):
+        vacancy = Vacancy.objects.get(id = validated_data['id'])
+        application = JobApplication(vacancy = vacancy, status =validated_data['status'],
+        bio=validated_data['bio'], cv=validated_data['cv'],documents=validated_data['documents'],experiance=validated_data['experiance'],
+        grade=validated_data['grade'],field=validated_data['field'], institiute=validated_data['institiute'])
+        return application
