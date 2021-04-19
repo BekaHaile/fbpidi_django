@@ -317,9 +317,7 @@ class News(models.Model):
     title_am = models.CharField(max_length=500, null = False)
     description = models.TextField( verbose_name="News Description(English)",blank =False, null = False )
     description_am = models.TextField( verbose_name="News Description(Amharic)",blank =False, null = False )
-    catagory = models.CharField( max_length=30, choices = (('',"select Category"),
-        ('Bevearage','Bevearage'), ('Business','Business'), ('Food','Food'),('Job Related','Job Related'),
-    ), verbose_name="News Catagory, the choices are ")
+    catagory = models.CharField( max_length=30, choices =NEWS_CATAGORY, verbose_name="News Catagory, the choices are ")
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="news_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     is_active = models.BooleanField(default=False)
