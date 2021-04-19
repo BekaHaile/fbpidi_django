@@ -54,10 +54,18 @@
 							{{form.site_location_name}}
 							<span class="form-text text-warning">{{form.site_location_name.errors}}</span>
 						</div>
-						<div class="col-md-4">
+					</div>
+					<hr>
+					<div class="form-group row">
+						<div class="col-md-6">
 							<label>{{form.distance_f_strt.label}}</label>
 								{{form.distance_f_strt}}
 								<span class="form-text text-warning">{{form.distance_f_strt.errors}}</span>
+						</div>
+						<div class="col-md-6">
+							<label>{{form.land_acquisition.label}}</label>
+								{{form.land_acquisition}}
+								<span class="form-text text-warning">{{form.land_acquisition.errors}}</span>
 						</div>
 						
 					</div>
@@ -92,20 +100,20 @@
 					</div>
 					<hr>
 					<div class="form-group row">
-						<div class="col-md-6">
+						<div class="col-md-12">
 							<label class="font-weight-semibold" for="">Employees Educational Status</label>
 							<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 									data-toggle="modal" data-target="#education_status_form_modal" id="">
 								<i class="fa fa-plus"> </i>
 							</button>
 						</div>
-						<div class="col-md-6">
+						<!-- <div class="col-md-6">
 							<label class="font-weight-semibold" for="">Land Acquisition</label>
 								<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 										data-toggle="modal" data-target="#land_aqsn_form_modal" id="">
 									<i class="fa fa-plus"> </i>
 								</button>
-						</div>
+						</div> -->
 						
 					</div>
 					<hr>

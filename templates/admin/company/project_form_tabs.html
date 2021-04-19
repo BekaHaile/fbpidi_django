@@ -373,33 +373,6 @@
 </div>
 
  
-<div class="tab-pane fade show" id="land_aqsn_form_tab">
-	<div class="card">
-		<div class="card-header header-elements-sm-inline">
-			<h6 class="card-title">Land Acquisition</h6>
-			<div class="list-icons">
-				{% if perms.company.add_landaquisition %}
-					<a href="#" data-toggle="modal" data-target="#land_aqsn_form_modal" class="btn bg-teal btn-sm rounded-round"><i
-							class="icon-add mr-2"></i>Add New Data</a>
-				{% endif %}
-			</div>
-		</div>
-
-		<div class="card-body">
-			<form action="{%url 'admin:update_land_aqsn' pk=land_aqsn_data.id%}" enctype="multipart/form-data" method="POST">
-				{%csrf_token%}
-				
-					{{land_aquisition|crispy}}
-				<div class="modal-footer">
-					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
-				</div>
-			</form>
-		</div>		 
-	</div>
-
-</div>
-
-
 <div class="tab-pane fade show" id="land_usage_form_tab">
 	<div class="card">
 		<div class="card-header header-elements-sm-inline">
