@@ -188,7 +188,7 @@ class ListResearch(View):
 			if q.count()>0:
 				result ={ 'query':q, 'message':f"{q.count()} Result found!"}
 			else:
-				result = {'query':Research.objects.all(),'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
+				result = {'query':[],'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
 		else:
 			result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"Researchs",'message_am':"ምርምር"}
 	
@@ -199,9 +199,6 @@ class SearchResearch(View):
 	def get(self,*args,**kwargs):
 		return redirect(reverse("research_list"))
 	def post(self,*args,**kwargs):
-		print("============")
-		print(self.request.POST["search"])
-
 		form = Research.objects.filter(title__contains=self.request.POST['search'])
 		if str(self.request.user) != "AnonymousUser":
 			usercreated = Research.objects.filter(created_by=self.request.user,accepted="APPROVED")
@@ -227,7 +224,7 @@ class SearchResearch(View):
 # 		context = {'researchs':form,"usercreated":usercreated,"category":category}
 # 		template_name = "frontpages/research/research_list.html"
 		
-		return render(self.request, template_name,context)
+# return render(self.request, template_name,context)
 class ResearchCategorySearch(View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.filter(accepted="APPROVED",category=self.kwargs['id'])

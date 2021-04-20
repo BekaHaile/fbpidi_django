@@ -271,8 +271,8 @@ class BlogList(View):
 				result['message']  = "Blogs"
 				result['message_am'] = Blog.model_am
 		#making sure that the page is not empty
-		if result['query'].count() == 0:
-			result['query'] = Blog.objects.filter(publish=True)
+		# if result['query'].count() == 0:
+		# 	result['query'] = Blog.objects.filter(publish=True)
 		
 		tags = get_tags("english")
 		tags_am = get_tags("amharic")

@@ -95,7 +95,7 @@ def SearchByTitle_All(model_name, request ):
             query = model.objects.filter( Q(title__icontains = filter_key) | Q(title_am__icontains = filter_key) |Q(description__icontains = filter_key ) | Q(description_am__icontains = filter_key) ).distinct() 
             # if there is no match for the filter_key or there is no filter_key at all
             if query.count() == 0: 
-                query = model.objects.all()
+                query = []
                 return { 'query': query, 'message': f"No match containing '{filter_key}'!", 'message_am': f"ካስገቡት ቃል '{filter_key}' ጋር የሚገናኝ አልተገኘም፡፡ !" }       
             return { 'query': query, 'message': f"{query.count()} result found!", 'message_am': f"{query.count()} ውጤት ተገኝቷል!" }
     except Exception as e:
@@ -159,6 +159,54 @@ def get_paginated_data(request, query):
         return Paginator(query, 2).page(1)
 
 
+class IndexSearch(View):
+    def get(self, *args, **kwargs):
+        result = {}
+        total = 0
+        print(self.request.GET)
+        if 'by_title' in self.request.GET and 'by_model' in self.request.GET:
+            pass
+        elif 'by_title' in self.request.GET:
+            title_models = ['News','Event','Announcement','Polls','Tender','Vacancy']
+            for model in title_models:
+                model_query =  SearchByTitle_All(model, self.request)['query']
+                if model_query.count() > 0:
+                    total+= model_query.count()
+                    result[model] = model_query
+
+            # search blogs
+            q = Q( Q(title__icontains = self.request.GET['by_title']) | Q(title_am__icontains = self.request.GET['by_title']) )
+            blog_query = Blog.objects.filter(q)
+            if blog_query.count()>0:
+                total+= blog_query.count()
+                result['Blog'] = blog_query
+            
+            # search Reseach
+            research_query = Research.objects.filter(Q(title__icontains = self.request.GET['by_title']))
+            if research_query.count() > 0:
+                total+= research_query.count()
+                result['Research'] = research_query
+            
+            # Search forum
+            forum_query = ForumQuestion.objects.filter(title__icontains = self.request.GET['by_title'])
+            if forum_query.count() > 0:
+                total+= forum_query.count()
+                result['Forum'] = forum_query
+          
+        data = result
+        data['models'] = result.keys()
+        if total == 0:
+            data['message'] = "No result found in collaborations"
+            data['message_am']= "ምንም ውጤት አልተገኝም"
+        else:
+            data['message'] = f"{total} result found"
+            data['message_am'] = f"{total} ውጤት ተገኝቷል"
+        print ("###################",data)
+        return render(self.request, "frontpages/others_search_list.html",data)
+
+
+
+
 class CustomerPollList(View):
     def get(self, *args, **kwargs):
         result ={}
@@ -181,7 +229,7 @@ class CustomerPollList(View):
                 if comp.pollsquestion_set.count()>0:
                     companies.append(comp)
             if result['query']==0:
-                result['query'] = PollsQuestion.objects.all()
+                result['query'] = []
                 result['message'] = 'No Result Found!'
             data = get_paginated_data(self.request, result['query'])
             return render(self.request, "frontpages/poll/polls-list.html", { 'polls':data, 'message' : result['message'], 'message_am':result['message_am'],'companies':companies})
@@ -368,8 +416,8 @@ class CustomerTenderList(View):
                 result = filter_by('status', ['Open', 'Upcoming'], by_type['query'])
             else:
                 result = SearchByTitle_All('Tender', self.request)
-            if  result['query'].count() == 0:
-                result['query'] = Tender.objects.filter( Q(status='Open') | Q(status = 'Upcoming') )
+            # if  result['query'].count() == 0:
+            #     result['query'] = Tender.objects.filter( Q(status='Open') | Q(status = 'Upcoming') )
             companies = []
             for comp in Company.objects.all():
                 if comp.tender_set.count() > 0:
@@ -530,8 +578,8 @@ class CustomerNewsList(View):
             else: 
                 result = SearchByTitle_All('News', self.request)
 
-            if result['query'].count()==0:
-                result['query'] = News.objects.all()
+            # if result['query'].count()==0:
+            #     result['query'] = News.objects.all()
             data = get_paginated_data(self.request, result['query'])
         
             return render(self.request, "frontpages/news/customer_news_list.html", {'news_list':data, 'message':result['message'],  'message_am':result['message_am'], 'NEWS_CATAGORY':News.NEWS_CATAGORY})
@@ -649,8 +697,8 @@ class CustomerEventList(View):
                 result = FilterByCompanyname(self.request.GET.getlist('by_company'), CompanyEvent.objects.all())
             else:
                 result = SearchByTitle_All('Event', self.request)
-            if result['query'].count() == 0:
-                result['query'] = CompanyEvent.objects.all()
+            # if result['query'].count() == 0:
+            #     result['query'] = CompanyEvent.objects.all()
             data = get_paginated_data(self.request, result['query'])
 
             eventcompanies = []

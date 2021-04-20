@@ -668,8 +668,6 @@ class ApiCreateResearch(APIView):
             return Response(data ={'error':True, 'message':f"exception occured {str(e)}"})
 
         
-
-
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])

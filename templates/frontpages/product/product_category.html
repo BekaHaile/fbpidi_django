@@ -15,7 +15,7 @@
 									<h1 class=""><span class="font-weight-bold">{{object_list.count}}</span> Products available</h1>
 								</div>
 								<div class="search-background px-4 py-3 mt-4">
-									<form action="{%url 'search_product'%}" method="post">{%csrf_token%}
+									<form action="{%url 'search_product'%}" method="GET">
 									<div class="form row row-sm">
 										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
 											<input type="text" name="name" class="form-control input-lg border-white" id="text" placeholder="Search Products">

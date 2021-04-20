@@ -1,0 +1,808 @@
+{%extends 'frontpages/layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+{%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+		<!--Sliders Section-->
+		<div>
+			<div class="cover-image sptb-1 bg-background" data-image-src="/static/frontpages/images/banners/banner1.jpg">
+				<div class="header-text1 mb-0">
+					<div class="container">
+						<div class="row">
+								<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
+									<div class="text-center text-white ">
+										<h1 class=""><span class="font-weight-bold"></span> {% print_translated message message_am LANGUAGE_CODE %} </h1>
+								
+									</div>
+									<form action = "{% url 'index_search' %}" method = "GET" >
+											<div class="search-background px-4 py-3 mt-4">
+												<div class="form row row-sm">
+													<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
+														{% if searched_name %}
+														<input type="text" name = "by_title" class="form-control input-lg border-white"  placeholder="{{searched_name}}">
+														{%else%}
+														<input type="text" name = "by_title" class="form-control input-lg border-white"  placeholder="Search Collaborations">
+														{%endif%}
+													</div>
+													<div class="form-group col-xl-4 col-lg-4 select2-lg  col-md-12 mb-0 border-white">
+														<select  name = 'by_category'  class="form-control select2-show-search w-100" data-placeholder="Select">
+															<optgroup label="Categories">
+																
+
+																{% if searched_category %}
+																<option>{{searched_category}}</option>
+																{% endif %}
+															
+																<option>All</option>
+																
+																{% for catagory in NEWS_CATAGORY %}
+																<option name = '{{category.0}}' value="{{catagory.0}}">{{catagory.0}}</option>
+																{% endfor %}
+															</optgroup>
+														</select>
+													</div>
+													<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
+														<button type="submit"  class="btn btn-lg btn-block btn-secondary">{% trans "Search" %}</button>
+													</div>
+												</div>
+											</div>
+									</form>
+								</div>
+							
+						</div>
+					</div>
+				</div><!-- /header-text -->
+			</div>
+		</div>
+		<!--/Sliders Section-->
+
+		<!--Breadcrumb-->
+		<div class="bg-white border-bottom">
+			<div class="container">
+				<div class="page-header">
+					<h4 class="page-title">{% trans "Index Search Result" %}</h4>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/">{% trans "Home" %}</a></li>
+						<li class="breadcrumb-item active" aria-current="page">{% trans "Index Search" %}</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<!--/Breadcrumb-->
+
+		<!--Add listing-->
+		
+			<div class="container">
+				<div class="row">
+					<div class="col-xl-9 col-lg-9 col-md-12">
+						<!--Add lists-->
+						<div class=" mb-lg-0">
+							<div class="">
+								<div class="item2-gl business-list-01">
+									<div class="">
+										<div class="bg-white p-5 item2-gl-nav d-flex">
+									
+											<h4 class="mb-0 mt-3">{% trans "Page" %} {{news_list.number}} {% trans "of" %} {{news_list.paginator.num_pages}}</h4>
+											<ul class="nav item2-gl-menu ml-auto mt-1">
+												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
+												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
+											</ul>
+                                            <div class="d-sm-flex">
+                                                
+                                                <div class="selectgroup">
+                                                    <label class="selectgroup-item mb-md-0">
+                                                        <input type="radio"  class="selectgroup-input" checked="">
+                                                        <span class="selectgroup-button d-md-flex"><button style="border: hidden; background-color: white; color: #0a2045;">{% trans "All" %}</button> <i class="fa fa-sort ml-2 mt-1"></i></span>
+                                                    </label>
+                                                    
+                                                </div>
+                                            </div>
+                                    
+										</div>
+									</div>
+									<div class="tab-content">
+										<div class="tab-pane active" id="tab-11">
+                                            {% if News %}
+                                            <div class = "card">
+                                                <div class= "card-header">
+                                                    <h3>{{News.count}} {% trans "News" %}</h3>
+                                                </div>
+                                                <div class="card-body">
+                                                    {% for news in News %}
+                                                    <div class="card overflow-hidden">
+                                                        <div class="d-md-flex">
+                                                            <div class="item-card9-img">
+                                                                <div class="item-card9-imgs">
+                                                                    <a href="/collaborations/customer_news_detail/{{news.id}}/"></a>
+                                                                    {% if news.get_images.0.image.url %}
+                                                                    <img src="{{news.get_images.0.image.url}}" alt="img" class="cover-image">
+                                                                    {% elif news.get_company.get_image %}
+                                                                    <img src="{{news.get_company.get_image}}"  alt="img" class="cover-image">
+                                                                    {% else %}
+                                                                    <img src="/static/frontpages/images/products/products/v1.jpg"  alt="img" class="cover-image">
+                                                                    {% endif %}
+                                                                </div>
+                                                                
+                                                                <div class="item-cardreview-absolute bg-secondary">{{ news.catagory }}</div>
+                                                            </div>
+                                                            <div class="card border-0 mb-0">
+                                                                <div class="card-body h-100">
+                                                                    <div class="item-card9">
+                                                                        <a href="/collaborations/customer_news_detail/{{news.id}}/" class="text-dark" style="margin-bottom: 3px;">
+                                                                            <h4 class="font-weight-semibold mt-1 mb-1">{% print_translated news.title news.title_am LANGUAGE_CODE %}</h4>
+                                                                        </a>
+                                                                        <!--<p >{{news.description|truncatechars_html:12|safe}}</p>-->
+
+                                                                        <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> {% trans "By" %}  </span>{% print_translated news.company.name news.company.name_am LANGUAGE_CODE %} </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-footer pt-2 pb-2">
+                                                                    <div class="item-card9-footer d-sm-flex">
+                                                                        <div class="item-card9-cost">
+                                                                            <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                                <b>{% trans "By" %}: &nbsp</b>
+                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.company.name}} ">
+                                                                                    <img src="{{news.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
+                                                                                
+                                                                                </a>
+
+                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.get_company.phone_number}}"><i class="fa fa-phone"></i></a>
+
+                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.get_company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+
+                                                                                <a class="" href="/chat/with/{{news.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title= "{% trans 'Chat with staff' %} "><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+                                                                                
+                                                                                <a class="" href="/collaborations/customer_news_detail/{{news.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "News Detail" %}</b></a>
+                                            
+                                                                                <br>
+                                                                                <!-- <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.created_date}}</small></div> -->
+                                                                                
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="ml-auto mt-3 mt-sm-0">
+                                                                            <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.created_date}}</small></div>
+                                                                                
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {%endfor%}
+                                                </div>
+
+                                            {% endif %}
+                                            </div>
+
+                                            {% if Event %}
+                                            <div class = "card">
+                                               <div class="card-header"> <h3>{{Event.count}} {% trans "Events" %}</h3></div>
+                                               <div class="card-body">
+                                                    {% for event in Event %}
+                                                    <div class="card overflow-hidden">
+                                                        <div class="d-md-flex">
+                                                            <div class="item-card9-img">
+                                                                <div class="item-card9-imgs">
+                                                                    <a href="/collaborations/customer_event_detail/{{event.id}}/"></a>
+                                                                    {% if event.image %}
+                                                                    
+                                                                    <img src="{{event.image.url}}"  alt="img" class="cover-image">
+                                                                    {% else %}
+                                                                    
+                                                                    <img src="{{event.company.get_image}}" alt="img" class="cover-image">
+                                                                    {% endif %}
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            <div class="card border-0 mb-0">
+                                                                <div class="card-body h-100">
+                                                                    <div class="item-card9">
+                                                                        <a href="/collaborations/customer_event_detail/{{event.id}}/" class="text-dark">
+                                                                            <h4 class="font-weight-semibold mt-1 mb-1">{% print_translated event.title|safe event.title_am|safe LANGUAGE_CODE %}</h4>
+                                                                        </a>
+        
+                                                                        <small>{% change_end_date event.start_date %} </small> - <small>{% change_end_date event.end_date %}</small>
+                                                                        {% if event.status == 'Open' %}
+                                                                        <div style="background-color: green; color:white; width: fit-content; padding: 5px; " >{% trans "Open" %}</div>
+                                                                        {%elif event.status == 'Upcoming' %}
+                                                                        <div style="background-color: yellow; color:black; width: fit-content; padding: 5px;" >{% trans "Upcoming" %}</div>
+                                                                        {%elif event.status == 'Closed' %}
+                                                                        <div style="background-color: red; color:white; width: fit-content; padding: 5px;" >{% trans "Closed" %}</div>
+                                                                        {%else%} 
+                                                                        <div style="background-color: blue; color:white; width: fit-content; padding: 5px;" >{% trans "Suspended" %}</div>
+                                                                        {%endif%}
+        
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-footer pt-2 pb-2">
+                                                                    <div class="item-card9-footer d-sm-flex">
+                                                                        <div class="item-card9-cost">
+                                                                            <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                                <b>{% trans "By" %}: &nbsp</b>
+                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{event.company.name}}">
+                                                                                    <img src="{{event.company.get_image}}" alt="image" class="avatar brround  mr-2">
+                                                                                </a>
+        
+                                                                                
+                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{event.company.phone_number}}"><i class="fa fa-phone"></i></a>
+        
+                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{event.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+                                                                                <a class="" href="/chat/with/{{event.created_by.username}}/" target = "blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+                                                                                <a class="" href="/collaborations/customer_event_detail/{{event.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Event Detail" %}</b></a>
+                                    
+                                                                            </div>
+                                                                        </div>
+        
+                                                                        <div class="ml-auto mt-3 mt-sm-0">
+        
+                                                                        
+                                                                            <div class="text-dark font-weight-normal mb-0 mt-1 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{event.created_date}}</small></div>
+                                                                            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {%endfor%}
+                                                </div>
+                                            </div>
+                                                
+                                            {% endif %}
+
+                                            {% if Announcement %}
+                                            <div class = "card">
+                                                <div class = "card-header">
+                                                    <h3 class="mt-2 ">{{Announcement.count}} {% trans "Announcements" %}</h3>
+                                                </div>
+
+                                                <div class = "card-body">
+                                                    {%for post in Announcement%}
+                                                        <div class="card overflow-hidden">
+                                                            <div class="d-md-flex">
+                                                                <div class="item-card9-img">
+                                                                    <div class="item-card9-imgs">
+                                                                    
+                                                                        <a href="/collaborations/announcement-detail/{{post.id}}/"></a>
+                                                                        {% if post.announcementimages.count > 0 %}
+                                                                        <img src="{{post.announcementimages.0.image.url}}"  alt="img" class="cover-image">
+                                                                        {% else %}
+                                                                        <img src="{{post.company.get_image}}" alt="img" class="cover-image">
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    
+                                                                    
+                                                                </div>
+                                                                <div class="card border-0 mb-0">
+                                                                    <div class="card-body h-100">
+                                                                        <div class="item-card9">
+                                                                            <a href="/collaborations/announcement-detail/{{post.id}}/" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated post.title post.title_am LANGUAGE_CODE%}</h4></a>
+                                                                        
+                                                                        </div>
+
+                                                                    </div>
+
+
+                                                                    <div class="card-footer pt-2 pb-2">
+                                                                        <div class="item-card9-footer d-sm-flex">
+                                                                            <div class="item-card9-cost">
+                                                                                <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                                    <b>By: &nbsp</b>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{post.company.name}}">
+                                                                                        <img src="{{post.company.get_image}}" alt="image" class="avatar brround  mr-2">
+                                                                                    </a>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{post.company.phone_number}}"><i class="fa fa-phone"></i></a>	
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{post.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+                                                                                    <a class="" target = "blank" href="/chat/with/{{post.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+                                                                                    <a class="" href="/collaborations/announcement-detail/{{post.id}}/" ><b class="btn btn-secondary btn-sm mt-1">Read More</b></a>
+                                                                
+                                                                                    <br>
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="ml-auto mt-3 mt-sm-0">
+                                                                                
+                                                                                <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{post.created_date}}</small></div> 
+                                                                                    
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {%endfor%}
+                                                </div>
+
+                                            </div>
+                                            {% endif %}
+
+                                            {% if Tender %}
+                                            <div class = "card">
+                                                <div class = "card-header">
+                                                    <h3 class="mt-2 ">{{Tender.count}} {% trans "Tenders" %}</h3>
+                                                </div>
+
+                                                <div class = "card-body">
+                                                    {% for tender in Tender %}
+											<div class="card overflow-hidden">
+												<div class="d-md-flex">
+													<div class="item-card9-img">
+														<div class="item-card9-imgs">
+															<a href="/collaborations/customer_tender_detail/{{tender.id}}/"></a>
+															{% if tender.company.get_image %}
+															<img src="{{tender.get_company.get_image}}"  alt="img" class="cover-image">
+															{% else %}
+															
+															<img src="/static/frontpages/images/products/products/v1.jpg" alt="img" class="cover-image">
+															{% endif %}
+														</div>
+														
+														
+													</div>
+													<div class="card border-0 mb-0">
+														<div class="card-body h-100">
+															<div class="item-card9">
+																<a href="/collaborations/customer_tender_detail/{{tender.id}}/" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated tender.title|safe tender.title_am|safe LANGUAGE_CODE %}</h4></a>
+
+																<a href="/collaborations/customer_tender_detail/{{tender.id}}/" class="text-dark" style="margin-bottom: 3px;"><p>{{tender.tender_type}}</p></a>
+																
+																{% if tender.status == 'Open' %}
+																<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >{% trans "Open" %}</div>
+																{%elif tender.status == 'Upcoming' %}
+																<div style="background-color: yellow; color:black; width: fit-content; padding: 5px;" >{% trans "Upcoming" %}</div>
+																{%elif tender.status == 'Closed' %}
+																<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >{% trans "Closed" %}</div>
+																{%endif%}
+
+																
+															</div>
+														</div>
+														<div class="card-footer pt-2 pb-2">
+															<div class="item-card9-footer d-sm-flex">
+																<div class="item-card9-cost">
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																		<b>{% trans "By" %}: &nbsp</b>
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{% print_translated comp.name comp.name_am LANGUAGE_CODE %}">
+																			<img src="{{tender.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
+																		</a>
+																		
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.company.phone_number}}"><i class="fa fa-phone"></i></a>
+
+																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+
+																		<a class="mr-2" href="/chat/with/{{tender.created_by.username}}/" target="blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+										
+																		<a class="" href="/collaborations/customer_tender_detail/{{tender.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Tender Detail" %}</b></a>
+
+																		
+																		<br>
+																		
+																	</div>
+																</div>
+																<div class="ml-auto mt-3 mt-sm-0">
+																	
+																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "Posted" %}:</b> {{tender.created_date}}</small></div> 
+																		
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											{%endfor%}
+                                                </div>
+                                            </div>
+                                            {% endif %}
+
+                                            {% if Vacancy %}
+                                            <!-- <div class = "card">
+                                                <div class = "card-header">
+                                                    <h3 class="mt-2 "> </h3>
+                                                </div>
+
+                                                <div class = "card-body">
+                                                </div>
+
+                                            </div> -->
+                                            {% endif %}
+
+                                            {% if Polls %}
+                                            <div class = "card">
+                                                <div class = "card-header">
+                                                    <h3 class="mt-2 ">{{Polls.count}} {% trans "Polls" %}</h3>
+                                                </div>
+
+                                                <div class = "card-body">                                                   
+                                                        {%for poll in Polls%}
+                                                        <div class="card overflow-hidden">
+                                                            <div class="d-md-flex">
+                                                                <div class="item-card9-img">
+                                                                    <div class="item-card9-imgs">
+                                                                        <a href="/collaborations/poll_detail/{{poll.id}}/"></a>
+                                                                        {% if poll.company.get_image %}
+                                                                        <img src="{{poll.company.get_image}}"  alt="img" class="cover-image">
+                                                                        {% else %}
+                                                                        
+                                                                        <img src="/static/frontpages/images/products/products/v1.jpg" alt="img" class="cover-image">
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    
+                                                                    
+                                                                </div>
+                                                                <div class="card border-0 mb-0">
+                                                                    <div class="card-body h-100">
+                                                                        <div class="item-card9">
+                                                                            <a href="/collaborations/poll_detail/{{poll.id}}/" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated poll.title poll.title_am LANGUAGE_CODE %}</h4></a>
+                                                                            
+                                                                            {% if poll.count_choices > 1 %}
+                                                                                    {{poll.count_choices}} {% trans "Choices" %}
+                                                                            {% else %}
+                                                                                    {{poll.count_choices}} {% trans "Choice" %}
+                                                                            {%endif%}
+
+                                                                            {% if poll.count_choices > 0 %}
+                                                                            <p class="mr-0" style="display: block;">
+                                                                                {% if poll.count_votes > 1 %}
+                                                                                    {{poll.count_votes}} 
+                                                                                    {% trans "Votes" %}
+                                                                                {% else %}
+                                                                                    {{poll.count_votes}} 
+                                                                                    {% trans "Vote" %}
+                                                                                {%endif%}
+                                                                                <i class="fa fa-hand-stop-o text-muted mr-2"></i>
+                                                                            </p>
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-footer pt-2 pb-2">
+                                                                        <div class="item-card9-footer d-sm-flex">
+                                                                            <div class="item-card9-cost">
+                                                                                <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                                    <b>By: &nbsp</b>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.company.name}}">
+                                                                                        <img src="{{poll.company.get_image}}" alt="image" class="avatar brround  mr-2">
+                                                                                    </a>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.company.phone_number}}"><i class="fa fa-phone"></i></a>	
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{poll.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+                                                                                    <a class="" href="/chat/with/{{poll.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+                                                                                    <a class="" href="/collaborations/poll_detail/{{poll.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Poll Detail" %}</b></a>
+                                                                
+                                                                                    <br>
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="ml-auto mt-3 mt-sm-0">
+                                                                                
+                                                                                <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{poll.created_date}}</small></div> 
+                                                                                    
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {%endfor%}
+                                                </div>
+                                            </div>
+                                            {% endif %}
+
+
+                                            {% if Blog %}
+                                            <div class = "card">
+                                                <div class = "card-header">
+                                                    <h3 class="mt-2 ">{{Blog.count}} {% trans "Blogs" %}</h3>
+                                                </div>
+
+                                                <div class = "card-body">  
+                                                    {% for blog in Blog %}
+                                                    <div class="card overflow-hidden">
+                                                        <div class="d-md-flex">
+                                                            <div class="item-card9-img">
+                                                                <div class="item-card9-imgs">
+                                                                    <a href="{% url 'blog_details' id=blog.id %}"></a>
+                                                                    <img src="{{blog.company.get_image}}"  alt="img" class="cover-image">
+                                                                    
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            <div class="card border-0 mb-0">
+                                                                <div class="card-body h-100">
+                                                                    <div class="item-card9">
+                                                                        <a href="{% url 'blog_details' id=blog.id %}" class="text-dark">
+                                                                            <h3 class="font-weight-semibold mt-1 mb-1"><b>{% print_translated blog.title|safe blog.title_am|safe LANGUAGE_CODE %} </b></h3>
+                                                                        </a>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-footer pt-2 pb-2">
+                                                                    <div class="item-card9-footer d-sm-flex">
+                                                                        <div class="item-card9-cost">
+                                                                            <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                                <b>{% trans "By" %}: &nbsp</b>
+                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{blog.company.name}}">
+                                                                                    <img src="{{blog.company.get_image}}" alt="image" class="avatar brround  mr-2">
+                                                                                </a>
+
+                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{blog.company.phone_number}}"><i class="fa fa-phone"></i></a>
+
+                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{blog.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+                                                                                <a class="" href="/chat/with/{{blog.created_by.username}}/" target = "blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with bloger"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+                                                                                <a class="" href="{% url 'blog_details' id=blog.id %}" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Read More" %}</b></a>
+                                    
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="ml-auto mt-3 mt-sm-0">
+                                                                            <div class="text-dark font-weight-normal mb-0 mt-1 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{blog.created_date}}</small></div>
+                                                                            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {%endfor%}
+                                                </div>
+                                            </div>
+                                            {% endif %}
+
+
+                                            {% if Forum %}
+                                            <div class = "card">
+                                                <div class = "card-header">
+                                                    <h3 class="mt-2 ">{{Forum.count}} {% trans "Forums" %}</h3>
+                                                </div>
+
+                                                <div class = "card-body"> 
+                                                    <div class="card overflow-hidden">
+                                                        <div class="d-md-flex">
+                                                            <div class="item-card9-img">
+                                                                <div class="item-card9-imgs">
+                                                                    <a href="{%url 'research_detail' id=research.id %}"></a>
+                                                                    {% if research.created_by.get_company %}
+                                                                    <img src="{{research.created_by.get_company.get_image}}"  alt="img1" class="cover-image">
+                                                                    {% elif research.created_by %}
+                                                                    <img src="{{research.created_by.profile_image}}" alt="img2" class="cover-image">
+                                                                    {% else %}
+                                                                    <img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="cover-image">
+                                                                    {% endif %}
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            <div class="card border-0 mb-0">
+                                                                <div class="card-body h-100">
+                                                                    <div class="item-card9">
+                                                                        <a href="{%url 'research_detail' id=research.id %}" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1"> {{research.title}}</h4></a>
+                                                                    
+                                                                    </div>
+    
+                                                                </div>
+                                                                
+                                                            
+    
+                                                                <div class="card-footer pt-2 pb-2">
+                                                                    <div class="item-card9-footer d-sm-flex">
+                                                                        <div class="item-card9-cost">
+                                                                            <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                                <b>By: &nbsp</b>
+                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by}}">
+                                                                                    {% if research.created_by.is_staff %} 
+                                                                                        {% if research.company.get_image %}
+                                                                                        <img src="{{research.company.get_image}}"  alt="img1" class="avatar brround  mr-2">
+                                                                                        {% elif research.created_by.profile_image %}
+                                                                                        <img src="{{research.created_by.profile_image}}" alt="img2" class="avatar brround  mr-2">
+                                                                                        {% else %}
+                                                                                        <img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="avatar brround  mr-2">
+                                                                                        {% endif %}
+                                                                                    <!-- if the creator of the research is customer -->
+                                                                                    {% else %}
+                                                                                        {% if research.created_by.profile_image %} 
+                                                                                            <img src="{{research.created_by.profile_image}}" alt="image" class="avatar brround  mr-2">
+                                                                                        {% else %}
+                                                                                            <img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="avatar brround  mr-2">
+                                                                                        {% endif %}
+                                                                                    {% endif %}
+                                                                                    
+                                                                                </a>
+                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by.phone_number}}"><i class="fa fa-phone"></i></a>	
+                                                                                <a class="" href="/chat/with/{{research.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+                                                                                <a class="" href="{%url 'research_detail' id=research.id %}" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Read More" %}</b></a>
+                                                            
+                                                                                <br>
+                                                                                
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="ml-auto mt-3 mt-sm-0">
+                                                                            
+                                                                            <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{research.created_date.date}}</small></div> 
+                                                                                
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+
+
+                                            {% if Research %}
+                                            <div class = "card">
+                                                <div class = "card-header">
+                                                    <h3 class="mt-2 ">{{Research.count}} {% trans "Researchs" %}</h3>
+                                                </div>
+
+                                                <div class = "card-body"> 
+                                                    {%for research in Research%}
+											
+												<div class="card overflow-hidden">
+													<div class="d-md-flex">
+														<div class="item-card9-img">
+															<div class="item-card9-imgs">
+																<a href="{%url 'research_detail' id=research.id %}"></a>
+																{% if research.created_by.get_company %}
+																<img src="{{research.created_by.get_company.get_image}}"  alt="img1" class="cover-image">
+																{% elif research.created_by %}
+																<img src="{{research.created_by.profile_image}}" alt="img2" class="cover-image">
+																{% else %}
+																<img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="cover-image">
+																{% endif %}
+															</div>
+															
+														</div>
+														<div class="card border-0 mb-0">
+															<div class="card-body h-100">
+																<div class="item-card9">
+																	<a href="{%url 'research_detail' id=research.id %}" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1"> {{research.title}}</h4></a>
+																
+																</div>
+
+															</div>
+															
+														
+
+															<div class="card-footer pt-2 pb-2">
+																<div class="item-card9-footer d-sm-flex">
+																	<div class="item-card9-cost">
+																		<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																			<b>By: &nbsp</b>
+																			<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by}}">
+																				{% if research.created_by.is_staff %} 
+																					{% if research.company.get_image %}
+																					<img src="{{research.company.get_image}}"  alt="img1" class="avatar brround  mr-2">
+																					{% elif research.created_by.profile_image %}
+																					<img src="{{research.created_by.profile_image}}" alt="img2" class="avatar brround  mr-2">
+																					{% else %}
+																					<img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="avatar brround  mr-2">
+																					{% endif %}
+																				<!-- if the creator of the research is customer -->
+																				{% else %}
+																					{% if research.created_by.profile_image %} 
+																						<img src="{{research.created_by.profile_image}}" alt="image" class="avatar brround  mr-2">
+																					{% else %}
+																						<img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="avatar brround  mr-2">
+																					{% endif %}
+																				{% endif %}
+																				
+																			</a>
+																			<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by.phone_number}}"><i class="fa fa-phone"></i></a>	
+																			<a class="" href="/chat/with/{{research.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+																			<a class="" href="{%url 'research_detail' id=research.id %}" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Read More" %}</b></a>
+														
+																			<br>
+																			
+																		</div>
+																	</div>
+																	<div class="ml-auto mt-3 mt-sm-0">
+																		
+																		<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{research.created_date.date}}</small></div> 
+																			
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											{%endfor%}
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            
+										</div>
+
+										
+									</div>
+								</div>
+								{% if news_list.has_other_pages %}
+								<div class="center-block text-center">
+									<ul class="pagination mb-5">
+										{% if news_list.has_previous %}
+										<li class="page-item page-prev "><a class="page-link" href="?page={{news_list.previous_page_number}}" tabindex="-1">{% trans "Prev" %}</a></li>
+										{% else %}
+										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">{% trans "Prev" %}</a></li>
+										{% endif %}
+										
+										{% for i in news_list.paginator.page_range %}
+											{% if news_list.number == i %}
+													<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+											{% else %}
+													<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+											{% endif %}
+										{% endfor %}
+
+										{% if news_list.has_next %}
+										<li class="page-item page-next"><a class="page-link" href="?page={{news_list.next_page_number}}">{% trans "Next" %}</a></li>
+										{% else %}
+										<li class="page-item page-next disabled"><a class="page-link" href="#">{% trans "Next" %}</a></li>
+										{% endif %}
+									</ul>
+								</div>
+								{% endif %}
+							</div>
+						</div>
+						<!--/Add lists-->
+					</div>
+
+					<!--Right Side Content-->
+					
+					<div class="col-xl-3 col-lg-3 col-md-12">
+						<!-- <form action = "/collaborations/customer_news_list/" method = "GET" >
+					
+							<div class="card">
+								<div class="card-body">
+									<div class="input-group">
+											<input type="text" id = "by_title" name = "by_title" class="form-control br-tl-3 br-bl-3" placeholder="Search">
+											<div class="input-group-append ">
+												<button type="submit" class="btn btn-secondary br-tr-3 br-br-3">
+													{% trans "Search" %}
+												</button>
+											</div>
+									</div>
+								</div>
+							</div>
+						</form> -->
+
+
+						<form action = "" method = "GET">
+						<div class="card mb-0">
+							<div class="card-header">
+								<h3 class="card-title">{% trans "Modules" %}</h3>
+							</div>
+							<div class="card-body">
+								<div class="" id="container">
+									<div class="filter-product-checkboxs">
+										{% for model in models %}
+										<label class="custom-control custom-checkbox mb-3">
+											<input type="checkbox" class="custom-control-input" name="by_model"   value="{{model}}">
+											<span class="custom-control-label">
+												<a  class="text-dark">{{model}}</a>
+                                            
+											</span>
+										</label>
+										{% endfor %}
+										
+									</div>
+								</div>
+							</div>
+						
+							<div class="card-footer">
+								<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>
+							</div>
+						</div>
+						</form>
+					</div>
+					<!--/Right Side Content-->
+				</div>
+			</div>
+		</section>
+		<!--/Add Listings-->
+
+	
+			
+		{%endblock%}
+
+		
+		
