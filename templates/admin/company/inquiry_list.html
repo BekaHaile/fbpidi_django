@@ -168,8 +168,7 @@
                                                     <h5 style = "color:black"><b>Inquiry Content :</b></h5>
                                                     <div class="form-group">
                                                         
-                                                        <textarea  rows="7" class =" form form-control"  disabled="True">
-                                                            {{inquiry.content}}</textarea> 
+                                                        <textarea  rows="7" class =" form form-control"  disabled="True">{{inquiry.content}}</textarea> 
                                                     </div>
                                                     <br>
                                                 
@@ -179,9 +178,7 @@
                                                     <p>Your previous reply, You can resend another replay, by editing.</p>
                                                     
                                                     <div class="form-group">
-                                                        <textarea class="form-control" name="reply_message" rows="7" placeholder="Reply Message" required>
-                                                            {{inquiry.productinquiryreply_set.first.reply}}
-                                                        </textarea>
+                                                        <textarea class="form-control" name="reply_message" rows="7" placeholder="Reply Message" required>{{inquiry.productinquiryreply_set.first.reply}}</textarea>
                                                     </div>
                                                     {% else %}
                                                     <p>Write Your Replay Here</p>

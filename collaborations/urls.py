@@ -1,7 +1,7 @@
 from django.urls import path,include
 
 from .views import (CustomerPollList, PollDetail, 
-                    CustomerTenderList, CustomerTenderDetail,
+                    CustomerTenderList, CustomerTenderDetail,IndexSearch,
 
                     ApplyForTender,ApplyForCompanyTender, CustomerNewsList, AjaxEventParticipation,AjaxApplyForTender,
                     CustomerNewsDetail,CustomerEventList, CustomerEventDetail, EventParticipation
@@ -23,6 +23,7 @@ from .Views.research import (EditResearch,ListResearch,ResearchDetail,CreateRese
                     
 
 urlpatterns = [ 
+    path('index_search/',IndexSearch.as_view(), name="index_search"),
     path('project-view/<id>/',ProjectDetailView.as_view(),name='project_view'),
     
     path("project-list",ListProject.as_view(),name="project_list"),

@@ -300,7 +300,10 @@
                 <ul class="horizontalMenu-list">
                     
                     <li><a href="{%url 'index' %}">{% trans "Home" %} <span class="fa fa-caret m-0"></span></a></li>
-                    <li><a href="{%url 'about'%}">{% trans "About Us" %} </a></li>
+                    {% get_fbpidi as fbpidi %}
+                    {% if fbpidi != None %}
+                    <li><a href="{%url 'company_about' pk=fbpidi.id%}">{% trans "About Us" %} </a></li>
+                    {% endif %}
                     <li><a href="{% url 'manufac_category_main' option='all' %}">{% trans "Manufacturers" %} <span
                             class="fa fa-caret-down m-0"></span></a>
                         <ul class="sub-menu">

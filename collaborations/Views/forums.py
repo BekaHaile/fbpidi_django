@@ -266,7 +266,7 @@ class ListForumQuestions(View):
 			if query.count() > 0:
 				result = {'query':query, 'message':f'{query.count()} result found!', 'message_am':f'{query.count()} ውጤቶች ተገኝተዋል' }
 			else:
-				result = {'query':ForumQuestion.objects.all()[:5], 'message':'No result found!', 'message_am':'ምንም ውጤት አልተገኘም' }
+				result = {'query':ForumQuestion.objects.all()[:5], 'message':'No result found! Other Forums', 'message_am':'ምንም ውጤት አልተገኘም, ሌሎች ውጤቶች' }
 		else:
 			result = {'query':ForumQuestion.objects.all()[:5], 'message':'Forums', 'message_am':'ውይይቶች' }
 		
@@ -286,7 +286,6 @@ class EditForumQuestions(View):
 		context = {'forum':forum,'usercreated':userCreated}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
-		print("############# ", self.kwargs)
 		form = ForumQuestionForm(self.request.POST,self.request.FILES)
 		userCreated = ForumQuestion.objects.filter(created_by=self.request.user)
 		template_name = "frontpages/forums/forum_edit.html"
