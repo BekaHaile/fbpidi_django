@@ -81,6 +81,15 @@ class Product(models.Model):
     def get_category(self):
         return self.brand.product_type.category_name
 
+    def rating(self):
+        total = 0
+        reviews =self.review_set.all()
+        for r in reviews:
+            total += r.rating
+        try:
+            return total/reviews.count()
+        except Exception:
+            return 0
     
     class Meta:
         ordering = ('-created_date',)

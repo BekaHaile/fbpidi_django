@@ -20,25 +20,18 @@
 											<div class="search-background px-4 py-3 mt-4">
 												<div class="form row row-sm">
 													<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
-														{% if searched_name %}
-														<input type="text" name = "by_title" class="form-control input-lg border-white"  placeholder="{{searched_name}}">
-														{%else%}
-														<input type="text" name = "by_title" class="form-control input-lg border-white"  placeholder="Search Collaborations">
-														{%endif%}
+														
+														<input type="text" required name = "by_title" class="form-control input-lg border-white"  placeholder="Search Collaborations">
+														
 													</div>
 													<div class="form-group col-xl-4 col-lg-4 select2-lg  col-md-12 mb-0 border-white">
-														<select  name = 'by_category'  class="form-control select2-show-search w-100" data-placeholder="Select">
+														<select required name = 'by_model'  class="form-control select2-show-search w-100" data-placeholder="Select">
 															<optgroup label="Categories">
+                                                                <option>{% trans "Select Module" %}</option>
+																<option value="All">{% trans "All" %}</option>
 																
-
-																{% if searched_category %}
-																<option>{{searched_category}}</option>
-																{% endif %}
-															
-																<option>All</option>
-																
-																{% for catagory in NEWS_CATAGORY %}
-																<option name = '{{category.0}}' value="{{catagory.0}}">{{catagory.0}}</option>
+																{% for module in modules %}
+																<option name = '{{category.0}}' value="{{module.0}}">{% trans module.0 %}</option>
 																{% endfor %}
 															</optgroup>
 														</select>
@@ -84,7 +77,7 @@
 									<div class="">
 										<div class="bg-white p-5 item2-gl-nav d-flex">
 									
-											<h4 class="mb-0 mt-3">{% trans "Page" %} {{news_list.number}} {% trans "of" %} {{news_list.paginator.num_pages}}</h4>
+											<a href = "/"><h4 class="mb-0 mt-3"><i class="fa fa-arrow-left mr-3"></i>{% trans "Back to Home" %} </h4></a>
 											<ul class="nav item2-gl-menu ml-auto mt-1">
 												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
 												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
@@ -172,9 +165,9 @@
                                                     </div>
                                                     {%endfor%}
                                                 </div>
-
-                                            {% endif %}
                                             </div>
+                                            {% endif %}
+                                            
 
                                             {% if Event %}
                                             <div class = "card">
@@ -749,24 +742,7 @@
 					<!--Right Side Content-->
 					
 					<div class="col-xl-3 col-lg-3 col-md-12">
-						<!-- <form action = "/collaborations/customer_news_list/" method = "GET" >
-					
-							<div class="card">
-								<div class="card-body">
-									<div class="input-group">
-											<input type="text" id = "by_title" name = "by_title" class="form-control br-tl-3 br-bl-3" placeholder="Search">
-											<div class="input-group-append ">
-												<button type="submit" class="btn btn-secondary br-tr-3 br-br-3">
-													{% trans "Search" %}
-												</button>
-											</div>
-									</div>
-								</div>
-							</div>
-						</form> -->
-
-
-						<form action = "" method = "GET">
+						
 						<div class="card mb-0">
 							<div class="card-header">
 								<h3 class="card-title">{% trans "Modules" %}</h3>
@@ -774,11 +750,11 @@
 							<div class="card-body">
 								<div class="" id="container">
 									<div class="filter-product-checkboxs">
-										{% for model in models %}
+										{% for model in modules %}
 										<label class="custom-control custom-checkbox mb-3">
-											<input type="checkbox" class="custom-control-input" name="by_model"   value="{{model}}">
+											<!-- <input type="checkbox" class="custom-control-input" name="by_model"   value="{{model.0}}"> -->
 											<span class="custom-control-label">
-												<a  class="text-dark">{{model}}</a>
+												<a href="{% url model.1 %}"  class="text-dark">{{model.0}}</a>
                                             
 											</span>
 										</label>
@@ -789,10 +765,10 @@
 							</div>
 						
 							<div class="card-footer">
-								<button type = "submit" value="Something" href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>
+								<button  value="Something" href="#" class="btn btn-primary btn-block">{% trans "Go To Specific Module" %}</a>
 							</div>
 						</div>
-						</form>
+						
 					</div>
 					<!--/Right Side Content-->
 				</div>

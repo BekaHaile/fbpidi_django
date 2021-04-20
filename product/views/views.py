@@ -1083,13 +1083,14 @@ class SearchProduct(View):
     def get(self,*args,**kwargs):
         template_name = "frontpages/product/product_category.html"
         products = Product.objects.all()
-        if self.request.GET['name'] != '':
+        if 'name' in self.request.GET and self.request.GET['name'] != '':
             products = Product.objects.filter(
                 Q(name__icontains=self.request.GET['name'])|Q(name_am__icontains=self.request.GET['name'])|Q(brand__brand_name__icontains=self.request.GET['name'])|Q(brand__product_type__sub_category_name__icontains=self.request.GET['name'])
                 ).distinct()
         try:
-            if self.request.GET['sector'] !='' or self.request.GET['sector'] != "Select":
-                products = products.filter(Q(brand__product_type__category_name__id=self.request.GET['sector']))
+            if 'sector' in self.request.GET:
+                if self.request.GET['sector'] !='' or self.request.GET['sector'] != "Select":
+                    products = products.filter(Q(brand__product_type__category_name__id=self.request.GET['sector'])).distinct()
         except ValueError as e:
             products = products 
         return render(self.request,template_name,{'object_list':products})

@@ -80,7 +80,17 @@
                                           
 											<li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b> {% trans "Start Date" %}: {{event.start_date.date}}</b> </a></li>                                       
 										    <li class="mr-5"><a><i class="fa fa-calendar-o text-muted mr-2"></i><b>{% trans "End Date" %}: {{event.end_date.date}}</b> </a></li>
-										
+											<li>
+												<div class="item7-card-text ml-2 mt-1">
+													{% if event.status == 'Open' %}
+													<div style="background-color: green; color:white; width: fit-content; padding: 5px; " >{% trans "Open" %}</div>
+													{%elif event.status == 'Upcoming' %}
+													<div style="background-color: yellow; color:black; width: fit-content; padding: 5px;" >{% trans "Upcoming" %}</div>
+													{%elif event.status == 'Closed' %}
+													<div style="background-color: red; color:white; width: fit-content; padding: 5px;" >{% trans "Closed" %}</div>
+												{%endif%}
+												</div>
+											</li>
 										</ul>
 									</div>
                                 </div>
@@ -97,49 +107,39 @@
 										</div>
                                     </div>
                                 </div>
-								{%if event.status == "Upcoming" %}
-								<form action="{% url 'event_participation' id=event.id %}" method="POST">
-									{%csrf_token%}
+				
+								{%if event.status == "Upcoming" or event.status == "Open" %}
+								
 									<br>
-									
 									<div class="col-md-6">
-										<label class="col-form-label "><b>Remind me on</b> <p class = "text-muted">{% trans "From"%} {{ event.start_date.date }} - {{event.end_date.date}} </p></label>
+										<label class="col-form-label "><b><h3>{% trans "Send me a reminder on" %}</h3></b> <p class = "text-muted">{% trans "From"%} {{ event.start_date.date }} - {{event.end_date.date}} </p></label>
 										<div >
 											{{event_participant_form.notify_on}}
 										</div>
-				
 									</div>
 									<br>
-									
 									<div class="col-md-8">
-										<label class="col-form-label "><b>Your email</b></label>
-										<div >
-											{{event_participant_form.patricipant_email}}
-										</div>
-				
+										<label class="col-form-label "><b>{% trans "Your email" %}</b></label>
+										<div >{{event_participant_form.patricipant_email}}</div>
 									</div>
-				
 									<br>
-										
-									
 									<div class="col-sm-4">
-										
-										<button type="submit" class="btn bg-primary" class="badge badge-secondary" style="margin-right: 20px; color:white;">{% trans "Remind Me" %}</button>
-										
+									<button  id = "remind_me_button"  class="btn bg-primary" class="badge badge-secondary" style="margin-right: 20px; color:white;">{% trans "Remind Me" %}</button>
 									</div>
-								</form> 
+								
 								{%endif%}
-							</div>
+							</div>	
+						</div>
 
+						<div class = "card">
 							<div class="card-header">
 								<h3 class="card-title">{% trans "Event Description" %}</h3>
 							</div>
 							<div class="card-body pt-0">
 								<div class="mb-0">
-									<p>{% print_translated event.description event.description_am LANGUAGE_CODE %}</p>
+									<p>{% print_translated event.description|safe event.description_am|safe LANGUAGE_CODE %}</p>
 								</div>	
 							</div>
-							
 						</div>
 
 						<!--/Business Overview-->
@@ -265,6 +265,52 @@
 				$('#summernote').summernote();
 				$('.summernote').summernote();
 			});
+		</script>
+		<script>
+			if (document.getElementById("remind_me_button")){
+				document.querySelector('#remind_me_button').onclick = function(e) 
+						{
+                            var participant_email = document.querySelector('#participant_email');
+                            var notify_on = document.querySelector("#notify_on");
+							
+                            if (participant_email.value == "" || participant_email.value == null || notify_on.value == "" ){
+                                window.alert("Fill the form first!");
+                            }
+                           else{
+							console.log("notify on = "+notify_on.value)
+							console.log(" event start date "+ "{{event.start_date.date}}")
+                                
+                               fetch("{% url 'ajax_event_participation' id=event.id %}",
+                                {
+                                    method:"POST",
+                                    credentials: 'same-origin',
+                                    headers:{
+                                        "content-Type":'application/json',
+                                        'X-CSRFToken':'{{csrf_token}}'
+                                    },
+                                    body:JSON.stringify({
+                                        'notify_on': notify_on.value,
+										'participant_email':participant_email.value
+
+									})
+                                }
+                               ).then(e => e.json()).then(result=>{
+								   if (result['error'] == false)
+									{
+										window.alert(result['message']);  
+									}
+								   else{
+											window.alert("Error occured while trying to register your reminder. Wrong Form filled!");
+										}
+									notify_on.value = new Date()
+									participant_email.value = ""
+                                             
+                                    });   
+                                    
+                            }
+                        };
+			}
+        
 		</script>
 		
 

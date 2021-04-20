@@ -95,7 +95,6 @@ def SearchByTitle_All(model_name, request ):
             query = model.objects.filter( Q(title__icontains = filter_key) | Q(title_am__icontains = filter_key) |Q(description__icontains = filter_key ) | Q(description_am__icontains = filter_key) ).distinct() 
             # if there is no match for the filter_key or there is no filter_key at all
             if query.count() == 0: 
-                query = []
                 return { 'query': query, 'message': f"No match containing '{filter_key}'!", 'message_am': f"ካስገቡት ቃል '{filter_key}' ጋር የሚገናኝ አልተገኘም፡፡ !" }       
             return { 'query': query, 'message': f"{query.count()} result found!", 'message_am': f"{query.count()} ውጤት ተገኝቷል!" }
     except Exception as e:
@@ -153,56 +152,98 @@ def filter_by(field_name, field_values, query):
 def get_paginated_data(request, query):
     page_number = request.GET.get('page', 1)
     try:
-        return Paginator(query, 2).page(page_number)
+        return Paginator(query, 1).page(page_number)
     except Exception as e:
         print("exception at get_paginate_data ",e)
         return Paginator(query, 2).page(1)
 
 
 class IndexSearch(View):
+    modules =  [('News','customer_news_list'),('Event','customer_event_list'),('Announcement','announcement_list'),('Polls','polls'),
+                ('Tender','tender_list'),('Vacancy','vacancy'),('Blog','customer_blog_list'),('Research','research_list'), ('Forum','forum_list')]
+
+    title_models = ['News','Event','Announcement','Polls','Tender','Vacancy']
+    def blog_search(self):
+        q = Q( Q(title__icontains = self.request.GET['by_title']) | Q(title_am__icontains = self.request.GET['by_title']) )
+        return Blog.objects.filter(q)    
+    
+    def forum_search(self):
+        return ForumQuestion.objects.filter(title__icontains = self.request.GET['by_title'])
+    
+    def research_search(self):
+        return Research.objects.filter(Q(title__icontains = self.request.GET['by_title']))
+
     def get(self, *args, **kwargs):
         result = {}
         total = 0
         print(self.request.GET)
+        
         if 'by_title' in self.request.GET and 'by_model' in self.request.GET:
-            pass
-        elif 'by_title' in self.request.GET:
-            title_models = ['News','Event','Announcement','Polls','Tender','Vacancy']
-            for model in title_models:
+            model = self.request.GET['by_model']
+            if model in self.title_models:
                 model_query =  SearchByTitle_All(model, self.request)['query']
                 if model_query.count() > 0:
                     total+= model_query.count()
                     result[model] = model_query
 
-            # search blogs
-            q = Q( Q(title__icontains = self.request.GET['by_title']) | Q(title_am__icontains = self.request.GET['by_title']) )
-            blog_query = Blog.objects.filter(q)
-            if blog_query.count()>0:
-                total+= blog_query.count()
-                result['Blog'] = blog_query
+            elif model == "Blog":
+                blog_query = self.blog_search()
+                if blog_query.count()>0:
+                    total+= blog_query.count()
+                    result['Blog'] = blog_query
+
+            elif model == "Forum":
+                forum_query = self.forum_search()
+                if forum_query.count() > 0:
+                    total+= forum_query.count()
+                    result['Forum'] = forum_query
+
+            elif model == "Research":
+                research_query = self.research_search()
+                if research_query.count() > 0:
+                    total+= research_query.count()
+                    result['Research'] = research_query
+
+            else: #if All
+                for model in self.title_models:
+                    model_query =  SearchByTitle_All(model, self.request)['query']
+                    if model_query.count() > 0:
+                        total+= model_query.count()
+                        result[model] = model_query
+                    
+                blog_query = self.blog_search()
+                if blog_query.count()>0:
+                    total+= blog_query.count()
+                    result['Blog'] = blog_query
+                
+                research_query = self.research_search()
+                if research_query.count() > 0:
+                    total+= research_query.count()
+                    result['Research'] = research_query
+                
+                forum_query = self.forum_search()
+                if forum_query.count() > 0:
+                    total+= forum_query.count()
+                    result['Forum'] = forum_query
             
-            # search Reseach
-            research_query = Research.objects.filter(Q(title__icontains = self.request.GET['by_title']))
-            if research_query.count() > 0:
-                total+= research_query.count()
-                result['Research'] = research_query
-            
-            # Search forum
-            forum_query = ForumQuestion.objects.filter(title__icontains = self.request.GET['by_title'])
-            if forum_query.count() > 0:
-                total+= forum_query.count()
-                result['Forum'] = forum_query
+            # if model_query.count() > 0:
+            #         total+= model_query.count()
+            #         result[model] = model_query
           
+        else:
+            return redirect("/")
+        
         data = result
-        data['models'] = result.keys()
+        data['modules'] = self.modules
         if total == 0:
-            data['message'] = "No result found in collaborations"
+            data['message'] = "No result found!"
             data['message_am']= "ምንም ውጤት አልተገኝም"
         else:
             data['message'] = f"{total} result found"
             data['message_am'] = f"{total} ውጤት ተገኝቷል"
-        print ("###################",data)
-        return render(self.request, "frontpages/others_search_list.html",data)
+
+        return render(self.request, "frontpages/index_search_page.html",data)
+        
 
 
 

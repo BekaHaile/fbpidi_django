@@ -906,20 +906,66 @@ def activate_company(request,pk):
 
 
 ############## newly added, delete this commet after everything has worked right
-class SearchCompany(View):
-    def post(self,*args,**kwargs):
-        template_name = "frontpages/company/company_list.html"
-        companies = Company.objects.all().exclude(main_category='FBPIDI')
-        if self.request.POST['name'] != '':
-            companies = Company.objects.filter(Q(name=self.request.POST['name'])
-            |Q(company_product__name=self.request.POST['name'])) 
+class SearchCompany(ListView):
+    model = Company
+    template_name = "frontpages/company/company_list.html"
+    paginate_by = 1
+    def get_queryset(self):
         try:
-            if self.request.POST['sector'] !='' or self.request.POST['sector'] != 'Select':
-                companies = companies.filter(Q(category__id=self.request.POST['sector']))
+            companies = Company.objects.all().exclude(main_category='FBPIDI')
+            if 'name' in self.request.GET and self.request.GET['name'] != '':
+                companies = Company.objects.filter( Q(name__icontains=self.request.GET['name'])|Q(name_am__icontains=self.request.GET['name'])
+                |Q(company_product__name=self.request.GET['name'])) 
+
+            if 'sector' in self.request.GET:
+                if self.request.GET['sector'] !='' or self.request.GET['sector'] != 'Select':
+                        companies = companies.filter(Q(category__id=self.request.GET['sector']))
         except ValueError:
             companies=companies
 
-        return render(self.request,template_name,{'object_list':companies})
+        return companies
+    # def get(self,*args, **kwargs):
+    #     template_name = "frontpages/company/company_list.html"
+    #     companies = Company.objects.all().exclude(main_category='FBPIDI')
+    #     try:
+    #         if 'name' in self.request.GET and self.request.GET['name'] != '':
+    #             companies = Company.objects.filter( Q(name__icontains=self.request.GET['name'])|Q(name_am__icontains=self.request.GET['name'])
+    #             |Q(company_product__name=self.request.GET['name'])) 
+        
+    #         if 'sector' in self.request.GET:
+    #             if self.request.GET['sector'] !='' or self.request.GET['sector'] != 'Select':
+    #                  companies = companies.filter(Q(category__id=self.request.GET['sector']))
+    #     except ValueError:
+    #         companies=companies
+
+    #     return render(self.request,template_name,{'object_list':companies})
+
+    
+
+class FilterCompanyByCategory(ListView):
+    model = Company
+    template_name = "frontpages/company/company_list.html"
+    paginate_by = 1
+        
+    def get_queryset(self):
+        try:
+            categories = self.request.GET.getlist('by_category')
+            companies = Company.objects.filter(main_category__in = categories , is_active =True).exclude(main_category='FBPIDI')      
+        except Exception as e:
+            print("Exception while filtering companies ",e)
+            companies = Company.objects.all().exclude(main_category='FBPIDI')  
+        return companies
+
+    # def get(self, *args, **kwargs):
+        
+    #     try:
+    #         categories = self.request.GET.getlist('by_category')
+    #         companies = Company.objects.filter(main_category__in = categories).exclude(main_category='FBPIDI')      
+    #     except Exception as e:
+    #         print("Exception while filtering companies ",e)
+    #         companies = Company.objects.all().exclude(main_category='FBPIDI')      
+
+    #     return render(self.request,template_name,{'object_list':companies})
 
 class CompanyByMainCategory(ListView):
     model = Company
@@ -928,13 +974,13 @@ class CompanyByMainCategory(ListView):
     
     def get_queryset(self):
         if self.kwargs['option'] == "Beverage":
-            return Company.objects.filter(main_category="Beverage")
+            return Company.objects.filter(main_category="Beverage", is_active =True)
         elif self.kwargs['option'] == "Food":
-            return Company.objects.filter(main_category="Food")
+            return Company.objects.filter(main_category="Food", is_active =True)
         elif self.kwargs['option'] == "Pharmaceuticals":
-            return Company.objects.filter(main_category="Pharmaceuticals")
+            return Company.objects.filter(main_category="Pharmaceuticals", is_active =True)
         elif self.kwargs['option'] == "all":
-            return Company.objects.all().exclude(main_category="FBPIDI")
+            return Company.objects.all().exclude(main_category="FBPIDI", is_active =True)
 
 class ProjectList(ListView):
     model = InvestmentProject

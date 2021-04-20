@@ -118,44 +118,44 @@
 													<div class="card border-0 mb-0">
 														<div class="card-body h-100">
 															<div class="item-card9">
-																<a target="_blank" href="{%url 'product_detail'  pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
+																<a target="_blank" href="{%url 'product_detail'  pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}
+																	{% if not product.company.is_active %}
+																	<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i>
+																	{% endif %}
+																</h4></a>
 																<div class="rating-stars d-flex mr-5">
-																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
+															
+																	
+																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="{{product.rating}}">
 																	<div class="rating-stars-container mr-2">
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																	</div> <a class="fs-13 leading-tight mt-1" href="#">{{product|review_count}} Reviews</a>
+																		{% get_looper_object product.rating as rates %}
+																		{% for i in rates %}
+																			<div class="rating-star sm">
+																				<i class="fa fa-star"></i>
+																			</div>
+																		{% endfor %}
+																		
+																	</div> <a class="fs-13 leading-tight mt-1" href="#">{{product|review_count}} {% trans "Reviews" %}</a>
 																</div>
 																<div class="mt-2 mb-2">
 																	<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i>{{product.company.get_company_address.city_town}}</a>
 																	<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{product.company.get_company_address.local_area}}, {{product.company.get_company_address.fax}}</a>
 																</div>
-																<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark">ETB {{product.price}}</span> </p>
+																{% if product.price %}
+																<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark">{% trans "ETB" %} {{product.price}}</span> </p>
+																{% endif %}
 															</div>
 														</div>
 														<div class="card-footer pt-2 pb-2">
 															<div class="item-card9-footer d-sm-flex">
 																<div class="item-card9-cost">
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																		<a class="" href="mailto:{{product.company.get_company_address.email}}" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
+																		<!-- <a class="" href="mailto:{{product.company.get_company_address.email}}" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a> -->
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
 																		<a class="" href="{{product.get_company_address.fax}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.get_company_address.fax}}"><i class="fa fa-globe"></i></a>
-																		<a class="" href="/chat/with/{{product.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+																		<a class="" href="/chat/with/{{product.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
 
-																		<a class="" href="#"><i class="fa fa-share-alt"></i></a>
+																		
 																	</div>
 																</div>
 																{%if not user.is_authenticated%}
@@ -236,9 +236,11 @@
 															<div class="card border-0 mb-0">
 																<div class="card-body">
 																	<div class="item-card9">
+																		hhhhhhhhhhh
+																		{{product.rating}}
 																		<a target="_blank" href="{%url 'product_detail'  pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
 																		<div class="rating-stars d-flex mr-5">
-																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
+																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="1">
 																			<div class="rating-stars-container mr-2">
 																				<div class="rating-star sm">
 																					<i class="fa fa-star"></i>
@@ -261,18 +263,21 @@
 																			<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i> {{product.company.get_company_address.city_town}}</a>
 																			<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{product.company.get_company_address.local_area}}, {{product.company.get_company_address.fax}}</a>
 																		</div>
-																		<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark">ETB {{product.price}}</span></p>
+																		{% if product.price %}
+																			<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark">{% trans "ETB" %} {{product.price}}</span></p>
+																		{% endif  %}
+																		
 																	</div>
 																</div>
 																<div class="card-footer pt-2 pb-2">
 																	<div class="item-card9-footer d-sm-flex">
 																		<div class="item-card9-cost">
 																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																				<a class="" href="mailto:{{product.company.get_company_address.email}}" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a>
+																				<!-- <a class="" href="mailto:{{product.company.get_company_address.email}}" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a> -->
 																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
 																				<a class="" href="{{product.get_company_address.fax}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.get_company_address.fax}}"><i class="fa fa-globe"></i></a>
-																				<a class="" href="/chat/with/{{product.user.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
+																				<a class="" href="/chat/with/{{product.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+																				
 																			</div>
 																		</div>
 																		{% if user.is_customer %}
@@ -325,14 +330,16 @@
                     <div class="col-xl-3 col-lg-3 col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="input-group">
-                                    <input type="text" class="form-control br-tl-3 br-bl-3" placeholder="Search">
-                                    <div class="input-group-append ">
-                                        <button type="button" class="btn btn-secondary br-tr-3 br-br-3">
-                                            Search
-                                        </button>
-                                    </div>
-                                </div>
+								<form action="{%url 'search_product'%}" method="GET">
+									<div class="input-group">
+										<input required type="text" name= "name" class="form-control br-tl-3 br-bl-3" placeholder="Search">
+										<div class="input-group-append ">
+											<button type="submit" class="btn btn-secondary br-tr-3 br-br-3">
+												Search
+											</button>
+										</div>
+									</div>
+								</form>
                             </div>
                         </div>
                         <div class="card mb-0">
