@@ -303,6 +303,233 @@
                   });
         
                 }
+              }); 
+			//   change in capital utilization
+			var $changecapitalutilChart = $("#change-capital-util-chart");
+              $.ajax({
+                url: $changecapitalutilChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $changecapitalutilChart[0].getContext("2d");
+                   
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: 'Chnage in Capital Utilization',
+                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Chnage in Capital Utilization data'
+                      }
+                    }
+                  });
+        
+                }
+              });  
+			  // Average Extraction Rate
+			var $extnrateChart = $("#extn-rate-chart");
+              $.ajax({
+                url: $extnrateChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $extnrateChart[0].getContext("2d");
+                   
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: 'Average Extraction Rate',
+                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Average Extraction Rate of a Product'
+                      }
+                    }
+                  });
+        
+                }
+              }); 
+			   // Gross value of production
+			var $gvpChart = $("#gvp-chart");
+              $.ajax({
+                url: $gvpChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $gvpChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: data.year,
+                        backgroundColor: [ '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.this_year
+                      },{
+                        label: data.year-1,
+                        backgroundColor: [ '#f26411', '#46db14', '#4a9150', '#725ee0','#94071f'],
+                        data: data.last_year
+                      },{
+                        label: data.year-2,
+                        backgroundColor: [ '#46db14', '#eb6b34', '#4a9150', '#46db14','#f26411'],
+                        data: data.prev_year
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Gross Value of Production'
+                      }
+                    }
+                  });
+        
+                }
+              });
+			  //Number of employees
+			  var $numempChart = $("#num-emp-chart");
+              $.ajax({
+                url: $numempChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $numempChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Employees",
+                        backgroundColor: [ '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Number of Employees By Sector'
+                      }
+                    }
+                  });
+        
+                }
+              });  
+			  //Number of Female employees
+			  var $numfemempChart = $("#num-female-emp-chart");
+              $.ajax({
+                url: $numfemempChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $numfemempChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Female Employees",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Number of Female Employees By Sector'
+                      }
+                    }
+                  });
+        
+                }
+              });  
+			  //Number of Foreign employees
+			  var $numforempChart = $("#num-for-emp-chart");
+              $.ajax({
+                url: $numforempChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $numforempChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Foreign Employees",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Number of Foreign Employees By Sector'
+                      }
+                    }
+                  });
+        
+                }
+              });  
+			  //Number of Female employees
+			  var $numjobsChart = $("#num-jobs-chart");
+              $.ajax({
+                url: $numjobsChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $numjobsChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Number of Jobs",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Number of Jobs Created By Sector'
+                      }
+                    }
+                  });
+        
+                }
               });  
 	
 		});
@@ -490,44 +717,47 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4">
+		<div class="col-md-12 col-sm-12">
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
-					<div class="card bg-teal-800">
+					<div class="card " style="height: 100%;">
 						<div class="card-body">
+							<div id="container" style="width: 100%;">
+								<canvas id="change-capital-util-chart" data-url="{% url 'admin:change_capital_util_chart' %}"></canvas>								
+							</div>
 							<ul class="nav nav-pills nav-justified">						
+								Change in Capital Utilization Report Data
 								<li class="nav-item"><a href="{%url 'admin:get_change_capital_utilization' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 							</ul>
-		
-							<div class="tab-content">
-								Change in Capital Utilization Report Data
-							</div>
+		 
 						</div>
 					</div>
 				</div>
 				<div class="col-md-12 col-sm-12">
-					<div class="card bg-primary-400">
+					<div class="card" style="height: 100%;">
 						<div class="card-body">
-							<ul class="nav nav-pills nav-justified">						
+							<div id="container" style="width: 100%;">
+								<canvas id="extn-rate-chart" data-url="{% url 'admin:extraction_rate_chart' %}"></canvas>								
+							</div>
+							<ul class="nav nav-pills nav-justified">	
+								Average Extraction Rate					
 								<li class="nav-item"><a href="{%url 'admin:average_extraction_rate' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 							</ul>
-		
-							<div class="tab-content">
-								Average Extraction Rate
-							</div>
+		 
 						</div>
 					</div>
 				</div>
 				<div class="col-md-12 col-sm-12">
-					<div class="card bg-pink-400" >
+					<div class="card" style="height: 100%;">
 						<div class="card-body " >
-							<ul class="nav nav-pills nav-justified">						
+							<div id="container" style="width: 100%;">
+								<canvas id="gvp-chart" data-url="{% url 'admin:gvp_chart' %}"></canvas>								
+							</div>
+							<ul class="nav nav-pills nav-justified">
+								Gross Value of Production Data						
 								<li class="nav-item"><a href="{%url 'admin:get_gvp_data' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 							</ul>
-		
-							<div class="tab-content">
-								Gross Value of Production Data
-							</div>
+		 
 						</div>
 					</div>
 				</div>
@@ -537,35 +767,40 @@
 		</div>
 	<div class="row">
 		 
-		<div class="col-md-4 col-sm-4">
-			<div class="card">
+		<div class="col-md-6 col-sm-6 mb-2 mt-2">
+			<div class="card" style="height: 100%;">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-justified">						
+					<div id="container" style="width: 100%;">
+						<canvas id="num-emp-chart" data-url="{% url 'admin:num_emp_chart' %}"></canvas>								
+					</div>
+					<ul class="nav nav-pills nav-justified">	
+						Number Of Employees by Sector					
 						<li class="nav-item"><a href="{%url 'admin:get_number_emp' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
 
-					<div class="tab-content">
-						Number Of Employees by Sector
-					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4">
-			<div class="card">
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
+			<div class="card" style="height: 100%;">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-justified">						
+					<div id="container" style="width: 100%;">
+						<canvas id="num-female-emp-chart" data-url="{% url 'admin:num_fem_emp_chart' %}"></canvas>								
+					</div>
+					<ul class="nav nav-pills nav-justified">
+						Number Of Female Employees by Sector						
 						<li class="nav-item"><a href="{%url 'admin:get_num_emp_female' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
-
-					<div class="tab-content">
-						Number Of Female Employees by Sector
-					</div>
+ 
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4">
-			<div class="card">
+		<div class="col-md-6 col-sm-6 mb-2 mt-2">
+			<div class="card" style="height: 100%;">
 				<div class="card-body">
+					<div id="container" style="width: 100%;">
+						<canvas id="num-for-emp-chart" data-url="{% url 'admin:num_for_emp_chart' %}"></canvas>								
+					</div>
 					<ul class="nav nav-pills nav-justified">						
 						<li class="nav-item"><a href="{%url 'admin:get_num_emp_foreign' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
@@ -576,16 +811,16 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4">
-			<div class="card bg-teal-800">
+		<div class="col-md-6 col-sm-6 mb-2 mt-2">
+			<div class="card" style="height: 100%;">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-justified">						
+					<div id="container" style="width: 100%;">
+						<canvas id="num-jobs-chart" data-url="{% url 'admin:num_jobs_chart' %}"></canvas>								
+					</div>
+					<ul class="nav nav-pills nav-justified">			
+						Number Of Jobs Created by Sector			
 						<li class="nav-item"><a href="{%url 'admin:get_num_jobs' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
-
-					<div class="tab-content">
-						Number Of Jobs Created by Sector
-					</div>
 				</div>
 			</div>
 		</div>
