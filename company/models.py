@@ -309,7 +309,7 @@ class InvestmentProject(models.Model):
 	product_type = models.ManyToManyField(Category,verbose_name="Sub Sector",related_name="project_product_types")
 	site_location_name = models.CharField(verbose_name="Site location street name", max_length=200,null=True,blank=True)
 	distance_f_strt	= models.FloatField(default=0,verbose_name="Distance of the Site from the Street in Km")
-	# land_acquisition = models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT, related_name="land_aquisition", verbose_name="Land Acquisition",null=True,blank=True)
+	land_acquisition = models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT, related_name="land_aquisition", verbose_name="Land Acquisition",null=True,blank=True)
 	project_classification	= models.ForeignKey(ProjectDropDownsMaster, on_delete=models.CASCADE,related_name="project_classification",verbose_name="Project Classification",null=True,blank=True)
 	contact_person	=  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT,null=True,blank=True)
 	remaining_work	= models.TextField(verbose_name="Remaining Work To be done in English ",null=True,blank=True)
@@ -333,7 +333,7 @@ class InvestmentProject(models.Model):
 	automation	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="automation",null=True,blank=True, verbose_name="Automation",)
 	mode_of_project	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="project_mode",null=True,blank=True,verbose_name="Mode of Project")
 	facility_design	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="facility",null=True,blank=True,verbose_name="Facility design")
-	# project_complete = models.BooleanField(default=False)
+	project_complete = models.BooleanField(default=False)
 	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='project_created_by')
 	created_date	= models.DateTimeField(auto_now_add=True)
 	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='project_updated_by',null=True,blank=True)
@@ -345,13 +345,6 @@ class InvestmentProject(models.Model):
 			return CompanyAddress.objects.get(project=self)
 		except Exception as e:
 			return None
-
-class LandAquisition(models.Model):
-	project = models.OneToOneField(InvestmentProject,on_delete=models.CASCADE,related_name="land_aquisition")
-	its_own = models.FloatField(default=0,verbose_name="Its Own.")
-	lease = models.FloatField(default=0,verbose_name="Lease.")
-	rent = models.FloatField(default=0,verbose_name="Rent.")
-	timestamp = models.DateTimeField(auto_now_add=True)
 	
 class LandUsage(models.Model):
 	project = models.OneToOneField(InvestmentProject,on_delete=models.CASCADE,related_name="land_usage")

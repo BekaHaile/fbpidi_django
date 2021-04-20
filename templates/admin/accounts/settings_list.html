@@ -33,8 +33,8 @@
 							<li class="nav-item"><a href="#basic-tab3" class="nav-link" data-toggle="tab">Certifications</a></li>
 							<li class="nav-item"><a href="#basic-tab4" class="nav-link" data-toggle="tab">Management Tools</a></li>
 							<li class="nav-item"><a href="#basic-tab5" class="nav-link" data-toggle="tab">Source of energy</a></li>
-							<li class="nav-item"><a href="#basic-tab6" class="nav-link" data-toggle="tab">Support Types</a></li>
-							<li class="nav-item"><a href="#basic-tab7" class="nav-link" data-toggle="tab">Conditions</a></li>
+							<li class="nav-item"><a href="#basic-tab6" class="nav-link" data-toggle="tab">Area of Major Challenges</a></li>
+							<li class="nav-item"><a href="#basic-tab7" class="nav-link" data-toggle="tab">Industry Status CheckList</a></li>
 							<li class="nav-item"><a href="#basic-tab8" class="nav-link" data-toggle="tab">Laboratory Analisys</a></li>
 							<li class="nav-item"><a href="#basic-tab9" class="nav-link" data-toggle="tab">Lab Equipments</a></li>
 						</ul>
@@ -760,7 +760,7 @@
 									</thead>
 									<tbody>
 										{%for chklist in pl_objects%}
-											{%if chklist.dropdown_type == "Areas of Major Challenges" %}
+											{%if chklist.dropdown_type == "Facility Design" %}
 											<tr>
 												<td>{{forloop.counter}}</td>
 												<td>{{chklist.name}}</td>

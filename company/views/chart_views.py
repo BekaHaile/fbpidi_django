@@ -43,7 +43,7 @@ def company_subsector_chart(request):
     data=[]
     queryset = Company.objects.values('category__category_name').annotate(Count('id')).order_by('category').exclude(main_category='FBPIDI')
     for category in queryset:
-        labels.append(category['category__category_name'])
+        labels.append(category['category__category_name']+"("+str(category['id__count'])+")")
         data.append(category['id__count'])
     return JsonResponse({'labels':labels,'data':data})
 

@@ -89,12 +89,13 @@ class AllReportPage(LoginRequiredMixin,View):
                         'sector':company.main_category
                     })
         # form of ownership
-        queryset = companies.values('ownership_form').annotate(Count('id')).order_by('ownership_form') 
+        queryset = companies.values('ownership_form__name').annotate(Count('id')).order_by('ownership_form') 
         total_ownership = 0
         for ownership in queryset:
-            total_ownership += int(ownership['id__count'])
-            ownership_data.append({'label':CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']),
-                                    'data':ownership['id__count']})
+            if ownership['ownership_form__name'] != None:
+                total_ownership += int(ownership['id__count'])
+                ownership_data.append({'label':ownership['ownership_form__name'],
+                                        'data':ownership['id__count']})
 
         # Educational status data
         total_edu = 0
@@ -111,20 +112,22 @@ class AllReportPage(LoginRequiredMixin,View):
                 education_status_data.append({'company':company.name,'sector':company.main_category,'label':edu_data['education_type'],
                                         'data':int(edu_data['female__sum']+edu_data['male__sum'])})
             total_edu = fem_edu+male_edu
-        queryset_cert = companies.values('certification').annotate(Count('id')).order_by('certification') 
+        queryset_cert = companies.values('certification__name').annotate(Count('id')).order_by('certification') 
         certification_data = []
         total_certification = 0
         for certification in queryset_cert:
-            total_certification+= int(certification['id__count'])
-            certification_data.append({'label':CompanyDropdownsMaster.objects.get(id=certification['certification']).name,
-                                    'data':certification['id__count']})
+            if certification['certification__name'] != None:
+                total_certification+= int(certification['id__count'])
+                certification_data.append({'label':certification['certification__name'],
+                                        'data':certification['id__count']})
         
-        queryset_mgmt = companies.values('management_tools').annotate(Count('id')).order_by('management_tools') 
+        queryset_mgmt = companies.values('management_tools__name').annotate(Count('id')).order_by('management_tools') 
         management_tool_data = []
         total_managment = 0
         for management_tool in queryset_mgmt:
-            total_managment+= int(management_tool['id__count'])
-            management_tool_data.append({'label':CompanyDropdownsMaster.objects.get(id=management_tool['management_tools']).name,
+            if management_tool['management_tools__name'] != None:
+                total_managment+= int(management_tool['id__count'])
+                management_tool_data.append({'label':management_tool['management_tools__name'],
                                     'data':management_tool['id__count']})
         queryset_energy = companies.values('source_of_energy').annotate(Count('id')).order_by('source_of_energy') 
         total_energy = 0
@@ -135,6 +138,7 @@ class AllReportPage(LoginRequiredMixin,View):
                 energy_source_data.append({'label':CompanyDropdownsMaster.objects.get(id=energy_source['source_of_energy']).name,
                                     'data':energy_source['id__count']})
         women_in_pson_level = []
+        total_fem_posn = 0
         for company in companies:
             queryset_female_posn = FemalesInPosition.objects.filter(
                     company=company,year_fem=get_current_year()).values('company__name').annotate(
@@ -142,7 +146,7 @@ class AllReportPage(LoginRequiredMixin,View):
                     )
             in_med = 0
             in_high = 0
-            total_fem_posn = 0
+            
             for women_data in queryset_female_posn:
                 in_high = int(women_data['high_position'])
                 in_med = int(women_data['med_position'])
@@ -150,12 +154,13 @@ class AllReportPage(LoginRequiredMixin,View):
 
             women_in_pson_level.append({'company':company.name,'sector':company.main_category,'label':'Med Level Positions','data':in_med})
             women_in_pson_level.append({'company':company.name,'sector':company.main_category,'label':'Higher Level Positions','data':in_high})
-        queryset_wh = companies.values('working_hours').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
+        queryset_wh = companies.values('working_hours__name').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
         working_hour_data = []
         total_wh = 0
         for working_hour in queryset_wh:
-            total_wh += int(working_hour['id__count'])
-            working_hour_data.append({'label':CompanyDropdownsMaster.objects.get(id=working_hour['working_hours']),
+            if working_hour['working_hours__name'] != None:
+                total_wh += int(working_hour['id__count'])
+                working_hour_data.append({'label':working_hour['working_hours__name'],
                                     'data':working_hour['id__count']})
         prodn_data = []
         for company in companies:
@@ -574,6 +579,7 @@ class AllReportPage(LoginRequiredMixin,View):
                 energy_source_data.append({'label':CompanyDropdownsMaster.objects.get(id=energy_source['source_of_energy']).name,
                                     'data':energy_source['id__count']})
         women_in_pson_level = []
+        total_fem_posn = 0
         for company in companies:
             queryset_female_posn = FemalesInPosition.objects.filter(
                     company=company,year_fem=current_year).values('company__name').annotate(
@@ -581,7 +587,7 @@ class AllReportPage(LoginRequiredMixin,View):
                     )
             in_med = 0
             in_high = 0
-            total_fem_posn = 0
+            
             for women_data in queryset_female_posn:
                 in_high = int(women_data['high_position'])
                 in_med = int(women_data['med_position'])

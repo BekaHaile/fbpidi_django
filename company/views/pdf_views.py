@@ -245,6 +245,8 @@ class GenerateAllCompanyPdf(View):
                     }
                 )
         average_price_data = []
+        prodn_total = 0
+        price_total = 0
         for product in products:
             pup = 0
             spp = ProductionAndSalesPerformance.objects.filter(product=product,activity_year=current_year).values('product').annotate(

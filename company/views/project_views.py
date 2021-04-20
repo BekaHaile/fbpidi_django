@@ -98,7 +98,6 @@ class CreateInvestmentProjectDetail(LoginRequiredMixin,UpdateView):
         context['employees_form'] = EmployeesFormProject
         context['job_created_form'] = JobCreatedFormProject
         context['edication_form'] = EducationStatusFormProject
-        context['land_aquisition'] = LandAquisitionForm
         context['usage_form'] = LandUsageForm
         context['pstate_form'] = ProjectStatusForm
         context['product_form'] = ProjectProductForm
@@ -141,7 +140,6 @@ class CreateInvestmentProjectDetail_Admin(LoginRequiredMixin,UpdateView):
         context['employees_form'] = EmployeesFormProject
         context['job_created_form'] = JobCreatedFormProject
         context['edication_form'] = EducationStatusFormProject
-        context['land_aquisition'] = LandAquisitionForm
         context['usage_form'] = LandUsageForm
         context['pstate_form'] = ProjectStatusForm
         context['product_form'] = ProjectProductForm
@@ -182,7 +180,6 @@ class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
         context['employees_form'] = EmployeesFormProject
         context['job_created_form'] = JobCreatedFormProject
         context['edication_form'] = EducationStatusFormProject
-        context['land_aquisition'] = LandAquisitionForm
         context['usage_form'] = LandUsageForm
         context['pstate_form'] = ProjectStatusForm
         context['product_form'] = ProjectProductForm
@@ -191,11 +188,6 @@ class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
             context['land_usage_data'] = LandUsage.objects.get(project=self.kwargs['pk'])
         except LandUsage.DoesNotExist:
             context['land_usage_data']=None
-        
-        try:
-            context['land_aqsn_data'] = LandAquisition.objects.get(project=self.kwargs['pk'])
-        except LandAquisition.DoesNotExist:
-            context['land_aqsn_data']=None
         
         try:
             context['inv_cap_data'] = InvestmentCapital.objects.filter(project=self.kwargs['pk']).latest('timestamp')
@@ -347,39 +339,7 @@ class UpdateInvestmentCapitalForProject(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_project",pk=InvestmentCapital.objects.get(id=self.kwargs['pk']).project.id)
 
-@method_decorator(decorators,name='dispatch')
-class CreateLandAcqsn(LoginRequiredMixin,CreateView):
-    model=LandAquisition
-    form_class = LandAquisitionForm
-
-    def form_valid(self,form):
-        try:
-            la = form.save(commit=False)
-            la.project = InvestmentProject.objects.get(id=self.kwargs['project'])
-            la.save()
-            return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
-        except InvestmentProject.DoesNotExist:
-            return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
-        except IntegrityError as e:
-            return JsonResponse({'error':True,'message':'Land Acquisition Data already Exists'})
-
-    def form_invalid(self,form):
-        return JsonResponse({'error':True,'message':form.errors})
-
-@method_decorator(decorators,name='dispatch')
-class UpdateLandAcqsn(LoginRequiredMixin,UpdateView):
-    model=LandAquisition
-    form_class = LandAquisitionForm
-
-    def form_valid(self,form):
-        form.save()
-        messages.success(self.request,"Land Acquisition Data Updated")
-        return redirect("admin:update_project",pk=LandAquisition.objects.get(id=self.kwargs['pk']).project.id)
-    
-    def form_invalid(self,form):
-        messages.warning(self.request,form.errors)
-        return redirect("admin:update_project",pk=LandAquisition.objects.get(id=self.kwargs['pk']).project.id)
-
+ 
 @method_decorator(decorators,name='dispatch')
 class CreateEmployeesProject(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
