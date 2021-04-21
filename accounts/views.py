@@ -130,9 +130,11 @@ def api_activate(request, uidb64, token):
     if user is not None and default_token_generator.check_token(user, token):
         user.is_active = True
         user.save()
-        sendApiWelcomeEmail(request,user,acctivated = True)
+        sendApiWelcomeEmail(request,user)
+        return render(request,'email/confirm_registration_message.html',
+            {'message':"Thank you for your email confirmation. Now you can login to your account."})
     else:
-        sendApiWelcomeEmail(request,user,acctivated = False)
+        sendApiWelcomeEmail(request,user,activated = False)
 
 @method_decorator(decorators,name='dispatch')
 class MyProfileView(LoginRequiredMixin,UpdateView):

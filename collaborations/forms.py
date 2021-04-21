@@ -187,31 +187,15 @@ class CreateChoiceForm(forms.ModelForm):
 class TenderForm(forms.ModelForm):
     # user, bank_account, document
     
-    tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),)
     class Meta:
         model = Tender
-        fields = ('title', 'title_am','description', 'description_am','tender_type',  )
+        fields = ('title', 'title_am','description', 'description_am' )
         widgets = {
                 'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
                 'description':forms.Textarea(attrs={'class':'summernote','placeholder':'description of the Tender'}),
                 'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
                 'description_am':forms.Textarea(attrs={'class':'summernote','placeholder':'description of the Tender in amharic'}),
                 }
-
-class TenderEditForm(forms.ModelForm):
-    # user, bank_account, document
-    tender_type = forms.ChoiceField(choices = [ ('Free', 'Free'), ('Paid', 'Paid')], required=True, widget=forms.RadioSelect(attrs={'type': 'radio'}),) 
-    
-    class Meta:
-        model = Tender
-        fields = ('title', 'title_am','description', 'description_am','tender_type')
-        widgets = {
-                'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title English'}),
-                'description':forms.Textarea(attrs={'class':'summernote'}),
-                'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title Amharic'}),
-                'description_am':forms.Textarea(attrs={'class':'summernote'}),
-            
-            }
 
 
 class TenderApplicantForm(forms.Form):
@@ -394,13 +378,13 @@ class ProjectForm(forms.ModelForm):
 class ResearchForm(forms.ModelForm):
     # description = forms.CharField(widget=SummernoteWidget())
     # detail = forms.CharField(widget=SummernoteWidget())
-    status = forms.ChoiceField(choices = RESEARCH_STATUS, required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
 
+    status = forms.ChoiceField(choices = (('','Select Status'),('Completed','Completed'),('Inprogress','Inprogress')), required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
+    category = forms.ModelChoiceField(queryset=ResearchProjectCategory.objects.all(), empty_label = "Select Research Category", required=True, widget =forms.Select(attrs={'class':'form-control form-control-uniform'}), )
     class Meta:
         model = Research
         fields  = ('title','description','status','category')
         widgets = {
-        'category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
         'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Research'}),
         'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),
         }

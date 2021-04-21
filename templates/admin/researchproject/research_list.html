@@ -34,7 +34,7 @@
 					{% if perms.collaborations.add_research %} 
 					<a href="{% url 'admin:research_form'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Research</a>
-							{%endif%}
+					{%endif%}
 				</div>
 			</div>
 		</div>
@@ -42,27 +42,23 @@
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
+					<th>#</th>
 					<th>Title</th>
 					<th>User</th>
 					<th>Status </th>
 					<th>Accepted </th>
-					<th>Description </th>
 					<th class="text-center">Actions</th>
 				</tr>
 			</thead> 
 			<tbody>
 				{%for research in researchs%}
 				<tr>
-					
+					<td>{{forloop.counter}}</td>
 					<td>{{research.title|truncatechars_html:20}}</td>
 					<td>{{research.created_by.username}}</td>
 					<td>{{research.status}}</td>
-					<td>
-						{{research.accepted}}
-					</td>
-					<td>
-						{{research.description|safe|truncatechars_html:35}}
-					</td>
+					<td>{{research.accepted}}</td>
+					
 					<td class="text-center">
 						<div class="list-icons">
 							<div class="dropdown">

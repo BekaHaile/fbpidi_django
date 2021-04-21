@@ -51,7 +51,9 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 <!-- Content area -->
 <div class="content">
 
-	{% if edit and perms.collaborations.change_tender %}
+	{% if edit %} 
+		{% if user.is_superuser or user.get_company == tender.company %} 
+			{% if perms.collaborations.change_tender %}
 	    
 			<div class="card">
 
@@ -90,52 +92,7 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 										rows="10">{{tender.description_am|safe}}</textarea>
 								</div>
 							</div>
-
-							<!-- tender type -->
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group ">
-										<label class="col-form-label ">{{form.tender_type.label|title}}</label>
-											
-											<span class="form-text text-muted">If you set the type to be free, the document will be downloaded freely</span>
-											
-											{% if tender.tender_type == "Free"%}
-											<input type="radio" id="Free" name="tender_type" value="Free" checked="true">
-											<label for="Free">Free</label><br>
-											<input type="radio" id="edit_paid" name="tender_type" value="Paid" >
-											<label for="edit_paid">Paid</label><br>  
-											<div class="edit-reveal-if-active">
-												<label style="margin-right: 10px;">Document Price: </label>
-												<input type="number" class = "form form-control col-lg-6" required name = "document_price" placeholder="document price" value = "0"/>
-											</div>  
-											{% else %}
-
-											<input type="radio" id="Free" name="tender_type" value="Free" >
-											<label for="Free">Free</label><br>
-											<input type="radio" id="edit_paid" name="tender_type" value="Paid" checked = "true">
-											<label for="edit_paid">Paid</label><br>  
-											<div class="edit-reveal-if-active">
-												<label style="margin-right: 10px;">Document Price: {{tender.document_price}}</label>
-												<input type="number" class = "form form-control col-lg-6" required name = "document_price" placeholder="document price" value = "{{tender.document_price}}"/>
-											</div>
-											{%endif%}
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group ">
-										
-										<label class="col-form-label col-lg-8">Change tender document</label>
-										<input type = "file" name = "document" value="{{tender.document.url}}"/>
-											
-											<span class="form-text text-muted">Accepted formats:pdf, Docx, png, gif</span>
-											<a href="{{tender.document.url}}" target="blank"class=" btn btn-primary rounded-round">Show current document</a>
-											
-										
-									</div>
-								</div>
-							</div>
-							<br><br>
-							
+		
 							<div id='alart' style="display:none;" class="alert alert-danger"  role="alert" >
 								 <p id="alart_message" >   </p>
 							</div>
@@ -184,8 +141,8 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 					<form action="{% url 'admin:tenders' %}" method="GET" enctype="multipart/form-data" >
 						{%csrf_token%}
 						<div class="text-right">
-							<button style="padding-left: 2%; padding-right: 2%; background-color: grey;" type="submit"
-								class="btn btn-primary rounded-round col-lg-2">Cancel </button>
+							<a href = "{% url 'admin:tenders' %}"  onclick="return confirm ('Are you sure you want to Cancel Editing this tender?')" style="padding-left: 2%; padding-right: 2%; background-color: grey;" 
+								class="btn btn-primary rounded-round col-lg-2">Cancel </a>
 						</div>
 					</form>
 					<br>
@@ -193,6 +150,10 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 						
 				</div>
 			</div>
+			{% else %}
+			<h1>You are not permited to edit this tender</h1>
+			{% endif %}
+		{% endif %}
 
 	{%else%}
 		
@@ -229,32 +190,8 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 									{{form.description_am|safe}}
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-md-6">	
-									<div class="form-group ">
-											<label class="col-form-label ">{{form.tender_type.label|title}}</label>
-											<span class="form-text text-muted">If you set the type to be free, the document will be downloaded freely</span>
-											<input type="radio" name="tender_type" id="create_free" value="Free">
-											<label for="create_free">Free</label>
-											<br>
-											<input type="radio" name="tender_type" id="create_paid" value="Paid">
-											<label for="create_paid">Paid</label>
-											<br>
-											<div class="reveal-if-active">
-												<label style="margin-right: 10px;">Document Price:</label>
-												<input type="number" required name = "document_price" placeholder="document price" value="0"/>
-											</div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group ">
-										<label class="col-form-label ">Upload your tender document</label>
-										<input required type = "file" name = "document"  >
-											<span class="form-text text-muted">Accepted formats:pdf, Docx, png, gif</span>
-											<!-- <span class="form-text text-warning">{{form.company_logo.errors}}</span> -->
-									</div>
-								</div>
-							</div>
+						
+
 							<div id='alart' style="display:none;" class="alert alert-danger"  role="alert" >
 								<p id="alart_message" >   </p>
 						   </div>
@@ -301,5 +238,39 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 
 	
 </script>
-<script src="/static/admin/global_assets/js/custom_js/start_date_checker.js"></script>
+<script>
+ $("input[name = 'start_date']").change(function () {check_date_input()})
+	$("input[name = 'end_date']").change(function () {check_date_input()})
+
+  
+function set_alert_message(text)
+{  
+        alert_box = document. getElementById("alart_message")
+        alert_box.innerHTML = text;
+        alert_box.style['display'] = 'block';
+        $("input [type = 'submit']").attr("disabled",  true);
+		$("button[type = 'submit']").attr("disabled", true);
+}
+	
+function check_date_input()
+	{		
+      
+        var start_date = new Date($("input[name = 'start_date']").val()); 
+        var end_date = new Date($("input[name = 'end_date']").val()); 
+        str_today = new Date().toDateString()
+        // new Date() is changed to DateString, inorder to cut of the timezone from the date, as the date from start date and end date is just the date field without time zone
+        today = new Date(str_today)
+       
+    	if (start_date > end_date) {
+            document. getElementById("alart").style.display = "block"; //show
+            set_alert_message("End date must be greater than or equal to start date!!")
+        }
+        else{
+            document. getElementById("alart").style.display = "none"; //hide.
+            $("input[type = 'submit']").attr("disabled",  false);
+			$("button[type = 'submit']").attr("disabled", false);
+            }
+	}
+
+</script>
 {%endblock%}

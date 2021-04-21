@@ -31,14 +31,14 @@
 					
 					<table class="table datatable-show-all">
 						<thead>
-							<tr>
+							<tr><th>#</th>
 								<th>Tender Title</th>
 								<th>Created By</th>
 								<th>Type</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
-								<th>Status</th>
-								<th>No of Applicants</th>
+								<!-- <th>Status</th> -->
+								<!-- <th>No of Applicants</th> -->
 								
 								<th class="text-center">Actions</th>
 								
@@ -48,16 +48,13 @@
 						<tbody>
 							{%for tender in tenders%}
 							<tr>
+								<td>{{forloop.counter}}</td>
 								<td>{{tender.title}}</td>
 								<td>{{tender.get_company.name}}</td>
 								<td>{{tender.tender_type}}</td>	
-
 								<td>{{tender.start_date.date}}</td>
 								<td>{{tender.end_date.date}}</td>
-								<td>{{tender.status}}</td>
-								<td>{{tender.get_applications.count}}</td>
-								
-								
+								<!-- <td>{{tender.status}}</td> -->
 								<td class="text-center">
 									<div class="list-icons">
 										<div class="dropdown">

@@ -31,7 +31,8 @@
 					<table class="table datatable-show-all">
 						<thead>
 							<tr>
-								<th>Images</th>
+								<th>#</th>
+								<!-- <th>Images</th> -->
                                 <th>News Title</th>
                                 <th>News Title (Amharic)</th>
                                 <th>Created By</th>
@@ -43,12 +44,14 @@
 						<tbody>
 							
 								{%for news in newslist%}
+									
 									<tr>
-										{% if news.get_images %}
+										<td>{{forloop.counter}}</td>
+										<!-- {% if news.get_images %}
 										<td><a href="#"><img src="{{news.get_single_image}}" alt="Image" width="100" height="70"></a></td>
 										{% else %}
 										<td><a href="#"><img src="{{news.get_company.get_image}}" alt="Image" width="100" height="70"></a></td>
-										{% endif %} 
+										{% endif %}  -->
 										<td><b>{{news.title}}</b></td>
 										<td><b>{{news.title_am}}</b></td>
 										<td><b>{{news.get_company.name}}</b></td>
@@ -64,7 +67,7 @@
 															
 														{% if user.is_superuser or user.get_company == news.get_company %}
 															{% if perms.collaborations.change_news %}		
-															<a href="{%url 'admin:edit_news' id=news.id%} " class="dropdown-item"><i class="icon-pencil"></i>Edit News</a>
+															<a href="{%url 'admin:edit_news' id=news.id%} " class="dropdown-item"><i class="icon-pencil"></i>View/ Edit News</a>
 															{% endif %}
 
 															{% if perms.collaborations.delete_news %}

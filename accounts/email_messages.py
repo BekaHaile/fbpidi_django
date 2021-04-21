@@ -24,9 +24,12 @@ def sendEmailVerification(request,user):
         )
         email.content_subtype = "html"
         email.send()
+        print("email sent")
         return email
-    except Exception:
-        return
+
+    except Exception as e :
+        print ("Exception sending email ",e)
+        return 
 
 def sendApiEmailVerification(request,user):
     try:
@@ -41,13 +44,17 @@ def sendApiEmailVerification(request,user):
 
         to_email = user.email
         email = EmailMessage(
-        mail_subject, message, to=[to_email]
+        mail_subject, message,   to=["antenyismu@gmail.com"]
         )
         email.content_subtype = "html"
-        email.send()
+        try:
+            email.send()
+        except Exception as e:
+            print("###### exception on email.send ",e)
+            return False
         return True
     except Exception as e:
-        print("##### Exception while sending verification email ",e)
+        print("##### This is the Exception ",e)
         return False
 
 

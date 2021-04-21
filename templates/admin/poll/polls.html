@@ -30,9 +30,8 @@
 
 					<table class="table datatable-show-all">
 						<thead>
-							<tr>
+							<tr><th>#</th>
 								<th>Poll Title</th>
-                                <th>Description</th>
                                 <th>Choices</th>
                                 <th>Votes</th>
 								<th>Created By</th>
@@ -44,9 +43,9 @@
 					
 							{%for poll in polls%}
 							<tr>
+								<td>{{forloop.counter}}</td>
 								<td>{{poll.title}}</td>
-								<td><div class="summernote">{{poll.description|safe|truncatechars_html:5}}</div></td>
-                                <td>{{poll.count_choices}}</td>
+								<td>{{poll.count_choices}}</td>
                                 <td>{{poll.count_votes}}</td>
                                 <td>{{poll.created_by.username}}</td>
 								<td><span class="badge badge-success">{{poll.created_date}}</span></td>

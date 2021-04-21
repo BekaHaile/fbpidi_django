@@ -46,25 +46,23 @@
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
+					<th>#</th>
 					<th>Status</th>
 					<th>company</th>
 					<th>Questions_am</th>
 					<th>Questions</th>
-					<th>Answers_am </th>
-					<th>Answers</th>
-				
 					<th class="text-center">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				{%for faq in faqs%}
 				<tr>
+					<td>{{forloop.counter}}</td>
 					<td>{{faq.status}}</td>
 					<td>{{faq.company}}</td>
 					<td>{{faq.questions_am|safe|truncatechars_html:20}}</td>
         			<td>{{faq.questions|safe|truncatechars_html:20}}</td>
-        			<td>{{faq.answers_am|safe|truncatechars_html:20}}</td>
-        			<td>{{faq.answers|safe|truncatechars_html:20}}</td>
+        			
 					
 					<td class="text-center">
 						<div class="list-icons">

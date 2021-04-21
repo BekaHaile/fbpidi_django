@@ -123,7 +123,7 @@ class Blog(models.Model):
         return self.blogcomment_set.all().count()
 
     def comments(self):
-        return self.blogcomment_set.all()
+        return self.blogcomment_set.all()[:7]
 
 
 class BlogComment(models.Model):
@@ -174,13 +174,13 @@ class Tender(models.Model):
     title_am = models.CharField( max_length=200, verbose_name="Tender title(Amharic)" )
     description = models.TextField( verbose_name="Tender Description(English)" )
     description_am = models.TextField( verbose_name="Tender Description(Amharic)" )
-    document = models.FileField(upload_to = "TenderDocuments/", max_length=254, verbose_name="Tender document",help_text="pdf, Max size 3MB", blank=True)
+    document = models.FileField(upload_to = "TenderDocuments/", max_length=254, verbose_name="Tender document",help_text="pdf, Max size 3MB", blank=True, null=True)
     tender_type = models.CharField(max_length=4, verbose_name="Tender type", choices=[ ('Free', 'Free'), ('Paid', 'Paid')], default="Free" )
     document_price = models.FloatField(verbose_name="documnet price (for paid tenders)", max_length = 6, default=0)
     status = models.CharField(max_length=10, verbose_name="Tender status", choices=[
                                                                                         ('Upcoming', 'Upcoming'),('Open', 'Open' ), 
                                                                                         ('Closed', 'Closed'), ('Suspended', 'Suspended')
-                                                                                    ])
+                                                                                    ], default='Open')
     #if we r using the company logo there is no need to save it twice, we can get it from user.company.get_image()   
     #image = models.ImageField(verbose_name="Company image",help_text="png,jpg,gif files, Max size 10MB") 
     bank_account = models.ManyToManyField('company.CompanyBankAccount', related_name="accounts")
@@ -242,7 +242,7 @@ class JobCategory(models.Model):
         
 
 class Vacancy(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
     location = models.CharField(max_length=1000)
     salary = models.IntegerField(null=True,default=0)
     category = models.ForeignKey(JobCategory, on_delete=models.CASCADE)

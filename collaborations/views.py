@@ -25,7 +25,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView, DetailView,
 
 from admin_site.decorators import company_created,company_is_active
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
-from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
+from .forms import PollsForm, TenderForm,  CreateJobApplicationForm
 from collaborations.forms import (BlogsForm, BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm,ForumQuestionForm,CommentForm,CommentReplayForm,NewsForm, CompanyEventForm, EventParticipantForm, 
 								AnnouncementForm,ResearchForm,ResearchProjectCategoryForm, TenderApplicantForm, PollsForm, CreatePollForm, CreateChoiceForm, DocumentForm )
 
@@ -246,8 +246,6 @@ class IndexSearch(View):
         
 
 
-
-
 class CustomerPollList(View):
     def get(self, *args, **kwargs):
         result ={}
@@ -341,22 +339,10 @@ class CreateTender(LoginRequiredMixin,View):
             form = TenderForm(self.request.POST)       
             if form.is_valid():
                 tender = form.save(commit=False)
-                tender.created_by = self.request.user
-                if  self.request.FILES['document']:
-                    tender.document = self.request.FILES['document']
-                if self.request.POST['tender_type'] == "Paid":
-                    tender.document_price = self.request.POST['document_price']
-                else:
-                    tender.document_price = 0     
+                tender.created_by = self.request.user 
                 tender.start_date = change_to_datetime(self.request.POST['start_date'])
                 tender.end_date = change_to_datetime(self.request.POST['end_date'])
                 today = datetime.datetime.now().date()
-                if today < tender.start_date.date():
-                    tender.status = "Upcoming"
-                elif tender.start_date.date() <= today and today <=tender.end_date.date():
-                    tender.status = "Open"
-                elif today > tender.end_date.date():
-                    tender.status = "Closed"
                 tender.save()                  
                 messages.success(self.request,"Tender Successfully Created")
                 return redirect("admin:tenders")   
@@ -375,10 +361,14 @@ class TenderList(LoginRequiredMixin, ListView):
     template_name = "admin/collaborations/tenders.html"
     context_object_name = 'tenders'  
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return Tender.objects.all() 
-        else:
-            return Tender.objects.filter(company = self.request.user.get_company()) 
+        try:
+            if self.request.user.is_superuser:
+                return Tender.objects.all() 
+            else:
+                return Tender.objects.filter(company = self.request.user.get_company())
+        except Exception as e:
+            print("Exception while listing admin tenders ",e)
+            return [] 
 
 
 @method_decorator(decorators,name='dispatch')
@@ -397,13 +387,13 @@ class EditTender(LoginRequiredMixin,View):
         try:
             tender = Tender.objects.get(id =self.kwargs['id'] )
             banks= Bank.objects.all() # if there will be a scenario where the admin needs to add register new bank account
-            return render(self.request,'admin/collaborations/create_tender.html', {'form':TenderEditForm(),'tender':tender,'edit':True})
+            return render(self.request,'admin/collaborations/create_tender.html', {'form':TenderForm(),'tender':tender,'edit':True})
         except Exception as e:
             print("Exception at Edit Tender,get ", e)
             return redirect("admin:error_404")
 
     def post(self,*args,**kwargs):  
-        form = TenderEditForm(self.request.POST)                       
+        form = TenderForm(self.request.POST)                       
         if form.is_valid():
             try:
                 tender= Tender.objects.get(id = self.kwargs['id'])            
@@ -411,24 +401,8 @@ class EditTender(LoginRequiredMixin,View):
                 tender.title_am = self.request.POST['title_am']
                 tender.description = self.request.POST['description']
                 tender.description_am = self.request.POST['description_am']
-                tender.tender_type = self.request.POST['tender_type']
-                tender.start_date = change_to_datetime(self.request.POST['start_date'])
+                tender.start_date = change_to_datetime(self.request.POST['start_date']) # using this to store a date without timezone
                 tender.end_date = change_to_datetime(self.request.POST['end_date'])
-                if self.request.POST["tender_type"] == "Free":
-                    tender.document_price = 0
-                else:
-                    tender.document_price = self.request.POST["document_price"]
-                if self.request.FILES:
-                    tender.document = self.request.FILES['document'] 
-
-                today = datetime.datetime.now().date()
-                if today < tender.start_date.date():
-                    tender.status = "Upcoming"
-                elif tender.start_date.date() <= today and today <=tender.end_date.date():
-                    tender.status = "Open"
-                elif today > tender.end_date.date():
-                    tender.status = "Closed"
-               
                 tender.last_updated_by = self.request.user
                 tender.last_updated_date = timezone.now()
                 tender.save()
@@ -439,7 +413,8 @@ class EditTender(LoginRequiredMixin,View):
             messages.success(self.request,"Tender Successfully Edited")
             return redirect("admin:tenders") 
         else:
-            messages.warning(self.request, "Error! Tender was not Edited!" )
+            print("####",form.errors)
+            messages.warning(self.request, "Error! Tender was not Edited!", )
             return redirect("admin:tenders")
 
 ######## Tender for customers
@@ -457,8 +432,6 @@ class CustomerTenderList(View):
                 result = filter_by('status', ['Open', 'Upcoming'], by_type['query'])
             else:
                 result = SearchByTitle_All('Tender', self.request)
-            # if  result['query'].count() == 0:
-            #     result['query'] = Tender.objects.filter( Q(status='Open') | Q(status = 'Upcoming') )
             companies = []
             for comp in Company.objects.all():
                 if comp.tender_set.count() > 0:

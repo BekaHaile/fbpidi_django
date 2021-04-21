@@ -203,6 +203,7 @@ class ApiProductByMainCategory(APIView):
             if 'by_company' in request.query_params:
                 companies = Company.objects.filter( Q(name__in = request.query_params['by_company'].split(',')[:-1] )| Q(name_am__in =request.query_params['by_company'].split(',')[:-1]) )
                 products = products.filter(company__in = companies)
+            
 
             products=get_paginated_data(request, products)
             return Response( data = {'error': False, 'paginator':get_paginator_info(products), 'count':len(products), 
