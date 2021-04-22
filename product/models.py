@@ -249,7 +249,8 @@ class OrderProduct(models.Model):
 
 class ProductInquiry(models.Model):
     sender_email = models.EmailField(verbose_name="sender email",)
-    product = models.ForeignKey(Product, on_delete = models.CASCADE)
+    product = models.ForeignKey(Product, on_delete = models.CASCADE, blank = True, null = True)
+    category = models.ForeignKey(Category, on_delete = models.CASCADE, blank = True, null = True)
     subject = models.CharField(max_length=200,)
     quantity = models.IntegerField()
     pieces = models.CharField(max_length=100)
@@ -259,13 +260,16 @@ class ProductInquiry(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
 
     def save(self):
-        self.pieces = self.product.brand.product_type.uom.name
-        super(ProductInquiry, self).save()
+        if self.product :
+            self.pieces = self.product.brand.product_type.uom.name
+            super(ProductInquiry, self).save()
+        else:
+            super(ProductInquiry, self).save()          
 
 class ProductInquiryReply(models.Model):
     inquiry = models.ForeignKey(ProductInquiry, on_delete = models.CASCADE)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
     reply = models.TextField()
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -176,7 +176,7 @@ class IndexSearch(View):
     def get(self, *args, **kwargs):
         result = {}
         total = 0
-        print(self.request.GET)
+    
         
         if 'by_title' in self.request.GET and 'by_model' in self.request.GET:
             model = self.request.GET['by_model']
@@ -241,6 +241,7 @@ class IndexSearch(View):
         else:
             data['message'] = f"{total} result found"
             data['message_am'] = f"{total} ውጤት ተገኝቷል"
+        data['searched_name'] = self.request.GET['by_title']
 
         return render(self.request, "frontpages/index_search_page.html",data)
         

@@ -12,7 +12,8 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class=""><span class="font-weight-bold">{{object_list.count}}</span> Products available</h1>
+									
+									<h1 class=""><span class="font-weight-bold">{{object_list.count}}</span> {% trans "Products available" %}</h1>
 								</div>
 								<div class="search-background px-4 py-3 mt-4">
 									<form action="{%url 'search_product'%}" method="GET">
@@ -23,8 +24,8 @@
 										<div class="form-group col-xl-4 col-lg-4 select2-lg  col-md-12 mb-0 border-white">
 											<select name="sector" class="form-control select2-show-search w-100" data-placeholder="Select">
 												<optgroup label="Categories">
-													<option>Select</option>
-													<option value="">All Categories</option>
+													<option>{% trans "Select" %}</option>
+													<option value="">{% trans "All Categories" %}</option>
 													{%for sub_sec in sub_sectors%}
 													<option value="{{sub_sec.id}}">{{sub_sec.category_name}}</option>
 													{%endfor%}
@@ -32,7 +33,7 @@
 											</select>
 										</div>
 										<div class="col-xl-2 col-lg-3 col-md-12 mb-0">
-											<button type="submit" class="btn btn-lg btn-block btn-secondary">Search</button>
+											<button type="submit" class="btn btn-lg btn-block btn-secondary">{% trans "Search" %}</button>
 										</div>
 									</div>
 								</form>
@@ -236,27 +237,19 @@
 															<div class="card border-0 mb-0">
 																<div class="card-body">
 																	<div class="item-card9">
-																		hhhhhhhhhhh
-																		{{product.rating}}
-																		<a target="_blank" href="{%url 'product_detail'  pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
+																
+																	
+																		<a target="_blank" href="{%url 'product_detail'  pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}</h4></a>
 																		<div class="rating-stars d-flex mr-5">
 																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="1">
 																			<div class="rating-stars-container mr-2">
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
-																				<div class="rating-star sm">
-																					<i class="fa fa-star"></i>
-																				</div>
+																				{% get_looper_object product.rating as rates %}
+																				{% for i in rates %}
+																					<div class="rating-star sm">
+																						<i class="fa fa-star"></i>
+																					</div>
+																				{% endfor %}
+																			
 																			</div> <a class="fs-13 leading-tight mt-1" href="#">{{product|review_count}} Reviews</a>
 																		</div>
 																		<div class="mt-2 mb-2">
@@ -335,7 +328,7 @@
 										<input required type="text" name= "name" class="form-control br-tl-3 br-bl-3" placeholder="Search">
 										<div class="input-group-append ">
 											<button type="submit" class="btn btn-secondary br-tr-3 br-br-3">
-												Search
+												{% trans "Search" %}
 											</button>
 										</div>
 									</div>
@@ -344,18 +337,50 @@
                         </div>
                         <div class="card mb-0">
                             <div class="card-header">
-                                <h3 class="card-title">Categories</h3>
+                                <h3 class="card-title">{% trans " List By Categories" %}</h3>
                             </div>
                             <div class="card-body">
                                 <div class="" id="container">
                                     <div class="filter-product-checkboxs">
-                                        {%for category in categories%}
+                                         {%for category in sub_sectors%}
                                         <label class="custom-control custom-checkbox mb-3">
-                                            <input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
+                                            
                                             <span class="custom-control-label">
-												<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{{category.category_name|truncatechars_html:20}}</a>
+												<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.category_name|truncatechars_html:20  category.category_name_am|truncatechars_html:20 LANGUAGE_CODE %}</a>
 											</span>
                                         </label>
+                                        {%endfor%}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+						<br>
+						<div class="card mb-0">
+                            <div class="card-header">
+                                <h3 class="card-title">{% trans "Send Inquiry By Sub-Sector" %}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="" id="container">
+                                    <div class="filter-product-checkboxs">
+                                         {%for category in sub_sectors%}
+										 <form action = "{%url 'category_inquiry_form' %}" method ="GET">
+											<label class="custom-control custom-checkbox mb-0">
+											
+												<span class="custom-control-label">
+													<input type="hidden" name ="category" value = "{{category.id}}"/>
+													<a class="text-dark">{% print_translated category.category_name|truncatechars_html:20  category.category_name_am|truncatechars_html:20 LANGUAGE_CODE %}</a>
+													<span class="custom-control-label">
+														<button class="badgetext badge badge-pill mb-1 mt-1 " type="submit"
+														style="border:none; color :white; padding: 7px;background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Inquiry" %}</button>
+
+														<!-- <a  stle="color:white">{{cat}}<span style = "background-color: blue;" class="badgetext badge badge-pill badge-light mb-0 mt-1">{% trans "Send Inquiry" %}</span></a> -->
+													</span>
+													
+												</span>
+											</label>
+										</form>
+										<hr>
                                         {%endfor%}
                                     </div>
                                 </div>
