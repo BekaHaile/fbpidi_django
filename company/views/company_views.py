@@ -119,9 +119,11 @@ class CompanyInquiryList(ListView):
         try:
          
             company = self.request.user.get_company()
-            print("#######", company)
+            categories = [c.id for c  in company.category.all()]
+            print(categories)
+            
             q = Q( Q( product__company = self.request.user.get_company().id) | 
-                    Q( category = self.request.user.get_company().category.id))
+                    Q( category__in = categories))
             if 'replied_only' in self.request.GET:
                 
                 return ProductInquiry.objects.filter(q, replied =True).distinct()

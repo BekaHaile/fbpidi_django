@@ -90,7 +90,7 @@
                         <th>#</th>
                         <th><b>Sender Email</b></th>
                         <th><b>Subject</b></th>
-                        <th><b>Product</b></th>
+                        <th><b>Product/Category</b></th>
                         <th><b>Quantity</b></th>
                         <th><b>Status</b></th>
                         <th><b>Request Date</b></th>
@@ -118,7 +118,11 @@
                                     </a>
                                 </td>
                                 <td class="table-inbox-message">
-                                    {{inquiry.product.name}}
+                                    {% if inquiry.product %}
+                                        {{inquiry.product.name|safe|truncatechars_html:10}} (product)
+                                    {% else %} 
+                                    {{inquiry.category.category_name|safe|truncatechars_html:10 }} (Category)
+                                    {% endif %}
                                 </td>
 
                                 <td class="table-inbox-message">
