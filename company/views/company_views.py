@@ -18,6 +18,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.core import serializers
+from django.template.loader import render_to_string,get_template
+from django.core.mail import EmailMessage
 
 from company.models import *
 from accounts.models import CompanyAdmin,User
@@ -115,11 +117,19 @@ class CompanyInquiryList(ListView):
     template_name = "admin/company/inquiry_list.html"
     def get_queryset(self):
         try:
+         
+            company = self.request.user.get_company()
+            categories = [c.id for c  in company.category.all()]
+            print(categories)
+            
+            q = Q( Q( product__company = self.request.user.get_company().id) | 
+                    Q( category__in = categories))
             if 'replied_only' in self.request.GET:
-                return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id, replied =True)
+                
+                return ProductInquiry.objects.filter(q, replied =True).distinct()
             elif 'unreplied_only' in self.request.GET:
-                return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id, replied = False)
-            return ProductInquiry.objects.filter(product__company = self.request.user.get_company().id)
+                return ProductInquiry.objects.filter(q, replied = False).distinct()
+            return ProductInquiry.objects.filter(q).distinct()
         except Exception as e:
             print("@@@@@@ Exception inside CompanyInquiryList ",e)
             return []
@@ -139,6 +149,7 @@ class CompanyInquiryReply(View):
                 else:
                     reply= ProductInquiryReply(created_by=self.request.user, inquiry=sender_inquiry, reply =reply_message)
                     reply.save()
+
                 sender_inquiry.replied = True
                 sender_inquiry.save()
                 messages.success(self.request, f"Successfully, replied to {sender_inquiry.sender_email}")
@@ -152,13 +163,40 @@ class CompanyInquiryReply(View):
 
 
 
+
 def Subscribe(request):
     if request.method=="POST":
         try:
             data = json.loads(request.body)
             subscription = CompanySubscription( email=data['email'])
-            subscription.save()
-            return JsonResponse(data={'error':False, 'message':'Successfull Subscription! '}, safe=False )
+            try:
+               
+                mail_subject = f"New Blogs of the Week from FBPIDI.{data['email']}"
+                message = get_template('email/acct_activate_email.html').render({
+                    'user': "user bota",
+                    'domain': "FBPIDI",
+                    'uid': "uid",
+                    'token': "some token",
+                })
+
+               
+                email = EmailMessage(
+                mail_subject, message, to=["antenyismu@gmail.com","333333333","labme777@gmail.com"])
+                email.content_subtype = "html"
+                try:
+                    email.send(fail_silently=False)
+                except Exception as e:
+                    print("Excepion at send",e)
+
+                subscription.save()
+                return JsonResponse(data={'error':False, 'message':'Successfull Subscription! '}, safe=False )
+                
+
+            except Exception as e :
+                print ("Exception sending email ",e)
+                return JsonResponse(data={'error':True, 'message':'Error Subscription! '}, safe=False )
+            
+
         except Exception as e:
             return JsonResponse(data={'error':True, 'message':f'The exception is {str(e)}'},  safe=False )
 

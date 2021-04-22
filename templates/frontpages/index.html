@@ -93,20 +93,20 @@
 									<form action="{%url 'index_search'%}" method="GET">
 										<div class="form row">
 											<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
-												<input type="text" class="form-control  " name = "by_title" id="text9"
-													placeholder="{% trans 'Enter Your Others Keywords' %}">
+												<input required type="text" name="by_title" class="form-control  " id="text8"
+													placeholder="{% trans 'Search from collaborations' %}">
 											</div>
 											<div class="form-group col-xl-6 col-lg-7 col-md-12 mb-0">
 												<div class="row">
 													<div class="form-group col-xl-8 col-lg-7 col-md-12 mb-0">
-														<select 
+														<select name="by_model" required
 															class="form-control select2-show-search  border-bottom-0 br-lg-0"
-															data-placeholder="Select Category">
-															<optgroup label="Categories">
-																<option>{% trans "Select Category" %}</option>
-																<option value="">All Categories</option>
-																{%for sub_sec in sub_sectors%}
-																<option value="{{sub_sec.id}}">{{sub_sec.category_name}}</option>
+															data-placeholder="Select Modules">
+															<optgroup label= "{% trans 'Modules' %}">
+																<option >{% trans "Select Module" %}</option>
+																<option value="All">{% trans "All" %}</option>
+																{%for module in modules %}
+																<option value="{{module}}">{% trans module %}</option>
 																{%endfor%}
 															</optgroup>
 														</select>
@@ -673,7 +673,15 @@
 							</div>
 							<h4 class="mb-4 fs-20">{% trans "New User"%}</h4>
 							<p>{% trans "it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text" %}</p>
-							<a href="{%if not user.is_authenticated%}{%url 'register'%}{%else%}#{%endif%}" class="btn btn-primary text-white px-6">{% trans "Register" %}</a>
+							
+							<a href="{%if not user.is_authenticated%}{%url 'register'%}{%else%}#{%endif%}" class="btn btn-primary text-white px-6">
+								{% if not user.is_authenticated %}
+									{% trans "Register" %}
+								{% else %}
+									{% trans "Thanks for registering" %}
+								{% endif %}
+							</a>
+							
 						</div>
 					</div>
 				</div>
@@ -687,7 +695,7 @@
 	<div class="container">
 		<div class="section-title center-block text-center">
 			<h2>{% trans "Latest News" %}</h2>
-			<p>{% trans "In Ethiopian Food, Beverage and Pharmaceutical Industry." %}</p>
+			<p>{% trans "Latest News From Food, Beverage and Pharmaceutical Industries In Ethiopia." %}</p>
 		</div>
 		<div>
 			<div class="items-gallery">

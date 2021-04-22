@@ -964,6 +964,7 @@ def FetchInquiryProducts(request):
     products = Product.objects.filter(id__in = product_list).distinct()
     return JsonResponse( p_serializer(products, many = True).data, safe = False)
 
+# this function is used, because to convert the list of string ids to integer and to cut the last , off
 def get_id_list(str_id):
     prods_id_list = str_id[:-1] 
     product_ids = prods_id_list.split(",")
@@ -999,6 +1000,45 @@ class InquiryRequest(LoginRequiredMixin, View):
             print("@@@ Exception ",e)
             return redirect("index")
     
+class InquiryByCategory(LoginRequiredMixin, View):
+
+    def get(self, *args, **kwargs):
+        print("########", self.request.GET)
+        category = self.request.GET.getlist('category')[0]
+        print("########", category)
+        companies = Company.objects.filter(category = category )
+        company_ids = [c.id for c in companies ]
+        context = {'company_ids':company_ids,'count':len(company_ids),'category':category,'form':ProductInquiryForm}
+        print("######", company_ids)
+        return render(self.request, "frontpages/product/category_inquiry_form.html", context)
+
+        # try:
+            
+        # except Exception as e:
+        #     print("@@@@@@ Exception at InquiryByCategory get ",e)
+        #     return redirect ('index')
+    
+    def post(self, *args,**kwargs):
+        
+            print("###############companies", self.request.POST["category"])
+            
+            category = Category.objects.get(id = int(self.request.POST['category']))
+            print("### cat", category)
+            
+            companies = category.company_category.all()
+            print("!!!!!!!!!!!!!",companies)
+            form = ProductInquiryForm(self.request.POST)
+            if form.is_valid:
+                for c in companies:       
+                    item = form.save(commit = False)
+                    item.category = category
+                    item.save()
+            else:
+                print("form invalid")
+            return render(self.request, "frontpages/product/success_inquiry.html",{ 'email':self.request.POST['sender_email'], 'prod_id_list': [] })
+        # except Exception as e:
+        #     print("@@@ Exception ",e)
+        #     return redirect("index")
 
 @login_required
 def LikeProduct(request):
@@ -1048,6 +1088,7 @@ class ProductByMainCategory(ListView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
+        print("######### ", self.kwargs['option'])
         context['categories'] = Category.objects.filter(category_type=self.kwargs['option'])
         return context
 
@@ -1083,16 +1124,17 @@ class SearchProduct(View):
     def get(self,*args,**kwargs):
         template_name = "frontpages/product/product_category.html"
         products = Product.objects.all()
-        if self.request.GET['name'] != '':
+        if 'name' in self.request.GET and self.request.GET['name'] != '':
             products = Product.objects.filter(
                 Q(name__icontains=self.request.GET['name'])|Q(name_am__icontains=self.request.GET['name'])|Q(brand__brand_name__icontains=self.request.GET['name'])|Q(brand__product_type__sub_category_name__icontains=self.request.GET['name'])
                 ).distinct()
         try:
-            if self.request.GET['sector'] !='' or self.request.GET['sector'] != "Select":
-                products = products.filter(Q(brand__product_type__category_name__id=self.request.GET['sector']))
+            if 'sector' in self.request.GET:
+                if self.request.GET['sector'] !='' or self.request.GET['sector'] != "Select":
+                    products = products.filter(Q(brand__product_type__category_name__id=self.request.GET['sector'])).distinct()
         except ValueError as e:
             products = products 
-        return render(self.request,template_name,{'object_list':products})
+        return render(self.request,template_name,{'object_list':products, })
         
 class ProductDetailView(DetailView):
     model = Product

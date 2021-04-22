@@ -1,5 +1,5 @@
 from django.urls import path,include
-from product.views.views import  (AddToCartView,CartSummary,DecrementFromCart,CheckoutView,SearchProduct,
+from product.views.views import  (AddToCartView,CartSummary,DecrementFromCart,CheckoutView,SearchProduct,InquiryByCategory,
  ProductDetailView, ProductByCategoryView, ProductByMainCategory,CreateReview, FetchInquiryProducts, InquiryRequest, LikeProduct)
 
 
@@ -17,6 +17,9 @@ urlpatterns = [
 
     path("fetch_inquiry_products/", FetchInquiryProducts, name = "fetch_inquiry_products"),
     path("inquiry_form/", InquiryRequest.as_view(), name = "inquiry_form"),
+    
+    path("category_inquiry_form/", InquiryByCategory.as_view(), name = "category_inquiry_form"),
+    
     path('like_product/', LikeProduct, name = "like_product"),
     
 

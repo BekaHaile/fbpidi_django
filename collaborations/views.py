@@ -25,7 +25,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView, DetailView,
 
 from admin_site.decorators import company_created,company_is_active
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
-from .forms import PollsForm, TenderForm, TenderEditForm, CreateJobApplicationForm
+from .forms import PollsForm, TenderForm,  CreateJobApplicationForm
 from collaborations.forms import (BlogsForm, BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm,ForumQuestionForm,CommentForm,CommentReplayForm,NewsForm, CompanyEventForm, EventParticipantForm, 
 								AnnouncementForm,ResearchForm,ResearchProjectCategoryForm, TenderApplicantForm, PollsForm, CreatePollForm, CreateChoiceForm, DocumentForm )
 
@@ -95,7 +95,6 @@ def SearchByTitle_All(model_name, request ):
             query = model.objects.filter( Q(title__icontains = filter_key) | Q(title_am__icontains = filter_key) |Q(description__icontains = filter_key ) | Q(description_am__icontains = filter_key) ).distinct() 
             # if there is no match for the filter_key or there is no filter_key at all
             if query.count() == 0: 
-                query = []
                 return { 'query': query, 'message': f"No match containing '{filter_key}'!", 'message_am': f"ካስገቡት ቃል '{filter_key}' ጋር የሚገናኝ አልተገኘም፡፡ !" }       
             return { 'query': query, 'message': f"{query.count()} result found!", 'message_am': f"{query.count()} ውጤት ተገኝቷል!" }
     except Exception as e:
@@ -153,58 +152,99 @@ def filter_by(field_name, field_values, query):
 def get_paginated_data(request, query):
     page_number = request.GET.get('page', 1)
     try:
-        return Paginator(query, 2).page(page_number)
+        return Paginator(query, 1).page(page_number)
     except Exception as e:
         print("exception at get_paginate_data ",e)
         return Paginator(query, 2).page(1)
 
 
 class IndexSearch(View):
+    modules =  [('News','customer_news_list'),('Event','customer_event_list'),('Announcement','announcement_list'),('Polls','polls'),
+                ('Tender','tender_list'),('Vacancy','vacancy'),('Blog','customer_blog_list'),('Research','research_list'), ('Forum','forum_list')]
+
+    title_models = ['News','Event','Announcement','Polls','Tender','Vacancy']
+    def blog_search(self):
+        q = Q( Q(title__icontains = self.request.GET['by_title']) | Q(title_am__icontains = self.request.GET['by_title']) )
+        return Blog.objects.filter(q)    
+    
+    def forum_search(self):
+        return ForumQuestion.objects.filter(title__icontains = self.request.GET['by_title'])
+    
+    def research_search(self):
+        return Research.objects.filter(Q(title__icontains = self.request.GET['by_title']))
+
     def get(self, *args, **kwargs):
         result = {}
         total = 0
-        print(self.request.GET)
+    
+        
         if 'by_title' in self.request.GET and 'by_model' in self.request.GET:
-            pass
-        elif 'by_title' in self.request.GET:
-            title_models = ['News','Event','Announcement','Polls','Tender','Vacancy']
-            for model in title_models:
+            model = self.request.GET['by_model']
+            if model in self.title_models:
                 model_query =  SearchByTitle_All(model, self.request)['query']
                 if model_query.count() > 0:
                     total+= model_query.count()
                     result[model] = model_query
 
-            # search blogs
-            q = Q( Q(title__icontains = self.request.GET['by_title']) | Q(title_am__icontains = self.request.GET['by_title']) )
-            blog_query = Blog.objects.filter(q)
-            if blog_query.count()>0:
-                total+= blog_query.count()
-                result['Blog'] = blog_query
+            elif model == "Blog":
+                blog_query = self.blog_search()
+                if blog_query.count()>0:
+                    total+= blog_query.count()
+                    result['Blog'] = blog_query
+
+            elif model == "Forum":
+                forum_query = self.forum_search()
+                if forum_query.count() > 0:
+                    total+= forum_query.count()
+                    result['Forum'] = forum_query
+
+            elif model == "Research":
+                research_query = self.research_search()
+                if research_query.count() > 0:
+                    total+= research_query.count()
+                    result['Research'] = research_query
+
+            else: #if All
+                for model in self.title_models:
+                    model_query =  SearchByTitle_All(model, self.request)['query']
+                    if model_query.count() > 0:
+                        total+= model_query.count()
+                        result[model] = model_query
+                    
+                blog_query = self.blog_search()
+                if blog_query.count()>0:
+                    total+= blog_query.count()
+                    result['Blog'] = blog_query
+                
+                research_query = self.research_search()
+                if research_query.count() > 0:
+                    total+= research_query.count()
+                    result['Research'] = research_query
+                
+                forum_query = self.forum_search()
+                if forum_query.count() > 0:
+                    total+= forum_query.count()
+                    result['Forum'] = forum_query
             
-            # search Reseach
-            research_query = Research.objects.filter(Q(title__icontains = self.request.GET['by_title']))
-            if research_query.count() > 0:
-                total+= research_query.count()
-                result['Research'] = research_query
-            
-            # Search forum
-            forum_query = ForumQuestion.objects.filter(title__icontains = self.request.GET['by_title'])
-            if forum_query.count() > 0:
-                total+= forum_query.count()
-                result['Forum'] = forum_query
+            # if model_query.count() > 0:
+            #         total+= model_query.count()
+            #         result[model] = model_query
           
+        else:
+            return redirect("/")
+        
         data = result
-        data['models'] = result.keys()
+        data['modules'] = self.modules
         if total == 0:
-            data['message'] = "No result found in collaborations"
+            data['message'] = "No result found!"
             data['message_am']= "ምንም ውጤት አልተገኝም"
         else:
             data['message'] = f"{total} result found"
             data['message_am'] = f"{total} ውጤት ተገኝቷል"
-        print ("###################",data)
-        return render(self.request, "frontpages/others_search_list.html",data)
+        data['searched_name'] = self.request.GET['by_title']
 
-
+        return render(self.request, "frontpages/index_search_page.html",data)
+        
 
 
 class CustomerPollList(View):
@@ -300,22 +340,10 @@ class CreateTender(LoginRequiredMixin,View):
             form = TenderForm(self.request.POST)       
             if form.is_valid():
                 tender = form.save(commit=False)
-                tender.created_by = self.request.user
-                if  self.request.FILES['document']:
-                    tender.document = self.request.FILES['document']
-                if self.request.POST['tender_type'] == "Paid":
-                    tender.document_price = self.request.POST['document_price']
-                else:
-                    tender.document_price = 0     
+                tender.created_by = self.request.user 
                 tender.start_date = change_to_datetime(self.request.POST['start_date'])
                 tender.end_date = change_to_datetime(self.request.POST['end_date'])
                 today = datetime.datetime.now().date()
-                if today < tender.start_date.date():
-                    tender.status = "Upcoming"
-                elif tender.start_date.date() <= today and today <=tender.end_date.date():
-                    tender.status = "Open"
-                elif today > tender.end_date.date():
-                    tender.status = "Closed"
                 tender.save()                  
                 messages.success(self.request,"Tender Successfully Created")
                 return redirect("admin:tenders")   
@@ -334,10 +362,14 @@ class TenderList(LoginRequiredMixin, ListView):
     template_name = "admin/collaborations/tenders.html"
     context_object_name = 'tenders'  
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return Tender.objects.all() 
-        else:
-            return Tender.objects.filter(company = self.request.user.get_company()) 
+        try:
+            if self.request.user.is_superuser:
+                return Tender.objects.all() 
+            else:
+                return Tender.objects.filter(company = self.request.user.get_company())
+        except Exception as e:
+            print("Exception while listing admin tenders ",e)
+            return [] 
 
 
 @method_decorator(decorators,name='dispatch')
@@ -356,13 +388,13 @@ class EditTender(LoginRequiredMixin,View):
         try:
             tender = Tender.objects.get(id =self.kwargs['id'] )
             banks= Bank.objects.all() # if there will be a scenario where the admin needs to add register new bank account
-            return render(self.request,'admin/collaborations/create_tender.html', {'form':TenderEditForm(),'tender':tender,'edit':True})
+            return render(self.request,'admin/collaborations/create_tender.html', {'form':TenderForm(),'tender':tender,'edit':True})
         except Exception as e:
             print("Exception at Edit Tender,get ", e)
             return redirect("admin:error_404")
 
     def post(self,*args,**kwargs):  
-        form = TenderEditForm(self.request.POST)                       
+        form = TenderForm(self.request.POST)                       
         if form.is_valid():
             try:
                 tender= Tender.objects.get(id = self.kwargs['id'])            
@@ -370,24 +402,8 @@ class EditTender(LoginRequiredMixin,View):
                 tender.title_am = self.request.POST['title_am']
                 tender.description = self.request.POST['description']
                 tender.description_am = self.request.POST['description_am']
-                tender.tender_type = self.request.POST['tender_type']
-                tender.start_date = change_to_datetime(self.request.POST['start_date'])
+                tender.start_date = change_to_datetime(self.request.POST['start_date']) # using this to store a date without timezone
                 tender.end_date = change_to_datetime(self.request.POST['end_date'])
-                if self.request.POST["tender_type"] == "Free":
-                    tender.document_price = 0
-                else:
-                    tender.document_price = self.request.POST["document_price"]
-                if self.request.FILES:
-                    tender.document = self.request.FILES['document'] 
-
-                today = datetime.datetime.now().date()
-                if today < tender.start_date.date():
-                    tender.status = "Upcoming"
-                elif tender.start_date.date() <= today and today <=tender.end_date.date():
-                    tender.status = "Open"
-                elif today > tender.end_date.date():
-                    tender.status = "Closed"
-               
                 tender.last_updated_by = self.request.user
                 tender.last_updated_date = timezone.now()
                 tender.save()
@@ -398,7 +414,8 @@ class EditTender(LoginRequiredMixin,View):
             messages.success(self.request,"Tender Successfully Edited")
             return redirect("admin:tenders") 
         else:
-            messages.warning(self.request, "Error! Tender was not Edited!" )
+            print("####",form.errors)
+            messages.warning(self.request, "Error! Tender was not Edited!", )
             return redirect("admin:tenders")
 
 ######## Tender for customers
@@ -416,8 +433,6 @@ class CustomerTenderList(View):
                 result = filter_by('status', ['Open', 'Upcoming'], by_type['query'])
             else:
                 result = SearchByTitle_All('Tender', self.request)
-            # if  result['query'].count() == 0:
-            #     result['query'] = Tender.objects.filter( Q(status='Open') | Q(status = 'Upcoming') )
             companies = []
             for comp in Company.objects.all():
                 if comp.tender_set.count() > 0:

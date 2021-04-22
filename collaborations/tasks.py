@@ -133,3 +133,6 @@ def check_tender_enddate():
         print("Tried to automatically Close Tenders, but no Tender was Found!")
 
 
+@background() 
+def send_new_blogs():
+  pass

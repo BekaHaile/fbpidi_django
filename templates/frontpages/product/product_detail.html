@@ -20,46 +20,36 @@
 									<div class="rating-stars mx-auto mb-2 mt-3 d-flex banner-ratings">
 										<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
 										<div class="rating-stars-container mr-2">
+											{% get_looper_object product.rating as rates %}
+											{% for i in rates %}
 											<div class="rating-star sm">
 												<i class="fa fa-star"></i>
 											</div>
-											<div class="rating-star sm">
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="rating-star sm">
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="rating-star sm">
-												<i class="fa fa-star"></i>
-											</div>
-											<div class="rating-star sm">
-												<i class="fa fa-star"></i>
-											</div>
-										</div> <a class="text-white" href="#">{{product.review.count}} reviews</a>
+											{% endfor %}
+										</div> <a class="text-white" href="#">{{product|review_count}} {% trans "Reviews" %}</a>
 									</div>
 									<ul class="social-icons mb-4 ml-auto">
+										{% if product.company.get_company_address.facebooklink %}
 										<li>
 											<a class="social-icon" href=""><i class="fa fa-facebook"></i></a>
 										</li>
+										{% endif %}
+										{% if product.company.get_company_address.twiterlink %}
 										<li>
 											<a class="social-icon" href=""><i class="fa fa-twitter"></i></a>
 										</li>
-										<li>
-											<a class="social-icon" href=""><i class="fa fa-rss"></i></a>
-										</li>
-										<li>
-											<a class="social-icon" href=""><i class="fa fa-youtube"></i></a>
-										</li>
-										<li>
-											<a class="social-icon" href=""><i class="fa fa-linkedin"></i></a>
-										</li>
+										{% endif %}
+										
+
+										{% if product.company.get_company_address.googlelink %}
 										<li>
 											<a class="social-icon" href=""><i class="fa fa-google-plus"></i></a>
 										</li>
+										{% endif %}
 									</ul>
-									<a class="btn btn-info mb-1 mt-1" href="#"><i class="fa fa-heart-o"></i> Add Wishlist</a>
-									<a class="btn btn-success mb-1 mt-1" href="#"><i class="fa fa-star"></i> Write Review</a>
-									<a href="#" class="btn btn-danger icons mb-1 mt-1" data-toggle="modal" data-target="#report"><i class="icon icon-exclamation mr-1"></i> Report Abuse</a>
+									<!-- <a class="btn btn-info mb-1 mt-1" href="#"><i class="fa fa-heart-o"></i> Add Wishlist</a>
+									<a class="btn btn-success mb-1 mt-1" href="#"><i class="fa fa-star"></i> Write Review</a> -->
+									<!-- <a href="#" class="btn btn-danger icons mb-1 mt-1" data-toggle="modal" data-target="#report"><i class="icon icon-exclamation mr-1"></i> Report Abuse</a> -->
 									
 								</div>
 							</div>

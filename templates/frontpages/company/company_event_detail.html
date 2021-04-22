@@ -62,12 +62,12 @@
                                 </div>
                                
 
-								{%if obj.status == "Upcoming" %}
+								{%if obj.status == "Upcoming" or obj.status == "Open" %}
 								
 									<br>
 									
 									<div class="col-md-6">
-										<label class="col-form-label "><b>Remind me on</b> <p class = "text-muted">{% trans "From"%} {{ obj.start_date.date }} - {{obj.end_date.date}} </p></label>
+										<label class="col-form-label "><b>{% trans "Remind me on" %}</b> <p class = "text-muted">{% trans "From"%} {{ obj.start_date.date }} - {{obj.end_date.date}} </p></label>
 										<div >
 											{{event_participant_form.notify_on}}
 										</div>
@@ -76,7 +76,7 @@
 									<br>
 									
 									<div class="col-md-8">
-										<label class="col-form-label "><b>Your email</b></label>
+										<label class="col-form-label "><b>{% trans "Your email" %}</b></label>
 										<div >
 											{{event_participant_form.patricipant_email}}
 										</div>
@@ -97,99 +97,14 @@
 								<h3 class="card-title">{% trans "Event Description" %}</h3>
 							</div>
 							<div class="card-body">
-
                                 <p>
                                     {% print_translated obj.description obj.description_am LANGUAGE_CODE %}
                                 </p>
-								<!-- <div class="d-sm-flex mt-0 p-5 sub-review-section border border-bottom-0 br-bl-0 br-br-0">
-                                    <div class="d-flex mr-3">
-                                        <a href="#"><img class="media-object brround avatar-md" alt="64x64" src="/static/frontpages/images/faces/male/1.jpg"> </a>
-                                    </div>
-                                    <div class="media-body">
-                                        <h5 class="mt-0 mb-1 font-weight-semibold">Joanne Scott
-											<span class="fs-14 ml-0" data-toggle="tooltip" data-placement="top" title="verified"><i class="fa fa-check-circle-o text-success"></i></span>
-											<span class="fs-14 ml-2"> 4.5 <i class="fa fa-star text-yellow"></i></span>
-										</h5>
-										<small class="text-muted"><i class="fa fa-calendar"></i> Dec 21st  <i class=" ml-3 fa fa-clock-o"></i> 13.00  <i class=" ml-3 fa fa-map-marker"></i> Brezil</small>
-                                        <p class="font-13  mb-2 mt-2">
-                                           Lorem ipsum dolor sit amet, quis Neque porro quisquam est, nostrud exercitation ullamco laboris   commodo consequat.
-                                        </p>
-										<a href="#" class="mr-2 mt-1"><span class="badge badge-secondary">Helpful</span></a>
-										<a href="" class="mr-2 mt-1" data-toggle="modal" data-target="#Comment"><span class="badge badge-light">Comment</span></a>
-										<a href="" class="mr-2 mt-1" data-toggle="modal" data-target="#report"><span  class="badge badge-light">Report</span></a>
-										<div class="btn-group btn-group-sm mb-1 ml-auto float-sm-right mt-1">
-											<button class="btn btn-light" type="button"><i class="fa fa-thumbs-up"></i></button>
-											<button class="btn btn-light" type="button"><i class="fa fa-thumbs-down"></i></button>
-										</div>
-									</div> -->
+								
 								</div>
-
-								<!-- <div class="d-sm-flex p-5 sub-review-section border subsection-color br-tl-0 br-tr-0">
-									<div class="d-flex mr-3">
-										<a href="#"><img class="media-object brround avatar-md" alt="64x64" src="/static/frontpages/images/faces/female/2.jpg"> </a>
-									</div>
-									<div class="media-body">
-										<h5 class="mt-0 mb-1 font-weight-semibold">Rose Slater <span class="fs-14 ml-0" data-toggle="tooltip" data-placement="top" title="verified"><i class="fa fa-check-circle-o text-success"></i></span></h5>
-										<p class="font-13  mb-2 mt-2">
-											Lorem ipsum dolor sit amet nostrud exercitation ullamco laboris   commodo consequat.
-										</p>
-										<a href="" data-toggle="modal" data-target="#Comment" class="mt-1"><span class="badge badge-default">Comment</span></a>
-										<div class="btn-group btn-group-sm mb-1 ml-auto float-right mt-1">
-											<button class="btn btn-light" type="button"><i class="fa fa-thumbs-up"></i></button>
-											<button class="btn btn-light" type="button"><i class="fa fa-thumbs-down"></i></button>
-										</div>
-									</div>
-								</div> -->
-
-
-								<!-- <div class="d-sm-flex p-5 mt-4 border sub-review-section">
-									<div class="d-flex mr-3">
-										<a href="#"><img class="media-object brround avatar-md" alt="64x64" src="/static/frontpages/images/faces/male/3.jpg"> </a>
-									</div>
-									<div class="media-body">
-										<h5 class="mt-0 mb-1 font-weight-semibold">Edward
-										<span class="fs-14 ml-0" data-toggle="tooltip" data-placement="top" title="verified"><i class="fa fa-check-circle-o text-success"></i></span>
-										<span class="fs-14 ml-2"> 4 <i class="fa fa-star text-yellow"></i></span>
-										</h5>
-										<small class="text-muted"><i class="fa fa-calendar"></i> Dec 21st  <i class=" ml-3 fa fa-clock-o"></i> 16.35  <i class=" ml-3 fa fa-map-marker"></i> UK</small>
-                                        <p class="font-13  mb-2 mt-2">
-                                           Lorem ipsum dolor sit amet, quis Neque porro quisquam est, nostrud exercitation ullamco laboris   commodo consequat.
-                                        </p>
-										<a href="#" class="mr-2 mt-1"><span class="badge badge-secondary">Helpful</span></a>
-										<a href="" class="mr-2 mt-1" data-toggle="modal" data-target="#Comment"><span class="badge badge-light">Comment</span></a>
-										<a href="" class="mr-2 mt-1" data-toggle="modal" data-target="#report"><span  class="badge badge-light">Report</span></a>
-										<div class="btn-group btn-group-sm mb-1 ml-auto float-sm-right mt-1">
-											<button class="btn btn-light" type="button"><i class="fa fa-thumbs-up"></i></button>
-											<button class="btn btn-light" type="button"><i class="fa fa-thumbs-down"></i></button>
-										</div>
-									</div>
-								</div> -->
 							</div>
 
-                            
 						</div>
-						<!--/Comments-->
-
-						<!-- <div class="card mb-lg-0">
-							<div class="card-header">
-								<h3 class="card-title">Add a Comment</h3>
-							</div>
-							<div class="card-body">
-								<div class="mt-2">
-									<div class="form-group">
-										<input type="text" class="form-control" id="name1" placeholder="Your Name">
-									</div>
-									<div class="form-group">
-										<input type="email" class="form-control" id="email" placeholder="Email Address">
-									</div>
-									<div class="form-group">
-										<textarea class="form-control" name="example-textarea-input" rows="6" placeholder="Write Review"></textarea>
-									</div>
-									<a href="#" class="btn btn-secondary">Send Reply</a>
-								</div>
-							</div>
-						</div> -->
-
 
 					</div>
 				</div>
@@ -201,14 +116,15 @@
 		<script>
 
 			document.querySelector('#remind_me_button').onclick = function(e) {
-
-				console.log("clicked")
                             var participant_email = document.querySelector('#participant_email');
                             var notify_on = document.querySelector("#notify_on");
+							
                             if (participant_email.value == "" || participant_email.value == null || notify_on.value == "" ){
                                 window.alert("Fill the form first!");
                             }
                            else{
+							console.log("notify on = "+notify_on.value)
+							console.log(" event start date "+ "{{obj.start_date.date}}")
                                 
                                fetch("{% url 'ajax_event_participation' id=obj.id %}",
                                 {

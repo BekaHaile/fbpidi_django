@@ -2,7 +2,7 @@ from django.urls import path
 from company.views.views import (
     CompaniesDetailView,CompaniesView,CreateCompanyProfile,
     CreateFbpidiCompanyProfile, CompanyByMainCategory,
-    ProjectList,ProjectDetail,SearchCompany
+    ProjectList,ProjectDetail,SearchCompany,FilterCompanyByCategory
 )
 from company.views.company_views import *
 
@@ -15,6 +15,7 @@ urlpatterns = [
     path("subscribe/", Subscribe, name="subscribe"),
     path("like_company", Like_Company, name = "like_company"),
     path("search-company/",SearchCompany.as_view(),name='search_company'),
+    path("filter_companies_by_category/", FilterCompanyByCategory.as_view(), name="filter_companies_by_category"),
     path("company-products/<pk>/",CompanyProductList.as_view(),name="company_products"),
     path("company-product-detail/<str:company>/<pk>/",CompanyProductdetail.as_view(),name="company_product_detail"),
     path("company-projects/<pk>/",CompanyProjectList.as_view(),name="company_projects"),

@@ -30,18 +30,13 @@
 						 
 						<div class="row">
                             <div class="card "  style = "padding-left:20px">
-								<form target="blank" action="{% url 'inquiry_form' %}" method="POST" enctype="multipart/form-data">
-									{%csrf_token%}
-									{%if form.errors%}
-									<div class="alert alert-danger" role="alert">
-									  {{form.errors}}
-									</div>
-									{% endif %}
+								<form target="blank" action="{% url 'category_inquiry_form' %}" method="POST" enctype="multipart/form-data">
+									{% csrf_token %}
 									<div class="card-header ">
-										<h3 class="card-title">Send Your Inquiry</h3>
+										<h3 class="card-title">{% trans "Send Your Inquiry"  %} </h3>
 									</div>
 
-                                    <input type="hidden" id = "products_input" name="prod_id_list" value = "{{prod_id_list}}" >
+                                    <input type="hidden" id = "category" name="category" value = "{{category}}" >
 									<div class="card-body ">
 
 										<div class="row" style="margin-bottom: 20px;">
@@ -59,18 +54,16 @@
 											<label class="form-label text-dark mr-5">To </label>
 											<div class=" card card-body col-lg-9">
 
-												{% if product_count %}
-													<p>{{product_count}} products: </p>
-												{% else %}                                                
-													<img src = "{{products.0.image.url}}" width = "40px" height = "40px">
-													<p>{{products.0.company.name}}</p>
+												{% if company_ids %}
+													<p> {{count}} {% trans "Companies found!" %}: </p>
+
 												{% endif %}
 											</div>
 
 										</div>
 
                                         <div class="row mb-3" style="margin-bottom: 20px;">
-                                            <label class="form-label text-dark">Subject *</label>
+                                            <label class="form-label text-dark">{% trans "Subject" %}*</label>
                                             <div class="col-lg-9">
                                                 {{form.subject}}
                                                 </div>
@@ -80,8 +73,7 @@
                                             <label class="form-label text-dark">Quantity * </label>
                                             <div class="col-lg-3 row">
 
-                                                {{form.quantity}} 
-												<p style="display: inline;">{% print_translated products.0.brand.product_type.uom.name products.0.brand.product_type.uom.name_am LANGUAGE_CODE %}</p> 
+                                                {{form.quantity}}  
                                                 </div>
                                         </div>
                                         <div class="row mb-3" style="margin-bottom: 20px;">

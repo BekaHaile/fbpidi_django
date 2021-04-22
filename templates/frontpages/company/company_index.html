@@ -30,32 +30,19 @@
 					</div>
 					<div class="mt-1">
 						<h2 class="mb-1"><span class="font-weight-semibold">{% print_translated object.name object.name_am LANGUAGE_CODE%}</span></h2>
-						<div class="rating-stars mb-2 mt-3 d-flex">
-							<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
-							<div class="rating-stars-container mr-2">
-								<div class="rating-star sm">
-									<i class="fa fa-star"></i>
-								</div>
-								<div class="rating-star sm">
-									<i class="fa fa-star"></i>
-								</div>
-								<div class="rating-star sm">
-									<i class="fa fa-star"></i>
-								</div>
-								<div class="rating-star sm">
-									<i class="fa fa-star"></i>
-								</div>
-								<div class="rating-star sm">
-									<i class="fa fa-star"></i>
-								</div>
-							</div> <a class="" href="#">4 reviews</a>
-						</div>
+					
 						<div class="item-user mb-3">
 							<div class="item-user-icons">
+								{% if product.company.get_company_address.facebooklink %}
 								<a href="#" class="bg-light mt-0"><i class="fa fa-facebook"></i></a>
+								{% endif %}
+								{% if product.company.get_company_address.twiterlink %}
 								<a href="#" class="bg-light"><i class="fa fa-twitter"></i></a>
+								{% endif %}
+								{% if product.company.get_company_address.googlelink %}
 								<a href="#" class="bg-light"><i class="fa fa-google"></i></a>
-								<a href="#" class="bg-light"><i class="fa fa-dribbble"></i></a>
+								{% endif %}
+								
 							</div>
 						</div>
 						<!-- <a class="btn btn-info mb-1 mt-1" href="#"><i class="fa fa-bookmark"></i> Add Bookmark</a>
@@ -79,12 +66,16 @@
 				<div class="row">
 					<div class="col-xl-8 col-lg-8 col-md-12">
 						<div class="card overflow-hidden">
-							<div class="ribbon ribbon-top-right text-danger"><span class="bg-danger">featured</span></div>
+							
 							<div class="product-gallery-data mb-0 px-4 py-5">
 								<h4 class="card-title mb-3">Overview</h4>
-								<div class="mb-0">
-								{{object.detail|safe}}	
+								<div style="width:100%; " class ="text-center">
+							
+										{% print_translated object.detail|safe object.detail_am|safe LANGUAGE_CODE %}
+								
 								</div>
+
+								
 								<h4 class="card-title mt-5 mb-3">{% trans "Contact Info" %}</h4>
 								<div class="item-user mt-3">
 									<div class="row">
@@ -157,7 +148,7 @@
 													{{product.brand.product_type.category_name.category_type}} </a>
 											</div>
 											<div class="item-card7-icons">
-												<a href="#" class="item-card7-icons-l"><i class="fa fa-pencil"></i></a>
+												
 
 												{% if user.is_authenticated %}
 													{% user_liked_product user product.id  as liked %}
@@ -173,24 +164,17 @@
 											</div>
 											<div class="card-body">
 												<div class="rating-stars mb-1 mt-0 d-flex">
-													<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
+													<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="{{product.rating}}">
+												
 													<div class="rating-stars-container mr-2">
+														{% get_looper_object product.rating as rates %}
+														{% for i in rates %}
 														<div class="rating-star sm">
 															<i class="fa fa-star"></i>
 														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-star sm">
-															<i class="fa fa-star"></i>
-														</div>
-													</div> <a class="text-white" href="#">14 reviews</a>
+														{% endfor %}
+														
+													</div> <a class="text-white" href="#">{{product|review_count}} {% trans "Reviews" %}</a>
 												</div>
 												<div class="item-card7-desc">
 													<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold">{{product.name}} <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>

@@ -62,7 +62,7 @@
 														
 														{% if user.is_superuser or user.get_company == event.company %}
 															{% if perms.company.change_companyevent %}		
-															<a href="{%url 'admin:edit_companyevent' pk=event.id%} " class="dropdown-item"><i class="icon-pencil"></i>Edit Event</a>
+															<a href="{%url 'admin:edit_companyevent' pk=event.id%} " class="dropdown-item"><i class="icon-pencil"></i>View/ Edit Event</a>
 															{% endif %}
 
 															{% if perms.company.delete_companyevent %}

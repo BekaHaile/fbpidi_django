@@ -70,13 +70,14 @@
 								</a>
 								{% if user.is_superuser or user.get_company == blog.created_by.get_company %}
 								<div class="dropdown-menu dropdown-menu-right">
+									{% if perms.collaborations.change_blog %}
+									<a href="{%url 'admin:blog_detail'  model_name='Blog' id=blog.id%}" class="dropdown-item"  >
+										<i class="icon-pencil"></i>View/ Edit Blog</a>
+										{%endif%}
+									
 									{% if perms.collaborations.delete_blog %} 
 									<a href="{%url 'admin:delete' model_name='Blog' id=blog.id%}" class="dropdown-item" onclick="return confirm('are you sure you want to delete this')"><i class="icon-trash"></i>Delete Blog</a>
 									{%endif%}
-									{% if perms.collaborations.change_blog %}
-									<a href="{%url 'admin:blog_detail'  model_name='Blog' id=blog.id%}" class="dropdown-item"  >
-										<i class="icon-pencil"></i>Edit Blog</a>
-										{%endif%}
 									
 									
 								</div>

@@ -106,10 +106,15 @@ class CloseVacancy(LoginRequiredMixin,View):
 @method_decorator(decorators,name='get')
 class ApplicantList(LoginRequiredMixin,View):	
 	def get(self,*args,**kwargs):
-		vacancy=Vacancy.objects.filter(company= self.request.user.get_company())
-		context = {'vacancy':vacancy}
-		template_name = "admin/vacancy/vacancy_list.html"
-		return render(self.request, template_name,context)
+		try:
+			vacancy=Vacancy.objects.filter(company= self.request.user.get_company())
+			context = {'vacancy':vacancy}
+			template_name = "admin/vacancy/vacancy_list.html"
+			return render(self.request, template_name,context)
+		except Exception as e:
+			print("@@@@@@@@@ Exception at ApplicantList ",e)
+			return redirect("")
+	
 
 @method_decorator(decorators,name='get')
 class Applicantinfo(LoginRequiredMixin,View):
@@ -213,8 +218,10 @@ class AdminVacancyList(LoginRequiredMixin,ListView):
 	model = Vacancy
 	template_name= "admin/vacancy/job_list.html"
 	def get_queryset(self):
-		return  Vacancy.objects.all() if self.request.user.is_superuser else  Vacancy.objects.filter(company=self.request.user.get_company())
-	
+		try:
+			return  Vacancy.objects.all() if self.request.user.is_superuser else  Vacancy.objects.filter(company=self.request.user.get_company())
+		except:
+			return []
 
 ## show form
 @method_decorator(decorators,name='dispatch')
@@ -257,75 +264,99 @@ class CreateVacancy(LoginRequiredMixin, View):
 class CreateApplication(LoginRequiredMixin,View):
 
 	def get(self,*args,**kwargs):
-		vacancy=Vacancy.objects.get(id=self.kwargs['id'] ,closed=False)
-		applicants=JobApplication.objects.filter(vacancy=vacancy.id)
-		for applicant in applicants:
-			if(applicant.created_by == self.request.user):
+		try:
+			vacancy=Vacancy.objects.get(id=self.kwargs['id'] ,closed=False)
+			if JobApplication.objects.filter(vacancy=vacancy, created_by=self.request.user).exists():
 				messages.warning(self.request, "You can't apply to the same vacancy Twice")
 				return redirect("vacancy")
-				
-		job = CreateJobApplicationForm()
-		jobcategory = JobCategory.objects.all()
-		template_name="frontpages/vacancy/job_apply.html"
-		context={'job':job,'vacancy':vacancy,'category':jobcategory}
-		return render(self.request, template_name,context) 
+					
+			job = CreateJobApplicationForm()
+			jobcategory = JobCategory.objects.all()
+			template_name="frontpages/vacancy/job_apply.html"
+			context={'job':job,'vacancy':vacancy,'category':jobcategory}
+			return render(self.request, template_name,context) 
+		except Exception as e:
+			print("@@@@@@@@@@@@@ Exception at CreateApplication get  ",e )
+			return redirect("vacancy")
 
 	def post(self,*args,**kwargs):
-		form = CreateJobApplicationForm(self.request.POST,self.request.FILES)
-		if form.is_valid():
-			job=form.save(commit=False)
-			job.created_by=self.request.user
-			job.vacancy = Vacancy.objects.get(id=self.kwargs['id'])
-			job.save()
+		try:
+			form = CreateJobApplicationForm(self.request.POST,self.request.FILES)
+			if form.is_valid():
+				job=form.save(commit=False)
+				job.created_by=self.request.user
+				job.vacancy = Vacancy.objects.get(id=self.kwargs['id'])
+				job.save()
+				return redirect("vacancy")
+			else:
+				messages.warning(self.request, "Unsupported file type detected, the supported files are pdf, jpg, png, doc and docx! ")
+				return redirect("vacancy")
+		except Exception as e:
+			print("@@@@@@@@@@@@@ Exception at CreateApplication post  ",e )
 			return redirect("vacancy")
-		else:
-			messages.warning(self.request, "Unsupported file type detected, the supported files are pdf, jpg, png, doc and docx! ")
-			return redirect("vacancy")
+
 
 
 class CategoryBasedSearch(View):
 	def get(self,*args,**kwargs):
-		vacancy = Vacancy.objects.filter(category=self.kwargs['id'],closed=False) 
-		cateory = JobCategory.objects.get(id=self.kwargs['id'])
-		jobcategory = JobCategory.objects.all()
-		template_name="frontpages/vacancy/vacancy_list.html"
-		context = {'vacancys':vacancy,'category':jobcategory,'message':'Vacancies on '+str(cateory)}
-		return render(self.request, template_name,context)
+		try:
+			vacancy = Vacancy.objects.filter(category=self.kwargs['id'],closed=False) 
+			cateory = JobCategory.objects.get(id=self.kwargs['id'])
+			jobcategory = JobCategory.objects.all()
+			template_name="frontpages/vacancy/vacancy_list.html"
+			context = {'vacancys':vacancy,'category':jobcategory,'message':'Vacancies on '+str(cateory)}
+			return render(self.request, template_name,context)
+		except Exception as e:
+			print("@@@@@@@@@@@@@ Exception at CategoryBasedSearch  ",e )
+			return redirect("vacancy")
 
 class VacancyList(View):
 	def get(self, *args, **kwargs):
-		result = []
-		category = JobCategory.objects.all()
-		companies = []
-		for comp in Company.objects.all():
-			if comp.vacancy_set.count()>0:
-				companies.append(comp)
-		
-		if 'by_category' in self.request.GET and 'by_title' in self.request.GET:
-			q= Q( Q(title__contains = self.request.GET['by_title']) | 
-				  Q(title_am__contains = self.request.GET['by_title']) )
-			query = Vacancy.objects.filter(q)# search by title then filter by category
-			result = filter_by('category__category_name',self.request.GET.getlist('by_category'), query)
+		try:
+			result = []
+			category = JobCategory.objects.all()
+			companies = []
+			for comp in Company.objects.all():
+				if comp.vacancy_set.count()>0:
+					companies.append(comp)
 			
-		elif 'by_category' in self.request.GET:
-			result = filter_by('category__category_name', self.request.GET.getlist('by_category'), Vacancy.objects.all())
-		elif 'by_company' in self.request.GET:
-			result = FilterByCompanyname(self.request.GET.getlist('by_company'), Vacancy.objects.all())
-		else: 
-			result = SearchByTitle_All('Vacancy', self.request)
+			if 'by_category' in self.request.GET and 'by_title' in self.request.GET:
+				q= Q( Q(title__icontains = self.request.GET['by_title']) | 
+					Q(title_am__icontains = self.request.GET['by_title']) )
+				query = Vacancy.objects.filter(q)# search by title then filter by category
+				result = filter_by('category__category_name',self.request.GET.getlist('by_category'), query)
+				
+			elif 'by_category' in self.request.GET:
+				result = filter_by('category__category_name', self.request.GET.getlist('by_category'), Vacancy.objects.all())
+			elif 'by_company' in self.request.GET:
+				result = FilterByCompanyname(self.request.GET.getlist('by_company'), Vacancy.objects.all())
+			else: 
+				result = SearchByTitle_All('Vacancy', self.request)
 
-		if result['query'].count()==0:
-			result['query'] = Vacancy.objects.all()
-
-		#what ever the result is, paginate it and send
-		data = get_paginated_data(self.request, result['query'])
-		return render(self.request, "frontpages/vacancy/vacancy_list.html", {'vacancys':data, 'message':result['message'],  'message_am':result['message_am'], 'category':category, 'companies':companies})
+			if result['query'].count()==0:
+				result['query'] = Vacancy.objects.all()
+			
+			#what ever the result is, paginate it and send
+			data = get_paginated_data(self.request, result['query'])
+			return render(self.request, "frontpages/vacancy/vacancy_list.html", {'vacancys':data, 'message':result['message'], 
+			 'message_am':result['message_am'], 'category':category, 'companies':companies})
+		
+		except Exception as e:
+			print("@@@@@@@@@@@@@ Exception at Vacancy List ",e )
+			return redirect("vacancy")
         		
 class VacancyMoreDetail(View):
 	def get(self,*args,**kwargs):
-		vac = Vacancy.objects.get(id=self.kwargs['id'],closed=False)
-		jobcategory = JobCategory.objects.all()
-		template_name="frontpages/vacancy/vacancy_detail.html"
-		context = {'vacancy':vac,'category':jobcategory,'message':'Vacancy Detail'}
-		return render(self.request, template_name,context)
+		try:
+			vac = Vacancy.objects.get(id=self.kwargs['id'])
+			jobcategory = JobCategory.objects.all()
+			template_name="frontpages/vacancy/vacancy_detail.html"
+			context = {'vacancy':vac,'category':jobcategory,'message':'Vacancy Detail'}
+
+			if self.request.user.is_authenticated and JobApplication.objects.filter(vacancy=vac, created_by=self.request.user).exists():
+				context['applied'] = True
+			return render(self.request, template_name,context)
+		except Exception as e:
+			print ("@@@@@@@@@@@@Exception at vacancy detail ", e)
+			return redirect('vacancy')
 
