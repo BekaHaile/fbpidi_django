@@ -15,7 +15,7 @@
 									<h1 class=""><span class="font-weight-bold">{{object_list.count}}</span> {% trans "listings available" %}</h1>
 								</div>
 								<div class="search-background px-4 py-3 mt-4">
-									<form action="{% url 'search_company'%}" method="POST">{%csrf_token%}
+									<form action="{% url 'search_company'%}" method="GET">
 									<div class="form row row-sm">
 										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
 											<input type="text" name="name" class="form-control input-lg border-white" id="text" placeholder="Search Company">
@@ -134,9 +134,9 @@
 																		<a class="" href="#"><i class="fa fa-share-alt"></i></a>
 																	</div>
 																</div>
-																<div class="ml-auto mt-3 mt-sm-0">
+																<!-- <div class="ml-auto mt-3 mt-sm-0">
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i> {% trans "Get Directions" %}</a></div>
-																</div>
+																</div> -->
 															</div>
 														</div>
 													</div>
@@ -200,9 +200,9 @@
 																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
 																			</div>
 																		</div>
-																		<div class="ml-auto mt-3 mt-sm-0">
+																		<!-- <div class="ml-auto mt-3 mt-sm-0">
 																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  {% trans "Get Directions" %}</a></div>
-																		</div>
+																		</div> -->
 																	</div>
 																</div>
 															</div>
@@ -295,49 +295,56 @@
 					<!--Right Side Content-->
 					<div class="col-xl-4 col-lg-4 col-md-12">
 						<div class="card">
-							<div class="card-body">
-								<div class="input-group">
-									<input type="text" class="form-control br-tl-3 br-bl-3" placeholder="Search">
-									<div class="input-group-append ">
-										<button type="button" class="btn btn-secondary br-tr-3 br-br-3">
-											{% trans "Search" %}
-										</button>
+							<form action="{% url 'search_company'%}" method="GET">
+								<div class="card-body">
+									<div class="input-group">
+											<input type="text" name="name" required class="form-control br-tl-3 br-bl-3" placeholder="Search">
+											<div class="input-group-append ">
+												<button type="submit"  class="btn btn-secondary br-tr-3 br-br-3">
+													{% trans "Search" %}
+												</button>
+											</div>
 									</div>
 								</div>
-							</div>
+							</form>
 						</div>
 						<div class="card mb-0">
+							<form action = "{% url 'filter_companies_by_category' %}" method = "GET"> 
 							<div class="card-header">
 								<h3 class="card-title">{% trans "Categories" %}</h3>
 							</div>
 							<div class="card-body">
 								<div class="" id="container">
-									<div class="filter-product-checkboxs">
-										<label class="custom-control custom-checkbox mb-3">
-											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
-											<span class="custom-control-label">
-												<a href="#" class="text-dark">{% trans "Food" %}</a>
-											</span>
-										</label>
-										<label class="custom-control custom-checkbox mb-3">
-											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
-											<span class="custom-control-label">
-												<a href="#" class="text-dark">{% trans "Beverage" %}</a>
-											</span>
-										</label>
-										<label class="custom-control custom-checkbox mb-3">
-											<input type="checkbox" class="custom-control-input" name="checkbox1" value="option1">
-											<span class="custom-control-label">
-												<a href="#" class="text-dark">"{% trans "Pharmaceutical" %}</a>
-											</span>
-										</label>
-										
-									</div>
+									
+										<div class="filter-product-checkboxs">
+											<label class="custom-control custom-checkbox mb-3">
+												<input type="checkbox" class="custom-control-input" name="by_category" value="Food">
+												<span class="custom-control-label">
+													<a href="#" class="text-dark">{% trans "Food" %}</a>
+												</span>
+											</label>
+											<label class="custom-control custom-checkbox mb-3">
+												<input type="checkbox" class="custom-control-input" name="by_category" value="Beverage">
+												<span class="custom-control-label">
+													<a href="#" class="text-dark">{% trans "Beverage" %}</a>
+												</span>
+											</label>
+											<label class="custom-control custom-checkbox mb-3">
+												<input type="checkbox" class="custom-control-input" name="by_category" value="Pharmaceutical">
+												<span class="custom-control-label">
+													<a href="#" class="text-dark">"{% trans "Pharmaceutical" %}</a>
+												</span>
+											</label>
+											
+										</div>
+									
 								</div>
 							</div>
 							<div class="card-footer">
-								<a href="#" class="btn btn-primary btn-block">{% trans "Apply Filter" %}</a>
+								<button type="submit"  class="btn btn-primary btn-block">{% trans "Apply Filter" %}</button>
 							</div>
+
+						</form>
 						</div>
 					</div>
 					<!--/Right Side Content-->

@@ -105,15 +105,15 @@
                         {% else %}
                             <tr style="background-color: rgb(228, 228, 228);"> 
                         {% endif %}
-                                <td>{{forloop.counter}} </td>
+                                <td>{{forloop.counter}}</td>
                             
                                 <td >
-                                    <a   data-toggle="modal" data-target="#compose{{message.id}}">
+                                    <a   data-toggle="modal" data-target="#compose{{inquiry.id}}">
                                         {{inquiry.sender_email}}
                                     </a>
                                 </td>
                                 <td >
-                                    <a  data-toggle="modal" data-target="#compose{{message.id}}" >
+                                    <a  data-toggle="modal" data-target="#compose{{inquiry.id}}" >
                                         {{inquiry.subject|safe|truncatechars_html:20}}
                                     </a>
                                 </td>
@@ -127,7 +127,7 @@
                                 </td>
                                 <td >
 
-                                    <a href=""  data-toggle="modal" data-target="#compose{{message.id}}" >
+                                    <a href=""  data-toggle="modal" data-target="#compose{{inquiry.id}}" >
                                         
                                         <div class="letter-icon-title text-default">
                                             {% if inquiry.replied %}
@@ -144,7 +144,7 @@
                             </tr>     
                             
                          <!--  compse reply modal -->
-                         <div id="compose{{message.id}}" class="modal fade" tabindex="-1">
+                         <div id="compose{{inquiry.id}}" class="modal fade" tabindex="-1">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <form action = "{% url 'admin:admin_inquiry_reply' pk=inquiry.id %}" method = "POST" enctype="multipart/form-data">
@@ -155,7 +155,7 @@
                                         </div>					
                                         <div class="modal-body">
                                                 <div  style="padding-left: 20px;">
-                                                    <!-- <h5 style = "color:black"> <b>Sender Name :</b> {{message.name}}</h5> -->
+                                                    <!-- <h5 style = "color:black"> <b>Sender Name :</b> {{inquiry.name}}</h5> -->
                                                     <h5 style = "color:black"> <b>Sender Email :</b> <p style = "display:inline; color:rgb(91, 91, 201)">{{inquiry.sender_email}}</p> </h5>
                                                     <br>
                                                     <h5 style = "color:black"><b>Subject :</b></h5>
@@ -168,22 +168,22 @@
                                                     <h5 style = "color:black"><b>Inquiry Content :</b></h5>
                                                     <div class="form-group">
                                                         
-                                                        <textarea  rows="7" class =" form form-control"  disabled="True">{{inquiry.content}}</textarea> 
+                                                        <textarea  rows="10" class =" form form-control"  style="color:black; height:auto" disabled="True">{{inquiry.content}}</textarea> 
                                                     </div>
                                                     <br>
                                                 
                                                    
                                                     <br>
                                                     {% if inquiry.replied %}
-                                                    <p>Your previous reply, You can resend another replay, by editing.</p>
+                                                    <h5><p>Your previous reply, You can resend another replay, by editing.</p></h5>
                                                     
                                                     <div class="form-group">
-                                                        <textarea class="form-control" name="reply_message" rows="7" placeholder="Reply Message" required>{{inquiry.productinquiryreply_set.first.reply}}</textarea>
+                                                        <textarea class="form-control" name="reply_message" rows="10" placeholder="Reply Message" required>{{inquiry.productinquiryreply_set.first.reply}}</textarea>
                                                     </div>
                                                     {% else %}
-                                                    <p>Write Your Replay Here</p>
+                                                    <h5><p>Write Your Replay Here</p></h5>
                                                     <div class="form-group">
-                                                        <textarea class="form-control" name="reply_message" rows="7" placeholder="Reply Message" required></textarea>
+                                                        <textarea class="form-control" name="reply_message" rows="10" placeholder="Reply Message" required></textarea>
                                                     </div>
                                                     {% endif %}
         
@@ -194,7 +194,7 @@
         
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                                            {% if message.replied %}
+                                            {% if inquiry.replied %}
                                                 <button type="submit" class="btn bg-primary">Replay Again</button>
                                             {% else %}
                                             <button type="submit" class="btn bg-primary">Replay</button>

@@ -135,9 +135,9 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'IIMS',
+        'NAME': 'admindb',
         'USER': 'postgres',
-        'PASSWORD': 'Melfan@22',
+        'PASSWORD': 'cbe@ps4woga',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -228,11 +228,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_FILE_PATH = os.path.join(BASE_DIR, "email_archive")
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = "melkamu.aait@gmail.com"
-EMAIL_HOST_PASSWORD = "0920854091"
+EMAIL_HOST_USER = "antenyismu@gmail.com"
+EMAIL_HOST_PASSWORD = "111ywxwz"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 EMAIL_USE_LOCALTIME = True
 

@@ -30,9 +30,9 @@
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
+					<th>#</th>
 					<th>Title</th>
 					<th>Title_am</th>
-					<th>company </th>
 					<th>Created by </th>
 					<th>Created date</th>
 					<th class="text-center">Actions</th>
@@ -41,11 +41,10 @@
 			<tbody>
 				{%for Announcement in Announcements%}
 				<tr>
-					
+					<td>{{forloop.counter}}</td>
 					<td>{{Announcement.title|safe|truncatechars_html:20}}</td>
 					<td>{{Announcement.title_am|safe|truncatechars_html:20}}</td>
-					<td>{{Announcement.company}}</td>
-					<td>{{Announcement.created_by.username|safe}}</td>
+					<td>{{Announcement.created_by.first_name|safe}} {{Announcement.created_by.last_name|safe}}</td>
 					<td>{{Announcement.created_date}}</td>
 					<td class="text-center">
 						<div class="list-icons">
@@ -58,7 +57,7 @@
 								{% if user.is_superuser or user.get_company == Announcement.created_by.get_company %}
 								
 									{% if perms.collaborations.change_announcement %}
-										<a href="{%url 'admin:anounce_Detail'   id=Announcement.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit Item</a>	
+										<a href="{%url 'admin:anounce_Detail'   id=Announcement.id%}" class="dropdown-item"><i class="icon-pencil"></i>View/ Edit Item</a>	
 									{% endif %}
 
 									{% if perms.collaborations.delete_announcement %}

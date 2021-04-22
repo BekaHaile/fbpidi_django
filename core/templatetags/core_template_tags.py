@@ -1,3 +1,4 @@
+import math
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
@@ -132,7 +133,12 @@ def file_type( file_url):
 @register.simple_tag
 def count_unread_chats(user):
     return ChatMessages.count_unread_chats(user)
-
+@register.simple_tag
+def get_looper_object(number):  
+    l =[]
+    for i in range (math.floor(number)):
+        l.append(i)
+    return l
 @register.simple_tag
 def user_liked_product(user, product):    
     return True if user.productlike_set.filter(product = product).exists()  else  False

@@ -18,8 +18,8 @@ BACKGROUND_TASK_DICTIONARY = {
     'EVENT_START_DATE':check_event_startdate,
     'EVENT_END_DATE': check_event_enddate,
 
-    'TENDER_START_DATE': check_tender_startdate,
-    'TENDER_END_DATE': check_tender_enddate,
+    # 'TENDER_START_DATE': check_tender_startdate,
+    # 'TENDER_END_DATE': check_tender_enddate,
 }
 TODAY = timezone.now()
 BACKGROUND_TASK_TIME  = TODAY # will be changed when running inside __main__
@@ -74,12 +74,12 @@ def abort(task_verbose_name):
 if __name__ == '__main__':    
     
     print("Starting the background tasks ....")
-    # clear_background_tasks()
-    # clear_completed_tasks()
-    BACKGROUND_TASK_TIME = TODAY.replace(hour=3,minute=0,second=0)
-    print("Task scheduled at 6:00 am ",BACKGROUND_TASK_TIME)
-    for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
-        start_task(task_verbose_name=verbose_name,schedule=BACKGROUND_TASK_TIME, repeat = Task.DAILY) 
+    clear_background_tasks()
+    clear_completed_tasks()
+    # BACKGROUND_TASK_TIME = TODAY.replace(hour=3,minute=0,second=0)
+    # print("Task scheduled at 6:00 am ",BACKGROUND_TASK_TIME)
+    # for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
+    #     start_task(task_verbose_name=verbose_name,schedule=BACKGROUND_TASK_TIME, repeat = Task.DAILY) 
 
     
     
