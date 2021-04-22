@@ -259,6 +259,10 @@ class ProductInquiry(models.Model):
     attachement = models.FileField(upload_to = "InquiryDocument/", max_length=254, verbose_name="Inquiry document",help_text="pdf, Max size 3MB", blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-created_date']
+
+
     def save(self):
         if self.product :
             self.pieces = self.product.brand.product_type.uom.name
