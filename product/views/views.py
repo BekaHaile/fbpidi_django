@@ -1001,44 +1001,36 @@ class InquiryRequest(LoginRequiredMixin, View):
             return redirect("index")
     
 class InquiryByCategory(LoginRequiredMixin, View):
-
     def get(self, *args, **kwargs):
-        print("########", self.request.GET)
-        category = self.request.GET.getlist('category')[0]
-        print("########", category)
-        companies = Company.objects.filter(category = category )
-        company_ids = [c.id for c in companies ]
-        context = {'company_ids':company_ids,'count':len(company_ids),'category':category,'form':ProductInquiryForm}
-        print("######", company_ids)
-        return render(self.request, "frontpages/product/category_inquiry_form.html", context)
-
-        # try:
-            
-        # except Exception as e:
-        #     print("@@@@@@ Exception at InquiryByCategory get ",e)
-        #     return redirect ('index')
+        try:
+            category = self.request.GET.getlist('category')[0]            
+            companies = Company.objects.filter(category = category )
+            company_ids = [c.id for c in companies ]
+            context = {'company_ids':company_ids,'count':len(company_ids),'category':category,'form':ProductInquiryForm}
+            return render(self.request, "frontpages/product/category_inquiry_form.html", context)
+    
+        except Exception as e:
+            print("@@@@@@ Exception at InquiryByCategory get ",e)
+            return redirect ('index')
     
     def post(self, *args,**kwargs):
-        
-            print("###############companies", self.request.POST["category"])
-            
+        try:
             category = Category.objects.get(id = int(self.request.POST['category']))
-            print("### cat", category)
-            
             companies = category.company_category.all()
-            print("!!!!!!!!!!!!!",companies)
             form = ProductInquiryForm(self.request.POST)
             if form.is_valid:
                 for c in companies:       
                     item = form.save(commit = False)
                     item.category = category
                     item.save()
+                    return render(self.request, "frontpages/product/success_inquiry.html",{ 'email':self.request.POST['sender_email'], 'prod_id_list': [] })        
             else:
-                print("form invalid")
-            return render(self.request, "frontpages/product/success_inquiry.html",{ 'email':self.request.POST['sender_email'], 'prod_id_list': [] })
-        # except Exception as e:
-        #     print("@@@ Exception ",e)
-        #     return redirect("index")
+                print("invalid data")
+                return redirect("index")
+
+        except Exception as e:
+            print("@@@ Exception ",e)
+            return redirect("index")
 
 @login_required
 def LikeProduct(request):

@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django import forms
 from django_summernote.widgets import SummernoteWidget
 from .models import  (PollsQuestion, Choices, PollsResult,
@@ -37,6 +38,28 @@ class FaqsForm(forms.ModelForm):
                     'answers_am': forms.Textarea(attrs={'class':'summernote','placeholder':'Answer in amharic'}),
                     'questions':forms.TextInput(attrs={'class':'form-control','placeholder':'The Frequently asked Question '}),
                     'questions_am':forms.TextInput(attrs={'class':'form-control','placeholder':'The Frequently asked Question in Amharic'})}
+
+
+
+def image_cropper(x,y,w,h,raw_image):
+        # if the image is not cropped 
+        if (x == '' or y == '' or w == '' or h == ''):
+            image = Image.open(raw_image)
+            resized_image = image.resize((600, 600), Image.ANTIALIAS)
+            resized_image.save(raw_image.path)
+            return True
+
+        x = float(x)
+        y = float(y)
+        w = float(w)
+        h = float(h)
+        image = Image.open(raw_image)
+        cropped_image = image.crop((x, y, w+x, h+y))
+        ## replace the image with the cropped one
+        cropped_image.save(raw_image.path)
+        return True
+   
+
 
 class BlogsForm(forms.ModelForm):  
 
@@ -84,7 +107,6 @@ class BlogsForm(forms.ModelForm):
         ## replace the image with the cropped one
         cropped_image.save(blog.blogImage.path)
         return blog
-
 
 class BlogsEdit(forms.ModelForm):
 
@@ -268,12 +290,11 @@ class JobCategoryForm(forms.ModelForm):
 class NewsForm(forms.ModelForm):
     # NEWS_CATAGORY = ( )
     NEWS_CATAGORY = [ ('', 'Select Category'),('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological')]
-
     catagory = forms.ChoiceField( required = True, choices= NEWS_CATAGORY, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
-    
+    image = forms.ImageField(allow_empty_file=True,  required=False, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field"}) )
     class Meta:
         model = News
-        fields = ('title', 'title_am', 'description', 'description_am', 'catagory')
+        fields = ('title', 'title_am', 'description', 'description_am', 'catagory','image')
         widgets = {
             'title' : forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'News Title(English).'}),
             'title_am' : forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'News Title (Amharic).'}),
@@ -283,7 +304,7 @@ class NewsForm(forms.ModelForm):
 
 class CompanyEventForm(forms.ModelForm):
     STATUS_CHOICE = [ ('Upcoming', 'Upcoming'),('Open', 'Open' )]
-    image = forms.FileField(allow_empty_file=True,  required=False, widget= forms.FileInput(attrs={'class': 'form-input-styled',}) )
+    image = forms.ImageField(allow_empty_file=True,  required=False, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field"}) )
     class Meta:
         model=CompanyEvent
         fields = ('title','title_am','description','description_am','image', 'start_date', 'end_date')
@@ -294,8 +315,7 @@ class CompanyEventForm(forms.ModelForm):
             'description_am': forms.Textarea(attrs={'class': 'summernote'}),
             'start_date': forms.DateTimeInput(attrs={'class':"form-control daterange-single"}),
             'end_date': forms.DateTimeInput(attrs={'class':"form-control daterange-single"}),
-            'image': forms.FileInput(attrs={'class': 'form-input-styled', 'id': "blogImage" }),
-
+            
         }
 
 class EventParticipantForm(forms.ModelForm):
@@ -336,18 +356,28 @@ class CommentReplayForm(forms.ModelForm):
         widgets = {
             'content':forms.Textarea(attrs={'class':'form-control','placeholder':'Give your replay on the Forum comment'}),
         }
-
+ 
 class AnnouncementForm(forms.ModelForm):
 
     class Meta:
         model = Announcement
-        fields = ('title','title_am','description','description_am')
+        fields = ('title','title_am','description','description_am','image')
         widgets = {
+        'image': forms.FileInput(attrs={'id': 'blogImage' ,'accept': 'image/*'}),
         'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Announcement in English'}),
         'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Announcement in Amharic'}),
         'description':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in English'}),
         'description_am':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in Amharic'}),
+        
         }
+    def save(self,x,y,w,h, user):
+        announcement = super(AnnouncementForm, self).save(commit=False)
+        announcement.created_by = user
+        announcement.company = user.get_company()
+        announcement.save()
+        image_cropper(x,y,w,h,announcement.image)        
+        return announcement
+
         
 class ResearchProjectCategoryForm(forms.ModelForm):
     class Meta:
