@@ -15,7 +15,13 @@
 	    var my_token = "{{csrf_token}}";
 		var company_id = "{{object.id}}";
 	</script>
-
+	<style>
+		.col-md-5{
+			border: solid rgb(199, 191, 191) 1px;
+			border-radius: 1%;
+			padding: 2%;
+		}
+	</style>
 	
 	{{form.media}}
 
@@ -29,13 +35,6 @@
 	<div class="card">
 		<div class="card-header bg-white header-elements-inline">
 			<h6 class="card-title">Complete the form in each tab</span></h6>
-			<div class="header-elements">
-				<div class="list-icons">
-					<a class="list-icons-item" data-action="collapse"></a>
-					<a class="list-icons-item" data-action="reload"></a>
-					<a class="list-icons-item" data-action="remove"></a>
-				</div>
-			</div>
 		</div>
 		<div class="card-body">
 			<form id="company_detail_form" class="wizard-form steps-enable-all" action="#"
@@ -47,7 +46,7 @@
 											<hr>
 											<div class="form-group row">
 												
-												<div class="col-md-6 ">
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Add Company Address</label>
 													
 													{%if object.get_company_address%}
@@ -62,7 +61,7 @@
 													</button>
 													{%endif%}
 
-												</div>	
+												</div>	<div class="col-md-1"></div>
 												<div class="col-md-6">
 													<label class="d-block font-weight-semibold">Does the company have expansion plan?</label>
 													<label for=""><input type="radio" name="expn_plan" id="expn_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
@@ -85,14 +84,14 @@
 											</div>
 											<hr>
 											<div class="form-group row">
-												<div class="col-md-6">
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Current Investment Capital In Birr?</label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#inv_capital_form_modal" id="">
 														<i class="fa fa-plus"> </i>
 													</button>
-												</div>
-												<div class="col-md-6">
+												</div><div class="col-md-2"></div>
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Do you have Valid Certificate of Competency?</label>
 													
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
@@ -105,12 +104,12 @@
 											<hr>
 											<div class="form-group row">
 													<div class="col-md-6">
-														<label>{{form.working_hours.label}}</label>
+														<label>{{form.working_hours.label}} *</label>
 															{{form.working_hours}}
 															<span class="form-text text-warning">{{form.working_hours.errors}}</span>
 													</div>
 													<div class="col-md-6">
-														<label>{{form.orgn_strct.label}}</label>
+														<label>{{form.orgn_strct.label}} *</label>
 														<div class="uniform-uploader">
 															{{form.orgn_strct}}
 															<span class="filename" style="user-select: none;">No file selected</span>
@@ -122,14 +121,14 @@
 											</div>
 											<hr>
 											<div class="form-group row">
-												<div class="col-md-6">
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Number Of Employees</label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#employees_form_modal" id="">
 														<i class="fa fa-plus"> </i>
 													</button>
-												</div>
-												<div class="col-md-6">
+												</div><div class="col-md-2"></div>
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">New Job Created This Year</label>
 													
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
@@ -141,14 +140,14 @@
 											</div>
 											<hr>
 											<div class="form-group row">
-												<div class="col-md-6">
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Employees Educational Status</label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#education_status_form_modal" id="">
 														<i class="fa fa-plus"> </i>
 													</button>
-												</div>
-												<div class="col-md-6">
+												</div><div class="col-md-2"></div>
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Number of females in position levels</label>
 													
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
@@ -215,14 +214,14 @@
 											</div>
 											<hr>
 											<div class="form-group row">
-												<div class="col-md-6">
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Sources and amount of your inputs</label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#srcamnt_input_form_modal" id="">
 														<i class="fa fa-plus"> </i>
 													</button>
-												</div>
-												<div class="col-md-6">
+												</div><div class="col-md-1"></div>
+												<div class="col-md-6" style="border: solid rgb(199, 191, 191) 1px;border-radius: 1%;padding: 2%;">
 													<label class="font-weight-semibold" for="">How many kilowatt-hour electric power you use per day?</label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#power_consumption_form_modal" id="">
@@ -234,17 +233,17 @@
 											<hr>
 											<div class="form-group row">
 												<div class="col-md-4">
-													<label for="">{{form.category.label}}</label>
+													<label for="">{{form.category.label}} *</label>
 													{{form.category}}
 													<span class="form-text text-warning">{{form.category.errors}}</span>
 												</div>
 												<div class="col-md-4">
-													<label for="">{{form.management_tools.label}}</label>
+													<label for="">{{form.management_tools.label}} *</label>
 													{{form.management_tools}}
 													<span class="form-text text-warning">{{form.management_tools.errors}}</span>
 												</div>
 												<div class="col-md-4">
-													<label for="">{{form.certification.label}}</label>
+													<label for="">{{form.certification.label}} *</label>
 													{{form.certification}}
 													<span class="form-text text-warning">{{form.certification.errors}}</span>
 												</div>
@@ -296,14 +295,14 @@
 											</div>
 											<hr>
 											<div class="form-group row">
-												<div class="col-md-6">
+												<div class="col-md-5">
 													<label class="font-weight-semibold"  for="">Where do you sell your products?</label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#destination_form_modal" id="">
 														<i class="fa fa-plus"> </i>
 													</button>
-												</div>
-												<div class="col-md-6">
+												</div><div class="col-md-2"></div>
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Target market in percent (%) </label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#target_form_modal" id="">
@@ -393,7 +392,7 @@
 														
 													</div>		
 													<div class="col-md-6">
-														<label>{{form.source_of_energy.label}}</label>
+														<label>{{form.source_of_energy.label}} *</label>
 															{{form.source_of_energy}}
 															<span class="form-text text-warning">{{form.source_of_energy.errors}}</span>
 													</div>
@@ -511,7 +510,7 @@
 													
 												</div>
 												<div class="col-md-6">
-													<label class="font-weight-semibold" for="">{{form.support_required.label}}</label>
+													<label class="font-weight-semibold" for="">{{form.support_required.label}} *</label>
 													{{form.support_required}}
 													<span class="form-text text-warning">{{form.support_required.errors}}</span>
 												</div>

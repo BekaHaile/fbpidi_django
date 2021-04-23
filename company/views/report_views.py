@@ -261,7 +261,6 @@ class GrossValueOfProduction(LoginRequiredMixin,View):
                         'last_yr':gvp_index['total_last_year'],
                         'pref_yr':gvp_index['total_prev_year'],
                     })
-            print(gvp_data)
             context['gvp_data'] = gvp_data
             context['flag'] = "gross_vp_data"
             context['years'] = {'this_year':get_current_year(),'last_year':get_current_year()-1,'prev_year':get_current_year()-2}

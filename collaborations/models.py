@@ -468,9 +468,8 @@ class AnnouncementImages(models.Model):
 class ResearchProjectCategory(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
-    cateoryname = models.CharField(max_length=500,null=False)
-    cateoryname_am = models.CharField(max_length=500,null=False)
-    detail = models.TextField(null=False)
+    cateoryname = models.CharField(max_length=500,null=False,verbose_name="Research Category Name")
+    cateoryname_am = models.CharField(max_length=500,null=False,verbose_name="Research Category Name in Amharic")
     last_updated_by = models.ForeignKey (settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, blank=True, null = True, related_name="category_updated")
     last_updated_date = models.DateTimeField(blank=True, null = True)
     expired = models.BooleanField(default=False)
