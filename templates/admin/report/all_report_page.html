@@ -24,8 +24,9 @@
  
 {% endblock %}
 
-{%block pagename%} <a href="{%url 'admin:report_page'%}">Reports</a> > All Reports{%endblock%} 
-
+{%block pagename%} Reports {%endblock%} 
+{%block nav%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<a href="{%url 'admin:all_report_page'%}" class="breadcrumb-item">All Reports</a>{%endblock%}
 {%block content%}
 
 			<!-- Content area -->

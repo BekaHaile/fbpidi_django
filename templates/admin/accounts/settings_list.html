@@ -10,6 +10,8 @@
  
 {% endblock %}
 {%block pagename%}Settings{%endblock%}
+{%block nav%}
+<a href="{%url 'admin:settings'%}" class="breadcrumb-item">Settings</a>{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
@@ -971,12 +973,12 @@
 														<div class="dropdown-menu dropdown-menu-right">
 															{% if user.is_superuser or user == cat.created_by %}
 																{% if perms.collaborations.delete_jobcategory %}
-																<a href="{%url 'admin:delete' model_name='JobCategory' id=cat.id%}" class="dropdown-item" onclick="return confirm('Warning:\n If You delete this the Vacanies under this will be deleted')"><i class="icon-trash"></i>Delete JobCategory</a>
+																<a href="{%url 'admin:delete' model_name='JobCategory' id=cat.id%}" class="dropdown-item" onclick="return confirm('Warning:\n If You delete this the Vacanies under this will be deleted')"><i class="icon-trash"></i>Delete Vacancy Category</a>
 																{%endif%}
 															
 																{% if perms.collaborations.change_jobcategory %}
 																<a href="{%url 'admin:update_vacancy_category' pk=cat.id%}" class="dropdown-item" >
-																	<i class="icon-pencil"></i>Edit JobCategory</a>
+																	<i class="icon-pencil"></i>Edit Vacancy Category</a>
 																{%endif%}
 															{%endif%}
 															

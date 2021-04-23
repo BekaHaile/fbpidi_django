@@ -18,6 +18,25 @@ Product Production and Sales Performance Data Form
 Product Packaging Data Form
 {%endif%}
 {%endblock%}
+
+{%block nav%}
+{%if flag == "production_capacity"%}
+<a href="{%url 'admin:production_capacity'%}" class="breadcrumb-item">Production Capacity</a>
+<a href="{%url 'admin:create_production_capacity'%}" class="breadcrumb-item">Production Capacity Form</a>
+{%elif flag == "anual_input_need"%}
+<a href="{%url 'admin:anual_input_need'%}" class="breadcrumb-item">Annual Input Need</a>
+<a href="{%url 'admin:create_anual_inp_need'%}" class="breadcrumb-item">Anual Input Need Form</a>
+{%elif flag == "demand_supply"%}
+<a href="{%url 'admin:demand_supply_list'%}" class="breadcrumb-item">Demand & Supply</a>
+<a href="{%url 'admin:create_demand_supply'%}" class="breadcrumb-item">Demand & Supply Form</a>
+{%elif flag == "sales_performance"%}
+<a href="{%url 'admin:sales_performance'%}" class="breadcrumb-item">Production & Sales Performance</a>
+<a href="{%url 'admin:create_sales_performance'%}" class="breadcrumb-item">Production & Sales Performance Form</a>
+{%elif flag == "packaging"%}
+<a href="{%url 'admin:packaging'%}" class="breadcrumb-item">Packaging</a>
+<a href="{%url 'admin:create_packaging'%}" class="breadcrumb-item">Packaging Form</a>
+{%endif%}
+{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -28,13 +47,7 @@ Product Packaging Data Form
 	<div class="card">
 		<div class="card-header bg-white header-elements-inline">
 			<h6 class="card-title">Create Production Capacity for Product: {{product.name}}</span></h6>
-			<div class="header-elements">
-				<div class="list-icons">
-					<a class="list-icons-item" data-action="collapse"></a>
-					<a class="list-icons-item" data-action="reload"></a>
-					<a class="list-icons-item" data-action="remove"></a>
-				</div>
-			</div>
+			
 		</div>
 
 		<div class="card-body">
@@ -49,13 +62,7 @@ Product Packaging Data Form
 	<div class="card">
 		<div class="card-header bg-white header-elements-inline">
 			<h6 class="card-title">Add Annual Input Need Data for Product: {{product.name}}</span></h6>
-			<div class="header-elements">
-				<div class="list-icons">
-					<a class="list-icons-item" data-action="collapse"></a>
-					<a class="list-icons-item" data-action="reload"></a>
-					<a class="list-icons-item" data-action="remove"></a>
-				</div>
-			</div>
+			
 		</div>
 
 		<div class="card-body">
@@ -70,13 +77,7 @@ Product Packaging Data Form
 	<div class="card">
 		<div class="card-header bg-white header-elements-inline">
 			<h6 class="card-title">Add Anual Input Demand and Supply data for Product: {{product.name}}</span></h6>
-			<div class="header-elements">
-				<div class="list-icons">
-					<a class="list-icons-item" data-action="collapse"></a>
-					<a class="list-icons-item" data-action="reload"></a>
-					<a class="list-icons-item" data-action="remove"></a>
-				</div>
-			</div>
+			
 		</div>
 
 		<div class="card-body">
@@ -91,13 +92,7 @@ Product Packaging Data Form
 	<div class="card">
 		<div class="card-header bg-white header-elements-inline">
 			<h6 class="card-title">Add Anual Sales Performance data for Product: {{product.name}}</span></h6>
-			<div class="header-elements">
-				<div class="list-icons">
-					<a class="list-icons-item" data-action="collapse"></a>
-					<a class="list-icons-item" data-action="reload"></a>
-					<a class="list-icons-item" data-action="remove"></a>
-				</div>
-			</div>
+			
 		</div>
 
 		<div class="card-body">
@@ -112,13 +107,7 @@ Product Packaging Data Form
 	<div class="card">
 		<div class="card-header bg-white header-elements-inline">
 			<h6 class="card-title">Add Packaging data for Product: {{product.name}}</span></h6>
-			<div class="header-elements">
-				<div class="list-icons">
-					<a class="list-icons-item" data-action="collapse"></a>
-					<a class="list-icons-item" data-action="reload"></a>
-					<a class="list-icons-item" data-action="remove"></a>
-				</div>
-			</div>
+			
 		</div>
 
 		<div class="card-body">

@@ -28,6 +28,8 @@
 {% endblock %}
 {%block pagename%}Company Profile: {{company.name}}
 {%endblock%}
+{%block nav%}<a href="{%url 'admin:companies'%}" class="breadcrumb-item">Companies</a>
+<a href="{%url 'admin:update_company_info' pk=object.id%}" class="breadcrumb-item">Company Detail</a>{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
@@ -252,348 +254,348 @@
 												<label for="">{{form.name_am.label}} *</label>
 												{{form.name_am}}
 											</div>					
-									</div>
-									<div class="form-group row">
-										<label for="">{{form.geo_location.label}} *</label>
-									</div>
-									<div class="form-group row p-2 ml-2">
-											{{form.geo_location}}					
-									</div>
-									 
-									<div class="form-group row">
-										<div class="col-md-6">
-											<label for="">{{form.contact_person.label}} *</label>
-											{{form.contact_person}}
 										</div>
-										<div class="col-md-6">
-											<label for="">{{form.ownership_form.label}} *</label>
-											{{form.ownership_form}}
+										<div class="form-group row">
+											<label for="">{{form.geo_location.label}} *</label>
 										</div>
-									</div>
-									
-									<div class="form-group row">
+										<div class="form-group row p-2 ml-2">
+												{{form.geo_location}}					
+										</div>
 										
-										<div class="col-md-6">
-											<label for="">{{form.established_yr.label}} *</label>
-											{{form.established_yr}}
-										</div>
-										<div class="col-md-6">
-											<label for="">{{form.category.label}} *</label>
-											{{form.category}}									
-									</div>
-									</div>
-									
-									<div class="form-group row">
-										
-										<div class="col-md-6">
-											<label>{{form.trade_license.label}} *</label>
-												{{form.trade_license}} 
-											<span class="form-text text-muted">{{form.trade_license.help_text}}b</span>
-										</div>
-										<div class="col-md-6">
-											{{form.x}}
-											{{form.y}}
-											{{form.height}}
-											{{form.width}}
-											<label>{{form.logo.label}} *</label>
-												{{form.logo}}
-											<span class="form-text text-muted">{{form.logo.help_text}}b</span>
-										</div>
-										 
-									 </div>
-									 <div class="form-group">
-										<label for="">{{form.detail.label}} *</label>
-										{{form.detail}}
-									</div>
-									<div class="form-group">
-									   <label for="">{{form.detail_am.label}} *</label>
-									   {{form.detail_am}}
-								   </div>
-									<hr>
-									<div class="form-group row">
-										
-										<div class="col-md-6">
-											<label class="d-block font-weight-semibold">Does the company have expansion plan?</label>
-											<label for=""><input type="radio" name="expn_plan" id="expn_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
-											<label for=""><input type="radio" name="expn_plan" id="expn_no" checked><span class="ml-2">No</span></label>
-										</div>
-										<div class="col-md-12" id="div_expn" style="display: none;">
-											<label for="">If Yes Please Specify</label>
-											<div class="form-group">
-												{{form.expansion_plan.label}}
-												{{form.expansion_plan}}
-												<span class="form-text text-warning">{{form.expansion_plan.errors}}</span>
-											</div>
-										</div>
-									</div>
-									<hr>
-									<div class="form-group row">
+										<div class="form-group row">
 											<div class="col-md-6">
-												<label>{{form.working_hours.label}} *</label>
-													{{form.working_hours}}
-													<span class="form-text text-warning">{{form.working_hours.errors}}</span>
+												<label for="">{{form.contact_person.label}} *</label>
+												{{form.contact_person}}
 											</div>
 											<div class="col-md-6">
-												<label>{{form.orgn_strct.label}} *</label>
-												<div class="uniform-uploader">
-													{{form.orgn_strct}}
-													<span class="filename" style="user-select: none;">No file selected</span>
-													<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+												<label for="">{{form.ownership_form.label}} *</label>
+												{{form.ownership_form}}
+											</div>
+										</div>
+										
+										<div class="form-group row">
+											
+											<div class="col-md-6">
+												<label for="">{{form.established_yr.label}} *</label>
+												{{form.established_yr}}
+											</div>
+											<div class="col-md-6">
+												<label for="">{{form.category.label}} *</label>
+												{{form.category}}									
+										</div>
+										</div>
+										
+										<div class="form-group row">
+											
+											<div class="col-md-6">
+												<label>{{form.trade_license.label}} *</label>
+													{{form.trade_license}} 
+												<span class="form-text text-muted">{{form.trade_license.help_text}}b</span>
+											</div>
+											<div class="col-md-6">
+												{{form.x}}
+												{{form.y}}
+												{{form.height}}
+												{{form.width}}
+												<label>{{form.logo.label}} *</label>
+													{{form.logo}}
+												<span class="form-text text-muted">{{form.logo.help_text}}b</span>
+											</div>
+											
+										</div>
+										<div class="form-group">
+											<label for="">{{form.detail.label}} *</label>
+											{{form.detail}}
+										</div>
+										<div class="form-group">
+										<label for="">{{form.detail_am.label}} *</label>
+										{{form.detail_am}}
+									</div>
+										<hr>
+										<div class="form-group row">
+											
+											<div class="col-md-6">
+												<label class="d-block font-weight-semibold">Does the company have expansion plan?</label>
+												<label for=""><input type="radio" name="expn_plan" id="expn_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+												<label for=""><input type="radio" name="expn_plan" id="expn_no" checked><span class="ml-2">No</span></label>
+											</div>
+											<div class="col-md-12" id="div_expn" style="display: none;">
+												<label for="">If Yes Please Specify</label>
+												<div class="form-group">
+													{{form.expansion_plan.label}}
+													{{form.expansion_plan}}
+													<span class="form-text text-warning">{{form.expansion_plan.errors}}</span>
 												</div>
-												<span class="form-text text-muted">{{form.orgn_strct.help_text}}</span>
-												<span class="form-text text-warning">{{form.orgn_strct.errors}}</span>
-											</div>					
-									</div>
-									<hr>
-									
-									<div class="form-group">
-										<div></div>
-										<label class="d-block font-weight-semibold">Do you have quality control laboratory?</label>
-										<label for=""><input type="radio" name="lab" id="lab_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
-										<label for=""><input type="radio" name="lab" id="lab_no" checked><span class="ml-2">No</span></label>
-										<div id="div_lab" style="display: none;">
-											<label for="">Please Specifiy The Following</label>
-											<div class="form-group">
-												{{form.lab_test_analysis.label}}
-												{{form.lab_test_analysis}}
-												<span class="form-text text-warning">{{form.lab_test_analysis.errors}}</span>
 											</div>
-											<div class="form-group">
-												{{form.lab_equipment.label}}
-												{{form.lab_equipment}}
-												<span class="form-text text-warning">{{form.lab_equipment.errors}}</span>
+										</div>
+										<hr>
+										<div class="form-group row">
+												<div class="col-md-6">
+													<label>{{form.working_hours.label}} *</label>
+														{{form.working_hours}}
+														<span class="form-text text-warning">{{form.working_hours.errors}}</span>
+												</div>
+												<div class="col-md-6">
+													<label>{{form.orgn_strct.label}} *</label>
+													<div class="uniform-uploader">
+														{{form.orgn_strct}}
+														<span class="filename" style="user-select: none;">No file selected</span>
+														<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+													</div>
+													<span class="form-text text-muted">{{form.orgn_strct.help_text}}</span>
+													<span class="form-text text-warning">{{form.orgn_strct.errors}}</span>
+												</div>					
+										</div>
+										<hr>
+										
+										<div class="form-group">
+											<div></div>
+											<label class="d-block font-weight-semibold">Do you have quality control laboratory?</label>
+											<label for=""><input type="radio" name="lab" id="lab_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+											<label for=""><input type="radio" name="lab" id="lab_no" checked><span class="ml-2">No</span></label>
+											<div id="div_lab" style="display: none;">
+												<label for="">Please Specifiy The Following</label>
+												<div class="form-group">
+													{{form.lab_test_analysis.label}}
+													{{form.lab_test_analysis}}
+													<span class="form-text text-warning">{{form.lab_test_analysis.errors}}</span>
+												</div>
+												<div class="form-group">
+													{{form.lab_equipment.label}}
+													{{form.lab_equipment}}
+													<span class="form-text text-warning">{{form.lab_equipment.errors}}</span>
+												</div>
+											
 											</div>
-										
 										</div>
-									</div>
-									<hr>
-									<div class="form-group">
-										<label class="d-block font-weight-semibold">Does the company outsource test parameters and contract agreement?</label>
-										<label for=""><input type="radio" name="outsource" id="outsrc_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
-										<label for=""><input type="radio" name="outsource" id="outsrc_no" checked><span class="ml-2">No</span></label>
-										<div id="div_outsrc" style="display: none;">
-											<label for="">Please Specifiy The Following</label>
-											<div class="form-group">
-												{{form.outsourced_test_param.label}}
-												{{form.outsourced_test_param}}
-												<span class="form-text text-warning">{{form.outsourced_test_param.errors}}</span>
+										<hr>
+										<div class="form-group">
+											<label class="d-block font-weight-semibold">Does the company outsource test parameters and contract agreement?</label>
+											<label for=""><input type="radio" name="outsource" id="outsrc_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+											<label for=""><input type="radio" name="outsource" id="outsrc_no" checked><span class="ml-2">No</span></label>
+											<div id="div_outsrc" style="display: none;">
+												<label for="">Please Specifiy The Following</label>
+												<div class="form-group">
+													{{form.outsourced_test_param.label}}
+													{{form.outsourced_test_param}}
+													<span class="form-text text-warning">{{form.outsourced_test_param.errors}}</span>
+												</div>
+											
 											</div>
-										
 										</div>
-									</div>
-									<hr>
-									<div class="form-group row">
-										
-										<div class="col-md-6">
-											<label for="">{{form.management_tools.label}} *</label>
-											{{form.management_tools}}
-											<span class="form-text text-warning">{{form.management_tools.errors}}</span>
-										</div>
-										<div class="col-md-6">
-											<label for="">{{form.certification.label}} *</label>
-											{{form.certification}}
-											<span class="form-text text-warning">{{form.certification.errors}}</span>
-										</div>
-										
-									</div>
-									<hr>
-									<div class="form-group">
-										<label class="d-block font-weight-semibold">Does your company conduct Research and Development?</label>
-										<label for=""><input type="radio" name="research" id="rsrch_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
-										<label for=""><input type="radio" name="research" id="rsrch_no" checked><span class="ml-2">No</span></label>
-										<div id="div_rsrch" style="display: none;">
-											<label class="p-2" for="">Please Specifiy The Following</label>
-											<div class="form-group">
-												{{form.conducted_research.label}}
-												{{form.conducted_research}}
-												<span class="form-text text-warning">{{form.conducted_research.errors}}</span>
+										<hr>
+										<div class="form-group row">
+											
+											<div class="col-md-6">
+												<label for="">{{form.management_tools.label}} *</label>
+												{{form.management_tools}}
+												<span class="form-text text-warning">{{form.management_tools.errors}}</span>
+											</div>
+											<div class="col-md-6">
+												<label for="">{{form.certification.label}} *</label>
+												{{form.certification}}
+												<span class="form-text text-warning">{{form.certification.errors}}</span>
 											</div>
 											
 										</div>
-									</div>
-									<hr>
-									<div class="form-group">
-										<label class="d-block font-weight-semibold">Do you have new product developed?</label>
-										<label for=""><input type="radio" name="new_product" id="product_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
-										<label for=""><input type="radio" name="new_product" id="product_no" checked><span class="ml-2">No</span></label>
-										<div id="div_product" style="display: none;">
-											<label class="p-2" for="">Please Specifiy The Following</label>
-											<div class="form-group">
-												{{form.new_product_developed.label}}
-												{{form.new_product_developed}}
-												<span class="form-text text-warning">{{form.new_product_developed.errors}}</span>
+										<hr>
+										<div class="form-group">
+											<label class="d-block font-weight-semibold">Does your company conduct Research and Development?</label>
+											<label for=""><input type="radio" name="research" id="rsrch_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+											<label for=""><input type="radio" name="research" id="rsrch_no" checked><span class="ml-2">No</span></label>
+											<div id="div_rsrch" style="display: none;">
+												<label class="p-2" for="">Please Specifiy The Following</label>
+												<div class="form-group">
+													{{form.conducted_research.label}}
+													{{form.conducted_research}}
+													<span class="form-text text-warning">{{form.conducted_research.errors}}</span>
+												</div>
+												
 											</div>
-											
 										</div>
-									</div>
-									<hr>
-									
-									<div class="form-group">
-										<label class="d-block font-weight-semibold">Do you have properly available infrastructure?</label>
+										<hr>
+										<div class="form-group">
+											<label class="d-block font-weight-semibold">Do you have new product developed?</label>
+											<label for=""><input type="radio" name="new_product" id="product_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+											<label for=""><input type="radio" name="new_product" id="product_no" checked><span class="ml-2">No</span></label>
+											<div id="div_product" style="display: none;">
+												<label class="p-2" for="">Please Specifiy The Following</label>
+												<div class="form-group">
+													{{form.new_product_developed.label}}
+													{{form.new_product_developed}}
+													<span class="form-text text-warning">{{form.new_product_developed.errors}}</span>
+												</div>
+												
+											</div>
+										</div>
+										<hr>
 										
-										<div class="ml-4 row">
-											<div class="col-md-4">
-												<label class="mr-2 font-weight-semibold" for=""><span class="mr-1">{{form.electric_power}}</span>{{form.electric_power.label}}</label>
-											</div>
-											<div class="col-md-4">
-												<label class="mr-2 font-weight-semibold" for=""><span class="mr-1">{{form.water_supply}}</span>{{form.water_supply.label}}</label>
-											</div>
+										<div class="form-group">
+											<label class="d-block font-weight-semibold">Do you have properly available infrastructure?</label>
+											
+											<div class="ml-4 row">
+												<div class="col-md-4">
+													<label class="mr-2 font-weight-semibold" for=""><span class="mr-1">{{form.electric_power}}</span>{{form.electric_power.label}}</label>
+												</div>
+												<div class="col-md-4">
+													<label class="mr-2 font-weight-semibold" for=""><span class="mr-1">{{form.water_supply}}</span>{{form.water_supply.label}}</label>
+												</div>
 
+												<div class="col-md-4">
+													<label class="mr-2 font-weight-semibold" for=""><span class="mr-1">{{form.telecom}}</span>{{form.telecom.label}}</label>
+													
+												</div>
+											</div>
+										</div>
+										<hr>
+										<div class="form-group row ml-4">
 											<div class="col-md-4">
-												<label class="mr-2 font-weight-semibold" for=""><span class="mr-1">{{form.telecom}}</span>{{form.telecom.label}}</label>
+												<label class="font-weight-semibold pr-2" for=""><span class="mr-1">{{form.marketing_department}}</span>{{form.marketing_department.label}}</label>
+												
+											</div>
+											<div class="col-md-4">
+												<label class="font-weight-semibold" for=""><span class="mr-1">{{form.e_commerce}}</span>{{form.e_commerce.label}}</label>
+												
+											</div>
+											<div class="col-md-4">
+												<label class="font-weight-semibold" for=""><span class="mr-1">{{form.active_database}}</span>{{form.active_database.label}}</label>
+												
+											</div>
+											
+										</div>
+										<hr>
+										<div class="form-group">
+											<label class="d-block font-weight-semibold">Does the company have waste treatment and disposal system?</label>
+											<label for=""><input type="radio" name="waste_trtmt" id="wastetrt_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+											<label for=""><input type="radio" name="waste_trtmt" id="wastetrt_no" checked><span class="ml-2">No</span></label>
+											<div id="div_waste_trtmt" style="display: none;">
+												<label class="p-2" for="">Please Specifiy The Following</label>
+												<div class="form-group">
+													{{form.waste_trtmnt_system.label}}
+													{{form.waste_trtmnt_system}}
+													<span class="form-text text-warning">{{form.waste_trtmnt_system.errors}}</span>
+												</div>
 												
 											</div>
 										</div>
-									</div>
-									<hr>
-									<div class="form-group row ml-4">
-										<div class="col-md-4">
-											<label class="font-weight-semibold pr-2" for=""><span class="mr-1">{{form.marketing_department}}</span>{{form.marketing_department.label}}</label>
-											
-										</div>
-										<div class="col-md-4">
-											<label class="font-weight-semibold" for=""><span class="mr-1">{{form.e_commerce}}</span>{{form.e_commerce.label}}</label>
-											
-										</div>
-										<div class="col-md-4">
-											<label class="font-weight-semibold" for=""><span class="mr-1">{{form.active_database}}</span>{{form.active_database.label}}</label>
-											
-										</div>
-										
-									</div>
-									<hr>
-									<div class="form-group">
-										<label class="d-block font-weight-semibold">Does the company have waste treatment and disposal system?</label>
-										<label for=""><input type="radio" name="waste_trtmt" id="wastetrt_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
-										<label for=""><input type="radio" name="waste_trtmt" id="wastetrt_no" checked><span class="ml-2">No</span></label>
-										<div id="div_waste_trtmt" style="display: none;">
-											<label class="p-2" for="">Please Specifiy The Following</label>
-											<div class="form-group">
-												{{form.waste_trtmnt_system.label}}
-												{{form.waste_trtmnt_system}}
-												<span class="form-text text-warning">{{form.waste_trtmnt_system.errors}}</span>
-											</div>
-											
-										</div>
-									</div>
-									<hr>
-									<div class="form-group row ml-4">
-										<div class="col-md-6">
-											<label class="font-weight-semibold" for=""><span class="mr-1">{{form.efluent_treatment_plant}}</span>{{form.efluent_treatment_plant.label}}</label>
-											
-										</div>
-										<div class="col-md-6">
-											<label class="font-weight-semibold" for=""><span class="mr-1">{{form.env_mgmt_plan}}</span>{{form.env_mgmt_plan.label}}</label>
-											
-										</div>
-										
-									</div>
-									<hr>
-									
-									<div class="form-group">
-										<div class="row">
+										<hr>
+										<div class="form-group row ml-4">
 											<div class="col-md-6">
-												<label class="d-block font-weight-semibold">Does your company measure its gas /carbon/ emission to the environment?</label>
-												<label for=""><input type="radio" name="carbon_emision" id="ce_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
-												<label for=""><input type="radio" name="carbon_emision" id="ce_no" checked><span class="ml-2">No</span></label>
+												<label class="font-weight-semibold" for=""><span class="mr-1">{{form.efluent_treatment_plant}}</span>{{form.efluent_treatment_plant.label}}</label>
 												
-											</div>		
+											</div>
 											<div class="col-md-6">
-												<label>{{form.source_of_energy.label}} *</label>
-													{{form.source_of_energy}}
-													<span class="form-text text-warning">{{form.source_of_energy.errors}}</span>
-											</div>
-														
-										</div>
-										<div class="col-md-12" id="div_ce" style="display: none;">
-											<label for="" class="p-2">Please Specify the following</label>
-											<div class="form-group">
-												<label for="">{{form.gas_carb_emision.label}}</label>
-												{{form.gas_carb_emision}}
-												<span class="form-text text-warning">{{form.gas_carb_emision.errors}}</span>
-											</div>
-										
-										</div>
-									</div>
-									<hr>
-									<div class="form-group">
-										<label class="d-block font-weight-semibold">Is there any environmental issue complaint with the local community?</label>
-										<label for=""><input type="radio" name="env_complaint" id="env_complaint_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
-										<label for=""><input type="radio" name="env_complaint" id="env_complaint_no" checked><span class="ml-2">No</span></label>
-										<div id="div_env_complaint" style="display: none;">
-											<label for="" class="p-2">Please Specify the following</label>
-											<div class="form-group">
-												<label for="">{{form.comunity_compliant.label}}</label>
-												{{form.comunity_compliant}}
-												<span class="form-text text-warning">{{form.comunity_compliant.errors}}</span>
+												<label class="font-weight-semibold" for=""><span class="mr-1">{{form.env_mgmt_plan}}</span>{{form.env_mgmt_plan.label}}</label>
+												
 											</div>
 											
 										</div>
-									</div>
-									<hr>
-									<div class="form-group row ml-4">
-										<div class="col-md-6">
-											<label class="font-weight-semibold" for=""><span class="mr-1">{{form.compound_allot}}</span>{{form.compound_allot.label}}</label>
-											
-										</div>
-										<div class="col-md-6">
-											<label class="font-weight-semibold" for=""><span class="mr-1">{{form.env_focal_person}}</span>{{form.env_focal_person.label}}</label>
-											
-										</div>
+										<hr>
 										
-									</div>
-									<hr>
-									<div class="form-group row ml-4">
-										<div class="col-md-6">
-											<label class="font-weight-semibold" for=""><span class="mr-1">{{form.safety_profesional}}</span>{{form.safety_profesional.label}}</label>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-6">
+													<label class="d-block font-weight-semibold">Does your company measure its gas /carbon/ emission to the environment?</label>
+													<label for=""><input type="radio" name="carbon_emision" id="ce_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+													<label for=""><input type="radio" name="carbon_emision" id="ce_no" checked><span class="ml-2">No</span></label>
+													
+												</div>		
+												<div class="col-md-6">
+													<label>{{form.source_of_energy.label}} *</label>
+														{{form.source_of_energy}}
+														<span class="form-text text-warning">{{form.source_of_energy.errors}}</span>
+												</div>
+															
+											</div>
+											<div class="col-md-12" id="div_ce" style="display: none;">
+												<label for="" class="p-2">Please Specify the following</label>
+												<div class="form-group">
+													<label for="">{{form.gas_carb_emision.label}}</label>
+													{{form.gas_carb_emision}}
+													<span class="form-text text-warning">{{form.gas_carb_emision.errors}}</span>
+												</div>
 											
-										</div>
-										<div class="col-md-6">
-											<label class="font-weight-semibold" for=""><span class="mr-1">{{form.notification_procedure}}</span>{{form.notification_procedure.label}}</label>
-											
-										</div>
-										
-									</div>
-									<hr>
-									<div class="form-group">
-										<label class="d-block font-weight-semibold">Industry university linkage</label>
-										<label for=""><input type="radio" name="linkage" id="linkage_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
-										<label for=""><input type="radio" name="linkage" id="linkage_no" checked><span class="ml-2">No</span></label>
-										<div id="div_linkage" style="display: none;">
-											<label for="" class="p-2">Please Specify the following</label>
-											<div class="form-group">
-												<label for="">{{form.university_linkage.label}}</label>
-												{{form.university_linkage}}
-												<span class="form-text text-warning">{{form.university_linkage.errors}}</span>
 											</div>
 										</div>
-									</div>
-									<hr>
-									<div class="form-group">
-										<label class="d-block font-weight-semibold">{{form.quality_defects.label}}</label>
-												{{form.quality_defects}}
-												<span class="form-text text-warning">{{form.quality_defects.errors}}</span>
-									</div>
-									<hr>
-									<div class="form-group">
-										<label class="d-block font-weight-semibold">{{form.gas_waste_mgmnt_measure.label}}</label>
-												{{form.gas_waste_mgmnt_measure}}
-												<span class="form-text text-warning">{{form.gas_waste_mgmnt_measure.errors}}</span>
-									</div>
-									<hr>
-									<div class="form-group row ml-4">
-										<div class="col-md-6">
-											<label class="font-weight-semibold" for=""><span class="mr-1">{{form.recall_system}}</span>{{form.recall_system.label}}</label>
+										<hr>
+										<div class="form-group">
+											<label class="d-block font-weight-semibold">Is there any environmental issue complaint with the local community?</label>
+											<label for=""><input type="radio" name="env_complaint" id="env_complaint_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+											<label for=""><input type="radio" name="env_complaint" id="env_complaint_no" checked><span class="ml-2">No</span></label>
+											<div id="div_env_complaint" style="display: none;">
+												<label for="" class="p-2">Please Specify the following</label>
+												<div class="form-group">
+													<label for="">{{form.comunity_compliant.label}}</label>
+													{{form.comunity_compliant}}
+													<span class="form-text text-warning">{{form.comunity_compliant.errors}}</span>
+												</div>
+												
+											</div>
+										</div>
+										<hr>
+										<div class="form-group row ml-4">
+											<div class="col-md-6">
+												<label class="font-weight-semibold" for=""><span class="mr-1">{{form.compound_allot}}</span>{{form.compound_allot.label}}</label>
+												
+											</div>
+											<div class="col-md-6">
+												<label class="font-weight-semibold" for=""><span class="mr-1">{{form.env_focal_person}}</span>{{form.env_focal_person.label}}</label>
+												
+											</div>
 											
 										</div>
-										<div class="col-md-6">
-											<label class="font-weight-semibold" for="">{{form.support_required.label}} *</label>
-											{{form.support_required}}
-											<span class="form-text text-warning">{{form.support_required.errors}}</span>
+										<hr>
+										<div class="form-group row ml-4">
+											<div class="col-md-6">
+												<label class="font-weight-semibold" for=""><span class="mr-1">{{form.safety_profesional}}</span>{{form.safety_profesional.label}}</label>
+												
+											</div>
+											<div class="col-md-6">
+												<label class="font-weight-semibold" for=""><span class="mr-1">{{form.notification_procedure}}</span>{{form.notification_procedure.label}}</label>
+												
+											</div>
+											
 										</div>
-										
-									</div>
-									<hr>
+										<hr>
+										<div class="form-group">
+											<label class="d-block font-weight-semibold">Industry university linkage</label>
+											<label for=""><input type="radio" name="linkage" id="linkage_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
+											<label for=""><input type="radio" name="linkage" id="linkage_no" checked><span class="ml-2">No</span></label>
+											<div id="div_linkage" style="display: none;">
+												<label for="" class="p-2">Please Specify the following</label>
+												<div class="form-group">
+													<label for="">{{form.university_linkage.label}}</label>
+													{{form.university_linkage}}
+													<span class="form-text text-warning">{{form.university_linkage.errors}}</span>
+												</div>
+											</div>
+										</div>
+										<hr>
+										<div class="form-group">
+											<label class="d-block font-weight-semibold">{{form.quality_defects.label}}</label>
+													{{form.quality_defects}}
+													<span class="form-text text-warning">{{form.quality_defects.errors}}</span>
+										</div>
+										<hr>
+										<div class="form-group">
+											<label class="d-block font-weight-semibold">{{form.gas_waste_mgmnt_measure.label}}</label>
+													{{form.gas_waste_mgmnt_measure}}
+													<span class="form-text text-warning">{{form.gas_waste_mgmnt_measure.errors}}</span>
+										</div>
+										<hr>
+										<div class="form-group row ml-4">
+											<div class="col-md-6">
+												<label class="font-weight-semibold" for=""><span class="mr-1">{{form.recall_system}}</span>{{form.recall_system.label}}</label>
+												
+											</div>
+											<div class="col-md-6">
+												<label class="font-weight-semibold" for="">{{form.support_required.label}} *</label>
+												{{form.support_required}}
+												<span class="form-text text-warning">{{form.support_required.errors}}</span>
+											</div>
+											
+										</div>
+										<hr>
 
 										<div>
 											<button id="submit_update" type="submit" class="btn btn-success btn-md">Save Chages <i class="fa fa-mark"></i></button>

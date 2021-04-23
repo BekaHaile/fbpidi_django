@@ -14,6 +14,11 @@
 {{form.media}}
 {% endblock %}
 {%block pagename%}Investment Project Form {%endblock%}
+{%block nav%}
+<a href="{%url 'admin:project_list'%}" class="breadcrumb-item">Projects</a>
+<span class="breadcrumb-item active">Project Form</span>
+{%endblock%}
+
 {%block content%}
 
 <!-- Content area -->
@@ -22,13 +27,7 @@
 	<div class="card">
 		<div class="card-header bg-white header-elements-inline">
 			<h6 class="card-title">Create Investment Project</span></h6>
-			<div class="header-elements">
-				<div class="list-icons">
-					<a class="list-icons-item" data-action="collapse"></a>
-					<a class="list-icons-item" data-action="reload"></a>
-					<a class="list-icons-item" data-action="remove"></a>
-				</div>
-			</div>
+			
 		</div>
 		<div class="card-body m-2">
 			<form id="companyform" action="{%url 'admin:create_my_project'%}"

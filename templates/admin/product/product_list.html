@@ -9,6 +9,7 @@
 
 {% endblock %}
 {%block pagename%}Product/Varayti List{%endblock%}
+{%block nav%}<a href="{%url 'admin:admin_products'%}" class="breadcrumb-item">Varayti</a>{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -62,17 +63,15 @@
 								<a href="#" class="list-icons-item" data-toggle="dropdown">
 									<i class="icon-menu9"></i>
 								</a>
-								{%if not user.is_superuser and product.company == user.get_company %}
 								<div class="dropdown-menu dropdown-menu-right">
-									{% if perms.product.delete_product %}
+									{% if not user.is_superuser and perms.product.delete_product %}
 									<a href="{%url 'admin:delete' model_name='product' id=cat.id%}"  onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete Product</a>
 									{% endif %}
-									{% if perms.product.change_product %}
+									{% if not user.is_superuser and perms.product.change_product %}
 									<a href="{%url 'admin:product_detail' pk=cat.id%}" class="dropdown-item">
 										<i class="icon-pencil"></i>Edit Varayti</a>
 									 {% endif %}
 								</div>
-								{%endif%}
 							</div>
 						</div>
 					</td>

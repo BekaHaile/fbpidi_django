@@ -36,8 +36,8 @@ class Company(models.Model):
 	detail_am = models.TextField(verbose_name="Company Description in Amharic",default="")
 	contact_person	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True,related_name="contact_person") # contact person
 	category	= models.ManyToManyField(Category,related_name="company_category",verbose_name="Company Product Types") # category
-	expansion_plan	= models.TextField(verbose_name="Expansion Plan in English", null = True)
-	expansion_plan_am	= models.TextField(verbose_name="Expansion Plan in Amharic", null = True)
+	expansion_plan	= models.TextField(verbose_name="Expansion Plan ", null=True,blank=True)
+	expansion_plan_am	= models.TextField(verbose_name="Expansion Plan in Amharic", null=True,blank=True)
 	trade_license	= models.FileField(max_length=254, verbose_name="your Trade License",
 									help_text="Images and pdf files less than 10MB", null=True,
 									upload_to="company/trade_license/",
@@ -47,9 +47,9 @@ class Company(models.Model):
 							help_text="Image and pdf files less thatn 10MB", null=True,blank=True,
 							upload_to="company/organization_structure/",
 							validators=[FileExtensionValidator(allowed_extensions=allowed_file_extensions)])
-	lab_test_analysis = models.ManyToManyField(CompanyDropdownsMaster,verbose_name="Laboratory test analysis in english",blank=True,related_name="lab_test_analysis") 
+	lab_test_analysis = models.ManyToManyField(CompanyDropdownsMaster,verbose_name="Laboratory test analysis",blank=True,related_name="lab_test_analysis") 
 	lab_equipment	= models.ManyToManyField(CompanyDropdownsMaster,verbose_name="Laboratory equipment",related_name="lab_equipment",blank=True) 
-	outsourced_test_param = models.TextField(verbose_name="Outsourced test parameters and contract agreements in english",null=True,blank=True)
+	outsourced_test_param = models.TextField(verbose_name="Outsourced test parameters and contract agreements",null=True,blank=True)
 	outsourced_test_param_am = models.TextField(verbose_name="Outsourced test parameters and contract agreements in amharic", null=True,blank=True)
 	certification	= models.ManyToManyField(CompanyDropdownsMaster,related_name="certification",verbose_name="Which certificate have you received?")  
 	conducted_research	= models.TextField(verbose_name="Conducted research and development",null=True,blank=True)
@@ -63,29 +63,32 @@ class Company(models.Model):
 	marketing_department = models.BooleanField(default=False,verbose_name="Does the company have Marketing Department section?")
 	e_commerce	= models.BooleanField(default=False,verbose_name="Do you use E-Commerce?")
 	active_database =	models.BooleanField(default=False,verbose_name="Do you adopt any active data base system?")
-	waste_trtmnt_system	= models.TextField(verbose_name="Waste Treatment and disposal system in english",null=True,blank=True)
+	waste_trtmnt_system	= models.TextField(verbose_name="Waste Treatment and disposal system",null=True,blank=True)
 	waste_trtmnt_system_am	= models.TextField(verbose_name="Waste Treatment and disposal system in amharic",null=True,blank=True)
 	efluent_treatment_plant = models.BooleanField(default=False,verbose_name="Do you have effluent treatment plant?")
 	env_mgmt_plan = models.BooleanField(default=False,verbose_name="Does the company have Environmental management plan?")
 	source_of_energy = models.ManyToManyField(CompanyDropdownsMaster,related_name="source_of_energy",blank=True)
-	gas_carb_emision = models.TextField(verbose_name="Measure of Gas/carbon emission to the environment in english",null=True,blank=True)
+	gas_carb_emision = models.TextField(verbose_name="Measure of Gas/carbon emission to the environment",null=True,blank=True)
 	gas_carb_emision_am = models.TextField(verbose_name="Measure of Gas/carbon emission to the environment in amharic",null=True,blank=True)
 	compound_allot	= models.BooleanField(default=False,verbose_name="Does the company allot 5%\ of the compound for greenery?")
-	comunity_compliant	= models.TextField(verbose_name="Environmental issue compliant with the community in english",null=True,blank=True)
+	comunity_compliant	= models.TextField(verbose_name="Environmental issue compliant with the community",null=True,blank=True)
 	comunity_compliant_am	= models.TextField(verbose_name="Environmental issue compliant with the community in amharic",null=True,blank=True)
 	env_focal_person = models.BooleanField(default=False,verbose_name="Does the company have Environmental and social focal person?")
 	safety_profesional	 = models.BooleanField(default=False,verbose_name="Does the company have safety professionals?")
 	notification_procedure	= models.BooleanField(default=False,verbose_name="Do you have proper notification procedure to inform EFDA regarding proper disposal?")
-	university_linkage	= models.TextField(verbose_name="Industry University linkage in english",null=True,blank=True)
+	university_linkage	= models.TextField(verbose_name="Industry University linkage",null=True,blank=True)
 	university_linkage_am	= models.TextField(verbose_name="Industry University linkage in amharic",null=True,blank=True)
 	recall_system	= models.BooleanField(default=False,verbose_name="Is there a Recall system due to quality issue?")
 	quality_defects_am	= models.TextField(verbose_name="What quality defect frequently observed in your product? in amharic",null=True,blank=True)
-	quality_defects	= models.TextField(verbose_name="What quality defect frequently observed in your product? in English",null=True,blank=True)
-	gas_waste_mgmnt_measure	= models.TextField(verbose_name="What measures does your company introduced to reduce its gas and waste management? in English",null=True,blank=True)
+	quality_defects	= models.TextField(verbose_name="What quality defect frequently observed in your product? ",null=True,blank=True)
+	gas_waste_mgmnt_measure	= models.TextField(verbose_name="What measures does your company introduced to reduce its gas and waste management? ",null=True,blank=True)
 	gas_waste_mgmnt_measure_am	= models.TextField(verbose_name="What measures does your company introduced to reduce its gas and waste management? in amharic",null=True,blank=True)
 	support_required	= models.ManyToManyField(CompanyDropdownsMaster,verbose_name="What kind of support do you need to increase your production and market",related_name="major_challenges")
 	company_condition = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,verbose_name="Status of processing/ industry facility",related_name="company_status")
 	is_active = models.BooleanField(default=False)
+	reserve_attr0 = models.CharField(max_length=255,default="")
+	reserve_attr1 = models.CharField(max_length=255,default="")
+	reserve_attr2 = models.CharField(max_length=255,default="")
 	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_created_by',null=True)
 	created_date	= models.DateTimeField(auto_now_add=True)
 	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_updated_by',null=True)
@@ -181,6 +184,10 @@ class SourceAmountIputs(models.Model):
 	purchase_from_union	= models.FloatField(default=0,verbose_name="Purchase from Cooperative unions",help_text="(Ton/Year)")
 	purchase_from_agents	= models.FloatField(default=0,verbose_name="Purchase from Commission Agents",help_text="(Ton/Year)")
 	purchase_from_other	= models.FloatField(default=0,verbose_name="Other Specify other",help_text="(Ton/Year)")
+	is_active = models.BooleanField(default=False)
+	reserve_attr0 = models.CharField(max_length=255,default="")
+	reserve_attr1 = models.CharField(max_length=255,default="")
+	reserve_attr2 = models.CharField(max_length=255,default="")
 	timestamp = models.DateField(auto_now_add=True)
 
 # Employees information/statistics
@@ -253,6 +260,10 @@ class MarketTarget(models.Model):
 	wholesaler_distributor	= models.FloatField(verbose_name="Wholesaler/Distributor ",default=0)	
 	retailer = models.FloatField(verbose_name="Retailer ",default=0)	
 	other = models.FloatField(verbose_name="Others ",default=0)
+	is_active = models.BooleanField(default=False)
+	reserve_attr0 = models.CharField(max_length=255,default="")
+	reserve_attr1 = models.CharField(max_length=255,default="")
+	reserve_attr2 = models.CharField(max_length=255,default="")
 	timestamp = models.DateField(auto_now_add=True)
 
 # Yearly market destinations
@@ -292,7 +303,7 @@ class InvestmentProject(models.Model):
 	company	= models.ForeignKey(Company, on_delete=models.CASCADE,related_name="company_project")
 	image = models.ImageField(verbose_name="Project Image",blank=True,null=True)
 	project_name = models.CharField(max_length=255,default="",verbose_name="Investment Company Name All Capital Letters")
-	project_name_am = models.CharField(max_length=255,default="",verbose_name="Investment Company Name in amharic")
+	project_name_am = models.CharField(max_length=255,default="",verbose_name="Investment Company Name in Amharic")
 	geo_location	= gis_models.PointField(verbose_name="Investment Project Location",null=True)
 	ownership_form = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,
 										verbose_name="Form Of Ownership",related_name="ownership_form_project")
@@ -312,16 +323,16 @@ class InvestmentProject(models.Model):
 	land_acquisition = models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT, related_name="land_aquisition", verbose_name="Land Acquisition",null=True,blank=True)
 	project_classification	= models.ForeignKey(ProjectDropDownsMaster, on_delete=models.CASCADE,related_name="project_classification",verbose_name="Project Classification",null=True,blank=True)
 	contact_person	=  models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT,null=True,blank=True)
-	remaining_work	= models.TextField(verbose_name="Remaining Work To be done in English ",null=True,blank=True)
+	remaining_work	= models.TextField(verbose_name="Remaining Work To be done  ",null=True,blank=True)
 	remaining_work_am	= models.TextField(verbose_name="Remaining Work To be done in amharic",null=True,blank=True)
-	major_problems	= models.TextField(verbose_name="List Major Problems that need to be addressed in English",null=True,blank=True)
+	major_problems	= models.TextField(verbose_name="List Major Problems that need to be addressed ",null=True,blank=True)
 	major_problems_am	= models.TextField(verbose_name="List Major Problems that need to be addressed in amharic",null=True,blank=True)
 	operational_time =  models.DateField(verbose_name="Planned Tme to be Operational",null=True,blank=True)
-	annual_raw_material =	models.TextField(verbose_name="Annual Raw material demand and type in English",null=True,blank=True)
+	annual_raw_material =	models.TextField(verbose_name="Annual Raw material demand and type ",null=True,blank=True)
 	annual_raw_material_am =	models.TextField(verbose_name="Annual Raw material demand and type in Amharic",null=True,blank=True)
 	power_need	= models.FloatField(default=0,verbose_name="power Need in kwh",null=True,blank=True)
 	water_suply	= models.FloatField(default=0,verbose_name="Water Supply",null=True,blank=True)
-	cond_provided_for_wy = models.TextField(verbose_name="Special Conditions Provided for women and youth in english",null=True,blank=True)
+	cond_provided_for_wy = models.TextField(verbose_name="Special Conditions Provided for women and youth",null=True,blank=True)
 	cond_provided_for_wy_am = models.TextField(verbose_name="Special Conditions Provided for women and youth in amharic",null=True,blank=True)
 	target_market =	models.TextField(verbose_name="If  you have export  write target market (Destination)",null=True,blank=True)
 	env_impac_ass_doc =	models.FileField(max_length=254, verbose_name="Environmental Impact assessment document",
@@ -334,6 +345,10 @@ class InvestmentProject(models.Model):
 	mode_of_project	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="project_mode",null=True,blank=True,verbose_name="Mode of Project")
 	facility_design	= models.ForeignKey(ProjectDropDownsMaster,on_delete=models.RESTRICT,related_name="facility",null=True,blank=True,verbose_name="Facility design")
 	project_complete = models.BooleanField(default=False)
+	is_active = models.BooleanField(default=False)
+	reserve_attr0 = models.CharField(max_length=255,default="")
+	reserve_attr1 = models.CharField(max_length=255,default="")
+	reserve_attr2 = models.CharField(max_length=255,default="")
 	created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='project_created_by')
 	created_date	= models.DateTimeField(auto_now_add=True)
 	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='project_updated_by',null=True,blank=True)
@@ -409,17 +424,6 @@ class ProjectProductQuantity(models.Model):
 	local_share = models.FloatField(default=0,verbose_name=" %\ Local Share")
 	export_share = models.FloatField(default=0,verbose_name=" %\ Export Share ")
 	timestamp = models.DateTimeField(auto_now_add=True)
-
-
-class CompanySolution(models.Model):
-    company = models.ForeignKey(Company,on_delete=models.CASCADE)
-    title = models.CharField(max_length=200,verbose_name="Title(English)")
-    title_am = models.CharField(max_length=200,verbose_name="Title(Amharic)")
-    description = models.TextField(verbose_name="Description(English)")
-    description_am = models.TextField(verbose_name="Description(Amharic)")
-    link = models.CharField(verbose_name="link",max_length=200)
-    image = models.ImageField()
-    time_stamp = models.DateTimeField(auto_now_add=True)
 
 
 class CompanyEvent(models.Model):

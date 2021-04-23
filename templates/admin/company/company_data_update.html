@@ -106,6 +106,12 @@ Company Certificates Data
 <script>
 	$(document).ready(function () {
 		$(".summernote").summernote();
+		$("#id_employment_type").prop("disabled",false);
+		$("#id_job_type").prop("disabled",false);
+		$("#id_quarter_job").prop('disabled',false);
+		$("#id_education_type").prop('disabled',false);
+		$("#id_quarter_fem").prop('disabled',false);
 	});
+	
 </script>
 {%endblock%}

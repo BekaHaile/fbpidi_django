@@ -5,6 +5,8 @@
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
 {%block pagename%}Research Category detail{%endblock%}
+{%block nav%}<a href="{%url 'admin:settings'%}" class="breadcrumb-item">Settings</a>
+<a href="{%url 'admin:researchprojectcategory_detail' pk=object.id%}" class="breadcrumb-item">Update Research Category</a>{%endblock%}
 {%block content%}
 
 <!-- Content area -->

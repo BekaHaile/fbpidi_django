@@ -33,7 +33,8 @@
  
 {% endblock %}
 
-{%block pagename%} <a href="{%url 'admin:report_page'%}">Reports</a> > {%if flag == 'capital_utilization'%}Capital Utilization{%elif flag == 'inv_cap'%}Total Investment Capital
+{%block pagename%}{%if flag == 'capital_utilization'%}Capital Utilization{%elif flag == 'inv_cap'%}
+Total Investment Capital
 {%elif flag == 'num_employees'%}
 Number Of Employees By Sector
 {%elif flag == 'num_employees_female'%}
@@ -75,6 +76,54 @@ Number of Industries By Market Destination
 {%elif flag == 'target_data'%}
 Number of Industries By Market Target
 {%endif%} Report Data
+{%endblock%}
+
+{%block nav%}
+{%if flag == 'capital_utilization'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Capital Utilization</span>
+{%elif flag == 'inv_cap'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Total Investment Capital</span>
+{%elif flag == 'num_employees'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number Of Employees By Sector</span>
+{%elif flag == 'num_employees_female'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number Of Female Employees By Sector</span>
+{%elif flag == 'num_employees_foreign'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number of Foreign Employees By Sector</span>
+{%elif flag == 'change_capital_utilization'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Change in Capital Utilization</span>  
+{%elif flag == 'extraction_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Average Extraction Rate by Product</span>
+{%elif flag == 'gross_vp_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Gross Value of Production (GVP)</span>
+{%elif flag == 'unit_price_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Average Unit Price</span>
+{%elif flag == 'num_jobs_created'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number of Jobs Created</span>
+{%elif flag ==  'production_cap'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Production Capacity by Product</span>
+{%elif flag == 'ownership_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Companies Percentage by Owenership</span>
+{%elif flag == 'working_hour_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number of Companies By Working Hour</span>
+{%elif flag ==  'avalilable_input'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Available Inputs</span>
+{%elif flag == 'input_share'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Share Of Local Inputs </span>
+{%elif flag == 'education_status_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Employees Educational Status</span>
+{%elif flag == 'women_in_pson_level'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Women in Higher and Middle Positions </span>
+{%elif flag == 'certification_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number of Industries based on Certifications</span>
+{%elif flag == 'management_tool_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number of Industries by Management Tools</span>
+{%elif flag == 'energy_source_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number of Industries By Source of Energy</span>
+{%elif flag == 'destination_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number of Industries By Market Destination</span>
+{%elif flag == 'target_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number of Industries By Market Target</span>
+{%endif%}
 {%endblock%}
 {%block content%}
 
