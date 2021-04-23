@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from accounts.models import User						 
 from collaborations.models import Announcement,AnnouncementImages
-from collaborations.forms import AnnouncementForm
+from collaborations.forms import AnnouncementForm, image_cropper
 from admin_site.decorators import company_created,company_is_active
 from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname, get_paginated_data
 from company.models import Company
@@ -55,13 +55,12 @@ class CreatAnnouncementAdmin(LoginRequiredMixin,View):
 	def post(self,*args,**kwargs):
 		form = AnnouncementForm(self.request.POST,self.request.FILES) 
 		try:
-			if form.is_valid():
-				announcement = form.save(commit=False)
-				announcement.created_by = self.request.user  
-				announcement.save()
-				for image in self.request.FILES.getlist('images'):
-					announcementimage= AnnouncementImages( announcement=announcement, image = image )
-					announcementimage.save()
+			if form.is_valid():				
+				x = self.request.POST.get('x')
+				y = self.request.POST.get('y')
+				w = self.request.POST.get('width')
+				h = self.request.POST.get('height')
+				announcement = form.save(x,y,w,h,self.request.user)
 				messages.success(self.request, "Added New Announcement Successfully")
 				return redirect("admin:anounce_list")
 			messages.warning(self.request, "Couldn't create announcement! Form contains invalid inputs!")
@@ -83,20 +82,21 @@ class ListAnnouncementAdmin(LoginRequiredMixin, ListView):
 				return Announcement.objects.filter(company=self.request.user.get_company()) 
 
 
+
 @method_decorator(decorators,name='dispatch')	
 class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		try:
 			announcement = Announcement.objects.get(id=self.kwargs['id'])
 			template_name="admin/announcement/announcement_detail.html"
-			return render(self.request, template_name, {'announcement':announcement})
+			return render(self.request, template_name, {'announcement':announcement, "form":AnnouncementForm})
 		except Exception as e:
 			print("Exception at Announcement Detail ",e)
 			return redirect("admin:anounce_list")
 
 	def post(self,*agrs,**kwargs):
-		try:
-			announcement = AnnouncementForm(self.request.POST)
+		
+			announcement = AnnouncementForm(self.request.POST, self.request.FILES)
 			announcementpost = Announcement.objects.get(id=self.kwargs['id'])
 			if announcement.is_valid():
 				announcementpost.title = announcement.cleaned_data.get('title')
@@ -105,19 +105,23 @@ class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 				announcementpost.description_am = announcement.cleaned_data.get('description_am')
 				announcementpost.last_updated_by = self.request.user
 				announcementpost.last_updated_date = timezone.now()
+				if 'image' in self.request.FILES:
+					announcementpost.image = self.request.FILES['image']					
 				announcementpost.save()
-				if 'images' in self.request.FILES:
-					for image in self.request.FILES.getlist('images'):
-						announcementimage= AnnouncementImages( announcement=announcementpost, image= image)
-						announcementimage.save()
+				if 'image' in self.request.FILES: #the cropper, crops an images and replace it source with the cropped one
+					data = self.request.POST
+					image_cropper(data['x'], data['y'],data['width'],data['height'], announcementpost.image)
+					
+				
+
 				messages.success(self.request, "Edited Announcement Successfully")
 				return redirect(f"/admin/anounce-Detail/{announcementpost.id}/")
 			messages.warning(self.request, "Could not edit announcement, invalid form!")
 			return redirect('admin:anounce_list')
-		except Exception as e:
-			print("Exception at announcement detail post ",e)
-			messages.warning(self.request, "Couldn't Edit announcement!")
-			return redirect('admin:anounce_list')
+		# except Exception as e:
+		# 	print("Exception at announcement detail post ",e)
+		# 	messages.warning(self.request, "Couldn't Edit announcement!")
+		# 	return redirect('admin:anounce_list')
 
 
 

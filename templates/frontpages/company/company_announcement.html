@@ -40,8 +40,8 @@
 								<div class="card">
 									<div class="item7-card-img">
 										<a href="{% url 'company_announcemnet_detail' pk=obj.id company_pk=object.id %}"></a>
-										{% if obj.announcementimages.count > 0 %}
-										<img src="{{obj.announcementimages.0.image.url}}"  alt="img" class="cover-image">
+										{% if obj.image %}
+										<img src="{{obj.image.url}}"  alt="img" class="cover-image">
 										{% else %}
 										<img src="{{obj.company.get_image}}" alt="img" class="cover-image">
 										{% endif %}

@@ -32,18 +32,11 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="demo-gallery">
-									<ul id="lightgallery" class="owl-carousel owl-carousel-icons">
-                                        
-                                       {% for im in obj.announcementimages %}
-										<li class="item" data-responsive="{{im.image.url}}" data-src="{{im.image.url}}" data-sub-html="" >
-											<a href="">
-												<img class="img-responsive" width = "290px" height = "250" src="{{im.image.url}}" alt="{{img.image.name}}">
-											</a>
-										</li>
-                                        {% endfor %}
-                                       
-										
-									</ul>
+									{% if obj.image %}
+											<img class="img-responsive mr-10 ml-10" width = "100%" height = "400" src="{{obj.image.url}}" alt="{{obj.title}}">
+									{% else  %}
+									<img class="img-responsive mr-10 ml-10" width = "100%" height = "400" src="{{object.get_image}}" alt="{{object.name}}">
+									{% endif %}	
 								</div>
 								<div class="item7-card-desc d-flex mb-2 mt-3">
 									<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{obj.created_date.date}}</a>

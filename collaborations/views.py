@@ -3,6 +3,7 @@ import os
 import json
 import datetime
 
+from PIL import Image
 from django.views import View
 from django.http import Http404
 from django.urls import reverse
@@ -38,6 +39,26 @@ models = { 'Research':Research,'Announcement':Announcement, 'Blog':Blog, 'BlogCo
             'Forums':ForumQuestion, 'Forum Comments':ForumComments, 'Polls':PollsQuestion, 'News':News, 'Vacancy':Vacancy, 'Job Application':JobApplication, 'Job Category':JobCategory }
 
 decorators = [never_cache, company_created(),company_is_active()]
+
+
+def image_cropper(x,y,w,h,raw_image):
+        # if the image is not cropped 
+        if (x == '' or y == '' or w == '' or h == ''):
+            image = Image.open(raw_image)
+            resized_image = image.resize((600, 600), Image.ANTIALIAS)
+            resized_image.save(raw_image.path)
+            return True
+
+        x = float(x)
+        y = float(y)
+        w = float(w)
+        h = float(h)
+        image = Image.open(raw_image)
+        cropped_image = image.crop((x, y, w+x, h+y))
+        ## replace the image with the cropped one
+        cropped_image.save(raw_image.path)
+        return True
+
 
 
 def related_company_title(model_name, obj):
@@ -500,6 +521,7 @@ class CreateNews(LoginRequiredMixin, View):
             return render(self.request,'admin/collaborations/create_news.html',{'form':NewsForm})
         except Exception as e:
             return redirect("admin:error_404")
+    
     def post(self, *args, **kwargs):
         try:
             form = NewsForm( self.request.POST) 
@@ -507,9 +529,11 @@ class CreateNews(LoginRequiredMixin, View):
                 news = form.save(commit=False)
                 news.created_by = self.request.user
                 news.save()
-                for image in self.request.FILES.getlist('images'):
-                    imag = NewsImages(created_by=self.request.user, created_date=timezone.now(), news=news, name = image.name, image = image)
-                    imag.save()
+                if 'image' in self.request.FILES:
+                    news.image = self.request.FILES['image']
+                    news.save()
+                    data = self.request.POST
+                    image_cropper(data['x'],data['y'],data['width'],data['height'], news.image )
                 messages.success(self.request, "News Created Successfully!")
                 return redirect("admin:news_list") 
             else:
@@ -526,7 +550,7 @@ class EditNews(LoginRequiredMixin, View):
         try:   
             if 'id' in self.kwargs:
                 news = News.objects.get(id =  self.kwargs['id'])
-                return render(self.request,'admin/collaborations/create_news.html',{'news':news, 'edit':True})
+                return render(self.request,'admin/collaborations/create_news.html',{'news':news, 'form':NewsForm(instance= news),'edit':True})
         except Exception as e: 
             print("execption at create News ", str(e))
             messages.warning(self.request,"Error, Could Not Find the News! ")
@@ -534,20 +558,19 @@ class EditNews(LoginRequiredMixin, View):
         
     def post(self, *args, **kwargs):
         if self.kwargs['id']:
-            form = NewsForm(self.request.POST) 
-            news = News.objects.filter(id = self.kwargs['id']).first()
+            news = get_object_or_404(News, id = self.kwargs['id'])
+            form = NewsForm(self.request.POST, instance = news) 
+            print(" ###########", form.errors)
             if form.is_valid:
-                news.title = self.request.POST['title']
-                news.title_am = self.request.POST['title_am']
-                news.description = self.request.POST['description']
-                news.description_am = self.request.POST['description_am']
+                news = form.save(commit = False)
                 news.last_updated_by = self.request.user
                 news.last_updated_date = timezone.now()    
                 news.save()
-                if 'images' in self.request.FILES:
-                    for image in self.request.FILES.getlist('images'):
-                        imag = NewsImages(created_by=self.request.user, created_date=timezone.now(), news=news, name = image.name, image = image)
-                        imag.save()
+                if 'image' in self.request.FILES:
+                    news.image = self.request.FILES['image']
+                    news.save()
+                    data = self.request.POST
+                    image_cropper(data['x'],data['y'],data['width'],data['height'], news.image )
                 messages.success(self.request, "News Edited Successfully!")
                 return redirect(f"/admin/news_list/") 
             else:
@@ -646,11 +669,14 @@ class CreateCompanyEvent(LoginRequiredMixin, CreateView):
                 event.status = "Upcoming"
             elif event.start_date.date() <= today and today <=event.end_date.date():
                 event.status = "Open"
-            elif today > teeventnder.end_date.date():
+            elif today > event.end_date.date():
                 event.status = "Closed"
             event.company = self.request.user.get_company()
             event.created_by = self.request.user               
             event.save()
+            if 'image' in self.request.FILES:
+                data = self.request.POST
+                image_cropper(data['x'],data['y'],data['width'],data['height'], event.image )
             messages.success(self.request,"Event Created Successfully")
             return redirect('admin:admin_companyevent_list')
 
@@ -667,20 +693,16 @@ def change_to_datetime(calender_date):
 class EditCompanyEvent(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):
         try:
-            return render(self.request, "admin/collaborations/create_events.html",{'edit':True,'event':CompanyEvent.objects.get(id = self.kwargs['pk'])})
+            return render(self.request, "admin/collaborations/create_events.html",{'edit':True,'form': CompanyEventForm, 'event':CompanyEvent.objects.get(id = self.kwargs['pk'])})
         except Exception as e:
             return redirect("admin:error_404")
 
-
     def post(self,*args,**kwargs):
-        form = CompanyEventForm(self.request.POST,self.request.FILES)
-        event = CompanyEvent.objects.get(id=self.kwargs['pk']) 
+        # form = CompanyEventForm(self.request.POST,self.request.FILES)
+        event = get_object_or_404(CompanyEvent, id=self.kwargs['pk'])
+        form = CompanyEventForm(self.request.POST, instance=event)
         if form.is_valid():
-            form.save(commit=False)
-            event.title = self.request.POST['title']
-            event.title_am = self.request.POST['title_am']
-            event.description = self.request.POST['description']
-            event.description_am = self.request.POST['description_am']
+            event = form.save()
             event.start_date = change_to_datetime(self.request.POST['start_date'])
             event.end_date = change_to_datetime(self.request.POST['end_date'])
             today = datetime.datetime.now().date()
@@ -690,8 +712,11 @@ class EditCompanyEvent(LoginRequiredMixin,View):
                 event.status = "Open"
             elif today > event.end_date.date():
                 event.status = "Closed" 
-            if self.request.FILES:
+            if 'image' in self.request.FILES:
                 event.image = self.request.FILES['image']
+                event.save()
+                data = self.request.POST
+                image_cropper(data['x'],data['y'],data['width'],data['height'], event.image )
             event.last_updated_by = self.request.user
             event.last_updated_date = timezone.now()
             event.save() 

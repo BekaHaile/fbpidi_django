@@ -377,7 +377,7 @@
         <div class="row">
             <div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
                 <div class="input-group sub-input mt-0">
-                    <input type="text" id="email_field" class="form-control input-lg " placeholder="Enter your Email">
+                    <input type="email" id="email_field" required class="form-control input-lg " placeholder="Enter your Email">
                     <div class="input-group-append ">
                         <button type="button" onclick="subscribe()" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
                             {%  trans "Subscribe" %}
@@ -540,7 +540,9 @@
 <script>
     function subscribe()
     {
-        fetch("{% url 'subscribe' %}",
+        email_field =document.getElementById('email_field')
+        if (email_field.value !="" ){
+            fetch("{% url 'subscribe' %}",
             {
                 method:"POST",
                 credentials: 'same-origin',
@@ -549,7 +551,8 @@
                     'X-CSRFToken':'{{csrf_token}}'
                 },
                 body:JSON.stringify({
-                    'email': document.getElementById('email_field').value,
+                    
+                    'email': email_field.value,
                 })
             }
             ).then(e => e.json()).then(result=>{
@@ -557,6 +560,12 @@
                    
                     document.getElementById('email_field').value = ""             
                 }); 
+
+        }
+        else{
+            window.alert("Please enter a valid email address")
+        }
+        
     }
     
 </script>

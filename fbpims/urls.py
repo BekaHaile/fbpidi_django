@@ -25,7 +25,7 @@ from django.urls import path,include,re_path
 
 from admin_site.admin import admin_site
 
-from accounts.views import activate,api_activate
+from accounts.views import activate,api_activate, activate_subscription
 from core.views import IndexView, ProfileView
 
 from django.views.generic import TemplateView
@@ -38,6 +38,8 @@ urlpatterns = [
    
     path('activate/<uidb64>/<token>/',activate, name='activate'),
     path('api_activate/<uidb64>/<token>/', api_activate, name = 'api_activate'),
+    # path('activate_subscribtion/<subscribtion_id>/<token>/',activate_subscription,name = 'activate_subscribtion' ),
+    path('activate_subscribtion/<uidb64>/<token>/',activate_subscription,name = 'activate_subscribtion' ),
     
     # third party app urls
     path('summernote/', include('django_summernote.urls')),

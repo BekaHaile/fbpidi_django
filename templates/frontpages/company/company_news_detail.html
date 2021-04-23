@@ -33,10 +33,14 @@
 							<div class="card-body">
 								<a href="#" class="text-body"><h3 class="font-weight-semibold text-capitalize">{%print_translated obj.title obj.title_am LANGUAGE_CODE%}</h3></a>
 								<div class="demo-gallery">
-								
-												<img class="img-responsive mr-10 ml-10" width = "100%" height = "400" src="{{obj.get_single_image}}" alt="">
-										
-									</ul>
+
+									{% if obj.image %}
+											<img class="img-responsive mr-10 ml-10" width = "100%" height = "400" src="{{obj.image.url}}" alt="{{obj.title}}">
+									{% else  %}
+									<img class="img-responsive mr-10 ml-10" width = "100%" height = "400" src="{{object.get_image}}" alt="{{object.name}}">
+									{% endif %}
+
+									
 								</div>
 								<div class="item7-card-desc d-flex mb-2 mt-3">
 									<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{obj.created_date.date}}</a>
