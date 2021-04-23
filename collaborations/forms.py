@@ -382,11 +382,10 @@ class AnnouncementForm(forms.ModelForm):
 class ResearchProjectCategoryForm(forms.ModelForm):
     class Meta:
         model = ResearchProjectCategory
-        fields = ('cateoryname','cateoryname_am','detail')
+        fields = ('cateoryname','cateoryname_am')
         widgets = {
-        'cateoryname':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Cateory in English'}),
-        'cateoryname_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Cateory in Amharic'}),
-        'detail':forms.Textarea(attrs={'class':'form-control','placeholder':'detail description of the category'}),
+        'cateoryname':forms.TextInput(attrs={'class':'form-control','placeholder':'Category Name in English'}),
+        'cateoryname_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Category Name in Amharic'}),
         
         }  
 

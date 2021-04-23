@@ -25,7 +25,7 @@
 			  var ctx = $subsectorCompanyChart[0].getContext("2d");
 	
 			  new Chart(ctx, {
-				type: 'doughnut',
+				type: 'bar',
 				data: {
 				  labels: data.labels,
 				  datasets: [{
@@ -89,7 +89,7 @@
 				var ctx = $mgmtToolChart[0].getContext("2d");
 
 				new Chart(ctx, {
-				type: 'line',
+				type: 'bar',
 				data: {
 					labels: data.labels,
 					datasets: [{
@@ -531,6 +531,227 @@
         
                 }
               });  
+			  //Number of Education Level
+			  var $numeduChart = $("#num-edu-level-chart");
+              $.ajax({
+                url: $numeduChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $numeduChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Male of Employees",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data_male
+                      },{
+                        label: "Female of Employees",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data_female
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Number of Jobs Created By Sector'
+                      }
+                    }
+                  });
+        
+                }
+              }); 
+			  //Number of Female Emp in Position Level
+			  var $numFemChart = $("#num-fem-chart");
+              $.ajax({
+                url: $numFemChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $numFemChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "FeMale Employees",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Number of Female Employees in Position Level'
+                      }
+                    }
+                  });
+        
+                }
+              });  
+			  // Available Inputs
+			  var $avlinputChart = $("#input-avl-chart");
+              $.ajax({
+                url: $avlinputChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $avlinputChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Available Inputs",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Available Inputs'
+                      }
+                    }
+                  });
+        
+                }
+              }); 
+			//   local share of inputs
+			var $inputshareChart = $("#input-share-chart");
+              $.ajax({
+                url: $inputshareChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $inputshareChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Local Share of Inputs",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Local Share of Inputs'
+                      }
+                    }
+                  });
+        
+                }
+              });  
+			//   Energy Source data
+			var $esChart = $("#energy-source-chart");
+              $.ajax({
+                url: $esChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $esChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Companies",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Number/Share of Companies by Energy Source'
+                      }
+                    }
+                  });
+        
+                }
+              });  
+			  //   Market Destination
+			var $destinChart = $("#destin-chart");
+              $.ajax({
+                url: $destinChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $destinChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Companies",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Number/Share of Companies by Destination'
+                      }
+                    }
+                  });
+        
+                }
+              });  
+			  //   Market TARget data
+			var $targetChart = $("#target-chart");
+              $.ajax({
+                url: $targetChart.data("url"),
+                success: function (data) {
+        
+                  var ctx = $targetChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Companies",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Number/Share of Companies by Market Target'
+                      }
+                    }
+                  });
+        
+                }
+              });  
 	
 		});
 	
@@ -582,7 +803,7 @@
 <div class="content">
 	
 	<div class="row">
-		<div class="col-lg-6 mb-2">
+		<div class="col-lg-12 col-md-12 mb-2">
 
 			<!-- Members online -->
 			<div class="card " style="height: 100%;">
@@ -604,7 +825,7 @@
 
 		</div>
 
-		<div class="col-lg-6 mb-2">
+		<div class="col-lg-6 mb-2 mb-2 mt-2">
 
 			<!-- Current server load -->
 			<div class="card" style="height: 100%;">
@@ -627,7 +848,7 @@
 
 		</div>
 
-		<div class="col-lg-6 mb-2">
+		<div class="col-lg-6 mb-2 mb-2 mt-2">
 
 			<!-- Today's revenue -->
 			<div class="card" style="height: 100%;">
@@ -652,7 +873,7 @@
 	<div class="row">
 		  
 		 
-		<div class="col-md-12 col-sm-12 mb-2">
+		<div class="col-md-12 col-sm-12  mb-2 mt-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
 					<div id="container" style="width: 100%;">
@@ -700,7 +921,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-8 col-sm-8 mb-2">
+		<div class="col-md-12 col-sm-12 mb-2 mt-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
 					<div id="container" style="width: 100%;">
@@ -717,7 +938,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-12 col-sm-12">
+		<div class="col-md-12 col-sm-12 mb-2 mt-2">
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
 					<div class="card " style="height: 100%;">
@@ -733,7 +954,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-12 col-sm-12">
+				<div class="col-md-12 col-sm-12 mb-2 mt-2">
 					<div class="card" style="height: 100%;">
 						<div class="card-body">
 							<div id="container" style="width: 100%;">
@@ -747,7 +968,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-12 col-sm-12">
+				<div class="col-md-12 col-sm-12 mb-2 mt-2">
 					<div class="card" style="height: 100%;">
 						<div class="card-body " >
 							<div id="container" style="width: 100%;">
@@ -824,175 +1045,136 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4">
-			<div class="card">
+		<div class="col-md-6 col-sm-6 mb-2 bt-2">
+			<div class="card" style="height: 100%;">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-justified">						
+					<div id="container" style="width: 100%;">
+						<canvas id="num-edu-level-chart" data-url="{% url 'admin:num_edu_level_chart' %}"></canvas>								
+					</div>
+					<ul class="nav nav-pills nav-justified">
+						Number/Share Of Employees Educational Status						
 						<li class="nav-item"><a href="{%url 'admin:get_education_status'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
-
-					<div class="tab-content">
-						Number/Share Of Employees Educational Status
-					</div>
+ 
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4">
-			<div class="card bg-primary-400">
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
+			<div class="card" style="height: 100%;">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-justified">						
+					<div id="container" style="width: 100%;">
+						<canvas id="num-fem-chart" data-url="{% url 'admin:num_fem_inpsn_chart' %}"></canvas>								
+					</div>
+					<ul class="nav nav-pills nav-justified">			
+						Number/Share Of Female Employees In Middle and Higher Position			
 						<li class="nav-item"><a href="{%url 'admin:get_women_in_psn'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
-
-					<div class="tab-content">
-						Number/Share Of Female Employees In Middle and Higher Position
-					</div>
 				</div>
 			</div>
 		</div>
-		
-		
-		
-		
-		 
-		
-		
 	</div>
 	<div class="row">
-		
-		<div class="col-md-4 col-sm-4">
-			<div class="row">
-				<div class="col-md-12 col-sm-12">
-					<div class="card">
-						<div class="card-body">
-							<ul class="nav nav-pills nav-justified">						
-								<li class="nav-item"><a href="{%url 'admin:get_input_available' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-							</ul>
-		
-							<div class="tab-content">
-								Available Inputs
-							</div>
+			<div class="col-md-12 col-sm-12 mt-2 mb-2">
+				<div class="card" style="height: 100%;">
+					<div class="card-body">
+						<div id="container" style="width: 100%;">
+							<canvas id="input-avl-chart" data-url="{% url 'admin:input_avl_chart' %}"></canvas>								
 						</div>
+						<ul class="nav nav-pills nav-justified">		
+							Available Inputs				
+							<li class="nav-item"><a href="{%url 'admin:get_input_available' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+						</ul>
+
 					</div>
 				</div>
-				<div class="col-md-12 col-sm-12">
-					<div class="card">
-						<div class="card-body">
-							<ul class="nav nav-pills nav-justified">						
-								<li class="nav-item"><a href="{%url 'admin:get_input_share' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-							</ul>
-		
-							<div class="tab-content">
-								Share of Local Inputs
-							</div>
+			</div>
+			<div class="col-md-12 col-sm-12 mt-2 mb-2">
+				<div class="card" style="height: 100%;">
+					<div class="card-body">
+						<div id="container" style="width: 100%;">
+							<canvas id="input-share-chart" data-url="{% url 'admin:input_share_chart' %}"></canvas>								
 						</div>
+						<ul class="nav nav-pills nav-justified">	
+							Share of Local Inputs					
+							<li class="nav-item"><a href="{%url 'admin:get_input_share' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+						</ul> 
 					</div>
 				</div>
-				
-				<div class="col-md-12 col-sm-12">
-					<div class="card">
-						<div class="card-body">
-							<ul class="nav nav-pills nav-justified">						
-								<li class="nav-item"><a href="{%url 'admin:get_number_companies' option='research'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-							</ul>
-		
-							<div class="tab-content">
-								Number of Industries With Filtering Option
-							</div>
+			</div>
+			
+			<div class="col-md-6 col-sm-6 mt-2 mb-2">
+				<div class="card">
+					<div class="card-body">
+						<ul class="nav nav-pills nav-justified">						
+							<li class="nav-item"><a href="{%url 'admin:get_number_companies' option='research'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+						</ul>
+	
+						<div class="tab-content">
+							Number of Industries With Filtering Option
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-md-8 col-sm-8 mt-2 mb-2">
+			<div class="col-md-6 col-sm-6 mt-2 mb-2">
+				<div class="card">
+					<div class="card-body">
+						<ul class="nav nav-pills nav-justified">						
+							<li class="nav-item"><a href="{%url 'admin:get_unit_price' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+						</ul>
+	
+						<div class="tab-content">
+							Average Unit Price
+						</div>
+					</div>
+				</div>
+			</div>
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
 			<div class="card " style="height: 100%;">
 				<div class="card-body">
 					<div id="container" style="width: 100%;">
 						<canvas id="tools-chart" data-url="{% url 'admin:mgmt_tools_chart' %}"></canvas>
-						
 					</div>
-					<ul class="nav nav-pills nav-justified">						
+					<ul class="nav nav-pills nav-justified">
+						Number Of Industries By Management Tools						
 						<li class="nav-item"><a href="{%url 'admin:get_comp_mgmg_tool'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
-					<!-- 
-					<div class="tab-content">
-						Number Of Industries By Management Tools
-					</div> -->
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 mb-2 mt-2">
+			<div class="card" style="height: 100%;">
+				<div class="card-body">
+					<div id="container" style="width: 100%;">
+						<canvas id="energy-source-chart" data-url="{% url 'admin:energy_source_chart' %}"></canvas>
+					</div>
+					<ul class="nav nav-pills nav-justified">
+						Number of Industries By Source of energy						
+						<li class="nav-item"><a href="{%url 'admin:get_comp_energy_source'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row mt-2">
-		<div class="col-md-8 col-sm-8">
+	<div class="row">
+		<div class="col-md-12 col-sm-12 mt-2 mb-1">
 			<div class="card" style="height: 90%;">
 				<div class="card-body">
 					<div id="container" style="width: 100%;">
-						<canvas id="certification-chart" data-url="{% url 'admin:certification_chart' %}"></canvas>
-						 
-						
+						<canvas id="certification-chart" data-url="{% url 'admin:certification_chart' %}"></canvas>						
 					</div>
-					<ul class="nav nav-pills nav-justified">						
+					<ul class="nav nav-pills nav-justified">
+						Number of Industries Based on Certifications						
 						<li class="nav-item"><a href="{%url 'admin:get_comp_certfication'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
-
-					<!-- <div class="tab-content">
-						Number of Industries Based on Certifications
-					</div> -->
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4 col-lg-4">
-			<div class="row">
-				<div class="col-md-12 col-sm-12">
-					<div class="card">
-						<div class="card-body">
-							<ul class="nav nav-pills nav-justified">						
-								<li class="nav-item"><a href="{%url 'admin:get_unit_price' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-							</ul>
-		
-							<div class="tab-content">
-								Average Unit Price
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-12 col-sm-12">
-					<div class="card bg-blue-400">
-						<div class="card-body">
-							<ul class="nav nav-pills nav-justified">						
-								<li class="nav-item"><a href="{%url 'admin:get_comp_energy_source'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-							</ul>
-		
-							<div class="tab-content">
-								Number of Industries By Source of energy
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-12 col-sm-12 col-lg-12 mb-0">
-					<div class="card bg-teal-400">
-						<div class="card-body">
-							<div class="d-flex">
-								<a href="{%url 'admin:get_comp_by_destination'%}" class="btn btn-pink rounded-round"><span class="badge bg-teal-800 badge-pill align-self-center ml-auto">View Report</span></a> 
-							</div>
-		
-							<div>
-								Number of Industries By Market Destination
-								<!-- <div class="font-size-sm opacity-75">489 avg</div> -->
-							</div>
-						</div>
-		
-						 
-					</div>
-				</div>
-			</div>
-		</div>
-		
-	</div>
-	<div class="row">
-		<div class="col-md-6 col-sm-6">
-			<div class="card bg-primary-400">
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
+			<div class="card" style="height: 100%;">
 				<div class="card-body">
+					<div id="container" style="width: 100%;">
+						<canvas id="target-chart" data-url="{% url 'admin:market_target_chart' %}"></canvas>						
+					</div>
 					<ul class="nav nav-pills nav-justified">						
 						<li class="nav-item"><a href="{%url 'admin:get_comp_by_target'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
@@ -1003,17 +1185,19 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6 col-sm-6">
-			<div class="card bg-green-400">
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
+			<div class="card" style="height: 100%;">
 				<div class="card-body">
-					<ul class="nav nav-pills nav-justified">						
-						<li class="nav-item"><a href="#" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-					</ul>
-
-					<div class="tab-content">
-						Placeholder For More Reports
+					<div id="container" style="width: 100%;">
+						<canvas id="destin-chart" data-url="{% url 'admin:market_destin_chart' %}"></canvas>						
+					</div>
+					<div class="d-flex">
+						Number of Industries By Market Destination
+						<a href="{%url 'admin:get_comp_by_destination'%}" class="btn btn-pink rounded-round"><span class="badge bg-teal-800 badge-pill align-self-center ml-auto">View Report</span></a> 
 					</div>
 				</div>
+
+				 
 			</div>
 		</div>
 	</div>

@@ -161,13 +161,10 @@ class ProductCreationForm(forms.ModelForm):
 class DosageFormForm(forms.ModelForm):
     class Meta:
         model = DosageForm
-        fields = ('dosage_form','dosage_form_am','description','description_am',)
+        fields = ('dosage_form','dosage_form_am',)
         widgets = {
             'dosage_form':forms.TextInput(attrs={'class':'form-control','placeholder':'Dosage Form in English'}),
             'dosage_form_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Dosage Form in Amharic'}),
-            'description':forms.Textarea(attrs={'class':'summernote'}),
-            'description_am':forms.Textarea(attrs={'class':'summernote'})
-
         }
 
 

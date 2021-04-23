@@ -1001,7 +1001,7 @@
 										<tr>
 											<th>#</th>
 											<th>Name</th>
-											<th>Description</th>
+											<th>Amharic Name</th>
 											<th>Created By</th>
 											<th>Created Date</th>
 											<th class="text-center">Actions</th>
@@ -1012,7 +1012,7 @@
 											<tr>
 												<td>{{forloop.counter}}</td>
 												<td>{{chklist.cateoryname}}</td>
-												<td>{{chklist.detail|truncatechars_html:20|safe}}</td>
+												<td>{{chklist.cateoryname_am}}</td>
 												<td>{{chklist.created_by.username}}</td>
 												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
 												<td class="text-center">
@@ -1358,19 +1358,16 @@
 							<div class="modal-body">
 								<div class="form-group">
 									<div class="row">
-										<div class="col-sm-4">
+										<div class="col-sm-6">
 											<label>{{uom_form.name.label}}</label>
 											{{uom_form.name}}
 										</div>
 
-										<div class="col-sm-4">
+										<div class="col-sm-6">
 											<label>{{uom_form.name_am.label}}</label>
 											{{uom_form.name_am}}
 										</div>
-										<div class="col-sm-4">
-											<label>{{uom_form.description.label}}</label>
-											{{uom_form.description}}
-										</div>
+										
 									</div>
 								</div>
 

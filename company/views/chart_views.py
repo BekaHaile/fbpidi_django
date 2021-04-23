@@ -317,3 +317,99 @@ def num_jobs_chart(request):
     labels = ['Food Sector','Beverage Sector','Phrmaceutical Sector']
     data = [food_total,bev_total,pharm_total]
     return JsonResponse({'labels':labels,'data':data})
+
+def num_edu_level_chart(request):
+    labels = []
+    data_male = []
+    data_female = []
+    queryset = EducationalStatus.objects.filter(year_edu=get_current_year()).values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
+    total = 0
+    for edu_data in queryset:
+        labels.append(edu_data['education_type'])
+        data_female.append(edu_data['female__sum'])
+        data_male.append(edu_data['male__sum'])
+    return JsonResponse({'labels':labels,'data_male':data_male,'data_female':data_female})
+
+def num_fem_inpsn_chart(request):
+    queryset = FemalesInPosition.objects.filter(year_fem=get_current_year())
+    in_med = 0
+    in_high = 0
+    women_in_pson_level = []
+    for women_data in queryset:
+        in_high += int(women_data.high_position)
+        in_med += int(women_data.med_position)
+    return JsonResponse({
+        'labels':['Med Level Positions','Higher Level Positions'],
+        'data':[in_med,in_high]
+    })
+
+def input_avl_chart(request):
+    labels  =[]
+    data = []
+    supply = 0
+    demand = 0
+    av_inp = 0
+    for product in SubCategory.objects.all():
+        inp_dem_sups = InputDemandSupply.objects.filter(product=product,year=get_current_year()).values('product').annotate(
+            demand=Sum('demand'),supply = Sum('supply')
+        ).order_by('product')
+        if inp_dem_sups.exists():
+            for aup in inp_dem_sups:
+                demand += aup['demand']
+                supply += aup['supply']
+                
+            if demand == 0:
+                av_inp=float(supply/1)
+            else:
+                av_inp=float(supply/demand)
+        labels.append(product.sub_category_name)
+        data.append(round(av_inp,2))
+    return JsonResponse({'labels':labels,'data':data})
+
+def input_share_chart(request):
+    labels  =[]
+    data = []
+    local_share = 0
+    for product in SubCategory.objects.all():
+        ann_inp_need = AnnualInputNeed.objects.filter(product=product)
+        if ann_inp_need.exists():
+            for aup in ann_inp_need:
+                local_share += aup.local_input
+        labels.append(product.sub_category_name)
+        data.append(local_share)
+    return JsonResponse({'labels':labels,'data':data})
+
+def energy_source_chart(request):
+    labels  =[]
+    data = []
+    queryset = Company.objects.values('source_of_energy__name').annotate(Count('id')).order_by('source_of_energy').exclude(main_category='FBPIDI')
+    for energy_source in queryset:
+        if energy_source['source_of_energy__name'] != None:
+            labels.append(energy_source['source_of_energy__name'])
+            data.append(energy_source['id__count'])
+    return JsonResponse({'labels':labels,'data':data})
+
+def market_target_chart(request):
+    company = Company.objects.all().exclude(main_category='FBPIDI').order_by('id')
+    return JsonResponse({
+        'labels':["Further Processing Factors","Final Consumers","Restaurant & Hotels","Institutions","EPSA",
+                  "Hospitals","Agents","Wholesaler/Distributor","Retailor",],
+        'data':[company.filter(market_target__further_proc_power__gt=0).distinct('id').count(),
+                company.filter(market_target__final_consumer__gt=0).distinct('id').count(),
+                company.filter(market_target__restaurant_and_hotels__gt=0).distinct('id').count(),
+                company.filter(market_target__institutions__gt=0).distinct('id').count(),
+                company.filter(market_target__epsa__gt=0).distinct('id').count(),
+                company.filter(market_target__hospitals__gt=0).distinct('id').count(),
+                company.filter(market_target__agents__gt=0).distinct('id').count(),
+                company.filter(market_target__wholesaler_distributor__gt=0).distinct('id').count(),
+                company.filter(market_target__retailer__gt=0).distinct('id').count()
+                ]
+    })
+
+def market_destin_chart(request):
+    company = Company.objects.all().exclude(main_category='FBPIDI')
+    return JsonResponse({
+        'labels':["Exporting ","Local/Domestic",],
+        'data':[company.filter(market_destination__export__gt=0,market_destination__year_destn=get_current_year()).count(),
+                company.filter(market_destination__domestic__gt=0,market_destination__year_destn=get_current_year()).count()]
+    })
