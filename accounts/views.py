@@ -1,14 +1,17 @@
 # django imports
+import json
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse,JsonResponse
 from django.contrib import messages
+from django.core.mail import EmailMessage
 from django.views.generic import (CreateView,View,UpdateView,ListView)
 from django.contrib.admin import AdminSite
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission,Group
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
+from django.template.loader import render_to_string,get_template
 from django.contrib.auth import views as auth_views
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -20,9 +23,9 @@ from useraudit.models import FailedLoginLog,LoginAttempt,LoginLog,UserDeactivati
 
 from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,CompanyUserCreationForm,
                             AdminCreateUserForm,GroupCreationForm,FrontLoginForm)
-from accounts.models import UserProfile,Company,CompanyAdmin,Customer
+from accounts.models import UserProfile,Company,CompanyAdmin,Customer,Subscription
 from company.models import CompanyStaff,Company
-from accounts.email_messages import sendEmailVerification,sendWelcomeEmail, sendApiWelcomeEmail
+from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
 from admin_site.decorators import company_created
 
 # 
@@ -130,11 +133,13 @@ def api_activate(request, uidb64, token):
     if user is not None and default_token_generator.check_token(user, token):
         user.is_active = True
         user.save()
-        sendApiWelcomeEmail(request,user)
+        sendWelcomeEmail(request,user)
         return render(request,'email/confirm_registration_message.html',
-            {'message':"Thank you for your email confirmation. Now you can login to your account."})
+            {'message':"Thank you for your email confirmation. Now you can login to your account using FBPIDI app."})
     else:
-        sendApiWelcomeEmail(request,user,activated = False)
+        return render(request,'email/confirm_registration_message.html',
+            {'message':"Activation link is invalid!"})
+
 
 @method_decorator(decorators,name='dispatch')
 class MyProfileView(LoginRequiredMixin,UpdateView):
@@ -258,4 +263,55 @@ class UserLogView(LoginRequiredMixin,View):
         'login_logs':login_logs,'user_deactivated':deactivation
         }
         return render(self.request,"admin/accounts/user_logs.html",context)
+
+
+
+def Subscribe(request):
+    if request.method=="POST":
+        try:
+            data = json.loads(request.body)
+            try:
+                subscription = Subscription( email=data['email'])
+                subscription.save()
+                mail_subject = f"Subscription Email Verification Required .{data['email']}"
+                message = get_template('email/acct_activate_email.html').render({
+                    'user': "user bota",
+                    'domain': "FBPIDI",
+                    'uid': subscription.id,
+                    'token': "some token",
+                    'redirect_url':'activate_subscribtion'
+                })
+                email = EmailMessage( mail_subject, message, to=[ data['email'] ])
+                email.content_subtype = "html"
+                try:
+                    email.send(fail_silently=False)
+                except Exception as e:
+                    subscription.delete()
+                    print ("Exception sending email ",e)
+                    return JsonResponse(data={'error':True, 'message':'Error Occured while sending email, check your email and connection and try again! '}, safe=False )
+
+                return JsonResponse(data={'error':False, 'message':'Successfull Subscription! '}, safe=False )
+                
+            except Exception as e :
+                subscription.delete()
+                print ("Exception sending email ",e)
+                return JsonResponse(data={'error':True, 'message':'Error Subscription! '}, safe=False )
+        except Exception as e:
+            return JsonResponse(data={'error':True, 'message':f'The exception is {str(e)}'},  safe=False )
+
+
+def activate_subscription(request, uidb64, token):
+    try:
+        sid = urlsafe_base64_decode(uidb64).decode()
+        subscription = Subscription.objects.get(pk=sid)
+        subscription.activate = True
+        subscription.save()
+
+        # sendWelcomeEmail(request,user)
+        return render(request,'email/confirm_registration_message.html',
+            {'message':"Thank you for your subscribtion! we will keep you updated of the latest news and blogs through your email."})
+    except Exception as e:
+        return render(request,'email/confirm_registration_message.html',
+            {'message':"Activation Failed!"})
+
 

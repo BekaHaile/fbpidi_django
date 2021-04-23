@@ -85,20 +85,12 @@
 								<div class="product-slider">
 									<div id="carousel" class="carousel slide" data-ride="carousel">
 										<div class="carousel-inner">
-											<div class="carousel-item active"><img height = "100" src="{{news.get_images.0.image.url}}" alt="{{image.name}}"> </div>  
-											
-                                            {% for image in news.get_images %}
-                                                {% if image.image.url != news.get_images.0.image.url %}
-                                                    <div class="carousel-item "><img height = "100" src="{{image.image.url}}" alt="{{image.name}}"> </div>
-                                                {%endif%}
-                                            {% endfor %}
+											{% if news.image %}
+                                            <div class="carousel-item active"><img height = "100" src="{{news.image.url}}" alt="{{news.image.name}}"> </div>  
+											{% else %}
+											<div class="carousel-item active"><img height = "100" src="{{news.company.get_image}}" alt="{{news.title}}"> </div>  
+											{% endif %}
 										</div>
-										<a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
-											<i class="fa fa-angle-left" aria-hidden="true"></i>
-										</a>
-										<a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
-											<i class="fa fa-angle-right" aria-hidden="true"></i>
-										</a>
                                     </div>
                                 </div>
 							</div>

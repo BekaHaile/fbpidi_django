@@ -386,12 +386,6 @@ class CompanyMessageReply(models.Model):
 		ordering = ['-created_date']
 
 
-class CompanySubscription(models.Model):
-	# users can subscribe using an email address or their FBPIDI user account
-	email = models.EmailField( verbose_name = "Subscription Email.")
-	created_date = models.DateTimeField(auto_now_add = True)
-	
-
 
 class ProjectState(models.Model):
 	project = models.OneToOneField(InvestmentProject,on_delete=models.CASCADE,related_name="project_state")

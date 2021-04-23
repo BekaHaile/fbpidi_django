@@ -34,7 +34,11 @@
 								<a href="#" class="text-body"><h3 class="font-weight-semibold text-capitalize">{%print_translated obj.title obj.title_am LANGUAGE_CODE%}</h3></a>
 							
 								<a href="">
-									<img class="img-responsive" width = "290px" height = "250" src="{{obj.company.get_image}}" alt="{{img.image.name}}">
+									{% if obj.image %}
+									<img class="img-responsive mr-10 ml-10" width = "100%" height = "400" src="{{obj.image.url}}" alt="{{obj.title}}">
+									{% else  %}
+									<img class="img-responsive mr-10 ml-10" width = "100%" height = "400" src="{{object.get_image}}" alt="{{object.name}}">
+									{% endif %}
 								</a>
 										
 										

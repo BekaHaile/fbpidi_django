@@ -317,20 +317,20 @@ class News(models.Model):
     title_am = models.CharField(max_length=500, null = False)
     description = models.TextField( verbose_name="News Description(English)",blank =False, null = False )
     description_am = models.TextField( verbose_name="News Description(Amharic)",blank =False, null = False )
+    image = models.ImageField(blank=True, null=True)
     catagory = models.CharField( max_length=30, choices =NEWS_CATAGORY, verbose_name="News Catagory, the choices are ")
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="news_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
-    
 
     model_am ="ዜናዎች"
 
     def get_images(self):
-        return self.newsimages_set.all() if self.newsimages_set.exists() else None
+        return self.image
 
     def get_single_image(self):
-        return  self.newsimages_set.first().image.url 
+        return  self.image
 
     def get_company(self):
         return self.created_by.get_company()
@@ -342,7 +342,6 @@ class News(models.Model):
     class Meta:
         ordering = ['-created_date',] 
     
-
 
     
 class NewsImages(models.Model):
@@ -429,7 +428,6 @@ class CommentReplay(models.Model):
     
 
 class Announcement(models.Model):
-
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -437,6 +435,7 @@ class Announcement(models.Model):
     title_am = models.CharField(max_length=500,null=False)
     description = models.TextField(null=False)
     description_am = models.TextField(null=False)
+    image = models.ImageField(blank=True, null=True)
     last_updated_by = models.ForeignKey (settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, blank=True, null = True, related_name="announcemnt_updated")
     last_updated_date = models.DateTimeField(blank=True, null = True)
     is_active = models.BooleanField(default=False)
@@ -446,7 +445,7 @@ class Announcement(models.Model):
         ordering = ['-created_date',]
 
     def announcementimages(self):
-        return self.announcementimages_set.all()
+        return self.image
     
     def save(self):
         self.company = self.created_by.get_company()
@@ -563,6 +562,7 @@ class Document_Category(models.Model):
     description = models.CharField(max_length = 250, verbose_name = "category description", help_text="some detail information about the category")
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, blank=True, null=True) # if it is null then the category is created by the system
     created_date = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=False)
 
 
 class Document(models.Model):
@@ -577,6 +577,7 @@ class Document(models.Model):
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="document_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
 
     def save(self):
         self.company = self.created_by.get_company()
