@@ -1,7 +1,8 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags %}
 
-{%block pagename%}Companies{%endblock%}
+{%block pagename%}<span class="font-weight-semibold">Industries</span>{%endblock%}
+{%block nav%}<a href="{%url 'admin:companies'%}" class="breadcrumb-item">Companies</a>{%endblock%}
 {%block content%}
 
 			<!-- Content area -->

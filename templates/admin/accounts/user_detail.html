@@ -16,6 +16,10 @@
  
 
 {%block pagename%}User Profile{%endblock%}
+{%block nav%}
+<a href="{%url 'admin:users_list'%}" class="breadcrumb-item">Users List</a>
+<span class="breadcrumb-item active">User Detail</span>
+{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
@@ -92,13 +96,7 @@
 							<div class="card">
 								<div class="card-header header-elements-inline">
 									<h5 class="card-title">Profile information</h5>
-									<div class="header-elements">
-										<div class="list-icons">
-					                		<a class="list-icons-item" data-action="collapse"></a>
-					                		<a class="list-icons-item" data-action="reload"></a>
-					                		<a class="list-icons-item" data-action="remove"></a>
-					                	</div>
-				                	</div>
+									
 								</div>
 
 								<div class="card-body"><!-- {{form|crispy}} -->

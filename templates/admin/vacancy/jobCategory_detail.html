@@ -4,7 +4,12 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
-{%block pagename%}Vacancy category detail{%endblock%}
+{%block pagename%}Vacancy Category Detail{%endblock%}
+{%block nav%}
+<a href="{%url 'admin:settings'%}" class="breadcrumb-item">Settings</a>
+<span class="breadcrumb-item active">Vacancy Category Form</span>
+{%endblock%}
+
 {%block content%}
 
 <!-- Content area -->

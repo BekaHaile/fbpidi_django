@@ -28,7 +28,20 @@
  
 {% endblock %}
 
-{%block pagename%}<a href="{%url 'admin:report_page'%}">Reports</a> {%if flag == 'company_count'%}{{label}}{%else%} {%if sector and sector != 'all'%} <span> > </span> {{sector}} Sector{%endif%}{%if sub_sector%} <span> > </span>{{sub_sector}}{%endif%} <span class=" ">{{object_list.count}}</span> Industries{%endif%}{%endblock%}
+{%block pagename%}Company Reports {%endblock%}
+
+{%block nav%}
+{%if flag == 'company_count'%}
+<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">{{label}}</span>
+{%elif flag == 'companies_by_region'%}
+<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Companies By Region</span>
+{%else%}
+<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">{{title}}</span>
+{%endif%}
+{%endblock%}
 {%block content%}
 
 			<!-- Content area -->

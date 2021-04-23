@@ -84,15 +84,6 @@ class ListPendingResearchAdmin(LoginRequiredMixin ,View):
 		return render(self.request, template_name,context)
 
 
-@method_decorator(decorators,name='get')
-class ResearchDetailView(LoginRequiredMixin, View):
-	def get(self,*args,**kwargs):
-		form = Research.objects.get(id=self.kwargs['id'])
-		template_name = "admin/researchproject/research_view.html"
-		context = {'forms':form}
-		return render(self.request, template_name,context)
-
-
 @method_decorator(decorators,name='dispatch')
 class CreateResearchAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):

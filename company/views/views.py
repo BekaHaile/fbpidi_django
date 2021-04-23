@@ -578,11 +578,14 @@ class UpdateInvestmentCapital(LoginRequiredMixin,UpdateView):
     def form_valid(self,form):
         data = form.save()
         messages.success(self.request,"Investment Capital Data Updated")
-        return redirect("admin:update_company_info",pk=data.company.id)
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=data.company.id)
+        else:
+            return redirect("admin:update_company_info",pk=data.company.id)
 
     def form_invalid(self,form):
-        messages.success(self.request,form.errors)
-        return redirect("admin:update_company_info",pk=InvestmentCapital.objects.get(id=self.kwargs['pk']).company.id)
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_inv_capital",pk=self.kwargs['pk'])
 
 class UpdateEmployees(LoginRequiredMixin,UpdateView):
     model = Employees
@@ -602,11 +605,14 @@ class UpdateEmployees(LoginRequiredMixin,UpdateView):
     def form_valid(self,form):
         data = form.save()
         messages.success(self.request,"Employees Data Updated")
-        return redirect("admin:update_company_info",pk=data.company.id)
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=data.company.id)
+        else:
+            return redirect("admin:update_company_info",pk=data.company.id)
 
     def form_invalid(self,form):
-        messages.success(self.request,form.errors)
-        return redirect("admin:update_company_info",pk=Employees.objects.get(id=self.kwargs['pk']).company.id)
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_employees",pk=self.kwargs['pk'])
 
 class UpdateCertificate(LoginRequiredMixin,UpdateView):
     model = Certificates
@@ -620,12 +626,15 @@ class UpdateCertificate(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
-        messages.success(self.request,"Certificate Data Updated")
-        return redirect("admin:update_company_info",pk=data.company.id)
+        messages.warning(self.request,"Certificate Data Updated")
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=data.company.id)
+        else:
+            return redirect("admin:update_company_info",pk=data.company.id)
 
     def form_invalid(self,form):
         messages.success(self.request,form.errors)
-        return redirect("admin:update_company_info",pk=Certificates.objects.get(id=self.kwargs['pk']).company.id)
+        return redirect("admin:update_comp_certificate",pk=self.kwargs['pk'])
 
 
 class UpdateJobsCreated(LoginRequiredMixin,UpdateView):
@@ -646,11 +655,14 @@ class UpdateJobsCreated(LoginRequiredMixin,UpdateView):
     def form_valid(self,form):
         data = form.save()
         messages.success(self.request,"Jobs Created Data Updated")
-        return redirect("admin:update_company_info",pk=data.company.id)
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=data.company.id)
+        else:
+            return redirect("admin:update_company_info",pk=data.company.id)
 
     def form_invalid(self,form):
-        messages.success(self.request,form.errors)
-        return redirect("admin:update_company_info",pk=JobOpportunities.objects.get(id=self.kwargs['pk']).company.id)
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_jobs_created",pk=self.kwargs['pk'])
 
 class UpdateEducationStatus(LoginRequiredMixin,UpdateView):
     model = EducationalStatus
@@ -670,11 +682,14 @@ class UpdateEducationStatus(LoginRequiredMixin,UpdateView):
     def form_valid(self,form):
         data = form.save()
         messages.success(self.request,"Education Status Data Updated")
-        return redirect("admin:update_company_info",pk=data.company.id)
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=data.company.id)
+        else:
+            return redirect("admin:update_company_info",pk=data.company.id)
 
     def form_invalid(self,form):
-        messages.success(self.request,form.errors)
-        return redirect("admin:update_company_info",pk=EducationalStatus.objects.get(id=self.kwargs['pk']).company.id)
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_education_status",pk=self.kwargs['pk'])
 
 class UpdateFemalesInPosn(LoginRequiredMixin,UpdateView):
     model = FemalesInPosition
@@ -694,11 +709,14 @@ class UpdateFemalesInPosn(LoginRequiredMixin,UpdateView):
     def form_valid(self,form):
         data = form.save()
         messages.success(self.request,"Females in Position Level Data Updated")
-        return redirect("admin:update_company_info",pk=data.company.id)
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=data.company.id)
+        else:
+            return redirect("admin:update_company_info",pk=data.company.id)
 
     def form_invalid(self,form):
-        messages.success(self.request,form.errors)
-        return redirect("admin:update_company_info",pk=FemalesInPosition.objects.get(id=self.kwargs['pk']).company.id)
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_female_posn",pk=self.kwargs['pk'])
 
 class UpdateSrcAmntInputs(LoginRequiredMixin,UpdateView):
     model = SourceAmountIputs
@@ -718,11 +736,14 @@ class UpdateSrcAmntInputs(LoginRequiredMixin,UpdateView):
     def form_valid(self,form):
         data = form.save()
         messages.success(self.request,"Source & Ammount of inputs Data Updated")
-        return redirect("admin:update_company_info",pk=data.company.id)
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=data.company.id)
+        else:
+            return redirect("admin:update_company_info",pk=data.company.id)
 
     def form_invalid(self,form):
-        messages.success(self.request,form.errors)
-        return redirect("admin:update_company_info",pk=SourceAmountIputs.objects.get(id=self.kwargs['pk']).company.id)
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_srcamnt_inputs",pk=self.kwargs['pk'])
 
 class UpdatePowerConsumption(LoginRequiredMixin,UpdateView):
     model = PowerConsumption
@@ -742,11 +763,14 @@ class UpdatePowerConsumption(LoginRequiredMixin,UpdateView):
     def form_valid(self,form):
         data = form.save()
         messages.success(self.request,"Power Consumption Data Updated")
-        return redirect("admin:update_company_info",pk=data.company.id)
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=data.company.id)
+        else:
+            return redirect("admin:update_company_info",pk=data.company.id)
 
     def form_invalid(self,form):
-        messages.success(self.request,form.errors)
-        return redirect("admin:update_company_info",pk=PowerConsumption.objects.get(id=self.kwargs['pk']).company.id)
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_power_consumed",pk=self.kwargs['pk'])
 
 class UpdateMarketTarget(LoginRequiredMixin,UpdateView):
     model = MarketTarget
@@ -766,11 +790,14 @@ class UpdateMarketTarget(LoginRequiredMixin,UpdateView):
     def form_valid(self,form):
         data = form.save()
         messages.success(self.request,"Market Target Data Updated")
-        return redirect("admin:update_company_info",pk=data.company.id)
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=data.company.id)
+        else:
+            return redirect("admin:update_company_info",pk=data.company.id)
 
     def form_invalid(self,form):
-        messages.success(self.request,form.errors)
-        return redirect("admin:update_company_info",pk=MarketTarget.objects.get(id=self.kwargs['pk']).company.id)
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_target",pk=self.kwargs['pk'])
 
 class UpdateMarketDestination(LoginRequiredMixin,UpdateView):
     model = MarketDestination
@@ -790,11 +817,14 @@ class UpdateMarketDestination(LoginRequiredMixin,UpdateView):
     def form_valid(self,form):
         data = form.save()
         messages.success(self.request,"Market Destination Data Updated")
-        return redirect("admin:update_company_info",pk=data.company.id)
+        if self.request.user.is_superuser:
+            return redirect("admin:company_detail",pk=data.company.id)
+        else:
+            return redirect("admin:update_company_info",pk=data.company.id)
 
     def form_invalid(self,form):
-        messages.success(self.request,form.errors)
-        return redirect("admin:update_company_info",pk=MarketDestination.objects.get(id=self.kwargs['pk']).company.id)
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_destination",pk=self.kwargs['pk'])
 
 
 

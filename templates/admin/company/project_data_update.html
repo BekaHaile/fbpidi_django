@@ -18,6 +18,27 @@ Employees Education Status Data
 Product Quantity
 {%endif%}
 {%endblock%}
+{%block nav%}
+{%if flag == "inv_capital"%}<a href="{%url 'admin:project_list'%}" class="breadcrumb-item">Projects</a>
+<a href="{%url 'admin:update_project' pk=object.project.id%}" class="breadcrumb-item">Project Detail</a>
+<span class="breadcrumb-item active"> Investment Capital Data</span>
+{%elif flag == "employees"%}
+<a href="{%url 'admin:project_list'%}" class="breadcrumb-item">Projects</a>
+<a href="{%url 'admin:update_project' pk=object.projct.id%}" class="breadcrumb-item">Project Detail</a>
+<span class="breadcrumb-item active">Company Employees Data</span>
+{%elif flag == "job_oportunity"%}
+<a href="{%url 'admin:project_list'%}" class="breadcrumb-item">Projects</a>
+<a href="{%url 'admin:update_project' pk=object.project.id%}" class="breadcrumb-item">Project Detail</a>
+<span class="breadcrumb-item active">Yearly Jobs Created Data</span>
+{%elif flag == "education"%}<a href="{%url 'admin:project_list'%}" class="breadcrumb-item">Projects</a>
+<a href="{%url 'admin:update_project' pk=object.project.id %}" class="breadcrumb-item">Project Detail</a>
+<span class="breadcrumb-item active">Employees Education Status Data</span>
+{%elif flag == "product_quantity"%}<a href="{%url 'admin:project_list'%}" class="breadcrumb-item">Projects</a>
+<a href="{%url 'admin:update_project' pk=object.project.id%}" class="breadcrumb-item">Project Detail</a>
+<span class="breadcrumb-item active">Product Quantity</span>
+{%endif%}
+{%endblock%}
+
 {%block content%}
 
 	<!-- Content area -->

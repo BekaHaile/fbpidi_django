@@ -8,6 +8,9 @@
 
 {% endblock %}
 {%block pagename%}Industry Product and Investment/Project Form Dropdown/Lookups{%endblock%}
+{%block nav%}
+<a href="{%url 'admin:settings'%}" class="breadcrumb-item">Settings</a>
+<a href="{%url 'admin:update_checklist' pk=object.id%}" class="breadcrumb-item">CheckLists</a>{%endblock%}
 {%block content%}
 
 			<!-- Content area -->

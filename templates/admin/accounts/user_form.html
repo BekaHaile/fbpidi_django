@@ -8,6 +8,10 @@
 
 {% endblock %}
 {%block pagename%}Create Users{%endblock%}
+{%block nav%}
+<a href="{%url 'admin:users_list'%}" class="breadcrumb-item">Users List</a>
+<span class="breadcrumb-item active">Users Form</span>
+{%endblock%}
 {%block content%}
 
 			<!-- Content area -->

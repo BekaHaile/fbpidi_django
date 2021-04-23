@@ -330,6 +330,11 @@ class UpdateInvestmentCapitalForProject(LoginRequiredMixin,UpdateView):
     form_class = InvestmentCapitalForm
     template_name = "admin/company/project_data_update.html"
 
+    def get_context_data(self,*args,**kwargs):
+        context = super().get_context_data(*args,**kwargs)
+        context['flag'] = "inv_capital"
+        return context
+
     def form_valid(self,form):
         form.save()
         messages.success(self.request,"Investment Capital Data Updated")
@@ -409,7 +414,7 @@ class UpdateEmployeesProject(LoginRequiredMixin,UpdateView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['flag'] = "employeees" 
+        context['flag'] = "employees" 
         return context
     
     def form_valid(self,form):
@@ -502,4 +507,19 @@ class CheckYearFieldProject(LoginRequiredMixin,View):
                                     'data':json.loads(serializers.serialize('json',[education],ensure_ascii=False))[0]})
             except EducationalStatus.DoesNotExist:
                 return JsonResponse({"error":False,"message":"You are good to go"})
-         
+
+def mark_complete(request,pk):
+    if request.method == 'GET':
+        try:
+            project = InvestmentProject.objects.get(id=pk)
+            if project.project_complete == False:
+                project.project_complete = True
+                project.save()
+                messages.success(request,"You Have marked Your Project Complete")
+            else:
+                project.project_complete = False
+                project.save()
+                messages.success(request,"You Have marked Your Project Incomplete")
+            return redirect("admin:update_project",pk=pk)
+        except InvestmentProject.DoesNotExist:
+            return redirect('admin:error_404')

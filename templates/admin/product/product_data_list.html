@@ -22,6 +22,20 @@ Product Packaging Data
 {%endif%}
 {%endblock%}
 
+
+{%block nav%}
+{%if flag == "production_capacity"%}
+<a href="{%url 'admin:production_capacity'%}" class="breadcrumb-item">Production Capacity</a>
+{%elif flag == "anual_input_need"%}
+<a href="{%url 'admin:anual_input_need'%}" class="breadcrumb-item">Annual Input Need</a>
+{%elif flag == "demand_supply"%}
+<a href="{%url 'admin:demand_supply_list'%}" class="breadcrumb-item">Demand & Supply</a>
+{%elif flag == "sales_performance"%}
+<a href="{%url 'admin:sales_performance'%}" class="breadcrumb-item">Production & Sales Performance</a>
+{%elif flag == "packaging"%}
+<a href="{%url 'admin:packaging'%}" class="breadcrumb-item">Packaging</a>
+{%endif%}
+{%endblock%}
 {%block content%}
 
 <!-- Content area -->
