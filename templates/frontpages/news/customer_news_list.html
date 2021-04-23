@@ -112,12 +112,12 @@
 													<div class="item-card9-img">
 														<div class="item-card9-imgs">
 															<a href="/collaborations/customer_news_detail/{{news.id}}/"></a>
-															{% if news.get_images.0.image.url %}
-															<img src="{{news.get_images.0.image.url}}" alt="img" class="cover-image">
-															{% elif news.get_company.get_image %}
-															<img src="{{news.get_company.get_image}}"  alt="img" class="cover-image">
+															{% if news.image %}
+															
+															<img src="{{news.image.url}}"  alt="img" class="cover-image">
 															{% else %}
-															<img src="/static/frontpages/images/products/products/v1.jpg"  alt="img" class="cover-image">
+															
+															<img src="{{news.company.get_image}}" alt="img" class="cover-image">
 															{% endif %}
 														</div>
 														

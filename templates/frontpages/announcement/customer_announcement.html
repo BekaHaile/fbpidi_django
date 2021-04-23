@@ -89,8 +89,8 @@
 														<div class="item-card9-imgs">
 														
 															<a href="/collaborations/announcement-detail/{{post.id}}/"></a>
-															{% if post.announcementimages.count > 0 %}
-															<img src="{{post.announcementimages.0.image.url}}"  alt="img" class="cover-image">
+															{% if post.image  %}
+															<img src="{{post.image.url}}"  alt="img" class="cover-image">
 															{% else %}
 															<img src="{{post.company.get_image}}" alt="img" class="cover-image">
 															{% endif %}

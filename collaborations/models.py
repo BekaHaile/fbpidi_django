@@ -324,15 +324,13 @@ class News(models.Model):
     is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
 
-    
-
     model_am ="ዜናዎች"
 
     def get_images(self):
-        return self.newsimages_set.all() if self.newsimages_set.exists() else None
+        return self.image
 
     def get_single_image(self):
-        return  self.newsimages_set.first().image.url 
+        return  self.image
 
     def get_company(self):
         return self.created_by.get_company()
@@ -447,7 +445,7 @@ class Announcement(models.Model):
         ordering = ['-created_date',]
 
     def announcementimages(self):
-        return self.announcementimages_set.all()
+        return self.image
     
     def save(self):
         self.company = self.created_by.get_company()

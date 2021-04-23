@@ -6,8 +6,9 @@ from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string,get_template
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
-
-def sendEmailVerification(request,user):
+# the redirect_url for the web is 'activate' and for the api is 'api_activate', both views send the same
+# welcome email, but the web activate view will render a web page, and the api does nothing.
+def sendEmailVerification(request,user, redirect_url = 'activate'):
     try:
         current_site = get_current_site(request)
         mail_subject = 'Email Verification Required.'
@@ -16,49 +17,24 @@ def sendEmailVerification(request,user):
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': default_token_generator.make_token(user),
+            'redirect_url':redirect_url,
         })
 
         to_email = user.email
         email = EmailMessage(
-        mail_subject, message, to=[to_email]
+        mail_subject, message, to=[to_email],
         )
         email.content_subtype = "html"
         email.send()
         print("email sent")
-        return email
+        # return email
+        return True
 
     except Exception as e :
         print ("Exception sending email ",e)
-        return 
-
-def sendApiEmailVerification(request,user):
-    try:
-        current_site = get_current_site(request)
-        mail_subject = 'Email Verification Required.'
-        message = get_template('email/api_acct_activation_email.html').render({
-            'user': user,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': default_token_generator.make_token(user),
-        })
-
-        to_email = user.email
-        email = EmailMessage(
-        mail_subject, message,   to=["antenyismu@gmail.com"]
-        )
-        email.content_subtype = "html"
-        try:
-            email.send()
-        except Exception as e:
-            print("###### exception on email.send ",e)
-            return False
-        return True
-    except Exception as e:
-        print("##### This is the Exception ",e)
         return False
 
-
-def sendWelcomeEmail(request,user, acctivated):
+def sendWelcomeEmail(request,user, acctivated=None):
     current_site = get_current_site(request)
     mail_subject = 'Your Account has been Activated'
     message = get_template('email/acc_activated_email.html').render({
@@ -72,21 +48,6 @@ def sendWelcomeEmail(request,user, acctivated):
     email.content_subtype = "html"
     email.send()
     return email
-
-def sendApiWelcomeEmail(request,user):
-    current_site = get_current_site(request)
-    mail_subject = 'Your Account has been Activated'
-    message = get_template('email/api_acc_activated_email.html').render({
-        'user': user,
-    })
-    to_email = user.email
-    email = EmailMessage(
-    mail_subject, message, to=[to_email]
-    )
-    email.content_subtype = "html"
-    email.send()
-    return email
-
 
 def sendEventParticipationNotification(participant):
     mail_message = f'The Event titled "{participant.event.title}" Will start on {participant.event.start_date.date()}.'

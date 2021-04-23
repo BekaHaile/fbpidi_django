@@ -39,8 +39,8 @@
 								<div class="card">
 									<div class="item7-card-img">
 										<a href="{% url 'company_news_detail' pk=obj.id company_pk=object.id %}"></a>
-												{% if obj.get_images.0.image.url %}
-												<img src="{{obj.get_images.0.image.url}}" width = "370px" height= "200px" alt="img" class="cover-image">
+												{% if obj.image.url %}
+												<img src="{{obj.image.url}}" width = "370px" height= "200px" alt="img" class="cover-image">
 												{% elif obj.get_company.get_image %}
 												<img src="{{obj.get_company.get_image}}"  width = "370px" height= "200px" alt="img" class="cover-image">
 												{% else %}

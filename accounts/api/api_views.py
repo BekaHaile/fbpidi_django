@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, CompanyAdminSerializer, CustomerCreationSerializer
 from rest_framework.authtoken.models import Token
-from accounts.email_messages import sendApiEmailVerification
+from accounts.email_messages import sendEmailVerification
 
 ###### for the api social auth, from https://github.com/coriolinus/oauth2-article/blob/master/views.py
 from django.conf import settings
@@ -20,7 +20,6 @@ from requests.exceptions import HTTPError
 from social_django.utils import psa
 
 class CustomerSignUpView(APIView):
-
     def post(self, request):
             data = {}
             try:
@@ -55,7 +54,7 @@ class CustomerSignUpView(APIView):
             else:
                 user = UserProfile.objects.get(username = request.data['username'])            
             
-            if sendApiEmailVerification(request, user): 
+            if sendEmailVerification(request, user, redirect_url='api_activate'): 
                 data = {'error':False,'message': "Please check your email and verify your email address"}
             else:
                 data = {'error':True, 'message':"Error while sending Verification Email, try signing up again!"}
@@ -63,11 +62,6 @@ class CustomerSignUpView(APIView):
             data = {'error':True, 'message': dict(customer_serializer.errors).values()}
         return data
                 
-
-
-class CompleteEmailVerification(APIView):
-    def get(self, request):
-        pass
 
 
 class SocialSerializer(serializers.Serializer):

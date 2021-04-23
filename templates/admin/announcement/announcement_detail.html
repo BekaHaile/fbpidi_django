@@ -57,65 +57,9 @@
 						</div>
 							
 					</div>
-
-					<div class="card">
-						<label class="col-form-label col-lg-3"> Manage images  *</label>
-		                
-		                <div class="card-body" >    
-							<div class="media-body">
-								<div class="mt-4 mb-3 row">
-									{%for image in announcement.announcementimages%}
-										<div class="col-sm-6 col-lg-3">
-											<div class="card">
-												<div class="card-img-actions m-1">
-													<img class="card-img img-fluid" src="{{image.image.url}}" width ="250" height = "200" alt="">
-													<div class="card-img-actions-overlay card-img">
-														<a style="max-height:80px; max-width:80px; overflow: hidden" target="blank" href="{{image.image.url}}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round" data-popup="lightbox" rel="group">
-															<i class="icon-eye"></i>
-														</a>
-															{% if user.is_superuser or announcement.created_by.get_company == user.get_company%}
-																{% if perms.collaborations.delete_announcement %}
-																	<a href="{%url 'admin:delete' model_name='AnnouncementImages' id=image.id%}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2" onclick="return confirm ('Are you sure you want to delete this image?')">
-																		<i class="icon-trash"></i>
-																	</a>
-																{% endif %}
-															{% endif %}
-													</div>
-												</div>
-											</div>
-										</div>
-									{%endfor%}
-									
-								</div>
-									{%if not announcement.image %}
-										<div class="alert alert-warning" role="alert">
-											<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-											<span class="font-weight-semibold">You have to upload an image</span>
-										</div>
-							</div>
-		                    
-		                </div>
-		                
-		                <div class="card-footer">   
-		                	<div class="form-group row">
-								<label class="col-form-label col-lg-3">Add images:</label>
-								<div class="uniform-uploader">{{form.image}}<span
-									class="filename" style="user-select: none;">No file selected</span><span
-									class="action btn bg-warning" style="user-select: none;">Choose File</span>
-								</div>
-							</div>
-		                </div>        
-		            </div> 
-						{%else%}
-						<img src = "{{announcement.image.url}}" width = "300" height = "300">
-		                            
-					</div>
-		                    
-		                </div>
-		                <div class="card-footer">   
-		                	<div class="form-group row">
-						 
-						  <label class="col-form-label col-lg-3">Add images:</label>
+					
+					<p><b>Current Image : </b> <a target = "blank" href="{{announcement.image.url}}"> {{announcement.image.name}}</a></p>
+					<label class="col-form-label col-lg-3">Change image:</label>
 						  <div class="col-lg-9">
 							<div class="uniform-uploader">{{form.image}}<span
 								class="filename" style="user-select: none;">No file selected</span><span
@@ -127,11 +71,6 @@
 							<input type="hidden" name="width" id="width" value="">
 							<input type="hidden" name="height" id="height" value="">
 						
-							</div>
-		                </div>        
-		            </div>
-						{%endif%}
-
 						
 				</fieldset>
 

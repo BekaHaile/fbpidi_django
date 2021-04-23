@@ -163,43 +163,6 @@ class CompanyInquiryReply(View):
 
 
 
-
-def Subscribe(request):
-    if request.method=="POST":
-        try:
-            data = json.loads(request.body)
-            subscription = CompanySubscription( email=data['email'])
-            try:
-               
-                mail_subject = f"New Blogs of the Week from FBPIDI.{data['email']}"
-                message = get_template('email/acct_activate_email.html').render({
-                    'user': "user bota",
-                    'domain': "FBPIDI",
-                    'uid': "uid",
-                    'token': "some token",
-                })
-
-               
-                email = EmailMessage(
-                mail_subject, message, to=["antenyismu@gmail.com","333333333","labme777@gmail.com"])
-                email.content_subtype = "html"
-                try:
-                    email.send(fail_silently=False)
-                except Exception as e:
-                    print("Excepion at send",e)
-
-                subscription.save()
-                return JsonResponse(data={'error':False, 'message':'Successfull Subscription! '}, safe=False )
-                
-
-            except Exception as e :
-                print ("Exception sending email ",e)
-                return JsonResponse(data={'error':True, 'message':'Error Subscription! '}, safe=False )
-            
-
-        except Exception as e:
-            return JsonResponse(data={'error':True, 'message':f'The exception is {str(e)}'},  safe=False )
-
 @login_required          
 def Like_Company(request):
     try:

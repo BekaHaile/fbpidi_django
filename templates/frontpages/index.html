@@ -60,7 +60,8 @@
 									</div></form>
 								</div>
 								<div class="tab-pane" id="tab2">
-									<form action="{%url 'search_company'%}" method="post"> {%csrf_token%}
+									<form action="{%url 'search_company'%}" method="GET"> 
+										
 									<div class="form row">
 										<div class="form-group  col-xl-6 col-lg-5 col-md-12 mb-0">
 											<input type="text" name="name" class="form-control  " id="text8"

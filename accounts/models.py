@@ -87,3 +87,13 @@ class CompanyAdmin(models.Model):
 
     # def get_company(self):
     #     return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None
+
+
+class Subscription(models.Model):
+	# users can subscribe using an email address or their FBPIDI user account
+        email = models.EmailField( verbose_name = "Subscription Email.")
+        created_date = models.DateTimeField(auto_now_add = True)
+        is_active = models.BooleanField(default =False)
+
+	
+
