@@ -722,7 +722,7 @@
 											<div class="card mb-xl-0">
 												<div class="item-card8-img  br-tr-4 br-tl-4">
 													<a href= "{% url 'customer_news_detail' id=news.id %}">
-													<img width= "360" height = "230" src="{{news.get_single_image}}" alt="img"
+													<img width= "360" height = "230" src="{{news.image.url}}" alt="img"
 														class="cover-image"></a>
 												</div>
 												<div class="item-card8-overlaytext">
@@ -767,7 +767,7 @@
 											<div class="card mb-xl-0">
 												<div class="item-card8-img  br-tr-4 br-tl-4">
 													<a href= "{% url 'customer_news_detail' id=news.id %}">
-													<img width= "360" height = "230" src="{{news.get_single_image}}" alt="img"
+													<img width= "360" height = "230" src="{{news.image.url}}" alt="img"
 														class="cover-image"></a>
 												</div>
 												<div class="item-card8-overlaytext">

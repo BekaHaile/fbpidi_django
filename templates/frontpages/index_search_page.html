@@ -80,7 +80,7 @@
 											<a href = "/"><h4 class="mb-0 mt-3"><i class="fa fa-arrow-left mr-3"></i>{% trans "Back to Home" %} </h4></a>
 											<ul class="nav item2-gl-menu ml-auto mt-1">
 												<li class=""><a href="#tab-11" class="active show" data-toggle="tab" title="List style"><i class="fa fa-list"></i></a></li>
-												<li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li>
+												<!-- <li><a href="#tab-12" data-toggle="tab" class="" title="Grid"><i class="fa fa-th"></i></a></li> -->
 											</ul>
                                             <div class="d-sm-flex">
                                                 
@@ -109,8 +109,8 @@
                                                             <div class="item-card9-img">
                                                                 <div class="item-card9-imgs">
                                                                     <a href="/collaborations/customer_news_detail/{{news.id}}/"></a>
-                                                                    {% if news.get_images.0.image.url %}
-                                                                    <img src="{{news.get_images.0.image.url}}" alt="img" class="cover-image">
+                                                                    {% if news.image.url %}
+                                                                    <img src="{{news.image.url}}" alt="img" class="cover-image">
                                                                     {% elif news.get_company.get_image %}
                                                                     <img src="{{news.get_company.get_image}}"  alt="img" class="cover-image">
                                                                     {% else %}
@@ -269,8 +269,8 @@
                                                                     <div class="item-card9-imgs">
                                                                     
                                                                         <a href="/collaborations/announcement-detail/{{post.id}}/"></a>
-                                                                        {% if post.announcementimages.count > 0 %}
-                                                                        <img src="{{post.announcementimages.0.image.url}}"  alt="img" class="cover-image">
+                                                                        {% if post.image %}
+                                                                        <img src="{{post.image.url}}"  alt="img" class="cover-image">
                                                                         {% else %}
                                                                         <img src="{{post.company.get_image}}" alt="img" class="cover-image">
                                                                         {% endif %}

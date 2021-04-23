@@ -1,3 +1,5 @@
+import string
+import random
 from django.shortcuts import render
 from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes
@@ -34,6 +36,7 @@ def sendEmailVerification(request,user, redirect_url = 'activate'):
         print ("Exception sending email ",e)
         return False
 
+
 def sendWelcomeEmail(request,user, acctivated=None):
     current_site = get_current_site(request)
     mail_subject = 'Your Account has been Activated'
@@ -48,6 +51,30 @@ def sendWelcomeEmail(request,user, acctivated=None):
     email.content_subtype = "html"
     email.send()
     return email
+
+
+def sendSubscriptionActivationEmail(request, subscribtion, email):
+    try: 
+        current_site = get_current_site(request)
+        mail_subject = f"Subscription Email Verification Required .{email}"
+        letters = string.ascii_lowercase
+        token = ''.join(random.choice(letters) for i in range(12))
+        message = get_template('email/acct_activate_email.html').render({
+            'user': "user bota",
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(subscribtion.id)),
+            'token': token,
+            'redirect_url':'activate_subscribtion'
+        })
+        email = EmailMessage( mail_subject, message, to=[ email ])
+        email.content_subtype = "html"
+        email.send(fail_silently=False)
+        print("sent an Email")
+        return True
+    except Exception as e:
+        print ("@@@@@ Exception while sending email activation email ", e)
+        return False
+
 
 def sendEventParticipationNotification(participant):
     mail_message = f'The Event titled "{participant.event.title}" Will start on {participant.event.start_date.date()}.'
