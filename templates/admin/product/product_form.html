@@ -12,6 +12,7 @@
 {%block nav%}<a href="{%url 'admin:admin_products'%}" class="breadcrumb-item">Varayti</a>
 <a href="{%url 'admin:create_product'%}" class="breadcrumb-item">Create Varayti</a>
 {%endblock%}
+{%block varayti%}active{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -185,7 +186,7 @@
 				modalCropEdit = document.getElementById('image')
 				cropper = new Cropper(modalCropEdit, {
 					viewMode: 1,
-					aspectRatio: 16 / 9,
+					aspectRatio: 1 / 1,
 					minCropBoxWidth: 200,
 					minCropBoxHeight: 200,
 					built: function () {

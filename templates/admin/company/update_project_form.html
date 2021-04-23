@@ -23,7 +23,7 @@
 <a href="{%url 'admin:project_list'%}" class="breadcrumb-item">Projects</a>
 <span class="breadcrumb-item active">Project Detail</span>
 {%endblock%}
-
+{%block projects%}active{%endblock%}
 {%block content%}
 	
 
@@ -267,10 +267,10 @@
 					var cropWidth;
 					var cropHeight;
 
-					var imageField = document.getElementById('#id_logo')
+					var imageField = document.getElementById('#id_image')
 					var modalCropEdit = document.getElementById('image')
 					var force = document.getElementById('force')
-					$("#id_logo").change(function () {
+					$("#id_image").change(function () {
 						if (this.files && this.files[0]) {
 
 							var reader = new FileReader();

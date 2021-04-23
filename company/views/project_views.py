@@ -20,7 +20,7 @@ from django.core import serializers
 from company.models import *
 from accounts.models import CompanyAdmin,UserProfile
 from product.models import Order,OrderProduct,Product
-
+from admin_site.views.dropdowns import image_cropper
 from admin_site.decorators import company_created,company_is_active
 
 
@@ -77,6 +77,9 @@ class CreateInvestmentProject(LoginRequiredMixin,CreateView):
         project = form.save(commit=False)
         project.created_by = self.request.user
         project.save()
+        image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    project.image,400,400)
         messages.success(self.request,'Investment Project Created,Please Complete The Following!')
         return redirect("admin:create_project_detail_admin",pk=project.id)
 
@@ -152,6 +155,9 @@ class CreateInvestmentProjectDetail_Admin(LoginRequiredMixin,UpdateView):
         project.last_updated_by=self.request.user
         project.last_updated_date = timezone.now()
         project.save()
+        image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    project.image,400,400)
         messages.success(self.request,"Project Detail Added Succesfully")
         return redirect("admin:project_list")
 
@@ -206,6 +212,9 @@ class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
         project.last_updated_by=self.request.user
         project.last_updated_date = timezone.now()
         project.save()
+        image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    project.image,400,400)
         messages.success(self.request,"Project Detail Added Succesfully")
         return redirect("admin:project_list")
 

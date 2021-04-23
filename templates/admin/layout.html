@@ -166,32 +166,31 @@
 						</li>
 
 						
-						<li class="nav-item nav-item-submenu">
+						<li class="nav-item nav-item-submenu {%block category_menu%}{%endblock%}">
 							<a href="#" class="nav-link"><i class="icon-cabinet"></i> <span>Sectors</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
 								<li class="nav-item">
 									<a href="{%url 'admin:categories'%}" class="nav-link"><i class="icon-drawer"></i>
 										<span>Sub Sector</span></a>
 								</li>
-								{%if user.get_company.main_category != "Pharmaceuticals"%}
 								<li class="nav-item">
 									<a href="{%url 'admin:sub_categories'%}" class="nav-link"><i class="icon-folder6"></i>
 										<span>Products</span></a>
 								</li>
 								<li class="nav-item">
-									<a href="{%url 'admin:brands'%}" class="nav-link"><i class="mi-branding-watermark"></i>
+									<a href="{%url 'admin:brands'%}" class="nav-link "><i class="mi-branding-watermark"></i>
 										<span>Product Brands</span></a>
 								</li> 
-								{%endif%}
 							</ul>
 						</li>
 						<li class="nav-item">
-							<a href="{%url 'admin:admin_products'%}" class="nav-link"><i
+							<a href="{%url 'admin:admin_products'%}" class="nav-link {%block varayti%}{%endblock%}"><i
 									class="icon-stack"></i> <span>Varayti</span></a>
 						</li>
 						{% if perms.product.view_productinquiry %}
 						<li class="nav-item">
-							<a href="{%url 'admin:admin_inquiry_list'%}" class="nav-link"><i
+							<a href="{%url 'admin:admin_inquiry_list'%}" class="nav-link {%block inquiry%}{%endblock%}
+							"><i
 									class="fa fa-shopping-cart mr-3.7"></i> <span>Inquiry Requests </span>
 									{% count_new_inquiry_requests user.get_company as company_inquiry_count %}
 									{% if company_inquiry_count > 0 %}
@@ -200,7 +199,7 @@
 								</a>
 						</li>
 						{% endif %}
-						<li class="nav-item nav-item-submenu">
+						<li class="nav-item nav-item-submenu {%block product_data%}{%endblock%}">
 							<a href="#" class="nav-link"><i class="icon-store"></i> <span>Product Data</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
 								<li class="nav-item">
@@ -228,7 +227,7 @@
 						</li>
 						
 						<li class="nav-item nav-item">
-							<a href="{%url 'admin:research_list' %}" class="nav-link"><i class="mi-youtube-searched-for"></i> 
+							<a href="{%url 'admin:research_list' %}" class="nav-link {%block research_data%}{%endblock%}"><i class="mi-youtube-searched-for"></i> 
 								<span>Research</span></a>
 								
 						</li> 
@@ -319,7 +318,7 @@
 						</li>
 						{%if user.is_superuser%}
 						<li class="nav-item">
-							<a href="{%url 'admin:companies'%}" class="nav-link">
+							<a href="{%url 'admin:companies'%}" class="nav-link {%block industries%}{%endblock%}">
 								<i class="icon-office"></i>
 								<span>Industries</span>
 								<span class="badge bg-blue-400 align-self-center ml-auto">
@@ -328,7 +327,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="{%url 'admin:report_page'%}" class="nav-link">
+							<a href="{%url 'admin:report_page'%}" class="nav-link {%block reports%}{%endblock%}">
 								<i class="icon-file-text2"></i>
 								<span>Report</span>
 								 
@@ -339,23 +338,23 @@
 						
 						
 						<li class="nav-item">
-							<a href="{%url 'admin:update_company_info' pk=user|get_company_id%}" class="nav-link">
+							<a href="{%url 'admin:update_company_info' pk=user|get_company_id%}" class="nav-link {%block industry%}{%endblock%}">
 								<i class="icon-coins"></i><span>My Company</span></a>
 						</li>
 						<li class="nav-item">
-							<a href="{%url 'admin:slider_list'%}" class="nav-link">
+							<a href="{%url 'admin:slider_list'%}" class="nav-link {%block sliders%}{%endblock%}">
 								<i class="icon-gallery"></i><span>Slider Images</span></a>
 						</li>
 						{%endif%}
 						<li class="nav-item">
-							<a href="{%url 'admin:project_list' %}" class="nav-link">
+							<a href="{%url 'admin:project_list' %}" class="nav-link {%block projects%}{%endblock%}">
 								<i class="icon-task "></i><span>Projects</span></a>
 						</li>
 						 <li class="nav-item-header">
 							<div class="text-uppercase font-size-xs line-height-xs">Account</div> <i class="icon-menu"
 								title="Forms"></i>
 						</li>
-						 <li class="nav-item nav-item-submenu">
+						 <li class="nav-item nav-item-submenu {%block accounts%}{%endblock%}">
 							<a href="#" class="nav-link"><i class="icon-users"></i> <span>Users</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
 								<li class="nav-item">
@@ -375,7 +374,7 @@
 							</ul>
 						</li>
 						<li class="nav-item">
-							<a href="{%url 'admin:settings'%}" class="nav-link"><i class="icon-cog"></i>
+							<a href="{%url 'admin:settings'%}" class="nav-link {%block settings%}{%endblock%}"><i class="icon-cog"></i>
 								<span>Settings</span></a>
 						</li>
 						<li class="nav-item mb-5">
