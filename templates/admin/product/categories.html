@@ -15,6 +15,7 @@
 	{%elif brand == True%}<a href="{%url 'admin:brands'%}" class="breadcrumb-item">Brands</a>
 	{%endif%}
 {%endblock%}
+{%block category_menu%}nav-item-expanded nav-item-open{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
@@ -60,15 +61,13 @@
 											</a>
 
 											<div class="dropdown-menu dropdown-menu-right">
-												{%if user.is_superuser or cat.created_by.get_company == user.get_company %}
-													{% if perms.admin_site.delete_category %}
+													{% if user.is_superuser or perms.admin_site.delete_category %}
 													<a href="{%url 'admin:delete' model_name='category' id=cat.id%}"  onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete Category</a>
 													{% endif %}
-													{% if perms.admin_site.delete_category %}
+													{% if user.is_superuser or perms.admin_site.delete_category %}
 													<a href="{%url 'admin:edit_category' pk=cat.id%}" class="dropdown-item">
 														<i class="icon-pencil"></i>Edit Category</a>
 													{% endif %}
-												{%endif%}
 												<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
 												<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
 												<a href="#" class="dropdown-item"><i class="icon-file-word"></i> Export to .doc</a> -->
@@ -123,7 +122,6 @@
 											</a>
 											
 											<div class="dropdown-menu dropdown-menu-right">
-											{% if user.is_superuser or cat.created_by.get_company == user.get_company %}
 												{% if perms.admin_site.delete_subcategory %}
 												<a href="{%url 'admin:delete' model_name='sub_category' id=cat.id%}"   onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete Sub-Category</a>
 												{% endif %}
@@ -131,7 +129,6 @@
 												<a href="{%url 'admin:edit_subcategory' pk=cat.id%}" class="dropdown-item">
 													<i class="icon-pencil"></i>Edit Product</a>
 												{% endif %}
-											{% endif %}
 												<!-- <a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
 												<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
 												<a href="#" class="dropdown-item"><i class="icon-file-word"></i> Export to .doc</a> -->
@@ -185,18 +182,16 @@
 											<a href="#" class="list-icons-item" data-toggle="dropdown">
 												<i class="icon-menu9"></i>
 											</a>
-											{% if user.get_company == cat.created_by.get_company %}
 											<div class="dropdown-menu dropdown-menu-right">
-												{% if perms.product.delete_brand %}
+												{% if not user.is_superuser and perms.product.delete_brand %}
 												<a href="{%url 'admin:delete' model_name='Brand' id=cat.id%}"  onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete Brand</a>
 												{% endif %}
-												{% if perms.product.change_brand %}
+												{% if not user.is_superuser and perms.product.change_brand %}
 												<a href="{%url 'admin:edit_brand' pk=cat.id%}" class="dropdown-item">
 													<i class="icon-pencil"></i>Edit</a>
 												{% endif %}
 												 
 											</div>
-											{%endif%}
 										</div>
 									</div>
 								</td>

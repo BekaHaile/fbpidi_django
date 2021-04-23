@@ -31,6 +31,10 @@ def company_count(user):
     if user.is_authenticated:
         return int(Company.objects.all().count())
 
+@register.simple_tag
+def add_two_val(x,y):
+    return float(x+y)
+    
 @register.filter
 def get_sum(data):
     sm = 0

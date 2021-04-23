@@ -21,6 +21,7 @@ def create_auth_token(sender, instance = None, created = False, **kwargs):
         
 
 class UserProfile(AbstractUser):
+    email = models.EmailField(verbose_name="Email Address",unique=True)
     phone_number = models.CharField(max_length=20,blank=True,null=True) 
     is_customer = models.BooleanField(default=False)  # ifFbpidiUser is customer
     is_company_admin = models.BooleanField(default=False)  # ifFbpidiUser is company admin

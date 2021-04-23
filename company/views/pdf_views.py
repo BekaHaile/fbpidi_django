@@ -467,9 +467,9 @@ class GenerateAllCompanyPdf(View):
 
 @method_decorator(decorators,name='dispatch')
 class GenerateCompanyToPDF(LoginRequiredMixin,View):
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         context = {}
-        company = Company.objects.get(id=self.request.POST['pk'])
+        company = Company.objects.get(id=self.kwargs['pk'])
         inv_cap =  InvestmentCapital.objects.filter(company=company).annotate(
                         machinery = Sum('machinery_cost'),
                         building = Sum('building_cost'),

@@ -27,6 +27,7 @@
 {%block pagename%} Reports {%endblock%} 
 {%block nav%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
 <a href="{%url 'admin:all_report_page'%}" class="breadcrumb-item">All Reports</a>{%endblock%}
+{%block reports%}active{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
@@ -145,10 +146,10 @@
 								<tr>
 									<th>#</th>
 									<th>Company</th>
-									<th>Machinery Cost</th>
-									<th>Building Cost</th>
-									<th>Working Capital</th>
-									<th>Investment Capital</th>
+									<th>Machinery Cost (ETB)</th>
+									<th>Building Cost (ETB)</th>
+									<th>Working Capita (ETB)l</th>
+									<th>Investment Capital (ETB)</th>
 									<th>Sector</th>
 								</tr>
 							</thead>
@@ -157,10 +158,10 @@
 								<tr>
 									<td>{{forloop.counter}}</td>
 									<td>{{id.company}}</td>
-									<td>ETB {{id.machinery}}</td>
-									<td>ETB {{id.building}}</td>
-									<td>ETB {{id.working}}</td>
-									<td>ETB {{id.total_inv_cap}}</td>
+									<td>{{id.machinery}}</td>
+									<td>{{id.building}}</td>
+									<td>{{id.working}}</td>
+									<td>{{id.total_inv_cap}}</td>
 									<td>{{id.sector}}</td>
 								</tr>
 								{%endfor%}
@@ -169,10 +170,10 @@
 							<tr>
 								<td></td>
 								<td>Total</td>
-								<td>ETB {% get_inv_cap_sum inv_cap_data 'machinery' %}</td>
-								<td>ETB {% get_inv_cap_sum inv_cap_data 'building' %}</td>
-								<td>ETB {% get_inv_cap_sum inv_cap_data 'working' %}</td>
-								<td>ETB {% get_inv_cap_sum inv_cap_data  'total' %}</td>
+								<td>{% get_inv_cap_sum inv_cap_data 'machinery' %}</td>
+								<td>{% get_inv_cap_sum inv_cap_data 'building' %}</td>
+								<td>{% get_inv_cap_sum inv_cap_data 'working' %}</td>
+								<td>{% get_inv_cap_sum inv_cap_data  'total' %}</td>
 									<td></td>
 							</tr>
 						</table>
@@ -764,7 +765,7 @@
 								<tr>
 									<td>{{forloop.counter}}</td>
 									<td>{{fd.product}}</td>
-									<td>ETB {{fd.data|floatformat:2}}</td>
+									<td>{{fd.data|floatformat:2}}</td>
 								</tr>
 								{%endfor%}
 								
@@ -772,7 +773,7 @@
 							<!-- <tr>
 								<td>Total</td>
 								<td></td>
-								<td>ETB {{price_data|get_sum|floatformat:2}}</td>
+								<td>{{price_data|get_sum|floatformat:2}}</td>
 							</tr> -->
 						</table>
 					</div> 
@@ -808,9 +809,9 @@
 									<td>{{forloop.counter}}</td>
 									<td>{{fd.company}}</td>
 									<td>{{fd.product}}</td>
-									<td>ETB {%if fd.prev_yr == None%}0.00{%else%}{{fd.prev_yr|floatformat:2}}{%endif%}</td>
-									<td>ETB {%if fd.last_yr == None%}0.00{%else%}{{fd.last_yr|floatformat:2}}{%endif%}</td>
-									<td>ETB {%if fd.this_yr == None%}0.00{%else%}{{fd.this_yr|floatformat:2}}{%endif%}</td>
+									<td>{%if fd.prev_yr == None%}0.00{%else%}{{fd.prev_yr|floatformat:2}}{%endif%}</td>
+									<td>{%if fd.last_yr == None%}0.00{%else%}{{fd.last_yr|floatformat:2}}{%endif%}</td>
+									<td>{%if fd.this_yr == None%}0.00{%else%}{{fd.this_yr|floatformat:2}}{%endif%}</td>
 									{%if sector != 'all'%}
 									<td>{{sector}}</td>
 									{%endif%}
@@ -883,13 +884,14 @@
 								<td></td>
 								<td>Total</td>
 								<td></td><td></td>
+								<td>{{total_emp_data|get_sum}}</td>
 								{%if sector != 'all'%}
 								<td> </td>
 								{%endif%}
 								{%if sub_sector%}
 								<td> </td>
 								{%endif%}
-								<td>{{total_emp_data|get_sum}}</td>
+								
 							</tr>
 						</table>
 					</div> 
@@ -938,14 +940,14 @@
 							<tr>
 								<td></td>
 								<td>Total</td>
-								<td></td><td></td>
+								<td></td><td></td><td>{{total_fem_emp_data|get_sum}}</td>
 								{%if sector != 'all'%}
 								<td> </td>
 								{%endif%}
 								{%if sub_sector%}
 								<td> </td>
 								{%endif%}
-								<td>{{total_fem_emp_data|get_sum}}</td>
+								
 							</tr>
 						</table>
 					</div> 
@@ -997,13 +999,14 @@
 								<td></td>
 								<td>Total</td>
 								<td></td><td></td>
+								<td>{{for_emp_data|get_sum}}</td>
 								{%if sector != 'all'%}
 								<td> </td>
 								{%endif%}
 								{%if sub_sector%}
 								<td></td>
 								{%endif%}
-								<td>{{for_emp_data|get_sum}}</td>
+								
 							</tr>
 						</table>
 					</div> 
@@ -1023,6 +1026,7 @@
 									<th>Job Types</th>
 									<th>Male</th>
 									<th>Female</th>
+									<th>Total</th>
 									{%if sector != 'all'%}
 									<th>Sector</th>
 									{%endif%}
@@ -1038,6 +1042,7 @@
 									<td>Temporary</td>
 									<td>{{fd.data.temporary_male}}</td>
 									<td>{{fd.data.temporary_female}}</td>
+									<td>{%add_two_val fd.data.temporary_male fd.data.temporary_female%}</td>
 									{%if sector != 'all'%}
 									<td>{{sector}}</td>
 									{%endif%}
@@ -1050,6 +1055,7 @@
 									<td>Permanent</td>
 									<td>{{fd.data.permanent_male}}</td>
 									<td>{{fd.data.permanent_female}}</td>
+									<td>{%add_two_val fd.data.permanent_male fd.data.permanent_female%}</td>
 									{%if sector != 'all'%}
 									<td>{{sector}}</td>
 									{%endif%}

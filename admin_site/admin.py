@@ -15,7 +15,7 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,
 # views from admin_site app
 from admin_site.views.views import (AdminIndex,  Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice,  DetailPoll)
-from admin_site.views.delete_view import DeleteView
+from admin_site.views.delete_view import DeleteAllView
 from admin_site.views.errors import *
 from admin_site.views.dropdowns import *
 
@@ -179,7 +179,7 @@ class CustomAdminSite(admin.AdminSite):
             path("brands/",wrap(BrandView.as_view()),name="brands"),
             path("create_brand/",wrap(CreateBrand.as_view()),name="create_brand"),
             path("brand_edit/<pk>/",wrap(BrandDetail.as_view()),name="edit_brand"),
-            path("delete/<model_name>/<id>/",wrap(DeleteView.as_view()),name="delete"),
+            path("delete/<model_name>/<id>/",wrap(DeleteAllView.as_view()),name="delete"),
             path("products_list/",wrap(AdminProductListView.as_view()),name="admin_products"),
             path("create_product/",wrap(CreateProductView.as_view()),name="create_product"),
             path("product_detail/<pk>/",wrap(ProductUpdateView.as_view()),name="product_detail"),
@@ -316,7 +316,7 @@ class CustomAdminSite(admin.AdminSite):
              path('list_document_by_category/<option>/', wrap(DocumentListing.as_view()), name = "list_document_by_category"),
 
             # Company Report Paths
-            path('get-company-information-pdf/',wrap(GenerateCompanyToPDF.as_view()),name='get_company_pdf'),
+            path('get-company-information-pdf/<pk>/',wrap(GenerateCompanyToPDF.as_view()),name='get_company_pdf'),
             path('get-project-information-pdf/<pk>/',wrap(GenerateProjectToPDF.as_view()),name='get_project_pdf'),
             path("get-all-company-report/<region>/<sector>/<sub_sector>/<product>/<year>/",wrap(GenerateAllCompanyPdf.as_view()),name="generate_all_report"),
             path("get-all-project-report/<region>/<sector>/<sub_sector>/<product>/",wrap(GenerateProjectPdf.as_view()),name="generate_project_report"),

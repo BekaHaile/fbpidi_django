@@ -132,29 +132,7 @@ class ProductCreationForm(forms.ModelForm):
             'image':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
             'quantity':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_quantity")'}),
         } 
-
-    @atomic
-    def save(self,commit=True):
-        product = super(ProductCreationForm, self).save(commit=commit)
-
-        x = self.cleaned_data.get('x')
-        y = self.cleaned_data.get('y')
-        w = self.cleaned_data.get('width')
-        h = self.cleaned_data.get('height')
-
-        if (x or y or w or h ):
-                image = Image.open(product.image)
-                cropped_image = image.crop((x, y, w+x, h+y))
-                resized_image = cropped_image.resize((208, 208), Image.ANTIALIAS)
-                resized_image.save(product.image.path)
-
-                return product
-                
-        else:
-                image = Image.open(product.image)
-                resized_image = image.resize((208, 208), Image.ANTIALIAS)
-                resized_image.save(product.image.path)
-                return product
+ 
     
 
 
@@ -331,6 +309,11 @@ class ProductPriceForm(forms.ModelForm):
         }
 
 class ProductImageForm(forms.ModelForm):
+    x = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    
     class Meta:
         model = ProductImage
         fields = ('product_image',)

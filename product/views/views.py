@@ -24,6 +24,7 @@ from product.models import *
 from product.forms import *
 from company.models import *
 from admin_site.decorators import company_created
+from admin_site.views.dropdowns import image_cropper
 
 def get_current_year():
     this_year = datetime.datetime.today().year
@@ -270,6 +271,9 @@ class CreateProductView(LoginRequiredMixin,CreateView):
         product.company = self.request.user.get_company()
         product.created_by = self.request.user
         product.save()    
+        image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    product.image,400,400)
         messages.success(self.request,"Product Created Successfully!")
         return redirect("admin:admin_products")
     
@@ -295,7 +299,10 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
         product = form.save(commit=False)
         product.last_updated_by = self.request.user
         product.last_updated_date = timezone.now()
-        product.save()    
+        product.save() 
+        image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    product.image,400,400)   
         messages.success(self.request,"Product Update Successfully!")
         return redirect("admin:admin_products")
 
@@ -309,6 +316,9 @@ class AddProductImage(LoginRequiredMixin,CreateView):
         product = Product.objects.get(id=self.kwargs['pk'])
         image.product = product
         image.save()
+        image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    image.product_image,400,400)
         messages.success(self.request,"Image Added Successfully!")
         return redirect("admin:product_detail",pk=product.id)
 

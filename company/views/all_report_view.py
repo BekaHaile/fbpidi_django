@@ -129,13 +129,12 @@ class AllReportPage(LoginRequiredMixin,View):
                 total_managment+= int(management_tool['id__count'])
                 management_tool_data.append({'label':management_tool['management_tools__name'],
                                     'data':management_tool['id__count']})
-        queryset_energy = companies.values('source_of_energy').annotate(Count('id')).order_by('source_of_energy') 
+        queryset_energy = companies.values('source_of_energy__name').annotate(Count('id')).order_by('source_of_energy') 
         total_energy = 0
         energy_source_data = []
         for energy_source in queryset_energy:
-            if energy_source['source_of_energy'] != None:
                 total_energy+= int(energy_source['id__count'])
-                energy_source_data.append({'label':CompanyDropdownsMaster.objects.get(id=energy_source['source_of_energy']).name,
+                energy_source_data.append({'label':energy_source['source_of_energy__name'],
                                     'data':energy_source['id__count']})
         women_in_pson_level = []
         total_fem_posn = 0
@@ -175,14 +174,14 @@ class AllReportPage(LoginRequiredMixin,View):
                     'total_actual':p['total_actual']
                 })
         total_avi_data = []
-        demand = 0
-        supply = 0
-        product = ""
-        unit = ""
         for company in companies:
             inp_dem_sups = InputDemandSupply.objects.filter(company=company,year=get_current_year()).values('product__sub_category_name','input_unit__name').annotate(
                 demand=Sum('demand'),supply = Sum('supply')
             )
+            demand = 0
+            supply = 0
+            product = ""
+            unit = ""
             if inp_dem_sups.exists():
                 for aup in inp_dem_sups:
                     demand += aup['demand']
@@ -264,13 +263,12 @@ class AllReportPage(LoginRequiredMixin,View):
                     }
                 )
         average_price_data = []
-        prodn_total = 0
-        price_total = 0
         for product in products:
             pup = 0
             spp = ProductionAndSalesPerformance.objects.filter(product=product,activity_year=get_current_year()).values('product').annotate(
                 total_sales_amnt=Sum('sales_amount'),total_sales=Sum('sales_value'))
-
+            prodn_total = 0
+            price_total = 0
             if spp.exists():
                 for aup in spp:
                     price_total = aup['total_sales']
@@ -298,12 +296,11 @@ class AllReportPage(LoginRequiredMixin,View):
                     'pref_yr':gvp_index['total_prev_year'],
                 })
         emp_data_total = []
-        total_perm_emp = 0
-        total_temp_emp=0
         for company in companies:
             employees_perm = Employees.objects.filter(company=company,employment_type__icontains="Permanent")
-            employees_temp = Employees.objects.filter(company=company,employment_type__icontains="Temporary")
-            
+            employees_temp = Employees.objects.filter(company=company,employment_type__icontains="Temporary") 
+            total_perm_emp = 0
+            total_temp_emp=0
             for ep in employees_perm:
                 total_perm_emp = (ep.male+ep.female)
             
@@ -312,12 +309,12 @@ class AllReportPage(LoginRequiredMixin,View):
             
             total = total_perm_emp+total_temp_emp
             emp_data_total.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
-        total_for_emp_m=0
-        total_for_emp_f=0
+
         for_emp_data = []
         for company in companies:
             employees_foreign = Employees.objects.filter(company=company,employment_type__icontains="Foreign")
-                        
+            total_for_emp_m=0
+            total_for_emp_f=0
             for ef in employees_foreign:
                 total_for_emp_m += (ef.male)
                 total_for_emp_f += (ef.female)
@@ -533,11 +530,11 @@ class AllReportPage(LoginRequiredMixin,View):
                         'sector':company.main_category
                     })
         # form of ownership
-        queryset = companies.values('ownership_form').annotate(Count('id')).order_by('ownership_form') 
+        queryset = companies.values('ownership_form__name').annotate(Count('id')).order_by('ownership_form') 
         total_ownership = 0
         for ownership in queryset:
             total_ownership += int(ownership['id__count'])
-            ownership_data.append({'label':CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']),
+            ownership_data.append({'label':ownership['ownership_form__name'],
                                     'data':ownership['id__count']})
 
         # Educational status data
@@ -555,28 +552,28 @@ class AllReportPage(LoginRequiredMixin,View):
                 education_status_data.append({'company':company.name,'sector':company.main_category,'label':edu_data['education_type'],
                                         'data':int(edu_data['female__sum']+edu_data['male__sum'])})
             total_edu = fem_edu+male_edu
-        queryset_cert = companies.values('certification').annotate(Count('id')).order_by('certification') 
+        queryset_cert = companies.values('certification__name').annotate(Count('id')).order_by('certification') 
         certification_data = []
         total_certification = 0
         for certification in queryset_cert:
             total_certification+= int(certification['id__count'])
-            certification_data.append({'label':CompanyDropdownsMaster.objects.get(id=certification['certification']).name,
+            certification_data.append({'label':certification['certification__name'],
                                     'data':certification['id__count']})
         
-        queryset_mgmt = companies.values('management_tools').annotate(Count('id')).order_by('management_tools') 
+        queryset_mgmt = companies.values('management_tools__name').annotate(Count('id')).order_by('management_tools') 
         management_tool_data = []
         total_managment = 0
         for management_tool in queryset_mgmt:
             total_managment+= int(management_tool['id__count'])
-            management_tool_data.append({'label':CompanyDropdownsMaster.objects.get(id=management_tool['management_tools']).name,
+            management_tool_data.append({'label':management_tool['management_tools__name'],
                                     'data':management_tool['id__count']})
-        queryset_energy = companies.values('source_of_energy').annotate(Count('id')).order_by('source_of_energy') 
+        queryset_energy = companies.values('source_of_energy__name').annotate(Count('id')).order_by('source_of_energy') 
         total_energy = 0
         energy_source_data = []
         for energy_source in queryset_energy:
-            if energy_source['source_of_energy'] != None:
+            if energy_source['source_of_energy__name'] != None:
                 total_energy+= int(energy_source['id__count'])
-                energy_source_data.append({'label':CompanyDropdownsMaster.objects.get(id=energy_source['source_of_energy']).name,
+                energy_source_data.append({'label':energy_source['source_of_energy__name'],
                                     'data':energy_source['id__count']})
         women_in_pson_level = []
         total_fem_posn = 0
@@ -595,12 +592,12 @@ class AllReportPage(LoginRequiredMixin,View):
 
             women_in_pson_level.append({'company':company.name,'sector':company.main_category,'label':'Med Level Positions','data':in_med})
             women_in_pson_level.append({'company':company.name,'sector':company.main_category,'label':'Higher Level Positions','data':in_high})
-        queryset_wh = companies.values('working_hours').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
+        queryset_wh = companies.values('working_hours__name').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
         working_hour_data = []
         total_wh = 0
         for working_hour in queryset_wh:
             total_wh += int(working_hour['id__count'])
-            working_hour_data.append({'label':CompanyDropdownsMaster.objects.get(id=working_hour['working_hours']),
+            working_hour_data.append({'label':working_hour['working_hours__name'],
                                     'data':working_hour['id__count']})
         prodn_data = []
         for company in companies:
@@ -615,14 +612,15 @@ class AllReportPage(LoginRequiredMixin,View):
                     'total_actual':p['total_actual']
                 })
         total_avi_data = []
-        demand = 0
-        supply = 0
-        product = ""
-        unit = ""
         for company in companies:
             inp_dem_sups = InputDemandSupply.objects.filter(company=company,year=current_year).values('product__sub_category_name','input_unit__name').annotate(
                 demand=Sum('demand'),supply = Sum('supply')
             )
+            demand = 0
+            supply = 0
+            product = ""
+            unit = ""
+
             if inp_dem_sups.exists():
                 for aup in inp_dem_sups:
                     demand += aup['demand']
@@ -704,13 +702,12 @@ class AllReportPage(LoginRequiredMixin,View):
                     }
                 )
         average_price_data = []
-        prodn_total = 0
-        price_total = 0
         for product in products:
             pup = 0
             spp = ProductionAndSalesPerformance.objects.filter(product=product,activity_year=current_year).values('product').annotate(
                 total_sales_amnt=Sum('sales_amount'),total_sales=Sum('sales_value'))
-
+            prodn_total = 0
+            price_total = 0
             if spp.exists():
                 for aup in spp:
                     price_total = aup['total_sales']
@@ -738,12 +735,11 @@ class AllReportPage(LoginRequiredMixin,View):
                     'pref_yr':gvp_index['total_prev_year'],
                 })
         emp_data_total = []
-        total_perm_emp = 0
-        total_temp_emp=0
         for company in companies:
             employees_perm = Employees.objects.filter(company=company,employment_type__icontains="Permanent")
             employees_temp = Employees.objects.filter(company=company,employment_type__icontains="Temporary")
-            
+            total_perm_emp = 0
+            total_temp_emp=0
             for ep in employees_perm:
                 total_perm_emp = (ep.male+ep.female)
             
@@ -752,12 +748,12 @@ class AllReportPage(LoginRequiredMixin,View):
             
             total = total_perm_emp+total_temp_emp
             emp_data_total.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
-        total_for_emp_m=0
-        total_for_emp_f=0
+       
         for_emp_data = []
         for company in companies:
             employees_foreign = Employees.objects.filter(company=company,employment_type__icontains="Foreign")
-                        
+            total_for_emp_m=0
+            total_for_emp_f=0            
             for ef in employees_foreign:
                 total_for_emp_m += (ef.male)
                 total_for_emp_f += (ef.female)

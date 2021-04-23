@@ -11,6 +11,11 @@
 <script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
 {% endblock %}
 {%block pagename%}Update Slider Image{%endblock%}
+{%block nav%}
+<a href="{%url 'admin:slider_list'%}" class="breadcrumb-item">Slider Images</a>
+<span class="breadcrumb-item active">Slider Image Form</span>
+{%endblock%}
+{%block sliders%}active{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
