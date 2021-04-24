@@ -73,7 +73,7 @@ def get_weekly_and_old(queryset):
         return {'error':True, 'message':str(e)}
 
 if __name__ == '__main__':    
-    subscribers_email =[ s.email for s in Subscribers.objects.filter(is_active = True)]
+    
     blogs = get_weekly_and_old(Blog.objects.filter(publish = True))
     if blogs['error']==False:
         this_week_objects = blogs['this_week_objects']

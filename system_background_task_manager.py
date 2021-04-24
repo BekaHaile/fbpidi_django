@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from background_task.models import Task, CompletedTask
 from collaborations.tasks import (check_event_startdate, check_event_enddate, check_event_participation, check_tender_startdate, 
-                                  check_tender_enddate, clear_completed_tasks )
+                                  check_tender_enddate, clear_completed_tasks, send_news_and_blogs_weekly )
 
 # key: value pair for background task verbose name: background_task method
 BACKGROUND_TASK_DICTIONARY = {
@@ -17,6 +17,7 @@ BACKGROUND_TASK_DICTIONARY = {
     'EVENT_PARTICIPATION': check_event_participation,
     'EVENT_START_DATE':check_event_startdate,
     'EVENT_END_DATE': check_event_enddate,
+    # 'WEEKLY_NEWS_BLOGS':send_news_and_blogs_weekly
 
     # 'TENDER_START_DATE': check_tender_startdate,
     # 'TENDER_END_DATE': check_tender_enddate,
@@ -39,7 +40,7 @@ def clear_completed_tasks():
 # The Task table is the background_task table inside the databse
 # the CompleteTask table is the background_task_completetask table inside the database
 
-def start_task(task_verbose_name, schedule = 1, repeat = Task.DAILY): 
+def start_task( task_verbose_name,repeat, schedule = 1,  ): 
     if not Task.objects.filter(verbose_name=task_verbose_name).exists():
         print(f"creating new task with verbose name {task_verbose_name} ")
         background_task_method = BACKGROUND_TASK_DICTIONARY [ task_verbose_name ]
@@ -76,13 +77,21 @@ if __name__ == '__main__':
     print("Starting the background tasks ....")
     clear_background_tasks()
     clear_completed_tasks()
-    # BACKGROUND_TASK_TIME = TODAY.replace(hour=3,minute=0,second=0)
-    # print("Task scheduled at 6:00 am ",BACKGROUND_TASK_TIME)
-    # for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
-    #     start_task(task_verbose_name=verbose_name,schedule=BACKGROUND_TASK_TIME, repeat = Task.DAILY) 
+    BACKGROUND_TASK_TIME = TODAY.replace(hour=3,minute=0,second=0) # set the time to when u want to send emails
+   
+    print("Task scheduled at 6:00 am ",BACKGROUND_TASK_TIME)
+    for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
+        start_task(task_verbose_name=verbose_name,schedule=1, repeat = Task.DAILY) 
+    send_news_and_blogs_weekly(verbose_name='WEEKLY_NEWS_BLOGS', repeat =Task.WEEKLY)
+  
 
-    
-    
+
+
+#     for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
+#         start_task(task_verbose_name=verbose_name,schedule=1, repeat = 3) 
+#     send_news_and_blogs_weekly(verbose_name='WEEKLY_NEWS_BLOGS', schedule=1, repeat =10)
+# # 
+
 
 
 

@@ -34,13 +34,13 @@
 						<div class="item-user mb-3">
 							<div class="item-user-icons">
 								{% if product.company.get_company_address.facebooklink %}
-								<a href="#" class="bg-light mt-0"><i class="fa fa-facebook"></i></a>
+								<a href="{{product.company.get_company_address.facebooklink}}" class="bg-light mt-0"><i class="fa fa-facebook"></i></a>
 								{% endif %}
 								{% if product.company.get_company_address.twiterlink %}
-								<a href="#" class="bg-light"><i class="fa fa-twitter"></i></a>
+								<a href="{{product.company.get_company_address.twiterlink}}" class="bg-light"><i class="fa fa-twitter"></i></a>
 								{% endif %}
 								{% if product.company.get_company_address.googlelink %}
-								<a href="#" class="bg-light"><i class="fa fa-google"></i></a>
+								<a href="{{product.company.get_company_address.googlelink}}" class="bg-light"><i class="fa fa-google"></i></a>
 								{% endif %}
 								
 							</div>

@@ -68,13 +68,10 @@ from admin_site.decorators import company_created,company_is_active
 decorators = [never_cache, company_created(),company_is_active()]
 
 @method_decorator(decorators,name='dispatch')
-class ListForumQuestionAdmin(LoginRequiredMixin ,View):
-	def get(self,*args,**kwargs):
-		form = ForumQuestion.objects.all()
-		template_name = "admin/forum/Forumquestions/list.html"
-		context = {'researchprojectcategorys':form}
-		return render(self.request, template_name,context)
-
+class ListForumQuestionAdmin(LoginRequiredMixin ,ListView):
+	model = ForumQuestion
+	template_name = "admin/forum/Forumquestions/list.html"
+	
 @method_decorator(decorators,name='dispatch')
 class CreateForumQuestionAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
@@ -94,7 +91,7 @@ class CreateForumQuestionAdmin(LoginRequiredMixin, View):
 			forum.created_by = self.request.user
 			forum.save()
 			messages.success(self.request, "Added New Forum Successfully")
-			return redirect("admin:forum_form")
+			return redirect("admin:forum_list")
 		return render(self.request, template_name,context)
 
 @method_decorator(decorators,name='dispatch')
