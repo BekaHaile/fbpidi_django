@@ -186,6 +186,7 @@ class UserDetailView(LoginRequiredMixin, UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:user_detail",pk=self.kwargs['pk'])
 
+
 @method_decorator(decorators,name='dispatch')
 class SuspendUser(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -206,6 +207,7 @@ class SuspendUser(LoginRequiredMixin,View):
             messages.success(self.request,"The User Does Not Exist")
             return redirect("admin:users_list")
 
+
 @method_decorator(decorators,name='dispatch')
 class CreateCompanyStaff(LoginRequiredMixin,CreateView):
     model=UserProfile
@@ -222,6 +224,7 @@ class CreateCompanyStaff(LoginRequiredMixin,CreateView):
         messages.success(self.request,"You Created a User Successfully!")
         return redirect("admin:users_list")
 
+
 @method_decorator(decorators,name='dispatch')
 class CreateUserView(LoginRequiredMixin, CreateView):
     model=UserProfile
@@ -235,12 +238,14 @@ class CreateUserView(LoginRequiredMixin, CreateView):
         messages.success(self.request,"You Created a User Successfully!")
         return redirect("admin:users_list")
 
+
 @method_decorator(decorators,name='dispatch')
 class GroupList(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         groups = Group.objects.all()
         return render(self.request,"admin/pages/group_list.html",{'groups':groups})      
-        
+
+
 @method_decorator(decorators,name='dispatch')
 class GroupView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
@@ -255,6 +260,7 @@ class GroupView(LoginRequiredMixin,View):
         group.permissions.set(permission_list)
         group.save()
         return JsonResponse({"message":"Role Group Created SuccessFully"})
+
 
 @method_decorator(decorators,name='dispatch')
 class UserLogView(LoginRequiredMixin,View):

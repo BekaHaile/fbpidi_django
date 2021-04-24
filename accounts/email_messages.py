@@ -1,6 +1,7 @@
 import string
 import random
-from django.shortcuts import render
+
+from django.shortcuts import render, redirect
 from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
@@ -8,8 +9,13 @@ from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string,get_template
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
+from accounts.models import Subscribers
+from company.models import Company
+
 # the redirect_url for the web is 'activate' and for the api is 'api_activate', both views send the same
 # welcome email, but the web activate view will render a web page, and the api does nothing.
+SITE_DOMAIN = "/localhost:8000/"
+
 def sendEmailVerification(request,user, redirect_url = 'activate'):
     try:
         current_site = get_current_site(request)
@@ -144,5 +150,31 @@ def sendInquiryReplayEmail(request, inquiry, reply_message):
         return True
     except Exception as e:
         print("Exception While Sending Inquiry Email ", str(e))
+        return False
+
+
+def sendWeekBlogAndNews(blogs,week_blogs_count,news,week_news_count):
+    try:
+        subscribers_email =[ s.email for s in Subscribers.objects.filter(is_active = True)]
+        mail_subject = f'Latest News and Blogs From FBPIDI'
+        context = {
+            'blogs': blogs,
+            'week_blogs_count':week_blogs_count,
+            'news':news,
+            'week_news_count':week_news_count,
+            'domain': SITE_DOMAIN,
+            'fbpidi': Company.objects.get(main_category='FBPIDI'),
+            'unsubscribe_link':'unsubscribe',
+            'redirect_url':'activate_subscribtion'
+        }
+        message = get_template('email/news_email.html').render(context)
+        email = EmailMessage( mail_subject, message, to = subscribers_email)
+        email.content_subtype = "html"
+        email.send(fail_silently=False)
+        print("Email sent")
+        return True
+
+    except Exception as e:
+        print("Exception inside sendWeekBlogAndNews  ", str(e))
         return False
 

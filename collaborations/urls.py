@@ -4,7 +4,7 @@ from .views import (CustomerPollList, PollDetail,
                     CustomerTenderList, CustomerTenderDetail,IndexSearch,
 
                     ApplyForTender,ApplyForCompanyTender, CustomerNewsList, AjaxEventParticipation,AjaxApplyForTender,
-                    CustomerNewsDetail,CustomerEventList, CustomerEventDetail, EventParticipation
+                    CustomerNewsDetail,CustomerEventList, CustomerEventDetail, EventParticipation, send_blogs
                     )
 from .Views.forums import (CreateForumQuestion , ListForumQuestions,
                         ForumQuestionsDetail,SearchForum,
@@ -58,6 +58,7 @@ urlpatterns = [
     path("apply_company_tender/<id>/", ApplyForCompanyTender.as_view(), name = "apply_company_tender"),
 
     path("faq/",FaqList.as_view(),name="faq"),
+    path("send_blogs/", send_blogs, name = "send_blogs"),
     
     # path("search-tag/<name>",SearchBlogTag.as_view(),name="search_blogtag"),
     # path("search-tag_am/<name>",SearchBlogTag_Am.as_view(),name="search_blogtag_am"),
