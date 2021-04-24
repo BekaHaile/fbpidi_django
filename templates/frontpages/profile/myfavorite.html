@@ -1,0 +1,401 @@
+{%extends 'frontpages/profile/profile_layout.html'%}
+
+{%block profile_content%} 
+<div class="card mb-0 overflow-hidden">
+	<div class="card-header">
+		<h3 class="card-title">My Favorite Listings</h3>
+	</div>
+	<div class="card-body ads-tabs">
+		<div class="card overflow-hidden card-absolute">
+			<div class="edit-buttons-absolute">
+				<a class="btn btn-success btn-sm text-white" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+				<a class="btn btn-danger btn-sm text-white" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>
+				<a class="btn btn-info btn-sm text-white" data-toggle="tooltip" data-original-title="Save to Wishlist"><i class="fa fa-heart-o"></i></a>
+				<a class="btn btn-secondary btn-sm text-white" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>
+			</div>
+			<div class="d-md-flex">
+				<div class="item-card9-img">
+					<div class="item-card9-imgs">
+						<a href="{% url 'bs' %}"></a>
+						<img src="/static/frontpages/images/products/h4.png" alt="img" class="cover-image">
+					</div>
+					<div class="item-cardreview-absolute">
+						<div class="rating-stars d-flex">
+							<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="3">
+							<div class="rating-stars-container">
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+							</div><span class="ml-2 font-weight-semibold">(124)</span>
+						</div>
+					</div>
+				</div>
+				<div class="card border-0 mb-0">
+					<div class="card-body py-4">
+						<div class="item-card9">
+							<div class="d-flex">
+								<a href="{% url 'bs' %}">RealEstate</a>
+							</div>
+							<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold mt-0">BHK RealEstates Consultancy <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
+							<div class="item-card2-desc mt-3">
+								<div class="item-card2-desc-cost">
+									<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> New York, NY 10012, US-52014</h6>
+									<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#"> 140 256-654-6859</a></h6>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer py-3">
+						<div class="row">
+							<div class="col">
+								<a href="#" class="mt-1 mb-1 mr-1"><i class="fa fa-clock-o"></i> Every day <b>9am-10pm</b></a>
+							</div>
+							<div class="col col-auto">
+								<a href="#" class="mt-1 mb-1 mr-2"><i class="fa fa-heart-o"></i> Add to favorities</a>
+								<a href="#" class="mt-1 mb-1 mr-0"><i class="fa fa-eye"></i> 254</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card overflow-hidden card-absolute">
+			<div class="edit-buttons-absolute">
+				<a class="btn btn-success btn-sm text-white" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+				<a class="btn btn-danger btn-sm text-white" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>
+				<a class="btn btn-info btn-sm text-white" data-toggle="tooltip" data-original-title="Save to Wishlist"><i class="fa fa-heart-o"></i></a>
+				<a class="btn btn-secondary btn-sm text-white" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>
+			</div>
+			<div class="d-md-flex">
+				<div class="item-card9-img">
+					<div class="item-card9-imgs">
+						<a href="{% url 'bs' %}"></a>
+						<img src="/static/frontpages/images/products/j2.png" alt="img" class="cover-image">
+					</div>
+					<div class="item-cardreview-absolute">
+						<div class="rating-stars d-flex">
+							<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="3">
+							<div class="rating-stars-container">
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+							</div><span class="ml-2 font-weight-semibold">(174)</span>
+						</div>
+					</div>
+				</div>
+				<div class="card border-0 mb-0">
+					<div class="card-body py-4">
+						<div class="item-card9">
+							<div class="d-flex">
+								<a href="{% url 'bs' %}">Jobs</a>
+							</div>
+							<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold mt-0">Software Private Limited <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
+							<div class="item-card2-desc mt-3">
+								<div class="item-card2-desc-cost">
+									<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> New York, NY 10012, US-52014</h6>
+									<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#"> 140 256-654-6859</a></h6>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer py-3">
+						<div class="row">
+							<div class="col">
+								<a href="#" class="mt-1 mb-1 mr-1"><i class="fa fa-clock-o"></i> Every day <b>9am-10pm</b></a>
+							</div>
+							<div class="col col-auto">
+								<a href="#" class="mt-1 mb-1 mr-2"><i class="fa fa-heart-o"></i> Add to favorities</a>
+								<a href="#" class="mt-1 mb-1 mr-0"><i class="fa fa-eye"></i> 42</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card overflow-hidden card-absolute">
+			<div class="edit-buttons-absolute">
+				<a class="btn btn-success btn-sm text-white" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+				<a class="btn btn-danger btn-sm text-white" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>
+				<a class="btn btn-info btn-sm text-white" data-toggle="tooltip" data-original-title="Save to Wishlist"><i class="fa fa-heart-o"></i></a>
+				<a class="btn btn-secondary btn-sm text-white" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>
+			</div>
+			<div class="d-md-flex">
+				<div class="item-card9-img">
+					<div class="item-card9-imgs">
+						<a href="{% url 'bs' %}"></a>
+						<img src="/static/frontpages/images/products/pe1.png" alt="img" class="cover-image">
+					</div>
+					<div class="item-cardreview-absolute">
+						<div class="rating-stars d-flex">
+							<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="4">
+							<div class="rating-stars-container">
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+							</div><span class="ml-2 font-weight-semibold">(321)</span>
+						</div>
+					</div>
+				</div>
+				<div class="card border-0 mb-0">
+					<div class="card-body py-4">
+						<div class="item-card9">
+							<div class="d-flex">
+								<a href="{% url 'bs' %}">animals</a>
+							</div>
+							<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold mt-0">kenco petcenter <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
+							<div class="item-card2-desc mt-3">
+								<div class="item-card2-desc-cost">
+									<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> New York, NY 10012, US-52014</h6>
+									<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#"> 140 256-654-6859</a></h6>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer py-3">
+						<div class="row">
+							<div class="col">
+								<a href="#" class="mt-1 mb-1 mr-1"><i class="fa fa-clock-o"></i> Every day <b>9am-10pm</b></a>
+							</div>
+							<div class="col col-auto">
+								<a href="#" class="mt-1 mb-1 mr-2"><i class="fa fa-heart-o"></i> Add to favorities</a>
+								<a href="#" class="mt-1 mb-1 mr-0"><i class="fa fa-eye"></i> 17</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card overflow-hidden card-absolute">
+			<div class="edit-buttons-absolute">
+				<a class="btn btn-success btn-sm text-white" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+				<a class="btn btn-danger btn-sm text-white" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>
+				<a class="btn btn-info btn-sm text-white" data-toggle="tooltip" data-original-title="Save to Wishlist"><i class="fa fa-heart-o"></i></a>
+				<a class="btn btn-secondary btn-sm text-white" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>
+			</div>
+			<div class="d-md-flex">
+				<div class="item-card9-img">
+					<div class="item-card2-img">
+						<a href="{% url 'bs' %}"></a>
+						<img src="/static/frontpages/images/products/b3.png" alt="img" class="cover-image">
+					</div>
+					<div class="item-cardreview-absolute">
+						<div class="rating-stars d-flex">
+							<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="5">
+							<div class="rating-stars-container">
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+							</div><span class="ml-2 font-weight-semibold">(142)</span>
+						</div>
+					</div>
+				</div>
+				<div class="card border-0 mb-0">
+					<div class="card-body py-4">
+						<div class="item-card9">
+							<div class="d-flex">
+								<a href="{% url 'bs' %}">Beauty & Spa</a>
+							</div>
+							<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold mt-0">Goozer Beauty & Spa <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
+							<div class="item-card2-desc mt-3">
+								<div class="item-card2-desc-cost">
+									<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> New York, NY 10012, US-52014</h6>
+									<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#"> 140 256-654-6859</a></h6>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer py-3">
+						<div class="row">
+							<div class="col">
+								<a href="#" class="mt-1 mb-1 mr-1"><i class="fa fa-clock-o"></i> Every day <b>9am-10pm</b></a>
+							</div>
+							<div class="col col-auto">
+								<a href="#" class="mt-1 mb-1 mr-2"><i class="fa fa-heart-o"></i> Add to favorities</a>
+								<a href="#" class="mt-1 mb-1 mr-0"><i class="fa fa-eye"></i> 356</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card overflow-hidden card-absolute">
+			<div class="edit-buttons-absolute">
+				<a class="btn btn-success btn-sm text-white" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+				<a class="btn btn-danger btn-sm text-white" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>
+				<a class="btn btn-info btn-sm text-white" data-toggle="tooltip" data-original-title="Save to Wishlist"><i class="fa fa-heart-o"></i></a>
+				<a class="btn btn-secondary btn-sm text-white" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>
+			</div>
+			<div class="d-md-flex">
+				<div class="item-card9-img">
+					<div class="item-card2-img">
+						<a href="{% url 'bs' %}"></a>
+						<img src="/static/frontpages/images/products/h6.png" alt="img" class="cover-image">
+					</div>
+					<div class="item-cardreview-absolute">
+						<div class="rating-stars d-flex">
+							<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="4">
+							<div class="rating-stars-container">
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+							</div><span class="ml-2 font-weight-semibold">(324)</span>
+						</div>
+					</div>
+				</div>
+				<div class="card border-0 mb-0">
+					<div class="card-body py-4">
+						<div class="item-card9">
+							<div class="d-flex">
+								<a href="{% url 'bs' %}">Restaurant</a>
+							</div>
+							<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold mt-0">GilkonStar Hotel <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
+							<div class="item-card2-desc mt-3">
+								<div class="item-card2-desc-cost">
+									<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> New York, NY 10012, US-52014</h6>
+									<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#"> 140 256-654-6859</a></h6>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer py-3">
+						<div class="row">
+							<div class="col">
+								<a href="#" class="mt-1 mb-1 mr-1"><i class="fa fa-clock-o"></i> Every day <b>9am-10pm</b></a>
+							</div>
+							<div class="col col-auto">
+								<a href="#" class="mt-1 mb-1 mr-2"><i class="fa fa-heart-o"></i> Add to favorities</a>
+								<a href="#" class="mt-1 mb-1 mr-0"><i class="fa fa-eye"></i> 58</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card overflow-hidden mb-0 card-absolute">
+			<div class="edit-buttons-absolute">
+				<a class="btn btn-success btn-sm text-white" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+				<a class="btn btn-danger btn-sm text-white" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>
+				<a class="btn btn-info btn-sm text-white" data-toggle="tooltip" data-original-title="Save to Wishlist"><i class="fa fa-heart-o"></i></a>
+				<a class="btn btn-secondary btn-sm text-white" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>
+			</div>
+			<div class="d-md-flex">
+				<div class="item-card9-img">
+					<div class="item-card2-img ">
+						<a href="{% url 'bs' %}"></a>
+						<img src="/static/frontpages/images/products/v1.png" alt="img" class="cover-image">
+					</div>
+					<div class="item-cardreview-absolute">
+						<div class="rating-stars d-flex">
+							<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="3">
+							<div class="rating-stars-container">
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+								<div class="rating-star sm">
+									<i class="fa fa-star"></i>
+								</div>
+							</div><span class="ml-2 font-weight-semibold">(24)</span>
+						</div>
+					</div>
+				</div>
+				<div class="card border-0 mb-0">
+					<div class="card-body py-4">
+						<div class="item-card9">
+							<div class="d-flex">
+								<a href="{% url 'bs' %}">AutoMobile</a>
+							</div>
+							<a href="{% url 'bs' %}" class="text-dark"><h4 class="font-weight-semibold mt-0">Seep Automobiles <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
+							<div class="item-card2-desc mt-3">
+								<div class="item-card2-desc-cost">
+									<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> New York, NY 10012, US-52014</h6>
+									<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#"> 140 256-654-6859</a></h6>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer py-3">
+						<div class="row">
+							<div class="col">
+								<a href="#" class="mt-1 mb-1 mr-1"><i class="fa fa-clock-o"></i> Every day <b>9am-10pm</b></a>
+							</div>
+							<div class="col col-auto">
+								<a href="#" class="mt-1 mb-1 mr-2"><i class="fa fa-heart-o"></i> Add to favorities</a>
+								<a href="#" class="mt-1 mb-1 mr-0"><i class="fa fa-eye"></i> 635</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{%endblock%}

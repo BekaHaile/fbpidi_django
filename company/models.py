@@ -47,6 +47,7 @@ class Company(models.Model):
 							help_text="Image and pdf files less thatn 10MB", null=True,blank=True,
 							upload_to="company/organization_structure/",
 							validators=[FileExtensionValidator(allowed_extensions=allowed_file_extensions)])
+	foreigner_share = models.FloatField(default=0.0,verbose_name="Foreigners Share")
 	lab_test_analysis = models.ManyToManyField(CompanyDropdownsMaster,verbose_name="Laboratory test analysis",blank=True,related_name="lab_test_analysis") 
 	lab_equipment	= models.ManyToManyField(CompanyDropdownsMaster,verbose_name="Laboratory equipment",related_name="lab_equipment",blank=True) 
 	outsourced_test_param = models.TextField(verbose_name="Outsourced test parameters and contract agreements",null=True,blank=True)

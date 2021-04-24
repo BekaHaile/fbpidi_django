@@ -19,7 +19,7 @@ from django.core import serializers
 
 from company.models import *
 from accounts.models import CompanyAdmin,UserProfile
-from product.models import Order,OrderProduct,Product
+from product.models import Product
 from admin_site.views.dropdowns import image_cropper
 from admin_site.decorators import company_created,company_is_active
 

@@ -35,7 +35,7 @@ class ProfileView(LoginRequiredMixin, View):
         context = {}
         user_detail = Customer.objects.get(user=self.request.user)
         context = {'user_detail':user_detail}
-        return render(self.request,"frontpages/mydash.html",context)
+        return render(self.request,"frontpages/profile/mydash.html",context)
 
     def post(self,*args,**kwargs):
         user_detail = Customer.objects.get(user=self.request.user)
@@ -74,6 +74,9 @@ class ProfileView(LoginRequiredMixin, View):
         user_detail.save()
         return redirect("mydash")
 
+class MyFavorite(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        return render(self.request,"frontpages/profile/myfavorite.html")
 
         
 #       

@@ -18,7 +18,7 @@ from django.views.decorators.cache import never_cache
 
 from company.models import *
 from accounts.models import CompanyAdmin,UserProfile
-from product.models import Order,OrderProduct,Product
+from product.models import Product
 
 from company.forms import *
 from collaborations.models import *

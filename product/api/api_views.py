@@ -21,10 +21,8 @@ from collaborations.api.api_views import get_paginated_data, get_paginator_info
 
 from company.models import Company
 from company.api.serializers import CompanyInfoSerializer
-from product.models import SubCategory,Product, ProductImage, ProductPrice, Order, OrderProduct, InvoiceRecord
-from product.api.serializer import (ProductFullSerializer, ProductInfoSerializer, ProductImageSerializer, OrderSerializer, OrderProductSerializer, ShippingAddressSerializer)
-
-from product.forms import CheckoutForm
+from product.models import SubCategory,Product, ProductImage, ProductPrice
+from product.api.serializer import (ProductFullSerializer, ProductInfoSerializer, ProductImageSerializer)
 
 
 class ApiCartSummary(APIView):

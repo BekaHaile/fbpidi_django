@@ -26,7 +26,7 @@ from django.urls import path,include,re_path
 from admin_site.admin import admin_site
 
 from accounts.views import activate,api_activate, activate_subscription
-from core.views import IndexView, ProfileView
+from core.views import IndexView, ProfileView,MyFavorite
 
 from django.views.generic import TemplateView
 
@@ -51,6 +51,7 @@ urlpatterns = [
     path("", include('core.urls') ), #has index url and other non-app related templates
 
     path("mydash/",ProfileView.as_view(),name="mydash"),
+    path("myfavorite/",MyFavorite.as_view(),name="favorite"),
 
     
     path("admin/",admin_site.urls),# admin page urls

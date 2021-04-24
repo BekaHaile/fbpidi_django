@@ -189,8 +189,7 @@
 						</li>
 						{% if perms.product.view_productinquiry %}
 						<li class="nav-item">
-							<a href="{%url 'admin:admin_inquiry_list'%}" class="nav-link {%block inquiry%}{%endblock%}
-							"><i
+							<a href="{%url 'admin:admin_inquiry_list'%}" class="nav-link {%block inquiry%}{%endblock%}"><i
 									class="fa fa-shopping-cart mr-3.7"></i> <span>Inquiry Requests </span>
 									{% count_new_inquiry_requests user.get_company as company_inquiry_count %}
 									{% if company_inquiry_count > 0 %}
