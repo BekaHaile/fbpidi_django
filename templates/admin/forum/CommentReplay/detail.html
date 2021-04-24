@@ -5,6 +5,13 @@
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
 {%block pagename%}Edit Comment Replay {%endblock%}
+{%block nav%}<a href="{%url 'admin:forum_list'%}" class="breadcrumb-item">Forums</a>
+<a href="{%url 'admin:Forum_Comments' id=forum.id%}" class="breadcrumb-item">Forum Comments</a>
+<a href="{%url 'admin:Comment_replays' id=comment.id%}" class="breadcrumb-item">Comment Replies</a>
+<a href="" class="breadcrumb-item">Comment Reply Detail</a>
+
+{%endblock%}
+
 {%block content%}
 
 <!-- Content area -->

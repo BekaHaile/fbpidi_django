@@ -138,9 +138,10 @@ class ListForumCommentByIdAdmin(LoginRequiredMixin ,View):
 @method_decorator(decorators,name='dispatch')
 class ListCommentReplayByIdAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
-		form = CommentReplay.objects.filter(comment=self.kwargs['id'])
+		comment = ForumComments.objects.get(id= self.kwargs['id'])
+		form = CommentReplay.objects.filter(comment=comment)
 		template_name = "admin/forum/CommentReplay/list.html"
-		context = {'researchprojectcategorys':form}
+		context = {'researchprojectcategorys':form,'forum':comment.forum_question, 'comment':comment}
 		return render(self.request, template_name,context)
 
 @method_decorator(decorators,name='dispatch')
@@ -148,7 +149,7 @@ class ForumCommentsDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		form = ForumComments.objects.get(id=self.kwargs['id'])
 		template_name = "admin/forum/ForumComments/detail.html"
-		context = {'forms':form}
+		context = {'forms':form, 'forum':form.forum_question}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = CommentForm(self.request.POST,self.request.FILES)
@@ -175,9 +176,10 @@ class ListCommentReplayAdmin(LoginRequiredMixin ,View):
 @method_decorator(decorators,name='dispatch')
 class CommentReplayDetail(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
+		
 		form = CommentReplay.objects.get(id=self.kwargs['id'])
 		template_name = "admin/forum/CommentReplay/detail.html"
-		context = {'forms':form}
+		context = {'forms':form,'comment':form.comment, 'forum':form.comment.forum_question}
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = CommentReplayForm(self.request.POST,self.request.FILES)

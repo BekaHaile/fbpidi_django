@@ -5,14 +5,16 @@
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
 {%block pagename%}Edit Forum Comments{%endblock%}
+{%block nav%}<a href="{%url 'admin:forum_list'%}" class="breadcrumb-item">Forums</a>
+<a href="{%url 'admin:Forum_Comments' id=forum.id%}" class="breadcrumb-item">Forum Comments</a>
+<a href="" class="breadcrumb-item">Comment Detail</a>
+{%endblock%}
+
 {%block content%}
 
 <!-- Content area -->
 <div class="content">
-
-	 
 	<div class="card">
-
 		<div class="card-body">
 
 			<form action="" method="POST" enctype="multipart/form-data">

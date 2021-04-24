@@ -30,7 +30,7 @@ def check_event_startdate():
                 event.save()
                 success+=1
                 sendEventNotification( event= event,  message = f"IIMP system has changed the status of the Event titled '{event.title}'. This occurs when the creator of the event didn't change the status .")
-        print(f"Finished automatic Events Opening process, checked {events.count()} Upcoming tenders and successfully Opened {success} Events. ", timezone.now(),"ssssssss")
+        print(f"Finished automatic Events Opening process, checked {events.count()} Upcoming tenders and successfully Opened {success} Events. ", timezone.now())
     else:
         print("Tried to automatically Open Events, but no Tender was Found!")
 
