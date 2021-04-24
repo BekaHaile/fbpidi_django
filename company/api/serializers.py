@@ -41,7 +41,7 @@ class CompanyInfoSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Company
-        fields = ('id','contact_person','name','name_am','logo','geo_location','category', 'certification','established_yr', 'company_address','company_certificates')
+        fields = ('id','contact_person','name','name_am','logo','detail','detail_am','geo_location','category', 'certification','established_yr', 'company_address','company_certificates')
 
 
 class CompanyNameSerializer(serializers.ModelSerializer):
