@@ -901,9 +901,7 @@ def send_blogs(request):
             news = news['all']
             try:
                 current_site = get_current_site(request)
-                print("##### domain is ", current_site.domain)
                 from accounts.models import Subscribers
-                
                 subscribers_email =[ s.email for s in Subscribers.objects.filter(is_active = True)]
                 mail_subject = f'Latest News and Blogs From FBPIDI'
                 context = {
@@ -935,7 +933,4 @@ def send_blogs(request):
     else:
         print("news error", news['message'])
         return redirect("/")
-    # print(get_weekly_and_old(Blog.objects.filter(publish = True)))
-    # print(get_weekly_and_old(News.objects.all()))
-
-
+    

@@ -74,7 +74,7 @@ def abort(task_verbose_name):
 # the clear_background_tasks cmd, so that the tasks saved in the db to be run are deleted.
 if __name__ == '__main__':    
     
-    print("Starting the background tasks ....")
+    print("Starting the background tasks for ....", timezone.now())
     clear_background_tasks()
     clear_completed_tasks()
     BACKGROUND_TASK_TIME = TODAY.replace(hour=3,minute=0,second=0) # set the time to when u want to send emails
