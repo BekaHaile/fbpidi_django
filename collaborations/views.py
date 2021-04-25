@@ -23,7 +23,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.http import FileResponse, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from accounts.email_messages import sendWeekBlogAndNews
 
 from admin_site.decorators import company_created,company_is_active
@@ -156,7 +156,7 @@ def SearchCategory_Title(model_name, request):
 # accepts dynamic field name with filtering field value keys, and filters from the query
 def filter_by(field_name, field_values, query):
     """
-    accepts field_name like category or title etc and filter keys like ['Food','Beverage'] and filters from a query
+    accepts field_name like category or title etc and filter keys like ['key1','key2'] and filters from a query
     """
     kwargs ={}
     q= Q()  
@@ -347,7 +347,7 @@ def change_to_datetime(calender_date):
     str_date = datetime.datetime.strptime(calender_date, '%m/%d/%Y').strftime('%Y-%m-%d')
     return datetime.datetime.strptime(str_date,'%Y-%m-%d' )
 
-
+    
 ########## tender related views
 @method_decorator(decorators,name='dispatch')
 class CreateTender(LoginRequiredMixin,View):
@@ -359,7 +359,7 @@ class CreateTender(LoginRequiredMixin,View):
             print("execption at createtender ", str(e))
             return redirect("admin:error_404")
     def post(self,*args,**kwargs):
-        try:
+        # try:
             form = TenderForm(self.request.POST)       
             if form.is_valid():
                 tender = form.save(commit=False)
@@ -373,10 +373,10 @@ class CreateTender(LoginRequiredMixin,View):
             else:
                 messages.warning(self.request, "Error! Tender was not Created!" )
                 return redirect("admin:tenders")   
-        except Exception as e:
-            print("Exception at collaborations.views.CreateTender post" , str (e))
-            messages.warning(self.request, "Could not create Tender")
-            return redirect("admin:tenders")
+        # except Exception as e:
+        #     print("Exception at collaborations.views.CreateTender post" , str (e))
+        #     messages.warning(self.request, "Could not create Tender")
+        #     return redirect("admin:tenders")
             
 
 @method_decorator(decorators,name='dispatch')

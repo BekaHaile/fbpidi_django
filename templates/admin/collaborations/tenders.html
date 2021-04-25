@@ -9,6 +9,10 @@
  
 {% endblock %}
 {%block pagename%}Latest Tenders list{%endblock%}
+{%block nav%}
+    <a href="" class="breadcrumb-item">Tenders List</a>
+{%endblock%}
+{%block collaborations%}nav-item-expanded nav-item-open{%endblock%}
 {%block content%}
 			
 			<!-- Content area -->
@@ -33,8 +37,10 @@
 						<thead>
 							<tr><th>#</th>
 								<th>Tender Title</th>
+								{% if user.is_superuser %}
+								<th>Company</th>
+								{% endif %}
 								<th>Created By</th>
-								<th>Type</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
 								<!-- <th>Status</th> -->
@@ -50,8 +56,10 @@
 							<tr>
 								<td>{{forloop.counter}}</td>
 								<td>{{tender.title}}</td>
+								{% if user.is_superuser %}
 								<td>{{tender.get_company.name}}</td>
-								<td>{{tender.tender_type}}</td>	
+								{% endif %}
+								<td>{{tender.created_by.username}}</td>	
 								<td>{{tender.start_date.date}}</td>
 								<td>{{tender.end_date.date}}</td>
 								<!-- <td>{{tender.status}}</td> -->

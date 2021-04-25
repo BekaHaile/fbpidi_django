@@ -9,6 +9,11 @@
 
 {% endblock %} 
 {%block pagename%}Announcement List{%endblock%}
+{%block nav%}
+    <a href="{%url 'admin:anounce_list'%}" class="breadcrumb-item">Announcement List</a>
+{%endblock%}
+
+{%block collaborations%}nav-item-expanded nav-item-open{%endblock%}
 {%block content%}
 
 <!-- Content area -->
