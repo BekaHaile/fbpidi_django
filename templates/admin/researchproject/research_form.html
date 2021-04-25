@@ -3,6 +3,10 @@
 {% block extrastyle %}
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
+
+<link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
+<script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
+
 {% endblock %}
 {%block pagename%}Research{%endblock%}
 {%block nav%}<a href="{%url 'admin:research_list'%}" class="breadcrumb-item">Research List</a>

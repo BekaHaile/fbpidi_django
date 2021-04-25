@@ -178,7 +178,7 @@ class ListResearch(View):
 		elif 'by_title' in self.request.GET:
 			q = Research.objects.filter(Q(title__icontains = self.request.GET['by_title']))
 			if q.count()>0:
-				result ={ 'query':q, 'message':f"{q.count()} Result found!"}
+				result ={ 'query':q, 'message':f"{q.count()} Result found!", 'message_am':f"{q.count()}  ውጤት ተገኝቷል!"}
 			else:
 				result = {'query':[],'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
 		else:

@@ -66,12 +66,12 @@ def chat_with(request, reciever_name):
             else:
                 return redirect("admin:admin_chat_list")
     except Exception as e:
-        print("Exception at chat with ",e)
-        if request.user.is_customer:
-            return redirect('customer_chat_list')
-        else:
-            return redirect("admin:admin_chat_list")
-    messages = []
+            print("Exception at chat with ",e)
+            if request.user.is_customer:
+                return redirect('customer_chat_list')
+            else:
+                return redirect("admin:admin_chat_list")
+    messages_list = []
     if request.method == 'GET':
         q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) ) | 
                Q( Q(sender = request.user) & Q(receiver = other_user) ) 
@@ -84,13 +84,13 @@ def chat_with(request, reciever_name):
         num_of_messages = unread.count() if unread.count()>=5 else 5 #set number of messages to 5 if unread messages are lesser than 5, or set z numer equal to no of unread messages
         query_messages = query_messages[:num_of_messages]
         reversed_query = query_messages[::-1]#we need -created_date to retrieve from db, and order of created_date to display for users, so we have to reverse it
-        messages = ChatMessagesSerializer(reversed_query, many = True).data
+        messages_list = ChatMessagesSerializer(reversed_query, many = True).data
  
     other_chats = get_grouped_chats(user=request.user, excluded_user=other_user)
     if request.user.is_customer:
-        return render(request, 'frontpages/chat/customer_chat_layout.html',{'other_user':other_user, 'old_messages': messages,'other_chats':other_chats})
+        return render(request, 'frontpages/chat/customer_chat_layout.html',{'other_user':other_user, 'old_messages': messages_list,'other_chats':other_chats})
     else:    
-        return render(request, 'admin/chat/chat_layout.html',{'other_user':other_user, 'old_messages': messages,'other_chats':other_chats})
+        return render(request, 'admin/chat/chat_layout.html',{'other_user':other_user, 'old_messages': messages_list,'other_chats':other_chats})
     
 @login_required    
 def list_unread_messages(request):

@@ -103,66 +103,68 @@
                                                     <h3>{{News.count}} {% trans "News" %}</h3>
                                                 </div>
                                                 <div class="card-body">
-                                                    {% for news in News %}
-                                                    <div class="card overflow-hidden">
-                                                        <div class="d-md-flex">
-                                                            <div class="item-card9-img">
-                                                                <div class="item-card9-imgs">
-                                                                    <a href="/collaborations/customer_news_detail/{{news.id}}/"></a>
-                                                                    {% if news.image.url %}
-                                                                    <img src="{{news.image.url}}" alt="img" class="cover-image">
-                                                                    {% elif news.get_company.get_image %}
-                                                                    <img src="{{news.get_company.get_image}}"  alt="img" class="cover-image">
-                                                                    {% else %}
-                                                                    <img src="/static/frontpages/images/products/products/v1.jpg"  alt="img" class="cover-image">
-                                                                    {% endif %}
-                                                                </div>
-                                                                
-                                                                <div class="item-cardreview-absolute bg-secondary">{{ news.catagory }}</div>
-                                                            </div>
-                                                            <div class="card border-0 mb-0">
-                                                                <div class="card-body h-100">
-                                                                    <div class="item-card9">
-                                                                        <a href="/collaborations/customer_news_detail/{{news.id}}/" class="text-dark" style="margin-bottom: 3px;">
-                                                                            <h4 class="font-weight-semibold mt-1 mb-1">{% print_translated news.title news.title_am LANGUAGE_CODE %}</h4>
-                                                                        </a>
-                                                                        <!--<p >{{news.description|truncatechars_html:12|safe}}</p>-->
-
-                                                                        <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> {% trans "By" %}  </span>{% print_translated news.company.name news.company.name_am LANGUAGE_CODE %} </p>
+                                                    {% for news in News|slice:"2" %}
+                                                       
+                                                            <div class="card overflow-hidden">
+                                                            <div class="d-md-flex">
+                                                                <div class="item-card9-img">
+                                                                    <div class="item-card9-imgs">
+                                                                        <a href="/collaborations/customer_news_detail/{{news.id}}/"></a>
+                                                                        {% if news.image.url %}
+                                                                        <img src="{{news.image.url}}" alt="img" class="cover-image">
+                                                                        {% elif news.get_company.get_image %}
+                                                                        <img src="{{news.get_company.get_image}}"  alt="img" class="cover-image">
+                                                                        {% else %}
+                                                                        <img src="/static/frontpages/images/products/products/v1.jpg"  alt="img" class="cover-image">
+                                                                        {% endif %}
                                                                     </div>
+                                                                    
+                                                                    <div class="item-cardreview-absolute bg-secondary">{{ news.catagory }}</div>
                                                                 </div>
-                                                                <div class="card-footer pt-2 pb-2">
-                                                                    <div class="item-card9-footer d-sm-flex">
-                                                                        <div class="item-card9-cost">
-                                                                            <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-                                                                                <b>{% trans "By" %}: &nbsp</b>
-                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.company.name}} ">
-                                                                                    <img src="{{news.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
-                                                                                
-                                                                                </a>
+                                                                <div class="card border-0 mb-0">
+                                                                    <div class="card-body h-100">
+                                                                        <div class="item-card9">
+                                                                            <a href="/collaborations/customer_news_detail/{{news.id}}/" class="text-dark" style="margin-bottom: 3px;">
+                                                                                <h4 class="font-weight-semibold mt-1 mb-1">{% print_translated news.title news.title_am LANGUAGE_CODE %}</h4>
+                                                                            </a>
+                                                                            <!--<p >{{news.description|truncatechars_html:12|safe}}</p>-->
 
-                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.get_company.phone_number}}"><i class="fa fa-phone"></i></a>
+                                                                            <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark"> {% trans "By" %}  </span>{% print_translated news.company.name news.company.name_am LANGUAGE_CODE %} </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-footer pt-2 pb-2">
+                                                                        <div class="item-card9-footer d-sm-flex">
+                                                                            <div class="item-card9-cost">
+                                                                                <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                                    <b>{% trans "By" %}: &nbsp</b>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.company.name}} ">
+                                                                                        <img src="{{news.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
+                                                                                    
+                                                                                    </a>
 
-                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.get_company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.get_company.phone_number}}"><i class="fa fa-phone"></i></a>
 
-                                                                                <a class="" href="/chat/with/{{news.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title= "{% trans 'Chat with staff' %} "><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-                                                                                
-                                                                                <a class="" href="/collaborations/customer_news_detail/{{news.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "News Detail" %}</b></a>
-                                            
-                                                                                <br>
-                                                                                <!-- <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.created_date}}</small></div> -->
-                                                                                
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{news.get_company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+
+                                                                                    <a class="" href="/chat/with/{{news.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title= "{% trans 'Chat with staff' %} "><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+                                                                                    
+                                                                                    <a class="" href="/collaborations/customer_news_detail/{{news.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "News Detail" %}</b></a>
+                                                
+                                                                                    <br>
+                                                                                    <!-- <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.created_date}}</small></div> -->
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="ml-auto mt-3 mt-sm-0">
+                                                                                <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.created_date}}</small></div>
+                                                                                    
                                                                             </div>
                                                                         </div>
-                                                                        <div class="ml-auto mt-3 mt-sm-0">
-                                                                            <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  At:</b> {{news.created_date}}</small></div>
-                                                                                
-                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
+                                                            </div>
+                                                       
                                                     {%endfor%}
                                                 </div>
                                                 {% if News.count > 2 %}
@@ -183,7 +185,7 @@
                                             <div class = "card">
                                                <div class="card-header"> <h3>{{Event.count}} {% trans "Events" %}</h3></div>
                                                <div class="card-body">
-                                                    {% for event in Event %}
+                                                    {% for event in Event|slice:"2" %}
                                                     <div class="card overflow-hidden">
                                                         <div class="d-md-flex">
                                                             <div class="item-card9-img">
@@ -251,6 +253,16 @@
                                                     </div>
                                                     {%endfor%}
                                                 </div>
+                                                {% if Event.count > 2 %}
+                                                <div class="card-footer">
+                                                    
+                                                    <form action = "{% url 'customer_event_list' %}" method = "GET">
+                                                        <input type = "hidden" name="by_title" value = "{{searched_name}}">
+                                                        <button type= "submit" class="btn btn-secondary btn-sm mt-1 mb-1 ml-3" ><h5>{% trans "More result" %}</h5></a>
+                                                    </form>
+                                                    
+                                                </div>
+                                                {% endif %}
                                             </div>
                                                 
                                             {% endif %}
@@ -262,7 +274,7 @@
                                                 </div>
 
                                                 <div class = "card-body">
-                                                    {%for post in Announcement%}
+                                                    {%for post in Announcement|slice:"2" %}
                                                         <div class="card overflow-hidden">
                                                             <div class="d-md-flex">
                                                                 <div class="item-card9-img">
@@ -317,6 +329,16 @@
                                                         </div>
                                                     {%endfor%}
                                                 </div>
+                                                {% if Announcement.count > 2 %}
+                                                <div class="card-footer">
+                                                    
+                                                    <form action = "{% url 'announcement_list' %}" method = "GET">
+                                                        <input type = "hidden" name="by_title" value = "{{searched_name}}">
+                                                        <button type= "submit" class="btn btn-secondary btn-sm mt-1 mb-1 ml-3" ><h5>{% trans "More result" %}</h5></a>
+                                                    </form>
+                                                    
+                                                </div>
+                                                {% endif %}
 
                                             </div>
                                             {% endif %}
@@ -328,63 +350,75 @@
                                                 </div>
 
                                                 <div class = "card-body">
-                                                    {% for tender in Tender %}
-											<div class="card overflow-hidden">
-												<div class="d-md-flex">
-													<div class="item-card9-img">
-														<div class="item-card9-imgs">
-															<a href="/collaborations/customer_tender_detail/{{tender.id}}/"></a>
-															{% if tender.company.get_image %}
-															<img src="{{tender.get_company.get_image}}"  alt="img" class="cover-image">
-															{% else %}
-															
-															<img src="/static/frontpages/images/products/products/v1.jpg" alt="img" class="cover-image">
-															{% endif %}
-														</div>
-														
-														
-													</div>
-													<div class="card border-0 mb-0">
-														<div class="card-body h-100">
-															<div class="item-card9">
-																<a href="/collaborations/customer_tender_detail/{{tender.id}}/" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated tender.title|safe tender.title_am|safe LANGUAGE_CODE %}</h4></a>
-																
-															</div>
-														</div>
-														<div class="card-footer pt-2 pb-2">
-															<div class="item-card9-footer d-sm-flex">
-																<div class="item-card9-cost">
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																		<b>{% trans "By" %}: &nbsp</b>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{% print_translated comp.name comp.name_am LANGUAGE_CODE %}">
-																			<img src="{{tender.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
-																		</a>
-																		
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.company.phone_number}}"><i class="fa fa-phone"></i></a>
+                                                    {% for tender in Tender|slice:"2" %}
+                                                        <div class="card overflow-hidden">
+                                                            <div class="d-md-flex">
+                                                                <div class="item-card9-img">
+                                                                    <div class="item-card9-imgs">
+                                                                        <a href="/collaborations/customer_tender_detail/{{tender.id}}/"></a>
+                                                                        {% if tender.company.get_image %}
+                                                                        <img src="{{tender.get_company.get_image}}"  alt="img" class="cover-image">
+                                                                        {% else %}
+                                                                        
+                                                                        <img src="/static/frontpages/images/products/products/v1.jpg" alt="img" class="cover-image">
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    
+                                                                    
+                                                                </div>
+                                                                <div class="card border-0 mb-0">
+                                                                    <div class="card-body h-100">
+                                                                        <div class="item-card9">
+                                                                            <a href="/collaborations/customer_tender_detail/{{tender.id}}/" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated tender.title|safe tender.title_am|safe LANGUAGE_CODE %}</h4></a>
+                                                                            
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-footer pt-2 pb-2">
+                                                                        <div class="item-card9-footer d-sm-flex">
+                                                                            <div class="item-card9-cost">
+                                                                                <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                                    <b>{% trans "By" %}: &nbsp</b>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{% print_translated comp.name comp.name_am LANGUAGE_CODE %}">
+                                                                                        <img src="{{tender.get_company.get_image}}" alt="image" class="avatar brround  mr-2">
+                                                                                    </a>
+                                                                                    
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.company.phone_number}}"><i class="fa fa-phone"></i></a>
 
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{tender.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
 
-																		<a class="mr-2" href="/chat/with/{{tender.created_by.username}}/" target="blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-										
-																		<a class="" href="/collaborations/customer_tender_detail/{{tender.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Tender Detail" %}</b></a>
+                                                                                    <a class="mr-2" href="/chat/with/{{tender.created_by.username}}/" target="blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+                                                    
+                                                                                    <a class="" href="/collaborations/customer_tender_detail/{{tender.id}}/" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Tender Detail" %}</b></a>
 
-																		
-																		<br>
-																		
-																	</div>
-																</div>
-																<div class="ml-auto mt-3 mt-sm-0">
-																	
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "Posted" %}:</b> {{tender.created_date}}</small></div> 
-																		
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											{%endfor%}
+                                                                                    
+                                                                                    <br>
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="ml-auto mt-3 mt-sm-0">
+                                                                                
+                                                                                <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "Posted" %}:</b> {{tender.created_date}}</small></div> 
+                                                                                    
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>  
+                                                    {%endfor%}
                                                 </div>
+                                            
+                                                {% if Tender.count > 2 %}
+                                                <div class="card-footer">
+                                                    
+                                                    <form action = "{% url 'customer_blog_list' %}" method = "GET">
+                                                        <input type = "hidden" name="by_title" value = "{{searched_name}}">
+                                                        <button type= "submit" class="btn btn-secondary btn-sm mt-1 mb-1 ml-3" ><h5>{% trans "More result" %}</h5></a>
+                                                    </form>
+                                                    
+                                                </div>
+                                                {% endif %}
+
                                             </div>
                                             {% endif %}
 
@@ -396,64 +430,75 @@
 
                                                 <div class = "card-body">
 
-                                                    {% for vacancy in Vacancy %}
-											<div class="card overflow-hidden">
-												<div class="d-md-flex">
-													<div class="item-card9-img">
-														<div class="item-card9-imgs">
-															<a href="{%url 'vacancy_detail' id=vacancy.id%}"></a>
-															<img src="{{vacancy.company.get_image}}"  alt="img" class="cover-image">
-                                                            <div class="item-cardreview-absolute " style="background-color: rgb(122, 194, 13);">{{vacancy.category|safe}}</div>
-                                                            
-														</div>
-														
-													</div>
-													<div class="card border-0 mb-0">
-														<div class="card-body h-100">
-															<div class="item-card9">
-
-																<a href="/collaborations/customer_event_detail/{{event.id}}/" class="text-dark mb-3">
-																	<h3 class="font-weight-semibold mt-1 mb-3"><b>{% print_translated vacancy.title|safe vacancy.title_am|safe LANGUAGE_CODE%}</b></h3>
-																</a>
-
-                                                                <div class="mb-3">
-                                                                    <b>{% trans "category" %}</b> :{{vacancy.category|safe}}
+                                                    {% for vacancy in Vacancy|slice:"2" %}
+                                                        <div class="card overflow-hidden">
+                                                            <div class="d-md-flex">
+                                                                <div class="item-card9-img">
+                                                                    <div class="item-card9-imgs">
+                                                                        <a href="{%url 'vacancy_detail' id=vacancy.id%}"></a>
+                                                                        <img src="{{vacancy.company.get_image}}"  alt="img" class="cover-image">
+                                                                        <div class="item-cardreview-absolute " style="background-color: rgb(122, 194, 13);">{{vacancy.category|safe}}</div>
+                                                                        
+                                                                    </div>
+                                                                    
                                                                 </div>
+                                                                <div class="card border-0 mb-0">
+                                                                    <div class="card-body h-100">
+                                                                        <div class="item-card9">
 
-                                                                <div class="mb-3">
-                                                                     <b>{% trans "Employment Type" %}</b> : {{vacancy.employement_type}}
+                                                                            <a href="/collaborations/customer_event_detail/{{event.id}}/" class="text-dark mb-3">
+                                                                                <h3 class="font-weight-semibold mt-1 mb-3"><b>{% print_translated vacancy.title|safe vacancy.title_am|safe LANGUAGE_CODE%}</b></h3>
+                                                                            </a>
+
+                                                                            <div class="mb-3">
+                                                                                <b>{% trans "category" %}</b> :{{vacancy.category|safe}}
+                                                                            </div>
+
+                                                                            <div class="mb-3">
+                                                                                <b>{% trans "Employment Type" %}</b> : {{vacancy.employement_type}}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-footer pt-2 pb-2">
+                                                                        <div class="item-card9-footer d-sm-flex">
+                                                                            <div class="item-card9-cost">
+                                                                                <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                                    <b>{% trans "By" %}: &nbsp</b>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{vacancy.company.name}}">
+                                                                                        <img src="{{vacancy.company.get_image}}" alt="image" class="avatar brround  mr-2">
+                                                                                    </a>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{vacancy.company.phone_number}}"><i class="fa fa-phone"></i></a>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{vacancy.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
+                                                                                    
+                                                                                    <a class="" href="/chat/with/{{vacancy.created_by.username}}/" target = "blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+                                                                                    <a class="" href="{%url 'vacancy_detail' id=vacancy.id%}" ><b class="btn btn-secondary btn-sm mt-1">{% trans "View job details" %}</b></a>
+                                        
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="ml-auto mt-3 mt-sm-0">
+
+                                                                                <div class="text-dark font-weight-normal mb-0 mt-1 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{vacancy.created_date}}</small></div>
+                                                                                
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-															</div>
-														</div>
-														<div class="card-footer pt-2 pb-2">
-															<div class="item-card9-footer d-sm-flex">
-																<div class="item-card9-cost">
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																		<b>{% trans "By" %}: &nbsp</b>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{vacancy.company.name}}">
-																			<img src="{{vacancy.company.get_image}}" alt="image" class="avatar brround  mr-2">
-																		</a>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{vacancy.company.phone_number}}"><i class="fa fa-phone"></i></a>
-																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{vacancy.company.location}}"><i class="fa fa-map-marker mr-1"></i></a>
-																		
-                                                                        <a class="" href="/chat/with/{{vacancy.created_by.username}}/" target = "blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-																		<a class="" href="{%url 'vacancy_detail' id=vacancy.id%}" ><b class="btn btn-secondary btn-sm mt-1">{% trans "View job details" %}</b></a>
-							
-																	</div>
-																</div>
-
-																<div class="ml-auto mt-3 mt-sm-0">
-
-																	<div class="text-dark font-weight-normal mb-0 mt-1 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{vacancy.created_date}}</small></div>
-																	
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											{%endfor%}
+                                                            </div>
+                                                        </div>
+                                                    {%endfor%}
                                                 </div>
+                                                {% if Vacancy.count > 2 %}
+                                                <div class="card-footer">
+                                                    
+                                                    <form action = "{% url 'vacancy' %}" method = "GET">
+                                                        <input type = "hidden" name="by_title" value = "{{searched_name}}">
+                                                        <button type= "submit" class="btn btn-secondary btn-sm mt-1 mb-1 ml-3" ><h5>{% trans "More result" %}</h5></a>
+                                                    </form>
+                                                    
+                                                </div>
+                                                {% endif %}
+
 
                                             </div>
                                             {% endif %}
@@ -465,7 +510,7 @@
                                                 </div>
 
                                                 <div class = "card-body">                                                   
-                                                        {%for poll in Polls%}
+                                                        {%for poll in Polls|slice:"2"%}
                                                         <div class="card overflow-hidden">
                                                             <div class="d-md-flex">
                                                                 <div class="item-card9-img">
@@ -486,7 +531,7 @@
                                                                         <div class="item-card9">
                                                                             <a href="/collaborations/poll_detail/{{poll.id}}/" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated poll.title poll.title_am LANGUAGE_CODE %}</h4></a>
                                                                             
-                                                                            {% if poll.count_choices > 1 %}
+                                                                            {% if poll.count_choices > 2 %}
                                                                                     {{poll.count_choices}} {% trans "Choices" %}
                                                                             {% else %}
                                                                                     {{poll.count_choices}} {% trans "Choice" %}
@@ -494,7 +539,7 @@
 
                                                                             {% if poll.count_choices > 0 %}
                                                                             <p class="mr-0" style="display: block;">
-                                                                                {% if poll.count_votes > 1 %}
+                                                                                {% if poll.count_votes > 2 %}
                                                                                     {{poll.count_votes}} 
                                                                                     {% trans "Votes" %}
                                                                                 {% else %}
@@ -535,6 +580,17 @@
                                                         </div>
                                                         {%endfor%}
                                                 </div>
+                                                {% if Polls.count > 2 %}
+                                                <div class="card-footer">
+                                                    
+                                                    <form action = "{% url 'polls' %}" method = "GET">
+                                                        <input type = "hidden" name="by_title" value = "{{searched_name}}">
+                                                        <button type= "submit" class="btn btn-secondary btn-sm mt-1 mb-1 ml-3" ><h5>{% trans "More result" %}</h5></a>
+                                                    </form>
+                                                    
+                                                </div>
+                                                {% endif %}
+
                                             </div>
                                             {% endif %}
 
@@ -546,7 +602,7 @@
                                                 </div>
 
                                                 <div class = "card-body">  
-                                                    {% for blog in Blog %}
+                                                    {% for blog in Blog|slice:"2" %}
                                                     <div class="card overflow-hidden">
                                                         <div class="d-md-flex">
                                                             <div class="item-card9-img">
@@ -595,6 +651,18 @@
                                                     </div>
                                                     {%endfor%}
                                                 </div>
+                                                {% if Blog.count > 2 %}
+                                                <div class="card-footer">
+                                                    
+                                                    <form action = "{% url 'polls' %}" method = "GET">
+                                                        <input type = "hidden" name="by_title" value = "{{searched_name}}">
+                                                        <button type= "submit" class="btn btn-secondary btn-sm mt-1 mb-1 ml-3" ><h5>{% trans "More result" %}</h5></a>
+                                                    </form>
+                                                    
+                                                </div>
+                                                {% endif %}
+
+                                                
                                             </div>
                                             {% endif %}
 
@@ -604,77 +672,41 @@
                                                 <div class = "card-header">
                                                     <h3 class="mt-2 ">{{Forum.count}} {% trans "Forums" %}</h3>
                                                 </div>
-
-                                                <div class = "card-body"> 
-                                                    <div class="card overflow-hidden">
-                                                        <div class="d-md-flex">
-                                                            <div class="item-card9-img">
-                                                                <div class="item-card9-imgs">
-                                                                    <a href="{%url 'research_detail' id=research.id %}"></a>
-                                                                    {% if research.created_by.get_company %}
-                                                                    <img src="{{research.created_by.get_company.get_image}}"  alt="img1" class="cover-image">
-                                                                    {% elif research.created_by %}
-                                                                    <img src="{{research.created_by.profile_image}}" alt="img2" class="cover-image">
-                                                                    {% else %}
-                                                                    <img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="cover-image">
-                                                                    {% endif %}
-                                                                </div>
-                                                                
-                                                            </div>
-                                                            <div class="card border-0 mb-0">
-                                                                <div class="card-body h-100">
-                                                                    <div class="item-card9">
-                                                                        <a href="{%url 'research_detail' id=research.id %}" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1"> {{research.title}}</h4></a>
-                                                                    
-                                                                    </div>
-    
-                                                                </div>
-                                                                
-                                                            
-    
-                                                                <div class="card-footer pt-2 pb-2">
-                                                                    <div class="item-card9-footer d-sm-flex">
-                                                                        <div class="item-card9-cost">
-                                                                            <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-                                                                                <b>By: &nbsp</b>
-                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by}}">
-                                                                                    {% if research.created_by.is_staff %} 
-                                                                                        {% if research.company.get_image %}
-                                                                                        <img src="{{research.company.get_image}}"  alt="img1" class="avatar brround  mr-2">
-                                                                                        {% elif research.created_by.profile_image %}
-                                                                                        <img src="{{research.created_by.profile_image}}" alt="img2" class="avatar brround  mr-2">
-                                                                                        {% else %}
-                                                                                        <img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="avatar brround  mr-2">
-                                                                                        {% endif %}
-                                                                                    <!-- if the creator of the research is customer -->
-                                                                                    {% else %}
-                                                                                        {% if research.created_by.profile_image %} 
-                                                                                            <img src="{{research.created_by.profile_image}}" alt="image" class="avatar brround  mr-2">
-                                                                                        {% else %}
-                                                                                            <img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="avatar brround  mr-2">
-                                                                                        {% endif %}
-                                                                                    {% endif %}
-                                                                                    
-                                                                                </a>
-                                                                                <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by.phone_number}}"><i class="fa fa-phone"></i></a>	
-                                                                                <a class="" href="/chat/with/{{research.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-                                                                                <a class="" href="{%url 'research_detail' id=research.id %}" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Read More" %}</b></a>
-                                                            
-                                                                                <br>
-                                                                                
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="ml-auto mt-3 mt-sm-0">
-                                                                            
-                                                                            <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{research.created_date.date}}</small></div> 
-                                                                                
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                {%for forum in Forum|slice:"2"%}
+                                                <div class="card">
+                                                    <div class="card-head">
+                                                        <h3 style = "margin-left:20px;margin-top:20px; ">{{forum.title}}</h3>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="item7-card-desc d-flex mb-2">
+                                                            <a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>{{forum.created_date}}</a>
+                                                            <div class="ml-auto">
+                                                                <a class="mr-0" href="#"><i class="fa fa-comment-o text-muted mr-2"></i>{{forum.countComment}} </a>
                                                             </div>
                                                         </div>
+
+                                                        <h4 class="font-weight-semibold" >{{forum.description|safe|truncatechars_html:30}}</h4>
+                                                        {% if forum.created_by != user %}
+                                                        <a class="mr2" href="/chat/with/{{forum.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with forum creator"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+                                                        {% endif %}
+
+                                                        <a href="{%url 'forum_detail' id=forum.id %}" class="btn btn-secondary btn-sm">{% trans "Read More" %}</a>
                                                     </div>
                                                 </div>
+                                                {%endfor%}
+                                                
+                                                {% if Forum.count > 2 %}
+                                                <div class="card-footer">    
+                                                    
+                                                    <form action = "{% url 'forum_list' %}" method = "GET">
+                                                        <input type = "hidden" name="by_title" value = "{{searched_name}}">
+                                                        <button type= "submit" class="btn btn-secondary btn-sm mt-1 mb-1 ml-3" ><h5>{% trans "More result" %}</h5></a>
+                                                    </form>
+                                                    
+                                                </div>
+                                                {% endif %}
+                                            
+
                                             </div>
                                             {% endif %}
 
@@ -686,78 +718,90 @@
                                                 </div>
 
                                                 <div class = "card-body"> 
-                                                    {%for research in Research%}
+                                                    {%for research in Research|slice:"2" %}
 											
-												<div class="card overflow-hidden">
-													<div class="d-md-flex">
-														<div class="item-card9-img">
-															<div class="item-card9-imgs">
-																<a href="{%url 'research_detail' id=research.id %}"></a>
-																{% if research.created_by.get_company %}
-																<img src="{{research.created_by.get_company.get_image}}"  alt="img1" class="cover-image">
-																{% elif research.created_by %}
-																<img src="{{research.created_by.profile_image}}" alt="img2" class="cover-image">
-																{% else %}
-																<img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="cover-image">
-																{% endif %}
-															</div>
-															
-														</div>
-														<div class="card border-0 mb-0">
-															<div class="card-body h-100">
-																<div class="item-card9">
-																	<a href="{%url 'research_detail' id=research.id %}" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1"> {{research.title}}</h4></a>
-																
-																</div>
+                                                        <div class="card overflow-hidden">
+                                                            <div class="d-md-flex">
+                                                                <div class="item-card9-img">
+                                                                    <div class="item-card9-imgs">
+                                                                        <a href="{%url 'research_detail' id=research.id %}"></a>
+                                                                        {% if research.created_by.get_company %}
+                                                                        <img src="{{research.created_by.get_company.get_image}}"  alt="img1" class="cover-image">
+                                                                        {% elif research.created_by %}
+                                                                        <img src="{{research.created_by.profile_image}}" alt="img2" class="cover-image">
+                                                                        {% else %}
+                                                                        <img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="cover-image">
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                                <div class="card border-0 mb-0">
+                                                                    <div class="card-body h-100">
+                                                                        <div class="item-card9">
+                                                                            <a href="{%url 'research_detail' id=research.id %}" class="text-dark" style="margin-bottom: 3px;"><h4 class="font-weight-semibold mt-1 mb-1"> {{research.title}}</h4></a>
+                                                                        
+                                                                        </div>
 
-															</div>
-															
-														
+                                                                    </div>
+                                                                    
+                                                                
 
-															<div class="card-footer pt-2 pb-2">
-																<div class="item-card9-footer d-sm-flex">
-																	<div class="item-card9-cost">
-																		<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
-																			<b>By: &nbsp</b>
-																			<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by}}">
-																				{% if research.created_by.is_staff %} 
-																					{% if research.company.get_image %}
-																					<img src="{{research.company.get_image}}"  alt="img1" class="avatar brround  mr-2">
-																					{% elif research.created_by.profile_image %}
-																					<img src="{{research.created_by.profile_image}}" alt="img2" class="avatar brround  mr-2">
-																					{% else %}
-																					<img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="avatar brround  mr-2">
-																					{% endif %}
-																				<!-- if the creator of the research is customer -->
-																				{% else %}
-																					{% if research.created_by.profile_image %} 
-																						<img src="{{research.created_by.profile_image}}" alt="image" class="avatar brround  mr-2">
-																					{% else %}
-																						<img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="avatar brround  mr-2">
-																					{% endif %}
-																				{% endif %}
-																				
-																			</a>
-																			<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by.phone_number}}"><i class="fa fa-phone"></i></a>	
-																			<a class="" href="/chat/with/{{research.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
-																			<a class="" href="{%url 'research_detail' id=research.id %}" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Read More" %}</b></a>
-														
-																			<br>
-																			
-																		</div>
-																	</div>
-																	<div class="ml-auto mt-3 mt-sm-0">
-																		
-																		<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{research.created_date.date}}</small></div> 
-																			
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											{%endfor%}
+                                                                    <div class="card-footer pt-2 pb-2">
+                                                                        <div class="item-card9-footer d-sm-flex">
+                                                                            <div class="item-card9-cost">
+                                                                                <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+                                                                                    <b>By: &nbsp</b>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by}}">
+                                                                                        {% if research.created_by.is_staff %} 
+                                                                                            {% if research.company.get_image %}
+                                                                                            <img src="{{research.company.get_image}}"  alt="img1" class="avatar brround  mr-2">
+                                                                                            {% elif research.created_by.profile_image %}
+                                                                                            <img src="{{research.created_by.profile_image}}" alt="img2" class="avatar brround  mr-2">
+                                                                                            {% else %}
+                                                                                            <img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="avatar brround  mr-2">
+                                                                                            {% endif %}
+                                                                                        <!-- if the creator of the research is customer -->
+                                                                                        {% else %}
+                                                                                            {% if research.created_by.profile_image %} 
+                                                                                                <img src="{{research.created_by.profile_image}}" alt="image" class="avatar brround  mr-2">
+                                                                                            {% else %}
+                                                                                                <img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="avatar brround  mr-2">
+                                                                                            {% endif %}
+                                                                                        {% endif %}
+                                                                                        
+                                                                                    </a>
+                                                                                    <a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{research.created_by.phone_number}}"><i class="fa fa-phone"></i></a>	
+                                                                                    <a class="" href="/chat/with/{{research.created_by.username}}/" data-toggle="tooltip" data-placement="top" title="" data-original-title="Chat with staff"><i style = "color:blue;" class="fa fa-comments fa-"></i></a>
+                                                                                    <a class="" href="{%url 'research_detail' id=research.id %}" ><b class="btn btn-secondary btn-sm mt-1">{% trans "Read More" %}</b></a>
+                                                                
+                                                                                    <br>
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="ml-auto mt-3 mt-sm-0">
+                                                                                
+                                                                                <div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><small > <b>  {% trans "At" %}:</b> {{research.created_date.date}}</small></div> 
+                                                                                    
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {%endfor%}
                                                 </div>
+                                                {% if Research.count > 2 %}
+                                                <div class="card-footer">    
+                                                    
+                                                    <form action = "{% url 'research_list' %}" method = "GET">
+                                                        <input type = "hidden" name="by_title" value = "{{searched_name}}">
+                                                        <button type= "submit" class="btn btn-secondary btn-sm mt-1 mb-1 ml-3" ><h5>{% trans "More result" %}</h5></a>
+                                                    </form>
+                                                    
+                                                </div>
+                                                {% endif %}
+                                            
+
                                             </div>
                                             {% endif %}
                                             
@@ -766,31 +810,7 @@
 										
 									</div>
 								</div>
-								{% if news_list.has_other_pages %}
-								<div class="center-block text-center">
-									<ul class="pagination mb-5">
-										{% if news_list.has_previous %}
-										<li class="page-item page-prev "><a class="page-link" href="?page={{news_list.previous_page_number}}" tabindex="-1">{% trans "Prev" %}</a></li>
-										{% else %}
-										<li class="page-item page-prev disabled"><a class="page-link" href="#" tabindex="-1">{% trans "Prev" %}</a></li>
-										{% endif %}
-										
-										{% for i in news_list.paginator.page_range %}
-											{% if news_list.number == i %}
-													<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
-											{% else %}
-													<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
-											{% endif %}
-										{% endfor %}
-
-										{% if news_list.has_next %}
-										<li class="page-item page-next"><a class="page-link" href="?page={{news_list.next_page_number}}">{% trans "Next" %}</a></li>
-										{% else %}
-										<li class="page-item page-next disabled"><a class="page-link" href="#">{% trans "Next" %}</a></li>
-										{% endif %}
-									</ul>
-								</div>
-								{% endif %}
+							
 							</div>
 						</div>
 						<!--/Add lists-->

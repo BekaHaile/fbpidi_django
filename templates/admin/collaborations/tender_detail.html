@@ -15,7 +15,14 @@
 	<!-- /theme JS files -->
  
 {% endblock %}
-{%block pagename%}To Home{%endblock%}
+{%block pagename%}Tender Detail{%endblock%}
+{%block nav%}
+    <a href="{%url 'admin:tenders'%}" class="breadcrumb-item">Tenders List</a>
+    <a href="" class="breadcrumb-item">Tender Detail</a>
+
+{%endblock%}
+{%block collaborations%}nav-item-expanded nav-item-open{%endblock%}
+
 {%block content%}
 
  <!--  Only super users can watch this -->
