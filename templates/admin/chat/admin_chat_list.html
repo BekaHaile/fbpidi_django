@@ -31,13 +31,18 @@
 	</style>
 	{{form.media}}
 {% endblock %}
-{%block pagename%}Company Profile: {{company.name}}
+{%block pagename%}Chat Messages: {%endblock%}
+
+{%block nav%}
+    <a href="" class="breadcrumb-item">Chat Messaages List</a>
+
 {%endblock%}
+
 {%block content%}
 
 <div class="card">
     <div class="card-header bg-transparent header-elements-inline">
-        <h6 class="card-title"> My inbox</h6>
+        <h6 class="card-title"> My chat inbox</h6>
     </div>
 
 
@@ -103,9 +108,9 @@
         <table class="table table-inbox">
             <tr class="table-inbox-name">
                 <td>#</td>
-                <td><b>Sender Image</b></td>
+                <td><b>Image</b></td>
                 <td><b>Sender Name</b></td>
-                <td><b >Seen</b></td>
+                <td><b >Receiver Name</b></td>
                 <td><b>Message Hint</b></td>
                 <td><b class="ml-5">Date</b></td>
         </tr>											
@@ -135,15 +140,13 @@
                                         <div class="letter-icon-title text-default"><b>{{message.sender_name}}</b></div>
                                     </a>
                                 </td>
-
-                                <td class="table-inbox-time">
-                                    {% if message.seen %}
-                                        <p class="letter-icon-title text-center  mr-3">Seen</p>
-                                    {% else %}
-                                        <p class="letter-icon-title text-center  mr-5">Unseen</p>
-                                    {% endif %}
+                                <td class="table-inbox-name">
+                                    <a  >
+                                        <div class="letter-icon-title text-default"><b>You</b></div>
+                                    </a>
                                 </td>
 
+                                
                                 <!-- the rest is the same whether the user is a receiver or a sender -->
                                 <td class="table-inbox-message">
                                     <div class="table-inbox-subject">{{message.message|safe|truncatechars_html:20}}</div>
@@ -170,19 +173,18 @@
                                                 
                                             </td>
                                             <td class="table-inbox-name">
+                                                <a >
+                                                    <div class="letter-icon-title text-default"><b>{{message.sender_name}}</b></div>
+                                                </a>
+                                            </td>
+
+                                            <td class="table-inbox-name">
                                                 <a href="/chat/with/{{message.receiver_name}}/" target = "blank">
                                                     <div class="letter-icon-title text-default"><b>{{message.receiver_name}}</b></div>
                                                 </a>
                                             </td>
 
-                                            <td class="table-inbox-time">
-                                                {% if message.seen %}
-                                                    <p class="letter-icon-title text-center   mr-5">Seen</p>
-                                                {% else %}
-                                                    <p class="letter-icon-title text-center  mr-5">Unseen</p>
-                                                {% endif %}
-                                            </td>
-
+                                           
                                             <!-- the rest is the same whether the user is a receiver or a sender -->
                                             <td class="table-inbox-message">
                                             

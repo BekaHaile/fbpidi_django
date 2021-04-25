@@ -21,6 +21,12 @@
     <!------------>
 {% endblock %}
 {%block pagename%}News Form{%endblock%}
+{%block nav%}
+    <a href="{%url 'admin:news_list'%}" class="breadcrumb-item">News List</a>
+    <a href="" class="breadcrumb-item">News Form</a>
+
+{%endblock%}
+{%block collaborations%}nav-item-expanded nav-item-open{%endblock%}
 {%block content%}
 
 <!-- Content area -->

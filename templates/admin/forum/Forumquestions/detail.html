@@ -8,7 +8,7 @@
 {%block nav%}<a href="{%url 'admin:forum_list'%}" class="breadcrumb-item">Forums</a>
 <a href="{%url 'admin:forum_detail' model_name='ForumQuestion' id=forms.id %}" class="breadcrumb-item">Forum Detail</a>
 {%endblock%}
-
+{%block collaborations%}nav-item-expanded nav-item-open{%endblock%}
 {%block content%}
 
 <!-- Content area -->

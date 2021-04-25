@@ -9,6 +9,13 @@
 
 {% endblock %}
 {%block pagename%}Blog Comments List{%endblock%}
+{%block nav%}
+    <a href="{%url 'admin:admin_Blogs'%}" class="breadcrumb-item">Blogs List</a>
+	<a href="" class="breadcrumb-item">Blog Comments</a>
+	
+
+{%endblock%}
+{%block collaborations%}nav-item-expanded nav-item-open{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -44,7 +51,7 @@
 			<tbody>
 				{%for blogcomment in blogcomments%}
 				<tr>
-					<tr>{{forloop.counter}}</tr>
+					<td>{{forloop.counter}}</td>
 					<td>{{blogcomment.blog|safe|truncatechars_html:20}}</td>
 					<td>{{blogcomment.blog.created_by.username}}</td>
 					<td>{{blogcomment.created_by.username}}</td>

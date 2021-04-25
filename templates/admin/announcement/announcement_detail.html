@@ -10,6 +10,13 @@
 <!------------>
 {% endblock %}
 {%block pagename%}Edit Announcement{%endblock%}
+{%block nav%}
+    <a href="{%url 'admin:anounce_list'%}" class="breadcrumb-item">Announcement List</a>
+	<a href="" class="breadcrumb-item">Announcement Detail</a>
+	
+{%endblock%}
+
+{%block collaborations%}nav-item-expanded nav-item-open{%endblock%}
 {%block content%}
 
 <!-- Content area -->

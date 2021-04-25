@@ -5,6 +5,13 @@
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
 {%block pagename%}Edit Blog Comment{%endblock%}
+{%block nav%}
+    <a href="{%url 'admin:admin_Blogs'%}" class="breadcrumb-item">Blogs List</a>
+	<a href="{% url 'admin:blogComment_list_id' id=forms.blog.id %}" class="breadcrumb-item">Blog Comments</a>
+	<a href="" class="breadcrumb-item">Comment Detail</a>
+
+{%endblock%}
+{%block collaborations%}nav-item-expanded nav-item-open{%endblock%}
 {%block content%}
 
 <!-- Content area -->

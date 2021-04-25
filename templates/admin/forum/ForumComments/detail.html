@@ -9,7 +9,7 @@
 <a href="{%url 'admin:Forum_Comments' id=forum.id%}" class="breadcrumb-item">Forum Comments</a>
 <a href="" class="breadcrumb-item">Comment Detail</a>
 {%endblock%}
-
+{%block collaborations%}nav-item-expanded nav-item-open{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -27,7 +27,7 @@
 					<div class="alert alert-danger" role="alert">
 					  {{form.errors}}
 					</div>
-					{% endif %}
+					{% endif %}	
 					{%csrf_token%}
 
 
