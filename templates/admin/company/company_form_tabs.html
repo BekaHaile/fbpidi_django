@@ -151,6 +151,7 @@
 					</tr>
 				</thead>
 				<tbody>
+					{%if object.investment_capital.all%}
 					{%for inv_cap in object.investment_capital.all%}
 					<tr>
 						<td>{{forloop.counter}}</td>
@@ -182,6 +183,7 @@
 						</td>
 					</tr>
 					{%endfor%}
+					{%endif%}
 				</tbody>
 			 </table>
 		</div>		 

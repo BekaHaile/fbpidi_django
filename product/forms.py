@@ -335,24 +335,6 @@ class ReviewForm(forms.ModelForm):
             'review':forms.Textarea(attrs={'class':'form-control','placeholder':'Your Message Here','row':'3'}),
         }
 
-
-class CheckoutForm(forms.ModelForm):
-    class Meta:
-        model=ShippingAddress
-        fields = ('first_name','last_name','company','city','email',
-                  'street_address','home_address','phone_no',)
-        widgets = {
-            'first_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Your First Name',}),
-            'last_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Your Last Name'}),
-            'email':forms.EmailInput(attrs={'class':'form-control','placeholder':'Your Email Address Here'}),
-            'phone_no':forms.TextInput(attrs={'class':'form-control','placeholder':'Phone Number'}),
-            'company':forms.TextInput(attrs={'class':'form-control','placeholder':'Your Company (optional)'}),
-            'city':forms.TextInput(attrs={'class':'form-control','placeholder':'Your City '}),
-            'street_address':forms.TextInput(attrs={'class':'form-control','placeholder':'Street Address'}),
-            'home_address':forms.TextInput(attrs={'class':'form-control','placeholder':'Home Address'}),
-        }
-    
-
 class ProductInquiryForm(forms.ModelForm):
     attacement = forms.FileField(required=False)
     class Meta:

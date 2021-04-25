@@ -1,16 +1,12 @@
 
 
-{%extends 'frontpages/profile_layout.html'%}
+{%extends 'frontpages/profile/profile_layout.html'%}
 {%load i18n%}
 {%load core_template_tags%} 
 {% get_current_language as LANGUAGE_CODE %}
 
 {%block profile_content%}
-
-
-
-
-							<div class="card">
+		<div class="card">
 								<div class="card-header bg-transparent header-elements-inline">
 									<h6 class="card-title">My inbox</h6>
 								</div>
@@ -209,7 +205,6 @@
 							</div>
 
 			<input id = "user_name" type="hidden" value="{{user.username}}">
-
 
 			<script>
 				

@@ -25,7 +25,7 @@ from company.models import *
 from accounts.models import CompanyAdmin,User
 from admin_site.decorators import company_created,company_is_active
 from accounts.email_messages import sendRelayMessage, sendInquiryReplayEmail
-from product.models import Order,OrderProduct,Product, ProductInquiry,ProductInquiryReply
+from product.models import Product, ProductInquiry,ProductInquiryReply
 
 from company.forms import *
 from collaborations.models import *
@@ -119,7 +119,6 @@ class CompanyInquiryList(ListView):
         try:
             company = self.request.user.get_company()
             categories = [c.id for c  in company.category.all()]
-            print(categories)
             
             q = Q( Q( product__company = self.request.user.get_company().id) | 
                     Q( category__in = categories))
