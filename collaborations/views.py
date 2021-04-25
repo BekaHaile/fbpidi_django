@@ -27,7 +27,7 @@ from datetime import timedelta
 from accounts.email_messages import sendWeekBlogAndNews
 
 from admin_site.decorators import company_created,company_is_active
-from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
+from company.models import Company,CompanyEvent, EventParticipants
 from .forms import PollsForm, TenderForm,  CreateJobApplicationForm
 from collaborations.forms import (BlogsForm, BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm,ForumQuestionForm,CommentForm,CommentReplayForm,NewsForm, CompanyEventForm, EventParticipantForm, 
 								AnnouncementForm,ResearchForm,ResearchProjectCategoryForm, TenderApplicantForm, PollsForm, CreatePollForm, CreateChoiceForm, DocumentForm )
@@ -441,6 +441,7 @@ class EditTender(LoginRequiredMixin,View):
             messages.warning(self.request, "Error! Tender was not Edited!", )
             return redirect("admin:tenders")
 
+
 ######## Tender for customers
 class CustomerTenderList(View):
     def get(self, *args, **kwargs): 
@@ -479,6 +480,7 @@ class CustomerTenderDetail(View):
             print("Exception at customerTenderDetail :", str(e))
             messages.warning(self.request, "tender not found")
             return redirect("tender_list")
+
 
 @login_required
 def AjaxApplyForTender(request, id):
@@ -579,6 +581,7 @@ class EditNews(LoginRequiredMixin, View):
                 messages.warning(self.request, "Error! News not Edited!")
                 return redirect(f"/admin/news_list/") 
 
+
 @method_decorator(decorators,name='dispatch')
 class AdminNewsList(LoginRequiredMixin, ListView):
     model = News
@@ -593,7 +596,6 @@ class AdminNewsList(LoginRequiredMixin, ListView):
             except Exception as e:
                 print("Exception while trying to fetch news objects")
                 return []
-
 
 
 
@@ -691,6 +693,7 @@ def change_to_datetime(calender_date):
     str_date = datetime.datetime.strptime(calender_date, '%m/%d/%Y').strftime('%Y-%m-%d')
     return datetime.datetime.strptime(str_date,'%Y-%m-%d' )
 
+
 @method_decorator(decorators,name='dispatch')
 class EditCompanyEvent(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):
@@ -739,8 +742,6 @@ class CustomerEventList(View):
                 result = FilterByCompanyname(self.request.GET.getlist('by_company'), CompanyEvent.objects.all())
             else:
                 result = SearchByTitle_All('Event', self.request)
-            # if result['query'].count() == 0:
-            #     result['query'] = CompanyEvent.objects.all()
             data = get_paginated_data(self.request, result['query'])
 
             eventcompanies = []
@@ -773,22 +774,29 @@ def AjaxEventParticipation(request, id):
     data = json.loads(request.body) 
     try:  
         event = get_object_or_404( CompanyEvent, id = id)
-        older = EventParticipants.objects.filter(event = event, patricipant_email = data['participant_email']).first()
-        if older:
-            older.notify_on = data["notify_on"]
-            older.notified = False
-            older.save()
+        cropped = data['notify_on'][:10]
+        selected_date = datetime.datetime.strptime( cropped, '%Y-%m-%d')
+        if (event.start_date.date()<= selected_date.date() and selected_date.date() <= event.end_date.date() ):
+            older = EventParticipants.objects.filter(event = event, patricipant_email = data['participant_email']).first()
+            if older:
+                older.notify_on = selected_date
+                older.notified = False
+                older.save()
+                message = f"Updated The Reminder For The Email {data['participant_email']}! \n The system will remind you on {cropped}"
+            else:
+                participant = EventParticipants(user = request.user, event= event, patricipant_email=data['participant_email'], notify_on=selected_date)
+                participant.save()
+                message = f"New Reminder Saved For The Email {data['participant_email']}!  \n The system will remind you on {cropped}"
+            return JsonResponse({'error':False, "message": message }, safe = False)
         else:
-            participant = EventParticipants(user = request.user, event= event, patricipant_email=data['participant_email'], notify_on=data[ "notify_on"])
-            participant.save()
-        return JsonResponse({'error':False,"message":f"Reminder saved! \n The system will remind you on {data['notify_on']}"}, safe = False)
+            return JsonResponse({'error':True, "message": f"You inserted Invalid date, \n Make sure that you choose a date between {event.start_date.date()} and {event.end_date.date()}" }, safe = False)
+
 
     except Exception as e:
         print("Exception occured while trying to paricipate in event", e)
         return JsonResponse({'error':True,"message":f"Exception occured while registering, "}, safe = False)
 
     
-
 #12345  use ajax for event participation.
 class EventParticipation(LoginRequiredMixin, View):
     def post(self, *args, **kwargs):   
@@ -875,8 +883,6 @@ class DocumentListing(LoginRequiredMixin, View):
         except Exception as e:
             print("exceptio at document list ",e)
             return redirect("admin:error_404")
-
-
 
 
 def get_weekly_and_old(queryset):

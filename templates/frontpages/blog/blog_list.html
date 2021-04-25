@@ -133,8 +133,8 @@
 										
 									</div>
 								</div>
-								{% if blogs.has_other_pages %}
 								<div class="center-block text-center">
+									
 									<ul class="pagination mb-5">
 										{% if blogs.has_previous %}
 										<li class="page-item page-prev "><a class="page-link" href="?page={{blogs.previous_page_number}}" tabindex="-1">{% trans "Prev" %}</a></li>
@@ -156,8 +156,9 @@
 										<li class="page-item page-next disabled"><a class="page-link" href="#">{% trans "Next" %}</a></li>
 										{% endif %}
 									</ul>
+									
 								</div>
-								{% endif %}
+								
 							</div>
 						</div>
 						<!--/Add lists-->

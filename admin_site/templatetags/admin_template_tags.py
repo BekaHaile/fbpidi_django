@@ -168,9 +168,6 @@ def count_unread_chats(user):
 def count_unread_inbox(company):
     return CompanyMessage.objects.filter(company = company).count()
 
-@register.simple_tag
-def count_new_inquiry_requests(user_company):
-    return ProductInquiry.objects.filter(product__company = user_company, replied=False).count()
 
 @register.simple_tag
 def count_new_inquiry_requests(user_company):
