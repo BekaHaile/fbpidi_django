@@ -133,7 +133,8 @@
 			<div class="list-icons">
 				{% if perms.company.add_investmentcapital %}
 				<a href="#" data-toggle="modal" data-target="#inv_capital_form_modal" class="btn bg-teal btn-sm rounded-round"><i
-						class="icon-add mr-2"></i>Add Additional Data</a>
+						class="icon-add mr-2"></i>
+						{%if inv_cap_data%}Add Additional Data{%else%}Add Data {%endif%}</a>
 				{% endif %}
 			</div>
 		</div>
@@ -151,6 +152,7 @@
 					</tr>
 				</thead>
 				<tbody>
+					{%if inv_cap_data%}
 					<tr>
 						<td>1</td>
 						<td>{{inv_cap_data.machinery_cost}}</td>
@@ -180,6 +182,7 @@
 							</div>
 						</td>
 					</tr>
+					{%endif%}
 				</tbody>
 			 </table>
 		</div>		 
@@ -372,7 +375,7 @@
 
 </div>
 
- 
+ {%if land_usage_data%}
 <div class="tab-pane fade show" id="land_usage_form_tab">
 	<div class="card">
 		<div class="card-header header-elements-sm-inline">
@@ -394,8 +397,9 @@
 	</div>
 
 </div>
+{%endif%}
 
-
+{%if project_state%}
 <div class="tab-pane fade show" id="project_state_form_tab">
 	<div class="card">
 		<div class="card-header header-elements-sm-inline">
@@ -417,8 +421,7 @@
 
 </div>
  
-
-
+{%endif%}
 <div class="tab-pane fade show" id="project_quantity_form_tab">
 	<div class="card">
 		<div class="card-header header-elements-sm-inline">

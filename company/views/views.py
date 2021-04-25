@@ -380,7 +380,7 @@ class CreateEmployees(LoginRequiredMixin,View):
                     employee.year = ethio_year
                     employee.company = Company.objects.get(id=self.kwargs['company'])
                     employee.save()
-                    return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
+                    return JsonResponse({'error': False, 'message': form.cleaned_data.get('employment_type')+': Employees Data Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Employee Data For this Year Already Exists"})
             except Company.DoesNotExist:
@@ -401,7 +401,7 @@ class CreateJobsCreatedYearly(LoginRequiredMixin,View):
                     jobs.quarter_job = form.cleaned_data.get("quarter_job")
                     jobs.company = Company.objects.get(id=self.kwargs['company'])
                     jobs.save()
-                    return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
+                    return JsonResponse({'error': False, 'message': form.cleaned_data.get('job_type')+': Job Opportunity Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Year Already Exists"})
             except Company.DoesNotExist:
@@ -422,7 +422,7 @@ class CreateEducationStatus(LoginRequiredMixin,View):
                     education.quarter_edu = form.cleaned_data.get("quarter_edu")
                     education.company = Company.objects.get(id=self.kwargs['company'])
                     education.save()
-                    return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
+                    return JsonResponse({'error': False, 'message': form.cleaned_data.get('education_type')+ ': Education Status Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Year Already Exists"})
             except Company.DoesNotExist:

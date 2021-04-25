@@ -1,191 +1,120 @@
-{%extends 'frontpages/profile_layout.html'%}
+{%extends 'frontpages/profile/profile_layout.html'%}
 
 {%block profile_content%}
-		 
-						<div class="card">
-							<div class="card-header">
-								<h3 class="card-title">Orders Payment Method</h3>
-							</div>
-							<div class="card-body">
-								<div class="card-pay">
-									<ul class="tabs-menu nav">
-										<li class=""><a href="#tab1" class="active" data-toggle="tab"><i class="fa fa-credit-card"></i> Credit Card</a></li>
-										<li><a href="#tab2" data-toggle="tab" class=""><i class="fa fa-paypal"></i>  Paypal</a></li>
-										<li><a href="#tab3" data-toggle="tab" class=""><i class="fa fa-university"></i>  Bank Transfer</a></li>
-									</ul>
-									<div class="tab-content">
-										<div class="tab-pane active show" id="tab1">
-											<div class="form-group">
-												<label class="form-label">CardHolder Name</label>
-												<input type="text" class="form-control" id="name1" placeholder="First Name">
-											</div>
-											<div class="form-group">
-												<label class="form-label">Card number</label>
-												<div class="input-group">
-													<input type="text" class="form-control" placeholder="Search for...">
-													<span class="input-group-append">
-														<button class="btn btn-info" type="button"><i class="fa fa-cc-visa"></i> &nbsp; <i class="fa fa-cc-amex"></i> &nbsp;
-														<i class="fa fa-cc-mastercard"></i></button>
-													</span>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-sm-8">
-													<div class="form-group">
-														<label class="form-label">Expiration</label>
-														<div class="input-group">
-															<input type="number" class="form-control" placeholder="MM" name="expire-month">
-															<input type="number" class="form-control" placeholder="YY" name="expire-year">
-														</div>
-													</div>
-												</div>
-												<div class="col-sm-4">
-													<div class="form-group">
-														<label class="form-label">CVV <i class="fa fa-question-circle"></i></label>
-														<input type="number" class="form-control" required="">
-													</div>
-												</div>
-											</div>
-											<a href="#" class="btn btn-secondary">Submit</a>
-										</div>
-										<div class="tab-pane" id="tab2">
-											<p>Paypal is easiest way to pay online</p>
-											<p><a href="#" class="btn btn-secondary"><i class="fa fa-paypal"></i> Log in my Paypal</a></p>
-											<p class="mb-0"><strong>Note:</strong> Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. </p>
-										</div>
-										<div class="tab-pane" id="tab3">
-											<p>Bank account details</p>
-											<dl class="card-text">
-											  <dt>BANK: </dt>
-											  <dd> THE UNION BANK 0456</dd>
-											</dl>
-											<dl class="card-text">
-											  <dt>Accaunt number: </dt>
-											  <dd> 67542897653214</dd>
-											</dl>
-											<dl class="card-text">
-											  <dt>IBAN: </dt>
-											  <dd>543218769</dd>
-											</dl>
-											<p class="mb-0"><strong>Note:</strong> Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. </p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card mb-0 overflow-hidden">
-							<div class="card-header">
-								<h3 class="card-title">Orders List</h3>
-							</div>
-							<div class="card-body">
-								<div class="table-responsive border-top">
-									<table class="table table-bordered table-hover text-nowrap">
-										<thead>
-											<tr>
-												<th>Order ID</th>
-												<th>Category</th>
-												<th>Date</th>
-												<th>Price</th>
-												<th>Status</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td class="text-secondary">#89345</td>
-												<td>Restaurant</td>
-												<td>07-12-2019</td>
-												<td class="font-weight-semibold fs-16">$893</td>
-												<td>
-													<a href="#" class="badge badge-danger">Pending</a>
-												</td>
-											</tr>
-											<tr>
-												<td class="text-secondary">#39281</td>
-												<td>Electorincs</td>
-												<td>12-11-2019</td>
-												<td class="font-weight-semibold fs-16">$254</td>
-												<td>
-													<a href="#" class="badge badge-secondary">Completed</a>
-												</td>
-											</tr>
-											<tr>
-												<td class="text-secondary">#35825</td>
-												<td>Clothing</td>
-												<td>15-11-2019</td>
-												<td class="font-weight-semibold fs-16">$352</td>
-												<td>
-													<a href="#" class="badge badge-success">Activated</a>
-												</td>
-											</tr>
-											<tr>
-												<td class="text-secondary">#62391</td>
-												<td>Jobs</td>
-												<td>10-11-2019</td>
-												<td class="font-weight-semibold fs-16">$643</td>
-												<td>
-													<a href="#" class="badge badge-danger">Pending</a>
-												</td>
-											</tr>
-											<tr>
-												<td class="text-secondary">#92481</td>
-												<td>Education</td>
-												<td>07-11-2019</td>
-												<td class="font-weight-semibold fs-16">$392</td>
-												<td>
-													<a href="#" class="badge badge-secondary">Activated</a>
-												</td>
-											</tr>
-											<tr>
-												<td class="text-secondary">#29381</td>
-												<td>Services</td>
-												<td>31-10-2019</td>
-												<td class="font-weight-semibold fs-16">$295</td>
-												<td>
-													<a href="#" class="badge badge-danger">Pending</a>
-												</td>
-											</tr>
-											<tr>
-												<td class="text-secondary">#72356</td>
-												<td>Constructions</td>
-												<td>27-10-2019</td>
-												<td class="font-weight-semibold fs-16">$836</td>
-												<td>
-													<a href="#" class="badge badge-secondary">Activated</a>
-												</td>
-											</tr>
-											<tr>
-												<td class="text-secondary">#89345</td>
-												<td>Real Estate</td>
-												<td>30-11-2019</td>
-												<td class="font-weight-semibold fs-16">$254</td>
-												<td>
-													<a href="#" class="badge badge-success">Completed</a>
-												</td>
-											</tr>
-											<tr>
-												<td class="text-secondary">#4570</td>
-												<td>Vechicle</td>
-												<td>03-12-2019</td>
-												<td class="font-weight-semibold fs-16">$654</td>
-												<td>
-													<a href="#" class="badge badge-secondary">Activated</a>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<ul class="pagination">
-									<li class="page-item page-prev disabled">
-										<a class="page-link" href="#" tabindex="-1">Prev</a>
-									</li>
-									<li class="page-item active"><a class="page-link" href="#">1</a></li>
-									<li class="page-item"><a class="page-link" href="#">2</a></li>
-									<li class="page-item"><a class="page-link" href="#">3</a></li>
-									<li class="page-item page-next">
-										<a class="page-link" href="#">Next</a>
-									</li>
-								</ul>
-							</div>
-						</div>
+
+	<div class="card mb-0 overflow-hidden">
+		<div class="card-header">
+			<h3 class="card-title">Orders List</h3>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive border-top">
+				<table class="table table-bordered table-hover text-nowrap">
+					<thead>
+						<tr>
+							<th>Order ID</th>
+							<th>Category</th>
+							<th>Date</th>
+							<th>Price</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="text-secondary">#89345</td>
+							<td>Restaurant</td>
+							<td>07-12-2019</td>
+							<td class="font-weight-semibold fs-16">$893</td>
+							<td>
+								<a href="#" class="badge badge-danger">Pending</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#39281</td>
+							<td>Electorincs</td>
+							<td>12-11-2019</td>
+							<td class="font-weight-semibold fs-16">$254</td>
+							<td>
+								<a href="#" class="badge badge-secondary">Completed</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#35825</td>
+							<td>Clothing</td>
+							<td>15-11-2019</td>
+							<td class="font-weight-semibold fs-16">$352</td>
+							<td>
+								<a href="#" class="badge badge-success">Activated</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#62391</td>
+							<td>Jobs</td>
+							<td>10-11-2019</td>
+							<td class="font-weight-semibold fs-16">$643</td>
+							<td>
+								<a href="#" class="badge badge-danger">Pending</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#92481</td>
+							<td>Education</td>
+							<td>07-11-2019</td>
+							<td class="font-weight-semibold fs-16">$392</td>
+							<td>
+								<a href="#" class="badge badge-secondary">Activated</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#29381</td>
+							<td>Services</td>
+							<td>31-10-2019</td>
+							<td class="font-weight-semibold fs-16">$295</td>
+							<td>
+								<a href="#" class="badge badge-danger">Pending</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#72356</td>
+							<td>Constructions</td>
+							<td>27-10-2019</td>
+							<td class="font-weight-semibold fs-16">$836</td>
+							<td>
+								<a href="#" class="badge badge-secondary">Activated</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#89345</td>
+							<td>Real Estate</td>
+							<td>30-11-2019</td>
+							<td class="font-weight-semibold fs-16">$254</td>
+							<td>
+								<a href="#" class="badge badge-success">Completed</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#4570</td>
+							<td>Vechicle</td>
+							<td>03-12-2019</td>
+							<td class="font-weight-semibold fs-16">$654</td>
+							<td>
+								<a href="#" class="badge badge-secondary">Activated</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<ul class="pagination">
+				<li class="page-item page-prev disabled">
+					<a class="page-link" href="#" tabindex="-1">Prev</a>
+				</li>
+				<li class="page-item active"><a class="page-link" href="#">1</a></li>
+				<li class="page-item"><a class="page-link" href="#">2</a></li>
+				<li class="page-item"><a class="page-link" href="#">3</a></li>
+				<li class="page-item page-next">
+					<a class="page-link" href="#">Next</a>
+				</li>
+			</ul>
+		</div>
+	</div>
 					
 {%endblock%}

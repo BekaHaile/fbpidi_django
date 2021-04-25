@@ -709,8 +709,6 @@ class InvestmentProjectDetailForm_Admin(forms.ModelForm):
         self.contact_person = kwargs.pop("contact_person")
         super(InvestmentProjectDetailForm_Admin,self).__init__(*args,**kwargs)
         self.fields['product_type'].queryset = Category.objects.filter(category_type=self.sector)
-        self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
-        self.fields['ownership_form'].empty_label = "Select Form of Ownership"
         self.fields['technology'].empty_label = "Select Technology to be Used"
         self.fields['technology'].queryset= ProjectDropDownsMaster.objects.filter(dropdown_type="Technology")
         self.fields['automation'].empty_label = "Select Automation"
@@ -728,7 +726,7 @@ class InvestmentProjectDetailForm_Admin(forms.ModelForm):
         model = InvestmentProject
         fields = (
             'product_type','site_location_name','contact_person','land_acquisition',
-            'distance_f_strt','ownership_form','remaining_work',
+            'distance_f_strt','remaining_work',
             'major_problems','operational_time','annual_raw_material',
             'power_need','water_suply','cond_provided_for_wy',
             'target_market','env_impac_ass_doc','capital_utilization',
