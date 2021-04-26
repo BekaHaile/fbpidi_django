@@ -268,6 +268,9 @@
 		</script>
 		<script>
 			console.log("jjjjjjjjjjjjj"+document.getElementsByName('notify_on')[0].value)
+			console.log("Event start date is "+"{{event.start_date.date}}")
+                            
+			
 
 			// console.log($("input[name = 'notify_on']").val())
 			// $("input[name = 'notify_on']").change(function () {
@@ -282,23 +285,19 @@
 			if (document.getElementById("remind_me_button")){
 				document.querySelector('#remind_me_button').onclick = function(e) 
 						{
-							console.log("{{event.start_date.date}}")
+							console.log("Event start date is "+"{{event.start_date.date}}")
                             var participant_email = document.querySelector('#participant_email');
-							var start_date =new Date("{{event.start_date}}");  
-        					var end_date = new Date("{{event.end_date}}"); 
+							// var end_date = new Date("{{event.end_date}}"); 
                             var notify_on = new Date($("input[name = 'notify_on']").val()); 
-							console.log("start date "+start_date+" \n enddata "+end_date+"\n notifyon "+notify_on)
-
-							str_today = new Date().toDateString()
+							console.log("selected date is "+notify_on)
+							
 							// new Date() is changed to DateString, inorder to cut of the timezone from the date, as the date from start date and end date is just the date field without time zone
-							today = new Date(str_today)
-                            if (participant_email.value == "" || participant_email.value == null || notify_on.value == "" ){
+                            if (participant_email.value == "" || participant_email.value == null || notify_on.value == ""   ){
                                 window.alert("Fill the form first!");
                             }
                            else{
 							console.log("notify on = "+notify_on.value)
-							console.log(" event start date " + "{{event.start_date.date}}")
-                               fetch("{% url 'ajax_event_participation' id=event.id %}",
+							fetch("{% url 'ajax_event_participation' id=event.id %}",
                                 {
                                     method:"POST",
                                     credentials: 'same-origin',
@@ -307,7 +306,7 @@
                                         'X-CSRFToken':'{{csrf_token}}'
                                     },
                                     body:JSON.stringify({
-                                        'notify_on': notify_on.value,
+                                        'notify_on': notify_on,
 										'participant_email':participant_email.value
 									})
                                 }
@@ -316,7 +315,7 @@
 										window.alert(result['message']);  
 
 								   	else
-										window.alert("Error occured while trying to register your reminder. Wrong Form filled!");
+										window.alert((result['message']));
 										
 									notify_on.value = new Date()
 									participant_email.value = ""         

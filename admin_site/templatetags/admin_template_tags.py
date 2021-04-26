@@ -11,6 +11,7 @@ from company.models import Company,CompanyStaff, CompanyMessage
 from product.models import Product, ProductInquiry
 from chat.models import  ChatMessage
 from chat import views
+from collaborations.models import Document, Document_Category
 
 
 from accounts.models import UserProfile
@@ -168,9 +169,6 @@ def count_unread_chats(user):
 def count_unread_inbox(company):
     return CompanyMessage.objects.filter(company = company).count()
 
-@register.simple_tag
-def count_new_inquiry_requests(user_company):
-    return ProductInquiry.objects.filter(product__company = user_company, replied=False).count()
 
 @register.simple_tag
 def count_new_inquiry_requests(user_company):
@@ -186,6 +184,9 @@ def tag_edit(string):
 def printstr(string):
     print(string) 
 
+@register.simple_tag
+def count_documents(category, user):
+  return  (Document.objects.filter( category = category, company = user.get_company()) ).count()
 
 @register.simple_tag
 def get_date(date):

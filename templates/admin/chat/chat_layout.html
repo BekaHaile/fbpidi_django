@@ -1,6 +1,20 @@
 {%extends 'admin/base_site.html'%}
 {% load admin_template_tags%}
 {% block extrastyle %}
+
+<style>
+.smaller_time{
+    display: block;
+    color: grey;
+}
+#main-chat-ul{
+    max-height:500px;
+    overflow-y:auto;
+    scroll-behavior: auto;
+}
+  
+</style>
+
 <!-- Theme JS files -->
 <script src="/static/admin/global_assets/js/demo_pages/chat_layouts.js"></script>
 
@@ -16,18 +30,6 @@
 {%endblock%}
 
 {%block content%} 
-
-<style>
-    .smaller_time{
-        display: block;
-        color: grey;
-    }
-    #main-chat-ul{
-        max-height:500px;
-        overflow-y:auto;
-        scroll-behavior: auto;
-    }
-</style>
 			<!-- Content area -->
 			<div class="content">
 
