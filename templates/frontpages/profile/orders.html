@@ -1,0 +1,120 @@
+{%extends 'frontpages/profile/profile_layout.html'%}
+
+{%block profile_content%}
+
+	<div class="card mb-0 overflow-hidden">
+		<div class="card-header">
+			<h3 class="card-title">Orders List</h3>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive border-top">
+				<table class="table table-bordered table-hover text-nowrap">
+					<thead>
+						<tr>
+							<th>Order ID</th>
+							<th>Category</th>
+							<th>Date</th>
+							<th>Price</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="text-secondary">#89345</td>
+							<td>Restaurant</td>
+							<td>07-12-2019</td>
+							<td class="font-weight-semibold fs-16">$893</td>
+							<td>
+								<a href="#" class="badge badge-danger">Pending</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#39281</td>
+							<td>Electorincs</td>
+							<td>12-11-2019</td>
+							<td class="font-weight-semibold fs-16">$254</td>
+							<td>
+								<a href="#" class="badge badge-secondary">Completed</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#35825</td>
+							<td>Clothing</td>
+							<td>15-11-2019</td>
+							<td class="font-weight-semibold fs-16">$352</td>
+							<td>
+								<a href="#" class="badge badge-success">Activated</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#62391</td>
+							<td>Jobs</td>
+							<td>10-11-2019</td>
+							<td class="font-weight-semibold fs-16">$643</td>
+							<td>
+								<a href="#" class="badge badge-danger">Pending</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#92481</td>
+							<td>Education</td>
+							<td>07-11-2019</td>
+							<td class="font-weight-semibold fs-16">$392</td>
+							<td>
+								<a href="#" class="badge badge-secondary">Activated</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#29381</td>
+							<td>Services</td>
+							<td>31-10-2019</td>
+							<td class="font-weight-semibold fs-16">$295</td>
+							<td>
+								<a href="#" class="badge badge-danger">Pending</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#72356</td>
+							<td>Constructions</td>
+							<td>27-10-2019</td>
+							<td class="font-weight-semibold fs-16">$836</td>
+							<td>
+								<a href="#" class="badge badge-secondary">Activated</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#89345</td>
+							<td>Real Estate</td>
+							<td>30-11-2019</td>
+							<td class="font-weight-semibold fs-16">$254</td>
+							<td>
+								<a href="#" class="badge badge-success">Completed</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-secondary">#4570</td>
+							<td>Vechicle</td>
+							<td>03-12-2019</td>
+							<td class="font-weight-semibold fs-16">$654</td>
+							<td>
+								<a href="#" class="badge badge-secondary">Activated</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<ul class="pagination">
+				<li class="page-item page-prev disabled">
+					<a class="page-link" href="#" tabindex="-1">Prev</a>
+				</li>
+				<li class="page-item active"><a class="page-link" href="#">1</a></li>
+				<li class="page-item"><a class="page-link" href="#">2</a></li>
+				<li class="page-item"><a class="page-link" href="#">3</a></li>
+				<li class="page-item page-next">
+					<a class="page-link" href="#">Next</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+					
+{%endblock%}

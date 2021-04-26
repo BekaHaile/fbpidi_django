@@ -543,7 +543,7 @@
                       },
                       title: {
                         display: true,
-                        text: 'Number of Jobs Created By Sector'
+                        text: 'Number of Employees Educational Status By Sector'
                       }
                     }
                   });
@@ -730,6 +730,69 @@
                       title: {
                         display: true,
                         text: 'Number/Share of Companies by Market Target'
+                      }
+                    }
+                  });
+        
+                }
+              });  
+              // Inqury chart by product
+              var $inqproductChart = $("#inq-product-chart");
+              $.ajax({
+                url: $inqproductChart.data("url"),
+                success: function (data) {
+                  console.log(data);
+                  var ctx = $inqproductChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Inquries",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Product Inqury '
+                      }
+                    }
+                  });
+        
+                }
+              });  
+
+              // Inqury chart by daily
+              var $inqdailyChart = $("#inq-daily-chart");
+              $.ajax({
+                url: $inqdailyChart.data("url"),
+                success: function (data) {
+                  console.log(data);
+                  var ctx = $inqdailyChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Inquries",
+                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Product Inqury Weakly'
                       }
                     }
                   });

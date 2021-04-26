@@ -153,18 +153,31 @@
 										</li>
 										 
 										<li class="nav-item">
+											{%if land_usage_data%}
 											<a href="#" data-toggle="tab" data-target="#land_usage_form_tab" class="nav-link">
 												<i class="icon-power2"></i>
 												Land Usage
 												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
 											</a>
+											{%else%}
+											<a href="#" data-toggle="modal" data-target="#land_usage_form_modal" class="nav-link">
+												<i class="icon-power2"></i>
+												Land Usage
+											</a>
+											{%endif%}
 										</li>
 										<li class="nav-item">
+											{%if project_state%}
 											<a href="#" data-toggle="tab" data-target="#project_state_form_tab" class="nav-link">
 												<i class="icon-location3"></i>
 												Project State
-												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
 											</a>
+											{%else%}
+											<a href="#" data-toggle="modal" data-target="#status_form_modal" class="nav-link">
+												<i class="icon-location3"></i>
+												Project State
+											</a>
+											{%endif%}
 										</li>
 										<li class="nav-item">
 											<a href="#" data-toggle="tab" data-target="#project_quantity_form_tab" class="nav-link">
@@ -247,10 +260,8 @@
 					$("#id_machinery_cost").val("{{inv_cap_data.machinery_cost}}");
 					$("#id_building_cost").val("{{inv_cap_data.building_cost}}");
 					$("#id_working_capital").val("{{inv_cap_data.working_capital}}");
-					// 
-					$("#id_its_own").val("{{land_aqsn_data.its_own}}");
-					$("#id_lease").val("{{land_aqsn_data.lease}}");
-					$("#id_rent").val("{{land_aqsn_data.rent}}");
+					
+					
 					$("#id_established_yr").blur(function(){
 						var e_year = $(this).val();
 						var current_year = new Date().getFullYear()-8;

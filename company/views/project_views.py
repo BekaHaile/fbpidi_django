@@ -19,7 +19,7 @@ from django.core import serializers
 
 from company.models import *
 from accounts.models import CompanyAdmin,UserProfile
-from product.models import Order,OrderProduct,Product
+from product.models import Product
 from admin_site.views.dropdowns import image_cropper
 from admin_site.decorators import company_created,company_is_active
 
@@ -196,7 +196,7 @@ class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
             context['land_usage_data']=None
         
         try:
-            context['inv_cap_data'] = InvestmentCapital.objects.filter(project=self.kwargs['pk']).latest('timestamp')
+            context['inv_cap_data'] = InvestmentCapital.objects.filter(project=self.kwargs['pk']).latest('-timestamp')
         except InvestmentCapital.DoesNotExist:
             context['inv_cap_data']=None
         
@@ -204,6 +204,7 @@ class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
             context['project_state'] = ProjectState.objects.get(project=self.kwargs['pk'])
         except ProjectState.DoesNotExist:
             context['project_state'] = None
+        print(context)
         return context
 
     def form_valid(self,form):
@@ -232,7 +233,7 @@ class CreateLandUsage(LoginRequiredMixin,CreateView):
             lu = form.save(commit=False)
             lu.project = InvestmentProject.objects.get(id=self.kwargs['project'])
             lu.save()
-            return JsonResponse({'error':False,'message':'Created Successfully!!!'})
+            return JsonResponse({'error':False,'message':'Land Usage Created Successfully!!!'})
         except InvestmentProject.DoesNotExist:
             return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
         except IntegrityError as e:
@@ -258,7 +259,7 @@ class CreateProductQty(LoginRequiredMixin,CreateView):
             pp = form.save(commit=False)
             pp.project = InvestmentProject.objects.get(id=self.kwargs['project'])
             pp.save()
-            return JsonResponse({'error':False,'message':'Created Successfully!!!'})
+            return JsonResponse({'error':False,'message':'Product Quantity Created Successfully!!!'})
         except InvestmentProject.DoesNotExist:
             return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
 
@@ -366,7 +367,7 @@ class CreateEmployeesProject(LoginRequiredMixin,View):
                     employee = form.save(commit=False)
                     employee.projct = InvestmentProject.objects.get(id=self.kwargs['project'])
                     employee.save()
-                    return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
+                    return JsonResponse({'error': False, 'message': form.cleaned_data.get('employment_type')+'Employees Data Uploaded Successfully for'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Employee Data For this Category Already Exists"})
             except Company.DoesNotExist:
@@ -386,7 +387,7 @@ class CreateJobsCreatedProject(LoginRequiredMixin,View):
                     jobs = form.save(commit=False)
                     jobs.project = InvestmentProject.objects.get(id=self.kwargs['project'])
                     jobs.save()
-                    return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
+                    return JsonResponse({'error': False, 'message': form.cleaned_data.get('job_type')+' Job Oportunities Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Category Already Exists"})
             except Company.DoesNotExist:
@@ -406,7 +407,7 @@ class CreateEducationStatusProject(LoginRequiredMixin,View):
                     education = form.save(commit=False)
                     education.project = InvestmentProject.objects.get(id=self.kwargs['project'])
                     education.save()
-                    return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
+                    return JsonResponse({'error': False, 'message': form.cleaned_data.get('education_type')+' Educational Status Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Category Already Exists"})
             except Company.DoesNotExist:

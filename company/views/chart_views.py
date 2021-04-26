@@ -413,3 +413,63 @@ def market_destin_chart(request):
         'data':[company.filter(market_destination__export__gt=0,market_destination__year_destn=get_current_year()).count(),
                 company.filter(market_destination__domestic__gt=0,market_destination__year_destn=get_current_year()).count()]
     })
+
+
+def inquiry_product_chart(request):
+    labels  =[]
+    data = []
+    try:
+        company = request.user.get_company()
+        categories = [c.id for c  in company.category.all()]
+        
+        q = Q( Q( product__company = request.user.get_company().id) | 
+                Q( category__in = categories))
+        queryset =  ProductInquiry.objects.filter(q).values('product__name').annotate(
+            inqury=Count('id')
+        ).order_by('product')
+        for inq in queryset:
+            labels.append(inq['product__name'])
+            data.append(inq['inqury'])
+        return JsonResponse({'labels':labels,'data':data})
+    except Exception as e:
+        return JsonResponse({'data':[],'labels':[]})
+
+
+def daily_inquiry_chart(request):
+    today = datetime.datetime.today()
+    yesterday = today-datetime.timedelta(days=1)
+    thirdday = today-datetime.timedelta(days=2)
+    frothday = today-datetime.timedelta(days=3)
+    fifthday = today-datetime.timedelta(days=4)
+    sixthday = today-datetime.timedelta(days=5)
+    sevenday = today-datetime.timedelta(days=6)
+    labels  =[]
+    data = []
+    try:
+        company = request.user.get_company()
+        categories = [c.id for c  in company.category.all()]
+        
+        q = Q( Q( product__company = request.user.get_company().id) | 
+                Q( category__in = categories))
+
+        today_data =  ProductInquiry.objects.filter(q,Q(created_date__date=today))
+        lastday_data =  ProductInquiry.objects.filter(q, Q(created_date__date=yesterday))
+        thirdday_data =  ProductInquiry.objects.filter(q,Q(created_date__date=thirdday) )
+        forthday_data =  ProductInquiry.objects.filter(q,Q(created_date__date=frothday) )
+        fifthday_data =  ProductInquiry.objects.filter(q, Q(created_date__date=fifthday))
+        sixday_data =  ProductInquiry.objects.filter(q, Q(created_date__date=sixthday))
+        sevenday_data = ProductInquiry.objects.filter(q, Q(created_date__date=sevenday))
+
+        labels=[
+            sevenday.strftime("%A"),sixthday.strftime("%A"),fifthday.strftime("%A"),frothday.strftime("%A"),
+            thirdday.strftime("%A"),yesterday.strftime("%A"),today.strftime("%A")
+        ]
+        data = [
+            sevenday_data.count(),sixday_data.count(),fifthday_data.count(),forthday_data.count(),
+            thirdday_data.count(),lastday_data.count(),today_data.count()
+        ]
+        return JsonResponse({'labels':labels,'data':data})
+    except Exception as e:
+        return JsonResponse({'data':[],'labels':[]})
+
+

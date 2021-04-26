@@ -11,7 +11,7 @@ $(document).ready(function () {
         var formData = new FormData(this);
         console.log(formData);
         $.ajax({
-            url: "/admin/create_investment_capital/"+project_id+"/",
+            url: "/admin/craete_land-innv-capital/"+project_id+"/",
             headers: { "X-CSRFToken": my_token },
             type: "POST",
             data: formData,

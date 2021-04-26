@@ -1,6 +1,6 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
-
+{%load admin_template_tags%}
  
 {% block extrastyle %}
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -9,6 +9,8 @@
 		<script src="/static/admin/global_assets/js/plugins/visualization/echarts/echarts.min.js"></script>
 		<script src="/static/admin/global_assets/js/demo_pages/charts/echarts/columns_waterfalls.js"></script>
         <script src="/static/admin/global_assets/js/demo_pages/charts/echarts/pies_donuts.js"></script>
+        <script src="/static/admin/assets/js/report.js"></script>
+
         <!-- /theme JS files -->
         <script>
             
@@ -54,7 +56,7 @@
 {% block content %}
   <!-- Content area -->
   <div class="content">
-
+    {%if user.is_superuser%}
     <!-- Main charts -->
     <div class="card">
         <div class="card-header header-elements-inline">
@@ -76,57 +78,74 @@
         </div>
     </div>
     <!-- /main charts -->
-
-    <div class="card">
-        <div class="card-header header-elements-inline">
-            <h5 class="card-title">Daily Sales</h5>
-            <div class="header-elements">
-                <div class="list-icons">
-                    <a class="list-icons-item" data-action="collapse"></a>
-                    <a class="list-icons-item" data-action="reload"></a>
-                    <a class="list-icons-item" data-action="remove"></a>
-                </div>
-            </div>
+    <div class="card " style="height: 100%;">
+      <div class="card-body">
+        <div id="container" style="width: 100%;">
+          <canvas id="ownership-chart" data-url="{% url 'admin:ownership_form_chart' %}"></canvas>
+          
+        </div>
+        <div class="d-flex">
+          <h3 class="font-weight-semibold mb-0">{{user|company_count}} Companies</h3>
+          <a href="{%url 'admin:filter_by_ownership'%}" class="btn btn-pink rounded-round"><span class="badge bg-teal-800 badge-pill align-self-center ml-auto">View Report</span></a> 
         </div>
 
-        <div class="card-body">
-            <div class="chart-container">
-                <div class="chart has-fixed-height" id="columns_stacked"></div>
-            </div>
-        </div>
+      </div>
+
+       
     </div>
+
+    <div class="card" style="height: 100%;">
+      <div class="card-body">
+        <div id="container" style="width: 100%;">
+          <canvas id="num-fem-chart" data-url="{% url 'admin:num_fem_inpsn_chart' %}"></canvas>								
+        </div>
+        <ul class="nav nav-pills nav-justified">			
+          Number/Share Of Female Employees In Middle and Higher Position			
+          <li class="nav-item"><a href="{%url 'admin:get_women_in_psn'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+        </ul>
+      </div>
+    </div>
+
 
     <!-- Dashboard content -->
     <div class="row">
-        <div class="col-xl-8">
-
-            <!-- Marketing campaigns -->
-            <div class="card">
-                <div class="card-header header-elements-inline">
-                    <h5 class="card-title">Products</h5>
-                    <div class="header-elements">
-                        <div class="list-icons">
-                            <a class="list-icons-item" data-action="collapse"></a>
-                            <a class="list-icons-item" data-action="reload"></a>
-                            <a class="list-icons-item" data-action="remove"></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div class="chart has-fixed-height" id="pie_basic"></div>
-                    </div>
-                </div>
+        <div class="col-xl-6 col-md-6">
+          <div class="card" style="height: 100%;">
+            <div class="card-body">
+              <div id="container" style="width: 100%;">
+                <canvas id="num-emp-chart" data-url="{% url 'admin:num_emp_chart' %}"></canvas>								
+              </div>
             </div>
-            <!-- /marketing campaigns -->
- 
+          </div>
         </div>
-
-         
+        <div class="col-xl-6 col-md-6">
+          <div class="card" style="height: 100%;">
+            <div class="card-body">
+              <div id="container" style="width: 100%;">
+                <canvas id="num-edu-level-chart" data-url="{% url 'admin:num_edu_level_chart' %}"></canvas>								
+              </div>     
+            </div>
+          </div>
+        </div>
     </div>
     <!-- /dashboard content -->
-
+    {%else %}
+    <div class="card" style="height: 100%;">
+      <div class="card-body">
+        <div id="container" style="width: 100%;">
+          <canvas id="inq-product-chart" data-url="{% url 'admin:inquiry_product_chart' %}"></canvas>								
+        </div>
+      </div>
+    </div>
+    <div class="card" style="height: 100%;">
+      <div class="card-body">
+        <div id="container" style="width: 100%;">
+          <canvas id="inq-daily-chart" data-url="{% url 'admin:daily_inquiry_chart' %}"></canvas>								
+        </div>
+      </div>
+    </div>
+    
+    {%endif%}
 </div>
 <!-- /content area -->
 {% endblock %}

@@ -1,0 +1,43 @@
+{%extends 'frontpages/profile/profile_layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+{%block profile_content%} 
+{% get_current_language as LANGUAGE_CODE %}
+
+<div class="card mb-0 overflow-hidden">
+	<div class="card-header">
+		<h3 class="card-title">My Favorites Listings</h3>
+	</div>
+	<div class="card-body ads-tabs">
+		{%for lp in liked_products%}
+		<div class="card overflow-hidden card-absolute">
+			<div class="d-md-flex">
+				<div class="item-card9-img">
+					<div class="item-card9-imgs">
+						<a href="{% url 'product_detail' pk=lp.product.id %}"></a>
+						<img src="{{lp.product.image.url}}" style="height: 150px;" alt="img" class="cover-image">
+					</div>
+				</div>
+				<div class="card border-0 mb-0">
+					<div class="card-body py-4">
+						<div class="item-card9">
+							<div class="d-flex">
+								<a href="{% url 'product_detail' pk=lp.product.id %}">{% print_translated lp.product.brand.product_type.sub_category_name lp.product.brand.product_type.sub_category_name_am LANGUAGE_CODE %}</a>
+							</div>
+							<a href="{% url 'product_detail' pk=lp.product.id %}" class="text-dark"><h4 class="font-weight-semibold mt-0">{%print_translated lp.product.name lp.product.name_am LANGUAGE_CODE %}<i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
+							<div class="item-card2-desc mt-3">
+								<div class="item-card2-desc-cost">
+									<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i>{{lp.product.company.get_company_address.region.name}},{{lp.product.company.get_company_address.sub_city}}</h6>
+									<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#">{{lp.product.company.get_company_address.phone_number}}</a></h6>
+								</div>
+							</div>
+						</div>
+					</div>
+					 
+				</div>
+			</div>
+		</div>
+		{%endfor%}
+	</div>
+</div>
+{%endblock%}

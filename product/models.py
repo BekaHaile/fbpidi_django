@@ -302,66 +302,6 @@ class ProductInquiryReply(models.Model):
         ordering = ['-created_date']
 
 
-
-
-class Order(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    products = models.ManyToManyField(OrderProduct,related_name='products',default="")
-    ref_code = models.CharField(max_length=30)
-    start_date = models.DateTimeField(auto_now_add=True)
-    order_date = models.DateTimeField()
-    ordered = models.BooleanField(default=False)
-    shipping_address = models.ForeignKey('ShippingAddress',
-                                on_delete=models.SET_NULL, 
-                                blank=True, null=True)
-    invoice = models.ForeignKey('InvoiceRecord',
-                                on_delete=models.SET_NULL, 
-                                blank=True, null=True)
-    # coupon = models.ForeignKey("Coupon",on_delete=models.SET_NULL, 
-    #                             blank=True, null=True)
-    being_delivered = models.BooleanField(default=False)
-    received = models.BooleanField(default=False)
-    refund_requested = models.BooleanField(default=False)
-    refund_granted = models.BooleanField(default=False)
-    time_stamp = models.DateTimeField(auto_now_add=True)
-
-
-    def get_total_price(self):
-        total = 0
-        for order_product in self.products.all():
-            total += order_product.get_total_item_price()
-        # if self.coupon:
-        #     total -= self.coupon.amount
-        return total
-
-
-class ShippingAddress(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    company = models.CharField(max_length=200,default="")
-    city = models.CharField(max_length=200)
-    street_address = models.CharField(max_length=100)
-    home_address = models.CharField(max_length=100)
-    email = models.EmailField(max_length=200)
-    phone_no = models.CharField(max_length=50)
-    delivery_note = models.TextField(null=True)
-    time_stamp = models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self):
-        return self.city
-
-
-class InvoiceRecord(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
-    code = models.CharField(max_length=200)
-    amount = models.FloatField()
-    paid = models.BooleanField(default=False)
-    time_stamp = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.invoice_code
-
 class Review(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
