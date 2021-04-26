@@ -11,6 +11,7 @@ from company.models import Company,CompanyStaff, CompanyMessage
 from product.models import Product, ProductInquiry
 from chat.models import  ChatMessage
 from chat import views
+from collaborations.models import Document, Document_Category
 
 
 from accounts.models import UserProfile
@@ -183,6 +184,9 @@ def tag_edit(string):
 def printstr(string):
     print(string) 
 
+@register.simple_tag
+def count_documents(category, user):
+  return  (Document.objects.filter( category = category, company = user.get_company()) ).count()
 
 @register.simple_tag
 def get_date(date):

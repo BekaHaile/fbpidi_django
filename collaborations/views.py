@@ -200,73 +200,71 @@ class IndexSearch(View):
         result = {}
         total = 0
     
-        
-        if 'by_title' in self.request.GET and 'by_model' in self.request.GET:
-            model = self.request.GET['by_model']
-            if model in self.title_models:
-                model_query =  SearchByTitle_All(model, self.request)['query']
-                if model_query.count() > 0:
-                    total+= model_query.count()
-                    result[model] = model_query
-
-            elif model == "Blog":
-                blog_query = self.blog_search()
-                if blog_query.count()>0:
-                    total+= blog_query.count()
-                    result['Blog'] = blog_query
-
-            elif model == "Forum":
-                forum_query = self.forum_search()
-                if forum_query.count() > 0:
-                    total+= forum_query.count()
-                    result['Forum'] = forum_query
-
-            elif model == "Research":
-                research_query = self.research_search()
-                if research_query.count() > 0:
-                    total+= research_query.count()
-                    result['Research'] = research_query
-
-            else: #if All
-                for model in self.title_models:
+        try:
+            if 'by_title' in self.request.GET and 'by_model' in self.request.GET:
+                model = self.request.GET['by_model']
+                if model in self.title_models:
                     model_query =  SearchByTitle_All(model, self.request)['query']
                     if model_query.count() > 0:
                         total+= model_query.count()
                         result[model] = model_query
-                    
-                blog_query = self.blog_search()
-                if blog_query.count()>0:
-                    total+= blog_query.count()
-                    result['Blog'] = blog_query
-                
-                research_query = self.research_search()
-                if research_query.count() > 0:
-                    total+= research_query.count()
-                    result['Research'] = research_query
-                
-                forum_query = self.forum_search()
-                if forum_query.count() > 0:
-                    total+= forum_query.count()
-                    result['Forum'] = forum_query
-            
-            # if model_query.count() > 0:
-            #         total+= model_query.count()
-            #         result[model] = model_query
-          
-        else:
-            return redirect("/")
-        
-        data = result
-        data['modules'] = self.modules
-        if total == 0:
-            data['message'] = "No result found!"
-            data['message_am']= "ምንም ውጤት አልተገኝም"
-        else:
-            data['message'] = f"{total} result found"
-            data['message_am'] = f"{total} ውጤት ተገኝቷል"
-        data['searched_name'] = self.request.GET['by_title']
 
-        return render(self.request, "frontpages/index_search_page.html",data)
+                elif model == "Blog":
+                    blog_query = self.blog_search()
+                    if blog_query.count()>0:
+                        total+= blog_query.count()
+                        result['Blog'] = blog_query
+
+                elif model == "Forum":
+                    forum_query = self.forum_search()
+                    if forum_query.count() > 0:
+                        total+= forum_query.count()
+                        result['Forum'] = forum_query
+
+                elif model == "Research":
+                    research_query = self.research_search()
+                    if research_query.count() > 0:
+                        total+= research_query.count()
+                        result['Research'] = research_query
+
+                else: #if All
+                    for model in self.title_models:
+                        model_query =  SearchByTitle_All(model, self.request)['query']
+                        if model_query.count() > 0:
+                            total+= model_query.count()
+                            result[model] = model_query
+                        
+                    blog_query = self.blog_search()
+                    if blog_query.count()>0:
+                        total+= blog_query.count()
+                        result['Blog'] = blog_query
+                    
+                    research_query = self.research_search()
+                    if research_query.count() > 0:
+                        total+= research_query.count()
+                        result['Research'] = research_query
+                    
+                    forum_query = self.forum_search()
+                    if forum_query.count() > 0:
+                        total+= forum_query.count()
+                        result['Forum'] = forum_query
+                
+            else:
+                return redirect("/")
+            data = result
+            data['modules'] = self.modules
+            if total == 0:
+                data['message'] = "No result found!"
+                data['message_am']= "ምንም ውጤት አልተገኝም"
+            else:
+                data['message'] = f"{total} result found"
+                data['message_am'] = f"{total} ውጤት ተገኝቷል"
+            data['searched_name'] = self.request.GET['by_title']
+
+            return render(self.request, "frontpages/index_search_page.html",data)
+        except Exception as e:
+            print("@@@@@@@@@@@@@ Exception ",e)
+            return redirct("/")
         
 
 
@@ -306,20 +304,25 @@ class CustomerPollList(View):
 class PollDetail(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):
         message = ""
-        context = {}        
-        if self.kwargs['id'] :
-            try:
-                poll = PollsQuestion.objects.get(id = self.kwargs['id']  )
-                context ['poll'] = poll
-                if poll.pollsresult_set.filter(user = self.request.user).count() > 0:
-                    context ['has_voted'] = True
-                return render(self.request, "frontpages/poll/poll_detail.html", context)
-            except Exception as e:
-                messages.warning(self.request, "Poll not found")
-                return redirect("polls") 
-        else:
-            messages.warning(self.request, "Nothing selected!")
-            return redirect("polls")
+        context = {}
+        try:        
+            if self.kwargs['id'] :
+                try:
+                    poll = PollsQuestion.objects.get(id = self.kwargs['id']  )
+                    context ['poll'] = poll
+                    if poll.pollsresult_set.filter(user = self.request.user).count() > 0:
+                        context ['has_voted'] = True
+                    return render(self.request, "frontpages/poll/poll_detail.html", context)
+                except Exception as e:
+                    messages.warning(self.request, "Poll not found")
+                    return redirect("polls") 
+        
+            else:
+                messages.warning(self.request, "Nothing selected!")
+                return redirect("polls")
+        except Exception as e:
+            print("exceptio at polls detail ",e)
+            return redirect('index')
 
     def post(self,*args,**kwargs):
         if self.kwargs['id'] and self.request.POST['selected_choice']: 

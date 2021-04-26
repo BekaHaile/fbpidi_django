@@ -1090,7 +1090,6 @@ class ProductByMainCategory(ListView):
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        print("######### ", self.kwargs['option'])
         context['categories'] = Category.objects.filter(category_type=self.kwargs['option'])
         return context
 

@@ -667,8 +667,8 @@ class Document(models.Model):
     title = models.CharField(max_length=250, verbose_name="document title")
     document = models.FileField(upload_to="Documents/", blank="False")
     category = models.CharField( max_length = 250, choices=DOC_CATEGORY)
-    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="document_updated_by")
-    last_updated_date = models.DateTimeField(null=True)
+    last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True,related_name="document_updated_by")
+    last_updated_date = models.DateTimeField(blank = True,null=True)
     expired = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
