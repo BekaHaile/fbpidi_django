@@ -135,9 +135,9 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'admindb',
+        'NAME': 'FBPIDI_IIMS',
         'USER': 'postgres',
-        'PASSWORD': 'cbe@ps4woga',
+        'PASSWORD': 'Fbpidi@123..',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -228,8 +228,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_FILE_PATH = os.path.join(BASE_DIR, "email_archive")
 
 EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = "antenyismu@gmail.com"
-# EMAIL_HOST_PASSWORD = "111ywxwz"
 EMAIL_HOST_USER = "melkamu.aait@gmail.com"
 EMAIL_HOST_PASSWORD = "0920854091"
 

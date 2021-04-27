@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from company.models import Company,CompanyStaff, CompanyMessage
 from product.models import Product, ProductInquiry
-from chat.models import  ChatMessage
+from chat.models import  ChatMessages
 from chat import views
 from collaborations.models import Document, Document_Category
 

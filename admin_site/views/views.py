@@ -15,7 +15,6 @@ from product.models import *
 from accounts.models import UserProfile
 from company.models import Company,CompanyEvent, HomePageSlider, InvestmentProject
 from admin_site.models import *
-from chat.models import ChatGroup, ChatMessage
 
 from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm
 
