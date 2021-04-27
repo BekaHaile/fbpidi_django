@@ -16,7 +16,6 @@ from product.models import *
 from admin_site.models import *
 from collaborations.models import *
 from accounts.models import UserProfile
-from chat.models import ChatGroup, ChatMessage
 from admin_site.decorators import company_created,company_is_active
 from company.models import (Company, CompanyEvent, HomePageSlider, InvestmentProject, InvestmentCapital, Certificates,PowerConsumption,
                             Employees,JobOpportunities,FemalesInPosition, EducationalStatus,SourceAmountIputs,MarketTarget,MarketDestination)

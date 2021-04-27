@@ -1,12 +1,8 @@
-from .models import ChatMessages, ChatGroup
+from .models import ChatMessages
 from rest_framework import serializers
 from datetime import datetime
 
 
-class ChatGroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ChatGroup
-        fields = '__all__'
 
 
 class ChatMessagesSerializer(serializers.ModelSerializer):
