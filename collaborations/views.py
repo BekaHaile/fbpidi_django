@@ -178,7 +178,7 @@ def get_paginated_data(request, query):
         return Paginator(query, 1).page(page_number)
     except Exception as e:
         print("exception at get_paginate_data ",e)
-        return Paginator(query, 2).page(1)
+        return Paginator(query, 4).page(1)
 
 
 class IndexSearch(View):
