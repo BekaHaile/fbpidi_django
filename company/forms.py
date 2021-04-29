@@ -416,8 +416,8 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
             )
         widgets = {
             'contact_person':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
-            'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
+            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
+            'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'logo':forms.FileInput(attrs={'class':''}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 900, 'map_height': 400}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
