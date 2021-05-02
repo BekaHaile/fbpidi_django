@@ -35,37 +35,36 @@
 		<table class="table datatable-show-all">
 			<thead>
 				<tr>
+					<th>#</th>
 					<th>Title</th>
-					<th>Description</th>
-					<th>User</th>
-					<th>Comments</th>
+					<th>Created By</th>
+					<th>Created ON</th>
 					<th>Attachements</th>
-					<th>Timestamp</th>
-					
+					<th>Comments</th>
 					<th class="text-center">Actions</th>
 				</tr>
 			</thead> 
 			<tbody>
-				{%for researchprojectcategory in researchprojectcategorys%}
+				{%for forum in object_list%}
 				<tr>
-					
-					<td>{{researchprojectcategory.title|truncatechars_html:20}}</td>
-					<td>{{researchprojectcategory.description|safe|truncatechars_html:20}}</td>
-					<td>{{researchprojectcategory.created_by.username}}</td>
-					<td><a class="mr-0" href="{%url 'admin:Forum_Comments' id=researchprojectcategory.id%}"><i class="fa fa-comment-o text-muted mr-2"></i>{{researchprojectcategory.countComment}}
-					</a></td>
+					<td>{{forloop.counter}}</td>
+					<td>{{forum.title|truncatechars_html:20}}</td>
+					<td>{{forum.created_by.username}}</td>
+					<td>{{forum.created_date}}</td>
 
 					<td>
-						{%if researchprojectcategory.attachements%}
-						 <a href="{{researchprojectcategory.attachements.url}}" download="{{researchprojectcategory.attachements.url}}"> 
-						 <b>Attachment</b>
+						{%if forum.attachements%}
+							<a href="{{forum.attachements.url}}" download="{{forum.attachements.url}}"> 
+							 Attachment
 						 </a>
 						 {%else%}
-						 <b>No Attachment</b>
+						 	No Attachment
 						 {%endif%}
                                    		
                     </td>
-					<td>{{researchprojectcategory.created_date}}</td>
+					<td><a class="mr-0" href="{%url 'admin:Forum_Comments' id=forum.id%}"><i class="fa fa-comment-o text-muted mr-2"></i>{{forum.countComment}}
+					</a></td>
+					
 					
 					<td class="text-center">
 						<div class="list-icons">
@@ -75,16 +74,16 @@
 								</a>
 									
 								<div class="dropdown-menu dropdown-menu-right">
-									{% if user.is_superuser or user.get_company == researchprojectcategory.created_by.get_company %}
+									{% if user.is_superuser or user.get_company == forum.created_by.get_company %}
 
 									{% if perms.collaborations.delete_forumquestion %} 
-									<a href="{%url 'admin:delete' model_name='ForumQuestionAdmin' id=researchprojectcategory.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Question</a>
+									<a href="{%url 'admin:delete' model_name='ForumQuestionAdmin' id=forum.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Question</a>
 									{% endif%}
 									{% endif%}
-									{% if user.is_superuser or user.get_company == researchprojectcategory.created_by.get_company %}
+									{% if user.is_superuser or user.get_company == forum.created_by.get_company %}
 									
 									{% if perms.collaborations.change_forumquestion %} 
-									<a href="{%url 'admin:forum_detail' model_name='ForumQuestion' id=researchprojectcategory.id%}" class="dropdown-item"  >
+									<a href="{%url 'admin:forum_detail' model_name='ForumQuestion' id=forum.id%}" class="dropdown-item"  >
 										<i class="icon-pencil"></i>Edit Question</a>
 									{% endif%}
 									{% endif%}

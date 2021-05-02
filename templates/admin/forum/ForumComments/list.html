@@ -32,25 +32,25 @@
 			<thead>
 
 				<tr>
+					<th>#</th>
+					<th>Title</th>
 					<th>Forum question</th>
-					<th>User</th>
-					<th>Comment</th>
+					<th>Created by</th>
+					<th>Created date</th>
 					<th>Replays</th>
-					<th>Timestamp</th>
-					
 					<th class="text-center">Actions</th>
 				</tr>
 			</thead> 
 			<tbody>
-				{%for researchprojectcategory in researchprojectcategorys%}
+				{%for comment in researchprojectcategorys%}
 				<tr>
-					
-					<td>{{researchprojectcategory.forum_question|safe|truncatechars_html:20}}</td>
-					<td>{{researchprojectcategory.created_by.username}}</td>
-					<td>{{researchprojectcategory.comment|safe|truncatechars_html:20}}</td>
-					<td><a class="mr-0" href="{%url 'admin:Comment_replays' id=researchprojectcategory.id%}"><i class="fa fa-comment-o text-muted mr-2"></i>{{researchprojectcategory.count_comment_replays}}
+					<td>{{forloop.counter}}</td>
+					<td>{{comment.comment|safe|truncatechars_html:20}}</td>
+					<td>{{comment.forum_question|safe|truncatechars_html:20}}</td>
+					<td>{{comment.created_by.username}}</td>
+					<td>{{comment.created_date}}</td>
+					<td><a class="mr-0" href="{%url 'admin:Comment_replays' id=comment.id%}"><i class="fa fa-comment-o text-muted mr-2"></i>{{comment.count_comment_replays}}
 					</a></td>
-					<td>{{researchprojectcategory.created_date}}</td>
 					
 					<td class="text-center">
 						<div class="list-icons">
@@ -60,16 +60,16 @@
 								</a>
 									
 								<div class="dropdown-menu dropdown-menu-right">
-									{% if user.is_superuser or user.get_company == researchprojectcategory.created_by.get_company %}
+									{% if user.is_superuser or user.get_company == comment.created_by.get_company %}
 
 									{% if perms.collaborations.delete_forumcomments %} 
-									<a href="{%url 'admin:delete' model_name='ForumCommentsAdmin' id=researchprojectcategory.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Comment</a>
+									<a href="{%url 'admin:delete' model_name='ForumCommentsAdmin' id=comment.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Comment</a>
 									{%endif%}
 									{%endif%}
-									{% if user.is_superuser or user.get_company == researchprojectcategory.created_by.get_company %}
+									{% if user.is_superuser or user.get_company == comment.created_by.get_company %}
 									
 									{% if perms.collaborations.change_forumcomments %} 
-									<a href="{%url 'admin:forum_comment_detail' model_name='ForumCommentsAdmin' id=researchprojectcategory.id%}" class="dropdown-item"  >
+									<a href="{%url 'admin:forum_comment_detail' model_name='ForumCommentsAdmin' id=comment.id%}" class="dropdown-item"  >
 										<i class="icon-pencil"></i>Edit Comment</a>
 										{%endif%}
 									
