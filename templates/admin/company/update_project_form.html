@@ -19,6 +19,11 @@
 {{form.media}}
 {% endblock %}
 {%block pagename%}Investment Project  - Profile{%endblock%}
+{%block nav%}
+<a href="{%url 'admin:project_list'%}" class="breadcrumb-item">Projects</a>
+<span class="breadcrumb-item active">Project Detail</span>
+{%endblock%}
+
 {%block content%}
 	
 
@@ -29,6 +34,12 @@
 						<h5 class="card-title"> </h5>
 						<div class="header-elements">
 							<div class="list-icons">
+								<a href="{%url 'admin:mark_complete' pk=object.id%}" class="btn btn-primary text-default">
+									{%if object.project_complete == False%}
+									<i class="icon-check2 mr-2"></i>Mark Complete
+									{%else%}<i class="icon-check2 mr-2"></i>Mark InComplete
+									{%endif%}
+								</a>	
 								 
 								<a target="_blank" href="{%url 'admin:get_project_pdf' pk=object.id%}" class="btn btn-primary text-default">
 									<i class="icon-file-pdf mr-2"></i>Export PDF</a>	

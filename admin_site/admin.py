@@ -43,15 +43,7 @@ from collaborations.Views.blog import(
                         AdminBlogList,BlogView,AdminBlogComments,
                         CreatBlog,ListBlogCommentAdmin,BlogCommentDetailAdmin)
 
-from collaborations.Views.research import(
-
-                        ListResearchAdmin,CreateResearchAdmin,ResearchDetailAdmin,
-                        ListPendingResearchAdmin,ResearchDetailView,ResearchApprove,
-                        CreateResearchCategory,ResearchCategoryDetail,
-                        ResearchPending
-                        
-
-                        )
+from collaborations.Views.research import *
 from collaborations.Views.forums import(ListForumQuestionAdmin,CreateForumQuestionAdmin,ForumQuestionDetail,
                                           ListForumCommentAdmin,ForumCommentsDetail,
                                           ListCommentReplayAdmin,CommentReplayDetail,
@@ -113,13 +105,12 @@ class CustomAdminSite(admin.AdminSite):
             # path('project-list',wrap(ListProjectAdmin.as_view()),name="project_list"),
             # path('project-detail/<model_name>/<id>',wrap(ProjectDetailAdmin.as_view()),name="project_detail"),
 
-            path('research-view/<id>/',wrap(ResearchDetailView.as_view()),name='research_view'),
             path('research-approve/<id>/',wrap(ResearchApprove.as_view()),name="research_approve"),
             path('research-pending/<id>/',wrap(ResearchPending.as_view()),name="research_pending"),
             path('pedning-research-list/',wrap(ListPendingResearchAdmin.as_view()),name="pedning_research_list"),
             path('research-list/',wrap(ListResearchAdmin.as_view()),name="research_list"),
             path('research-form/',wrap(CreateResearchAdmin.as_view()),name="research_form"),
-            path('research-detail/<model_name>/<id>/',wrap(ResearchDetailAdmin.as_view()),name="research_detail"),
+            path('research-detail/<id>/',wrap(ResearchDetailAdmin.as_view()),name="research_detail"),
 
             path('research-categorys-detail/<pk>/',wrap(ResearchCategoryDetail.as_view()),name='researchprojectcategory_detail'),
             path('research-categorys-form/',wrap(CreateResearchCategory.as_view()),name='researchprojectcategory_form'), 
@@ -397,6 +388,7 @@ class CustomAdminSite(admin.AdminSite):
             # path('researchprojectcategorys-form',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
             # path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
             path("activate-company/<pk>/",wrap(activate_company),name="activate_comapany"),
+            path("project-complete/<pk>/",wrap(mark_complete),name="mark_complete"),
             path("404-page/",wrap(error_404),name="error_404"),
             path("500-page/",wrap(error_500), name="error_500"),
             path("company-inactive-wait/",wrap(company_not_active),name="inactive_company"),

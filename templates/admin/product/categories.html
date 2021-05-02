@@ -8,7 +8,13 @@
 	<!-- /theme JS files -->
  
 {% endblock %}
-{%block pagename%}{%if category == True%}Product Categories{%elif sub_category == True %}Products {%elif brand == True%}Products Brand{%endif%}{%endblock%}
+{%block pagename%}{%if category == True%}Product Sectors{%elif sub_category == True %}Products {%elif brand == True%}Products Brand{%endif%}{%endblock%}
+{%block nav%}
+	{%if category == True%}<a href="{%url 'admin:categories'%}" class="breadcrumb-item">Sectors</a>
+	{%elif sub_category == True %}<a href="{%url 'admin:sub_categories'%}" class="breadcrumb-item">Products</a> 
+	{%elif brand == True%}<a href="{%url 'admin:brands'%}" class="breadcrumb-item">Brands</a>
+	{%endif%}
+{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
@@ -21,7 +27,7 @@
 						<div class="header-elements">
 							{% if user.is_superuser and perms.product.add_subcategory %}
 							<div class="list-icons">
-								<a href="{%url 'admin:create_category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Category</a>
+								<a href="{%url 'admin:create_category'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Sub-Sector</a>
 							</div>
 							{%endif%}
 						</div>

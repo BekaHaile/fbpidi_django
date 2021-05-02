@@ -1,7 +1,30 @@
+function get_current_year(){
+    var current_year = 0
+    var gc_year = new Date().getFullYear();
+    var month = new Date().getMonth()+1;
+    var day = new Date().getDay();
+
+    if(month <= 7 & day < 8 || month <= 7){
+        current_year = gc_year-9
+    }else{
+        current_year = gc_year - 8
+    }
+    return current_year
+}
+    
 $(document).ready(function () {
+
+    $("#id_year_edu option:last").prop("selected", "selected");
+    $("#id_year_emp option:last").prop("selected", "selected");
+    $("#id_year_job option:last").prop("selected", "selected");
+    $("#id_year_fem option:last").prop("selected", "selected");
+    $("#id_year_src option:last").prop("selected", "selected");
+    $("#id_year_pc option:last").prop("selected", "selected");  
+    $("#id_year_destn option:last").prop("selected", "selected");
+    $("#id_year_target option:last").prop("selected", "selected");
     var date = new Date();
     var current_year = new Date().getFullYear()-8
-
+   
     $(".summernote").summernote();
 
     // 

@@ -11,7 +11,7 @@ from admin_site.models import CompanyDropdownsMaster
 from accounts.models import UserProfile
 from company.models import *
 
-
+    
 def return_years(company):
     current_year = 0
     gc_year = datetime.datetime.today().year
@@ -78,7 +78,7 @@ class EmployeesForm(forms.ModelForm):
     
     class Meta:
         model=Employees
-        fields = ('employment_type','female','male','year_emp')
+        fields = ('year_emp','employment_type','female','male')
         widgets = {
             'employment_type':forms.Select(attrs={'class':'form-control form-control-uniform','disabled':'true'}),
             'male':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_male")'}),
@@ -510,8 +510,7 @@ class CompanyUpdateForm(forms.ModelForm):
     class Meta:
         model=Company
         fields=('name','contact_person','name_am','logo','established_yr','category','ownership_form','trade_license',
-            'expansion_plan','geo_location',
-            'detail','detail_am',
+            'expansion_plan','geo_location','detail','detail_am',
             'orgn_strct','certification','management_tools','working_hours',
             'lab_test_analysis','lab_equipment','outsourced_test_param',
             'conducted_research','new_product_developed',
