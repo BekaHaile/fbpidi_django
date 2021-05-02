@@ -13,6 +13,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.utils import timezone
 from django.core import serializers
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 
 from company.models import *
 from accounts.models import CompanyAdmin,UserProfile
@@ -21,6 +23,11 @@ from product.models import Order,OrderProduct,Product
 from company.forms import *
 from collaborations.models import *
 from chat.models import  ChatMessages
+from admin_site.decorators import company_created,company_is_active
+
+
+decorators = [never_cache, company_created(),company_is_active()]
+
 
 today = datetime.datetime.today()
 this_year = today.year
@@ -217,7 +224,8 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
             return redirect("admin:company_detail",pk=self.kwargs['pk'])
         else:
             return redirect("admin:update_company_info",pk=self.kwargs['pk'])
-    
+
+@method_decorator(decorators,name='dispatch')
 class CompaniesView(LoginRequiredMixin,ListView):
     model = Company
     template_name = "admin/company/companies.html"
@@ -810,7 +818,7 @@ class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
             return redirect("admin:index")
         else:
             messages.warning(self.request,form.errors)
-            return redirect("admin:create_fbpidi_company")
+            return render(self.request,"admin/company/company_form_fbpidi.html",{'form':form})
 
 
 class ViewFbpidiCompany(LoginRequiredMixin,UpdateView):

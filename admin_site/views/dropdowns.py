@@ -5,6 +5,8 @@ from django.shortcuts import render,redirect
 from django.views.generic import (View,CreateView,ListView,UpdateView)
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 
 from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster,RegionMaster,UomMaster
 from admin_site.forms import CompanyDropdownsMasterForm,ProjectDropdownsMasterForm,RegionMasterForm,UomMasterForm
@@ -12,8 +14,9 @@ from product.models import Dose,DosageForm
 from product.forms import DoseForm,DosageFormForm
 from collaborations.models import JobCategory,ResearchProjectCategory
 from collaborations.forms import JobCategoryForm,ResearchProjectCategoryForm
+from admin_site.decorators import company_created,company_is_active
 
-
+decorators = [never_cache, company_created(),company_is_active()]
 
 class CreateCompanyDropdownsMaster(LoginRequiredMixin,CreateView):
     model = CompanyDropdownsMaster
@@ -45,6 +48,7 @@ class UpdateCompanyDropdownsMaster(LoginRequiredMixin,UpdateView):
         messages.success(self.request,"Check List Updated Successfully")
         return redirect("admin:settings") 
 
+@method_decorator(decorators,name='dispatch')
 class AllSettingsPage(LoginRequiredMixin,ListView):
     model = CompanyDropdownsMaster
     template_name = "admin/accounts/settings_list.html"

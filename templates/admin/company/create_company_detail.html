@@ -58,7 +58,13 @@
 	    var my_token = "{{csrf_token}}";
 		var company_id = "{{object.id}}";
 	</script>
-
+	<style>
+		.col-md-5{
+			border: solid rgb(199, 191, 191) 1px;
+			border-radius: 1%;
+			padding: 2%;
+		}
+	</style>
 	
 	{{form.media}}
 </head>
@@ -72,13 +78,6 @@
 				<img src="/static/frontpages/images/brand/logo1.png" alt="">
 			</a>
 		</div>
-
-		<div class="d-md-none">
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
-				<i class="icon-tree5"></i>
-			</button>
-		</div>
-
 		 
 	</div>
 	<!-- /main navbar -->
@@ -89,18 +88,18 @@
 
 		<!-- Main content -->
 		<div class="content-wrapper">
+			{% if messages %}
+			{% for message in messages %}
+			<div class="alert alert-{{message.tags}} border-0 alert-dismissible">
+				<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+				<span class="font-weight-semibold">{{message}}</span>
+			</div>
 
+			{% endfor %}
+			{% endif %}
 			<!-- Content area -->
 			<div class="content d-flex justify-content-center align-items-center">
-				{% if messages %}
-				{% for message in messages %}
-				<div class="alert alert-{{message.tags}} border-0 alert-dismissible">
-					<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-					<span class="font-weight-semibold">{{message}}</span>
-				</div>
-
-				{% endfor %}
-				{% endif %}
+				
 
 					<div class="row">
 						<div class="col-lg-10 offset-lg-1">
@@ -118,7 +117,7 @@
 											<hr>
 											<div class="form-group row">
 												
-												<div class="col-md-6 ">
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Add Company Address</label>
 													
 													{%if object.get_company_address%}
@@ -134,6 +133,7 @@
 													{%endif%}
 
 												</div>	
+												<div class="col-md-1"></div>
 												<div class="col-md-6">
 													<label class="d-block font-weight-semibold">Does the company have expansion plan?</label>
 													<label for=""><input type="radio" name="expn_plan" id="expn_yes"><span class="ml-2">Yes</span></label><span class="ml-4 mr-4"></span>
@@ -156,14 +156,14 @@
 											</div>
 											<hr>
 											<div class="form-group row">
-												<div class="col-md-6">
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Current Investment Capital In Birr?</label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#inv_capital_form_modal" id="">
 														<i class="fa fa-plus"> </i>
 													</button>
-												</div>
-												<div class="col-md-6">
+												</div><div class="col-md-2"></div>
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Do you have Valid Certificate of Competency?</label>
 													
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
@@ -176,12 +176,12 @@
 											<hr>
 											<div class="form-group row">
 													<div class="col-md-6">
-														<label>{{form.working_hours.label}}</label>
+														<label>{{form.working_hours.label}} *</label>
 															{{form.working_hours}}
 															<span class="form-text text-warning">{{form.working_hours.errors}}</span>
 													</div>
 													<div class="col-md-6">
-														<label>{{form.orgn_strct.label}}</label>
+														<label>{{form.orgn_strct.label}} *</label>
 														<div class="uniform-uploader">
 															{{form.orgn_strct}}
 															<span class="filename" style="user-select: none;">No file selected</span>
@@ -193,14 +193,14 @@
 											</div>
 											<hr>
 											<div class="form-group row">
-												<div class="col-md-6">
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Number Of Employees</label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#employees_form_modal" id="">
 														<i class="fa fa-plus"> </i>
 													</button>
-												</div>
-												<div class="col-md-6">
+												</div><div class="col-md-2"></div>
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">New Job Created This Year</label>
 													
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
@@ -212,14 +212,14 @@
 											</div>
 											<hr>
 											<div class="form-group row">
-												<div class="col-md-6">
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Employees Educational Status</label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#education_status_form_modal" id="">
 														<i class="fa fa-plus"> </i>
 													</button>
-												</div>
-												<div class="col-md-6">
+												</div><div class="col-md-2"></div>
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Number of females in position levels</label>
 													
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
@@ -286,14 +286,14 @@
 											</div>
 											<hr>
 											<div class="form-group row">
-												<div class="col-md-6">
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Sources and amount of your inputs</label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#srcamnt_input_form_modal" id="">
 														<i class="fa fa-plus"> </i>
 													</button>
-												</div>
-												<div class="col-md-6">
+												</div><div class="col-md-2"></div>
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">How many kilowatt-hour electric power you use per day?</label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#power_consumption_form_modal" id="">
@@ -305,17 +305,17 @@
 											<hr>
 											<div class="form-group row">
 												<div class="col-md-4">
-													<label for="">{{form.category.label}}</label>
+													<label for="">{{form.category.label}} *</label>
 													{{form.category}}
 													<span class="form-text text-warning">{{form.category.errors}}</span>
 												</div>
 												<div class="col-md-4">
-													<label for="">{{form.management_tools.label}}</label>
+													<label for="">{{form.management_tools.label}} *</label>
 													{{form.management_tools}}
 													<span class="form-text text-warning">{{form.management_tools.errors}}</span>
 												</div>
 												<div class="col-md-4">
-													<label for="">{{form.certification.label}}</label>
+													<label for="">{{form.certification.label}} *</label>
 													{{form.certification}}
 													<span class="form-text text-warning">{{form.certification.errors}}</span>
 												</div>
@@ -367,14 +367,14 @@
 											</div>
 											<hr>
 											<div class="form-group row">
-												<div class="col-md-6">
+												<div class="col-md-5">
 													<label class="font-weight-semibold"  for="">Where do you sell your products?</label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#destination_form_modal" id="">
 														<i class="fa fa-plus"> </i>
 													</button>
-												</div>
-												<div class="col-md-6">
+												</div><div class="col-md-2"></div>
+												<div class="col-md-5">
 													<label class="font-weight-semibold" for="">Target market in percent (%) </label>
 													<button type="button" class="float-right btn btn-success btn-sm pl-2 pr-2" 
 															data-toggle="modal" data-target="#target_form_modal" id="">
@@ -464,7 +464,7 @@
 														
 													</div>		
 													<div class="col-md-6">
-														<label>{{form.source_of_energy.label}}</label>
+														<label>{{form.source_of_energy.label}} *</label>
 															{{form.source_of_energy}}
 															<span class="form-text text-warning">{{form.source_of_energy.errors}}</span>
 													</div>
@@ -582,7 +582,7 @@
 													
 												</div>
 												<div class="col-md-6">
-													<label class="font-weight-semibold" for="">{{form.support_required.label}}</label>
+													<label class="font-weight-semibold" for="">{{form.support_required.label}} *</label>
 													{{form.support_required}}
 													<span class="form-text text-warning">{{form.support_required.errors}}</span>
 												</div>
@@ -611,14 +611,14 @@
 
 				<div class="navbar-collapse collapse" id="navbar-footer">
 					<span class="navbar-text">
-						&copy; 2015 - 2018. <a href="#">Admin Templet</a> by <a href="" target="_blank">Admin</a>
+						&copy; FBPIDI <script>document.write(new Date().getFullYear());</script> . <a href="">Design & developed</a> by <a href="www.melfantech.com" target="_blank">Melfan Tech</a>
 					</span>
 
-					<ul class="navbar-nav ml-lg-auto">
+					<!-- <ul class="navbar-nav ml-lg-auto">
 						<li class="nav-item"><a href="" class="navbar-nav-link" target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
 						<li class="nav-item"><a href="" class="navbar-nav-link" target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
 						<li class="nav-item"><a href="" class="navbar-nav-link font-weight-semibold"><span class="text-pink-400"><i class="icon-cart2 mr-2"></i> Purchase</span></a></li>
-					</ul>
+					</ul> -->
 				</div>
 			</div>
 			<!-- /footer -->

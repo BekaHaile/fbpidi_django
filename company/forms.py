@@ -3,27 +3,13 @@ from django import forms
 from django.contrib.gis import forms as gis_form
 from django.db.models import OuterRef,Exists
 from django.db.transaction import atomic
+from django_summernote.fields import SummernoteWidget
 
 from PIL import Image
 
 from admin_site.models import CompanyDropdownsMaster
 from accounts.models import UserProfile
 from company.models import *
-
-# fields=(
-#     'expansion_plan','expansion_plan_am','trade_license',
-#             'working_hours','orgn_strct','lab_test_analysis','lab_equipment',
-#             'lab_equipment_am','outsourced_test_param','outsourced_test_param_am','certification',
-#             'conducted_research','conducted_research_am','new_product_developed','new_product_developed_am',
-#             'management_tools','electric_power','water_supply','telecom','marketing_department',
-#             'e_commerce','active_database','waste_trtmnt_system','waste_trtmnt_system_am',
-#             'efluent_treatment_plant','env_mgmt_plan','source_of_energy',
-#             'gas_carb_emision','gas_carb_emision_am','compound_allot','comunity_compliant', 
-#             'comunity_compliant_am','env_focal_person','safety_profesional','notification_procedure', 
-#             'university_linkage','university_linkage_am','recall_system','quality_defects_am', 
-#             'quality_defects','gas_waste_mgmnt_measure','gas_waste_mgmnt_measure_am','support_required',
-#             'company_condition',
-# )
 
 
 def return_years(company):
@@ -291,14 +277,6 @@ class InistituteForm(forms.ModelForm):
 
 class MyCompanyDetailForm(forms.ModelForm):
     
-    # company_condition = forms.ModelChoiceField(
-    #     label="Status of processing/ industry facility.",
-    #     empty_label="Select One Status",
-    #     queryset = CompanyDropdownsMaster.objects.filter(chk_type="Industry Status Checklists"),
-    #     required=False,
-    #     widget=forms.Select(attrs={'class':'form-control form-control-uniform','data-fouc':''})
-    # )
-
     def __init__(self,*args,**kwargs):
         self.main_type = kwargs.pop('main_type')
         super(MyCompanyDetailForm,self).__init__(*args,**kwargs)
@@ -315,44 +293,34 @@ class MyCompanyDetailForm(forms.ModelForm):
     class Meta:
         model=Company
         fields=(
-            'expansion_plan','expansion_plan_am','category','working_hours','certification',
+            'expansion_plan','category','working_hours','certification',
             'orgn_strct','lab_test_analysis','lab_equipment',
-            'outsourced_test_param','outsourced_test_param_am',
-            'conducted_research','conducted_research_am','new_product_developed','new_product_developed_am',
+            'outsourced_test_param',
+            'conducted_research','new_product_developed',
             'electric_power','water_supply','telecom','marketing_department','support_required',
-            'e_commerce','active_database','waste_trtmnt_system','waste_trtmnt_system_am',
+            'e_commerce','active_database','waste_trtmnt_system',
             'efluent_treatment_plant','env_mgmt_plan','management_tools','source_of_energy',
-            'gas_carb_emision','gas_carb_emision_am','compound_allot','comunity_compliant', 
-            'comunity_compliant_am','env_focal_person','safety_profesional','notification_procedure', 
-            'university_linkage','university_linkage_am','recall_system','quality_defects_am', 
-            'quality_defects','gas_waste_mgmnt_measure','gas_waste_mgmnt_measure_am'
+            'gas_carb_emision','compound_allot','comunity_compliant', 
+            'env_focal_person','safety_profesional','notification_procedure', 
+            'university_linkage','recall_system',
+            'quality_defects','gas_waste_mgmnt_measure',
             
             )
         widgets = {
                 'expansion_plan':forms.Textarea(attrs={'class':'summernote'}),
-                'expansion_plan_am':forms.Textarea(attrs={'class':'summernote'}),
                 'category':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'orgn_strct':forms.FileInput(),
                 'lab_test_analysis':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'lab_equipment':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'outsourced_test_param':forms.Textarea(attrs={'class':'summernote'}),
-                'outsourced_test_param_am':forms.Textarea(attrs={'class':'summernote'}),
                 'conducted_research':forms.Textarea(attrs={'class':'summernote'}),
-                'conducted_research_am':forms.Textarea(attrs={'class':'summernote'}),
                 'new_product_developed':forms.Textarea(attrs={'class':'summernote'}),
-                'new_product_developed_am':forms.Textarea(attrs={'class':'summernote'}),
                 'waste_trtmnt_system':forms.Textarea(attrs={'class':'summernote'}),
-                'waste_trtmnt_system_am':forms.Textarea(attrs={'class':'summernote'}),
                 'gas_carb_emision':forms.Textarea(attrs={'class':'summernote'}),
-                'gas_carb_emision_am':forms.Textarea(attrs={'class':'summernote'}),
                 'comunity_compliant':forms.Textarea(attrs={'class':'summernote'}), 
-                'comunity_compliant_am':forms.Textarea(attrs={'class':'summernote'}),
                 'university_linkage':forms.Textarea(attrs={'class':'summernote'}),
-                'university_linkage_am':forms.Textarea(attrs={'class':'summernote'}),
                 'quality_defects':forms.Textarea(attrs={'class':'summernote'}),
-                'quality_defects_am':forms.Textarea(attrs={'class':'summernote'}),
                 'gas_waste_mgmnt_measure':forms.Textarea(attrs={'class':'summernote'}),
-                'gas_waste_mgmnt_measure_am':forms.Textarea(attrs={'class':'summernote'}),
                 'working_hours':forms.Select(attrs={'class':'form-control form-control-uniform'}),
                 'certification':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'management_tools':forms.SelectMultiple(attrs={'class':'form-control'}),
@@ -412,7 +380,7 @@ class CompanyProfileForm(forms.ModelForm):
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'logo':forms.FileInput(attrs={'class':''}),
-            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
+            'geo_location':gis_form.OSMWidget(attrs={'required':True,'map_width': 800, 'map_height': 400}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
@@ -542,46 +510,34 @@ class CompanyUpdateForm(forms.ModelForm):
     class Meta:
         model=Company
         fields=('name','contact_person','name_am','logo','established_yr','category','ownership_form','trade_license',
-            'expansion_plan','expansion_plan_am','geo_location',
+            'expansion_plan','geo_location',
             'detail','detail_am',
             'orgn_strct','certification','management_tools','working_hours',
-            'lab_test_analysis','lab_equipment',
-            'outsourced_test_param','outsourced_test_param_am',
-            'conducted_research','conducted_research_am','new_product_developed','new_product_developed_am',
+            'lab_test_analysis','lab_equipment','outsourced_test_param',
+            'conducted_research','new_product_developed',
             'electric_power','water_supply','telecom','marketing_department','source_of_energy',
-            'e_commerce','active_database','waste_trtmnt_system','waste_trtmnt_system_am',
+            'e_commerce','active_database','waste_trtmnt_system',
             'efluent_treatment_plant','env_mgmt_plan',
-            'gas_carb_emision','gas_carb_emision_am','compound_allot','comunity_compliant', 
-            'comunity_compliant_am','env_focal_person','safety_profesional','notification_procedure', 
-            'university_linkage','university_linkage_am','recall_system','quality_defects_am', 
-            'quality_defects','gas_waste_mgmnt_measure','gas_waste_mgmnt_measure_am','support_required',
+            'gas_carb_emision','compound_allot','comunity_compliant','env_focal_person','safety_profesional',
+            'notification_procedure','university_linkage','recall_system',
+            'quality_defects','gas_waste_mgmnt_measure','support_required',
             
             )
         widgets = {
                 'expansion_plan':forms.Textarea(attrs={'class':'summernote'}),
-                'expansion_plan_am':forms.Textarea(attrs={'class':'summernote'}),
                 'orgn_strct':forms.FileInput(),
                 'geo_location':gis_form.OSMWidget(attrs={'map_width': 500, 'map_height': 250}),
                 'lab_test_analysis':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'lab_equipment':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'outsourced_test_param':forms.Textarea(attrs={'class':'summernote'}),
-                'outsourced_test_param_am':forms.Textarea(attrs={'class':'summernote'}),
                 'conducted_research':forms.Textarea(attrs={'class':'summernote'}),
-                'conducted_research_am':forms.Textarea(attrs={'class':'summernote'}),
                 'new_product_developed':forms.Textarea(attrs={'class':'summernote'}),
-                'new_product_developed_am':forms.Textarea(attrs={'class':'summernote'}),
                 'waste_trtmnt_system':forms.Textarea(attrs={'class':'summernote'}),
-                'waste_trtmnt_system_am':forms.Textarea(attrs={'class':'summernote'}),
                 'gas_carb_emision':forms.Textarea(attrs={'class':'summernote'}),
-                'gas_carb_emision_am':forms.Textarea(attrs={'class':'summernote'}),
                 'comunity_compliant':forms.Textarea(attrs={'class':'summernote'}), 
-                'comunity_compliant_am':forms.Textarea(attrs={'class':'summernote'}),
                 'university_linkage':forms.Textarea(attrs={'class':'summernote'}),
-                'university_linkage_am':forms.Textarea(attrs={'class':'summernote'}),
                 'quality_defects':forms.Textarea(attrs={'class':'summernote'}),
-                'quality_defects_am':forms.Textarea(attrs={'class':'summernote'}),
                 'gas_waste_mgmnt_measure':forms.Textarea(attrs={'class':'summernote'}),
-                'gas_waste_mgmnt_measure_am':forms.Textarea(attrs={'class':'summernote'}),
                 'detail':forms.Textarea(attrs={'class':'summernote'}),
                 'detail_am':forms.Textarea(attrs={'class':'summernote'}),
                 'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
@@ -777,9 +733,9 @@ class InvestmentProjectDetailForm(forms.ModelForm):
         fields = (
             'product_type','site_location_name','land_acquisition',
             'distance_f_strt','remaining_work',
-            'remaining_work_am','major_problems','major_problems_am','operational_time','annual_raw_material',
-            'annual_raw_material_am','power_need','water_suply','cond_provided_for_wy',
-            'cond_provided_for_wy_am','target_market','env_impac_ass_doc','capital_utilization',
+            'major_problems','operational_time','annual_raw_material',
+            'power_need','water_suply','cond_provided_for_wy',
+            'target_market','env_impac_ass_doc','capital_utilization',
             'technology','automation','mode_of_project','facility_design',
         )
         widgets = {
@@ -788,16 +744,12 @@ class InvestmentProjectDetailForm(forms.ModelForm):
             'site_location_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Site Location Name'}),
             'distance_f_strt':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_distance_f_strt")'}),
             'remaining_work':forms.Textarea(attrs={'class':'summernote'}),
-            'remaining_work_am':forms.Textarea(attrs={'class':'summernote'}),
             'major_problems':forms.Textarea(attrs={'class':'summernote'}),
-            'major_problems_am':forms.Textarea(attrs={'class':'summernote'}),
             'operational_time':forms.DateInput(attrs={'class':'form-control','type':'date'}),
             'annual_raw_material':forms.Textarea(attrs={'class':'summernote'}),
-            'annual_raw_material_am':forms.Textarea(attrs={'class':'summernote'}),
             'power_need':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_power_need")'}),
             'water_suply':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_water_suply")'}),
             'cond_provided_for_wy':forms.Textarea(attrs={'class':'summernote'}),
-            'cond_provided_for_wy_am':forms.Textarea(attrs={'class':'summernote'}),
             'target_market':forms.Textarea(attrs={'class':'summernote'}),
             'env_impac_ass_doc':forms.FileInput(attrs={'class':'form-control'}),
             'capital_utilization':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_capital_utilization")'}),
@@ -833,9 +785,9 @@ class InvestmentProjectDetailForm_Admin(forms.ModelForm):
         fields = (
             'product_type','site_location_name','contact_person','land_acquisition',
             'distance_f_strt','ownership_form','remaining_work',
-            'remaining_work_am','major_problems','major_problems_am','operational_time','annual_raw_material',
-            'annual_raw_material_am','power_need','water_suply','cond_provided_for_wy',
-            'cond_provided_for_wy_am','target_market','env_impac_ass_doc','capital_utilization',
+            'major_problems','operational_time','annual_raw_material',
+            'power_need','water_suply','cond_provided_for_wy',
+            'target_market','env_impac_ass_doc','capital_utilization',
             'technology','automation','mode_of_project','facility_design',
         )
         widgets = {
@@ -844,16 +796,12 @@ class InvestmentProjectDetailForm_Admin(forms.ModelForm):
             'site_location_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Site Location Name'}),
             'distance_f_strt':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_distance_f_strt")'}),
             'remaining_work':forms.Textarea(attrs={'class':'summernote'}),
-            'remaining_work_am':forms.Textarea(attrs={'class':'summernote'}),
             'major_problems':forms.Textarea(attrs={'class':'summernote'}),
-            'major_problems_am':forms.Textarea(attrs={'class':'summernote'}),
             'operational_time':forms.DateInput(attrs={'class':'form-control','type':'date'}),
             'annual_raw_material':forms.Textarea(attrs={'class':'summernote'}),
-            'annual_raw_material_am':forms.Textarea(attrs={'class':'summernote'}),
             'power_need':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_power_need")'}),
             'water_suply':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_water_suply")'}),
             'cond_provided_for_wy':forms.Textarea(attrs={'class':'summernote'}),
-            'cond_provided_for_wy_am':forms.Textarea(attrs={'class':'summernote'}),
             'target_market':forms.Textarea(attrs={'class':'summernote'}),
             'env_impac_ass_doc':forms.FileInput(attrs={'class':'form-control'}),
             'capital_utilization':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_capital_utilization")'}),
@@ -894,9 +842,9 @@ class ProjectUpdateForm(forms.ModelForm):
             'investment_license','issued_date','sector','project_classification',
             'contact_person','description','description_am','product_type','site_location_name',
             'distance_f_strt','remaining_work','land_acquisition',
-            'remaining_work_am','major_problems','major_problems_am','operational_time','annual_raw_material',
-            'annual_raw_material_am','power_need','water_suply','cond_provided_for_wy',
-            'cond_provided_for_wy_am','target_market','env_impac_ass_doc','capital_utilization',
+            'major_problems','operational_time','annual_raw_material',
+            'power_need','water_suply','cond_provided_for_wy',
+            'target_market','env_impac_ass_doc','capital_utilization',
             'technology','automation','mode_of_project','facility_design',
         )
         widgets = {
@@ -916,21 +864,16 @@ class ProjectUpdateForm(forms.ModelForm):
             'project_classification':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'contact_person':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),
-            'description_am':forms.Textarea(attrs={'class':'summernote'}),
             'product_type':forms.SelectMultiple(attrs={'class':'form-control form-control-uniform'}),
             'site_location_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Site Location Name'}),
             'distance_f_strt':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_distance_f_strt")'}),
             'remaining_work':forms.Textarea(attrs={'class':'summernote'}),
-            'remaining_work_am':forms.Textarea(attrs={'class':'summernote'}),
             'major_problems':forms.Textarea(attrs={'class':'summernote'}),
-            'major_problems_am':forms.Textarea(attrs={'class':'summernote'}),
             'operational_time':forms.DateInput(attrs={'class':'form-control','type':'date'}),
             'annual_raw_material':forms.Textarea(attrs={'class':'summernote'}),
-            'annual_raw_material_am':forms.Textarea(attrs={'class':'summernote'}),
             'power_need':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_power_need")'}),
             'water_suply':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_water_suply")'}),
             'cond_provided_for_wy':forms.Textarea(attrs={'class':'summernote'}),
-            'cond_provided_for_wy_am':forms.Textarea(attrs={'class':'summernote'}),
             'target_market':forms.Textarea(attrs={'class':'summernote'}),
             'env_impac_ass_doc':forms.FileInput(attrs={'class':'form-control'}),
             'capital_utilization':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_capital_utilization")'}),

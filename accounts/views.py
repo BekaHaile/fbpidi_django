@@ -26,11 +26,11 @@ from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,Compan
 from accounts.models import UserProfile,Company,CompanyAdmin,Customer,Subscribers
 from company.models import CompanyStaff,Company
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail,sendSubscriptionActivationEmail
-from admin_site.decorators import company_created
+from admin_site.decorators import company_created,company_is_active
 
 # 
 # INDEX VIEW
-decorators = [never_cache, company_created()]
+decorators = [never_cache, company_created(),company_is_active()]
 # Login view for the front end/customer UserProfile
 class LoginView(auth_views.LoginView):
     form_class = FrontLoginForm
@@ -193,11 +193,15 @@ class SuspendUser(LoginRequiredMixin,View):
             user = UserProfile.objects.get(id=self.kwargs['pk'])
             if self.kwargs['option'] == "suspend":
                 user.is_active = False
+                user.save()
+                messages.success(self.request,"User Suspended")
+                return redirect("admin:users_list")
             elif self.kwargs['option'] == 'enable':
                 user.is_active = True
-            user.save()
-            messages.success(self.request,"User Suspended")
-            return redirect("admin:users_list")
+                user.save()
+                messages.success(self.request,"User Activated")
+                return redirect("admin:users_list")
+            
         except UserProfile.DoesNotExist:
             messages.success(self.request,"The User Does Not Exist")
             return redirect("admin:users_list")
@@ -230,13 +234,14 @@ class CreateUserView(LoginRequiredMixin, CreateView):
         user.save()
         messages.success(self.request,"You Created a User Successfully!")
         return redirect("admin:users_list")
-            
+
+@method_decorator(decorators,name='dispatch')
 class GroupList(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         groups = Group.objects.all()
         return render(self.request,"admin/pages/group_list.html",{'groups':groups})      
         
-
+@method_decorator(decorators,name='dispatch')
 class GroupView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         permissions = Permission.objects.all()
@@ -251,7 +256,7 @@ class GroupView(LoginRequiredMixin,View):
         group.save()
         return JsonResponse({"message":"Role Group Created SuccessFully"})
 
-
+@method_decorator(decorators,name='dispatch')
 class UserLogView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         failed_logins = FailedLoginLog.objects.all()

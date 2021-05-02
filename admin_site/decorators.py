@@ -8,6 +8,7 @@ def company_created():
         def wrap(request,*args,**kwargs):
             if request.user.is_company_admin:
                 if request.user.get_company() == None:
+                    messages.warning(request,"Please Create Your Company Profile")
                     return redirect("admin:create_my_company")
                 else:
                     return view_func(request,*args,**kwargs) 

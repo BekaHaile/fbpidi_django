@@ -115,8 +115,6 @@ class Dose(models.Model):
 class DosageForm(models.Model):
     dosage_form = models.CharField(verbose_name="Dosage Form in English",max_length=255)
     dosage_form_am = models.CharField(verbose_name="Dosage Form in Amharic",max_length=255)
-    description = models.TextField(verbose_name="Dosage Form Description in English")
-    description_am = models.TextField(verbose_name="Dosage Form Description in Amharic")
     created_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='dosage_created_by',null=True)
     created_date	= models.DateTimeField(auto_now_add=True)
     last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='dosage_updated_by',null=True)
