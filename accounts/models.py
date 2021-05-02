@@ -32,6 +32,8 @@ class UserProfile(AbstractUser):
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
 
+    
+
     def __str__(self):
         return "{} : {} {}".format(self.username,self.first_name,self.last_name)
 
@@ -64,6 +66,8 @@ class Customer(models.Model):
     bio = models.TextField()
     profile_image = models.ImageField(default="")
     time_stamp = models.DateTimeField(auto_now_add=True)
+
+    
     
 
     def __str__(self):
@@ -78,6 +82,8 @@ class CompanyAdmin(models.Model):
     designation = models.CharField(max_length=200,null=True)
     time_stamp = models.DateTimeField(auto_now_add=True)
 
+    
+
     def __str__(self):
         return self.user.username
     
@@ -89,11 +95,12 @@ class CompanyAdmin(models.Model):
     #     return Company.objects.get(user = self.user) if Company.objects.get(user = self.user) else None
 
 
-class Subscription(models.Model):
+class Subscribers(models.Model):
 	# users can subscribe using an email address or their FBPIDI user account
-        email = models.EmailField( verbose_name = "Subscription Email.")
+        email = models.EmailField( verbose_name = "Subscriber Email.")
         created_date = models.DateTimeField(auto_now_add = True)
         is_active = models.BooleanField(default =False)
 
+        
 	
 

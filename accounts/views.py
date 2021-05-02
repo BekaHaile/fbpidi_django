@@ -1,8 +1,8 @@
 # django imports
 import json
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse,JsonResponse, Http404
 from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.views.generic import (CreateView,View,UpdateView,ListView)
@@ -23,9 +23,9 @@ from useraudit.models import FailedLoginLog,LoginAttempt,LoginLog,UserDeactivati
 
 from accounts.forms import (CompanyAdminCreationForm,CustomerCreationForm,CompanyUserCreationForm,
                             AdminCreateUserForm,GroupCreationForm,FrontLoginForm)
-from accounts.models import UserProfile,Company,CompanyAdmin,Customer,Subscription
+from accounts.models import UserProfile,Company,CompanyAdmin,Customer,Subscribers
 from company.models import CompanyStaff,Company
-from accounts.email_messages import sendEmailVerification,sendWelcomeEmail
+from accounts.email_messages import sendEmailVerification,sendWelcomeEmail,sendSubscriptionActivationEmail
 from admin_site.decorators import company_created
 
 # 
@@ -271,42 +271,35 @@ def Subscribe(request):
         try:
             data = json.loads(request.body)
             try:
-                subscription = Subscription( email=data['email'])
-                subscription.save()
-                mail_subject = f"Subscription Email Verification Required .{data['email']}"
-                message = get_template('email/acct_activate_email.html').render({
-                    'user': "user bota",
-                    'domain': "FBPIDI",
-                    'uid': subscription.id,
-                    'token': "some token",
-                    'redirect_url':'activate_subscribtion'
-                })
-                email = EmailMessage( mail_subject, message, to=[ data['email'] ])
-                email.content_subtype = "html"
                 try:
-                    email.send(fail_silently=False)
-                except Exception as e:
+                    subscription = get_object_or_404( Subscribers, email=data['email'] )
+                    return JsonResponse(data={'error':True, 'message':'You have aleardy subscribed with this email!'}, safe=False )
+                except Exception:     
+                    print("new email")
+                    subscription = Subscribers( email=data['email'])
+                    subscription.save()
+                    if sendSubscriptionActivationEmail(request, subscription, data['email']):
+                        return JsonResponse(data={'error':False, 'message':'We have sent an Email activation link to your email! \n check your it whenever you can!'}, safe=False )
+                        
                     subscription.delete()
-                    print ("Exception sending email ",e)
-                    return JsonResponse(data={'error':True, 'message':'Error Occured while sending email, check your email and connection and try again! '}, safe=False )
-
-                return JsonResponse(data={'error':False, 'message':'Successfull Subscription! '}, safe=False )
+                    return JsonResponse(data={'error':True, 'message':'Error Occured while sending email, \n Please check the email address and connection and try again! '}, safe=False )
                 
             except Exception as e :
                 subscription.delete()
                 print ("Exception sending email ",e)
                 return JsonResponse(data={'error':True, 'message':'Error Subscription! '}, safe=False )
         except Exception as e:
-            return JsonResponse(data={'error':True, 'message':f'The exception is {str(e)}'},  safe=False )
+            print ("Exception sending email ",e)
+            return JsonResponse(data={'error':True, 'message':f'An expected error has occured, please try agian later!'},  safe=False )
 
 
 def activate_subscription(request, uidb64, token):
     try:
         sid = urlsafe_base64_decode(uidb64).decode()
-        subscription = Subscription.objects.get(pk=sid)
-        subscription.activate = True
+        subscription = Subscribers.objects.get(id=sid)
+        subscription.is_active = True
         subscription.save()
-
+        print("########## inside activate_sub", )
         # sendWelcomeEmail(request,user)
         return render(request,'email/confirm_registration_message.html',
             {'message':"Thank you for your subscribtion! we will keep you updated of the latest news and blogs through your email."})

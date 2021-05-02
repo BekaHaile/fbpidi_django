@@ -26,6 +26,10 @@ class PollsQuestion(models.Model):
     expired = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
+
     
     model_am = "ምርጫዎች"
 
@@ -63,6 +67,11 @@ class Choices (models.Model):
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="poll_choice_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
+
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
     
     def __str__(self):
         return self.choice_name
@@ -81,7 +90,11 @@ class PollsResult(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     choice = models.ForeignKey(Choices, on_delete=models.CASCADE)
     remark = models.CharField( max_length=200,verbose_name= "Any remarks the user may have", default="" )
-    
+
+    is_active = models.BooleanField(default=False)
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
     def __str__(self):
         return f"{self.poll.title}'s Result "
@@ -105,11 +118,15 @@ class Blog(models.Model):
     content = models.TextField(null=False)
     content_am = models.TextField(null=False)
     publish = models.BooleanField(null=False,default=False)
+    subscriber_notified = models.BooleanField(default=False)
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="blog_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
 
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
     model_am =  "ብሎጎች" 
 
@@ -136,6 +153,10 @@ class BlogComment(models.Model):
     is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
 
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
+
     class Meta:
         ordering = ['-created_date',]
 
@@ -158,6 +179,10 @@ class Faqs(models.Model):
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="faq_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
+
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
     class Meta:
         ordering = ['-created_date',]
@@ -190,6 +215,10 @@ class Tender(models.Model):
     last_updated_date = models.DateTimeField(null=True)
     is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
+
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
     
     def get_applications(self):
         return TenderApplicant.objects.filter( tender = self )
@@ -216,8 +245,13 @@ class TenderApplicant(models.Model):
     company_name = models.CharField(verbose_name="first_name", max_length=50)
     company_tin_number = models.CharField(verbose_name="first_name", max_length=50)
     tender = models.ForeignKey(Tender, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=False)
 
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
   
     def __str__(self):
@@ -232,6 +266,11 @@ class JobCategory(models.Model):
     category_name_am = models.CharField(max_length=500,null=False)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=False)
+
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
 
     def countjobs(self):
@@ -260,8 +299,12 @@ class Vacancy(models.Model):
     created_date = models.DateTimeField(auto_now_add=True,editable=False)
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="vacancy_updated_by")
     last_updated_date = models.DateTimeField(null=True)
-    is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
+
+    is_active = models.BooleanField(default=False)
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
     class Meta:
         ordering = ['-created_date',]
@@ -300,6 +343,11 @@ class JobApplication(models.Model):
     documents = models.FileField(upload_to="documents/", max_length=254,help_text="pdf, jpg,doc,docx files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    is_active = models.BooleanField(default=False)
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
+
     class Meta:
         ordering = ['-created_date',]
         unique_together = (('vacancy','created_by'))
@@ -321,8 +369,13 @@ class News(models.Model):
     catagory = models.CharField( max_length=30, choices =NEWS_CATAGORY, verbose_name="News Catagory, the choices are ")
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="news_updated_by")
     last_updated_date = models.DateTimeField(null=True)
+    subscriber_notified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
+
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
     model_am ="ዜናዎች"
 
@@ -343,7 +396,7 @@ class News(models.Model):
         ordering = ['-created_date',] 
     
 
-    
+# keeping it if there may b a change  in the future
 class NewsImages(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1, related_name='newsimages')
     created_date = models.DateTimeField(auto_now_add=True)
@@ -372,6 +425,11 @@ class ForumQuestion(models.Model):
     expired = models.BooleanField(default=False)
 
 
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
+
+
     def __str__(self):
         return self.title
 
@@ -397,6 +455,11 @@ class ForumComments(models.Model):
     is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
 
+ 
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
+
     def __str__(self):
         return self.comment
 
@@ -419,6 +482,11 @@ class CommentReplay(models.Model):
     last_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,null=True,blank=True,related_name="comment_replay_updated_by")
     last_updated_date = models.DateTimeField(null=True)
     expired = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
+
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
     def __str__(self):
         return self.content
@@ -441,6 +509,10 @@ class Announcement(models.Model):
     is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
 
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
+
     class Meta:
         ordering = ['-created_date',]
 
@@ -453,12 +525,14 @@ class Announcement(models.Model):
     
     model_am = "ማስታወቂያ"
     
-
+# just keeping it if there may be a change of plans
 class AnnouncementImages(models.Model):
     announcement = models.ForeignKey(Announcement, on_delete = models.CASCADE)
     image = models.ImageField(upload_to = "Announcements", max_length=254, verbose_name="Announcement Image",help_text="jpg, png, gid", blank=False)  
     created_date = models.DateTimeField(auto_now_add=True)
     expired = models.BooleanField(default=False)
+
+
 
     class Meta:
         ordering = ['-created_date',]
@@ -474,6 +548,11 @@ class ResearchProjectCategory(models.Model):
     last_updated_by = models.ForeignKey (settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, blank=True, null = True, related_name="category_updated")
     last_updated_date = models.DateTimeField(blank=True, null = True)
     expired = models.BooleanField(default=False)
+
+    is_active = models.BooleanField(default=False)
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
     class Meta:
         ordering = ['-created_date',]
@@ -505,6 +584,10 @@ class Research(models.Model):
     expired = models.BooleanField(default=False)
     company = models.ForeignKey(Company, on_delete = models.CASCADE, blank=True, null = True)
 
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
+
     def save(self):
         if self.created_by.is_staff:
             self.company = self.created_by.get_company()
@@ -528,6 +611,11 @@ class ResearchAttachment(models.Model):
     attachement = models.FileField(upload_to="ResearchAttachements/",null=True, max_length=254,help_text="only pdf files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    is_active = models.BooleanField(default=False)
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
+
 
 class Project(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -543,6 +631,9 @@ class Project(models.Model):
     expired = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
     class Meta:
         ordering = ['-created_date',]
@@ -564,6 +655,9 @@ class Document_Category(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)
 
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
 class Document(models.Model):
     DOC_CATEGORY = [ ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'),]
@@ -579,6 +673,9 @@ class Document(models.Model):
     expired = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
     def save(self):
         self.company = self.created_by.get_company()
         super(Document, self).save()

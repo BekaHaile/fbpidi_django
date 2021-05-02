@@ -368,6 +368,9 @@
 </div>
 {%block content%}{%endblock%}
 <!-- Newsletter-->
+<div id = "subscribtion_message_div" style="width: 200px; height:200px;">
+    <h4 id="subscribtion_message"></h4>
+</div>
 <section class="sptb border-top bg-white mt-5">
     <div class="container">
         <div class="section-title center-block text-center">
@@ -541,7 +544,16 @@
     function subscribe()
     {
         email_field =document.getElementById('email_field')
-        if (email_field.value !="" ){
+        function canceldiv(){
+            $("#subscribtion_message_div").hide()
+        }
+        function showdiv(message){
+            $("#subscribtion_message").innerHTML = message
+            $("#subscribtion_message_div").show();
+           
+        }
+        if (email_field.value !="" && email_field.value.toString().includes('@')){
+            window.alert("We will try to send you an email for verification!")
             fetch("{% url 'subscribe' %}",
             {
                 method:"POST",
@@ -551,35 +563,31 @@
                     'X-CSRFToken':'{{csrf_token}}'
                 },
                 body:JSON.stringify({
-                    
                     'email': email_field.value,
+                    
                 })
             }
             ).then(e => e.json()).then(result=>{
+                showdiv(result['message'])
                     window.alert(result['message'])
-                   
                     document.getElementById('email_field').value = ""             
                 }); 
-
         }
         else{
-            window.alert("Please enter a valid email address")
+            
+            window.alert("Please enter a valid email address, containing '@'!")
         }
-        
     }
     
 </script>
-
 <!-- Start of Script for unread messages  -->
 <script>
-    
     // Check the inbox for logged in users only
     if ("{{user.is_authenticated}}"=="True")
-        setInterval(check_inbox, 2000);
+        setInterval( check_inbox, 2000 );
     
     
     function check_inbox(){
-          
             fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>
             {   num_unread_messages = data['num']
                 if (num_unread_messages > 0)
@@ -587,10 +595,8 @@
                  // first clear the list area 
                 document.getElementById('list_of_senders').innerHTML = "";
                 for (unread_message of data['unread_messages']){
-                    
                     append_unread_messages(unread_message);
                 }
-
             });
         }
 

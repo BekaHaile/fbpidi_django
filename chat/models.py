@@ -12,6 +12,11 @@ class ChatMessages(models.Model):
     seen = models.BooleanField(default = False)
     created_date = models.DateTimeField(auto_now_add=True)
 
+    is_active = models.BooleanField(default=False)
+    reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
+    reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
+
     
 
     def count_unread_chats(user):
@@ -21,10 +26,6 @@ class ChatMessages(models.Model):
         unread_messages = ChatMessages.objects.filter(sender = sender, receiver=user, seen =False).order_by('-created_date')
         return {'count':unread_messages.count(), 'last_message':unread_messages.first()}
     
-    
-
-
-
 
 class ChatGroup(models.Model):
     """
@@ -101,3 +102,4 @@ class ChatMessage(models.Model):
         """
         latest_10 = ChatMessage.objects.filter(chat_group__group_name = chat_group).order_by('-timestamp')[:n]
         return latest_10[::-1]
+
