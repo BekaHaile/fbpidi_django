@@ -2,7 +2,7 @@ from background_task import background
 from company.models import CompanyEvent, EventParticipants
 from collaborations.models import Tender, Blog, News
 from django.utils import timezone
-from accounts.email_messages import sendEventNotification, sendEventParticipationNotification, sendTenderEmailNotification
+from accounts.email_messages import sendEventNotification, sendEventParticipationNotification, sendTenderEmailNotification, sendWeekBlogAndNews
 from django.db.models import Q
 from django.utils import timezone
 from datetime import datetime, timedelta
@@ -19,7 +19,7 @@ def clear_completed_tasks():
 @background()
 def check_event_startdate():
     print("____________________")
-    print("Started automatic Event Opening for Upcoming tenders ...")
+    print("Started automatic Event Opening for Upcoming Events ...")
     if CompanyEvent.objects.exists():
         events = CompanyEvent.objects.filter( status='Upcoming') 
         today = timezone.now().date()
@@ -141,41 +141,39 @@ def get_weekly_and_old(queryset):
         week_dates  = [ timezone.now().date() - timedelta(days = d) for d in range(8)] #since we also need to subtract 7 days, the range has to b 8
         this_week_objects = unnotified.filter( created_date__date__in= week_dates )
         week_obj_ids = [obj.id for obj in this_week_objects]
-        older_objects = unnotified.exclude(id__in = week_obj_ids)
-        return {'error':False, "this_week_objects ": this_week_objects, "older_objects ", older_objects}
+        return {'error':False, "this_week_objects": this_week_objects, "all": unnotified}
     except Exception as e:
         return {'error':True, 'message':str(e)}
 
 
-@background() 
-def send_new_blogs():
-    subscribers_email =[ s.email for s in Subscribers.objects.filter(is_active = True)]
+@background()    
+def send_news_and_blogs_weekly():
+    print("____________________")
+    print("Started sending week blogs and news for subscribed emails ...")
     blogs = get_weekly_and_old(Blog.objects.filter(publish = True))
+    news = get_weekly_and_old(News.objects.all())
     if blogs['error']==False:
-        this_week_objects = blogs['this_week_objects']
-        older_blogs = blogs['older_objects']
-        # current_site = get_current_site(request)
-        blog_subject = ""
-        if this_week_objects.count() > 0:
-            mail_subject = f"Weekly notice of New Blogs and News with { this_week_objects.count() }"
-            mail_message = "Check out this blogs, \n"
-            for b in this_week_objects:
-                mail_message+= f" {b.title} by {b.created_by.username} \n for more info click <a href='http://127.0.0.1:8000/collaborations/blog-detail/{b.id}/'> \n" 
-        
-        else:
-            mail_subject = f"Blogs Notice from FBPIDI { older_blogs.count() }"
-            mail_message = "Check out this blogs, \n"
-            for b in older_blogs:
-                mail_message+= f" {b.title} by {b.created_by.username} \n for more info click <a href='http://127.0.0.1:8000/collaborations/blog-detail/{b.id}/'> \n"         
+        if news['error'] == False:
+            week_blogs_count = blogs['this_week_objects'].count()
+            blogs= blogs['all']
+            week_news_count = news['this_week_objects'].count()
+            news = news['all']
+            if sendWeekBlogAndNews(blogs, week_blogs_count, news, week_news_count):
+                for b in blogs:
+                    b.subscriber_notified = True
+                    # b.save()
+                print("Finished sending weekly blog emai to subscribed emails")
+                for n in news:
+                    n.subscriber_notified = True
+                    # n.save()
+                print("Finished sending weekly news emai to subscribed emails")
+            else:
+                print("Failed to send weekly blogs and news to subscribed emails")
 
-        email = EmailMessage(mail_subject, mail_message,from_email="antenyismu@gmail.com", to=subscribers_email)
-        email.content_subtype = "html"  
-        try:
-            email.send()
-            print("Email sent ")
-        except Exception as e:
-            print("Exception While Sending Email ", str(e))
+        else:
+            print("news error", news['message'])
     else:
-        print("Can't fetch blogs ", blogs)   
+        print("blogs error", blogs['message'])
+
     
     

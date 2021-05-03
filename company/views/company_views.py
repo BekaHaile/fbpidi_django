@@ -117,7 +117,6 @@ class CompanyInquiryList(ListView):
     template_name = "admin/company/inquiry_list.html"
     def get_queryset(self):
         try:
-         
             company = self.request.user.get_company()
             categories = [c.id for c  in company.category.all()]
             print(categories)
@@ -174,6 +173,7 @@ def Like_Company(request):
     except Exception as e:
         print("########Exception while tring to like a product ",e)
         return JsonResponse({'error':True})
+
     
 class CompanyProductList(DetailView):
     model= Company

@@ -23,6 +23,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.http import FileResponse, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
 
+from datetime import datetime, timedelta
+from accounts.email_messages import sendWeekBlogAndNews
 
 from admin_site.decorators import company_created,company_is_active
 from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
@@ -873,5 +875,67 @@ class DocumentListing(LoginRequiredMixin, View):
         except Exception as e:
             print("exceptio at document list ",e)
             return redirect("admin:error_404")
+
+
+
+
+def get_weekly_and_old(queryset):
+    try:
+        unnotified = queryset.filter(subscriber_notified = False)
+        week_dates  = [ timezone.now().date() - timedelta(days = d) for d in range(8)] #since we also need to subtract 7 days, the range has to b 8
+        this_week_objects = unnotified.filter( created_date__date__in= week_dates )
+        week_obj_ids = [obj.id for obj in this_week_objects]
+        return {'error':False, "this_week_objects": this_week_objects, "all": unnotified}
+    except Exception as e:
+        return {'error':True, 'message':str(e)}
+
+
+def send_blogs(request):
+    blogs = get_weekly_and_old(Blog.objects.filter(publish = True))
+    news = get_weekly_and_old(News.objects.all())
+    if blogs['error']==False:
+        if news['error'] == False:
+            week_blogs_count = blogs['this_week_objects'].count()
+            blogs= blogs['all']
+            week_news_count = news['this_week_objects'].count()
+            news = news['all']
+            try:
+                current_site = get_current_site(request)
+                print("##### domain is ", current_site.domain)
+                from accounts.models import Subscribers
+                
+                subscribers_email =[ s.email for s in Subscribers.objects.filter(is_active = True)]
+                mail_subject = f'Latest News and Blogs From FBPIDI'
+                context = {
+                    'blogs': blogs,
+                    'week_blogs_count':week_blogs_count,
+                    'news':news,
+                    'week_news_count':week_news_count,
+                    'domain': current_site.domain,
+                    'fbpidi': Company.objects.get(main_category='FBPIDI'),
+                    'unsubscribe_link':'unsubscribe',
+                    'redirect_url':'activate_subscribtion'
+                }
+                from django.core.mail import EmailMessage
+                from django.template.loader import render_to_string,get_template
+
+                message = get_template('email/news_email.html').render(context)
+                email = EmailMessage( mail_subject, message, to=subscribers_email)
+                email.content_subtype = "html"
+                email.send(fail_silently=False)
+                # print("Inquiry Replay message sent to Email ", inquiry.sender_email)
+                return render(request, 'email/news_email.html', context)
+            except Exception as e:
+                print("Exception While Sending Inquiry Email ", str(e))
+                return redirect("/")
+
+        else:
+            print("news error", news['message'])
+            return redirect("/")
+    else:
+        print("news error", news['message'])
+        return redirect("/")
+    # print(get_weekly_and_old(Blog.objects.filter(publish = True)))
+    # print(get_weekly_and_old(News.objects.all()))
 
 
