@@ -82,7 +82,7 @@ class SubCategoryForm(forms.ModelForm):
 
     class Meta:
         model = SubCategory
-        fields = ('category_name','sub_category_name','description','description_am','sub_category_name_am','uom','icons')
+        fields = ('category_name','sub_category_name','description','sub_category_name_am','description_am','uom','icons')
         widgets = {
             'icons':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
             'category_name':forms.Select(attrs={'class':'form-control form-control-uniform'}),

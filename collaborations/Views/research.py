@@ -12,6 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.contrib import messages
 
 from company.models import Company
+
 from accounts.models import User, CompanyAdmin, Company
 import os
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -21,10 +22,12 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 
 from django.contrib.sites.shortcuts import get_current_site
+
 from collaborations.forms import (ResearchForm,ResearchProjectCategoryForm)
-from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname
-from admin_site.decorators import company_created,company_is_active
 from collaborations.models import Research,ResearchAttachment,ResearchProjectCategory
+from collaborations.views import SearchByTitle_All, filter_by, FilterByCompanyname, get_paginated_data
+
+from admin_site.decorators import company_created,company_is_active
 from django.utils import timezone
 
 decorators = [never_cache, company_created(),company_is_active()]
@@ -183,9 +186,10 @@ class ListResearch(View):
 				result = {'query':[],'message':"No result found!",'message_am':"ምንም ውጤት አልተገኘም!"}
 		else:
 			result = {'query':Research.objects.filter(accepted="APPROVED"),'message':"Researchs",'message_am':"ምርምር"}
-	
+		
+		data = get_paginated_data(self.request, result['query'])
 		template_name="frontpages/research/research_list.html"
-		return render(self.request, template_name, {'researchs':result['query'],"category":ResearchProjectCategory.objects.all(), 'message':result['message'], 'message_am':result['message_am']})
+		return render(self.request, template_name, {'researchs':data, "category":ResearchProjectCategory.objects.all(), 'message':result['message'], 'message_am':result['message_am']})
 
 class SearchResearch(View):
 	def get(self,*args,**kwargs):

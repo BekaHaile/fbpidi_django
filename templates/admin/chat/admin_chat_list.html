@@ -29,7 +29,7 @@
 		}
 		
 	</style>
-	{{form.media}}
+	
 {% endblock %}
 {%block pagename%}Chat Messages: {%endblock%}
 
@@ -80,8 +80,7 @@
                                                     <span style = "color: rgb(199, 89, 89);" id = "error-area"></span>
                                                 </div>
                                                 <div style="margin-right: 5px;" class="row">
-
-                                                    <input id = "chat_to" style = "padding: 5px;" type="text" name = "chat_to" value="">
+                                                    <input id = "chat_to" style = "padding: 5px;" type="text" class="form form-control" name = "chat_to" value="" placeholder="Write username ...">
                                                 </div>
                                             </div>						
                                         </div>

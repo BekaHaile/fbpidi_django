@@ -310,7 +310,6 @@ def activate_subscription(request, uidb64, token):
         subscription = Subscribers.objects.get(id=sid)
         subscription.is_active = True
         subscription.save()
-        print("########## inside activate_sub", )
         # sendWelcomeEmail(request,user)
         return render(request,'email/confirm_registration_message.html',
             {'message':"Thank you for your subscribtion! we will keep you updated of the latest news and blogs through your email."})

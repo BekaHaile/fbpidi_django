@@ -1,6 +1,7 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags%}
 {% load i18n %}
+{%load admin_template_tags%}
 {% block extrastyle %}
 	<!-- Theme JS files -->
 	<script src="/static/admin/global_assets/js/plugins/extensions/rowlink.js"></script>
@@ -66,7 +67,13 @@
 											<a href="#inbox" class="nav-link" data-toggle="tab">
 												<i class="icon-envelop2"></i>
 												Inbox
-												<span class="badge bg-danger badge-pill ml-auto">29</span>
+												{% count_unread_chats user as unnread_chats %}
+												{% if unread_chats > 0 %}
+												<span class="badge bg-danger badge-pill ml-auto">{{unnread_chats}}</span>
+												{% else %}
+
+												<span class="badge bg-danger badge-pill ml-auto">No New Chats</span>
+												{% endif %}
 											</a>
 										</li>
 										 

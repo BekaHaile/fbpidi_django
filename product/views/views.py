@@ -1086,11 +1086,10 @@ class ProductByCategoryView(ListView):
 class ProductByMainCategory(ListView):
     model=Product
     template_name="frontpages/product/product_category.html"
-    paginate_by = 3
+    paginate_by = 6
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        print("######### ", self.kwargs['option'])
         context['categories'] = Category.objects.filter(category_type=self.kwargs['option'])
         return context
 

@@ -235,14 +235,12 @@ class UserChangeForm(forms.ModelForm):
     password hash display field.
     """
     password = ReadOnlyPasswordHashField()
-
     class Meta:
         model = get_user_model()
         fields = ('username', 'email', 'password',)
         widgets = {
-            'email': forms.EmailInput(
-                attrs={}
-            )
+            'email': forms.EmailInput(attrs={}),
+
         }
 
     def clean_password(self):

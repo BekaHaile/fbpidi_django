@@ -154,33 +154,38 @@
 				<tbody>
 					{%if inv_cap_data%}
 					<tr>
-						<td>1</td>
-						<td>{{inv_cap_data.machinery_cost}}</td>
-						<td>{{inv_cap_data.building_cost}}</td>
-						<td>{{inv_cap_data.working_capital}}</td>
-						<td>{{inv_cap_data.timestamp|date}}</td>
-						<td class="text-center">
-							<div class="list-icons">
-								<div class="dropdown">
-									<a href="#" class="list-icons-item" data-toggle="dropdown">
-										<i class="icon-menu9"></i>
-									</a>
-	
-									<div class="dropdown-menu dropdown-menu-right">
-										{% if user.is_superuser or user.get_company == inv_cap_data.company %}
-											{% if perms.company.delete_investmentcapital %}
-												<a href="{% url 'admin:delete' model_name='InvestmentCapital' id=inv_cap_data.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
-											{% endif %}
-											{% if perms.company.change_investmentcapital %}
-												<a href="{%url 'admin:update_inv_cap_project' pk=inv_cap_data.id%}" class="dropdown-item">
-												<i class="icon-pencil"></i>Edit</a>
-											{% endif %}
-										{% endif %}
-										 
+						
+							
+								<td>{{forloop.counter}}</td>
+								<td>{{inv_cap_data.machinery_cost}}</td>
+								<td>{{inv_cap_data.building_cost}}</td>
+								<td>{{inv_cap_data.working_capital}}</td>
+								<td>{{inv_cap_data.timestamp|date}}</td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+			
+											<div class="dropdown-menu dropdown-menu-right">
+												{% if user.is_superuser or user.get_company == inv_cap_data.company %}
+													{% if perms.company.delete_investmentcapital %}
+														<a href="{% url 'admin:delete' model_name='InvestmentCapital' id=inv_cap_data.id %}" onclick="return confirm ('Are you sure you want to delete this?')" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+													{% endif %}
+													{% if perms.company.change_investmentcapital %}
+														<a href="{%url 'admin:update_inv_cap_project' pk=inv_cap_data.id %}" class="dropdown-item">
+														<i class="icon-pencil"></i>Edit</a>
+													{% endif %}
+												{% endif %}
+												
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-						</td>
+								</td>
+							
+						
+
 					</tr>
 					{%endif%}
 				</tbody>
@@ -382,18 +387,20 @@
 			<h6 class="card-title">Land Usage</h6>
 			 
 		</div>
+		{% if land_usage_data %}
+			<div class="card-body">
 
-		<div class="card-body">
-			<form action="{%url 'admin:update_land_use' pk=land_usage_data.id%}" enctype="multipart/form-data" method="POST">
-				{%csrf_token%}
-				
-					{{usage_form|crispy}}
+				<form action="{%url 'admin:update_land_use' pk=land_usage_data.id%}" enctype="multipart/form-data" method="POST">
+					{%csrf_token%}
+					
+						{{usage_form|crispy}}
 
-				<div class="modal-footer">
-					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
-				</div>
-			</form>
-		</div>		 
+					<div class="modal-footer">
+						<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
+					</div>
+				</form>
+			</div>	
+		{% endif %}	 
 	</div>
 
 </div>
@@ -407,15 +414,17 @@
 		</div>
 
 		<div class="card-body">
-			<form action="{%url 'admin:update_project_state' pk=project_state.id%}" enctype="multipart/form-data" method="POST">
-				{%csrf_token%}
-				 
-					{{pstate_form|crispy}}
-			
-				<div class="modal-footer">
-					<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
-				</div>
-			</form>
+			{% if project_state %}
+				<form action="{%url 'admin:update_project_state' pk=project_state.id%}" enctype="multipart/form-data" method="POST">
+					{%csrf_token%}
+					
+						{{pstate_form|crispy}}
+				
+					<div class="modal-footer">
+						<button type="submit" id="submit_employee" class="btn bg-primary">Submit form</button>
+					</div>
+				</form>
+			{% endif %}
 		</div>		 
 	</div>
 

@@ -1,5 +1,7 @@
 {%extends 'admin/base_site.html'%}
 {% load core_template_tags %}
+{% load admin_template_tags %}
+
 {% block extrastyle %}
 
 	<!-- Theme JS files -->
@@ -44,7 +46,10 @@
 								<div class="col-md-2">
 									<a href="/admin/list_document_by_category/{{category.0}}/"><i style = "color: rgb(243, 196, 40); border: hidden; size: 200px; " class = "fa fa-folder fa-5x"></i></a>
 									<br>
-									<a href="/admin/list_document_by_category/{{category.0}}/"><p style = "margin-bottom: 30px; color: rgb(20, 19, 19);"><b>{{category.0}}</b></p></a>
+									<a href="/admin/list_document_by_category/{{category.0}}/" ><p style = "margin-bottom: 40px;"><b>{{category.0}}</b> ( {% count_documents category.0 user %} Documents )</p> 
+																									
+									</a>
+									
 								</div>
 								{%endfor%}
 						

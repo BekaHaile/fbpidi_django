@@ -22,6 +22,7 @@ from product.models import Product
 
 from company.forms import *
 from collaborations.models import *
+from collaborations.views import get_paginated_data
 from chat.models import  ChatMessages
 from admin_site.decorators import company_created,company_is_active
 from admin_site.views.dropdowns import image_cropper
@@ -970,7 +971,7 @@ def activate_company(request,pk):
 class SearchCompany(ListView):
     model = Company
     template_name = "frontpages/company/company_list.html"
-    paginate_by = 6
+    paginate_by = 4
     def get_queryset(self):
         try:
             companies = Company.objects.all().exclude(main_category='FBPIDI')
@@ -1006,7 +1007,7 @@ class SearchCompany(ListView):
 class FilterCompanyByCategory(ListView):
     model = Company
     template_name = "frontpages/company/company_list.html"
-    paginate_by = 6
+    paginate_by = 12
         
     def get_queryset(self):
         try:
@@ -1014,9 +1015,13 @@ class FilterCompanyByCategory(ListView):
             companies = Company.objects.filter(main_category__in = categories , is_active =True).exclude(main_category='FBPIDI')      
         except Exception as e:
             print("Exception while filtering companies ",e)
-            companies = Company.objects.all().exclude(main_category='FBPIDI')  
-        return companies
+            companies = Company.objects.all().exclude(main_category='FBPIDI')
 
+        return companies
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['by_category'] = self.request.GET.getlist('by_category')
+        return context
     # def get(self, *args, **kwargs):
         
     #     try:
@@ -1031,9 +1036,10 @@ class FilterCompanyByCategory(ListView):
 class CompanyByMainCategory(ListView):
     model = Company
     template_name = "frontpages/company/company_list.html"
-    paginate_by = 6
+    paginate_by = 4
     
     def get_queryset(self):
+        print("#####################",self.kwargs)
         if self.kwargs['option'] == "Beverage":
             return Company.objects.filter(main_category="Beverage", is_active =True)
         elif self.kwargs['option'] == "Food":

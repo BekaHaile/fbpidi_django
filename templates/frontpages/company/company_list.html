@@ -109,7 +109,7 @@
 													<div class="card border-0 mb-0">
 														<div class="card-body h-100">
 															<div class="item-card9">
-																<a href="{% url 'company_home' pk=company.id %}" target = "black" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.name company.name_am LANGUAGE_CODE %}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
+																<a href="{% url 'company_home' pk=company.id %}" target = "black" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.name company.name_am LANGUAGE_CODE %}</h4></a>
 																<div class="rating-stars d-flex mr-5">
 																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
 																	<a class="fs-13 leading-tight mt-1" href="#">{{company|company_product_count}} Products</a>
@@ -272,6 +272,7 @@
 										</div>
 									</div>
 								</div>
+								{% if not by_category %}
 								<div class="center-block text-center">
 									 <ul class="pagination mb-5">
 										{% if page_obj.has_previous %}
@@ -287,6 +288,26 @@
 										{%endif%}
 									</ul>
 								</div>
+								{% else %}
+								<div class="center-block text-center">
+									 <ul class="pagination mb-5">
+										{% if page_obj.has_previous %}
+										<li class="page-item page-prev ">
+											<input type="hidden" name='by_category' value = "{{by_category}}"/>
+											<a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">{% trans "Prev" %}</a>
+										</li>
+										{%endif%}
+										<li class="page-item active"><a class="page-link" href="#">{% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}.</a></li>
+										{% if page_obj.has_next %}
+										<li class="page-item page-next">
+											<input type="hidden" name='by_category' value = "{{by_category}}"/>
+											<a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
+										</li>
+										{%endif%}
+									</ul>
+								</div>
+
+								{% endif %}
 							</div>
 						</div>
 						<!--/Add lists-->
