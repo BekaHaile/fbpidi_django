@@ -261,6 +261,10 @@ class PowerConsumptionForm(forms.ModelForm):
         }
 
 class InistituteForm(forms.ModelForm):
+    x = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(),required=False)
     class Meta:
         model = Company
         fields = (
@@ -388,30 +392,7 @@ class CompanyProfileForm(forms.ModelForm):
             'detail':forms.Textarea(attrs={'class':'summernote'}),
             'detail_am':forms.Textarea(attrs={'class':'summernote'}),
         }
-
-    @atomic
-    def save(self,commit=True):
-        profile = super(CompanyProfileForm, self).save()
-
-        x = self.cleaned_data.get('x')
-        y = self.cleaned_data.get('y')
-        w = self.cleaned_data.get('width')
-        h = self.cleaned_data.get('height')
-
-        if (x or y or w or h ):
-                image = Image.open(profile.logo)
-                cropped_image = image.crop((x, y, w+x, h+y))
-                resized_image = cropped_image.resize((400, 400), Image.ANTIALIAS)
-                resized_image.save(profile.logo.path)
-
-                return profile
-                
-        else:
-                image = Image.open(profile.logo)
-                resized_image = image.resize((400, 400), Image.ANTIALIAS)
-                resized_image.save(profile.logo.path)
-                return profile
-                    
+ 
 
 class CompanyProfileForm_Superadmin(forms.ModelForm):
     x = forms.FloatField(widget=forms.HiddenInput(),required=False)
@@ -447,30 +428,7 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
             'detail_am':forms.Textarea(attrs={'class':'summernote'}),
         }
 
-    
-    
-    @atomic
-    def save(self,commit=True):
-        profile = super(CompanyProfileForm_Superadmin, self).save()
-
-        x = self.cleaned_data.get('x')
-        y = self.cleaned_data.get('y')
-        w = self.cleaned_data.get('width')
-        h = self.cleaned_data.get('height')
-
-        if (x or y or w or h ):
-                image = Image.open(profile.logo)
-                cropped_image = image.crop((x, y, w+x, h+y))
-                resized_image = cropped_image.resize((400, 400), Image.ANTIALIAS)
-                resized_image.save(profile.logo.path)
-
-                return profile
-                
-        else:
-                image = Image.open(profile.logo)
-                resized_image = image.resize((400, 400), Image.ANTIALIAS)
-                resized_image.save(profile.logo.path)
-                return profile
+     
 
 class CompanyRatingForm(forms.ModelForm):
 
@@ -495,6 +453,7 @@ class CompanyUpdateForm(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         self.main_type = kwargs.pop('main_type')
+        self.company = kwargs.pop("company")
         super(CompanyUpdateForm,self).__init__(*args,**kwargs)
         self.fields['category'].queryset = Category.objects.filter(category_type=self.main_type)
         self.fields['certification'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Certifications")
@@ -505,7 +464,7 @@ class CompanyUpdateForm(forms.ModelForm):
         self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
         self.fields['lab_test_analysis'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Laboratory Test Analysis")
         self.fields['lab_equipment'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Laboratory Equipment")
-
+        self.fields['contact_person'].queryset =  UserProfile.objects.filter(is_company_admin=True,contact_person__id=self.company.id)
 
     class Meta:
         model=Company
@@ -523,6 +482,7 @@ class CompanyUpdateForm(forms.ModelForm):
             
             )
         widgets = {
+                # 'contact_person':forms.TextInput(attrs={'class':'form-control'}),
                 'expansion_plan':forms.Textarea(attrs={'class':'summernote'}),
                 'orgn_strct':forms.FileInput(),
                 'geo_location':gis_form.OSMWidget(attrs={'map_width': 500, 'map_height': 250}),
@@ -542,30 +502,7 @@ class CompanyUpdateForm(forms.ModelForm):
                 'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             }
         
-    
-    @atomic
-    def save(self,commit=True):
-        profile = super(CompanyUpdateForm, self).save()
-
-        x = self.cleaned_data.get('x')
-        y = self.cleaned_data.get('y')
-        w = self.cleaned_data.get('width')
-        h = self.cleaned_data.get('height')
-
-        if (x or y or w or h ):
-                image = Image.open(profile.logo)
-                cropped_image = image.crop((x, y, w+x, h+y))
-                resized_image = cropped_image.resize((400, 400), Image.ANTIALIAS)
-                resized_image.save(profile.logo.path)
-
-                return profile
-                
-        else:
-                image = Image.open(profile.logo)
-                resized_image = image.resize((400, 400), Image.ANTIALIAS)
-                resized_image.save(profile.logo.path)
-                return profile
-            
+     
 
 class CompanyMessageForm(forms.ModelForm):
     class Meta:
@@ -636,6 +573,10 @@ class LandUsageForm(forms.ModelForm):
 
 
 class InvestmentProjectForm(forms.ModelForm):
+    x = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(),required=False)
     def __init__(self,*args,**kwargs):
         self.contact_person = kwargs.pop('contact_person')
         super(InvestmentProjectForm,self).__init__(*args,**kwargs)
@@ -673,6 +614,10 @@ class InvestmentProjectForm(forms.ModelForm):
         }
 
 class InvestmentProjectForm_ForSuperAdmin(forms.ModelForm):
+    x = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(),required=False)
     def __init__(self,*args,**kwargs):
         super(InvestmentProjectForm_ForSuperAdmin,self).__init__(*args,**kwargs)
         self.fields['company'].empty_label = "Select A Company"
@@ -813,6 +758,10 @@ class InvestmentProjectDetailForm_Admin(forms.ModelForm):
 
 
 class ProjectUpdateForm(forms.ModelForm):
+    x = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(),required=False)
     def __init__(self,*args,**kwargs):
         self.sector = kwargs.pop("sector")
         self.contact_person = kwargs.pop('contact_person')
@@ -896,26 +845,3 @@ class SliderImageForm(forms.ModelForm):
             'slider_image':forms.FileInput(attrs={'class':'form-control'}),
             'alt_text':forms.TextInput(attrs={'class':'form-control','placeholder':'Image Alt Text'})
         }
-    
-    @atomic
-    def save(self,commit=True):
-        slider = super(SliderImageForm, self).save(commit=commit)
-
-        x = self.cleaned_data.get('x')
-        y = self.cleaned_data.get('y')
-        w = self.cleaned_data.get('width')
-        h = self.cleaned_data.get('height')
-
-        if (x or y or w or h ):
-                image = Image.open(slider.slider_image)
-                cropped_image = image.crop((x, y, w+x, h+y))
-                resized_image = cropped_image.resize((1280, 720), Image.ANTIALIAS)
-                resized_image.save(slider.slider_image.path)
-
-                return slider
-                
-        else:
-                image = Image.open(slider.slider_image)
-                resized_image = image.resize((1280, 720), Image.ANTIALIAS)
-                resized_image.save(slider.slider_image.path)
-                return slider

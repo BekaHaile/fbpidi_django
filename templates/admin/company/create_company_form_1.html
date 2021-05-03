@@ -16,6 +16,7 @@
 {% endblock %}
 {%block pagename%}Company Form {%endblock%}
 {%block nav%}<a href="{%url 'admin:create_company_profile'%}" class="breadcrumb-item">Company Form</a>{%endblock%}
+{%block industries%}active{%endblock%}
 {%block content%}
 
 <!-- Content area -->
@@ -125,7 +126,7 @@
 </div>
 <!-- /content area -->
 <div class="modal fade" id="modalCrop">
-	<div class="modal-dialog modal-lg">
+	<div class="modal-dialog modal-md">
 	  <div class="modal-content">
 		<div class="modal-header">
 		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">

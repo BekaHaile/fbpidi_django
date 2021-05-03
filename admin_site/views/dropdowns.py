@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
+from PIL import Image
 
 from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster,RegionMaster,UomMaster
 from admin_site.forms import CompanyDropdownsMasterForm,ProjectDropdownsMasterForm,RegionMasterForm,UomMasterForm
@@ -175,3 +176,20 @@ class UpdateUomMaster(LoginRequiredMixin,UpdateView):
     def form_invalid(self,form):
         messages.success(self.request,form.errors)
         return redirect("admin:update_uom",pk=self.kwargs['pk'])
+
+
+def image_cropper(x,y,w,h,raw_image,size_x,size_y):
+    if (x == '' or x == None or y == '' or y == None or w == '' or w == None or h == '' or h == None):
+        image = Image.open(raw_image)
+        resized_image = image.resize((size_x, size_y), Image.ANTIALIAS)
+        resized_image.save(raw_image.path)
+        return True
+    else:
+        x = float(x)
+        y = float(y)
+        w = float(w)
+        h = float(h)
+        image = Image.open(raw_image)
+        cropped_image = image.crop((x, y, w+x, h+y))
+        cropped_image.save(raw_image.path)
+        return True

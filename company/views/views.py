@@ -24,7 +24,7 @@ from company.forms import *
 from collaborations.models import *
 from chat.models import  ChatMessages
 from admin_site.decorators import company_created,company_is_active
-
+from admin_site.views.dropdowns import image_cropper
 
 decorators = [never_cache, company_created(),company_is_active()]
 
@@ -63,6 +63,9 @@ class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
         company.contact_person = self.request.user
         company.craeted_by = self.request.user
         company.save()
+        image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    company.logo,400,400)
         messages.success(self.request,"Company Profile Created")
         return redirect("admin:create_mycompany_detail",pk=company.id)
 
@@ -76,6 +79,9 @@ class CreateCompanyProfile(LoginRequiredMixin,CreateView):
         company = form.save(commit=False)
         company.created_by = self.request.user
         company.save()
+        image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    company.logo,400,400)
         messages.success(self.request,"Company Profile Created")
         return redirect("admin:create_company_detail",pk=company.id)
 
@@ -181,7 +187,8 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(ViewMyCompanyProfile,self).get_form_kwargs()
-        kwargs.update({'main_type': Company.objects.get(id=self.kwargs['pk']).main_category})
+        kwargs.update({'main_type': Company.objects.get(id=self.kwargs['pk']).main_category,
+        'company':Company.objects.get(id=self.kwargs['pk'])})
         return kwargs
 
     def get_context_data(self,**kwargs):
@@ -212,6 +219,9 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
         company.save()
+        image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    company.logo,400,400)
         messages.success(self.request,"Company Detail Information Updated")
         if self.request.user.is_superuser:
             return redirect("admin:company_detail",pk=self.kwargs['pk'])
@@ -259,7 +269,8 @@ class CompaniesDetailView(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CompaniesDetailView,self).get_form_kwargs()
-        kwargs.update({'main_type': Company.objects.get(id=self.kwargs['pk']).main_category})
+        kwargs.update({'main_type': Company.objects.get(id=self.kwargs['pk']).main_category,
+        'company':Company.objects.get(id=self.kwargs['pk'])})
         return kwargs
 
 class RateCompany(LoginRequiredMixin,UpdateView):
@@ -845,6 +856,9 @@ class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
             fbpidi.is_active = True
             fbpidi.contact_person = self.request.user
             fbpidi.save()
+            image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    fbpidi.logo,400,400)
             return redirect("admin:index")
         else:
             messages.warning(self.request,form.errors)
@@ -871,6 +885,9 @@ class ViewFbpidiCompany(LoginRequiredMixin,UpdateView):
         fbpidi.last_updated_by=self.request.user
         fbpidi.last_updated_date=timezone.now()
         fbpidi.save()
+        image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    fbpidi.logo,400,400)
         messages.success(self.request,"Company Updated")
         return redirect("admin:view_fbpidi_company",pk=fbpidi.id)
     
@@ -901,6 +918,9 @@ class CreateSliderImage(LoginRequiredMixin,CreateView):
             image.company = Company.objects.get(id=self.kwargs['company'])
             image.created_by= self.request.user
             image.save()
+            image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    image.slider_image,1280,720)
             messages.success(self.request,"Image Uploaded Successfully")
             return redirect("admin:slider_list")
         except Exception as e:
@@ -921,6 +941,9 @@ class UpdateSliderImage(LoginRequiredMixin,UpdateView):
         image.last_updated_by=self.request.user
         image.last_updated_date = timezone.now()
         image.save()
+        image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                    image.slider_image,1280,720)
         messages.success(self.request,"Image Updated Successfully")
         return redirect("admin:slider_list")
     

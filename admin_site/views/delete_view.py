@@ -24,7 +24,7 @@ from company.models import (Company, CompanyEvent, HomePageSlider, InvestmentPro
 decorators = [never_cache, company_created(),company_is_active()]
 
 @method_decorator(decorators,name='dispatch')
-class DeleteView(LoginRequiredMixin,View):
+class DeleteAllView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         message = ""
         try:

@@ -11,6 +11,7 @@
 	{%elif brand == True%}<a href="{%url 'admin:brands'%}" class="breadcrumb-item">Brands</a><a href="{%url 'admin:update_brand' pk=object.id%}" class="breadcrumb-item">Update Brands</a>
 	{%endif%}
 {%endblock%}
+{%block category_menu%}nav-item-expanded nav-item-open{%endblock%}
 {%block content%}
 
 			<!-- Content area -->

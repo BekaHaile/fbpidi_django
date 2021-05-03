@@ -12,6 +12,10 @@
 	<script src="/static/admin/global_assets/js/plugins/ui/prism.min.js"></script>
 	<script src="/static/admin/global_assets/js/demo_pages/extra_fab.js"></script>
 	<script src="/static/admin/assets/js/company_detail.js"></script>
+
+	<link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
+	<script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
+	
 	<script>
 		var my_token = "{{csrf_token}}";
 		var company_id = "{{object.id}}";
@@ -30,6 +34,7 @@
 {%endblock%}
 {%block nav%}<a href="{%url 'admin:companies'%}" class="breadcrumb-item">Companies</a>
 <a href="{%url 'admin:update_company_info' pk=object.id%}" class="breadcrumb-item">Company Detail</a>{%endblock%}
+{%block industries%}active{%endblock%}
 {%block content%}
 
 			<!-- Content area -->
@@ -48,15 +53,17 @@
 						<div class="header-elements">
 							<div class="list-icons">
 								<a href="#" data-toggle="modal" data-target="#rating_form" class="btn btn-light btn-icon">
-									<i class="icon-star-full2"></i>
+									<i class="icon-star-full2"></i> Rate
 								</a>
 								<a href="{%url 'admin:activate_comapany' pk=object.id%}" class="btn btn-light btn-icon">
 									{%if object.is_active%}
-									<i class="icon-cross2"></i>
+									<i class="icon-cross2 mr-2"></i> Suspend
 									{%else%}
-									<i class="icon-checkmark3"></i>
+									<i class="icon-checkmark3 mr-2"></i> Activate
 									{%endif%}
 								</a>
+								<a target="_blank" href="{%url 'admin:get_company_pdf' pk=object.id%}" class="btn btn-light btn-icon">
+									<i class="icon-file-pdf mr-2"></i>Export PDF</a>	
 								 
 							</div>
 
@@ -770,15 +777,32 @@
 				</div>
 			</div>
 			<!-- /content area -->
-			<input id = "user_name" type="hidden" value="{{user.username}}">
-			 
+						
+			<div class="modal fade" id="modalCrop">
+				<div class="modal-dialog modal-md">
+				<div class="modal-content">
+					<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					</div>
+					<div class="modal-body">
+					<img src="" id="image" style="max-width: 100%;">
+					</div>
+					<div class="modal-footer">
+					<button type="button" id= "cancel-btn" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="button" id="js-crop-and-upload-button" class="btn btn-primary js-crop-and-upload">Save Croped</button>
+					</div>
+				</div>
+				</div>
+			</div>
 			<script>
 			 
 				$(document).ready(function () {
 					$('#summernote').summernote();
 					$('.summernote').summernote();
 
-					$("#id_contact_person").prop("disabled",true);
+					// $("#id_contact_person").prop("disabled",true);
 
 					$("#address_tab").click(function(){
 						$('select[name="region"]').find('option[value="{{object.get_company_address.region.id}}"]').attr("selected",true);
@@ -799,87 +823,86 @@
 						$("#id_googlelink").val("{{object.get_company_address.googlelink}}".toUpperCase());
 					});
 
-				var cropX;
-				var cropY;
-				var cropWidth;
-				var cropHeight;
-				var modal_image  = document.getElementById("modal_image_field");
-				var x = document.getElementById("#id_logo")
-			 	
-				$("#id_logo").change(function () {
-					console.log("some thing")
-				
-					if (this.files && this.files[0]) {
-						var reader = new FileReader();
-						reader.readAsDataURL(this.files[0])
-						
-						reader.onload = function (e) {
-										var c = document.getElementById('blogImage')
-										console.log("the e targe file is ", e.target.result);
-										modal_image.attributes['src'].value = ""	
-										
-										//console.log("the value of c src is "+ c.attributes['src'].value)
-										 $("#modal_image_field").attr("src", e.target.result);
-										$("#modalCrop").modal("show");
-										e.target.result = "";	
-									}
-			
-						console.log("all files ", this.files)
-						console.log("Files of 0 ", this.files[0])
-			
-						}
-					})
-			
-				$("#modalCrop").on("shown.bs.modal", function () {
-					modalCropEdit = document.getElementById('modal_image_field')
-					cropper = new Cropper(modalCropEdit,{
-								viewMode: 1,
-								aspectRatio: 3/1,
-								minCropBoxWidth: 300,
-								minCropBoxHeight: 100,
-			
-								crop(event){
-									
-									console.log("inside crop, the event is "+event)
-									setImageCropProperties(
-										modal_image_field,
-										event.detail.x,
-										event.detail.y,
-										event.detail.width,
-										event.detail.height)
-								}
-							})
-				})
-				var cancel = document.getElementById("cancel-btn")
-				cancel.addEventListener("click", function(e){
-					$("#modalCrop").modal("hide");
-				})
-				var confirm = document.getElementById("js-crop-and-upload-button")
-				confirm.addEventListener("click",function(event){
-			
-					cropImage(cropX,cropY,cropWidth,cropHeight);
-					console.log("finished cropping");
-					$("#modalCrop").modal("hide");
-			
-				})
-			
-				function setImageCropProperties(image,x,y,width,height){
-					console.log("Set image cropper called!")
-					cropX = x;
-					cropY = y;
-					cropWidth = width;
-					cropHeight = height;  
-				}
-				
-				function cropImage(x,y,width,height){
-					document.getElementById("x").value = cropX;
-					document.getElementById("y").value = cropY;
-					document.getElementById("width").value = cropWidth;
-					document.getElementById("height").value = cropHeight;
-				}
-				});
+					var cropper;
+					var imageFile;
+					var baseb4ImageString;
+					var cropX;
+					var cropY;
+					var cropWidth;
+					var cropHeight;
 
-				
+					var modalCropEdit = document.getElementById('image')
+					$("#id_logo").change(function () {
+						if (this.files && this.files[0]) {
+
+							var reader = new FileReader();
+							reader.onload = function (e) {
+
+								$("#image").attr("src", e.target.result);
+								$("#modalCrop").modal("show");
+							}
+							reader.readAsDataURL(this.files[0])
+
+						}
+					});
+					
+					$("#modalCrop").on("shown.bs.modal", function () {
+						modalCropEdit = document.getElementById('image')
+						cropper = new Cropper(modalCropEdit, {
+							viewMode: 1,
+							aspectRatio: 1 / 1,
+							minCropBoxWidth: 200,
+							minCropBoxHeight: 200,
+							built: function () {
+								$("#image").cropper('setCropBoxData', { width: 640 });
+							},
+							cropmove: function () {
+								$("#image").cropper('setCropBoxData', { width: 640 });
+							},
+
+							crop(event) {
+								setImageCropProperties(
+									image,
+									event.detail.x,
+									event.detail.y,
+									event.detail.width,
+									event.detail.height)
+							}
+						})
+					})
+
+
+					function setImageCropProperties(image, x, y, width, height) {
+						imageFile = image;
+						// console.log(imageFile)
+						cropX = x;
+						cropY = y;
+						cropWidth = width;
+						cropHeight = height;
+					}
+					function cropImage(x, y, width, height) {
+						var x = document.getElementById("id_x")
+						x.value = cropX
+
+						var y = document.getElementById("id_y")
+						y.value = cropY
+
+						var width = document.getElementById("id_width")
+						width.value = cropWidth
+
+						var height = document.getElementById("id_height")
+						height.value = cropHeight
+					
+					}
+					var confirm = document.getElementById("js-crop-and-upload-button")
+					confirm.addEventListener("click", function (event) {
+
+						cropImage(cropX, cropY, cropWidth, cropHeight)
+						$("#modalCrop").modal("hide");
+
+					});
+ 				});
+					
 				
 			</script>
 			

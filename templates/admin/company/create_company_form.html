@@ -263,19 +263,17 @@
 			var modalCropEdit = document.getElementById('image')
 
 			$("#id_logo").change(function () {
-				// if (this.files && this.files[0]) {
+				if (this.files && this.files[0]) {
 
-				// 	var reader = new FileReader();
-				// 	reader.onload = function (e) {
+					var reader = new FileReader();
+					reader.onload = function (e) {
 
-				// 		$("#image").attr("src", e.target.result);
-				// 		$("#modalCrop").modal("show");
-				// 	}
-				// 	reader.readAsDataURL(this.files[0])
+						$("#image").attr("src", e.target.result);
+						$("#modalCrop").modal("show");
+					}
+					reader.readAsDataURL(this.files[0])
 
-				// }
-				const url = URL.createObjectURL($(this).files[0]);
-				$("#image").attr("src",url);
+					}
 
 			});
 			
