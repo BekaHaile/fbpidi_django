@@ -158,17 +158,20 @@ def send_news_and_blogs_weekly():
             blogs= blogs['all']
             week_news_count = news['this_week_objects'].count()
             news = news['all']
-            if sendWeekBlogAndNews(blogs, week_blogs_count, news, week_news_count):
-                for b in blogs:
-                    b.subscriber_notified = True
-                    # b.save()
-                print("Finished sending weekly blog emai to subscribed emails")
-                for n in news:
-                    n.subscriber_notified = True
-                    # n.save()
-                print("Finished sending weekly news emai to subscribed emails")
+            if news.count()==0 and blogs.count()==0:
+                print("There is no Unnotified News or Blog this week, So system stopped sending email!")
             else:
-                print("Failed to send weekly blogs and news to subscribed emails")
+                if sendWeekBlogAndNews(blogs, week_blogs_count, news, week_news_count):
+                    for b in blogs:
+                        b.subscriber_notified = True
+                        b.save()
+                    print("Finished sending weekly blog emai to subscribed emails")
+                    for n in news:
+                        n.subscriber_notified = True
+                        n.save()
+                    print("Finished sending weekly news emai to subscribed emails")
+                else:
+                    print("Failed to send weekly blogs and news to subscribed emails")
 
         else:
             print("news error", news['message'])

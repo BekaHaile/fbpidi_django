@@ -40,7 +40,7 @@ def clear_completed_tasks():
 # The Task table is the background_task table inside the databse
 # the CompleteTask table is the background_task_completetask table inside the database
 
-def start_task(task_verbose_name, schedule = 1, repeat = Task.DAILY): 
+def start_task( task_verbose_name,repeat, schedule = 1,  ): 
     if not Task.objects.filter(verbose_name=task_verbose_name).exists():
         print(f"creating new task with verbose name {task_verbose_name} ")
         background_task_method = BACKGROUND_TASK_DICTIONARY [ task_verbose_name ]
@@ -75,33 +75,23 @@ def abort(task_verbose_name):
 if __name__ == '__main__':    
     
     print("Starting the background tasks ....")
-    # clear_background_tasks()
-    # clear_completed_tasks()
-    # BACKGROUND_TASK_TIME = TODAY.replace(hour=3,minute=0,second=0) # set the time to when u want to send emails
+    clear_background_tasks()
+    clear_completed_tasks()
+    BACKGROUND_TASK_TIME = TODAY.replace(hour=3,minute=0,second=0) # set the time to when u want to send emails
    
-   
-    # print("Task scheduled at 6:00 am ",BACKGROUND_TASK_TIME)
-    # for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
-    #     start_task(task_verbose_name=verbose_name,schedule=1, repeat = Task.DAILY) 
+    print("Task scheduled at 6:00 am ",BACKGROUND_TASK_TIME)
+    for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
+        start_task(task_verbose_name=verbose_name,schedule=1, repeat = Task.DAILY) 
+    send_news_and_blogs_weekly(verbose_name='WEEKLY_NEWS_BLOGS', repeat =Task.WEEKLY)
   
 
 
 
-    for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
-        start_task(task_verbose_name=verbose_name,schedule=1, repeat = 3) 
-    send_news_and_blogs_weekly(verbose_name='WEEKLY_NEWS_BLOGS', sechedule=1, repeat =10)
+#     for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
+#         start_task(task_verbose_name=verbose_name,schedule=1, repeat = 3) 
+#     send_news_and_blogs_weekly(verbose_name='WEEKLY_NEWS_BLOGS', schedule=1, repeat =10)
+# # 
 
-
-
-    # if not Task.objects.filter(verbose_name = 'WEEKLY_NEWS_BLOGS').exists():
-    #     print("new blogs ")
-    #     send_news_and_blogs_weekly.now()
-    # else:
-    #     print(f"task with verbose name WEEKLY_NEWS_BLOGS already exists")
-    #     send_news_and_blogs_weekly.now()
-
-
-    
 
 
 

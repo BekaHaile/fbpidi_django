@@ -238,139 +238,140 @@
                                             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="12" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
 
                                         </div>
-                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="30" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
-<!-- ------------------------------------------------ News Starts Here   -------------------------------------- -->
+                                        {% if news.count > 0 %}
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="30" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
+    <!-- ------------------------------------------------ News Starts Here   -------------------------------------- -->
 
-                                        <div class="h3-center" style="color:#4a4a44; font-family:Arial,sans-serif, 'SSP'; font-size:24px; line-height:30px; text-align:center">Latest News From FBPIDI</div>
-                                       
-                            
+                                            <div class="h3-center" style="color:#4a4a44; font-family:Arial,sans-serif, 'SSP'; font-size:24px; line-height:30px; text-align:center">Latest News From FBPIDI</div>
+                                        
+                                
 
 
-											<!-- Section 3 -->
-                                            {% if news %}
-                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
-                                                <tr>
-                                                    <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="30"></td>
-                                                    
-                                                    
-                                                    <td>
-                                                        {% for n in news %}
-                                                         <!-- Article Image On The Left -->
-                                                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="40" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
-                                                         
-                                                         <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
-                                                            
-                                                            <tr>
-                                                               
-                                                                 <td>
-                                                                    
-                                                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                         <tr>
-                                                                             <!-- Column -->
-                                                                             <th class="column" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; Margin:0" width="260" valign="top">
-                                                                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#e9e8e2">
-                                                                                     <tr>
-                                                                                         <td class="img" style="font-size:0pt; line-height:0pt; text-align:left" width="10"></td>
-                                                                                         <td>
-                                                                                             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="10" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
-     
-                                                                                             <!-- Article Image -->
-                                                                                             <div class="fluid-img" style="font-size:0pt; line-height:0pt; text-align:left"><a href="#" target="_blank"><img src="{{n.image.url}}" border="0" width="240" height="150" alt="" /></a></div>
-                                                                                             <!-- END Article Image -->
-                                                                                             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="10" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
-     
-                                                                                         </td>
-                                                                                         <td class="img" style="font-size:0pt; line-height:0pt; text-align:left" width="10"></td>
-                                                                                     </tr>
-                                                                                 </table>
-                                                                             </th>
-                                                                             <!-- END Column -->
-                                                                             <!-- Column -->
-                                                                             <th class="column" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; Margin:0" width="34" valign="top">
-                                                                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                                     <tr>
-                                                                                         <td>
-                                                                                             <div style="font-size:0pt; line-height:0pt;" class="mobile-br-25"></div>
-     
-                                                                                         </td>
-                                                                                     </tr>
-                                                                                 </table>
-                                                                             </th>
-                                                                             <!-- END Column -->
-                                                                             <!-- Column -->
-                                                                             <th class="column" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; Margin:0" valign="top">
-                                                                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                                     <tr>
-                                                                                         <td>
-                                                                                             <!-- Article Content -->
-                                                                                             <div class="h4" style="color:#4a4a44; font-family:Arial,sans-serif, 'SSP'; font-size:18px; line-height:24px; text-align:left">{{n.title}}</div>
-                                                                                             
-                                                                                             <div class="text" style="color:#949490; font-family:Arial,sans-serif, 'SSP'; font-size:14px; line-height:24px; text-align:left">
-                                                                                                 {{n.description|safe|truncatechars_html:100}}
-                                                                                             </div>
-                                             
-                                                                                             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="16" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
-     
-                                             
-                                                                                             <!-- Button -->
-                                                                                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                                                 <tr>
-                                                                                                     <td align="left"> 
-                                                                                                         <table border="0" cellspacing="0" cellpadding="0" bgcolor="#4a4a44" style="border-radius: 4px;">
-                                                                                                             <tr>
-                                                                                                                 <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="10" height="35"></td>
-                                                                                                                 <td>
-                                                                                                                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="5" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
-     
-                                                                                                                     <div class="text-button1" style="color:#ffffff; font-family:Arial,sans-serif, 'SSP'; font-size:12px; line-height:16px; text-align:center; text-transform:uppercase">
-                                                                                                                         <a href="http://{{ domain }}{% url 'customer_news_detail' id=n.id %}" target="_blank" class="link-white" style="color:#ffffff; text-decoration:none"><span class="link-white" style="color:#ffffff; text-decoration:none">FIND OUT MORE</span></a>
-                                                                                                                     </div>
-                                                                                                                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="5" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
-     
-                                                                                                                 </td>
-                                                                                                                 <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="10"></td>
-                                                                                                             </tr>
-                                                                                                         </table>
-                                                                                                     </td>
-                                                                                                 </tr>
-                                                                                             </table>
-                                                                                             <!-- END Button -->
-                                                                                             
-                                                                                             <!-- END Article Content -->
-                                                                                         </td>
-                                                                                     </tr>
-                                                                                 </table>
-                                                                             </th>
-                                                                             <!-- END Column -->
-                                                                         </tr>
-                                                                     </table>
-                                                                 </td>
-                                                                 
-                                                                
-                                                             </tr>
-                                                         </table>
-                                                         
-                                                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="40" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
-
-                                                         <!-- END Article Image On The Left -->
-
-                                                         <!-- Border 1px Grey -->
-                                                        <div style="font-size:0pt; line-height:0pt; height:1px; background:#e9e8e2; "><img src="images/spacer.gif" width="1" height="1" style="height:1px" alt="" /></div>
-
-                                                        <!-- END Border 1px Grey -->
-                                                         
-                                                         {% endfor %}
+                                                <!-- Section 3 -->
+                                            
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+                                                    <tr>
+                                                        <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="30"></td>
                                                         
-                                                       
-                                                    </td>
+                                                        
+                                                        <td>
+                                                            {% for n in news %}
+                                                            <!-- Article Image On The Left -->
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="40" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
+                                                            
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+                                                                
+                                                                <tr>
+                                                                
+                                                                    <td>
+                                                                        
+                                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                            <tr>
+                                                                                <!-- Column -->
+                                                                                <th class="column" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; Margin:0" width="260" valign="top">
+                                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#e9e8e2">
+                                                                                        <tr>
+                                                                                            <td class="img" style="font-size:0pt; line-height:0pt; text-align:left" width="10"></td>
+                                                                                            <td>
+                                                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="10" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
+        
+                                                                                                <!-- Article Image -->
+                                                                                                <div class="fluid-img" style="font-size:0pt; line-height:0pt; text-align:left"><a href="#" target="_blank"><img src="{{n.image.url}}" border="0" width="240" height="150" alt="" /></a></div>
+                                                                                                <!-- END Article Image -->
+                                                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="10" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
+        
+                                                                                            </td>
+                                                                                            <td class="img" style="font-size:0pt; line-height:0pt; text-align:left" width="10"></td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </th>
+                                                                                <!-- END Column -->
+                                                                                <!-- Column -->
+                                                                                <th class="column" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; Margin:0" width="34" valign="top">
+                                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                <div style="font-size:0pt; line-height:0pt;" class="mobile-br-25"></div>
+        
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </th>
+                                                                                <!-- END Column -->
+                                                                                <!-- Column -->
+                                                                                <th class="column" style="font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal; Margin:0" valign="top">
+                                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                <!-- Article Content -->
+                                                                                                <div class="h4" style="color:#4a4a44; font-family:Arial,sans-serif, 'SSP'; font-size:18px; line-height:24px; text-align:left">{{n.title}}</div>
+                                                                                                
+                                                                                                <div class="text" style="color:#949490; font-family:Arial,sans-serif, 'SSP'; font-size:14px; line-height:24px; text-align:left">
+                                                                                                    {{n.description|safe|truncatechars_html:100}}
+                                                                                                </div>
+                                                
+                                                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="16" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
+        
+                                                
+                                                                                                <!-- Button -->
+                                                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                                    <tr>
+                                                                                                        <td align="left"> 
+                                                                                                            <table border="0" cellspacing="0" cellpadding="0" bgcolor="#4a4a44" style="border-radius: 4px;">
+                                                                                                                <tr>
+                                                                                                                    <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="10" height="35"></td>
+                                                                                                                    <td>
+                                                                                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="5" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
+        
+                                                                                                                        <div class="text-button1" style="color:#ffffff; font-family:Arial,sans-serif, 'SSP'; font-size:12px; line-height:16px; text-align:center; text-transform:uppercase">
+                                                                                                                            <a href="http://{{ domain }}{% url 'customer_news_detail' id=n.id %}" target="_blank" class="link-white" style="color:#ffffff; text-decoration:none"><span class="link-white" style="color:#ffffff; text-decoration:none">FIND OUT MORE</span></a>
+                                                                                                                        </div>
+                                                                                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="5" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
+        
+                                                                                                                    </td>
+                                                                                                                    <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="10"></td>
+                                                                                                                </tr>
+                                                                                                            </table>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </table>
+                                                                                                <!-- END Button -->
+                                                                                                
+                                                                                                <!-- END Article Content -->
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </th>
+                                                                                <!-- END Column -->
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                    
+                                                                    
+                                                                </tr>
+                                                            </table>
+                                                            
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="40" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
+
+                                                            <!-- END Article Image On The Left -->
+
+                                                            <!-- Border 1px Grey -->
+                                                            <div style="font-size:0pt; line-height:0pt; height:1px; background:#e9e8e2; "><img src="images/spacer.gif" width="1" height="1" style="height:1px" alt="" /></div>
+
+                                                            <!-- END Border 1px Grey -->
+                                                            
+                                                            {% endfor %}
+                                                            
+                                                        
+                                                        </td>
 
 
-                                                    <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="30"></td>
-                                                   
-                                                </tr>
-                                            </table>
-                                            <!-- END Section 3 -->
-                                            {% endif %}
+                                                        <td class="content-spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="30"></td>
+                                                    
+                                                    </tr>
+                                                </table>
+                                                <!-- END Section 3 -->
+                                        {% endif %}
 
 
                                                                                     
@@ -382,7 +383,7 @@
 													<table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="30" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
 
 													<div class="h2-white-center" style="color:#ffffff; font-family:Arial,sans-serif, 'SSP'; font-size:30px; line-height:38px; text-align:center">
-														Check Our Website 
+														Check Our Website For Latest News
 													</div>
 													<table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="8" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
 
@@ -456,11 +457,11 @@
 
 													</div>
 													<table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="30" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
-
+                                                {% if blogs.count > 0 %}
 													<div class="h3-center" style="color:#4a4a44; font-family:Arial,sans-serif, 'SSP'; font-size:24px; line-height:30px; text-align:center">Latest Blogs From FBPIDI</div>
 													<table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="30" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
 
-                                                    {% if blogs %}
+                                                   
 													<table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                         
 														<tr>
@@ -671,7 +672,7 @@
 
 																	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="12" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
 
-																	<div class="h3-white-center" style="color:#ffffff; font-family:Arial,sans-serif, 'SSP'; font-size:24px; line-height:30px; text-align:center">Checkout Our Website</div>
+																	<div class="h3-white-center" style="color:#ffffff; font-family:Arial,sans-serif, 'SSP'; font-size:24px; line-height:30px; text-align:center">Checkout Our Website For More Blogs</div>
 																	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%"><tr><td height="15" class="spacer" style="font-size:0pt; line-height:0pt; text-align:center; width:100%; min-width:100%">&nbsp;</td></tr></table>
 
 																	<div class="text-white-center" style="color:#ffffff; font-family:Arial,sans-serif, 'SSP'; font-size:14px; line-height:24px; text-align:center">

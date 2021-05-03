@@ -922,7 +922,7 @@ def send_blogs(request):
                 message = get_template('email/news_email.html').render(context)
                 email = EmailMessage( mail_subject, message, to=subscribers_email)
                 email.content_subtype = "html"
-                email.send(fail_silently=False)
+                # email.send(fail_silently=False)
                 # print("Inquiry Replay message sent to Email ", inquiry.sender_email)
                 return render(request, 'email/news_email.html', context)
             except Exception as e:
