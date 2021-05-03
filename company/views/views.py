@@ -970,7 +970,7 @@ def activate_company(request,pk):
 class SearchCompany(ListView):
     model = Company
     template_name = "frontpages/company/company_list.html"
-    paginate_by = 1
+    paginate_by = 6
     def get_queryset(self):
         try:
             companies = Company.objects.all().exclude(main_category='FBPIDI')
@@ -1006,7 +1006,7 @@ class SearchCompany(ListView):
 class FilterCompanyByCategory(ListView):
     model = Company
     template_name = "frontpages/company/company_list.html"
-    paginate_by = 1
+    paginate_by = 6
         
     def get_queryset(self):
         try:

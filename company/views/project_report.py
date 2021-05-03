@@ -46,12 +46,11 @@ class ProjectReport(LoginRequiredMixin,View):
         total_ownership = 0
         ownership_data = []
         for ownership in queryset:
-            total_ownership += int(ownership['id__count'])
-            try:
+            if ownership['ownership_form'] != None:
+                total_ownership += int(ownership['id__count'])
                 ownership_data.append({'label':CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']),
                                     'data':ownership['id__count']})
-            except CompanyDropdownsMaster.DoesNotExist:
-                ownership_data= []
+    
         total_inv_cap_data = []
         for project in projects:
             if InvestmentCapital.objects.filter(project=project).exists():
@@ -73,12 +72,11 @@ class ProjectReport(LoginRequiredMixin,View):
         total_classification = 0
         classification_data = []
         for ownership in queryset_classificaion:
-            total_classification += int(ownership['id__count'])
-            try:
+            if ownership['project_classification'] != None:
+                total_classification += int(ownership['id__count'])
                 classification_data.append({'label':ProjectDropDownsMaster.objects.get(id=ownership['project_classification']),
                                     'data':ownership['id__count']})
-            except ProjectDropDownsMaster.DoesNotExist:
-                classification_data= []
+    
         prodn_data = []
         for project in projects:
             pdata = ProjectProductQuantity.objects.filter(project=project).values(

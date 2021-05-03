@@ -517,14 +517,12 @@ class OwnershipReport(LoginRequiredMixin,View):
         context = {}
         template_name = "admin/report/report_page.html"
         company = Company.objects.all().exclude(main_category="FBPIDI")
-        queryset = Company.objects.values('ownership_form').annotate(Count('id')).order_by('ownership_form').exclude(main_category='FBPIDI')
+        queryset = Company.objects.values('ownership_form__name').annotate(Count('id')).order_by('ownership_form').exclude(main_category='FBPIDI')
         total = 0
         for ownership in queryset:
-            total += int(ownership['id__count'])
-            # label.append(CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']))
-            # data.append(ownership['id__count'])
-            # percent.append(float(ownership['id__count']/queryset.count())*100)
-            ownership_data.append({'label':CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']),
+            if ownership['ownership_form__name'] != None:
+                total += int(ownership['id__count'])
+                ownership_data.append({'label':ownership['ownership_form__name'],
                                     'data':ownership['id__count']})
         context['total'] = total
         context['ownership_data'] = ownership_data
@@ -551,12 +549,13 @@ class FilterByWorkingHour(LoginRequiredMixin,View):
         working_hour_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = Company.objects.values('working_hours').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
+        queryset = Company.objects.values('working_hours__name').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
         total = 0
         for working_hour in queryset:
-            total += int(working_hour['id__count'])
-            working_hour_data.append({'label':CompanyDropdownsMaster.objects.get(id=working_hour['working_hours']),
-                                    'data':working_hour['id__count']})
+            if working_hour['working_hours__name'] != None:
+                total += int(working_hour['id__count'])
+                working_hour_data.append({'label':working_hour['working_hours__name'],
+                                        'data':working_hour['id__count']})
         context['total'] = total
         context['working_hour_data'] = working_hour_data
         context['flag'] = 'working_hour_data'
@@ -861,11 +860,12 @@ class CompanyCertificationData(LoginRequiredMixin,View):
         certification_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = Company.objects.values('certification').annotate(Count('id')).order_by('certification').exclude(main_category='FBPIDI')
+        queryset = Company.objects.values('certification__name').annotate(Count('id')).order_by('certification').exclude(main_category='FBPIDI')
         total = 0
         for certification in queryset:
-            total+= int(certification['id__count'])
-            certification_data.append({'label':CompanyDropdownsMaster.objects.get(id=certification['certification']).name,
+            if certification['certification__name'] != None:
+                total+= int(certification['id__count'])
+                certification_data.append({'label':certification['certification__name'],
                                     'data':certification['id__count']})
         context['total'] = total
         context['certification_data'] = certification_data
@@ -879,11 +879,12 @@ class CompanyByManagementTools(LoginRequiredMixin,View):
         management_tool_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = Company.objects.values('management_tools').annotate(Count('id')).order_by('management_tools').exclude(main_category='FBPIDI')
+        queryset = Company.objects.values('management_tools__name').annotate(Count('id')).order_by('management_tools').exclude(main_category='FBPIDI')
         total = 0
         for management_tool in queryset:
-            total+= int(management_tool['id__count'])
-            management_tool_data.append({'label':CompanyDropdownsMaster.objects.get(id=management_tool['management_tools']).name,
+            if management_tool['management_tools__name'] != None:
+                total+= int(management_tool['id__count'])
+                management_tool_data.append({'label':management_tool['management_tools__name'],
                                     'data':management_tool['id__count']})
         context['total'] = total
         context['management_tool_data'] = management_tool_data
@@ -896,12 +897,12 @@ class EnergySourceData(LoginRequiredMixin,View):
         energy_source_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = Company.objects.values('source_of_energy').annotate(Count('id')).order_by('source_of_energy').exclude(main_category='FBPIDI')
+        queryset = Company.objects.values('source_of_energy__name').annotate(Count('id')).order_by('source_of_energy').exclude(main_category='FBPIDI')
         total = 0
         for energy_source in queryset:
-            if energy_source['source_of_energy'] != None:
+            if energy_source['source_of_energy__name'] != None:
                 total+= int(energy_source['id__count'])
-                energy_source_data.append({'label':CompanyDropdownsMaster.objects.get(id=energy_source['source_of_energy']).name,
+                energy_source_data.append({'label':energy_source['source_of_energy__name'],
                                     'data':energy_source['id__count']})
         context['total'] = total
         context['energy_source_data'] = energy_source_data
