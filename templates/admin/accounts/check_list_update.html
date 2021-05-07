@@ -35,6 +35,10 @@
 							action="{%url 'admin:update_region' pk=object.id %}"
 							{%elif flag == 'uom_dropdown'%}
 							action="{%url 'admin:update_uom' pk=object.id %}"
+							{%elif flag == 'phpg'%}
+							action="{%url 'admin:update_phpg' pk=object.id %}"
+							{%elif flag == 'tg'%}
+							action="{%url 'admin:update_therapeutic_grp' pk=object.id %}"
 							{%endif%}
 							 method="POST">{%csrf_token%}
 							<fieldset class="mb-3 ml-3 mr-3">

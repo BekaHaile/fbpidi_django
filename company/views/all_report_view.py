@@ -133,6 +133,7 @@ class AllReportPage(LoginRequiredMixin,View):
         total_energy = 0
         energy_source_data = []
         for energy_source in queryset_energy:
+            if energy_source['source_of_energy__name'] != None:
                 total_energy+= int(energy_source['id__count'])
                 energy_source_data.append({'label':energy_source['source_of_energy__name'],
                                     'data':energy_source['id__count']})
@@ -495,6 +496,11 @@ class AllReportPage(LoginRequiredMixin,View):
         ownership_data = []
         education_status_data = []
         current_year= get_current_year()
+        context['year'] = self.request.POST['year']
+        context['region'] = self.request.POST['region']
+        context['sector'] = self.request.POST['sector']
+        context['sub_sector'] = self.request.POST['sub_sector']
+        context['product'] = self.request.POST['product']
         if self.request.POST['year'] != '':
             current_year = int(self.request.POST['year'])
             
@@ -506,12 +512,15 @@ class AllReportPage(LoginRequiredMixin,View):
         if self.request.POST['sector'] != "":
             companies = companies.filter(main_category=self.request.POST['sector'])
             products = products.filter(category_name__category_type=self.request.POST['sector'])
+            
         if self.request.POST['sub_sector'] != "":
             companies = companies.filter(category=self.request.POST['sub_sector'])
             products = products.filter(category_name=self.request.POST['sub_sector'])
+            
         if self.request.POST['product'] != "":
             companies = companies.filter(company_brand__product_type=self.request.POST['product'])
             products = products.filter(id=self.request.POST['product'])
+            
 
         for company in companies:
             if InvestmentCapital.objects.filter(company=company).exists():
@@ -533,8 +542,9 @@ class AllReportPage(LoginRequiredMixin,View):
         queryset = companies.values('ownership_form__name').annotate(Count('id')).order_by('ownership_form') 
         total_ownership = 0
         for ownership in queryset:
-            total_ownership += int(ownership['id__count'])
-            ownership_data.append({'label':ownership['ownership_form__name'],
+            if ownership['ownership_form__name'] != None:
+                total_ownership += int(ownership['id__count'])
+                ownership_data.append({'label':ownership['ownership_form__name'],
                                     'data':ownership['id__count']})
 
         # Educational status data
@@ -556,16 +566,18 @@ class AllReportPage(LoginRequiredMixin,View):
         certification_data = []
         total_certification = 0
         for certification in queryset_cert:
-            total_certification+= int(certification['id__count'])
-            certification_data.append({'label':certification['certification__name'],
+            if certification['certification__name'] != None:
+                total_certification+= int(certification['id__count'])
+                certification_data.append({'label':certification['certification__name'],
                                     'data':certification['id__count']})
         
         queryset_mgmt = companies.values('management_tools__name').annotate(Count('id')).order_by('management_tools') 
         management_tool_data = []
         total_managment = 0
         for management_tool in queryset_mgmt:
-            total_managment+= int(management_tool['id__count'])
-            management_tool_data.append({'label':management_tool['management_tools__name'],
+            if management_tool['management_tools__name'] != None:
+                total_managment+= int(management_tool['id__count'])
+                management_tool_data.append({'label':management_tool['management_tools__name'],
                                     'data':management_tool['id__count']})
         queryset_energy = companies.values('source_of_energy__name').annotate(Count('id')).order_by('source_of_energy') 
         total_energy = 0
@@ -863,7 +875,7 @@ class AllReportPage(LoginRequiredMixin,View):
             
             total = total_perm_emp+total_temp_emp
             femal_emp_data.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
-            
+        
         context['total_fem_emp_data'] = femal_emp_data
         context['total_count'] = companies.count()
         context['company_list'] = companies

@@ -73,11 +73,12 @@ class GenerateAllCompanyPdf(View):
                         'sector':company.main_category
                     })
         # form of ownership
-        queryset = companies.values('ownership_form').annotate(Count('id')).order_by('ownership_form') 
+        queryset = companies.values('ownership_form__name').annotate(Count('id')).order_by('ownership_form') 
         total_ownership = 0
         for ownership in queryset:
-            total_ownership += int(ownership['id__count'])
-            ownership_data.append({'label':CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']),
+            if ownership['ownership_form__name'] != None:
+                total_ownership += int(ownership['id__count'])
+                ownership_data.append({'label':ownership['ownership_form__name'],
                                     'data':ownership['id__count']})
 
         # Educational status data
@@ -221,7 +222,7 @@ class GenerateAllCompanyPdf(View):
         if companies_with_data:
             for company in companies_with_data:
                 production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=current_year).values('product','product__sub_category_name','product__uom','company__name').annotate(all_data=Sum('production_amount'))
-                production_performance_last_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=current_year-1).values('product','product__sub_category_name','product__uom','company__name').annotate(all_data=Sum('production_amount'))
+                production_performance_last_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=int(current_year)-1).values('product','product__sub_category_name','product__uom','company__name').annotate(all_data=Sum('production_amount'))
                 production_capacity_this_year = ProductionCapacity.objects.filter(company=company,year=current_year)
 
                 if production_performance_last_year.exists():
@@ -288,8 +289,8 @@ class GenerateAllCompanyPdf(View):
                 perform_data = ProductionAndSalesPerformance.objects.filter(
                         company=company).values('company__name','product__sub_category_name').annotate(
                             total_this_year=Sum('sales_value',filter=Q(activity_year=current_year)),
-                            total_last_year=Sum('sales_value',filter=Q(activity_year=current_year-1)),
-                            total_prev_year=Sum('sales_value',filter=Q(activity_year=current_year-2))
+                            total_last_year=Sum('sales_value',filter=Q(activity_year=int(current_year)-1)),
+                            total_prev_year=Sum('sales_value',filter=Q(activity_year=int(current_year)-2))
                         )
                 for gvp_index in perform_data:
                     gvp_data.append({
@@ -637,16 +638,14 @@ class GenerateProjectPdf(View):
                         'working':invcap['working'],
                         'sector':project.sector
                     })
-        queryset_classificaion = projects.values('project_classification').annotate(Count('id')).order_by('project_classification') 
+        queryset_classificaion = projects.values('project_classification__name').annotate(Count('id')).order_by('project_classification') 
         total_classification = 0
         classification_data = []
         for ownership in queryset_classificaion:
-            total_classification += int(ownership['id__count'])
-            try:
-                classification_data.append({'label':ProjectDropDownsMaster.objects.get(id=ownership['project_classification']),
+            if ownership['project_classification__name'] != None:
+                total_classification += int(ownership['id__count'])
+                classification_data.append({'label':ownership['project_classification__name'],
                                     'data':ownership['id__count']})
-            except ProjectDropDownsMaster.DoesNotExist:
-                classification_data= []
         prodn_data = []
         for project in projects:
             pdata = ProjectProductQuantity.objects.filter(project=project).values(

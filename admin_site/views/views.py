@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.db.models import Q
-
+from django.db import IntegrityError
 # 
 from product import models
 from product.models import *
@@ -57,6 +57,7 @@ class CreatePoll(LoginRequiredMixin, CreateView):
         poll = form.save(commit=False)
         poll.created_by = self.request.user
         poll.save()
+        record_activity(self.request.user,activity="Created Polls")
         messages.success(self.request,"Poll was Successfully Created!")
         return redirect("admin:admin_polls")
 
@@ -79,7 +80,7 @@ class AddChoice(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['poll']  = PollsQuestion.objects.get(id = self.kwargs['id'] )
         return context
-        
+       
 
 
 @method_decorator(decorators,name='dispatch')
@@ -102,6 +103,7 @@ class AddChoice(LoginRequiredMixin,View):
                 choice.save()
                 poll.choices.add(choice)
                 poll.save()
+                record_activity(self.request.user,activity="Added New Poll Choices")
                 messages.success(self.request,"Choice Successfully Created!")
                 return redirect("admin:admin_polls")
             else:
@@ -121,6 +123,7 @@ class EditPoll(LoginRequiredMixin,View):
             if poll.count_votes() != 0:
                 messages.warning(self.request, "Couldn't Edit poll, because poll Edit has started!")
                 return redirect('admin:admin_polls')
+            record_activity(self.request.user,activity="Edited a Polls Object")
             return render(self.request,'admin/poll/create_poll.html', {'pollform':CreatePollForm, 'choiceform':CreateChoiceForm, 'poll':poll, 'edit':True})
         except Exception as e:          
             print("Exception at Edit poll ",str(e))
@@ -161,7 +164,7 @@ class EditChoice(LoginRequiredMixin,View):
         try:
             choice = Choices.objects.get(id = self.request.POST['choice'])
         except Exception as e:
-                print("error at Editpoll post", str(e))
+                print("error at Edit poll post", str(e))
                 messages.warning(self.request, "Error! Choice was not Edited!" )
                 return redirect("admin:admin_polls")  
         choice.choice_name=self.request.POST['choice_name']
@@ -174,4 +177,30 @@ class EditChoice(LoginRequiredMixin,View):
         messages.success(self.request,"Choice has been Edited Successfully!")
         return redirect("admin:admin_polls")
     
-  
+def record_activity(user,content_type=None,before=None,after=None,activity=None):
+    try:
+        UserActivityLog.objects.create(
+            user=user,content_type=content_type,
+            before_change=before,
+            after_change=after,
+            activity=activity
+        )
+        return True
+    except Exception as e:
+        return False
+
+def visitor_ip_address(request):
+    x_forwarded_for= request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get("REMOTE_ADDR")
+    return ip
+
+
+def record_visit(request):
+    try:
+        UserTracker.objects.create(ipaddress=visitor_ip_address(request))
+        return True
+    except IntegrityError as e:
+        return False

@@ -96,7 +96,7 @@ class CapitalUtilizationReportSector(LoginRequiredMixin,View):
                             'company':company.name,'product':performance['product__sub_category_name'],'production_amount':performance['all_data'],
                             'actual_production':capacity.actual_prdn_capacity
                         })
-            print(capital_util_data)
+            
             context['capital_util_data'] = capital_util_data
             context['flag'] = "capital_utilization"
             return render(self.request,"admin/report/report_page.html",context)
@@ -382,7 +382,6 @@ class InputAvailablity(LoginRequiredMixin,View):
             inp_dem_sups = InputDemandSupply.objects.filter(product=product,year=get_current_year()).values('product').annotate(
                 demand=Sum('demand'),supply = Sum('supply')
             )
-            print(inp_dem_sups)
             if inp_dem_sups.exists():
                 for aup in inp_dem_sups:
                     demand += aup['demand']
@@ -517,14 +516,12 @@ class OwnershipReport(LoginRequiredMixin,View):
         context = {}
         template_name = "admin/report/report_page.html"
         company = Company.objects.all().exclude(main_category="FBPIDI")
-        queryset = Company.objects.values('ownership_form').annotate(Count('id')).order_by('ownership_form').exclude(main_category='FBPIDI')
+        queryset = Company.objects.values('ownership_form__name').annotate(Count('id')).order_by('ownership_form').exclude(main_category='FBPIDI')
         total = 0
         for ownership in queryset:
-            total += int(ownership['id__count'])
-            # label.append(CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']))
-            # data.append(ownership['id__count'])
-            # percent.append(float(ownership['id__count']/queryset.count())*100)
-            ownership_data.append({'label':CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']),
+            if ownership['ownership_form__name'] != None:
+                total += int(ownership['id__count'])
+                ownership_data.append({'label':ownership['ownership_form__name'],
                                     'data':ownership['id__count']})
         context['total'] = total
         context['ownership_data'] = ownership_data
@@ -551,12 +548,13 @@ class FilterByWorkingHour(LoginRequiredMixin,View):
         working_hour_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = Company.objects.values('working_hours').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
+        queryset = Company.objects.values('working_hours__name').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
         total = 0
         for working_hour in queryset:
-            total += int(working_hour['id__count'])
-            working_hour_data.append({'label':CompanyDropdownsMaster.objects.get(id=working_hour['working_hours']),
-                                    'data':working_hour['id__count']})
+            if working_hour['working_hours__name'] != None:
+                total += int(working_hour['id__count'])
+                working_hour_data.append({'label':working_hour['working_hours__name'],
+                                        'data':working_hour['id__count']})
         context['total'] = total
         context['working_hour_data'] = working_hour_data
         context['flag'] = 'working_hour_data'
@@ -667,7 +665,6 @@ class NumberOfEmployees(LoginRequiredMixin,View):
                 emp_data_total.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
             context['total_emp_data'] = emp_data_total
             context['flag'] = "num_employees"
-            print(context)
             return render(self.request,'admin/report/report_page.html',context)
 
 @method_decorator(decorators,name='dispatch')
@@ -824,7 +821,6 @@ class EduLevelofEmployees(LoginRequiredMixin,View):
             total += int(edu_data['female__sum']+edu_data['male__sum'])
             education_status_data.append({'label':edu_data['education_type'],
                                     'data':int(edu_data['female__sum']+edu_data['male__sum'])})
-        print(total)
         context['total'] = total
         context['education_status_data'] = education_status_data
         context['flag'] = 'education_status_data'
@@ -851,7 +847,6 @@ class NumWomenInPosition(LoginRequiredMixin,View):
         context['total'] = total
         context['women_in_pson_level'] = women_in_pson_level
         context['flag'] = 'women_in_pson_level'
-        print(context)
         return render(self.request,template_name,context)
 
 
@@ -861,11 +856,12 @@ class CompanyCertificationData(LoginRequiredMixin,View):
         certification_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = Company.objects.values('certification').annotate(Count('id')).order_by('certification').exclude(main_category='FBPIDI')
+        queryset = Company.objects.values('certification__name').annotate(Count('id')).order_by('certification').exclude(main_category='FBPIDI')
         total = 0
         for certification in queryset:
-            total+= int(certification['id__count'])
-            certification_data.append({'label':CompanyDropdownsMaster.objects.get(id=certification['certification']).name,
+            if certification['certification__name'] != None:
+                total+= int(certification['id__count'])
+                certification_data.append({'label':certification['certification__name'],
                                     'data':certification['id__count']})
         context['total'] = total
         context['certification_data'] = certification_data
@@ -879,11 +875,12 @@ class CompanyByManagementTools(LoginRequiredMixin,View):
         management_tool_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = Company.objects.values('management_tools').annotate(Count('id')).order_by('management_tools').exclude(main_category='FBPIDI')
+        queryset = Company.objects.values('management_tools__name').annotate(Count('id')).order_by('management_tools').exclude(main_category='FBPIDI')
         total = 0
         for management_tool in queryset:
-            total+= int(management_tool['id__count'])
-            management_tool_data.append({'label':CompanyDropdownsMaster.objects.get(id=management_tool['management_tools']).name,
+            if management_tool['management_tools__name'] != None:
+                total+= int(management_tool['id__count'])
+                management_tool_data.append({'label':management_tool['management_tools__name'],
                                     'data':management_tool['id__count']})
         context['total'] = total
         context['management_tool_data'] = management_tool_data
@@ -896,12 +893,12 @@ class EnergySourceData(LoginRequiredMixin,View):
         energy_source_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = Company.objects.values('source_of_energy').annotate(Count('id')).order_by('source_of_energy').exclude(main_category='FBPIDI')
+        queryset = Company.objects.values('source_of_energy__name').annotate(Count('id')).order_by('source_of_energy').exclude(main_category='FBPIDI')
         total = 0
         for energy_source in queryset:
-            if energy_source['source_of_energy'] != None:
+            if energy_source['source_of_energy__name'] != None:
                 total+= int(energy_source['id__count'])
-                energy_source_data.append({'label':CompanyDropdownsMaster.objects.get(id=energy_source['source_of_energy']).name,
+                energy_source_data.append({'label':energy_source['source_of_energy__name'],
                                     'data':energy_source['id__count']})
         context['total'] = total
         context['energy_source_data'] = energy_source_data

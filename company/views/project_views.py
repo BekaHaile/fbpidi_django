@@ -204,7 +204,6 @@ class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
             context['project_state'] = ProjectState.objects.get(project=self.kwargs['pk'])
         except ProjectState.DoesNotExist:
             context['project_state'] = None
-        print(context)
         return context
 
     def form_valid(self,form):

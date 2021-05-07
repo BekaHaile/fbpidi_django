@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 
 from company.models import Company
 from product.models import SubCategory,Product,Review
-from admin_site.models import Category
+from admin_site.models import Category,UserTracker
 from accounts.models import UserProfile
 import datetime
 from chat.models import ChatMessages
@@ -13,6 +13,11 @@ import os
 from chat import views as chat_views
 
 register = template.Library()
+
+@register.filter
+def visitor_count(arg):
+    return int(UserTracker.objects.all().count())
+
 
 @register.filter
 def review_count(product):

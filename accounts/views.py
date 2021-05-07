@@ -150,11 +150,11 @@ class MyProfileView(LoginRequiredMixin,UpdateView):
     def form_valid(self,form):
         form.save()
         messages.success(self.request,"Your Profile Updated Successfully")
-        return redirect("admin:my_profile",pk=self.request.user.id)
+        return redirect("admin:my_profile",pk=self.kwargs['pk'])
     
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
-        return redirect("admin:user_detail",pk=self.kwargs['pk'])
+        return redirect("admin:my_profile",pk=self.kwargs['pk'])
 
 
 # to list all users in the admin page

@@ -23,6 +23,7 @@ from django.core.mail import EmailMessage
 
 from company.models import *
 from accounts.models import CompanyAdmin,User
+from admin_site.views.views import record_visit
 from admin_site.decorators import company_created,company_is_active
 from accounts.email_messages import sendRelayMessage, sendInquiryReplayEmail
 from product.models import Product, ProductInquiry,ProductInquiryReply
@@ -45,6 +46,10 @@ class CompanyAbout(DetailView):
     model=Company
     template_name="frontpages/company/about.html"
 
+    def get(self,*args,**kwargs):
+        record_visit(self.request)
+        return super(self).get(*args,**kwargs)
+
 
 class CompanyContact(CreateView):
     model = CompanyMessage
@@ -52,9 +57,9 @@ class CompanyContact(CreateView):
     form_class = CompanyMessageForm
     
     def get_context_data(self, *args, **kwargs):
-            context = super().get_context_data(**kwargs)
-            context['object']  = Company.objects.get(id = self.kwargs['pk'])
-            return context
+        context = super().get_context_data(**kwargs)
+        context['object']  = Company.objects.get(id = self.kwargs['pk'])
+        return context
         
     def form_valid(self, form):
         try:

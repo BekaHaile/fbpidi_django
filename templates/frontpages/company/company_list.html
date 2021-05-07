@@ -118,7 +118,7 @@
 																	<!-- <a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i>{{company.geo_location.x}} , {{company.geo_location.y}}</a> -->
 																	<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{company.get_company_address.city_town}}, {{company.get_company_address.local_area}}, {{company.get_company_address.fax}}</a>
 																</div>
-																<p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark">{%print_translated company.detail|truncatechars_html:100|safe company.detail_am|truncatechars_html:100|safe LANGUAGE_CODE%}</p>
+																<!-- <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark">{%print_translated company.detail|truncatechars_html:100|safe company.detail_am|truncatechars_html:100|safe LANGUAGE_CODE%}</p> -->
 															</div>
 														</div>
 														<div class="card-footer pt-2 pb-2">
@@ -186,7 +186,7 @@
 																			<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i> {{company.get_company_address.city_town}}</a>
 																			<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{company.get_company_address.local_area}}, {{company.get_company_address.fax}}</a>
 																		</div>
-																		<p class="mb-0 leading-tight">{%print_translated company.detail|truncatechars_html:100|safe company.detail_am|truncatechars_html:100|safe LANGUAGE_CODE%}</p>
+																		<!-- <p class="mb-0 leading-tight">{%print_translated company.detail|truncatechars_html:100|safe company.detail_am|truncatechars_html:100|safe LANGUAGE_CODE%}</p> -->
 																	</div>
 																</div>
 																<div class="card-footer pt-2 pb-2">
@@ -353,7 +353,7 @@
 											<label class="custom-control custom-checkbox mb-3">
 												<input type="checkbox" class="custom-control-input" name="by_category" value="Pharmaceutical">
 												<span class="custom-control-label">
-													<a href="#" class="text-dark">"{% trans "Pharmaceutical" %}</a>
+													<a href="#" class="text-dark">{% trans "Pharmaceutical" %}</a>
 												</span>
 											</label>
 											

@@ -277,6 +277,10 @@ class CreateProductView(LoginRequiredMixin,CreateView):
         messages.success(self.request,"Product Created Successfully!")
         return redirect("admin:admin_products")
     
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return render(self.request,"admin/product/product_form.html",{'form':form})
+    
 
 @method_decorator(decorators,name='dispatch')
 class ProductUpdateView(LoginRequiredMixin,UpdateView):
@@ -305,6 +309,11 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
                     product.image,400,400)   
         messages.success(self.request,"Product Update Successfully!")
         return redirect("admin:admin_products")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return render(self.request,"admin/product/product_form_update.html",
+                        {'form':form,'image_form':ProductImageForm,'price_form':ProductPriceForm})
 
 @method_decorator(decorators,name='dispatch')
 class AddProductImage(LoginRequiredMixin,CreateView):

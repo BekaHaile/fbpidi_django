@@ -8,7 +8,7 @@ from django.db import models
 from django.utils import timezone
 
 allowed_file_extensions = ['pdf', 'doc', 'docx', 'jpg', 'png', 'xlsx', 'xls']
-allowed_image_extensions = ['png','jpg','jpeg',]
+allowed_image_extensions = ['png','jpg','jpeg','webp',]
 
 CAT_LIST = (
     ('','Select Company Type'),
@@ -16,8 +16,6 @@ CAT_LIST = (
     ("Beverage",'Beverages'),
     ("Pharmaceuticals",'Pharmaceuticals'),
 )
-
-		
 
 
 class Company(models.Model):
