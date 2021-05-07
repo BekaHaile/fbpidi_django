@@ -700,110 +700,47 @@
 		</div>
 		<div>
 			<div class="items-gallery">
-				<div class="items-blog-tab text-center">
-					<div class="items-blog-tab-heading row mb-0">
-						<div class="col-12">
-							<ul class="nav items-blog-tab-menu">
-							
-								<li class=""><a href="#All" class="active show" data-toggle="tab">ALL</a></li>
-								{% for cat in NEWS_CATAGORY %}
-									<li><a href="#{{cat.0}}" data-toggle="tab" class="mt-2">{{cat.0}}</a></li>
+				<div class="items-blog text-center">
+					<div class="row">
+						{% for news in news_list %}
+									<div class="col-xl-4 col-lg-4 col-md-12">
+										<div class="card mb-xl-0">
+											<div class="item-card8-img  br-tr-4 br-tl-4">
+												<a href= "{% url 'customer_news_detail' id=news.id %}">
+												<img width= "360" height = "230" src="{{news.image.url}}" alt="img"
+													class="cover-image"></a>
+											</div>
+											<div class="item-card8-overlaytext">
+												<h6 class="mb-0">{{news.catagory}}</h6>
+											</div>
+											<div class="card-body">
+												<div class="item-card8-desc">
+													<p class="text-muted mb-2">{{news.created_date}}</p>
+													<a href= "{% url 'customer_news_detail' id=news.id %}">
+														<h4 class="font-weight-semibold">{% print_translated news.title news.title_am LANGUAGE_CODE %} </h4>
+													</a>
+												
+												</div>
+											</div>
+											<div class="card-footer">
+												<div class="footerimg d-flex mt-0 mb-0">
+													<div class="d-flex footerimg-l mb-0">
+														<a target = "blank" href = "{% url 'company_home' pk=news.company.id %}">
+														<img src="{{news.company.logo.url}}" alt="image"
+															class="avatar brround  mr-2"></a>
+														<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
+															{% print_translated news.company.name news.company.name_am LANGUAGE_CODE %}<i class="icon icon-check text-success fs-12 ml-1"
+																data-toggle="tooltip" data-placement="top" title=""
+																data-original-title="{{news.created_by.username}}"></i></h5>
+													</div>
+													
+												</div>
+											</div>
+										</div>
+									</div>
 								{% endfor %}
-								
-							</ul>
+
 						</div>
-					</div>
-					<div class="tab-content">
-						
-						<div class="tab-pane active" id="All">
-							<div class="row">
-									{% for news in news_list %}
-										<div class="col-xl-4 col-lg-4 col-md-12">
-											<div class="card mb-xl-0">
-												<div class="item-card8-img  br-tr-4 br-tl-4">
-													<a href= "{% url 'customer_news_detail' id=news.id %}">
-													<img width= "360" height = "230" src="{{news.image.url}}" alt="img"
-														class="cover-image"></a>
-												</div>
-												<div class="item-card8-overlaytext">
-													<h6 class="mb-0">{{news.catagory}}</h6>
-												</div>
-												<div class="card-body">
-													<div class="item-card8-desc">
-														<p class="text-muted mb-2">{{news.created_date}}</p>
-														<a href= "{% url 'customer_news_detail' id=news.id %}">
-															<h4 class="font-weight-semibold">{% print_translated news.title news.title_am LANGUAGE_CODE %} </h4>
-														</a>
-													
-													</div>
-												</div>
-												<div class="card-footer">
-													<div class="footerimg d-flex mt-0 mb-0">
-														<div class="d-flex footerimg-l mb-0">
-															<a target = "blank" href = "{% url 'company_home' pk=news.company.id %}">
-															<img src="{{news.company.logo.url}}" alt="image"
-																class="avatar brround  mr-2"></a>
-															<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-																{% print_translated news.company.name news.company.name_am LANGUAGE_CODE %}<i class="icon icon-check text-success fs-12 ml-1"
-																	data-toggle="tooltip" data-placement="top" title=""
-																	data-original-title="{{news.created_by.username}}"></i></h5>
-														</div>
-														
-													</div>
-												</div>
-											</div>
-										</div>
-									{% endfor %}
-
-							</div>
-						</div>
-
-						{% for cat in NEWS_CATAGORY %}
-							<div class="tab-pane " id="{{cat.0}}">
-								<div class="row">
-									{% for news in news_list %}
-										{% if news.catagory == cat.0  %}
-										<div class="col-xl-4 col-lg-4 col-md-12">
-											<div class="card mb-xl-0">
-												<div class="item-card8-img  br-tr-4 br-tl-4">
-													<a href= "{% url 'customer_news_detail' id=news.id %}">
-													<img width= "360" height = "230" src="{{news.image.url}}" alt="img"
-														class="cover-image"></a>
-												</div>
-												<div class="item-card8-overlaytext">
-													<h6 class="mb-0">{{news.catagory}}</h6>
-												</div>
-												<div class="card-body">
-													<div class="item-card8-desc">
-														<p class="text-muted mb-2">{{news.created_date}}</p>
-														<a href= "{% url 'customer_news_detail' id=news.id %}">
-															<h4 class="font-weight-semibold">{% print_translated news.title news.title_am LANGUAGE_CODE %} </h4>
-														</a>
-													
-													</div>
-												</div>
-												<div class="card-footer">
-													<div class="footerimg d-flex mt-0 mb-0">
-														<div class="d-flex footerimg-l mb-0">
-															<a target = "blank" href = "{% url 'company_home' pk=news.company.id %}">
-															<img src="{{news.company.logo.url}}" alt="image"
-																class="avatar brround  mr-2"></a>
-															<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">
-																{% print_translated news.company.name news.company.name_am LANGUAGE_CODE %}<i class="icon icon-check text-success fs-12 ml-1"
-																	data-toggle="tooltip" data-placement="top" title=""
-																	data-original-title="{{news.created_by.username}}"></i></h5>
-														</div>
-														
-													</div>
-												</div>
-											</div>
-										</div>
-										{% endif %}
-									{% endfor %}
-								</div>
-							</div>
-						{% endfor %}
-
 					</div>
 				</div>
 			</div>
@@ -831,7 +768,7 @@
 							{%for category in product_type%}
 							{%if category.category_name.category_type == "Food"%}
 							<li class="">
-								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">
+								<a href="{%url 'product_product_category' cat_id=category.id%}" class="text-dark">
 									{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
 								<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">
 									{{category.id|product_count_by_subcategory}}</span>
@@ -857,7 +794,7 @@
 							{%for category in product_type%}
 							{%if category.category_name.category_type == "Beverage"%}
 							<li class="">
-								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
+								<a href="{%url 'product_product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
 								<span
 									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_by_subcategory}}</span>
 							</li>
@@ -882,7 +819,7 @@
 							{%for category in product_type%}
 							{%if category.category_name.category_type == "Pharmaceuticals"%}
 							<li class="">
-								<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
+								<a href="{%url 'product_product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
 								<span
 									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_by_subcategory}}</span>
 							</li>

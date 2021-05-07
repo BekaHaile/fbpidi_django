@@ -559,6 +559,78 @@ class FilterByWorkingHour(LoginRequiredMixin,View):
         context['working_hour_data'] = working_hour_data
         context['flag'] = 'working_hour_data'
         return render(self.request,template_name,context)
+
+@method_decorator(decorators,name='dispatch')
+class CompaniesByProductGroup(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        product_group_data = []
+        context = {}
+        template_name = "admin/report/report_page.html"
+        queryset = Product.objects.values('reserve_attr0__name').annotate(Count('company',distinct=True)).order_by('reserve_attr0')
+        total = 0
+        for product_grp in queryset:
+            if product_grp['reserve_attr0__name'] != None:
+                total += int(product_grp['company__count'])
+                product_group_data.append({'label':product_grp['reserve_attr0__name'],
+                                        'data':product_grp['company__count']})
+        context['total'] = total
+        context['product_group_data'] = product_group_data
+        context['flag'] = 'product_group_data'
+        return render(self.request,template_name,context)
+
+@method_decorator(decorators,name='dispatch')
+class CompaniesByTherapeuticGroup(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        therapeutic_group_data = []
+        context = {}
+        template_name = "admin/report/report_page.html"
+        queryset = Product.objects.values('therapeutic_group__name').annotate(Count('company',distinct=True)).order_by('therapeutic_group')
+        total = 0
+        for product_grp in queryset:
+            if product_grp['therapeutic_group__name'] != None:
+                total += int(product_grp['company__count'])
+                therapeutic_group_data.append({'label':product_grp['therapeutic_group__name'],
+                                        'data':product_grp['company__count']})
+        context['total'] = total
+        context['therapeutic_group_data'] = therapeutic_group_data
+        context['flag'] = 'therapeutic_group_data'
+        return render(self.request,template_name,context)
+
+@method_decorator(decorators,name='dispatch')
+class ProductsByProductGroup(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        product_group_data = []
+        context = {}
+        template_name = "admin/report/report_page.html"
+        queryset = Product.objects.values('reserve_attr0__name').annotate(Count('id')).order_by('reserve_attr0')
+        total = 0
+        for product_grp in queryset:
+            if product_grp['reserve_attr0__name'] != None:
+                total += int(product_grp['id__count'])
+                product_group_data.append({'label':product_grp['reserve_attr0__name'],
+                                        'data':product_grp['id__count']})
+        context['total'] = total
+        context['product_group_data_product'] = product_group_data
+        context['flag'] = 'product_group_data_product'
+        return render(self.request,template_name,context)
+
+@method_decorator(decorators,name='dispatch')
+class ProductsByTherapeuticGroup(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        therapeutic_group_data = []
+        context = {}
+        template_name = "admin/report/report_page.html"
+        queryset = Product.objects.values('therapeutic_group__name').annotate(Count('id')).order_by("therapeutic_group")
+        total = 0
+        for product_grp in queryset:
+            if product_grp['therapeutic_group__name'] != None:
+                total += int(product_grp['id__count'])
+                therapeutic_group_data.append({'label':product_grp['therapeutic_group__name'],
+                                        'data':product_grp['id__count']})
+        context['total'] = total
+        context['therapeutic_group_data_product'] = therapeutic_group_data
+        context['flag'] = 'therapeutic_group_data_product'
+        return render(self.request,template_name,context)
          
 @method_decorator(decorators,name='dispatch')
 class NumberofIndustriesByOption(LoginRequiredMixin,View):

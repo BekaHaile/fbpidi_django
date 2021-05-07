@@ -1089,6 +1089,23 @@ class ProductByCategoryView(ListView):
         #         pharmacy_category=category)
         # elif category.category_type == "Food" or category.category_type == "Beverage":
             
+class ProductByProductView(ListView):
+    model=Product
+    template_name="frontpages/product/product_category.html"
+    paginate_by = 3
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = SubCategory.objects.filter(category_name=SubCategory.objects.get(id=self.kwargs['cat_id']).category_name)
+      
+        return context
+
+    def get_queryset(self):
+        category = SubCategory.objects.get(id=self.kwargs['cat_id'])
+        brands = []
+        for brand in category.product_category.all():
+            brands.append(brand)
+        return Product.objects.filter(brand__in=brands)
 
 
 
