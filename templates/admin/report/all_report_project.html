@@ -485,6 +485,11 @@
 			</div>
 			<!-- /content area -->
 			<script>
+				var region = "{{region}}";
+				var sector = "{{sector}}";
+				var sub_sector = "{{sub_sector}}";
+				var product = "{{product}}";
+				var year = "{{year}}";
 				$(document).ready(function(){
 					$("#sector").change(function(){
 
@@ -544,10 +549,23 @@
 						}
 					});
 					$("#generatepdf").click(function(){
-						var region = $("#region").val();
-						var sector = $("#sector").val();
-						var sub_sector = $("#sub_sector").val();
-						var product = $("#product").val();
+						if(region == ''){
+							region = $("#region").val();
+						}
+						if(sector == ''){
+							sector = $("#sector").val();
+						}
+						if(sub_sector == ''){
+							sub_sector = $("#sub_sector").val();
+						}
+						if(product == ''){
+							product = $("#product").val();
+						}
+						 
+						// var region = $("#region").val();
+						// var sector = $("#sector").val();
+						// var sub_sector = $("#sub_sector").val();
+						// var product = $("#product").val();
 						if(region == ''){
 							region = 'all';
 						}

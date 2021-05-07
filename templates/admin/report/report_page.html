@@ -123,6 +123,15 @@ Number of Industries By Market Target
 <span class="breadcrumb-item active">Number of Industries By Market Destination</span>
 {%elif flag == 'target_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
 <span class="breadcrumb-item active">Number of Industries By Market Target</span>
+{%elif flag == 'product_group_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number of Industries By Product Group</span>
+{%elif flag == 'therapeutic_group_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number of Industries By Therapeutic Group</span>
+{%elif flag == 'product_group_data_product'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number of Products By Product Group</span>
+{%elif flag == 'therapeutic_group_data_product'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">Number of Products By Therapeutic Group</span>
+
 {%endif%}
 {%endblock%}
 {%block reports%}active{%endblock%}
@@ -456,6 +465,123 @@ Number of Industries By Market Target
 								<tr>
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}} Hours</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total %} %</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{%elif flag == 'product_group_data'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Pharmaceutical Product Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Pharmaceutical Product Group</th>
+									<th>Industries</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in product_group_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total %} %</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{%elif flag == 'therapeutic_group_data'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Pharmaceutical Product Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Therapeutic Group</th>
+									<th>Industries</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in therapeutic_group_data%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total %} %</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!--  -->
+				{%elif flag == 'product_group_data_product'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Pharmaceutical Product Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Pharmaceutical Product Group</th>
+									<th>Products</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in product_group_data_product%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
+									<td>{{od.data}}</td>
+									<td>{% get_share od.data total %} %</td>
+								</tr>
+								 {%endfor%}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				{%elif flag == 'therapeutic_group_data_product'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">Pharmaceutical Product Data</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Therapeutic Group</th>
+									<th>Industries</th>
+									<th>Share %</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in therapeutic_group_data_product%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
 									<td>{% get_share od.data total %} %</td>
 								</tr>

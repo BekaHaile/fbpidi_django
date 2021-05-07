@@ -9,8 +9,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from PIL import Image
 
-from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster,RegionMaster,UomMaster
-from admin_site.forms import CompanyDropdownsMasterForm,ProjectDropdownsMasterForm,RegionMasterForm,UomMasterForm
+from admin_site.models import *
+from admin_site.forms import *
 from product.models import Dose,DosageForm
 from product.forms import DoseForm,DosageFormForm
 from collaborations.models import JobCategory,ResearchProjectCategory
@@ -71,10 +71,13 @@ class AllSettingsPage(LoginRequiredMixin,ListView):
         context['region_list'] = RegionMaster.objects.all()
         context['uom_form'] = UomMasterForm()
         context['uom_list'] = UomMaster.objects.all()
+        context['phpg_form'] = PharmaceuticalProductForm()
+        context['phpg_list'] = PharmaceuticalProduct.objects.all()
+        context['terapeutic_form'] = TherapeuticGroupForm()
+        context['terapeutic_list'] = TherapeuticGroup.objects.all()
         context['flag'] = "company_dropdown"
         context['title'] = "Settings"
         return context
-
 
 
 class CreateProjectDropdownsMaster(LoginRequiredMixin,CreateView):
@@ -176,6 +179,81 @@ class UpdateUomMaster(LoginRequiredMixin,UpdateView):
     def form_invalid(self,form):
         messages.success(self.request,form.errors)
         return redirect("admin:update_uom",pk=self.kwargs['pk'])
+
+
+class CreatePhpgMaster(LoginRequiredMixin,CreateView):
+    model = PharmaceuticalProduct
+    form_class = PharmaceuticalProductForm
+
+    def form_valid(self,form):
+        phpg = form.save(commit=False)
+        phpg.created_by = self.request.user
+        phpg.save()
+        messages.success(self.request,"Product Group Added Successfully")
+        return redirect("admin:settings")
+    
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:create_phpg")
+
+class UpdatePhpgMaster(LoginRequiredMixin,UpdateView):
+    model = PharmaceuticalProduct
+    form_class = PharmaceuticalProductForm
+    template_name = "admin/accounts/check_list_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['flag'] = "phpg"
+        context['title'] = "Settings"
+        return context
+
+    def form_valid(self,form):
+        phpg = form.save(commit=False)
+        phpg.last_updated_by = self.request.user
+        phpg.save()
+        messages.success(self.request,"Product Group Updated Successfully")
+        return redirect("admin:settings")
+    
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:update_phpg",pk=self.kwargs['pk'])
+
+
+class CreateTherapeuticMaster(LoginRequiredMixin,CreateView):
+    model = TherapeuticGroup
+    form_class = TherapeuticGroupForm
+
+    def form_valid(self,form):
+        tg = form.save(commit=False)
+        tg.created_by = self.request.user
+        tg.save()
+        messages.success(self.request,"Therapeutic Group Added Successfully")
+        return redirect("admin:settings")
+    
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:create_therapeutic_grp")
+
+class UpdateTherapeuticMaster(LoginRequiredMixin,UpdateView):
+    model = TherapeuticGroup
+    form_class = TherapeuticGroupForm
+    template_name = "admin/accounts/check_list_update.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['flag'] = "tg"
+        context['title'] = "Settings"
+        return context
+
+    def form_valid(self,form):
+        form.save()
+        messages.success(self.request,"Therapeutic Group Updated Successfully")
+        return redirect("admin:settings")
+    
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:update_therapeutic_grp",pk=self.kwargs['pk'])
+
 
 
 def image_cropper(x,y,w,h,raw_image,size_x,size_y):

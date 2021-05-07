@@ -277,6 +277,10 @@ class CreateProductView(LoginRequiredMixin,CreateView):
         messages.success(self.request,"Product Created Successfully!")
         return redirect("admin:admin_products")
     
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return render(self.request,"admin/product/product_form.html",{'form':form})
+    
 
 @method_decorator(decorators,name='dispatch')
 class ProductUpdateView(LoginRequiredMixin,UpdateView):
@@ -305,6 +309,11 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
                     product.image,400,400)   
         messages.success(self.request,"Product Update Successfully!")
         return redirect("admin:admin_products")
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return render(self.request,"admin/product/product_form_update.html",
+                        {'form':form,'image_form':ProductImageForm,'price_form':ProductPriceForm})
 
 @method_decorator(decorators,name='dispatch')
 class AddProductImage(LoginRequiredMixin,CreateView):
@@ -1080,6 +1089,23 @@ class ProductByCategoryView(ListView):
         #         pharmacy_category=category)
         # elif category.category_type == "Food" or category.category_type == "Beverage":
             
+class ProductByProductView(ListView):
+    model=Product
+    template_name="frontpages/product/product_category.html"
+    paginate_by = 3
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = SubCategory.objects.filter(category_name=SubCategory.objects.get(id=self.kwargs['cat_id']).category_name)
+      
+        return context
+
+    def get_queryset(self):
+        category = SubCategory.objects.get(id=self.kwargs['cat_id'])
+        brands = []
+        for brand in category.product_category.all():
+            brands.append(brand)
+        return Product.objects.filter(brand__in=brands)
 
 
 

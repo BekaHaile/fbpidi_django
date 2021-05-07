@@ -2,6 +2,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.contrib.auth.models import ContentType
 
 CAT_LIST = (
     ('','Select Sector'),
@@ -129,3 +130,37 @@ class ProjectDropDownsMaster(models.Model):
     class Meta:
         ordering = ('-created_date',)
 
+class PharmaceuticalProduct(models.Model):
+    name = models.CharField(max_length=255,verbose_name="Product Group Name")
+    created_date = models.DateTimeField(auto_now_add=True,editable=False)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,
+                                    editable=False,related_name="pp_creted_by")
+    lastupdated_date = models.DateTimeField(null=True)
+    lastupdated_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,
+                                    related_name='pp_updated_by')
+    expired = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+class TherapeuticGroup(models.Model):
+    name = models.CharField(max_length=255,verbose_name="Therapeutic Group")
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.RESTRICT,
+                                    editable=False,related_name="tg_creted_by")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+class UserTracker(models.Model):
+    ipaddress = models.GenericIPAddressField(unique=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+class UserActivityLog(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True)
+    content_type = models.ForeignKey(ContentType,on_delete=models.SET_NULL,null=True,blank=True)
+    before_change = models.CharField(max_length=255,null=True)
+    after_change = models.CharField(max_length=255,null=True)
+    activity = models.CharField(max_length=255,null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)

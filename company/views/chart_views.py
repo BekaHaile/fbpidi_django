@@ -34,8 +34,9 @@ def certification_chart(request):
     data=[]
     queryset = Company.objects.values('certification__name').annotate(Count('id')).order_by('certification').exclude(main_category='FBPIDI')
     for certification in queryset:
-        labels.append(certification['certification__name'])
-        data.append(certification['id__count'])
+        if certification['certification__name'] != None:
+            labels.append(certification['certification__name'])
+            data.append(certification['id__count'])
     return JsonResponse({'labels':labels,'data':data})
 
 def company_subsector_chart(request):
@@ -53,8 +54,9 @@ def management_tool_chart(request):
     data=[]
     queryset = Company.objects.values('management_tools__name').annotate(Count('id')).order_by('management_tools').exclude(main_category='FBPIDI')
     for tools in queryset:
-        labels.append(tools['management_tools__name'])
-        data.append(tools['id__count'])
+        if tools['management_tools__name'] != None:
+            labels.append(tools['management_tools__name'])
+            data.append(tools['id__count'])
     return JsonResponse({'labels':labels,'data':data})  
 
 def ownership_form_chart(self,*args,**kwargs):
@@ -62,8 +64,9 @@ def ownership_form_chart(self,*args,**kwargs):
     data = []
     queryset = Company.objects.values('ownership_form').annotate(Count('id')).order_by('ownership_form').exclude(main_category='FBPIDI')
     for ownership in queryset:
-        labels.append(CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']).name)
-        data.append(ownership['id__count'])
+        if ownership['ownership_form'] != None:
+            labels.append(CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']).name)
+            data.append(ownership['id__count'])
     return JsonResponse({'labels':labels,'data':data})
 
 def main_category_chart(request):
@@ -84,8 +87,9 @@ def working_hour_chart(request):
     data = []
     queryset = Company.objects.values('working_hours__name').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
     for working_hour in queryset:
-        labels.append(working_hour['working_hours__name']+" hours")
-        data.append(working_hour['id__count'])
+        if working_hour['working_hours__name'] != None:
+            labels.append(working_hour['working_hours__name']+" hours")
+            data.append(working_hour['id__count'])
     return JsonResponse({
         'labels':labels,'data':data
     })

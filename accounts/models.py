@@ -5,13 +5,18 @@ from django.contrib.auth.models import (
 from django.contrib.auth.models import User, Permission, Group
 from django.conf import settings
 from django.db.models.signals import post_save
+from django.core.validators import FileExtensionValidator
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token 
+
 from company.models import Company, CompanyStaff
 
 #imports for authToken (the authentication for the rest api part), to generate tokens automatically
 # from django.conf import settings
 #from django.db.models.signals import post_save
-from django.dispatch import receiver
-from rest_framework.authtoken.models import Token 
+
+allowed_image_extensions = ['png','jpg','jpeg','webp',]
+
 
 # the method for generating tokens while users are created (not used for already created users)
 @receiver(post_save, sender = settings.AUTH_USER_MODEL)
@@ -26,7 +31,7 @@ class UserProfile(AbstractUser):
     is_customer = models.BooleanField(default=False)  # ifFbpidiUser is customer
     is_company_admin = models.BooleanField(default=False)  # ifFbpidiUser is company admin
     is_company_staff = models.BooleanField(default=False) # ifFbpidiUser is company staff
-    profile_image = models.ImageField(blank=True)
+    profile_image = models.ImageField(blank=True,validators=[FileExtensionValidator(allowed_extensions=allowed_image_extensions)])
     created_by = models.ForeignKey('self',on_delete=models.RESTRICT,null=True,blank=True,related_name="user_created_by")
     created_date = models.DateTimeField(auto_now_add=True,editable=False)
     last_updated_by = models.ForeignKey('self',on_delete=models.RESTRICT,null=True,blank=True,related_name="updated_by_user")
