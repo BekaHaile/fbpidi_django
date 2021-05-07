@@ -87,7 +87,7 @@ def working_hour_chart(request):
     data = []
     queryset = Company.objects.values('working_hours__name').annotate(Count('id')).order_by('working_hours').exclude(main_category='FBPIDI')
     for working_hour in queryset:
-        if working_hour['working_hours_name'] != None:
+        if working_hour['working_hours__name'] != None:
             labels.append(working_hour['working_hours__name']+" hours")
             data.append(working_hour['id__count'])
     return JsonResponse({

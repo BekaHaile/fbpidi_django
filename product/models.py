@@ -53,14 +53,14 @@ class Product(models.Model):
     #                                     verbose_name="Pharmacy Product Category",related_name="pharmacy_category")
     brand = models.ForeignKey(Brand,on_delete=models.RESTRICT,verbose_name="Varayti Brand",null=True,blank=True,related_name="varayti_brand")
     quantity = models.FloatField(verbose_name="Product Quantity",default=0)
-    therapeutic_group = models.ForeignKey(TherapeuticGroup,on_delete=models.RESTRICT,verbose_name="Therapeutic Group",null=True,blank=True)
+    therapeutic_group = models.ForeignKey(TherapeuticGroup,on_delete=models.RESTRICT,related_name="therapeutic_group",verbose_name="Therapeutic Group",null=True,blank=True)
     dose = models.ForeignKey('Dose',on_delete=models.RESTRICT,null=True,blank=True,related_name="product_dose")
     dosage_form = models.ForeignKey('DosageForm',on_delete=models.RESTRICT,null=True,blank=True,related_name="product_dosage_form")
     description = models.TextField(verbose_name="Varayti Description(English)")
     description_am = models.TextField(verbose_name="Varayti Description(Amharic)")
     image = models.ImageField()
     is_active = models.BooleanField(default=False)
-    reserve_attr0 = models.ForeignKey(PharmaceuticalProduct,on_delete=models.RESTRICT,null=True,blank=True,
+    reserve_attr0 = models.ForeignKey(PharmaceuticalProduct,on_delete=models.RESTRICT,related_name='product_group',null=True,blank=True,
                             verbose_name="Pharmaceutical Product Group")
     reserve_attr1 = models.CharField(max_length=255,default="")
     reserve_attr2 = models.CharField(max_length=255,default="")

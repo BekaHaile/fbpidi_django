@@ -355,6 +355,12 @@ class CustomAdminSite(admin.AdminSite):
             path("filter-by-trande-license/",wrap(FilterByTradeLicense.as_view()),name="filter_by_license"),
             path("filter-by-valid-certificate/",wrap(CompaniesWithCertificate.as_view()),name="filter_by_certificate"),
             path("filter-by-working-hour/",wrap(FilterByWorkingHour.as_view()),name="filter_by_working_hour"),
+
+            path("filter-company-product-grp/",wrap(CompaniesByProductGroup.as_view()),name="company_product_grp"),
+            path("filter-company-therapeutic-grp/",wrap(CompaniesByTherapeuticGroup.as_view()),name="company_therapy_grp"),
+            path("filter-product-therapeutic-grp/",wrap(ProductsByTherapeuticGroup.as_view()),name="product_therapy_grp"),
+            path("filter-product-product-grp/",wrap(ProductsByProductGroup.as_view()),name="product_product_grp"),
+
             path("get-investment-capital/<option>/<sector>/",wrap(InvestmentCapitalReportView.as_view()),name="get_by_inv_capital"),
             path("get-production-capacity-data/<product>/",wrap(ProductionCapacityView.as_view()),name="get_production_capacity"),
             path("get-available-input-data/<product>/",wrap(InputAvailablity.as_view()),name="get_input_available"),
