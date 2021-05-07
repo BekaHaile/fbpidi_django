@@ -112,21 +112,22 @@ class ProductCreationForm(forms.ModelForm):
         self.fields['dose'].empty_label = "Select Prodect Dose"
         self.fields['dosage_form'].empty_label = "Select Product Dosage Form"
         self.fields['brand'].empty_label = "Select Product Brand"
-        # self.fields['pharmacy_category'].empty_label = "Select Product Category"
+        self.fields['reserve_attr0'].empty_label = "Select Product Group"
+        self.fields['therapeutic_group'].empty_label = "Select Therapeutic Group"
      
     class Meta:
         model = Product
-        fields = ('name','name_am','brand',
+        fields = ('name','name_am','brand','reserve_attr0',
                     'dose','dosage_form','quantity','therapeutic_group',
                     'description','description_am','image',)
         widgets = {
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Product/Varayti Name(English)'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Product/Varayti Name(Amharic)'}),
             'brand':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-            # 'pharmacy_category':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'reserve_attr0':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'dose':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'dosage_form':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-            'therapeutic_group':forms.TextInput(attrs={'class':'form-control','placeholder':'Therapeutic Group'}),
+            'therapeutic_group':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'description':forms.Textarea(attrs={'class':'summernote','required':'False'}),
             'description_am':forms.Textarea(attrs={'class':'summernote','required':'False'}),
             'image':forms.FileInput(attrs={'class':"form-control form-input-styled"}),

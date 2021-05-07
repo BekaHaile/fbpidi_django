@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 # 
 from product.models import *
 from admin_site.models import Category
+from admin_site.views.views import record_visit
 from company.models import Company,CompanyLike
 # 
 from accounts.models import UserProfile,Company,Customer
@@ -17,7 +18,7 @@ from collaborations.models import News, NewsImages
 
 class IndexView(View):
     def get(self,*args,**kwargs):
-    
+        record_visit(self.request)
         products = Product.objects.all()
         category = Category.objects.all()
         sub_category = SubCategory.objects.all()

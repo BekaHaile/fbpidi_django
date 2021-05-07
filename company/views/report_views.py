@@ -96,7 +96,7 @@ class CapitalUtilizationReportSector(LoginRequiredMixin,View):
                             'company':company.name,'product':performance['product__sub_category_name'],'production_amount':performance['all_data'],
                             'actual_production':capacity.actual_prdn_capacity
                         })
-            print(capital_util_data)
+            
             context['capital_util_data'] = capital_util_data
             context['flag'] = "capital_utilization"
             return render(self.request,"admin/report/report_page.html",context)
@@ -382,7 +382,6 @@ class InputAvailablity(LoginRequiredMixin,View):
             inp_dem_sups = InputDemandSupply.objects.filter(product=product,year=get_current_year()).values('product').annotate(
                 demand=Sum('demand'),supply = Sum('supply')
             )
-            print(inp_dem_sups)
             if inp_dem_sups.exists():
                 for aup in inp_dem_sups:
                     demand += aup['demand']
@@ -666,7 +665,6 @@ class NumberOfEmployees(LoginRequiredMixin,View):
                 emp_data_total.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
             context['total_emp_data'] = emp_data_total
             context['flag'] = "num_employees"
-            print(context)
             return render(self.request,'admin/report/report_page.html',context)
 
 @method_decorator(decorators,name='dispatch')
@@ -823,7 +821,6 @@ class EduLevelofEmployees(LoginRequiredMixin,View):
             total += int(edu_data['female__sum']+edu_data['male__sum'])
             education_status_data.append({'label':edu_data['education_type'],
                                     'data':int(edu_data['female__sum']+edu_data['male__sum'])})
-        print(total)
         context['total'] = total
         context['education_status_data'] = education_status_data
         context['flag'] = 'education_status_data'
@@ -850,7 +847,6 @@ class NumWomenInPosition(LoginRequiredMixin,View):
         context['total'] = total
         context['women_in_pson_level'] = women_in_pson_level
         context['flag'] = 'women_in_pson_level'
-        print(context)
         return render(self.request,template_name,context)
 
 

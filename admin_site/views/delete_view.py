@@ -193,7 +193,19 @@ class DeleteAllView(LoginRequiredMixin,View):
                 message ="Region Deleted"
                 messages.success(self.request,message)
                 return redirect("admin:settings")
-
+            elif self.kwargs['model_name'] == 'uom_master':
+                try:
+                    region = UomMaster.objects.get(id=self.kwargs['id'])
+                    region.delete()
+                    message ="Unit of measurement Deleted"
+                    messages.success(self.request,message)
+                    return redirect("admin:settings")
+                except Exception as e:
+                    if "because they are referenced through restricted foreign keys" in e.args[0]:
+                        messages.warning(self.request,"Unit of Measurement is Referenced, Can't be deleted")
+                        return redirect("admin:settings")
+                    else:
+                        pass
 
             elif self.kwargs['model_name'] == 'Vacancy':
                 vacancy = Vacancy.objects.get(id=self.kwargs['id'])
@@ -439,35 +451,45 @@ class DeleteAllView(LoginRequiredMixin,View):
                 messages.success(self.request,message)
                 return redirect("admin:product_detail",id=pdimage.product.id,option='view')
             elif self.kwargs['model_name'] == 'News':
-                    news = News.objects.get(id = self.kwargs['id']  )
-                    news.delete() 
-                    messages.success(self.request,"News Deleted Successfully")
-                    return redirect("admin:news_list")
+                news = News.objects.get(id = self.kwargs['id']  )
+                news.delete() 
+                messages.success(self.request,"News Deleted Successfully")
+                return redirect("admin:news_list")
             elif self.kwargs['model_name'] == "NewsImage":  
-                    image = NewsImages.objects.get(id = self.kwargs['id']  )
-                    news = image.news
-                    image.delete()
-                    messages.success(self.request,"Image Deleted Successfully!")
-                    return redirect(f"/admin/edit_news/{news.id}")
-            
+                image = NewsImages.objects.get(id = self.kwargs['id']  )
+                news = image.news
+                image.delete()
+                messages.success(self.request,"Image Deleted Successfully!")
+                return redirect(f"/admin/edit_news/{news.id}")
             elif self.kwargs['model_name'] == 'CompanyEvent':     
-                    event = CompanyEvent.objects.get(id = self.kwargs['id']  )
-                    company = event.company
-                    event.delete()
-                    messages.success(self.request,"Event Deleted Successfully!")
-                    return redirect("admin:admin_companyevent_list") 
+                event = CompanyEvent.objects.get(id = self.kwargs['id']  )
+                company = event.company
+                event.delete()
+                messages.success(self.request,"Event Deleted Successfully!")
+                return redirect("admin:admin_companyevent_list") 
             elif self.kwargs['model_name'] == "Document":
-                    document = Document.objects.get(id= self.kwargs['id'])
-                    category =document.category
-                    document.delete()
-                    messages.success(self.request, "Document Deleted Successfully!")
-                    return render(self.request, f"admin/document/list_document_by_category.html", {'documents':Document.objects.filter(category = category), 'categories': Document.DOC_CATEGORY})
+                document = Document.objects.get(id= self.kwargs['id'])
+                category =document.category
+                document.delete()
+                messages.success(self.request, "Document Deleted Successfully!")
+                return render(self.request, f"admin/document/list_document_by_category.html", {'documents':Document.objects.filter(category = category), 'categories': Document.DOC_CATEGORY})
             elif self.kwargs['model_name'] == 'Tender':
-                    tender = Tender.objects.get(id = self.kwargs['id'])
-                    tender.delete()
-                    messages.success(self.request, "Tender Deleted Successfully!")
-                    return redirect("admin:tenders")   
-        
-        except Exception as e:
-                print("#######Excetion While deleting ",e)
+                tender = Tender.objects.get(id = self.kwargs['id'])
+                tender.delete()
+                messages.success(self.request, "Tender Deleted Successfully!")
+                return redirect("admin:tenders")   
+            elif self.kwargs['model_name'] == 'phpg':
+                phpg = PharmaceuticalProduct.objects.get(id = self.kwargs['id'])
+                phpg.delete()
+                messages.success(self.request, "Pharmaceutical Product Group Deleted Successfully!")
+                return redirect("admin:settings")  
+            elif self.kwargs['model_name'] == 'therapeutic_grp':
+                tg = TherapeuticGroup.objects.get(id = self.kwargs['id'])
+                tg.delete()
+                messages.success(self.request, "Therapeutic Group Deleted Successfully!")
+                return redirect("admin:settings")  
+            else:
                 return redirect("admin:error_404") 
+        except Exception as e:
+            print("#######Excetion While deleting ",e)
+            return redirect("admin:error_404") 

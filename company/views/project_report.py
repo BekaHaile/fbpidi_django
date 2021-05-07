@@ -42,13 +42,13 @@ class ProjectReport(LoginRequiredMixin,View):
         context = {}
         projects = InvestmentProject.objects.all()
         # form of ownership
-        queryset = projects.values('ownership_form').annotate(Count('id')).order_by('ownership_form') 
+        queryset = projects.values('ownership_form__name').annotate(Count('id')).order_by('ownership_form') 
         total_ownership = 0
         ownership_data = []
         for ownership in queryset:
-            if ownership['ownership_form'] != None:
+            if ownership['ownership_form__name'] != None:
                 total_ownership += int(ownership['id__count'])
-                ownership_data.append({'label':CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']),
+                ownership_data.append({'label':ownership['ownership_form__name'],
                                     'data':ownership['id__count']})
     
         total_inv_cap_data = []
@@ -68,13 +68,13 @@ class ProjectReport(LoginRequiredMixin,View):
                         'working':invcap['working'],
                         'sector':project.sector
                     })
-        queryset_classificaion = projects.values('project_classification').annotate(Count('id')).order_by('project_classification') 
+        queryset_classificaion = projects.values('project_classification__name').annotate(Count('id')).order_by('project_classification') 
         total_classification = 0
         classification_data = []
         for ownership in queryset_classificaion:
-            if ownership['project_classification'] != None:
+            if ownership['project_classification__name'] != None:
                 total_classification += int(ownership['id__count'])
-                classification_data.append({'label':ProjectDropDownsMaster.objects.get(id=ownership['project_classification']),
+                classification_data.append({'label':ownership['project_classification__name'],
                                     'data':ownership['id__count']})
     
         prodn_data = []
@@ -207,18 +207,20 @@ class ProjectReport(LoginRequiredMixin,View):
 
         if self.request.POST['sub_sector'] != "":
             projects = projects.filter(product_type=self.request.POST['sub_sector'])
-
+        
+        context['region'] = self.request.POST['region']
+        context['sector'] = self.request.POST['sector']
+        context['sub_sector'] = self.request.POST['sub_sector']
+        context['product'] = self.request.POST['product']
         # form of ownership
-        queryset = projects.values('ownership_form').annotate(Count('id')).order_by('ownership_form') 
+        queryset = projects.values('ownership_form__name').annotate(Count('id')).order_by('ownership_form') 
         total_ownership = 0
         ownership_data = []
         for ownership in queryset:
-            total_ownership += int(ownership['id__count'])
-            try:
-                ownership_data.append({'label':CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']),
+            if ownership['ownership_form__name'] != None:
+                total_ownership += int(ownership['id__count'])
+                ownership_data.append({'label':ownership['ownership_form__name'],
                                     'data':ownership['id__count']})
-            except CompanyDropdownsMaster.DoesNotExist:
-                ownership_data= []
         total_inv_cap_data = []
         for project in projects:
             if InvestmentCapital.objects.filter(project=project).exists():
@@ -236,16 +238,14 @@ class ProjectReport(LoginRequiredMixin,View):
                         'working':invcap['working'],
                         'sector':project.sector
                     })
-        queryset_classificaion = projects.values('project_classification').annotate(Count('id')).order_by('project_classification') 
+        queryset_classificaion = projects.values('project_classification__name').annotate(Count('id')).order_by('project_classification') 
         total_classification = 0
         classification_data = []
         for ownership in queryset_classificaion:
-            total_classification += int(ownership['id__count'])
-            try:
-                classification_data.append({'label':ProjectDropDownsMaster.objects.get(id=ownership['project_classification']),
+            if ownership['project_classification__name'] != None:
+                total_classification += int(ownership['id__count'])
+                classification_data.append({'label':ownership['project_classification__name'],
                                     'data':ownership['id__count']})
-            except ProjectDropDownsMaster.DoesNotExist:
-                classification_data= []
         prodn_data = []
         for project in projects:
             pdata = ProjectProductQuantity.objects.filter(project=project).values(

@@ -135,9 +135,9 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'FBPIDI_IIMS',
+        'NAME': 'admindb',
         'USER': 'postgres',
-        'PASSWORD': 'Fbpidi@123..',
+        'PASSWORD': 'cbe@ps4woga',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

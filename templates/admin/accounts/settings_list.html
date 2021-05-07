@@ -936,6 +936,8 @@
 							<li class="nav-item"><a href="#basic-tab2e" class="nav-link" data-toggle="tab">Research Category</a></li>
 							<li class="nav-item"><a href="#basic-tab3e" class="nav-link" data-toggle="tab">Region</a></li>
 							<li class="nav-item"><a href="#basic-tab4e" class="nav-link" data-toggle="tab">UOM</a></li>
+							<li class="nav-item"><a href="#basic-tab5e" class="nav-link" data-toggle="tab">Pharmaceutical Product Group</a></li>
+							<li class="nav-item"><a href="#basic-tab6e" class="nav-link" data-toggle="tab">Therapeutic Group</a></li>
 						</ul>
 
 						<div class="tab-content">
@@ -1099,7 +1101,7 @@
 								</table>
 							</div>
 							<div class="tab-pane fade " id="basic-tab4e">
-								<p class="card-title">Region List</p>
+								<p class="card-title">Unit of Measurement List</p>
 								<a  href="#" data-toggle="modal" data-target="#uom_list_form" class="float-right btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add UOM</a>
 
 								<table class="table datatable-show-all">
@@ -1128,12 +1130,108 @@
 					
 															<div class="dropdown-menu dropdown-menu-right">
 							
-																{% if perms.admin_site.delete_region %}
+																{% if perms.admin_site.delete_uommaster %}
 																<a href="{%url 'admin:delete' model_name='uom_master' id=chklist.id%}"  class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete </a>
 																{%endif%}
 																							
-																{% if perms.admin_site.change_region %}
+																{% if perms.admin_site.change_uommaster %}
 																<a href="{%url 'admin:update_uom' pk=chklist.id%}" class="dropdown-item"  >
+																	<i class="icon-pencil"></i>Edit </a>
+																{%endif%}
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+
+							<div class="tab-pane fade " id="basic-tab5e">
+								<p class="card-title">Pharmaceutical Products Groups List</p>
+								<a  href="#" data-toggle="modal" data-target="#phpg_list_form" class="float-right btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Product Group</a>
+
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Name</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in phpg_list%}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.created_date|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+							
+																{% if perms.admin_site.delete_pharmaceuticalproduct %}
+																<a href="{%url 'admin:delete' model_name='phpg' id=chklist.id%}"  class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this row?')"><i class="icon-trash"></i>Delete </a>
+																{%endif%}
+																							
+																{% if perms.admin_site.change_pharmaceuticalproduct %}
+																<a href="{%url 'admin:update_phpg' pk=chklist.id%}" class="dropdown-item"  >
+																	<i class="icon-pencil"></i>Edit </a>
+																{%endif%}
+															</div>
+														</div>
+													</div>
+												</td>
+											</tr>
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+
+							<div class="tab-pane fade " id="basic-tab6e">
+								<p class="card-title">Therapeutic Groups List</p>
+								<a  href="#" data-toggle="modal" data-target="#tg_list_form" class="float-right btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Therapeutic Group</a>
+
+								<table class="table datatable-show-all">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Name</th>
+											<th>Created By</th>
+											<th>Created Date</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for chklist in terapeutic_list%}
+											<tr>
+												<td>{{forloop.counter}}</td>
+												<td>{{chklist.name}}</td>
+												<td>{{chklist.created_by.username}}</td>
+												<td><span class="badge badge-success">{{chklist.timestamp|date}}</span></td>
+												<td class="text-center">
+													<div class="list-icons">
+														<div class="dropdown">
+															<a href="#" class="list-icons-item" data-toggle="dropdown">
+																<i class="icon-menu9"></i>
+															</a>
+					
+															<div class="dropdown-menu dropdown-menu-right">
+							
+																{% if perms.admin_site.delete_therapeuticgroup %}
+																<a href="{%url 'admin:delete' model_name='therapeutic_grp' id=chklist.id%}"  class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this row?')"><i class="icon-trash"></i>Delete </a>
+																{%endif%}
+																							
+																{% if perms.admin_site.change_therapeuticgroup %}
+																<a href="{%url 'admin:update_therapeutic_grp' pk=chklist.id%}" class="dropdown-item"  >
 																	<i class="icon-pencil"></i>Edit </a>
 																{%endif%}
 															</div>
@@ -1371,6 +1469,67 @@
 											{{uom_form.name_am}}
 										</div>
 										
+									</div>
+								</div>
+
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn bg-primary">Submit form</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div id="phpg_list_form" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Pharmaceutical Product Group Form</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+
+						<form action="{%url 'admin:create_phpg' %}" method="POST">
+							{%csrf_token%}
+							<div class="modal-body">
+								<div class="form-group">
+									<div class="row">
+										<div class="col-sm-12">
+											<label>{{phpg_form.name.label}}</label>
+											{{phpg_form.name}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn bg-primary">Submit form</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div id="tg_list_form" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Therapeutic Group Form</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+
+						<form action="{%url 'admin:create_therapeutic_grp' %}" method="POST">
+							{%csrf_token%}
+							<div class="modal-body">
+								<div class="form-group">
+									<div class="row">
+										<div class="col-sm-12">
+											<label>{{terapeutic_form.name.label}}</label>
+											{{terapeutic_form.name}}
+										</div>
 									</div>
 								</div>
 

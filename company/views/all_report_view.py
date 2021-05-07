@@ -496,6 +496,11 @@ class AllReportPage(LoginRequiredMixin,View):
         ownership_data = []
         education_status_data = []
         current_year= get_current_year()
+        context['year'] = self.request.POST['year']
+        context['region'] = self.request.POST['region']
+        context['sector'] = self.request.POST['sector']
+        context['sub_sector'] = self.request.POST['sub_sector']
+        context['product'] = self.request.POST['product']
         if self.request.POST['year'] != '':
             current_year = int(self.request.POST['year'])
             
@@ -507,12 +512,15 @@ class AllReportPage(LoginRequiredMixin,View):
         if self.request.POST['sector'] != "":
             companies = companies.filter(main_category=self.request.POST['sector'])
             products = products.filter(category_name__category_type=self.request.POST['sector'])
+            
         if self.request.POST['sub_sector'] != "":
             companies = companies.filter(category=self.request.POST['sub_sector'])
             products = products.filter(category_name=self.request.POST['sub_sector'])
+            
         if self.request.POST['product'] != "":
             companies = companies.filter(company_brand__product_type=self.request.POST['product'])
             products = products.filter(id=self.request.POST['product'])
+            
 
         for company in companies:
             if InvestmentCapital.objects.filter(company=company).exists():
@@ -867,7 +875,7 @@ class AllReportPage(LoginRequiredMixin,View):
             
             total = total_perm_emp+total_temp_emp
             femal_emp_data.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
-            
+        
         context['total_fem_emp_data'] = femal_emp_data
         context['total_count'] = companies.count()
         context['company_list'] = companies

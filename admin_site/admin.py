@@ -169,6 +169,10 @@ class CustomAdminSite(admin.AdminSite):
             path('update-region-lookup/<pk>/',wrap(UpdateRegionMaster.as_view()),name='update_region'),
             path('create-uom-lookup/',wrap(CreateUomMaster.as_view()),name='create_uom'),
             path('update-uom-lookup/<pk>/',wrap(UpdateUomMaster.as_view()),name='update_uom'),
+            path('create-phpg-lookup/',wrap(CreatePhpgMaster.as_view()),name='create_phpg'),
+            path('update-phpg-lookup/<pk>/',wrap(UpdatePhpgMaster.as_view()),name='update_phpg'),
+            path('create-tg-lookup/',wrap(CreateTherapeuticMaster.as_view()),name='create_therapeutic_grp'),
+            path('update-tg-lookup/<pk>/',wrap(UpdateTherapeuticMaster.as_view()),name='update_therapeutic_grp'),
 
             path("categories/",wrap(CategoryView.as_view()),name="categories"),
             path("create_category/",wrap(CreateCategories.as_view()),name="create_category"),

@@ -1,6 +1,8 @@
 from django import forms
 
-from admin_site.models import CompanyDropdownsMaster,ProjectDropDownsMaster,RegionMaster,UomMaster
+from admin_site.models import (CompanyDropdownsMaster,ProjectDropDownsMaster,
+                                RegionMaster,UomMaster,PharmaceuticalProduct,
+                                TherapeuticGroup)
 
 
 class CompanyDropdownsMasterForm(forms.ModelForm):
@@ -29,6 +31,22 @@ class UomMasterForm(forms.ModelForm):
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Unit of Measurement Short Name in English'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Unit of Measurement Short Name in Amharic'}),
             'description':forms.TextInput(attrs={'class':'form-control','placeholder':'Unit of Measurement Full Name'}),
+        }
+
+class PharmaceuticalProductForm(forms.ModelForm):
+    class Meta:
+        model=PharmaceuticalProduct
+        fields = ('name',)
+        widgets={
+            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Pharmaceutical Product Group'}),
+        }
+        
+class TherapeuticGroupForm(forms.ModelForm):
+    class Meta:
+        model=TherapeuticGroup
+        fields = ('name',)
+        widgets={
+            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Therapeutic Group Name'}),
         }
 
 class ProjectDropdownsMasterForm(forms.ModelForm):
