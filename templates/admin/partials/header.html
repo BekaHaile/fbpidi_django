@@ -178,6 +178,7 @@
 
         // this is the one that checks for any new unread messages on the top with the chat icon
         function check_inbox(){
+            if ("{{user.is_authenticated}}" == "True")
                 fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>
                 {   num_unread_messages = data['num']
                     if (num_unread_messages > 0)
