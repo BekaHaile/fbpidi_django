@@ -620,18 +620,55 @@ class ProductsByTherapeuticGroup(LoginRequiredMixin,View):
         therapeutic_group_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = Product.objects.values('therapeutic_group__name').annotate(Count('id')).order_by("therapeutic_group")
+        queryset = Product.objects.values('therapeutic_group__name').annotate(Count('reserve_attr0',distinct=True)).order_by("therapeutic_group")
         total = 0
         for product_grp in queryset:
             if product_grp['therapeutic_group__name'] != None:
-                total += int(product_grp['id__count'])
+                total += int(product_grp['reserve_attr0__count'])
                 therapeutic_group_data.append({'label':product_grp['therapeutic_group__name'],
-                                        'data':product_grp['id__count']})
+                                        'data':product_grp['reserve_attr0__count']})
         context['total'] = total
         context['therapeutic_group_data_product'] = therapeutic_group_data
         context['flag'] = 'therapeutic_group_data_product'
         return render(self.request,template_name,context)
-         
+
+
+@method_decorator(decorators,name='dispatch')
+class CompaniesByDosageForm(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        dosage_form_data = []
+        context = {}
+        template_name = "admin/report/report_page.html"
+        queryset = Product.objects.values('dosage_form__dosage_form').annotate(Count('company',distinct=True)).order_by('dosage_form')
+        total = 0
+        for product_grp in queryset:
+            if product_grp['dosage_form__dosage_form'] != None:
+                total += int(product_grp['company__count'])
+                dosage_form_data.append({'label':product_grp['dosage_form__dosage_form'],
+                                        'data':product_grp['company__count']})
+        context['total'] = total
+        context['dosage_form_data'] = dosage_form_data
+        context['flag'] = 'dosage_form_data'
+        return render(self.request,template_name,context)
+
+@method_decorator(decorators,name='dispatch')
+class ProductsByDosageForm(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        dosage_form_data = []
+        context = {}
+        template_name = "admin/report/report_page.html"
+        queryset = Product.objects.values('dosage_form__dosage_form').annotate(Count('reserve_attr0',distinct=True)).order_by("dosage_form")
+        total = 0
+        for product_grp in queryset:
+            if product_grp['dosage_form__dosage_form'] != None:
+                total += int(product_grp['reserve_attr0__count'])
+                dosage_form_data.append({'label':product_grp['dosage_form__dosage_form'],
+                                        'data':product_grp['reserve_attr0__count']})
+        context['total'] = total
+        context['dosage_form_data_product'] = dosage_form_data
+        context['flag'] = 'dosage_form_data_product'
+        return render(self.request,template_name,context)
+
 @method_decorator(decorators,name='dispatch')
 class NumberofIndustriesByOption(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):

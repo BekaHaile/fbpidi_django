@@ -2,7 +2,7 @@ import math
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
-
+from django.db.models import Avg
 from company.models import Company
 from product.models import SubCategory,Product,Review
 from admin_site.models import Category,UserTracker
@@ -22,6 +22,14 @@ def visitor_count(arg):
 @register.filter
 def review_count(product):
     return Review.objects.filter(product=product).count()
+
+@register.filter
+def product_rating(product):
+    if product.product_review.all().exists():
+        rating = Review.objects.filter(product=product).aggregate(Avg('rating'))
+        return int(rating['rating__avg'])
+    else:
+        return 0
 
 @register.filter
 def company_count(type):

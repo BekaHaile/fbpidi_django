@@ -25,6 +25,7 @@ from product.forms import *
 from company.models import *
 from admin_site.decorators import company_created
 from admin_site.views.dropdowns import image_cropper
+from admin_site.views.views import record_activity
 
 def get_current_year():
     this_year = datetime.datetime.today().year
@@ -77,6 +78,7 @@ class CreateCategories(LoginRequiredMixin,CreateView):
         category.created_by = self.request.user
         category.category_type_am=self.cat_list_am[form.cleaned_data.get('category_type')],
         category.save()
+        record_activity(self.request.user,"Category","Category data Created",category.id)
         messages.success(self.request,"You Created a New Category")
         return redirect("admin:categories")
     
@@ -84,6 +86,11 @@ class CreateCategories(LoginRequiredMixin,CreateView):
         context = super().get_context_data(**kwargs)
         context['category'] = True
         return context
+
+    def form_invalid(self,form):
+        messages.success(self.request,form.errors)
+        return redirect("admin:create_category")
+
 @method_decorator(decorators,name='dispatch')
 class SubCategoryView(LoginRequiredMixin,ListView):
     model = SubCategory
@@ -119,6 +126,7 @@ class SubCategoryDetail(LoginRequiredMixin,UpdateView):
         sub_category = form.save(commit=False)
         sub_category.created_by = self.request.user
         sub_category.save()
+        record_activity(self.request.user,"SubCategory","Sub-Category data Updated",sub_category.id)
         messages.success(self.request,"You Updated a Product Type")
         return redirect("admin:sub_categories")
     
@@ -138,6 +146,7 @@ class CreateSubCategories(LoginRequiredMixin,CreateView):
         sub_category = form.save(commit=False)
         sub_category.created_by = self.request.user
         sub_category.save()
+        record_activity(self.request.user,"SubCategory","Sub-Category data Created",sub_category.id)
         messages.success(self.request,"You Created a New Product Type")
         return redirect("admin:sub_categories")
     
@@ -148,7 +157,7 @@ class CreateSubCategories(LoginRequiredMixin,CreateView):
     
     def form_invalid(self,form):
         message.warning(self.request,form.errors)
-        return redirect("admin:create_subcategory",pk=self.kwargs['pk']) 
+        return redirect("admin:create_subcategory") 
 
 
 

@@ -21,6 +21,7 @@ from company.models import *
 from accounts.models import CompanyAdmin,UserProfile
 from product.models import Product
 from admin_site.views.dropdowns import image_cropper
+from admin_site.views.views import record_activity
 from admin_site.decorators import company_created,company_is_active
 
 
@@ -63,9 +64,13 @@ class CreateMyInvestmentProject(LoginRequiredMixin,CreateView):
         project.company = company
         project.created_by = self.request.user
         project.save()
+        record_activity(self.request.user,"InvestmentProject","Investment project data created",project.id)
         messages.success(self.request,'Investment Project Created,Please Complete The Following!')
         return redirect("admin:create_project_detail",pk=project.id)
 
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return render(self.request,"admin/company/create_project_form.html",{'form':form})
 
 @method_decorator(decorators,name='dispatch')
 class CreateInvestmentProject(LoginRequiredMixin,CreateView):
@@ -77,11 +82,16 @@ class CreateInvestmentProject(LoginRequiredMixin,CreateView):
         project = form.save(commit=False)
         project.created_by = self.request.user
         project.save()
+        record_activity(self.request.user,"InvestmentProject","Investment project data Created",project.id)
         image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
                     form.cleaned_data.get('width'),form.cleaned_data.get('height'),
                     project.image,400,400)
         messages.success(self.request,'Investment Project Created,Please Complete The Following!')
         return redirect("admin:create_project_detail_admin",pk=project.id)
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return render(self.request,"admin/company/create_project_form_admin.html",{'form':form})
 
 
 @method_decorator(decorators,name='dispatch')
@@ -212,6 +222,7 @@ class UpdateInvestmentProject(LoginRequiredMixin,UpdateView):
         project.last_updated_by=self.request.user
         project.last_updated_date = timezone.now()
         project.save()
+        record_activity(self.request.user,"InvestmentProject","Investment project data Updated",project.id)
         image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
                     form.cleaned_data.get('width'),form.cleaned_data.get('height'),
                     project.image,400,400)
@@ -232,11 +243,15 @@ class CreateLandUsage(LoginRequiredMixin,CreateView):
             lu = form.save(commit=False)
             lu.project = InvestmentProject.objects.get(id=self.kwargs['project'])
             lu.save()
+            record_activity(self.request.user,"LandUsage","Land Usage data Created",lu.id)
             return JsonResponse({'error':False,'message':'Land Usage Created Successfully!!!'})
         except InvestmentProject.DoesNotExist:
             return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
         except IntegrityError as e:
             return JsonResponse({'error':True,'message':'Data Already Exists'})
+    
+    def form_invalid(self,form):
+        return JsonResponse({'error':True,'message':form.errors})
 
 
 @method_decorator(decorators,name='dispatch')
@@ -245,8 +260,13 @@ class UpdateLandUsage(LoginRequiredMixin,UpdateView):
     form_class = LandUsageForm
 
     def form_valid(self,form):
-        form.save()
+        lu = form.save()
+        record_activity(self.request.user,"LandUsage","Land Usage data Updated",lu.id)
         return redirect("admin:update_project",pk=LandUsage.objects.get(id=self.kwargs['pk']).project.id)
+    
+    def form_invalid(self,form):
+        messages.warning(self.request,form.errors)
+        return redirect("admin:update_land_use",pk=self.kwargs['pk'])
 
 @method_decorator(decorators,name='dispatch')
 class CreateProductQty(LoginRequiredMixin,CreateView):
@@ -258,9 +278,13 @@ class CreateProductQty(LoginRequiredMixin,CreateView):
             pp = form.save(commit=False)
             pp.project = InvestmentProject.objects.get(id=self.kwargs['project'])
             pp.save()
+            record_activity(self.request.user,"ProjectProductQuantity","Product Quantity data Updated",pp.id)
             return JsonResponse({'error':False,'message':'Product Quantity Created Successfully!!!'})
         except InvestmentProject.DoesNotExist:
             return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
+    
+    def form_invalid(self,form):
+        return JsonResponse({'error':True,'message':form.errors})
 
 @method_decorator(decorators,name='dispatch')
 class UpdateProductQty(LoginRequiredMixin,UpdateView):
@@ -274,7 +298,8 @@ class UpdateProductQty(LoginRequiredMixin,UpdateView):
         return context
 
     def form_valid(self,form):
-        form.save()
+        pp=form.save()
+        record_activity(self.request.user,"ProjectProductQuantity","Product Quantity data Updated",pp.id)
         return redirect("admin:update_project",pk=ProjectProductQuantity.objects.get(id=self.kwargs['pk']).project.id)
     
     def form_invalid(self,form):
@@ -292,12 +317,15 @@ class CreateProjectState(LoginRequiredMixin,CreateView):
             ps = form.save(commit=False)
             ps.project = InvestmentProject.objects.get(id=self.kwargs['project'])
             ps.save()
+            record_activity(self.request.user,"ProjectState","Project State data Created",ps.id)
             return JsonResponse({'error':False,'message':'Project Status Created Successfully!!!'})
         except InvestmentProject.DoesNotExist:
             return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
         except IntegrityError as e:
             return JsonResponse({'error':True,'message':'Data Already Exists'})
 
+    def form_invalid(self,form):
+        return JsonResponse({'error':True,'message':form.errors})
 
 @method_decorator(decorators,name='dispatch')
 class UpdateProjectState(LoginRequiredMixin,UpdateView):
@@ -306,12 +334,13 @@ class UpdateProjectState(LoginRequiredMixin,UpdateView):
     template_name = "admin/company/project_data_update.html"
 
     def form_valid(self,form):
-        form.save()
+        ps = form.save()
+        record_activity(self.request.user,"ProjectState","Project State data Updated",ps.id)
         return redirect("admin:update_project",pk=ProjectState.objects.get(id=self.kwargs['pk']).project.id)
 
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
-        return redirect("admin:update_project")
+        return redirect("admin:update_project_state",pk=self.kwargs['pk'])
 
 
 @method_decorator(decorators,name='dispatch')
@@ -325,13 +354,13 @@ class CreateInvestmentCapitalForProject(LoginRequiredMixin,CreateView):
             project_invcap = form.save(commit=False)
             project_invcap.project = InvestmentProject.objects.get(id=self.kwargs['project'])
             project_invcap.save()
+            record_activity(self.request.user,"InvestmentCapital","Investment capital data Created",project_invcap.id)
             return JsonResponse({'error':False,'message':'Investment Capital Data Added'})
         except InvestmentProject.DoesNotExist:
             return JsonResponse({'error':True,'message':'Investment Project Doesn\'t Exist'})
             
     def form_invalid(self,form):
-        messages.warning(self.request,form.errors)
-        return redirect("admin:update_project",pk=self.kwargs['project'])
+        return JsonResponse({'error':True,'message':form.errors})
 
 @method_decorator(decorators,name='dispatch')
 class UpdateInvestmentCapitalForProject(LoginRequiredMixin,UpdateView):
@@ -345,13 +374,14 @@ class UpdateInvestmentCapitalForProject(LoginRequiredMixin,UpdateView):
         return context
 
     def form_valid(self,form):
-        form.save()
+        inv_cap = form.save()
+        record_activity(self.request.user,"InvestmentCapital","Investment capital data Updated",inv_cap.id)
         messages.success(self.request,"Investment Capital Data Updated")
         return redirect("admin:update_project",pk=InvestmentCapital.objects.get(id=self.kwargs['pk']).project.id)
 
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
-        return redirect("admin:update_project",pk=InvestmentCapital.objects.get(id=self.kwargs['pk']).project.id)
+        return redirect("admin:update_inv_cap_project",pk=self.kwargs['pk'])
 
  
 @method_decorator(decorators,name='dispatch')
@@ -366,6 +396,7 @@ class CreateEmployeesProject(LoginRequiredMixin,View):
                     employee = form.save(commit=False)
                     employee.projct = InvestmentProject.objects.get(id=self.kwargs['project'])
                     employee.save()
+                    record_activity(self.request.user,"Employees","Employees data Created",employee.id)
                     return JsonResponse({'error': False, 'message': form.cleaned_data.get('employment_type')+'Employees Data Uploaded Successfully for'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Employee Data For this Category Already Exists"})
@@ -386,6 +417,7 @@ class CreateJobsCreatedProject(LoginRequiredMixin,View):
                     jobs = form.save(commit=False)
                     jobs.project = InvestmentProject.objects.get(id=self.kwargs['project'])
                     jobs.save()
+                    record_activity(self.request.user,"JobOpportunities","Jobs Created data Created",jobs.id)
                     return JsonResponse({'error': False, 'message': form.cleaned_data.get('job_type')+' Job Oportunities Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Category Already Exists"})
@@ -406,6 +438,7 @@ class CreateEducationStatusProject(LoginRequiredMixin,View):
                     education = form.save(commit=False)
                     education.project = InvestmentProject.objects.get(id=self.kwargs['project'])
                     education.save()
+                    record_activity(self.request.user,"EducationalStatus","Educational Status data Created",education.id)
                     return JsonResponse({'error': False, 'message': form.cleaned_data.get('education_type')+' Educational Status Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Category Already Exists"})
@@ -428,6 +461,7 @@ class UpdateEmployeesProject(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"Employees","Employees data Updated",data.id)
         messages.success(self.request,"Employees Data Updated")
         return redirect("admin:update_project",pk=data.project.id)
 
@@ -449,6 +483,7 @@ class UpdateJobsCreatedProject(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"JobOpportunities","Jobs Created data Updated",data.id)
         messages.success(self.request,"Jobs Created Data Updated")
         return redirect("admin:update_project",pk=data.project.id)
 
@@ -469,6 +504,7 @@ class UpdateEducationStatusProject(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"EducationalStatus","Educational Status data Updated",data.id)
         messages.success(self.request,"Education Status Data Updated")
         return redirect("admin:update_project",pk=data.project.id)
 
@@ -486,6 +522,7 @@ class CreateProjectAddress(LoginRequiredMixin,CreateView):
             address = form.save(commit=False)
             address.project = InvestmentProject.objects.get(id=self.kwargs['project'])
             address.save()
+            record_activity(self.request.user,"CompanyAddress","Project Address Created",address.id)
             return JsonResponse({'error':False,'message':'Investment Project Address Saved Successfully'})
         except IntegrityError as e:
             return JsonResponse({'error':True,'message':'Investment Project Address is Already Added'})

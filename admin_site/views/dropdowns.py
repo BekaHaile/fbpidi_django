@@ -11,11 +11,12 @@ from PIL import Image
 
 from admin_site.models import *
 from admin_site.forms import *
-from product.models import Dose,DosageForm
-from product.forms import DoseForm,DosageFormForm
+from product.models import DosageForm
+from product.forms import DosageFormForm
 from collaborations.models import JobCategory,ResearchProjectCategory
 from collaborations.forms import JobCategoryForm,ResearchProjectCategoryForm
 from admin_site.decorators import company_created,company_is_active
+from admin_site.views.views import record_activity
 
 decorators = [never_cache, company_created(),company_is_active()]
 
@@ -28,6 +29,7 @@ class CreateCompanyDropdownsMaster(LoginRequiredMixin,CreateView):
         chkmst = form.save(commit=False)
         chkmst.created_by = self.request.user
         chkmst.save()
+        record_activity(self.request.user,"CompanyDropdownsMaster","Company lookup data Created",chkmst.id)
         messages.success(self.request,"Check List Added Successfully")
         return redirect("admin:settings")
 
@@ -46,6 +48,7 @@ class UpdateCompanyDropdownsMaster(LoginRequiredMixin,UpdateView):
         chkmst.lastupdated_by = self.request.user
         chkmst.lastupdated_date = timezone.now()
         chkmst.save()
+        record_activity(self.request.user,"CompanyDropdownsMaster","Company lookup data Updated",chkmst.id)
         messages.success(self.request,"Check List Updated Successfully")
         return redirect("admin:settings") 
 
@@ -59,8 +62,6 @@ class AllSettingsPage(LoginRequiredMixin,ListView):
         context['chkform'] = CompanyDropdownsMasterForm()
         context['projectform'] = ProjectDropdownsMasterForm()
         context['pl_objects'] = ProjectDropDownsMaster.objects.all()
-        context['dose_form'] = DoseForm()
-        context['doses'] = Dose.objects.all()
         context['dosage_forms'] = DosageForm.objects.all()
         context['dosage_form_form'] = DosageFormForm()
         context['job_category_form'] = JobCategoryForm()
@@ -89,6 +90,7 @@ class CreateProjectDropdownsMaster(LoginRequiredMixin,CreateView):
         chkmst = form.save(commit=False)
         chkmst.created_by = self.request.user
         chkmst.save()
+        record_activity(self.request.user,"ProjectDropDownsMaster","Project lookup data Created",chkmst.id)
         messages.success(self.request,"Dropdown Added Successfully")
         return redirect("admin:settings")
 
@@ -108,6 +110,7 @@ class UpdateProjectDropdownsMaster(LoginRequiredMixin,UpdateView):
         chkmst.lastupdated_by = self.request.user
         chkmst.lastupdated_date = timezone.now()
         chkmst.save()
+        record_activity(self.request.user,"ProjectDropDownsMaster","Project lookup data Updated",chkmst.id)
         messages.success(self.request,"Dropdown Updated Successfully")
         return redirect("admin:settings") 
 
@@ -118,7 +121,8 @@ class CreateRegionMaster(LoginRequiredMixin,CreateView):
     form_class = RegionMasterForm
 
     def form_valid(self,form):
-        form.save()
+        chkmst = form.save()
+        record_activity(self.request.user,"RegionMaster","Region lookup data Created",chkmst.id)
         messages.success(self.request,"Region Master Added Successfully")
         return redirect("admin:settings")
     
@@ -138,7 +142,8 @@ class UpdateRegionMaster(LoginRequiredMixin,UpdateView):
         return context
 
     def form_valid(self,form):
-        form.save()
+        chkmst = form.save()
+        record_activity(self.request.user,"RegionMaster","Region lookup data Updated",chkmst.id)
         messages.success(self.request,"Region Master Updated Successfully")
         return redirect("admin:settings")
     
@@ -152,7 +157,8 @@ class CreateUomMaster(LoginRequiredMixin,CreateView):
     form_class = UomMasterForm
 
     def form_valid(self,form):
-        form.save()
+        chkmst = form.save()
+        record_activity(self.request.user,"UomMaster","Unit of Measurement lookup data Created",chkmst.id)
         messages.success(self.request,"Unit of Mesurement Master Added Successfully")
         return redirect("admin:settings")
     
@@ -172,7 +178,8 @@ class UpdateUomMaster(LoginRequiredMixin,UpdateView):
         return context
 
     def form_valid(self,form):
-        form.save()
+        chkmst = form.save()
+        record_activity(self.request.user,"UomMaster","Unit of Measurement lookup data Updated",chkmst.id)
         messages.success(self.request,"Unit of Mesurement Updated Successfully")
         return redirect("admin:settings")
     
@@ -189,6 +196,7 @@ class CreatePhpgMaster(LoginRequiredMixin,CreateView):
         phpg = form.save(commit=False)
         phpg.created_by = self.request.user
         phpg.save()
+        record_activity(self.request.user,"PharmaceuticalProduct","Product Group lookup data Created",phpg.id)
         messages.success(self.request,"Product Group Added Successfully")
         return redirect("admin:settings")
     
@@ -211,6 +219,7 @@ class UpdatePhpgMaster(LoginRequiredMixin,UpdateView):
         phpg = form.save(commit=False)
         phpg.last_updated_by = self.request.user
         phpg.save()
+        record_activity(self.request.user,"PharmaceuticalProduct","Product Group lookup data Updated",phpg.id)
         messages.success(self.request,"Product Group Updated Successfully")
         return redirect("admin:settings")
     
@@ -227,6 +236,7 @@ class CreateTherapeuticMaster(LoginRequiredMixin,CreateView):
         tg = form.save(commit=False)
         tg.created_by = self.request.user
         tg.save()
+        record_activity(self.request.user,"TherapeuticGroup","Therapeutic Group lookup data Created",tg.id)
         messages.success(self.request,"Therapeutic Group Added Successfully")
         return redirect("admin:settings")
     
@@ -246,7 +256,8 @@ class UpdateTherapeuticMaster(LoginRequiredMixin,UpdateView):
         return context
 
     def form_valid(self,form):
-        form.save()
+        tg = form.save()
+        record_activity(self.request.user,"TherapeuticGroup","Therapeutic group lookup data Updated",tg.id)
         messages.success(self.request,"Therapeutic Group Updated Successfully")
         return redirect("admin:settings")
     

@@ -93,7 +93,7 @@
 															{% if user.is_authenticated %}
 																{% user_liked_company user company.id  as liked %}
 																{% if liked == True %}
-																	<a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+																	<a  class="item-card9-icons1 wishlist"   style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
 																{% else %}
 																	<a  class="item-card9-icons1 wishlist" id="like_{{company.id}}" onclick="like_company('{{company.id}}')"> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
 
@@ -118,7 +118,6 @@
 																	<!-- <a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i>{{company.geo_location.x}} , {{company.geo_location.y}}</a> -->
 																	<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{company.get_company_address.city_town}}, {{company.get_company_address.local_area}}, {{company.get_company_address.fax}}</a>
 																</div>
-																<!-- <p class="mb-0 leading-tight"><span class="font-weight-semibold text-dark">{%print_translated company.detail|truncatechars_html:100|safe company.detail_am|truncatechars_html:100|safe LANGUAGE_CODE%}</p> -->
 															</div>
 														</div>
 														<div class="card-footer pt-2 pb-2">
@@ -177,7 +176,7 @@
 																<div class="card-body">
 																	<div class="item-card9">
 																		
-																		<a href="{% url 'company_home' pk=company.id %}" target = "black" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.name company.name_am LANGUAGE_CODE%}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
+																		<a href="{% url 'company_home' pk=company.id %}" target = "black" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.name|truncatechars_html:21 company.name_am|truncatechars_html:21 LANGUAGE_CODE%}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
 																		<div class="rating-stars d-flex mr-5">
 																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
 																			<a class="fs-13 leading-tight mt-1" href="#">{{company|company_product_count}} Products</a>
@@ -186,7 +185,6 @@
 																			<a href="#" class="mt-1 mb-1 mr-3 text-dark"><i class="fa fa-globe mr-1"></i> {{company.get_company_address.city_town}}</a>
 																			<a href="#" class="mt-1 mb-1 mr-1 text-muted"><i class="fa fa-map-marker mr-1"></i>{{company.get_company_address.local_area}}, {{company.get_company_address.fax}}</a>
 																		</div>
-																		<!-- <p class="mb-0 leading-tight">{%print_translated company.detail|truncatechars_html:100|safe company.detail_am|truncatechars_html:100|safe LANGUAGE_CODE%}</p> -->
 																	</div>
 																</div>
 																<div class="card-footer pt-2 pb-2">
@@ -200,71 +198,14 @@
 																				<a class="" href="#"><i class="fa fa-share-alt"></i></a>
 																			</div>
 																		</div>
-																		<!-- <div class="ml-auto mt-3 mt-sm-0">
-																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i>  {% trans "Get Directions" %}</a></div>
-																		</div> -->
+																		
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
 												</div>
-												<!-- <div class="col-xl-6 col-lg-6 col-md-12">
-													<div class="card overflow-hidden">
-														<div class="card-body">
-															<div class="item-card9">
-																<div class="mr-5 w-150">
-																	<img src="{{company.logo.url}}" alt="image" class="w-100 border br-4">
-																</div>
-																<div class="d-block w-100 mt-2">
-																	<div class="d-flex">
-																		<a href="{% url 'manufac_category_main' option=company.main_category %}">{{company.main_category}}</a>
-																	</div>
-																	<a href="{% url 'bs_2' %}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.name company.name_am LANGUAGE_CODE%}<i class="ion-checkmark-circled text-success ml-1"  data-toggle="tooltip" data-placement="top" title="" data-original-title="Verified"></i></h4></a>
-																	<p class="">{%print_translated company.detail|truncatechars_html:180|safe company.detail_am|truncatechars_html:180|safe LANGUAGE_CODE %}</p>
-																	<div class="item-card2-desc mt-3">
-																		<div class="item-card2-desc-cost row">
-																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-0"><i class="fa fa-map-marker mr-1"></i> {{company.get_company_address.city_town}}, {{company.get_company_address.local_area}}, {{company.get_company_address.fax}}</h6>
-																			</div>
-																			<div class="col-md-12">
-																				<h6 class="text-dark font-weight-normal mb-0 mt-2"><i class="fa fa-phone mr-1"></i> <a href="#">{{company.get_company_address.phone_number}}</a></h6>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="card-footer py-3">
-															<div class="">
-																<a class="btn btn-sm btn-light mr-2"><i class="fa fa-heart-o"></i> Add to Favorites</a>
-																<a class="btn btn-sm btn-light"><i class="fa fa-eye"></i> 125</a>
-															</div>
-															<div class="ml-auto mt-3">
-																<div class="rating-stars d-flex">
-																	<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value"  value="3">
-																	<div class="rating-stars-container">
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																		<div class="rating-star sm">
-																			<i class="fa fa-star"></i>
-																		</div>
-																	</div><a href="#" class="ml-1"> 52 Reviews</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div> -->
+												
 												 
 												{%endfor%}
 												 

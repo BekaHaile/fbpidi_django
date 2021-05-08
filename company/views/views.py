@@ -5,8 +5,7 @@ import csv
 from django.db import IntegrityError
 from django.utils import timezone
 from django.shortcuts import render, redirect
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse,JsonResponse
+from django.http import JsonResponse
 from django.contrib import messages
 from django.views.generic import CreateView,UpdateView,ListView,View,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -19,13 +18,13 @@ from django.views.decorators.cache import never_cache
 from company.models import *
 from accounts.models import CompanyAdmin,UserProfile
 from product.models import Product
-
 from company.forms import *
 from collaborations.models import *
 from collaborations.views import get_paginated_data
 from chat.models import  ChatMessages
 from admin_site.decorators import company_created,company_is_active
 from admin_site.views.dropdowns import image_cropper
+from admin_site.views.views import record_activity
 
 decorators = [never_cache, company_created(),company_is_active()]
 
@@ -64,6 +63,7 @@ class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
         company.contact_person = self.request.user
         company.craeted_by = self.request.user
         company.save()
+        record_activity(self.request.user,"Company","Company Profile Created",company.id)
         image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
                     form.cleaned_data.get('width'),form.cleaned_data.get('height'),
                     company.logo,400,400)
@@ -80,6 +80,7 @@ class CreateCompanyProfile(LoginRequiredMixin,CreateView):
         company = form.save(commit=False)
         company.created_by = self.request.user
         company.save()
+        record_activity(self.request.user,"Company","Company Profile Created",company.id)
         image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
                     form.cleaned_data.get('width'),form.cleaned_data.get('height'),
                     company.logo,400,400)
@@ -220,6 +221,7 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
         company.save()
+        record_activity(self.request.user,"Company","Company Profile Updated",company.id)
         image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
                     form.cleaned_data.get('width'),form.cleaned_data.get('height'),
                     company.logo,400,400)
@@ -283,6 +285,7 @@ class RateCompany(LoginRequiredMixin,UpdateView):
         rating.last_updated_by=self.request.user
         rating.last_updated_date = timezone.now()
         rating.save()
+        record_activity(self.request.user,"Company","Company Profile Rated",rating.id)
         return redirect("admin:company_detail", pk=self.kwargs['pk'])
 
 
@@ -295,9 +298,13 @@ class CreateCompanyAddress(LoginRequiredMixin,CreateView):
             address = form.save(commit=False)
             address.company = Company.objects.get(id=self.kwargs['company'])
             address.save()
+            record_activity(self.request.user,"CompanyAddress","Company Address Created",address.id)
             return JsonResponse({'error':False,'message':'Company Address Saved Successfully'})
         except IntegrityError as e:
             return JsonResponse({'error':True,'message':'Company Address is Already Added'})
+    
+    def form_invalid(self,form):
+        return JsonResponse({'error':True,'message':form.errors})
         
 
 class UpdateCompanyAddress(LoginRequiredMixin,UpdateView):
@@ -305,8 +312,12 @@ class UpdateCompanyAddress(LoginRequiredMixin,UpdateView):
     form_class = CompanyAddressForm
 
     def form_valid(self,form):
-        form.save()
+        address = form.save()
+        record_activity(self.request.user,"CompanyAddress","Company Address Updated",address.id)
         return JsonResponse({'error':False,'message':'Company Address Updated Successfully'})
+    
+    def form_invalid(self,form):
+        return JsonResponse({'error':True,'message':form.errors})
 
 
 class CreateInvestmentCapital(LoginRequiredMixin,CreateView):
@@ -320,6 +331,7 @@ class CreateInvestmentCapital(LoginRequiredMixin,CreateView):
             company_inv_cap.company = Company.objects.get(id=self.kwargs['company'])
             company_inv_cap.year = form.cleaned_data.get('year_inv')
             company_inv_cap.save()
+            record_activity(self.request.user,"InvestmentCapital","Investment capital data Created",company_inv_cap.id)
             return JsonResponse({'error': False, 'message': "Sucessfully Added Investment Capital"})
         except Company.DoesNotExist:
             return JsonResponse({'error': True, 'message': "Company Does Not Exist"})
@@ -347,6 +359,7 @@ class CreatePowerConsumption(LoginRequiredMixin,CreateView):
                 power_consm = form.save(commit=False)
                 power_consm.company = Company.objects.get(id=self.kwargs['company'])
                 power_consm.save()
+                record_activity(self.request.user,"PowerConsumption","Power Consumption data Created",power_consm.id)
                 return JsonResponse({'error': False, 'message': "Sucessfully Added Power Consumption Data"})
         except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Day Already Exists"})
@@ -365,9 +378,11 @@ class CreateCertificates(LoginRequiredMixin,View):
             certificate = form.save(commit=False)
             certificate.company = Company.objects.get(id=self.kwargs['company'])
             certificate.save()
+            record_activity(self.request.user,"Certificates","Certificate data Created",certificate.id)
             return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
         else:
             return JsonResponse({'error': True, 'message': form.errors}) 
+    
 
 class CreateEmployees(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
@@ -381,6 +396,7 @@ class CreateEmployees(LoginRequiredMixin,View):
                     employee.year = ethio_year
                     employee.company = Company.objects.get(id=self.kwargs['company'])
                     employee.save()
+                    record_activity(self.request.user,"Employees","Employees data Created",employee.id)
                     return JsonResponse({'error': False, 'message': form.cleaned_data.get('employment_type')+': Employees Data Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Employee Data For this Year Already Exists"})
@@ -402,6 +418,7 @@ class CreateJobsCreatedYearly(LoginRequiredMixin,View):
                     jobs.quarter_job = form.cleaned_data.get("quarter_job")
                     jobs.company = Company.objects.get(id=self.kwargs['company'])
                     jobs.save()
+                    record_activity(self.request.user,"JobOpportunities","Jobs Created data Created",jobs.id)
                     return JsonResponse({'error': False, 'message': form.cleaned_data.get('job_type')+': Job Opportunity Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Year Already Exists"})
@@ -423,6 +440,7 @@ class CreateEducationStatus(LoginRequiredMixin,View):
                     education.quarter_edu = form.cleaned_data.get("quarter_edu")
                     education.company = Company.objects.get(id=self.kwargs['company'])
                     education.save()
+                    record_activity(self.request.user,"EducationalStatus","Educational Status data Created",education.id)
                     return JsonResponse({'error': False, 'message': form.cleaned_data.get('education_type')+ ': Education Status Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Year Already Exists"})
@@ -444,6 +462,7 @@ class CreateFemaleinPosition(LoginRequiredMixin,View):
                     femaleposn.quarter_fem = form.cleaned_data.get("quarter_fem")
                     femaleposn.company = Company.objects.get(id=self.kwargs['company'])
                     femaleposn.save()
+                    record_activity(self.request.user,"FemalesInPosition","Female Employees data Created",femaleposn.id)
                     return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Year Already Exists"})
@@ -464,6 +483,7 @@ class CreateAnualSourceofInputs(LoginRequiredMixin,View):
                     inputs.year_src = form.cleaned_data.get("year_src")
                     inputs.company = Company.objects.get(id=self.kwargs['company'])
                     inputs.save()
+                    record_activity(self.request.user,"SourceAmountIputs","Source & amount of inputs data Created",inputs.id)
                     return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Year Already Exists"})
@@ -485,6 +505,7 @@ class CreateMarketDestination(LoginRequiredMixin,View):
                     destination.year_destn = form.cleaned_data.get("year_destn")
                     destination.company = Company.objects.get(id=self.kwargs['company'])
                     destination.save()
+                    record_activity(self.request.user,"MarketDestination","Market destination data Created",destination.id)
                     return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Year Already Exists"})
@@ -506,6 +527,7 @@ class CreateMarketTarget(LoginRequiredMixin,View):
                     target.year_target = form.cleaned_data.get("year_target")
                     target.company = Company.objects.get(id=self.kwargs['company'])
                     target.save()
+                    record_activity(self.request.user,"MarketTarget","Market Target data Created",target.id)
                     return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
             except IntegrityError as e:
                 return JsonResponse({'error':True,'message':"Data For this Year Already Exists"})
@@ -589,6 +611,7 @@ class UpdateInvestmentCapital(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"InvestmentCapital","Investment capital data Updated",data.id)
         messages.success(self.request,"Investment Capital Data Updated")
         if self.request.user.is_superuser:
             return redirect("admin:company_detail",pk=data.company.id)
@@ -616,6 +639,7 @@ class UpdateEmployees(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"Employees","Employees data Updated",data.id)
         messages.success(self.request,"Employees Data Updated")
         if self.request.user.is_superuser:
             return redirect("admin:company_detail",pk=data.company.id)
@@ -638,6 +662,7 @@ class UpdateCertificate(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"Certificates","Certificates data Updated",data.id)
         messages.warning(self.request,"Certificate Data Updated")
         if self.request.user.is_superuser:
             return redirect("admin:company_detail",pk=data.company.id)
@@ -666,6 +691,7 @@ class UpdateJobsCreated(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"JobOpportunities","Job Created data Updated",data.id)
         messages.success(self.request,"Jobs Created Data Updated")
         if self.request.user.is_superuser:
             return redirect("admin:company_detail",pk=data.company.id)
@@ -693,6 +719,7 @@ class UpdateEducationStatus(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"EducationalStatus","Educational Status data Updated",data.id)
         messages.success(self.request,"Education Status Data Updated")
         if self.request.user.is_superuser:
             return redirect("admin:company_detail",pk=data.company.id)
@@ -720,6 +747,7 @@ class UpdateFemalesInPosn(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"FemalesInPosition","Female Employees data Updated",data.id)
         messages.success(self.request,"Females in Position Level Data Updated")
         if self.request.user.is_superuser:
             return redirect("admin:company_detail",pk=data.company.id)
@@ -747,6 +775,7 @@ class UpdateSrcAmntInputs(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"SourceAmountIputs","Source & amount of inputs data Updated",data.id)
         messages.success(self.request,"Source & Ammount of inputs Data Updated")
         if self.request.user.is_superuser:
             return redirect("admin:company_detail",pk=data.company.id)
@@ -774,6 +803,7 @@ class UpdatePowerConsumption(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"PowerConsumption","Power Consumption data Updated",data.id)
         messages.success(self.request,"Power Consumption Data Updated")
         if self.request.user.is_superuser:
             return redirect("admin:company_detail",pk=data.company.id)
@@ -801,6 +831,7 @@ class UpdateMarketTarget(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"MarketTarget","Market Target data Updated",data.id)
         messages.success(self.request,"Market Target Data Updated")
         if self.request.user.is_superuser:
             return redirect("admin:company_detail",pk=data.company.id)
@@ -828,6 +859,7 @@ class UpdateMarketDestination(LoginRequiredMixin,UpdateView):
     
     def form_valid(self,form):
         data = form.save()
+        record_activity(self.request.user,"MarketDestination","Market Destination data Updated",data.id)
         messages.success(self.request,"Market Destination Data Updated")
         if self.request.user.is_superuser:
             return redirect("admin:company_detail",pk=data.company.id)
@@ -919,6 +951,7 @@ class CreateSliderImage(LoginRequiredMixin,CreateView):
             image.company = Company.objects.get(id=self.kwargs['company'])
             image.created_by= self.request.user
             image.save()
+            record_activity(self.request.user,"HomePageSlider","Home Page slider image Created",image.id)
             image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
                     form.cleaned_data.get('width'),form.cleaned_data.get('height'),
                     image.slider_image,1280,720)
@@ -942,6 +975,7 @@ class UpdateSliderImage(LoginRequiredMixin,UpdateView):
         image.last_updated_by=self.request.user
         image.last_updated_date = timezone.now()
         image.save()
+        record_activity(self.request.user,"HomePageSlider","Home Page slider image Updated",image.id)
         image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
                     form.cleaned_data.get('width'),form.cleaned_data.get('height'),
                     image.slider_image,1280,720)

@@ -43,7 +43,7 @@ SECRET_KEY = 'u#@!ig3kcz)ocq=2791oii#ay4&$$6lxvj5!$cb2wkfhi5nt(q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','127.0.0.2','192.168.1.108','192.168.1.113','www.iims.com','iims.com','172.17.25.67']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','127.0.0.2','192.168.1.105','192.168.1.113','www.iims.com','iims.com','172.17.25.67']
 
 # Application definition
 
@@ -135,7 +135,7 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'admindb',
+        'NAME': 'FBPIDI_IIMS',
         'USER': 'postgres',
         'PASSWORD': 'cbe@ps4woga',
         'HOST': '127.0.0.1',

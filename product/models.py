@@ -54,7 +54,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand,on_delete=models.RESTRICT,verbose_name="Varayti Brand",null=True,blank=True,related_name="varayti_brand")
     quantity = models.FloatField(verbose_name="Product Quantity",default=0)
     therapeutic_group = models.ForeignKey(TherapeuticGroup,on_delete=models.RESTRICT,related_name="therapeutic_group",verbose_name="Therapeutic Group",null=True,blank=True)
-    dose = models.ForeignKey('Dose',on_delete=models.RESTRICT,null=True,blank=True,related_name="product_dose")
+    dose = models.CharField(max_length=255,verbose_name="Dose & Packaging",null=True,blank=True)
     dosage_form = models.ForeignKey('DosageForm',on_delete=models.RESTRICT,null=True,blank=True,related_name="product_dosage_form")
     description = models.TextField(verbose_name="Varayti Description(English)")
     description_am = models.TextField(verbose_name="Varayti Description(Amharic)")
@@ -88,7 +88,7 @@ class Product(models.Model):
 
     def rating(self):
         total = 0
-        reviews =self.review_set.all()
+        reviews =self.product_review.all()
         for r in reviews:
             total += r.rating
         try:
@@ -306,7 +306,7 @@ class ProductInquiryReply(models.Model):
 class Review(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name="product_review")
     rating = models.IntegerField(default=2)
     review = models.TextField()
     time_stamp = models.DateTimeField(auto_now_add=True)
