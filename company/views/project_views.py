@@ -83,6 +83,11 @@ class CreateInvestmentProject(LoginRequiredMixin,CreateView):
         messages.success(self.request,'Investment Project Created,Please Complete The Following!')
         return redirect("admin:create_project_detail_admin",pk=project.id)
 
+    def form_invalid(self, form):
+        print("form is invalide", form.errors)
+        messages.warning(self.request,"Form is invalid! Check your input again!")
+        return redirect("admin:create_project")
+
 
 @method_decorator(decorators,name='dispatch')
 class CreateInvestmentProjectDetail(LoginRequiredMixin,UpdateView):

@@ -499,12 +499,12 @@
         </div>
     </footer>
     <script>
-        // check unread messages for only logged in users
-        if ("{{user.is_authenticated}}"=="True")
+        
             setInterval(check_inbox, 2000);
             
         function check_inbox(){
-              
+            // check unread messages for only logged in users
+            if ("{{user.is_authenticated}}"=="True")
                 fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>
                 {   num_unread_messages = data['num']
                     if (num_unread_messages > 0)
@@ -512,7 +512,7 @@
                      // first clear the list area 
                     document.getElementById('list_of_senders').innerHTML = "";
                     for (unread_message of data['unread_messages']){
-                        console.log("from for loop"+unread_message.sender_name+" "+unread_message.message)
+
                         append_unread_messages(unread_message);
                     }
 
@@ -520,8 +520,7 @@
             }
 
         function append_unread_messages(message_obj){
-            console.log("from appende meesages"+message_obj)
-        
+          
         var li_item = document.createElement('li');
         li_item.id = message_obj.content;
         var li_card_item = document.createElement('div');
@@ -605,7 +604,7 @@
             }
             ).then(e => e.json()).then(result=>{
                     window.alert(result['message'])
-                    console.log(result['message']) 
+                     
                     document.getElementById('email_field').value = ""             
                 }); 
     }

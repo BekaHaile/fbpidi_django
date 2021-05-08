@@ -73,6 +73,9 @@ def get_weekly_and_old(queryset):
         return {'error':True, 'message':str(e)}
 
 if __name__ == '__main__':    
+    Company.objects.all()
+    for c in Company.objects.all():
+        c.is_active
     
     blogs = get_weekly_and_old(Blog.objects.filter(publish = True))
     if blogs['error']==False:
