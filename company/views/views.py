@@ -1071,17 +1071,35 @@ class CompanyByMainCategory(ListView):
     model = Company
     template_name = "frontpages/company/company_list.html"
     paginate_by = 4
+    def get_data(self, cat):
+        if cat == "Beverage":
+            return Company.objects.filter(main_category="Beverage", is_active =True)
+        elif cat == "Food":
+            return Company.objects.filter(main_category="Food", is_active =True)
+        elif cat == "Pharmaceuticals":
+            return Company.objects.filter(main_category="Pharmaceuticals", is_active =True)
+        elif cat == "all":
+            return Company.objects.all().exclude(main_category="FBPIDI", is_active =True)
+
     
     def get_queryset(self):
-        print("#####################",self.kwargs)
-        if self.kwargs['option'] == "Beverage":
-            return Company.objects.filter(main_category="Beverage", is_active =True)
-        elif self.kwargs['option'] == "Food":
-            return Company.objects.filter(main_category="Food", is_active =True)
-        elif self.kwargs['option'] == "Pharmaceuticals":
-            return Company.objects.filter(main_category="Pharmaceuticals", is_active =True)
-        elif self.kwargs['option'] == "all":
-            return Company.objects.all().exclude(main_category="FBPIDI", is_active =True)
+        return self.get_data(self.kwargs['option'])
+
+        # if self.kwargs['option'] == "Beverage":
+        #     return Company.objects.filter(main_category="Beverage", is_active =True)
+        # elif self.kwargs['option'] == "Food":
+        #     return Company.objects.filter(main_category="Food", is_active =True)
+        # elif self.kwargs['option'] == "Pharmaceuticals":
+        #     return Company.objects.filter(main_category="Pharmaceuticals", is_active =True)
+        # elif self.kwargs['option'] == "all":
+        #     return Company.objects.all().exclude(main_category="FBPIDI", is_active =True)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        count = self.get_data(self.kwargs['option']).count()
+        context['message'] = f" {count} Listing Found! "
+        context['message_am'] = f"{count} ውጤት ተገኝቷል! "
+        return context
 
 class ProjectList(ListView):
     model = InvestmentProject

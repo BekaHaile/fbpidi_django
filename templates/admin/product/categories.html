@@ -109,8 +109,9 @@
 							<tbody>
 								{%for cat in object_list%}
 							<tr>
-								<td>{{cat.sub_category_name}}</td>
 								<td>{{cat.category_name}}</td>
+								<td>{{cat.sub_category_name}}</td>
+								
 								<td>{{cat.uom}}</td>
 								<td>{{cat.created_by.username}}</td>
 								<td><span class="badge badge-success">{{cat.created_date}}</span></td>

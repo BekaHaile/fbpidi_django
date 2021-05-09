@@ -927,7 +927,6 @@ class DecrementFromCart(LoginRequiredMixin,View):
         if order_qset.exists():
             order = order_qset[0]
             if order.products.filter(product__id=product.id).exists():
-                print("here")
                 order_product = OrderProduct.objects.filter( 
                     user=self.request.user,product=product,ordered=False )[0]
                 if order_product.quantity > 1:

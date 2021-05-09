@@ -12,7 +12,7 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class=""><span class="font-weight-bold">{{object_list.count}}</span> {% trans "listings available" %}</h1>
+									<h1 class=""><span class="font-weight-bold">{% print_translated message message_am LANGUAGE_CODE %}</span> </h1>
 								</div>
 								<div class="search-background px-4 py-3 mt-4">
 									<form action="{% url 'search_company'%}" method="GET">
@@ -133,9 +133,7 @@
 																		<a class="" href="#"><i class="fa fa-share-alt"></i></a>
 																	</div>
 																</div>
-																<!-- <div class="ml-auto mt-3 mt-sm-0">
-																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc"><a href="#"><i class="fa fa-map-signs"></i> {% trans "Get Directions" %}</a></div>
-																</div> -->
+															
 															</div>
 														</div>
 													</div>
@@ -205,8 +203,6 @@
 														</div>
 													</div>
 												</div>
-												
-												 
 												{%endfor%}
 												 
 											</div>

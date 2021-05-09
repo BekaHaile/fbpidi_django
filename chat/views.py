@@ -125,7 +125,7 @@ class AdminChatList( LoginRequiredMixin, View):
 def get_grouped_chats(user, excluded_user = None):
         if excluded_user !=None:
             to_exclude = Q( Q(receiver = excluded_user) | Q(sender = excluded_user))
-            other_messages = ChatMessages.objects.filter( Q(receiver = user) | Q(sender = user)).exclude( to_exclude).order_by('-created_date')
+            other_messages = ChatMessages.objects.filter( Q(receiver = user) | Q(sender = user)).exclude(to_exclude).order_by('-created_date')
         else:
             other_messages = ChatMessages.objects.filter( Q(receiver = user) | Q(sender = user)).order_by('-created_date')
             
