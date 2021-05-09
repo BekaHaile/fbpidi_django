@@ -549,7 +549,8 @@ class CreateSalesPerformance(LoginRequiredMixin,CreateView):
             sp.created_by = self.request.user
             sp.save()
             messages.success(self.request,"Production Sales Performance Created")
-            return redirect("admin:sales_performance")
+            return redirect("admin:create_sales_performance")
+            # return redirect("admin:sales_performance")
     
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
@@ -718,7 +719,7 @@ class CreateAnualInputNeed(LoginRequiredMixin,CreateView):
 
     def form_valid(self,form):
         if AnnualInputNeed.objects.filter(company=self.request.user.get_company(),product=SubCategory.objects.get(id=form.cleaned_data.get('product').id),year=form.cleaned_data.get('year'),
-            input_name__icontains =form.cleaned_data.get("input_name")).exists():
+            input_name =form.cleaned_data.get("input_name")).exists():
             messages.warning(self.request,"Data For this Input and Year already exists")
             return redirect("admin:create_anual_inp_need")
         else:
@@ -727,7 +728,8 @@ class CreateAnualInputNeed(LoginRequiredMixin,CreateView):
             ain.created_by = self.request.user
             ain.save()
             messages.success(self.request,"Anual Input Need Created")
-            return redirect("admin:anual_input_need")
+            return redirect("admin:create_anual_inp_need")
+            # return redirect("admin:anual_input_need")
 
 @method_decorator(decorators,name='dispatch')
 class UpdateAnualInputNeed(LoginRequiredMixin,UpdateView):
@@ -820,7 +822,8 @@ class CreateInputDemandSupply(LoginRequiredMixin,CreateView):
             ds.created_by = self.request.user
             ds.save()
             messages.success(self.request,"Input Demand and Supply data added")
-            return redirect("admin:demand_supply_list")
+            return redirect("admin:create_demand_supply")
+            # return redirect("admin:demand_supply_list")
     
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)

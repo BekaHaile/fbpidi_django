@@ -9,13 +9,13 @@ from product.models import Category, SubCategory, Brand
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id','category_type', 'category_type_am', 'category_name','category_name_am')
+        fields = ('id','category_type', 'category_type_am', 'category_name','category_name_am', 'icons')
         
 class SubCategorySerializer(serializers.ModelSerializer):
         category_name = CategorySerializer(read_only = True)
         class Meta:
             model = SubCategory
-            fields = ('id','category_name','sub_category_name','sub_category_name_am')
+            fields = ('id','category_name','sub_category_name','sub_category_name_am','icons')
 
 
 class BrandSerializer(serializers.ModelSerializer):
