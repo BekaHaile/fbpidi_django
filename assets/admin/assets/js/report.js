@@ -46,7 +46,7 @@
 				  labels: data.labels,
 				  datasets: [{
 					label: 'Companies',
-					backgroundColor: [ '#2196F3;', '#F44336', '#FF7043', '#FF9800', '#4CAF50'],
+					backgroundColor: [ '#2196F3;', '#F44336', '#FF7043', '#FF9800', '#4CAF50','#93f78f','#a87132','#8442db',],
 					data: data.data
 				  }]          
 				},
@@ -302,7 +302,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: 'Chnage in Capital Utilization',
-                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0'],
+                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0','#a87132','#93f78f'],
                         data: data.data
                       }]          
                     },

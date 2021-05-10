@@ -36,20 +36,18 @@
 										<img src="{{user.profile_image.url}}" style="height: 90px;width: 100px;" class="brround" alt="user">
 										{%endif%}
 									</div>
-									<a href="{% url 'userprofile' %}" class="text-dark"><h4 class="mt-3 mb-0 font-weight-semibold">{{user.first_name}} {{user.last_name}}</h4></a>
+									<a href="{% url 'mydash' %}" class="text-dark"><h4 class="mt-3 mb-0 font-weight-semibold">{{user.first_name}} {{user.last_name}}</h4></a>
 								</div>
 							</div>
 							<div class="item1-links mb-0">
-								<a href="{% url 'mydash' %}" class="active d-flex border-bottom">
+								<a href="{% url 'mydash' %}" class="{%block mydash%}{%endblock%} d-flex border-bottom">
 									<span class="icon1 mr-2"><i class="typcn typcn-edit fs-20"></i></span> Edit Profile
 								</a>
-								<!-- <a href="{% url 'mylistings' %}" class="d-flex border-bottom">
-									<span class="icon1 mr-2"><i class="typcn typcn-briefcase fs-20"></i></span> My Listings
-								</a> -->
-								<a href="{% url 'favorite' %}" class="d-flex border-bottom">
+							
+								<a href="{% url 'favorite' %}" class="{%block favorites%}{%endblock%} d-flex border-bottom">
 									<span class="icon1 mr-2"><i class="typcn typcn-heart-outline fs-20"></i></span> My Favorite
 								</a>
-								<a href="{% url 'customer_chat_list' %}" class="d-flex border-bottom">
+								<a href="{% url 'customer_chat_list' %}" class="{%block chats%}{%endblock%} d-flex border-bottom">
 									<span class="icon1 mr-2"><i class="typcn typcn-mail  fs-20"></i></span>
 									
 									{% count_unread_chats user as unread_messages_count %}
@@ -62,7 +60,7 @@
 									
 								</a>
 								
-								<a href="{% url 'orders' %}" class="d-flex border-bottom">
+								<a href="{% url 'orders' %}" class="{%block orders%}{%endblock%} d-flex border-bottom">
 									<span class="icon1 mr-2"><i class="typcn typcn-shopping-cart fs-20"></i></span> Orders
 								</a>
 								<a href="{% url 'logout' %}" class="d-flex">

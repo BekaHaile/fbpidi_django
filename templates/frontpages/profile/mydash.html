@@ -1,5 +1,5 @@
 {%extends 'frontpages/profile/profile_layout.html'%}
-
+{%block mydash%}active{%endblock%}
 {%block profile_content%}
 						<form action="{%url 'mydash'%}" method="POST" enctype="multipart/form-data">
 							{%csrf_token%}

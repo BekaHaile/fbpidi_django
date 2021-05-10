@@ -159,7 +159,8 @@ class UserTracker(models.Model):
 
 class UserActivityLog(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True)
-    content_type = models.ForeignKey(ContentType,on_delete=models.SET_NULL,null=True,blank=True)
+    model_name = models.CharField(max_length=200,null=True,blank=True)
+    object_id = models.IntegerField(null=True,blank=True)
     before_change = models.CharField(max_length=255,null=True)
     after_change = models.CharField(max_length=255,null=True)
     activity = models.CharField(max_length=255,null=True)

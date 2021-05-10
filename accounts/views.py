@@ -27,7 +27,8 @@ from accounts.models import UserProfile,Company,CompanyAdmin,Customer,Subscriber
 from company.models import CompanyStaff,Company
 from accounts.email_messages import sendEmailVerification,sendWelcomeEmail,sendSubscriptionActivationEmail
 from admin_site.decorators import company_created,company_is_active
-
+from admin_site.models import UserActivityLog
+from admin_site.views.views import record_activity
 # 
 # INDEX VIEW
 decorators = [never_cache, company_created(),company_is_active()]
@@ -178,7 +179,8 @@ class UserDetailView(LoginRequiredMixin, UpdateView):
     template_name = "admin/accounts/user_detail.html"
 
     def form_valid(self,form):
-        form.save()
+        user_profile = form.save()
+        record_activity(self.request.user,"UserProfile","Edited a UserProfile Object",user_profile.id,before=None,after=None)
         messages.success(self.request,"User Info Updated Successfully")
         return redirect("admin:user_detail",pk=self.kwargs['pk'])
 
@@ -195,11 +197,13 @@ class SuspendUser(LoginRequiredMixin,View):
             if self.kwargs['option'] == "suspend":
                 user.is_active = False
                 user.save()
+                record_activity(self.request.user,"UserProfile","Suspended A User",user.id,before=None,after=None)
                 messages.success(self.request,"User Suspended")
                 return redirect("admin:users_list")
             elif self.kwargs['option'] == 'enable':
                 user.is_active = True
                 user.save()
+                record_activity(self.request.user,"UserProfile","Activated A User",user.id,before=None,after=None)
                 messages.success(self.request,"User Activated")
                 return redirect("admin:users_list")
             
@@ -218,6 +222,7 @@ class CreateCompanyStaff(LoginRequiredMixin,CreateView):
         user = form.save()
         user.created_by = self.request.user
         user.save()
+        record_activity(self.request.user,"UserProfile","Created A Company Staff ",user.id,before=None,after=None)
         company = Company.objects.get(contact_person=self.request.user)
         comp_staff = CompanyStaff.objects.create(user=user,company=company)
         comp_staff.save()
@@ -235,6 +240,7 @@ class CreateUserView(LoginRequiredMixin, CreateView):
         user = form.save()
         user.created_by = self.request.user
         user.save()
+        record_activity(self.request.user,"UserProfile","User Created",user.id,before=None,after=None)
         messages.success(self.request,"You Created a User Successfully!")
         return redirect("admin:users_list")
 
@@ -259,6 +265,7 @@ class GroupView(LoginRequiredMixin,View):
         group,created = Group.objects.get_or_create(name = self.request.POST.get('group_name'))
         group.permissions.set(permission_list)
         group.save()
+        record_activity(self.request.user,"Group","Role Group Created ",group.id,before=None,after=None)
         return JsonResponse({"message":"Role Group Created SuccessFully"})
 
 
@@ -268,10 +275,10 @@ class UserLogView(LoginRequiredMixin,View):
         failed_logins = FailedLoginLog.objects.all()
         login_logs = LoginLog.objects.all()
         login_attempt = LoginAttempt.objects.all()
-        deactivation = UserDeactivation.objects.all()
+        user_activities = UserActivityLog.objects.all()
         context = {
         'failed_logins':failed_logins,'login_attempts':login_attempt,
-        'login_logs':login_logs,'user_deactivated':deactivation
+        'login_logs':login_logs,'user_activities':user_activities,
         }
         return render(self.request,"admin/accounts/user_logs.html",context)
 
