@@ -159,11 +159,11 @@
                                         
                                             
                                             <a href="#compose{{inquiry.id}}" data-toggle="modal" data-target="#compose{{inquiry.id}}" class="dropdown-item" ><i class="icon-eye"></i>View Detail</a>
-                                            <a href="#" class="dropdown-item" ><i class="icon-trash"></i>Chat Reply</a>
+                                            <a  class="dropdown-item" onclick="linked_reply('{{inquiry.id}}', 'chat')" ><i class="icon-trash" ></i>Chat Reply</a>
                                             <a href="#" class="dropdown-item" data-toggle="modal" data-target="#compose{{inquiry.id}}" ><i class="icon-trash"></i>Direct Reply</a>
-                                            <a href="#compose{{inquiry.id}}" class="dropdown-item" ><i class="icon-trash"></i>Email Reply</a>
+                                            <a  href="mailto:{{inquiry.sender_email}}" class="dropdown-item" onclick="email_reply('{{inquiry.id}}', 'email')" ><i class="icon-trash"></i>Email Reply</a>
                                             
-                                                
+    
                                             </div>
                                         </div>
                                     </div>
@@ -244,6 +244,56 @@
     <!-- /table -->
 
 </div>
+<script>
+    function email_reply(inquiry_id)
+            {
+                    fetch("{% url 'admin:linked_inquiry_relply' %}",
+                    {
+                        method:"POST",
+                        credentials: 'same-origin',
+                        headers:{
+                            "content-Type":'application/json',
+                            'X-CSRFToken':'{{csrf_token}}'
+                        },
+                        body:JSON.stringify({
+                            'id': inquiry_id,
+                            'type':'email'
+                            
+                        })
+                    }
+                    )
+					
+				}
+    function linked_reply(inquiry_id, type)
+				{
+                    fetch("{% url 'admin:linked_inquiry_relply' %}",
+                    {
+                        method:"POST",
+                        credentials: 'same-origin',
+                        headers:{
+                            "content-Type":'application/json',
+                            'X-CSRFToken':'{{csrf_token}}'
+                        },
+                        body:JSON.stringify({
+                            'id': inquiry_id,
+                            'type':type
+                            
+                        })
+                    }
+                    ).then(e => e.json()).then(result=>{
+                        if (result['error'] == false)        
+                            window.location.pathname = '/chat/with/' + result['username']+'/';  
+                        
+                        else
+                            window.alert("yes error");    
+                       
+                        });   
+					
+				}
+				
+                
+</script>
+
 {% endblock %}
 
 

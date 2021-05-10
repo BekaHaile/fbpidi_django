@@ -134,7 +134,7 @@
 				{
 					var receiver = document.getElementById('chat_to').value;	
 					fetch( " /chat/check_user/"+receiver+"/").then(e=>e.json()).then(result =>
-					{   console.log(result)
+					{   
 						if (result['result'] == true){
 							 window.location.pathname = '/chat/with/' + receiver+'/';
 						}
@@ -155,7 +155,9 @@
 					});
 					
 				}
-				$(document).ready(function(){
+				
+                
+                $(document).ready(function(){
 					$("#summernote").summernote();
 					$(".summernote").summernote();
 				});

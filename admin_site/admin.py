@@ -85,6 +85,7 @@ class CustomAdminSite(admin.AdminSite):
 
             # inquiry related
             path('inquiry_list/', CompanyInquiryList.as_view(), name = "admin_inquiry_list"),
+            path('linked_inquiry_relply',LinkedInquiryReply, name = 'linked_inquiry_relply'),
             path('inquiry_reply/<pk>/', CompanyInquiryReply.as_view(), name="admin_inquiry_reply"),
 
 
