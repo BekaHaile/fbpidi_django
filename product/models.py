@@ -255,22 +255,8 @@ class ProductPrice(models.Model):
         return str(self.price)
 
 
-class OrderProduct(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
-    to_company = models.ForeignKey(Company,on_delete=models.CASCADE,null=True,blank=True)
-    quantity = models.IntegerField(default=1)
-    ordered = models.BooleanField(default=False)
-    time_stamp = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return "{} of {}".format(self.quantity,self.product.name)
-    
-    def get_total_item_price(self):
-        return self.product.price().price * self.quantity
-
-
 class ProductInquiry(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,related_name="user_inquiry")
     sender_email = models.EmailField(verbose_name="sender email",)
     product = models.ForeignKey(Product, on_delete = models.CASCADE, blank = True, null = True)
     category = models.ForeignKey(Category, on_delete = models.CASCADE, blank = True, null = True)
@@ -310,13 +296,4 @@ class Review(models.Model):
     rating = models.IntegerField(default=2)
     review = models.TextField()
     time_stamp = models.DateTimeField(auto_now_add=True)
-
-
-class AbuseReport(models.Model):
-    url_link = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)
-    email = models.EmailField(max_length=200)
-    message  = models.TextField()
-    time_stamp = models.DateTimeField(auto_now_add=True)
-    
 

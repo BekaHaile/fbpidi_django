@@ -874,106 +874,7 @@ class UpdateInputDemandSupply(LoginRequiredMixin,UpdateView):
 
 
 
-
-@method_decorator(decorators,name='dispatch') 
-class AddToCartView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        product = get_object_or_404(Product,id=kwargs['id'])
-        
-        order_product,created = OrderProduct.objects.get_or_create(
-            product=product,
-            to_company=product.company,
-            user=self.request.user,
-            ordered=False
-        )
-        order_queryset = Order.objects.filter(
-            user=self.request.user,
-            ordered=False
-        )
-        if order_queryset.exists():
-            order = order_queryset[0]
-            if order.products.filter(product__id=product.id).exists():
-                order_product.quantity +=1
-                order_product.save()
-                return redirect("cart_summary")
-            else:
-                order.products.add(order_product)
-                order.save()
-                messages.success(self.request,"New Product is added to your cart")
-                return redirect("cart_summary")
-        else:
-            order = Order.objects.create(user=self.request.user,order_date=timezone.now())
-            order.products.add(order_product)
-            order.save()
-            messages.success(self.request,"The Order is added to your cart")
-            return redirect("cart_summary")
-
-
-class CartSummary(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        try:
-            order = Order.objects.get(user=self.request.user,ordered=False)
-            products = Product.objects.all().order_by("timestamp")[:4]
-            return  render(self.request,"frontpages/product/carts.html",{'orders':order,'products':products})
-        except ObjectDoesNotExist:
-            messages.warning(self.request,"You Do Not have active order")
-            return redirect("index")
-
-
-class DecrementFromCart(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        product = get_object_or_404(Product,id=self.kwargs['id'])
-        order_qset = Order.objects.filter(user=self.request.user,ordered=False)
-        if order_qset.exists():
-            order = order_qset[0]
-            if order.products.filter(product__id=product.id).exists():
-                order_product = OrderProduct.objects.filter( 
-                    user=self.request.user,product=product,ordered=False )[0]
-                if order_product.quantity > 1:
-                    order_product.quantity -= 1
-                    order_product.save()
-                    return redirect("cart_summary")
-                else:
-                    order.products.remove(order_product)
-                    messages.success(self.request,"All Items removed from your cart")
-                    return redirect("index")
-                
-               
-            else: 
-                messages.warning(self.request,"This item was not in your cart")
-                return redirect("index")
-        else: 
-            messages.warning(self.request,"You do not have order")
-            return redirect("index")    
-
-
-class CheckoutView(LoginRequiredMixin,View):
-    def get(self,*args,**kwargs):
-        context = {}
-        order = Order.objects.get(user=self.request.user,ordered=False)
-        context['order'] = order
-        context['form'] = CheckoutForm()
-        return render(self.request,"frontpages/product/checkout.html",context)
-
-    
-    def post(self,*args,**kwargs):
-        form = CheckoutForm(self.request.POST)
-        order = Order.objects.get(user=self.request.user,ordered=False)
-        if form.is_valid():
-            shipping = form.save(commit=False)
-            shipping.user = self.request.user
-            shipping.save()
-            order.shipping_address = shipping
-            invoice = InvoiceRecord.create(
-                user=self.request.user,
-                amount=order.get_total_price()
-            )
-            invoice.code = create_invoice(invoice,self.request.user)
-            invoice.save()
-            order.invoice = invoice
-            order.ordered = True
-            order.save()
-            return redirect("")
+ 
 
  
 class p_serializer(serializers.ModelSerializer):
@@ -1019,6 +920,7 @@ class InquiryRequest(LoginRequiredMixin, View):
                 for p in products:       
                     item = form.save(commit = False)
                     item.product = p
+                    item.user=self.request.user
                     item.save()
             else:
                 print("form invalid")
@@ -1049,6 +951,7 @@ class InquiryByCategory(LoginRequiredMixin, View):
                 for c in companies:       
                     item = form.save(commit = False)
                     item.category = category
+                    item.user=self.request.user
                     item.save()
                     return render(self.request, "frontpages/product/success_inquiry.html",{ 'email':self.request.POST['sender_email'], 'prod_id_list': [] })        
             else:

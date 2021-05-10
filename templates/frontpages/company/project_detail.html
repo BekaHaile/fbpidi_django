@@ -13,8 +13,8 @@
 						<div class="text-center text-white">
 							<!-- <h1 class="">Project-Details</h1> -->
 							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="{%url 'company_home' pk=project.id%}">{% trans "Home" %}</a></li>
-								<li class="breadcrumb-item"><a href="{%url 'company_projects' pk=project.id%}">{% trans "Products" %}</a></li>
+								<li class="breadcrumb-item"><a href="{%url 'company_home' pk=object.id%}">{% trans "Home" %}</a></li>
+								<li class="breadcrumb-item"><a href="{%url 'company_projects' pk=object.id%}">{% trans "Investment Projects" %}</a></li>
 								<li class="breadcrumb-item active text-white" aria-current="page">{{project.project_name}}</li>
 							</ol>
 						</div>

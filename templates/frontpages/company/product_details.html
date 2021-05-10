@@ -43,10 +43,10 @@
 												</a></li>
 											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i> {{product.company.get_company_address.city_town|title}}</a></li>
 											<!-- <li class="mr-5"><a href="#" class="icons"><i class="icon icon-calendar text-muted mr-1"></i> 5 hours ago</a></li> -->
-											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-eye text-muted mr-1"></i> 765</a></li>
+											<!-- <li class="mr-5"><a href="#" class="icons"><i class="icon icon-eye text-muted mr-1"></i> 765</a></li> -->
 										</ul>
 										<div class="rating-stars d-flex mr-5">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
+											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="{{product|product_rating}}">
 											<div class="rating-stars-container mr-2">
 												<div class="rating-star sm">
 													<i class="fa fa-star"></i>
@@ -63,7 +63,7 @@
 												<div class="rating-star sm">
 													<i class="fa fa-star"></i>
 												</div>
-											</div> 4.0
+											</div> {{product|product_rating}}
 										</div>
 										<div class="rating-stars d-flex">
 											<div class="rating-stars-container mr-2">

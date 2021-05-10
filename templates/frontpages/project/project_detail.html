@@ -1,16 +1,21 @@
 {%extends 'frontpages/layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
 
+{%block title%}Projects List{%endblock%}
 {%block content%}
+{% get_current_language as LANGUAGE_CODE %}
 		<!--Breadcrumb-->
 		<section>
 			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Project-Details</h1>
+							<h1 class="">{%trans "Investment Project"%}</h1>
 							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="{%url 'index'%}">Home</a></li>
-								<li class="breadcrumb-item"><a href="#">Project-Detail</a></li>
+								<li class="breadcrumb-item"><a href="{%url 'index'%}">{% trans "Home" %}</a></li>
+								<li class="breadcrumb-item"><a href="{%url 'project_list'%}">{% trans "Projects"%}</a></li>
+								<li class="breadcrumb-item"><a href="#">{%print_translated object.project_name object.project_name_am LANGUAGE_CODE %}</a></li>
 							</ol>
 						</div>
 					</div>
@@ -41,7 +46,7 @@
 									<a href="#"><i class="fa fa-phone text-muted mr-2"></i><span> {{object.contact_person.phone_number}}</span></a>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<a href="#"><i class="fa fa-map text-muted mr-2"></i><span> {{object.site_location_name}}</span></a>										 
 								</div>
-								<p>{{object.description|safe}}</p>
+								<p>{%print_translated object.description|safe object.description_am|safe LANGUAGE_CODE %}</p>
 							</div>
 						</div>
  

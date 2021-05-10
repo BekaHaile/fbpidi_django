@@ -6,7 +6,7 @@
 
 {%block content%}
 {% get_current_language as LANGUAGE_CODE %}
-
+		<section style="height: 50px;"></section>
 		<!--Sliders Section-->
 		<div class="demo-gallery">
 			<ul id="lightgallery" class="owl-carousel owl-carousel-icons-banner">
@@ -163,19 +163,28 @@
 												{% endif %}
 											</div>
 											<div class="card-body">
-												<div class="rating-stars mb-1 mt-0 d-flex">
-													<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="{{product.rating}}">
-												
+												<div class="rating-stars d-flex mr-5">
+													<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="{{product|product_rating}}">
 													<div class="rating-stars-container mr-2">
-														{% get_looper_object product.rating as rates %}
-														{% for i in rates %}
 														<div class="rating-star sm">
 															<i class="fa fa-star"></i>
 														</div>
-														{% endfor %}
-														
-													</div> <a class="text-white" href="#">{{product|review_count}} {% trans "Reviews" %}</a>
+														<div class="rating-star sm">
+															<i class="fa fa-star"></i>
+														</div>
+														<div class="rating-star sm">
+															<i class="fa fa-star"></i>
+														</div>
+														<div class="rating-star sm">
+															<i class="fa fa-star"></i>
+														</div>
+														<div class="rating-star sm">
+															<i class="fa fa-star"></i>
+														</div>
+													</div> {{product|product_rating}}
+													<a class="text-white" href="#">{{product|review_count}} {% trans "Reviews" %}</a>
 												</div>
+												 
 												<div class="item-card7-desc">
 													<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold">{{product.name}} <i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
 												</div>

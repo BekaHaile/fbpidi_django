@@ -1,4 +1,6 @@
+{%load core_template_tags%}
 {%load i18n%}
+{% get_current_language as LANGUAGE_CODE %}
 <!doctype html>
 <html lang="en" dir="ltr">
 
@@ -9,13 +11,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="FBPIDI - Business Directory">
     <meta name="author" content="Melfan Tech">
-    <meta name="keywords" content="business directory website,online business directory website,
-		directory listing sites,bootstrap form template,bootstrap templates,responsive web design,
-		bootstrap website templates,business directory,business directory template,business listing,buy web templates,
-		directory,directory html template,directory listing html template,directory website template,html list template,
-		html template,html5 responsive template,html5 template,local business directory,local business listing,online business directory,
-		online directory,premium,premium bootstrap templates,small business directory,classified,Premium business directory Templates,
-		Directory & Listing HTML Template,business listing websites">
+    <meta name="keywords" content="FBPIDI, fbpidi, food beverage and pharmaceutical Industries,
+    food beverage and pharmaceutical Industries development inistitute melfantech,">
     <link rel="icon" href="/static/frontpages/images/brand/favicon.png" type="image/x-icon"/>
     <link rel="shortcut icon" type="image/x-icon" href="/static/frontpages/images/brand/favicon.png"/>
 
@@ -346,8 +343,8 @@
 <section class="sptb border-top bg-white mt-5">
     <div class="container">
         <div class="section-title center-block text-center">
-            <h2>Subscribe To Our Newsletter</h2>
-            <p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+            <h2>{% trans "Subscribe To Our Newsletter" %}</h2>
+            <p>{% print_translated "Ethiopian Food, Beverage and Pharmaceutical Industries" "የኢትዮጲያ ምግብ፣ መጠጥ እና መድህኒት ኩባኒያዎች " LANGUAGE_CODE %}</p>
         </div>
         <div class="row">
             <div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">

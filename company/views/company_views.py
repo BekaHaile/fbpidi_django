@@ -179,9 +179,22 @@ def Like_Company(request):
         return JsonResponse({'error':True})
 
     
-class CompanyProductList(DetailView):
-    model= Company
+class CompanyProductList(ListView):
+    model= Product
     template_name = "frontpages/company/product_list.html"
+    paginate_by = 6
+
+    def get_queryset(self):
+        try:
+            return Product.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
+        except Exception as e:
+            return []
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object'] = Company.objects.get(id = self.kwargs['pk'])
+        return context 
+
 
 
 class CompanyProductdetail(DetailView):
@@ -195,9 +208,21 @@ class CompanyProductdetail(DetailView):
         return context
 
 
-class CompanyProjectList(DetailView):
-    model= Company
+class CompanyProjectList(ListView):
+    model= InvestmentProject
     template_name = "frontpages/company/project_list.html"
+    paginate_by = 3
+
+    def get_queryset(self):
+        try:
+            return InvestmentProject.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
+        except Exception as e:
+            return []
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object'] = Company.objects.get(id = self.kwargs['pk'])
+        return context
 
 
 class CompanyProjectdetail(DetailView):

@@ -1104,6 +1104,7 @@ class CompanyByMainCategory(ListView):
 class ProjectList(ListView):
     model = InvestmentProject
     template_name = "frontpages/project/project_list.html"
+    paginate_by = 6
 
 class ProjectDetail(DetailView):
     model = InvestmentProject

@@ -167,7 +167,7 @@ def get_fbpidi():
 
 @register.simple_tag
 def count_review_rating(product, rating):
-    return product.review_set.filter(rating = rating).count()
+    return product.product_review.filter(rating = rating).count()
 
     
 

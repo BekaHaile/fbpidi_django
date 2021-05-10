@@ -365,8 +365,8 @@
 										</li>
 										<li><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>
 												{{company.get_company_address.city_town}}</a></li>
-										<!-- <li class="mb-md-0"><a href="#" class="icons"><i
-													class="icon icon-event text-muted mr-1"></i> 1 hour ago</a></li> -->
+										<li class="mb-md-0"><a href="#" class="icons"><i
+													class="icon icon-event text-muted mr-1"></i>{{company.created_date|timesince}}</a></li>
 										<li class="mb-0"><a href="#" class="icons"><i
 													class="icon icon-phone text-muted mr-1"></i>{{company.get_company_address.phone_number}}</a>
 										</li>

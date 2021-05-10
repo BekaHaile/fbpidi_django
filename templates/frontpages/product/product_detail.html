@@ -16,18 +16,8 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
-									<h1 class="mb-2"><span class="font-weight-semibold">{{product.company.name|title}}</span></h1>
-									<div class="rating-stars mx-auto mb-2 mt-3 d-flex banner-ratings">
-										<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
-										<div class="rating-stars-container mr-2">
-											{% get_looper_object product.rating as rates %}
-											{% for i in rates %}
-											<div class="rating-star sm">
-												<i class="fa fa-star"></i>
-											</div>
-											{% endfor %}
-										</div> <a class="text-white" href="#">{{product|review_count}} {% trans "Reviews" %}</a>
-									</div>
+									<h1 class="mb-2"><span class="font-weight-semibold">{%print_translated product.company.name|title product.company.name|title LANGUAGE_CODE%}</span></h1>
+									 
 									<ul class="social-icons mb-4 ml-auto">
 										{% if product.company.get_company_address.facebooklink %}
 										<li>
@@ -74,7 +64,7 @@
 					<h4 class="page-title">{{product.company.main_category}} Proccesing Industry</h4>
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="{%url 'index' %}">Home</a></li>
-						<li class="breadcrumb-item"><a href="#">Products</a></li>
+						<li class="breadcrumb-item"><a href="{%url 'product_category_main' option='all'%}">Products</a></li>
 						<li class="breadcrumb-item active" aria-current="page">Detail</li>
 					</ol>
 				</div>
@@ -101,10 +91,11 @@
 												</a></li>
 											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i> {{product.company.get_company_address.city_town|title}}</a></li>
 											<!-- <li class="mr-5"><a href="#" class="icons"><i class="icon icon-calendar text-muted mr-1"></i> 5 hours ago</a></li> -->
-											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-eye text-muted mr-1"></i> 765</a></li>
+											<!-- <li class="mr-5"><a href="#" class="icons"><i class="icon icon-eye text-muted mr-1"></i> 765</a></li> -->
 										</ul>
 										<div class="rating-stars d-flex mr-5">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
+											<input type="number" readonly="readonly" class="rating-value star" 
+											name="rating-stars-value" value="{{product|product_rating}}">
 											<div class="rating-stars-container mr-2">
 												<div class="rating-star sm">
 													<i class="fa fa-star"></i>
@@ -121,7 +112,7 @@
 												<div class="rating-star sm">
 													<i class="fa fa-star"></i>
 												</div>
-											</div> 4.0
+											</div> {{product|product_rating}}
 										</div>
 										<div class="rating-stars d-flex">
 											
@@ -236,7 +227,7 @@
 								<div class="list-id">
 									<div class="row">
 										<div class="col">
-											<a class="mb-0">Business ID : #8256358</a>
+											<a class="mb-0">{%print_translated product.company.name product.company.name_am LANGUAGE_CODE%}</a>
 										</div>
 										<div class="col col-auto">
 											Posted By <a class="mb-0 font-weight-bold">{{product.created_by.username}}</a> / {{product.created_date|date}}
@@ -258,7 +249,7 @@
 						</div>
 						<!--/Business Overview-->
 
-						<h3 class="mt-5 mb-4 fs-20">Related Products</h3>
+						<h3 class="mt-5 mb-4 fs-20">{% trans "Related Products" %}</h3>
 
 						<!--Related Posts-->
 						<div id="myCarousel5" class="owl-carousel owl-carousel-icons3">
@@ -277,12 +268,24 @@
 											 </a>
 									</div>
 									<div class="item-card7-icons">
-										<a href="#" class="item-card7-icons-l"> <i class="fa fa-pencil"></i></a>
-										<a href="#" class="item-card7-icons-r"><i class="fa fa fa-heart-o"></i></a>
+										{% if user.is_authenticated %}
+											{% user_liked_product user rp.id  as liked %}
+											{% if liked == True %}
+												<a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+											{% else %}
+												<a  class="item-card9-icons1 wishlist" id="glike_{{rp.id}}" onclick="like_product('{{rp.id}}')"> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+
+											{% endif %}
+										{% else %}
+										
+										<a href="/accounts/login/?next=/product/fetch_inquiry_products/" class="item-card9-icons1 wishlist" > <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+
+										{% endif %}
 									</div>
 									<div class="card-body">
 										<div class="rating-stars mb-1 mt-0 d-flex">
-											<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="4">
+											<input type="number" readonly="readonly" class="rating-value star" 
+											name="rating-stars-value" value="{{rp|product_rating}}">
 											<div class="rating-stars-container mr-2">
 												<div class="rating-star sm">
 													<i class="fa fa-star"></i>
@@ -307,7 +310,7 @@
 										<div class="item-card7-text">
 											<ul class="icon-card mb-0 mt-2">
 												<li ><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>{{rp.company.get_company_address.city_town}}</a></li>
-												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i>{{product.created_date|timesince}} ago.</a></li>
+												<li><a href="#" class="icons"><i class="icon icon-event text-muted mr-1"></i>{{product.created_date|timesince}}</a></li>
 												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-user text-muted mr-1"></i>{{rp.created_by.first_name}} {{rp.created_by.last_name }}</a></li>
 												<li class="mb-0"><a href="#" class="icons"><i class="icon icon-phone text-muted mr-1"></i>{{rp.company.get_company_address.phone_number}}</a></li>
 											</ul>
@@ -522,31 +525,25 @@
 								<h3 class="card-title">Search Products</h3>
 							</div>
 							<div class="card-body">
+								<form action="{%url 'search_product'%}" method="GET"> 
 								<div class="form-group">
-									<input type="text" class="form-control keywords-input" id="search-text" placeholder="What are you looking for?">
+									<input type="text" name="name" class="form-control keywords-input" id="search-text" placeholder="What are you looking for?">
 								</div>
 								<div class="form-group">
-									<select name="country" id="select-countries" class="form-control custom-select select2-show-search">
-										<option value="1" selected>Select Category</option>
-										<option value="2">RealEstate</option>
-										<option value="3">Restaurant</option>
-										<option value="4">Beauty</option>
-										<option value="5">Jobs</option>
-										<option value="6">Services</option>
-										<option value="7">AutoMobile</option>
-										<option value="8">Education</option>
-										<option value="9">Electronics</option>
-										<option value="10">Pets & Animals</option>
-										<option value="11">Computer</option>
-										<option value="12">Mobile</option>
-										<option value="13">Events</option>
-										<option value="14">Travel</option>
-										<option value="15">Clothing</option>
+									<select name="sector" class="form-control select2-show-search w-100" data-placeholder="Select">
+										<optgroup label="Categories">
+											<option>{% trans "Select" %}</option>
+											<option value="">{% trans "All Categories" %}</option>
+											{%for sub_sec in sub_sectors%}
+											<option value="{{sub_sec.id}}">{{sub_sec.category_name}}</option>
+											{%endfor%}
+										</optgroup>
 									</select>
 								</div>
 								<div >
-									<a href="#" class="btn  btn-block btn-secondary">Search</a>
+									<button type="submit" class="btn btn-block btn-secondary">{% trans "Search" %}</button>
 								</div>
+							</form>
 							</div>
 						</div>
 						 
@@ -557,26 +554,9 @@
 		</section>
 
 		
-		<!-- <script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBr_bmUNgUmX-vKrwfmvNzkAVPh3fiV9Dg&callback=initMap&libraries=&v=weekly"
-		async
-	  ></script> -->
+	
 		<script>
-			// Initialize and add the map
-			// function initMap() {
-			//   // The location of Uluru
-			//   const uluru = { lat: "{{product.company.geo_location.x}}", lng: "{{product.company.geo_location.y}}" };
-			//   // The map, centered at Uluru
-			//   const map = new google.maps.Map(document.getElementById("map2"), {
-			// 	zoom: 4,
-			// 	center: uluru,
-			//   });
-			//   // The marker, positioned at Uluru
-			//   const marker = new google.maps.Marker({
-			// 	position: uluru,
-			// 	map: map,
-			//   });
-			// }
+			
 			function addRating(value){
 				$("#rating").val(value);
 			}
