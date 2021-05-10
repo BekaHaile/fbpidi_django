@@ -153,6 +153,7 @@ class ProductPackaging(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_product_packaging")
     product	= models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="product_packaging")
     packaging	= models.CharField(verbose_name="Pckaging Type", max_length=2000)	 
+    input_unit = models.ForeignKey(UomMaster,on_delete=models.RESTRICT,blank=True, null=True,verbose_name="Unit Of Measurement")
     category	= models.CharField(verbose_name="Packaging Category", max_length=200, choices=PACKAGING_CATEGORY)
     amount = models.FloatField(verbose_name="Amount",default=0)	 
     local_input	= models.FloatField(default=0,verbose_name="Source of Local Inputs in %")			

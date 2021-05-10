@@ -9,7 +9,7 @@
 
 // Setup module
 // ------------------------------
-
+console.log("chat layout js called")
 var ChatLayouts = function() {
 
 

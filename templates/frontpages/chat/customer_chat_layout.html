@@ -7,6 +7,7 @@
 {% block extrastyle %}
 <!-- Theme JS files -->
 <script src="/static/admin/global_assets/js/demo_pages/chat_layouts.js"></script>
+
 <script src="/static/admin/global_assets/js/demo_pages/reconnecting-websocket.js"></script>
 <!-- /theme JS files -->
 
@@ -21,14 +22,14 @@
     color: grey;
 }
 #main-chat-ul{
-    height: 300px;
-    overflow:hidden;
-    overflow-y:scroll;
+    max-height:500px;
+    overflow-y:auto;
+    scroll-behavior: auto;
 }
 </style>
 <div class="container">
     <div class="row" style = "margin-top:15px;">
-        <div class="col-xl-8 col-lg-8 col-md-12">
+        <div class="col-xl-9 col-lg-9 col-md-12">
             <!--Add lists-->
             <div class=" mb-lg-0">
                 <div class="">
@@ -62,6 +63,7 @@
                                             <!-- <li class="media content-divider justify-content-center text-muted mx-0">
                                                 <span id = "date-span" class="px-2">Monday, Feb 10</span>
                                             </li> -->
+                                            
                                             
                                             {% for m in old_messages %}  
                                             
@@ -125,7 +127,7 @@
 
         <!--Right Side Content-->
         
-        <div class="col-xl-4 col-lg-4 col-md-12">
+        <div class="col-xl-3 col-lg-3 col-md-12">
             <div class = "card" >
                 <div class="card-header header-elements-inline">
                     <h5 class="card-title"><b>Other Chats</b></h5>

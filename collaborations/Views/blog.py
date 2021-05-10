@@ -292,7 +292,7 @@ class CreateBlogComment(LoginRequiredMixin,View):
 	def post(self,*args,**kwargs):
 		form = BlogCommentForm(self.request.POST)
 		blog = Blog.objects.get(id=self.kwargs['id'])
-		template_name="frontpages/blog-details-right.html" 
+		template_name="frontpages/blog/blog-details-right.html" 
 		if form.is_valid():
 			blogComment=BlogComment(blog=blog,created_by=self.request.user,content=form.cleaned_data.get('content'))
 			blogComment.save()

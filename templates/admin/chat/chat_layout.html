@@ -15,10 +15,6 @@
   
 </style>
 
-<!-- Theme JS files -->
-<script src="/static/admin/global_assets/js/demo_pages/chat_layouts.js"></script>
-
-<!-- /theme JS files -->
 
 {% endblock %}
 {%block pagename%}Chat Messages{%endblock%}
@@ -172,9 +168,9 @@
             var main_ul = document.getElementById("main-chat-ul");
             main_ul.scrollTop = main_ul.scrollHeight;
         }
-  
+       
     function append_message(message_obj){
-                    console.log("from append"+message_obj)
+               
                     var br = document.createElement('br')
                     var li_item = document.createElement('li');
                         var img_div = document.createElement('div');
@@ -198,7 +194,7 @@
                         time_area.textContent = message_obj.time;
                         time_area.className = "smaller_time";
                         
-                    //  if message is from another user
+                    //  if z user is z receiver
                     if (message_obj.sender_name != user_name)
                     {  
                         li_item.className = "media";
@@ -280,12 +276,15 @@
     };
     
     function load_messages(){
-         fetch( "{% url 'chat_request' id=other_user.id %}").then(e=>e.json()).then(messages =>
-        {   
-            for (m of messages){    
-                m.forEach(append_message)
+        if ("{{user.is_authenticated}}" == "True")
+            {
+                fetch( "{% url 'chat_request' id=other_user.id %}").then(e=>e.json()).then(messages =>
+                {   
+                    for (m of messages){    
+                        m.forEach(append_message)
+                    }
+                });
             }
-        });
     }
     
 </script>

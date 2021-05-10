@@ -192,10 +192,11 @@ class ProductPackagingForm(forms.ModelForm):
         super(ProductPackagingForm,self).__init__(*args,**kwargs)
         self.fields['product'].queryset = self.product
         self.fields['product'].empty_label = "Select Product"
+        self.fields['input_unit'].empty_label = "Select Unit of Measurement"
 
     class Meta:
         model=ProductPackaging
-        fields = ('product','packaging','category','amount','local_input','import_input','wastage')
+        fields = ('product','packaging','input_unit','category','amount','local_input','import_input','wastage')
         widgets = {
             'packaging':forms.TextInput(attrs={'class':'form-control','placeholder':'Packaging Type'}),
             'product':forms.Select(attrs={'class':'form-control form-control-uniform'}),

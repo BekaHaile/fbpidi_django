@@ -71,6 +71,7 @@ def chat_with(request, reciever_name):
                 return redirect('customer_chat_list')
             else:
                 return redirect("admin:admin_chat_list")
+    print("This method is callled ***********")
     messages_list = []
     if request.method == 'GET':
         q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) ) | 
