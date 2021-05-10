@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 
-from admin_site.models import Category
+from admin_site.models import Category, UserTracker
 from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
 
 from collaborations.models import News
@@ -26,15 +26,31 @@ from accounts.api.serializers import CustomerCreationSerializer, CustomerDetailS
 
 class ApiIndexView(APIView):
     def get(self, request):
+        total_companies = Company.objects.all().count()
+        total_products = Product.objects.all().count()
+        happy_customers = Customer.objects.all().count()
+        total_viewers = UserTracker.objects.all().count()
         return Response ( data = {
-            'products':ProductInfoSerializer(Product.objects.all(), many = True).data,
+            'products':ProductInfoSerializer(Product.objects.all()[:10], many = True).data,
             'category': CategorySerializer( Category.objects.all(), many = True).data,
             'sub_category': SubCategorySerializer( SubCategory.objects.all(), many = True).data,
-            'news_list': NewsListSerializer( News.objects.all(), many = True).data,
-            'NEWS_CATAGORY': News.NEWS_CATAGORY     
+            'news_list': NewsListSerializer( News.objects.all()[:10], many = True).data,
+            'NEWS_CATAGORY': News.NEWS_CATAGORY,
+            'total_companies':total_companies,'total_products':total_products,'happy_customers':happy_customers,'total_viewers':total_viewers     
             }
         )
-    
+
+class ApiTotalViewerData(APIView):
+    def get(self, request):
+        try:
+            total_companies = Company.objects.all().count()
+            total_products = Product.objects.all().count()
+            happy_customers = Customer.objects.all().count()
+            total_viewers = UserTracker.objects.all().count()
+            return Response (data ={'error':False, 'total_companies':total_companies,'total_products':total_products,'happy_customers':happy_customers,'total_viewers':total_viewers})
+        except Exception as e:
+            print("@@@@@ Exception at ApiTatalViewerData ",e)
+            return Response (data = {'error':True, 'message':str(e)})
     
 class ApiProfileView(APIView):
     # authentication_classes  = ([TokenAuthentication])

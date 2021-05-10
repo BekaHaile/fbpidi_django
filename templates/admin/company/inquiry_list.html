@@ -87,7 +87,7 @@
     <div class="table-responsive">
         <table class="table table-inbox">
             <thead>	
-                <tr class="table-inbox-name">
+                <tr class="table-inbox-name" style='min-height: 10000px;'>
                         <th>#</th>
                         <th><b>Sender Email</b></th>
                         <th><b>Subject</b></th>
@@ -95,6 +95,7 @@
                         <th><b>Quantity</b></th>
                         <th><b>Status</b></th>
                         <th><b>Request Date</b></th>
+                        <th class="text-center">Actions</th>
                 </tr>		
             </thead>							
             <tbody >
@@ -146,6 +147,31 @@
                                 <td class="table-inbox-time">
                                     <p class  = "mr-3"> {{inquiry.created_date}}</p>
                                 </td>
+
+                                <td class="text-center">
+                                    <div class="list-icons">
+                                        <div class="dropdown">
+                                            <a href="#" class="list-icons-item" data-toggle="dropdown">
+                                                <i class="icon-menu9"></i>
+                                            </a>
+                                                
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                        
+                                            
+                                            <a href="#compose{{inquiry.id}}" data-toggle="modal" data-target="#compose{{inquiry.id}}" class="dropdown-item" ><i class="icon-eye"></i>View Detail</a>
+                                            <a  class="dropdown-item" onclick="linked_reply('{{inquiry.id}}', 'chat')" ><i class="icon-trash" ></i>Chat Reply</a>
+                                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#compose{{inquiry.id}}" ><i class="icon-trash"></i>Direct Reply</a>
+                                            <a  href="mailto:{{inquiry.sender_email}}" class="dropdown-item" onclick="email_reply('{{inquiry.id}}', 'email')" ><i class="icon-trash"></i>Email Reply</a>
+                                            
+    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+
+
+
                             </tr>     
                             
                          <!--  compse reply modal -->
@@ -218,6 +244,56 @@
     <!-- /table -->
 
 </div>
+<script>
+    function email_reply(inquiry_id)
+            {
+                    fetch("{% url 'admin:linked_inquiry_relply' %}",
+                    {
+                        method:"POST",
+                        credentials: 'same-origin',
+                        headers:{
+                            "content-Type":'application/json',
+                            'X-CSRFToken':'{{csrf_token}}'
+                        },
+                        body:JSON.stringify({
+                            'id': inquiry_id,
+                            'type':'email'
+                            
+                        })
+                    }
+                    )
+					
+				}
+    function linked_reply(inquiry_id, type)
+				{
+                    fetch("{% url 'admin:linked_inquiry_relply' %}",
+                    {
+                        method:"POST",
+                        credentials: 'same-origin',
+                        headers:{
+                            "content-Type":'application/json',
+                            'X-CSRFToken':'{{csrf_token}}'
+                        },
+                        body:JSON.stringify({
+                            'id': inquiry_id,
+                            'type':type
+                            
+                        })
+                    }
+                    ).then(e => e.json()).then(result=>{
+                        if (result['error'] == false)        
+                            window.location.pathname = '/chat/with/' + result['username']+'/';  
+                        
+                        else
+                            window.alert("yes error");    
+                       
+                        });   
+					
+				}
+				
+                
+</script>
+
 {% endblock %}
 
 

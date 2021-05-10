@@ -212,7 +212,7 @@
 				{
 					var receiver = document.getElementById('chat_to').value;	
 					fetch( " /chat/check_user/"+receiver+"/").then(e=>e.json()).then(result =>
-					{   console.log(result)
+					{   
 						if (result['result'] == true){
 							 window.location.pathname = '/chat/with/' + receiver+'/';
 						}
@@ -237,94 +237,6 @@
 					$('#summernote').summernote();
 					$('.summernote').summernote();
 				});
-				var cropX;
-				var cropY;
-				var cropWidth;
-				var cropHeight;
-				var modal_image  = document.getElementById("modal_image_field");
-				var x = document.getElementById("blogImage")
-				x.value = "my shit"
-				// function close_modal(){
-				// 	$("#modalCrop").modal("hide");
-				// 	console.log("before closing the modal "+ modal_image.attributes['src'].value)
-				// 	$("#modal_image_field").attr("src", "");
-				// 			var modal_image = document.getElementById("modal_image_field")
-				// 			console.log("from closing the modal "+ modal_image.attributes['src'].value)
-				// 	}
-			
-			
-				
-				$("#blogImage").change(function () {
-					console.log("some thing")
-				
-					if (this.files && this.files[0]) {
-						var reader = new FileReader();
-						reader.readAsDataURL(this.files[0])
-						
-						reader.onload = function (e) {
-										var c = document.getElementById('blogImage')
-										console.log("the e targe file is ", e.target.result);
-										modal_image.attributes['src'].value = ""	
-										
-										//console.log("the value of c src is "+ c.attributes['src'].value)
-										 $("#modal_image_field").attr("src", e.target.result);
-										$("#modalCrop").modal("show");
-										e.target.result = "";	
-									}
-			
-						console.log("all files ", this.files)
-						console.log("Files of 0 ", this.files[0])
-			
-						}
-					})
-			
-				$("#modalCrop").on("shown.bs.modal", function () {
-					modalCropEdit = document.getElementById('modal_image_field')
-					cropper = new Cropper(modalCropEdit,{
-								viewMode: 1,
-								aspectRatio: 3/1,
-								minCropBoxWidth: 300,
-								minCropBoxHeight: 100,
-			
-								crop(event){
-									
-									console.log("inside crop, the event is "+event)
-									setImageCropProperties(
-										modal_image_field,
-										event.detail.x,
-										event.detail.y,
-										event.detail.width,
-										event.detail.height)
-								}
-							})
-				})
-				var cancel = document.getElementById("cancel-btn")
-				cancel.addEventListener("click", function(e){
-					$("#modalCrop").modal("hide");
-				})
-				var confirm = document.getElementById("js-crop-and-upload-button")
-				confirm.addEventListener("click",function(event){
-			
-					cropImage(cropX,cropY,cropWidth,cropHeight);
-					console.log("finished cropping");
-					$("#modalCrop").modal("hide");
-			
-				})
-			
-				function setImageCropProperties(image,x,y,width,height){
-					console.log("Set image cropper called!")
-					cropX = x;
-					cropY = y;
-					cropWidth = width;
-					cropHeight = height;  
-				}
-				
-				function cropImage(x,y,width,height){
-					document.getElementById("x").value = cropX;
-					document.getElementById("y").value = cropY;
-					document.getElementById("width").value = cropWidth;
-					document.getElementById("height").value = cropHeight;
-				}
 				
 			</script>
 {% endblock %}

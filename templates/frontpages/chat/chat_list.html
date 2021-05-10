@@ -9,10 +9,10 @@
 <div class="card">
     <div class="card-header bg-transparent header-elements-inline">
         <h6 class="card-title"> My inbox</h6>
-        <div class="header-elements pull-right" style="float: right;margin-left: 700px;">
+        <div class="header-elements pull-right" style="float: right;margin-left: 500px;">
                 <a href="#compose_modal" class="btn btn-success" data-toggle="modal" data-target="#compose_modal" >
                     <i class="icon-pencil7"></i> 
-                <span class="d-none d-lg-inline-block ml-2">Start Chat</span>
+                <span class="d-none d-lg-inline-block ml-2">Compose</span>
             </a>
         </div>
     </div>
@@ -41,7 +41,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                        <button type="submit" onclick="chat_with_user()" class="btn bg-primary">Chat</button>
+                        <button type="submit" onclick="chat_with_user()" style = "color:white" class="btn bg-primary">Chat</button>
                     </div>
             </div>
         </div>
@@ -80,11 +80,12 @@
                             </a>
                         </td>
                         <td class="table-inbox-message">
-                            <div class="table-inbox-subject">{{message.message|safe|truncatechars_html:20}}</div>
+                            <div class="table-inbox-subject">bb{{message.message|safe|truncatechars_html:20}}</div>
                         </td>
                         
                         <td class="table-inbox-time">
-                            <p class ="mr-5 text-center">{{message.time|date}}</p>
+                            
+                            <p class ="mr-5 text-center">cc{{message.time|date}}</p>
                         </td>
                     </tr>
                         
@@ -112,7 +113,7 @@
                             </td>
                             
                             <td class="table-inbox-time">
-                                <p class ="mr-5 text-center">{{message.time|date}}</p>
+                                <p class ="mr-4 text-center">xxx{{message.time|date}}</p>
                             </td>
                         </tr>
                     {% endif %}
@@ -133,7 +134,7 @@
 				{
 					var receiver = document.getElementById('chat_to').value;	
 					fetch( " /chat/check_user/"+receiver+"/").then(e=>e.json()).then(result =>
-					{   console.log(result)
+					{   
 						if (result['result'] == true){
 							 window.location.pathname = '/chat/with/' + receiver+'/';
 						}
@@ -154,7 +155,9 @@
 					});
 					
 				}
-				$(document).ready(function(){
+				
+                
+                $(document).ready(function(){
 					$("#summernote").summernote();
 					$(".summernote").summernote();
 				});
