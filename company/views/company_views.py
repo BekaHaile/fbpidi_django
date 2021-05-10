@@ -48,7 +48,7 @@ class CompanyAbout(DetailView):
 
     def get(self,*args,**kwargs):
         record_visit(self.request)
-        return super(self).get(*args,**kwargs)
+        return super(CompanyAbout,self).get(*args,**kwargs)
 
 
 class CompanyContact(CreateView):

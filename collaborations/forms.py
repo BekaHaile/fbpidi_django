@@ -337,7 +337,7 @@ class ForumQuestionForm(forms.ModelForm):
         fields = ('title','description',)
         widgets = {
             'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Forum Question'}),
-            'description':forms.Textarea(attrs={'class': 'summernote','placeholder':'Elaborate your question'}),
+            'description':forms.Textarea(attrs={'class': 'form-control','placeholder':'Elaborate your question'}),
         }               
 
 class CommentForm(forms.ModelForm):
