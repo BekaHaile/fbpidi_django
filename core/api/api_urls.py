@@ -1,8 +1,9 @@
 from django.urls import path, include
-from core.api.api_views import (ApiIndexView,ApiProfileView)
+from core.api.api_views import (ApiIndexView,ApiProfileView,ApiTotalViewerData)
 
 from product.api.api_views import ApiCartSummary, ApiAddToCartView, ApiDecrementFromCart, ApiCheckout
 from django.core.exceptions import ObjectDoesNotExist
+from admin_site.models import Category
 
 
 
@@ -10,6 +11,7 @@ urlpatterns = [
 
     path("home/", ApiIndexView.as_view(), name = "api_home"),
     path("mydash/",ApiProfileView.as_view(),name="api_mydash"),
+    path("total_viewers/",ApiTotalViewerData.as_view(), name="total_viewers"),
     #product related urls
     # path("product-detail/", ApiProductDetailView.as_view(),name="api_product_detail"),
     # path("product-by-category/",ApiProductByCategory.as_view(),name="api_product_category"),

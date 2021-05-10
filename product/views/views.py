@@ -636,7 +636,8 @@ class CreatePackaging(LoginRequiredMixin,CreateView):
         sp.created_by = self.request.user
         sp.save()
         messages.success(self.request,"Product Packaging Created")
-        return redirect("admin:packaging")
+        return redirect('admin:create_packaging')
+        # return redirect("admin:packaging")
     
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
