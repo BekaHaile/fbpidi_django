@@ -323,7 +323,7 @@ class CustomAdminSite(admin.AdminSite):
             path('get-company-information-pdf/<pk>/',wrap(GenerateCompanyToPDF.as_view()),name='get_company_pdf'),
             path('get-project-information-pdf/<pk>/',wrap(GenerateProjectToPDF.as_view()),name='get_project_pdf'),
             path("get-all-company-report/<region>/<sector>/<sub_sector>/<product>/<year>/",wrap(GenerateAllCompanyPdf.as_view()),name="generate_all_report"),
-            path("get-all-project-report/<region>/<sector>/<sub_sector>/<product>/",wrap(GenerateProjectPdf.as_view()),name="generate_project_report"),
+            path("get-all-project-report/<region>/<sector>/<sub_sector>/",wrap(GenerateProjectPdf.as_view()),name="generate_project_report"),
             path('get-all-report-page/',wrap(AllReportPage.as_view()),name="all_report_page"),
             path('get-all-report-page-project/',wrap(ProjectReport.as_view()),name="project_report"),
             path("report-page/",wrap(ReportPage.as_view()),name="report_page"),
@@ -360,6 +360,9 @@ class CustomAdminSite(admin.AdminSite):
             path("filter-company-therapeutic-grp/",wrap(CompaniesByTherapeuticGroup.as_view()),name="company_therapy_grp"),
             path("filter-product-therapeutic-grp/",wrap(ProductsByTherapeuticGroup.as_view()),name="product_therapy_grp"),
             path("filter-product-product-grp/",wrap(ProductsByProductGroup.as_view()),name="product_product_grp"),
+
+            path("filter-product-dosage-form/",wrap(ProductsByDosageForm.as_view()),name="product_dosage_form"),
+            path("filter-company-dosage-form/",wrap(CompaniesByDosageForm.as_view()),name="company_dosage_form"),
 
             path("get-investment-capital/<option>/<sector>/",wrap(InvestmentCapitalReportView.as_view()),name="get_by_inv_capital"),
             path("get-production-capacity-data/<product>/",wrap(ProductionCapacityView.as_view()),name="get_production_capacity"),

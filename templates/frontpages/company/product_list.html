@@ -29,7 +29,7 @@
 				<div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-12">
 						<div class="row">
-							{%for product in object.company_product.all%}
+							{%for product in object_list%}
 							<div class="col-xl-4 col-lg-6 col-md-12">
 								<div class="card">
 									<div class="item7-card-img">
@@ -77,17 +77,19 @@
 							{%endfor%}
 						</div>
 						<div class="d-sm-flex">
-							<h6 class="mb-0 mt-3">{% trans "Showing" %} 1 {% trans "to" %} 6 {% trans "of" %} 30 {% trans "entries" %}</h6>
-							<ul class="pagination mb-lg-0 mb-5 ml-auto">
-								<li class="page-item page-prev disabled">
-									<a class="page-link" href="#" tabindex="-1">{% trans "Prev" %}</a>
+							<h6 class="mb-0 mt-3"></h6>
+							<ul class="pagination mb-5">
+								{% if page_obj.has_previous %}
+								<li class="page-item page-prev ">
+									<a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">{% trans "Prev" %}</a>
 								</li>
-								<li class="page-item active"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								{%endif%}
+								<li class="page-item active"><a class="page-link" href="#">{% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}.</a></li>
+								{% if page_obj.has_next %}
 								<li class="page-item page-next">
-									<a class="page-link" href="#">Next</a>
+									<a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
 								</li>
+								{%endif%}
 							</ul>
 						</div>
 					</div>

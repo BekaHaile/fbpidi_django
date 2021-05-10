@@ -54,7 +54,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand,on_delete=models.RESTRICT,verbose_name="Varayti Brand",null=True,blank=True,related_name="varayti_brand")
     quantity = models.FloatField(verbose_name="Product Quantity",default=0)
     therapeutic_group = models.ForeignKey(TherapeuticGroup,on_delete=models.RESTRICT,related_name="therapeutic_group",verbose_name="Therapeutic Group",null=True,blank=True)
-    dose = models.ForeignKey('Dose',on_delete=models.RESTRICT,null=True,blank=True,related_name="product_dose")
+    dose = models.CharField(max_length=255,verbose_name="Dose & Packaging",null=True,blank=True)
     dosage_form = models.ForeignKey('DosageForm',on_delete=models.RESTRICT,null=True,blank=True,related_name="product_dosage_form")
     description = models.TextField(verbose_name="Varayti Description(English)")
     description_am = models.TextField(verbose_name="Varayti Description(Amharic)")
@@ -88,7 +88,7 @@ class Product(models.Model):
 
     def rating(self):
         total = 0
-        reviews =self.review_set.all()
+        reviews =self.product_review.all()
         for r in reviews:
             total += r.rating
         try:
@@ -255,22 +255,8 @@ class ProductPrice(models.Model):
         return str(self.price)
 
 
-class OrderProduct(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
-    to_company = models.ForeignKey(Company,on_delete=models.CASCADE,null=True,blank=True)
-    quantity = models.IntegerField(default=1)
-    ordered = models.BooleanField(default=False)
-    time_stamp = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return "{} of {}".format(self.quantity,self.product.name)
-    
-    def get_total_item_price(self):
-        return self.product.price().price * self.quantity
-
-
 class ProductInquiry(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,related_name="user_inquiry")
     sender_email = models.EmailField(verbose_name="sender email",)
     product = models.ForeignKey(Product, on_delete = models.CASCADE, blank = True, null = True)
     category = models.ForeignKey(Category, on_delete = models.CASCADE, blank = True, null = True)
@@ -306,17 +292,8 @@ class ProductInquiryReply(models.Model):
 class Review(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name="product_review")
     rating = models.IntegerField(default=2)
     review = models.TextField()
     time_stamp = models.DateTimeField(auto_now_add=True)
-
-
-class AbuseReport(models.Model):
-    url_link = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)
-    email = models.EmailField(max_length=200)
-    message  = models.TextField()
-    time_stamp = models.DateTimeField(auto_now_add=True)
-    
 

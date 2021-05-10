@@ -57,7 +57,7 @@ class CreatePoll(LoginRequiredMixin, CreateView):
         poll = form.save(commit=False)
         poll.created_by = self.request.user
         poll.save()
-        record_activity(self.request.user,activity="Created Polls")
+        record_activity(self.request.user,"PollsQuestion","Created Polls",poll.id,before=None,after=None)
         messages.success(self.request,"Poll was Successfully Created!")
         return redirect("admin:admin_polls")
 
@@ -103,7 +103,7 @@ class AddChoice(LoginRequiredMixin,View):
                 choice.save()
                 poll.choices.add(choice)
                 poll.save()
-                record_activity(self.request.user,activity="Added New Poll Choices")
+                record_activity(self.request.user,"Choices","Added New Poll Choices",poll.id,before=None,after=None)
                 messages.success(self.request,"Choice Successfully Created!")
                 return redirect("admin:admin_polls")
             else:
@@ -123,7 +123,6 @@ class EditPoll(LoginRequiredMixin,View):
             if poll.count_votes() != 0:
                 messages.warning(self.request, "Couldn't Edit poll, because poll Edit has started!")
                 return redirect('admin:admin_polls')
-            record_activity(self.request.user,activity="Edited a Polls Object")
             return render(self.request,'admin/poll/create_poll.html', {'pollform':CreatePollForm, 'choiceform':CreateChoiceForm, 'poll':poll, 'edit':True})
         except Exception as e:          
             print("Exception at Edit poll ",str(e))
@@ -145,6 +144,7 @@ class EditPoll(LoginRequiredMixin,View):
         poll.last_updated_by =self.request.user
         poll.last_updated_date = timezone.now()
         poll.save()
+        record_activity(self.request.user,"PollsQuestion","Edited a Polls Object",poll.id,before=None,after=None)
         messages.success(self.request,"Poll has been Edited Successfully!")
         return redirect("admin:admin_polls")
 
@@ -174,19 +174,23 @@ class EditChoice(LoginRequiredMixin,View):
         choice.last_updated_by=self.request.user
         choice.last_updated_date=timezone.now()
         choice.save()
+        record_activity(self.request.user,"Choices","Poll Choices Updated",choice.id)
         messages.success(self.request,"Choice has been Edited Successfully!")
         return redirect("admin:admin_polls")
     
-def record_activity(user,content_type=None,before=None,after=None,activity=None):
+def record_activity(user,model_name,activity,object_id,before=None,after=None):
     try:
         UserActivityLog.objects.create(
-            user=user,content_type=content_type,
+            user=user,
+            object_id=object_id,
+            model_name=model_name,
             before_change=before,
             after_change=after,
             activity=activity
         )
         return True
     except Exception as e:
+        print(e)
         return False
 
 def visitor_ip_address(request):

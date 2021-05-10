@@ -107,9 +107,9 @@ class ProductCreationForm(forms.ModelForm):
         #      self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type="Pharmaceuticals")
         # else:
         #     self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type=self.company.main_category)
-        self.fields['dose'].queryset = Dose.objects.all()
+        # self.fields['dose'].queryset = Dose.objects.all()
         self.fields['dosage_form'].queryset = DosageForm.objects.all()
-        self.fields['dose'].empty_label = "Select Prodect Dose"
+        # self.fields['dose'].empty_label = "Select Prodect Dose"
         self.fields['dosage_form'].empty_label = "Select Product Dosage Form"
         self.fields['brand'].empty_label = "Select Product Brand"
         self.fields['reserve_attr0'].empty_label = "Select Product Group"
@@ -125,7 +125,7 @@ class ProductCreationForm(forms.ModelForm):
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Product/Varayti Name(Amharic)'}),
             'brand':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'reserve_attr0':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-            'dose':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'dose':forms.TextInput(attrs={'class':'form-control','placeholder':'Dose & Packaging'}),
             'dosage_form':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'therapeutic_group':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'description':forms.Textarea(attrs={'class':'summernote','required':'False'}),

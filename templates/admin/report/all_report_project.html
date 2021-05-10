@@ -57,15 +57,16 @@
 									</select>
 								</li>
 								<li class="list-inline-item"> 
-									<select class="form-control" name="sub_sector" id="sub_sector">
+									<select class="form-control" name="sub_sector" 
+										style="max-width: 200px;" id="sub_sector">
 										<option value="">Select Sub sectors</option>
 									</select>
 								</li> 
-								<li class="list-inline-item"> 
+								<!-- <li class="list-inline-item"> 
 									<select class="form-control" name="product" id="product">
 										<option value="">Select Product</option>
 									</select>
-								</li> 
+								</li>  -->
 								 
 								 
 								 
@@ -558,9 +559,6 @@
 						if(sub_sector == ''){
 							sub_sector = $("#sub_sector").val();
 						}
-						if(product == ''){
-							product = $("#product").val();
-						}
 						 
 						// var region = $("#region").val();
 						// var sector = $("#sector").val();
@@ -575,11 +573,8 @@
 						if(sub_sector ==''){
 							sub_sector = 'all';
 						}
-						if(product==''){
-							product = 'all';
-						}
-
-						url = '/admin/get-all-project-report/'+region+'/'+sector+'/'+sub_sector+'/'+product+'/';
+						
+						url = '/admin/get-all-project-report/'+region+'/'+sector+'/'+sub_sector+'/';
 						window.open(url,'_blank');
 					});
 					$('.datatable-basic').DataTable(

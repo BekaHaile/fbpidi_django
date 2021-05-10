@@ -1,11 +1,16 @@
 {%extends 'admin/base_site.html'%}
 {% block extrastyle %}
 
-	<!-- Theme JS files -->
-	<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
-	<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
-	<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
-	<!-- /theme JS files -->
+<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src=" https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js "></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+ 
  
 {% endblock %}
 {%block pagename%}UserAudit{%endblock%}
@@ -20,11 +25,11 @@
 					<div class="card-header header-elements-inline">
 						<h6 class="card-title"></h6>
 						<div class="header-elements">
-							<div class="list-icons">
+							<!-- <div class="list-icons">
 								<a href="#" class="list-icons-item"><i class="icon-file-pdf"></i></a>
 								<a href="#" class="list-icons-item"><i class="icon-file-excel"></i></a>
 								<a href="#" class="list-icons-item"><i class="icon-file-word"></i></a> 
-							</div>
+							</div> -->
 						</div>
 					</div>
 
@@ -33,7 +38,7 @@
 							<li class="nav-item"><a href="#basic-tab1" class="nav-link active" data-toggle="tab">Failed Login</a></li>
 							<li class="nav-item"><a href="#basic-tab2" class="nav-link" data-toggle="tab">Logins</a></li>
 							<li class="nav-item"><a href="#basic-tab3" class="nav-link" data-toggle="tab">Lgoin Attempt</a></li>
-							<li class="nav-item"><a href="#basic-tab4" class="nav-link" data-toggle="tab">Users</a></li>
+							<li class="nav-item"><a href="#basic-tab4" class="nav-link" data-toggle="tab">Users Log</a></li>
 						</ul>
 
 						<div class="tab-content">
@@ -129,24 +134,22 @@
 									<thead>
 										<tr>
 											<th>#</th>
-											<th>User ID</th>
+											<th>User</th>
 											<th>User Email</th>
-											<th>Reason </th>
-											<th>Time Stamp</th>
-											<th class="text-center">Actions</th>
+											<th>Object</th>
+											<th>Activity</th>
+											<th>Timestamp</th>
 										</tr>
 									</thead>
 									<tbody>
-										{%for fl_lg in user_deactivated%}
+										{%for fl_lg in user_activities%}
 										<tr>
 											<td>{{forloop.counter}}</td>
-											<td>{{fl_lg.id}}</td>
-											<td>{{fl_lg.username}}</td>
-											<td>{{fl_lg.reason}}</td>
-											<td><span class="badge badge-success">{{fl_lg.timestamp}}</span></td>
-											<td class="text-center">
-												 
-											</td>
+											<td>{{fl_lg.user.first_name}} {{fl_lg.user.last_name}}</td>
+											<td>{{fl_lg.user.email}}</td>
+											<td>{{fl_lg.model_name}}</td>
+											<td class="text-center">{{fl_lg.activity}} with id ({{fl_lg.object_id}})</td>
+											<td><span class="badge badge-success">{{fl_lg.timestamp|date}}</span></td>
 										</tr>
 										{%endfor%}
 									</tbody>
@@ -160,9 +163,16 @@
 			 
 			</div>
 			<!-- /content area -->
-			<!-- <script>
+			<script>
 				$(document).ready(function() {
-					$('.summernote').summernote('code', 'html_tags_string_from_db');
+					$('.datatable-show-all').DataTable(
+						{
+							dom: 'Bfrtip',
+							buttons: [
+								'csv', 'excel', 'pdf', 'print'
+							]
+						}
+					);
 				});
-			  </script> -->
+			  </script>
 {%endblock%}
