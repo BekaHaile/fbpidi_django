@@ -1,0 +1,680 @@
+{%extends 'frontpages/layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+{% block javascript %}
+{% endblock %}
+{%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+		<!--Breadcrumb-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="../../assets/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white">
+							<h1 class="">Categories</h1>
+							<ol class="breadcrumb text-center">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item"><a href="#">Pages</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">Categories</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Breadcrumb-->
+
+		<!-- Categories-->
+		<section class="sptb bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Listings in Top Cities</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					{%for object in object_list%}
+					<div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-6">
+						<a href="#" class="top-cities card text-center mb-xl-0 box-shadow2">
+							<img src="{{object.icons.url}}" alt="img" class="w-70 bg-pink-transparent">
+							<div class="servic-data mt-3">
+								<h4 class="font-weight-semibold mb-0">{{object.sub_category_name}}</h4>
+							</div>
+						</a>
+					</div>
+					{%endfor%}
+				</div>
+			</div>
+		</section>
+		<!--Categories-->
+
+		<!--Categories-->
+		<section class="sptb">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Categories</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-xl-4 col-lg-6 col-md-6">
+						<div class="card">
+							<a class="absolute-link2" href="business-list.html"></a>
+							<div class="card-body">
+								<div class="d-flex">
+									<div class="mr-4">
+										<i class="fa fa-building fa-2x text-primary bg-primary-transparent category-icon"></i>
+									</div>
+									<div class="">
+										<h4>RealEstate</h4>
+										<p class="mb-0 text-muted">Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-4 col-lg-6 col-md-6">
+						<div class="card">
+							<a class="absolute-link2" href="business-list.html"></a>
+							<div class="card-body">
+								<div class="d-flex">
+									<div class="mr-4">
+										<i class="fa fa-graduation-cap fa-2x text-secondary bg-secondary-transparent category-icon"></i>
+									</div>
+									<div class="">
+										<h4>Study & Education </h4>
+										<p class="mb-0 text-muted">Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-4 col-lg-6 col-md-6">
+						<div class="card">
+							<a class="absolute-link2" href="business-list.html"></a>
+							<div class="card-body">
+								<div class="d-flex">
+									<div class="mr-4">
+										<i class="fa fa-cutlery fa-2x text-info bg-info-transparent category-icon"></i>
+									</div>
+									<div class="">
+										<h4>Hotel & Restaurant</h4>
+										<p class="mb-0 text-muted">Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-4 col-lg-6 col-md-6">
+						<div class="card">
+							<a class="absolute-link2" href="business-list.html"></a>
+							<div class="card-body">
+								<div class="d-flex">
+									<div class="mr-4">
+										<i class="fa fa-car fa-2x text-success bg-success-transparent category-icon"></i>
+									</div>
+									<div class="">
+										<h4>AutoMobiles</h4>
+										<p class="mb-0 text-muted">Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-4 col-lg-6 col-md-6">
+						<div class="card">
+							<a class="absolute-link2" href="business-list.html"></a>
+							<div class="card-body">
+								<div class="d-flex">
+									<div class="mr-4">
+										<i class="fa fa-heartbeat fa-2x text-pink bg-pink-transparent category-icon"></i>
+									</div>
+									<div class="">
+										<h4>Health</h4>
+										<p class="mb-0 text-muted">Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-4 col-lg-6 col-md-6">
+						<div class="card">
+							<a class="absolute-link2" href="business-list.html"></a>
+							<div class="card-body">
+								<div class="d-flex">
+									<div class="mr-4">
+										<i class="fa fa-paw fa-2x text-danger bg-danger-transparent category-icon"></i>
+									</div>
+									<div class="">
+										<h4>Animals & Pets</h4>
+										<p class="mb-0 text-muted">Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!--Categories-->
+		<section class="sptb bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Categories</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="business-list.html"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/furniture.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Home &amp; Furniture<span>4530 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="business-list.html"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/jobs.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Jobs<span>325 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="business-list.html"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/spa.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Beauty &amp; Spa<span>3145 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="business-list.html"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/vehicle.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">AutoMobiles<span>6547 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card mb-xl-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="business-list.html"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/restaurant.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Restaurant<span>3241 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card mb-xl-0">
+							<div class="item-card ">
+								<div class="item-card-desc">
+									<a href="business-list.html"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/electronics.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Electronics<span>6541 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card mb-xl-0">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="business-list.html"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/animals.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Animals<span>6354 Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-lg-6 col-md-6">
+						<div class="card mb-0 overflow-hidden">
+							<div class="item-card">
+								<div class="item-card-desc">
+									<a href="business-list.html"></a>
+									<div class="item-card-img">
+										<img src="../../assets/images/photos/categories/clothes.jpg" alt="img">
+									</div>
+									<div class="item-card-text">
+										<h4 class="mb-0">Clothing<span><b>8547</b> Listings</span></h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Categories-->
+
+		<!--Categories-->
+		<section class="sptb">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Sub Categories</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-4 col-md-6">
+						<div class="card">
+							<div class="card-header">
+								<a href="#" class="text-dark"><h3 class="card-title mb-0">Real Estate</h3></a>
+							</div>
+							<div class="card-body p-0">
+								<ul class="list-group widget-spec">
+									<li class="">
+										<a href="#" class="text-dark">Rentals</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">31</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Lands</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">45</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Villas</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">52</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Apartments</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">51</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Accommodation And Hotels</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">44</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">RealEstate Services</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">42</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Multi-family house</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">47</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Terraced house</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">48</span>
+									</li>
+									<li class="mb-0">
+										<a href="#" class="text-secondary"> View more..</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6">
+						<div class="card">
+							<div class="card-header">
+								<a href="#" class="text-dark"><h3 class="card-title mb-0">Electronics</h3></a>
+							</div>
+							<div class="card-body p-0">
+								<ul class="list-unstyled widget-spec">
+									<li class="">
+										<a href="#" class="text-dark">Computers-Laptops</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">13</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Games-Entertainment</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">17</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Washing machines</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">32</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Air Conditions</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">83</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Computer Accessories</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">231</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Kichen-Other Applicans</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">75</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Harddisk-Printers-Monitors</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">85</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Tvs-Video-Audio</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">36</span>
+									</li>
+									<li class="mb-0">
+										<a href="#" class="text-secondary"> View more..</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6">
+						<div class="card">
+							<div class="card-header">
+								<a href="#" class="text-dark"><h3 class="card-title mb-0">Jobs</h3></a>
+							</div>
+							<div class="card-body p-0">
+								<ul class="list-unstyled widget-spec">
+									<li class="">
+										<a href="#" class="text-dark">Data Entry-Bank Office</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">37</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Operater-Technician</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">65</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Cook</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">85</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Tell Caller-BPO</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">75</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Sales-Marketing</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">74</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Accountant</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">47</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Designer</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">63</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Deliver-Collection</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">35</span>
+									</li>
+									<li class="mb-0">
+										<a href="#" class="text-secondary"> View more..</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6">
+						<div class="card">
+							<div class="card-header">
+								<a href="#" class="text-dark"><h3 class="card-title mb-0">AutoMobiles</h3></a>
+							</div>
+							<div class="card-body p-0">
+								<ul class="list-unstyled widget-spec">
+									<li class="">
+										<a href="#" class="text-dark">Cars</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">34</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Motorcycles</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">23</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Bicycle</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">11</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Spare parts</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">12</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Driver</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">18</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Driver</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">38</span>
+									</li>
+									<li class="mb-0">
+										<a href="#" class="text-secondary"> View more..</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6">
+						<div class="card">
+							<div class="card-header">
+								<a href="#" class="text-dark"><h3 class="card-title mb-0">Mobiles</h3></a>
+							</div>
+							<div class="card-body p-0">
+								<ul class="list-unstyled widget-spec">
+									<li class="">
+										<a href="#" class="text-dark">Tablets</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">76</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Accessories</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">74</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Smart Phones</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">65</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Electronics - Computer</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">48</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Education - Classes</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">85</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Organization Services</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">84</span>
+									</li>
+									<li class="mb-0">
+										<a href="#" class="text-secondary"> View more..</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6">
+						<div class="card">
+							<div class="card-header">
+								<a href="#" class="text-dark"><h3 class="card-title mb-0">Services</h3></a>
+							</div>
+							<div class="card-body p-0">
+								<ul class="list-unstyled widget-spec">
+									<li class="">
+										<a href="#" class="text-dark">Health-Beauty</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">15</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Computing Services</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">18</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Electronics - Computer</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">22</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Education - Classes</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">24</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Organization Services</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">35</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Other Services</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">62</span>
+									</li>
+									<li class="mb-0">
+										<a href="#" class="text-secondary"> View more..</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6">
+						<div class="card">
+							<div class="card-header">
+								<a href="#" class="text-dark"><h3 class="card-title mb-0">Fashions</h3></a>
+							</div>
+							<div class="card-body p-0">
+								<ul class="list-unstyled widget-spec mb-0">
+									<li class="">
+										<a href="#" class="text-dark">Clothings</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">34</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Toys</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">35</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Shooes</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">36</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Appliances</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">75</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Jewellery</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">75</span>
+									</li>
+									<li class="mb-0">
+										<a href="#" class="text-secondary"> View more..</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6">
+						<div class="card">
+							<div class="card-header">
+								<a href="#" class="text-dark"><h3 class="card-title mb-0">Education</h3></a>
+							</div>
+							<div class="card-body p-0">
+								<ul class="list-unstyled widget-spec mb-0">
+									<li class="">
+										<a href="#" class="text-dark">Classes</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">77</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Seminars</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">78</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Tuitions</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">55</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Teaching</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">56</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Projects</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">57</span>
+									</li>
+									<li class="mb-0">
+										<a href="#" class="text-secondary"> View more..</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-6">
+						<div class="card">
+							<div class="card-header">
+								<a href="#" class="text-dark"><h3 class="card-title mb-0"> Furniture</h3></a>
+							</div>
+							<div class="card-body p-0">
+								<ul class="list-unstyled widget-spec mb-0">
+									<li class="">
+										<a href="#" class="text-dark">Sofa - Dining</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">120</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Beds</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">104</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Home Decor -  Garden</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">85</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Kids Furniture</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">75</span>
+									</li>
+									<li class="">
+										<a href="#" class="text-dark">Other Househlod items</a>
+										<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">77</span>
+									</li>
+									<li class="mb-0">
+										<a href="#" class="text-secondary"> View more..</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Categories-->
+
+		<!-- Newsletter-->
+		<section class="sptb border-top bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>Subscribe To Our Newsletter</h2>
+					<p>Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula</p>
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-xl-8 col-md-12 mx-auto d-block text-center">
+						<div class="input-group sub-input mt-0">
+							<input type="text" class="form-control input-lg " placeholder="Enter your Email">
+							<div class="input-group-append ">
+								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
+									Subscribe
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Newsletter-->
+ {%endblock%}

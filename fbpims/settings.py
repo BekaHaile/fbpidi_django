@@ -114,7 +114,9 @@ TEMPLATES = [
                 'product.context_processors.sectors',
                 'product.context_processors.sub_sectors',
                 'product.context_processors.product_type',
-
+                'product.context_processors.food_types',
+                'product.context_processors.beverage_types',
+                'product.context_processors.pharmaceutical_types',
             ],
         },
     },
@@ -137,7 +139,7 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'FBPIDI_IIMS',
         'USER': 'postgres',
-        'PASSWORD': 'Fbpidi@123..',
+        'PASSWORD': 'cbe@ps4woga',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

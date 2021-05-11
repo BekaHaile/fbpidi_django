@@ -2,7 +2,7 @@ from django.urls import path,include
 from product.views.views import  (SearchProduct,InquiryByCategory,
                                     ProductDetailView, ProductByCategoryView,
                                     ProductByProductView, ProductByMainCategory,
-                                    CreateReview, FetchInquiryProducts,
+                                    CreateReview, FetchInquiryProducts,CategoriesView,
                                     InquiryRequest, LikeProduct)
 
 
@@ -20,6 +20,6 @@ urlpatterns = [
     path("category_inquiry_form/", InquiryByCategory.as_view(), name = "category_inquiry_form"),
     path('like_product/', LikeProduct, name = "like_product"),
     
-
+    path("categories/<category>/",CategoriesView.as_view(),name="categories")
     
 ]

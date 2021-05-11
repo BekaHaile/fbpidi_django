@@ -1109,3 +1109,10 @@ class CreateReview(CreateView):
     def form_invalid(self,form):
         print("invalid form ",form.errors)
         return redirect('product_detail',pk=self.kwargs['product'])
+
+
+class CategoriesView(ListView):
+    template_name = "frontpages/product/categories.html"
+
+    def get_queryset(self):
+        return SubCategory.objects.filter(category_name__category_type=self.kwargs['category'])

@@ -763,18 +763,16 @@
 					</div>
 					<div class="card-body p-0">
 						<ul class="list-group widget-spec">
-							{%for category in product_type%}
-							{%if category.category_name.category_type == "Food"%}
+							{%for category in food_types%}
 							<li class="">
 								<a href="{%url 'product_product_category' cat_id=category.id%}" class="text-dark">
 									{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
 								<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">
 									{{category.id|product_count_by_subcategory}}</span>
 							</li>
-							{%endif%}
 							{%endfor%}
 							<li class="mb-0">
-								<a href="#" class="text-secondary"> View more..</a>
+								<a href="{%url 'categories' category='Food'%}" class="text-secondary"> View more..</a>
 							</li>
 						</ul>
 					</div>
@@ -789,14 +787,12 @@
 					</div>
 					<div class="card-body p-0">
 						<ul class="list-unstyled widget-spec">
-							{%for category in product_type%}
-							{%if category.category_name.category_type == "Beverage"%}
+							{%for category in beverage_types%}
 							<li class="">
 								<a href="{%url 'product_product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
 								<span
 									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_by_subcategory}}</span>
 							</li>
-							{%endif%}
 							{%endfor%}
 							<li class="mb-0">
 								<a href="#" class="text-secondary"> View more..</a>
@@ -814,14 +810,12 @@
 					</div>
 					<div class="card-body p-0">
 						<ul class="list-unstyled widget-spec">
-							{%for category in product_type%}
-							{%if category.category_name.category_type == "Pharmaceuticals"%}
+							{%for category in pharmaceutical_types%}
 							<li class="">
 								<a href="{%url 'product_product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
 								<span
 									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_by_subcategory}}</span>
 							</li>
-							{%endif%}
 							{%endfor%}
 							<li class="mb-0">
 								<a href="#" class="text-secondary"> View more..</a>
