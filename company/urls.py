@@ -13,6 +13,7 @@ urlpatterns = [
     path("about/<pk>/",CompanyAbout.as_view(),name="company_about"),
     path("contact/<pk>/",CompanyContact.as_view(),name="contact_company"),
     path("like_company", Like_Company, name = "like_company"),
+    path("dislike_company",DislikeCompany, name = "dislike_company"),
     path("search-company/",SearchCompany.as_view(),name='search_company'),
     path("filter_companies_by_category/", FilterCompanyByCategory.as_view(), name="filter_companies_by_category"),
     path("company-products/<pk>/",CompanyProductList.as_view(),name="company_products"),

@@ -15,8 +15,8 @@ from admin_site.api.serializers import CategorySerializer, SubCategorySerializer
 from collaborations.models import News
 from collaborations.api.serializers import NewsListSerializer
 
-from company.models import Company, InvestmentProject
-from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer, InvestmentProjectserializer
+from company.models import Company, InvestmentProject,CompanyLike
+from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer, InvestmentProjectserializer, CompanyMessageSerializer
 
 from product.models import SubCategory,Product, ProductImage, ProductPrice
 from product.api.serializer import ProductFullSerializer, ProductInfoSerializer, ProductImageSerializer
@@ -86,3 +86,61 @@ class ApiProjectDetail(APIView):
             return Response(data = {'error':False, 'project': InvestmentProjectserializer(project).data})
         except Exception as e:
             return Response(data ={'error':True, 'message':str(e)})
+
+
+      
+class ApiLikeCompany(APIView):
+    def get(self, request):
+        try:
+            company = Company.objects.get (id= int(request.query_params['c_id'] ))
+            if CompanyLike.objects.filter(  user = request.user, company = company ).exists():
+                return Response( data={'error':True, 'message':"Already Liked Company"})
+            c_like = CompanyLike(user = request.user, company = company   )
+            c_like.save()
+            return Response({'error':False})
+
+        except Exception as e:
+            print("########Exception at Like_Company ",e)
+            return Response({'error':True})
+
+
+class ApiDislikeCompany(APIView):
+    def get(self, request):
+        try:
+            c_like = CompanyLike.objects.filter(user = request.user, company = Company.objects.get (id= int(request.query_params['c_id'] ))).first()
+            if c_like:
+                c_like.delete()
+            return Response({'error':False})
+
+        except Exception as e:
+            print("########Exception at DislikeCompany ",e)
+            return Response({'error':True, 'message':str(e)})
+
+
+class ApiCompanyUs(APIView):
+    def get(self, request):
+        try:
+            return Response( data={'error':False, 'company':CompanyFullSerializer(Company.objects.get(id = request.query_params['c_id'])).data } )
+        except Exception as e:
+            return Response(data={'error':True, 'message':str(e)})
+
+
+class ApiContactCompany(APIView):
+    def get(self, request):
+        try:
+            return Response( data={'error':False, 'company':CompanyInfoSerializer(Company.objects.get(id = request.query_params['c_id'])).data } )
+        except Exception as e:
+            return Response(data={'error':True, 'message':str(e)})
+        
+    def post(self, request):
+        try:
+            serializer = CompanyMessageSerializer(data = request.data)
+            if serializer.is_valid():
+                contact = serializer.create(validated_data = request.data)
+                contact.company = Company.objects.get(id = request.data['c_id'])
+                contact.save()
+                return Response(data = {'error':False, })
+            else:
+                return Response(data = {'error':True, 'message': serializer.errors})
+        except Exception as e:
+            return Response(data = {'error':True, 'message':str(e)})

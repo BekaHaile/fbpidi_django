@@ -77,12 +77,12 @@ if __name__ == '__main__':
     print("Starting the background tasks for ....", timezone.now())
     clear_background_tasks()
     clear_completed_tasks()
-    BACKGROUND_TASK_TIME = TODAY.replace(hour=3,minute=0,second=0) # set the time to when u want to send emails
+    BACKGROUND_TASK_TIME = TODAY.replace(hour=0,minute=0,second=1) # set the time to when u want to send emails
    
     print("Task scheduled at 6:00 am ",BACKGROUND_TASK_TIME)
     for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
-        start_task(task_verbose_name=verbose_name,schedule=1, repeat = Task.DAILY) 
-    send_news_and_blogs_weekly(verbose_name='WEEKLY_NEWS_BLOGS', repeat =Task.WEEKLY)
+        start_task(task_verbose_name=verbose_name,schedule=1, repeat = 1) 
+    send_news_and_blogs_weekly(verbose_name='WEEKLY_NEWS_BLOGS', repeat =1)
   
 
 

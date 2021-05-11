@@ -96,6 +96,7 @@ class MyOrders(LoginRequiredMixin,View):
         try:
             context['orders'] = ProductInquiry.objects.filter(user=self.request.user)
         except Exception:
-            pass
+            print("@@@ Exception at My Orders, ",e)
+            return redirect('/')
         print(context)
         return render(self.request,"frontpages/profile/orders.html",context)

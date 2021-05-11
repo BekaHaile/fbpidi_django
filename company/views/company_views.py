@@ -176,13 +176,23 @@ def Like_Company(request):
         return JsonResponse({'error':False})
 
     except Exception as e:
-        print("########Exception while tring to like a product ",e)
+        print("########Exception at Like_Company ",e)
         return JsonResponse({'error':True})
 
 
 @login_required
 def DislikeCompany(request):
-    pass
+    try:
+        data = json.loads( request.body )
+        c_like = CompanyLike.objects.filter(user = request.user, company = Company.objects.get (id= int(data['c_id'] ))).first()
+        if c_like:
+            c_like.delete()
+        return JsonResponse({'error':False})
+
+    except Exception as e:
+        print("########Exception at DislikeCompany ",e)
+        return JsonResponse({'error':True})
+
     
 
 @login_required

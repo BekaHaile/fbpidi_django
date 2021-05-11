@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from product.models import Category, SubCategory, Brand, Product, ProductImage, ProductPrice
+from product.models import Category, SubCategory, Brand, Product, ProductImage, ProductPrice, ProductInquiry, ProductInquiryReply
 
 from accounts.api.serializers import CompanyAdminSerializer, UserSerializer
 from company.api.serializers import CompanyInfoSerializer, CompanyFullSerializer
@@ -44,4 +44,33 @@ class ProductInfoSerializer(serializers.ModelSerializer):
         model  = Product
         fields = ('id','name', 'name_am','latest_price', 'company', 'brand', 
                 'therapeutic_group','dose','description','description_am', 'image', 'created_date')
+
+
+# class JobApplicationCreationSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = JobApplication
+#         fields = ('status', 'bio','cv', 'documents','experiance','grade','institiute','field',) 
+    
+#     def create(self, validated_data):
+#         vacancy = Vacancy.objects.get(id = validated_data['id'])
+#         application = JobApplication(vacancy = vacancy, status =validated_data['status'],
+#         bio=validated_data['bio'], cv=validated_data['cv'],documents=validated_data['documents'],experiance=validated_data['experiance'],
+#         grade=validated_data['grade'],field=validated_data['field'], institiute=validated_data['institiute'])
+#         return application
+        
+    # user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,related_name="user_inquiry")
+    # product = models.ForeignKey(Product, on_delete = models.CASCADE, blank = True, null = True)
+    # category = models.ForeignKey(Category, on_delete = models.CASCADE, blank = True, null = True)
+    # attachement = models.FileField(upload_to = "InquiryDocument/", max_length=254, verbose_name="Inquiry document",help_text="pdf, Max size 3MB", blank=True)
+    
+class ProductInquiryCreationSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ProductInquiry
+        fields = ('sender_email','subject','quantity','content')
+    
+    def create(self, validated_data):
+        inquiry = ProductInquiry(sender_email=validated_data['sender_email'], subject=validated_data['subject'], content=validated_data['content'], quantity=validated_data['quantity'])
+        return inquiry
+
 
