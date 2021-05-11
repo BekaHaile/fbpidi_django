@@ -473,6 +473,7 @@ class GenerateAllCompanyPdf(View):
         context['ownership_data'] = ownership_data
         context['inv_cap_data'] = total_inv_cap_data
         context['current_year'] = current_year
+        
         pdf = render_to_pdf('admin/report/all_report_pdf.html', context)
         if pdf:
             response = HttpResponse(pdf, content_type='application/pdf')
@@ -483,6 +484,7 @@ class GenerateAllCompanyPdf(View):
                 content = "attachment; filename='%s'" %(filename)
             response['Content-Disposition'] = content
             return response
+        
         return HttpResponse("Not found")
           
 

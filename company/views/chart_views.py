@@ -1,4 +1,5 @@
 import datetime
+import random
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Sum,Count
@@ -15,6 +16,12 @@ from company.models import *
 from product.models import *
 decorators = [never_cache, company_created(),company_is_active()]
 
+
+def get_chart_color():
+    random_number = random.randint(0,16777215)
+    hex_number =format(random_number,'x')
+    hex_number = '#'+hex_number
+    return hex_number
 
 def get_current_year():
     current_year = 0
@@ -62,12 +69,15 @@ def management_tool_chart(request):
 def ownership_form_chart(self,*args,**kwargs):
     labels = []
     data = []
+    colors = []
     queryset = Company.objects.values('ownership_form').annotate(Count('id')).order_by('ownership_form').exclude(main_category='FBPIDI')
     for ownership in queryset:
         if ownership['ownership_form'] != None:
             labels.append(CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']).name)
             data.append(ownership['id__count'])
-    return JsonResponse({'labels':labels,'data':data})
+            colors.append(get_chart_color())
+
+    return JsonResponse({'labels':labels,'data':data,'colors':colors})
 
 def main_category_chart(request):
     labels = []
@@ -353,6 +363,7 @@ def input_avl_chart(request):
     supply = 0
     demand = 0
     av_inp = 0
+    colors = []
     for product in SubCategory.objects.all():
         inp_dem_sups = InputDemandSupply.objects.filter(product=product,year=get_current_year()).values('product').annotate(
             demand=Sum('demand'),supply = Sum('supply')
@@ -368,7 +379,9 @@ def input_avl_chart(request):
                 av_inp=float(supply/demand)
         labels.append(product.sub_category_name)
         data.append(round(av_inp,2))
-    return JsonResponse({'labels':labels,'data':data})
+        colors.append(get_chart_color())
+    
+    return JsonResponse({'labels':labels,'data':data,'colors':colors})
 
 def input_share_chart(request):
     labels  =[]

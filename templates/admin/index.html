@@ -12,46 +12,7 @@
         <script src="/static/admin/assets/js/report.js"></script>
 
         <!-- /theme JS files -->
-        <script>
-            
-
-            $(function () {
         
-              var $populationChart = $("#category-chart");
-              $.ajax({
-                url: $populationChart.data("url"),
-                success: function (data) {
-        
-                  var ctx = $populationChart[0].getContext("2d");
-                   
-                  new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                      labels: data.labels,
-                      datasets: [{
-                        label: 'Companies',
-                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0'],
-                        data: data.data
-                      }]          
-                    },
-                    options: {
-                      responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Company Summary'
-                      }
-                    }
-                  });
-        
-                }
-              });
-        
-            });
-        
-          </script>
 {% endblock %}
 {% block content %}
   <!-- Content area -->
