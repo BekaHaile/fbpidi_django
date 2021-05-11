@@ -385,18 +385,17 @@
 										{% if user.is_authenticated %}
 											{% user_liked_company user company.id  as liked %}
 											{% if liked == True %}
-												<a  class="text-pink" data-toggle="tooltip" data-placement="top" title="You Liked Company"><i class="fa fa-heart"></i></a>
+												<a  id="dislike_{{company.id}}" name="dislike_{{company.id}}" onclick="dislike_company('{{company.id}}')" class="text-pink" data-toggle="tooltip" data-placement="top" title="You Liked Company"><i class="fa fa-heart"></i></a>
 											<!-- <a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a> -->
 											{% else %}
-												<a  href=""  id="like_{{company.id}}" name="like_{{company.id}}" onclick="like_company('{{company.id}}')" data-toggle="tooltip" data-placement="top" title="Like This Company"><i class="fa fa-heart"></i></a>
+												<a  id="like_{{company.id}}" name="like_{{company.id}}" onclick="like_company('{{company.id}}')" data-toggle="tooltip" data-placement="top" title="Like This Company"><i class="fa fa-heart"></i></a>
 											
 											
 											{% endif %}
 										{% else %}
 										<a href = "/accounts/login/?next=/company/like_company"   id="like_{{company.id}}" data-toggle="tooltip" data-placement="top" title="You have to Login to Like"><i class="fa fa-heart"></i></a>
 											
-										<!-- <a  href= "/accounts/login/?next=/company/like_company"  class="item-card9-icons1 wishlist"  > <i style="color:white; " class="fa fa fa-heart-o"></i></a> -->
-
+									
 										{% endif %}
 
 
@@ -877,9 +876,6 @@
 						console.log("hello")
 					})
 					window.alert('Company Liked Successfull')
-					
-					
-					
 				}
 				else{
 					window.alert("not like")
@@ -887,8 +883,41 @@
 			});
 
 		}
-		
-		
+			
+	}
+
+	function dislike_company(c_id)
+	{
+		if (document.getElementById('dislike_'+c_id).value != "liked")
+		{
+				fetch("{% url 'dislike_company'  %}",
+			{
+			method:"POST",
+			credentials: 'same-origin',
+			headers:{
+				"content-Type":'application/json',
+				'X-CSRFToken':'{{csrf_token}}'
+			},
+			body:JSON.stringify({
+				'c_id': c_id,
+			})
+			}).then(e => e.json()).then(result=>{
+				if(result['error'] == false){
+					var heart = document.getElementsByName('dislike_'+c_id)
+					heart.forEach(h=>{
+						h.class = "";
+						h.value = ""
+						console.log("hello")
+					})
+					window.alert('Company Disliked Successfull')
+				}
+				else{
+					window.alert("Dislike Failed")
+				}   		
+			});
+
+		}
+			
 	}
 
 </script>

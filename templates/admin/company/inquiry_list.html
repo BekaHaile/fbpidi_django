@@ -159,7 +159,7 @@
                                         
                                             
                                             <a href="#compose{{inquiry.id}}" data-toggle="modal" data-target="#compose{{inquiry.id}}" class="dropdown-item" ><i class="icon-eye"></i>View Detail</a>
-                                            <a  class="dropdown-item" onclick="linked_reply('{{inquiry.id}}', 'chat')" ><i class="icon-trash" ></i>Chat Reply</a>
+                                            <a  class="dropdown-item" onclick="chat_reply('{{inquiry.id}}', 'chat')" ><i class="icon-trash" ></i>Chat Reply</a>
                                             <a href="#" class="dropdown-item" data-toggle="modal" data-target="#compose{{inquiry.id}}" ><i class="icon-trash"></i>Direct Reply</a>
                                             <a  href="mailto:{{inquiry.sender_email}}" class="dropdown-item" onclick="email_reply('{{inquiry.id}}', 'email')" ><i class="icon-trash"></i>Email Reply</a>
                                             
@@ -264,7 +264,7 @@
                     )
 					
 				}
-    function linked_reply(inquiry_id, type)
+    function chat_reply(inquiry_id, type)
 				{
                     fetch("{% url 'admin:linked_inquiry_relply' %}",
                     {

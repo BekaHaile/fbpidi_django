@@ -21,147 +21,9 @@ from collaborations.api.api_views import get_paginated_data, get_paginator_info
 
 from company.models import Company
 from company.api.serializers import CompanyInfoSerializer
-from product.models import SubCategory,Product, ProductImage, ProductPrice
-from product.api.serializer import (ProductFullSerializer, ProductInfoSerializer, ProductImageSerializer)
+from product.models import SubCategory,Product, ProductImage, ProductPrice,ProductLike
+from product.api.serializer import (ProductFullSerializer, ProductInfoSerializer, ProductImageSerializer, ProductInquiryCreationSerializer)
 
-
-class ApiCartSummary(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-    
-    def response(self, request, message = ""):
-        try:    
-            order = Order.objects.filter(user=request.user, ordered=False).first()           
-            products = Product.objects.all().order_by("timestamp")[:4]
-            count = 0
-            for product_order in order.products.all():
-                count += product_order.quantity
-            return { 'error':False, 'data' : {'message': message,'total_orders':count,'orders':OrderSerializer( order).data, 
-                                'products': ProductInfoSerializer( products, many = True).data
-                                    }, 
-                        }
-        except Exception as e:
-                return{'error':True, 'message':str(e)}
-
-    def get(self, request):
-        return Response( self.response( request ))
-     
-
-class ApiAddToCartView(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-    def get(self,request):
-        if request.query_params['id']:
-            try:
-                product = get_object_or_404(Product,id=int(request.query_params['id']))
-            except Exception:
-                return Response({'error':True, 'message': "Product not Found!"})
-
-            order_product,created = OrderProduct.objects.get_or_create(
-                product=product,
-                to_company=product.company,
-                user=self.request.user,
-                ordered=False
-            )
-            user_order_queryset = Order.objects.filter(
-                user=self.request.user,
-                ordered=False
-            )
-            if user_order_queryset.exists():
-                order = user_order_queryset[0]
-                if order.products.filter(product__id=product.id).exists():
-                    order_product.quantity +=1
-                    order_product.save()
-                    #12345 redirect to cart summary
-                    return Response( ApiCartSummary.response(self, request, f"You order additional {product.name}" ))
-                else:
-                    order.products.add(order_product)
-                    order.save()
-                    return Response( ApiCartSummary.response(self, request,"New Product is added to your cart" ))
-            else:
-                order = Order.objects.create(user=self.request.user,order_date=timezone.now())
-                order.products.add(order_product)
-                order.save()
-                return Response( ApiCartSummary.response(self, request,"The Order is added to your cart"  ))
-
-        else:
-            return Response({'error':True, 'message':"No Input with keyword 'id'!!"})
-
-
-class ApiDecrementFromCart(APIView):
-    authentication_classes = ([TokenAuthentication])
-    permission_classes = ([IsAuthenticated])
-    
-    def get(self,request):
-        if request.query_params['id']:
-            try:
-                product = get_object_or_404(Product,id=int(request.query_params['id']))
-            except Exception:
-                return Response({'error':True, 'message': "Product not Found!"})
-            product = get_object_or_404(Product,id=request.query_params['id'])
-            user_order_queryset = Order.objects.filter(user=request.user,ordered=False)
-            if user_order_queryset.exists():
-                order = user_order_queryset[0]
-                if order.products.filter(product__id=product.id).exists():
-                    order_product = OrderProduct.objects.filter( 
-                        user=self.request.user,product=product,ordered=False )[0]
-                    if order_product.quantity > 1:
-                        order_product.quantity -= 1
-                        order_product.save()
-                        return Response( ApiCartSummary.response(self, request, f"You removed 1 {order_product.product.name} from your cart." ))
-                        
-                    else:
-                        order.products.remove(order_product)
-                        return Response( ApiCartSummary.response(self, request, f"You removed all {order_product.product.name}s from your cart." ))
-                else:   
-                    return Response({'error':True, 'message':"This item was not in your cart"})
-            else: 
-                return Response({'error':True, 'message': "You do not have order"})   
-        
-        else:
-            return Response({'error':True, 'message':"No Input with keyword 'id'!!"})
-
-
-def create_ref_code():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits,k=30))
-
-def create_invoice(invoice,user):
-    return '#INV-'.join(random.choices(string.ascii_uppercase + (str(invoice.id).join(str(user.id)))))
-
-class ApiCheckout(APIView):
-    authentication_classes = ([TokenAuthentication])
-    permission_classes = ([IsAuthenticated])
-    def get(self, request):
-        order = Order.objects.get(user=request.user,ordered=False)
-        return Response( data = {'error':False,
-                                 'order': OrderSerializer(order).data},
-                        status = status.HTTP_200_OK
-                        )
-    
-    def post(self, request):
-        
-        if ShippingAddressSerializer(data = request.data).is_valid(raise_exception=True):
-            serializer = ShippingAddressSerializer(data = request.data)
-            shipping = serializer.create(validated_data = request.data, user = request.user)
-        try:
-            order = Order.objects.get(user=request.user,ordered=False)
-        except Exception:
-            return Response({'error':True, 'message': "Order object not Found!"})
-
-        
-        order.shipping_address = shipping
-        invoice = InvoiceRecord(
-            user=request.user,
-            amount=order.get_total_price()
-            
-        )
-        #12345 join create_invoice(invoice,request.user)
-        invoice.code = create_invoice(invoice,request.user)
-        invoice.save()
-        order.invoice = invoice
-        order.ordered = True
-        order.save()
-        return Response(data = {'error':False,'invoice_code':order.invoice.code, 'message':"Successfull"})
 
 
 
@@ -234,7 +96,104 @@ class ApiCompanyByMainCategoryList(APIView):
 
 
 
+# this function is used, because to convert the list of string ids to integer and to cut the last , off
+def get_id_list(str_id):
+    prods_id_list = str_id[:-1] 
+    product_ids = prods_id_list.split(",")
+    return [int(i) for i in product_ids]
+    
 
+class ApiInquiryRequest(APIView):
+    def get(self, request):
+        try:
+            selected_prods = Product.objects.filter(id__in = get_id_list( request.query_params['products']) )
+            return Response({'error':False, 'products':ProductInfoSerializer(selected_prods, many=True).data, 'count':selected_prods.count()})
+        except Exception as e:
+            print("@@@@@@ Exception at InquiryForm get ",e)
+            return Response({'error':True, 'message':str(e)})
+    def post(self, request):
+        try:
+            products = Product.objects.filter(id__in = get_id_list( request.data['prod_id_list']) ).distinct()
+            serializer = ProductInquiryCreationSerializer(data = request.data)
+
+            if serializer.is_valid():
+                for p in products:       
+                    item = serializer.create(validated_data=request.data)
+                    item.product = p
+                    item.user=request.user
+                    if 'attachement' in request.data:
+                        item.attachement = request.data['attachement']
+                    item.save()
+                return Response(data={'error':False, 'email':request.data['sender_email']})
+            else:
+                print("form invalid")
+                return Response(data={'error':True, 'message':serializer.errors})
+            
+        except Exception as e:
+            print("@@@ Exception ",e)
+            return Response(data= {'error':True, 'message':str(e)})
+    
+    
+class ApiInquiryByCategory(APIView):
+    def get(self, request):
+        try:    
+            category = Category.objects.get(id = request.query_params['category'])
+            companies = Company.objects.filter(category =   category)
+            company_ids = [c.id for c in companies ]
+            return Response(data={'error':False, 'company_ids':company_ids,'count':len(company_ids),'category':request.query_params['category']})
+    
+        except Exception as e:
+            print("@@@@@@ Exception at InquiryByCategory get ",e)
+            return Response(data = {'error':True, 'message':str(e)})
+    
+    def post(self, request):
+        try:
+            category = Category.objects.get(id = request.data['category'])
+            companies = category.company_category.all()
+            serializer = ProductInquiryCreationSerializer(data = request.data)
+            if serializer.is_valid():
+                for c in companies:      
+                    item = serializer.create(validated_data=request.data)
+                    item.category = category
+                    item.user=self.request.user
+                    if 'attachement' in request.data:
+                        item.attachement = request.data['attachement']
+                    item.save()
+                return Response(data={'error':False, 'email':request.data['sender_email']})
+            else:
+                print("invalid data")
+                return Response(data = {'error':True, 'message':str(serializer.errors)})
+
+        except Exception as e:
+            print("@@@ Exception ",e)
+            return Response(data = {'error':True, 'message':str(e)})
+
+
+class ApiLikeProduct(APIView):
+    def get(self, request):
+        try:  
+            product  = Product.objects.get (id= int(request.query_params['p_id'] ) )
+            if ProductLike.objects.filter(user = request.user, product = product).exists():
+                return Response(data = {'error':True, 'message': 'Already Liked product'})
+            p_like = ProductLike( user = request.user, product = product  )
+            p_like.save()
+            return Response(data = {'error':False})
+
+        except Exception as e:
+            print("########Exception while tring to like a product ",e)
+            return Response(data = {'error':True, 'message':str(e)})
+
+
+class ApiDislikeProduct(APIView):
+    def get(self, request):
+        try:
+            p_like = ProductLike.objects.filter(user = request.user, product = Product.objects.get (id= int(request.query_params['p_id'] ))).first()
+            if p_like:
+                p_like.delete()
+            return Response({'error':False})
+        except Exception as e:
+            print("########Exception at Dislike product ",e)
+            return Response({'error':True, 'message':str(e)})
 
         
 

@@ -1,7 +1,6 @@
 from django.urls import path, include
 from core.api.api_views import (ApiIndexView,ApiProfileView,ApiTotalViewerData)
 
-from product.api.api_views import ApiCartSummary, ApiAddToCartView, ApiDecrementFromCart, ApiCheckout
 from django.core.exceptions import ObjectDoesNotExist
 from admin_site.models import Category
 

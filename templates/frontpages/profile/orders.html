@@ -17,6 +17,7 @@
 							<th>Product</th>
 							<th>Date</th>
 							<th>Subject</th>
+							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -27,9 +28,71 @@
 							<td>{%if order.product%}{{order.product.name}}{%elif order.category%}{{order.category.category_name}}{%endif%}</td>
 							<td>{{order.created_date|date}}</td>
 							<td class="font-weight-semibold fs-16">{{order.subject}}</td>
+							<td><a href="#response{{inquiry.id}}" data-toggle="modal" data-target="#response{{inquiry.id}}" class="dropdown-item" ><i class="icon-eye"></i>View Detail</a>
+							</td>
 							 
 						</tr>
-						 {%endfor%}
+
+
+						  <!--  compse reply modal -->
+						  <div id="response{{inquiry.id}}" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title"><b>{% trans "Inquiry Detail" %}:</b> </h5>    
+                                        </div>					
+                                        <div class="modal-body">
+                                                <div  style="padding-left: 20px;">
+                                                    <h5 style = "color:black"> <b>Inquiry Email :</b> {{order.sender_email}}</h5>
+                                                    <h5 style = "color:black"><b>{% trans "Subject"  %}:</b></h5>
+                                                    <div class="form-group">
+                                                        <!-- <blockquote><p>{{inquiry.subject}}</p></blockquote> -->
+                                                        <input class =" form form-control"  style= "color:black; height:auto;" disabled="True" value= '" {{order.subject}} "' >
+                                                        
+                                                    </div>
+                                                    <br>
+                                                    <h5 style = "color:black"><b>{% trans "Inquiry Content" %} :</b></h5>
+                                                    <div class="form-group">
+                                                        
+                                                        <textarea  rows="10" class =" form form-control"  style="color:black; height:auto" disabled="True">{{order.content}}</textarea> 
+                                                    </div>
+                                                    <br>
+                                                
+                                                   
+                                                    <br>
+                                                    {% if order.replied %}
+														{% if order.productinquiryreply_set.all > 0 %}
+														<h5><p>{% trans "Response from the manufacturer" %}:</p></h5>
+														
+														<div class="form-group">
+															<textarea class="form-control" name="reply_message" rows="10" placeholder="Reply Message" required>{{inquiry.productinquiryreply_set.first.reply}}</textarea>
+														</div>
+														{% else %} 
+														<h5><p style = 'color:rgb(52, 174, 52)' class='mb-5'>{% trans "The response was either through inquiry email or IIMS chat, it was not by direct response!" %}:</p></h5>
+														{% endif %}
+                                                   
+                                                    {% else %}
+													<h5><p style="color:rgb(209, 39, 39)">{% trans "No Response, So Far!" %}:</p></h5>
+                                                    
+                                                    {% endif %}
+													
+        
+                                                    
+                                                </div>
+                                                            
+                                        </div>
+        
+                                        
+                                   
+        
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+						{%endfor%}
 					</tbody>
 				</table>
 			</div>

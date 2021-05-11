@@ -13,7 +13,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from accounts.models import UserProfile
 from chat.models import ChatMessages
-from chat.serializer import ChatMessagesSerializer
+from chat.api.serializer import ChatMessagesSerializer
 
 from admin_site.decorators import company_created,company_is_active
 
@@ -21,7 +21,7 @@ decorators = [never_cache, company_created(),company_is_active()]
 
 
 #checks if a requested user does exist in the database
-@login_required
+
 def check_username(request, username):
     try:
         u = get_object_or_404(UserProfile, username = username)
@@ -55,8 +55,8 @@ def chat_ajax_handler(request, id):
     
 
 # opens the chatting page and loads saved messages
-@login_required
-def chat_with(request, reciever_name):
+
+def chat_with(request, reciever_name):    
     try:
         other_user= UserProfile.objects.get(username=reciever_name)
         if other_user == request.user:
@@ -71,7 +71,7 @@ def chat_with(request, reciever_name):
                 return redirect('customer_chat_list')
             else:
                 return redirect("admin:admin_chat_list")
-    print("This method is callled ***********")
+    
     messages_list = []
     if request.method == 'GET':
         q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) ) | 
@@ -95,6 +95,7 @@ def chat_with(request, reciever_name):
     
 @login_required    
 def list_unread_messages(request):
+        
         all_unread_messages = ChatMessages.objects.filter(receiver = request.user, seen =False).order_by('-created_date')        
         sender_names = []
         grouped_unread_messages = []
