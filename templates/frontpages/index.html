@@ -637,7 +637,7 @@
 								<!-- User Icon Svg --->
 							</div>
 							<h4 class="mb-4 fs-20">{% trans "Exsiting User" %}</h4>
-							<p>{% trans "it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text" %}</p>
+							<p>{% trans "If you are have an account you can go to the login page and login with your previously registered credentials" %}</p>
 							<a href="{%url 'login'%}" class="btn btn-primary text-white px-6">{% trans "Login" %}</a>
 						</div>
 					</div>
@@ -670,7 +670,7 @@
 								<!--User Icon Svg --->
 							</div>
 							<h4 class="mb-4 fs-20">{% trans "New User"%}</h4>
-							<p>{% trans "it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text" %}</p>
+							<p>{% trans "If you are a New User You can click the register button bellow and fill your credentials in the apearing form & create profile" %}</p>
 							
 							<a href="{%if not user.is_authenticated%}{%url 'register'%}{%else%}#{%endif%}" class="btn btn-primary text-white px-6">
 								{% if not user.is_authenticated %}
