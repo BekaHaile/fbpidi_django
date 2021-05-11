@@ -64,7 +64,9 @@ urlpatterns = [
     path("api/accounts/", include("accounts.api.api_urls") ),# api login, logout ...
     path("api/collaborations/", include("collaborations.api.api_urls")),
     path('api/company/', include('company.api.api_urls')),
+    path("api/chat/", include('chat.api.api_urls')),
     path('api/product/', include('product.api.api_urls')),
+    
     
     
     path("not_found/",TemplateView.as_view(template_name="frontpages/404.html"),name="not_found"),

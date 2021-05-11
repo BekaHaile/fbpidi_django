@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from company.models import Company, CompanyAddress, Certificates,  InvestmentProject
+from company.models import Company, CompanyAddress, Certificates,  InvestmentProject, CompanyMessage
 from accounts.api.serializers import CompanyAdminSerializer, UserInfoSerializer
 from product.models import Category, SubCategory, Brand
 
@@ -56,3 +56,12 @@ class InvestmentProjectserializer(serializers.ModelSerializer):
     class Meta:
         model = InvestmentProject
         fields = "__all__"
+
+class CompanyMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompanyMessage
+        fields = ('name', 'email', 'message')
+    
+    def create(self, validated_data):
+        item = CompanyMessage(name = validated_data['name'], email = validated_data['email'], message=validated_data['message'])
+        return item

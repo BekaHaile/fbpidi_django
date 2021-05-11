@@ -290,14 +290,18 @@ class BlogList(View):
 
 class CreateBlogComment(LoginRequiredMixin,View):
 	def post(self,*args,**kwargs):
-		form = BlogCommentForm(self.request.POST)
-		blog = Blog.objects.get(id=self.kwargs['id'])
-		template_name="frontpages/blog/blog-details-right.html" 
-		if form.is_valid():
-			blogComment=BlogComment(blog=blog,created_by=self.request.user,content=form.cleaned_data.get('content'))
-			blogComment.save()
-			return redirect(reverse("blog_details",kwargs={'id':str(self.kwargs['id'])}))
-		return render(self.request, template_name,context)
+		try:
+			form = BlogCommentForm(self.request.POST)
+			blog = Blog.objects.get(id=self.kwargs['id'])
+			template_name="frontpages/blog/blog-details-right.html" 
+			if form.is_valid():
+				blogComment=BlogComment(blog=blog,created_by=self.request.user,content=form.cleaned_data.get('content'))
+				blogComment.save()
+				return redirect(reverse("blog_details",kwargs={'id':str(self.kwargs['id'])}))
+			return render(self.request, template_name,context)
+		except Exception as e:
+			print("@@@ Exception at CreateBlogComment ",e)
+			return redirect("/collaborations/blog-list/")
 
 class BlogDetail(View):
 	def get_tags(self,lang):
@@ -317,10 +321,14 @@ class BlogDetail(View):
 		return tag_list
 
 	def get(self,*args,**kwargs):
-		blog = Blog.objects.get(id=self.kwargs['id'])
-		comment = BlogCommentForm()
-		tags=self.get_tags("english")
-		tags_am=self.get_tags("amharic")
-		template_name="frontpages/blog/blog_detail.html" 
-		context = {'blog':blog,'comment':comment,'tags':tags,'tags_am':tags_am}
-		return render(self.request, template_name,context)
+		try:
+			blog = Blog.objects.get(id=self.kwargs['id'])
+			comment = BlogCommentForm()
+			tags=self.get_tags("english")
+			tags_am=self.get_tags("amharic")
+			template_name="frontpages/blog/blog_detail.html" 
+			context = {'blog':blog,'comment':comment,'tags':tags,'tags_am':tags_am}
+			return render(self.request, template_name,context)
+		except Exception as e:
+			print("@@@@ Exception at BlogDetail ", e)
+			return redirect("/collaborations/blog-list/")

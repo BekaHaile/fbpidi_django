@@ -886,6 +886,7 @@ class p_serializer(serializers.ModelSerializer):
         model = Product
         fields = ("id","name", "name_am",  "image")
 
+
 @login_required
 def FetchInquiryProducts(request):
     data = json.loads(request.body)
@@ -895,6 +896,7 @@ def FetchInquiryProducts(request):
     product_list = [int(i) for i in product_ids]
     products = Product.objects.filter(id__in = product_list).distinct()
     return JsonResponse( p_serializer(products, many = True).data, safe = False)
+
 
 # this function is used, because to convert the list of string ids to integer and to cut the last , off
 def get_id_list(str_id):
@@ -933,6 +935,7 @@ class InquiryRequest(LoginRequiredMixin, View):
             print("@@@ Exception ",e)
             return redirect("index")
     
+    
 class InquiryByCategory(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
@@ -965,6 +968,7 @@ class InquiryByCategory(LoginRequiredMixin, View):
         except Exception as e:
             print("@@@ Exception ",e)
             return redirect("index")
+
 
 @login_required
 def LikeProduct(request):
