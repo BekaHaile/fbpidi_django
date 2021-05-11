@@ -1707,7 +1707,7 @@ msgstr "የይለፍ ቃል ቀይር"
 
 #: .\templates\frontpages\company\product_list.html:61
 msgid "to"
-msgstr ""
+msgstr "ለ"
 
 #: .\templates\registration\password_reset_done.html:70
 msgid ""
@@ -1768,7 +1768,7 @@ msgstr "ገጾች"
 
 #: .\venv\Lib\site-packages\django\contrib\sitemaps\apps.py:7
 msgid "Site Maps"
-msgstr ""
+msgstr "ሳይት ማፕ"
 
 #: .\venv\Lib\site-packages\django\contrib\staticfiles\apps.py:9
 #, fuzzy
@@ -2978,9 +2978,6 @@ msgstr "የቅጥር አይነት"
 msgid "Cateory"
 msgstr "ምድብ"
 
-#: .\templates\frontpages\vacancy_detail.html:71
-msgid "Campany"
-msgstr "ድርጅቶች"
 
 #: .\templates\frontpages\vacancy_detail.html:87
 msgid "Starting date"

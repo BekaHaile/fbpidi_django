@@ -771,7 +771,7 @@
 							</li>
 							{%endfor%}
 							<li class="mb-0">
-								<a href="{%url 'categories' category='Food'%}" class="text-secondary"> View more..</a>
+								<a href="{%url 'categories' category='Food'%}" class="text-secondary"> {% trans "View more" %}..</a>
 							</li>
 						</ul>
 					</div>
@@ -794,7 +794,7 @@
 							</li>
 							{%endfor%}
 							<li class="mb-0">
-								<a href="#" class="text-secondary"> View more..</a>
+								<a href="{%url 'categories' category='Beverage'%}" class="text-secondary">{% trans "View more" %}..</a>
 							</li>
 						</ul>
 					</div>
@@ -817,7 +817,7 @@
 							</li>
 							{%endfor%}
 							<li class="mb-0">
-								<a href="#" class="text-secondary"> View more..</a>
+								<a href="{%url 'categories' category='Pharmaceuticals'%}" class="text-secondary">{% trans "View more" %}..</a>
 							</li>
 						</ul>
 					</div>
@@ -833,7 +833,6 @@
 	<div class="container">
 		<div class="section-title center-block text-center">
 			<h2>{% trans "Download App" %}</h2>
-			<p>{% trans "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula" %}</p>
 		</div>
 		<div class="row">
 			<div class="col-md-12">
