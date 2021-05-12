@@ -73,4 +73,17 @@ class ProductInquiryCreationSerializer(serializers.ModelSerializer):
         inquiry = ProductInquiry(sender_email=validated_data['sender_email'], subject=validated_data['subject'], content=validated_data['content'], quantity=validated_data['quantity'])
         return inquiry
 
+class ProductInquirySerializer(serializers.ModelSerializer):
+    product = ProductInfoSerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
+    reply = serializers.SerializerMethodField('get_reply')
+    class Meta:
+        model = ProductInquiry
+        fields = "__all__"
 
+    def get_reply(self, inquiry):
+        inquiry_reply = inquiry.productinquiryreply_set.first()
+        if inquiry_reply:
+            return {'reply':inquiry_reply.reply, 'created_date':inquiry_reply.created_date}
+        else:
+            return None

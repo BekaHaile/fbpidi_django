@@ -13,6 +13,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.views import APIView
 
 from accounts.models import UserProfile
+from accounts.api.serializers import UserInfoSerializer
 from chat.models import ChatMessages
 from chat.api.serializer import ChatMessagesSerializer
 from rest_framework.authentication import TokenAuthentication
@@ -50,7 +51,7 @@ class chat_ajax_handler(APIView):
         messages = []
         #get all unread messages(only), these are new unread messages other than those that are loaded when the user opens the chat layout page. like online chats from the other user
         print (" a chat request from",request.user)
-        other_user = UserProfile.objects.get(username = request.query_params ['sender_name'])
+        other_user = UserProfile.objects.get(username = request.query_params ['name'])
         q = Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False)  ) 
         unread_messages = ChatMessages.objects.filter(q)
         for m in unread_messages:
@@ -60,9 +61,13 @@ class chat_ajax_handler(APIView):
         return Response(data={'error':False, 'data':messages})
     def post(self, request):
       #save the message and send it back for the sender to be displayed
-        m = ChatMessages(sender = request.user, receiver = UserProfile.objects.get(username = request.data['sender_name']), message = request.data['message'])
-        m.save()
-        return Response(data={'error':False, 'data':ChatMessagesSerializer( m).data})
+        try:
+            m = ChatMessages(sender = request.user, receiver = UserProfile.objects.get(username = request.data['name']), message = request.data['message'])
+            m.save()
+            return Response(data={'error':False, 'data':ChatMessagesSerializer( m).data})
+
+        except Exception as e:
+            return Response(data ={'error':True, 'message':str(e)})
     
 
 # opens the chatting page and loads saved messages
@@ -72,34 +77,37 @@ class chat_with(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
-            other_user= UserProfile.objects.get(username=request.query_params['reciever_name'])
+            other_user= UserProfile.objects.get(username=request.query_params['name'])
             if other_user == request.user:
                 return Response(data={'error':True, 'message':"You can't chat with your self!"})
             
+            messages_list = []
+
+            q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) ) | 
+                    Q( Q(sender = request.user) & Q(receiver = other_user) ) 
+                )
+            query_messages = ChatMessages.objects.filter(q).order_by("-created_date")
+            unread = query_messages.filter( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False))
+            for m in unread:
+                m.seen = True
+                m.save()
+            num_of_messages = unread.count() if unread.count()>=5 else 5 #set number of messages to 5 if unread messages are lesser than 5, or set z numer equal to no of unread messages
+            query_messages = query_messages[:num_of_messages]
+            reversed_query = query_messages[::-1]#we need -created_date to retrieve from db, and order of created_date to display for users, so we have to reverse it
+            messages_list = ChatMessagesSerializer(reversed_query, many = True).data
+
+            other_chats = get_grouped_chats(user=request.user, excluded_user=other_user)
+            return Response(data = {'error':False, 'other_user': UserInfoSerializer(other_user).data, 'old_messages':messages_list,'other_chats':other_chats })
+   
+            
         except Exception as e:
-                print("Exception at chat with ",e)
+                print("Exception at chat with ",str(e))
                 
     
-        messages_list = []
-
-        q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) ) | 
-                Q( Q(sender = request.user) & Q(receiver = other_user) ) 
-            )
-        query_messages = ChatMessages.objects.filter(q).order_by("-created_date")
-        unread = query_messages.filter( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False))
-        for m in unread:
-            m.seen = True
-            m.save()
-        num_of_messages = unread.count() if unread.count()>=5 else 5 #set number of messages to 5 if unread messages are lesser than 5, or set z numer equal to no of unread messages
-        query_messages = query_messages[:num_of_messages]
-        reversed_query = query_messages[::-1]#we need -created_date to retrieve from db, and order of created_date to display for users, so we have to reverse it
-        messages_list = ChatMessagesSerializer(reversed_query, many = True).data
-
-        other_chats = get_grouped_chats(user=request.user, excluded_user=other_user)
-        if request.user.is_customer:
-            return render(request, 'frontpages/chat/customer_chat_layout.html',{'other_user':other_user, 'old_messages': messages_list,'other_chats':other_chats})
-        else:    
-            return render(request, 'admin/chat/chat_layout.html',{'other_user':other_user, 'old_messages': messages_list,'other_chats':other_chats})
+             # if request.user.is_customer:
+        #     return render(request, 'frontpages/chat/customer_chat_layout.html',{'other_user':other_user, 'old_messages': messages_list,'other_chats':other_chats})
+        # else:    
+        #     return render(request, 'admin/chat/chat_layout.html',{'other_user':other_user, 'old_messages': messages_list,'other_chats':other_chats})
 
    
 class list_unread_messages(APIView):
