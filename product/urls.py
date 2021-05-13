@@ -2,7 +2,7 @@ from django.urls import path,include
 from product.views.views import  (SearchProduct,InquiryByCategory,
                                     ProductDetailView, ProductByCategoryView,
                                     ProductByProductView, ProductByMainCategory,
-                                    CreateReview, FetchInquiryProducts,
+                                    CreateReview, FetchInquiryProducts,CategoriesView,
                                     InquiryRequest, LikeProduct, DislikeProduct)
 
 

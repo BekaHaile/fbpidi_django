@@ -707,7 +707,7 @@ msgstr "ንግግር"
 #: .\templates\frontpages\layout.html:350
 #: .\templates\frontpages\product\product_detail.html:499
 msgid "Contact Us"
-msgstr "ያግኑኝ"
+msgstr "ያግኙን"
 
 #: .\templates\frontpages\company\company_index.html:252
 #, fuzzy
