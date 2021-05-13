@@ -101,7 +101,7 @@
 			$.ajax({
 			url: $ownershipChart.data("url"),
 			success: function (data) {
-
+        console.log(data);
 				var ctx = $ownershipChart[0].getContext("2d");
 
 				new Chart(ctx, {
@@ -110,7 +110,7 @@
 					labels: data.labels,
 					datasets: [{
 					label: 'Industries',
-					backgroundColor: [ '#2196F3;', '#F44336', '#FF7043', '#FF9800', '#4CAF50'],
+					backgroundColor: data.colors,
 					data: data.data
 					}]          
 				},
@@ -594,7 +594,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: "Available Inputs",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },

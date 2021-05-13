@@ -419,7 +419,6 @@
 	<div class="container">
 		<div class="section-title center-block text-center">
 			<h2>{% trans "How It Works?" %}</h2>
-			<!-- <p>{% trans "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula" %}</p> -->
 		</div>
 		<div class="row">
 			<div class="col-lg-3 col-md-6 col-sm-6">
@@ -541,82 +540,12 @@
 		</div>
 	</div>
 </section>
-<!--/How It Works-->
-
-<!--&lt;!&ndash;Suppliers Listings&ndash;&gt;-->
-<!--<section class="sptb bg-patterns bg-white">-->
-	<!--<div class="container">-->
-		<!--<div class="section-title center-block text-center">-->
-			<!--<h2>{% trans "Latest Suppliers" %}</h2>-->
-			<!--<p>{% trans "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula" %}</p>-->
-		<!--</div>-->
-		<!--<div id="myCarousel2" class="owl-carousel owl-carousel-icons2">-->
-			<!--&lt;!&ndash; Wrapper for carousel items &ndash;&gt;-->
-			<!--{%for company in companies%}-->
-			<!--{%if company.company_type == "supplier"%}-->
-			<!--<div class="item">-->
-				<!--<div class="card mb-0 overflow-hidden">-->
-					<!--&lt;!&ndash; <div class="arrow-ribbon bg-success">Open</div> &ndash;&gt;-->
-					<!--<div class="item-card7-imgs">-->
-						<!--<a href="{% url 'bs' %}" class="absolute-link"></a>-->
-						<!--<img src="{{company.company_logo.url}}" alt="img" class="cover-image">-->
-					<!--</div>-->
-					<!--<div class="item-card7-overlaytext">-->
-						<!--<a href="{% url 'bs' %}" class="text-white">{%print_translated company.company_type company.company_type_am LANGUAGE_CODE%}</a>-->
-					<!--</div>-->
-					<!--<div class="card-body">-->
-						<!--<div class="item-card7-desc">-->
-							<!--<div class="item-card7-text">-->
-								<!--<a href="{% url 'bs' %}" class="text-dark">-->
-									<!--<h4 class="">{%print_translated company.company_name company.company_name_am LANGUAGE_CODE%}</h4>-->
-								<!--</a>-->
-							<!--</div>-->
-							<!--<ul class="item-cards7-ic mb-0">-->
-								<!--<li><a href="#"><span class=""><i class="icon icon-eye mr-1"></i> 12 Views</span></a>-->
-								<!--</li>-->
-								<!--<li><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>-->
-										<!--{{company.location}}</a></li>-->
-								<!--<li class="mb-md-0"><a href="#" class="icons"><i-->
-											<!--class="icon icon-event text-muted mr-1"></i> 1 hour ago</a></li>-->
-								<!--<li class="mb-0"><a href="#" class="icons"><i-->
-											<!--class="icon icon-phone text-muted mr-1"></i>{{company.phone_number}}</a>-->
-								<!--</li>-->
-							<!--</ul>-->
-							<!--&lt;!&ndash; <p class="mb-0">{{company.detail|safe|truncatechars_html:4}}</p> &ndash;&gt;-->
-						<!--</div>-->
-					<!--</div>-->
-					<!--<div class="card-footer">-->
-						<!--<div class="footerimg d-flex mt-0 mb-0">-->
-							<!--<div class="d-flex footerimg-l mb-0">-->
-								<!--<img src="{{company.company_logo.url}}" alt="image" class="avatar brround  mr-2">-->
-								<!--<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">{{company.location}}<i-->
-										<!--class="icon icon-check text-success fs-12 ml-1" data-toggle="tooltip"-->
-										<!--data-placement="top" title="verified"></i></h5>-->
-							<!--</div>-->
-							<!--<div class="mt-2 footerimg-r ml-auto">-->
-								<!--<a href="#" class="text-pink" data-toggle="tooltip" data-placement="top"-->
-									<!--title="Remove from Wishlist"><i class="fa fa-heart"></i></a>-->
-							<!--</div>-->
-						<!--</div>-->
-					<!--</div>-->
-				<!--</div>-->
-			<!--</div>-->
-			 <!---->
-			<!--{%endif%}-->
-			<!--{%endfor%}-->
-			<!---->
-		<!--</div>-->
-	<!--</div>-->
-<!--</section>-->
-<!--&lt;!&ndash;/Suppliers Listings&ndash;&gt;-->
-
-
+ 
 <!--Getting Started Section-->
 <section class="sptb bg-white">
 	<div class="container">
 		<div class="section-title center-block text-center">
 			<h2>{% trans "Getting Started" %}</h2>
-			<!-- <p>{% trans "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula"%}</p> -->
 		</div>
 		<div class="card overflow-hidden">
 			<div class="row no-gutters row-deck">
@@ -637,7 +566,7 @@
 								<!-- User Icon Svg --->
 							</div>
 							<h4 class="mb-4 fs-20">{% trans "Exsiting User" %}</h4>
-							<p>{% trans "it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text" %}</p>
+							<p>{% trans "If you are have an account you can go to the login page and login with your previously registered credentials" %}</p>
 							<a href="{%url 'login'%}" class="btn btn-primary text-white px-6">{% trans "Login" %}</a>
 						</div>
 					</div>
@@ -670,7 +599,7 @@
 								<!--User Icon Svg --->
 							</div>
 							<h4 class="mb-4 fs-20">{% trans "New User"%}</h4>
-							<p>{% trans "it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text" %}</p>
+							<p>{% trans "If you are a New User You can click the register button bellow and fill your credentials in the apearing form & create profile" %}</p>
 							
 							<a href="{%if not user.is_authenticated%}{%url 'register'%}{%else%}#{%endif%}" class="btn btn-primary text-white px-6">
 								{% if not user.is_authenticated %}
@@ -762,18 +691,16 @@
 					</div>
 					<div class="card-body p-0">
 						<ul class="list-group widget-spec">
-							{%for category in product_type%}
-							{%if category.category_name.category_type == "Food"%}
+							{%for category in food_types%}
 							<li class="">
 								<a href="{%url 'product_product_category' cat_id=category.id%}" class="text-dark">
 									{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
 								<span class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">
 									{{category.id|product_count_by_subcategory}}</span>
 							</li>
-							{%endif%}
 							{%endfor%}
 							<li class="mb-0">
-								<a href="#" class="text-secondary"> View more..</a>
+								<a href="{%url 'categories' category='Food'%}" class="text-secondary"> {% trans "View more" %}..</a>
 							</li>
 						</ul>
 					</div>
@@ -788,17 +715,15 @@
 					</div>
 					<div class="card-body p-0">
 						<ul class="list-unstyled widget-spec">
-							{%for category in product_type%}
-							{%if category.category_name.category_type == "Beverage"%}
+							{%for category in beverage_types%}
 							<li class="">
 								<a href="{%url 'product_product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
 								<span
 									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_by_subcategory}}</span>
 							</li>
-							{%endif%}
 							{%endfor%}
 							<li class="mb-0">
-								<a href="#" class="text-secondary"> View more..</a>
+								<a href="{%url 'categories' category='Beverage'%}" class="text-secondary">{% trans "View more" %}..</a>
 							</li>
 						</ul>
 					</div>
@@ -813,17 +738,15 @@
 					</div>
 					<div class="card-body p-0">
 						<ul class="list-unstyled widget-spec">
-							{%for category in product_type%}
-							{%if category.category_name.category_type == "Pharmaceuticals"%}
+							{%for category in pharmaceutical_types%}
 							<li class="">
 								<a href="{%url 'product_product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.sub_category_name category.sub_category_name_am LANGUAGE_CODE%}</a>
 								<span
 									class="badge badge-light border badge-pill float-right ml-auto font-weight-semibold">{{category.id|product_count_by_subcategory}}</span>
 							</li>
-							{%endif%}
 							{%endfor%}
 							<li class="mb-0">
-								<a href="#" class="text-secondary"> View more..</a>
+								<a href="{%url 'categories' category='Pharmaceuticals'%}" class="text-secondary">{% trans "View more" %}..</a>
 							</li>
 						</ul>
 					</div>
@@ -839,7 +762,6 @@
 	<div class="container">
 		<div class="section-title center-block text-center">
 			<h2>{% trans "Download App" %}</h2>
-			<p>{% trans "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula" %}</p>
 		</div>
 		<div class="row">
 			<div class="col-md-12">

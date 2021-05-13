@@ -1,0 +1,47 @@
+{%extends 'frontpages/layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+{% block javascript %}
+{% endblock %}
+{%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+		<!--Breadcrumb-->
+		<section>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white">
+							<h1 class="">{% trans "Categories" %}</h1>
+							<ol class="breadcrumb text-center">
+								<li class="breadcrumb-item"><a href="{%url 'index'%}">{% trans 'Home' %}</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Categories" %}</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Breadcrumb-->
+
+		<!-- Categories-->
+		<section class="sptb bg-white">
+			<div class="container">
+				<div class="section-title center-block text-center">
+					<h2>{%print_translated object.category_name.category_type object.category_name.category_type_am LANGUAGE_CODE %}</h2>
+				</div>
+				<div class="row">
+					{%for object in object_list%}
+					<div class="col-xl-2 col-lg-4 col-md-6 col-sm-6 col-6">
+						<a href="#" class="top-cities card text-center mb-xl-0 box-shadow2">
+							<img src="{{object.icons.url}}" alt="img" class="w-70 bg-pink-transparent">
+							<div class="servic-data mt-3">
+								<h4 class="font-weight-semibold mb-0">{%print_translated object.sub_category_name object.sub_category_name_am LANGUAGE_CODE%}</h4>
+							</div>
+						</a>
+					</div>
+					{%endfor%}
+				</div>
+			</div>
+		</section>
+		<!--Categories-->
+ {%endblock%}
