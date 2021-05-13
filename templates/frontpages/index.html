@@ -419,7 +419,6 @@
 	<div class="container">
 		<div class="section-title center-block text-center">
 			<h2>{% trans "How It Works?" %}</h2>
-			<!-- <p>{% trans "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula" %}</p> -->
 		</div>
 		<div class="row">
 			<div class="col-lg-3 col-md-6 col-sm-6">
@@ -541,82 +540,12 @@
 		</div>
 	</div>
 </section>
-<!--/How It Works-->
-
-<!--&lt;!&ndash;Suppliers Listings&ndash;&gt;-->
-<!--<section class="sptb bg-patterns bg-white">-->
-	<!--<div class="container">-->
-		<!--<div class="section-title center-block text-center">-->
-			<!--<h2>{% trans "Latest Suppliers" %}</h2>-->
-			<!--<p>{% trans "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula" %}</p>-->
-		<!--</div>-->
-		<!--<div id="myCarousel2" class="owl-carousel owl-carousel-icons2">-->
-			<!--&lt;!&ndash; Wrapper for carousel items &ndash;&gt;-->
-			<!--{%for company in companies%}-->
-			<!--{%if company.company_type == "supplier"%}-->
-			<!--<div class="item">-->
-				<!--<div class="card mb-0 overflow-hidden">-->
-					<!--&lt;!&ndash; <div class="arrow-ribbon bg-success">Open</div> &ndash;&gt;-->
-					<!--<div class="item-card7-imgs">-->
-						<!--<a href="{% url 'bs' %}" class="absolute-link"></a>-->
-						<!--<img src="{{company.company_logo.url}}" alt="img" class="cover-image">-->
-					<!--</div>-->
-					<!--<div class="item-card7-overlaytext">-->
-						<!--<a href="{% url 'bs' %}" class="text-white">{%print_translated company.company_type company.company_type_am LANGUAGE_CODE%}</a>-->
-					<!--</div>-->
-					<!--<div class="card-body">-->
-						<!--<div class="item-card7-desc">-->
-							<!--<div class="item-card7-text">-->
-								<!--<a href="{% url 'bs' %}" class="text-dark">-->
-									<!--<h4 class="">{%print_translated company.company_name company.company_name_am LANGUAGE_CODE%}</h4>-->
-								<!--</a>-->
-							<!--</div>-->
-							<!--<ul class="item-cards7-ic mb-0">-->
-								<!--<li><a href="#"><span class=""><i class="icon icon-eye mr-1"></i> 12 Views</span></a>-->
-								<!--</li>-->
-								<!--<li><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i>-->
-										<!--{{company.location}}</a></li>-->
-								<!--<li class="mb-md-0"><a href="#" class="icons"><i-->
-											<!--class="icon icon-event text-muted mr-1"></i> 1 hour ago</a></li>-->
-								<!--<li class="mb-0"><a href="#" class="icons"><i-->
-											<!--class="icon icon-phone text-muted mr-1"></i>{{company.phone_number}}</a>-->
-								<!--</li>-->
-							<!--</ul>-->
-							<!--&lt;!&ndash; <p class="mb-0">{{company.detail|safe|truncatechars_html:4}}</p> &ndash;&gt;-->
-						<!--</div>-->
-					<!--</div>-->
-					<!--<div class="card-footer">-->
-						<!--<div class="footerimg d-flex mt-0 mb-0">-->
-							<!--<div class="d-flex footerimg-l mb-0">-->
-								<!--<img src="{{company.company_logo.url}}" alt="image" class="avatar brround  mr-2">-->
-								<!--<h5 class="time-title text-muted p-0 leading-normal mt-2 mb-0">{{company.location}}<i-->
-										<!--class="icon icon-check text-success fs-12 ml-1" data-toggle="tooltip"-->
-										<!--data-placement="top" title="verified"></i></h5>-->
-							<!--</div>-->
-							<!--<div class="mt-2 footerimg-r ml-auto">-->
-								<!--<a href="#" class="text-pink" data-toggle="tooltip" data-placement="top"-->
-									<!--title="Remove from Wishlist"><i class="fa fa-heart"></i></a>-->
-							<!--</div>-->
-						<!--</div>-->
-					<!--</div>-->
-				<!--</div>-->
-			<!--</div>-->
-			 <!---->
-			<!--{%endif%}-->
-			<!--{%endfor%}-->
-			<!---->
-		<!--</div>-->
-	<!--</div>-->
-<!--</section>-->
-<!--&lt;!&ndash;/Suppliers Listings&ndash;&gt;-->
-
-
+ 
 <!--Getting Started Section-->
 <section class="sptb bg-white">
 	<div class="container">
 		<div class="section-title center-block text-center">
 			<h2>{% trans "Getting Started" %}</h2>
-			<!-- <p>{% trans "Mauris ut cursus nunc. Morbi eleifend, ligula at consectetur vehicula"%}</p> -->
 		</div>
 		<div class="card overflow-hidden">
 			<div class="row no-gutters row-deck">
