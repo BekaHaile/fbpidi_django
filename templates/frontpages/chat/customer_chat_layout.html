@@ -5,6 +5,9 @@
 {%block mydash%}active{%endblock%}
 
 {% block extrastyle %}
+  <!-- added for the frontpages chat part  -->
+  <link href="/static/admin/assets/css/components.min.css" rel="stylesheet" type="text/css">
+    
 <!-- Theme JS files -->
 <script src="/static/admin/global_assets/js/demo_pages/chat_layouts.js"></script>
 
@@ -29,7 +32,7 @@
 </style>
 <div class="container">
     <div class="row" style = "margin-top:15px;">
-        <div class="col-xl-9 col-lg-9 col-md-12">
+        <div class="col-xl-8 col-lg-8 col-md-12">
             <!--Add lists-->
             <div class=" mb-lg-0">
                 <div class="">
@@ -47,8 +50,6 @@
                                                 <div class="header-elements" >
                                                     <h4>   {% trans "Your Chats with " %}<b>{{other_user.first_name}} {{other_user.last_name}}</b></h4>
                                                 </div>
-                                               
-                                                
                                             </div>
                                             
                                                
@@ -124,7 +125,7 @@
 
         <!--Right Side Content-->
         
-        <div class="col-xl-3 col-lg-3 col-md-12">
+        <div class="col-xl-4 col-lg-4 col-md-12">
             <div class = "card" >
                 <div class="card-header header-elements-inline">
                     <h5 class="card-title"><b>Other Chats</b></h5>
@@ -137,11 +138,11 @@
                     </div>
                 </div>
 
-                <div class="card-body" style = "padding:5px 10px;">
+                <div class="card-body" style = "padding:3px 5px;">
                 
                     <ul class="media-list media-chat-scrollable mb-3">
                         {% for message_obj in other_chats %} 
-                            <div class = "card card-body" style = "padding:5px 15px; ">
+                            <div class = "card card-body" style = "padding:5px 5px; ">
                                 {% if user.username == message_obj.sender_name %}
                                     <li class="media">
                                         <div class="mr-3"><a href="{{message_obj.receiver_image}}"><img src="{{message_obj.receiver_image}}" class="rounded-circle" width="40" height="40" alt=""></a></div>

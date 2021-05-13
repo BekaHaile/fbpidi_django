@@ -10,6 +10,10 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, CompanyAdminSerializer, CustomerCreationSerializer
 from rest_framework.authtoken.models import Token
 from accounts.email_messages import sendEmailVerification
+from product.models import Product, ProductLike, ProductInquiry
+from product.api.serializer import ProductInfoSerializer, ProductInquirySerializer
+from company.models import Company, CompanyLike
+from company.api.serializers import CompanyInfoSerializer
 
 ###### for the api social auth, from https://github.com/coriolinus/oauth2-article/blob/master/views.py
 from django.conf import settings
@@ -18,6 +22,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from requests.exceptions import HTTPError
 from social_django.utils import psa
+
 
 class CustomerSignUpView(APIView):
     def post(self, request):
@@ -60,8 +65,7 @@ class CustomerSignUpView(APIView):
                 data = {'error':True, 'message':"Error while sending Verification Email, try signing up again!"}
         else:
             data = {'error':True, 'message': dict(customer_serializer.errors).values()}
-        return data
-                
+        return data                
 
 
 class SocialSerializer(serializers.Serializer):
@@ -156,6 +160,31 @@ def exchange_token(request, backend):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+
+class MyFavorites(APIView):
+    def get(self, request):
+        try:
+            p_likes = ProductLike.objects.filter(user=request.user)
+            liked_products = Product.objects.filter(id__in = [pl.product.id for pl in p_likes]) 
+
+            c_likes = CompanyLike.objects.filter(user = request.user )
+            liked_companies = Company.objects.filter(id__in = [cl.company.id for cl in c_likes])
+            return Response(data = {'error':False, 'liked_products':ProductInfoSerializer(liked_products, many = True).data, 
+                                                'liked_companies': CompanyInfoSerializer(liked_companies, many = True).data})
+        except Exception as e:
+            return Response(data  ={'error':True, 'message':str(e)})    
+
+
+class MyOrders(APIView):
+    def get(self, request):
+        try:
+            orders = ProductInquiry.objects.filter(user=self.request.user)
+            return Response(data={'error':False, 'oders':ProductInquirySerializer(orders, many =True).data })
+        except Exception as e:
+            return Response(data = {'error':True, 'message':str(e)})
+
+
+        
 
 
 

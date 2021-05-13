@@ -261,6 +261,7 @@ class AdminProductListView(LoginRequiredMixin,ListView):
         elif self.request.user.is_company_staff:
             return Product.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
 
+
 @method_decorator(decorators,name='dispatch')
 class CreateProductView(LoginRequiredMixin,CreateView):
     model=Product
@@ -324,6 +325,7 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
         return render(self.request,"admin/product/product_form_update.html",
                         {'form':form,'image_form':ProductImageForm,'price_form':ProductPriceForm})
 
+
 @method_decorator(decorators,name='dispatch')
 class AddProductImage(LoginRequiredMixin,CreateView):
     model=ProductImage
@@ -340,6 +342,7 @@ class AddProductImage(LoginRequiredMixin,CreateView):
         messages.success(self.request,"Image Added Successfully!")
         return redirect("admin:product_detail",pk=product.id)
 
+
 @method_decorator(decorators,name='dispatch')
 class CreatePrice(LoginRequiredMixin,CreateView):
     model = ProductPrice
@@ -353,6 +356,7 @@ class CreatePrice(LoginRequiredMixin,CreateView):
         messages.success(self.request,"New Product Price Added Successfully!")
         return redirect("admin:product_detail",pk=product.id)
 
+
 @method_decorator(decorators,name='dispatch')
 class CreateDose(LoginRequiredMixin,CreateView):
     model = Dose
@@ -364,6 +368,7 @@ class CreateDose(LoginRequiredMixin,CreateView):
         data.save()
         messages.success(self.request,"Product Dose Created Successfully!")
         return redirect("admin:settings")
+
 
 @method_decorator(decorators,name='dispatch')
 class UpdateDose(LoginRequiredMixin,UpdateView):
@@ -384,6 +389,7 @@ class UpdateDose(LoginRequiredMixin,UpdateView):
         messages.success(self.request,"Product Dose Updated Successfully!")
         return redirect("admin:settings")
 
+
 @method_decorator(decorators,name='dispatch')
 class CreateDosageForm(LoginRequiredMixin,CreateView):
     model = DosageForm
@@ -395,6 +401,7 @@ class CreateDosageForm(LoginRequiredMixin,CreateView):
         data.save()
         messages.success(self.request,"Product Dosage Form Created Successfully!")
         return redirect("admin:settings")
+
 
 @method_decorator(decorators,name='dispatch')
 class UpdateDosageForm(LoginRequiredMixin,UpdateView):
@@ -415,6 +422,7 @@ class UpdateDosageForm(LoginRequiredMixin,UpdateView):
         messages.success(self.request,"Product Dosage Form Updated Successfully!")
         return redirect("admin:settings")
 
+
 @method_decorator(decorators,name='dispatch')
 class ListProductionCapacity(LoginRequiredMixin,ListView):
     model = ProductionCapacity
@@ -431,6 +439,7 @@ class ListProductionCapacity(LoginRequiredMixin,ListView):
         # context['product']=Product.objects.get(id=self.kwargs['product'])
         context['flag'] = "production_capacity"
         return context
+
 
 @method_decorator(decorators,name='dispatch')
 class CreateProductionCapacity(LoginRequiredMixin,CreateView):
@@ -472,6 +481,7 @@ class CreateProductionCapacity(LoginRequiredMixin,CreateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:create_production_capacity")
 
+
 @method_decorator(decorators,name='dispatch')
 class UpdateProductionCapacity(LoginRequiredMixin,UpdateView):
     model=ProductionCapacity
@@ -505,6 +515,7 @@ class UpdateProductionCapacity(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_production_capacity",pk=self.kwargs['pk'])
 
+
 @method_decorator(decorators,name='dispatch')
 class ListSalesPerformance(LoginRequiredMixin,ListView):
     model = ProductionAndSalesPerformance
@@ -520,6 +531,7 @@ class ListSalesPerformance(LoginRequiredMixin,ListView):
         context = super().get_context_data(**kwargs)
         context['flag'] = "sales_performance"
         return context
+
 
 @method_decorator(decorators,name='dispatch')
 class CreateSalesPerformance(LoginRequiredMixin,CreateView):
@@ -558,12 +570,13 @@ class CreateSalesPerformance(LoginRequiredMixin,CreateView):
             sp.created_by = self.request.user
             sp.save()
             messages.success(self.request,"Production Sales Performance Created")
-            # return redirect("admin:create_sales_performance")
-            return redirect("admin:sales_performance")
+            return redirect("admin:create_sales_performance")
+            # return redirect("admin:sales_performance")
     
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
         return redirect("admin:create_sales_performance")
+
 
 @method_decorator(decorators,name='dispatch')
 class UpdateSalesPerformance(LoginRequiredMixin,UpdateView):
@@ -602,6 +615,7 @@ class UpdateSalesPerformance(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_sales_performance",pk=self.kwargs['pk'])
 
+
 @method_decorator(decorators,name='dispatch')
 class ListPackaging(LoginRequiredMixin,ListView):
     model = ProductPackaging
@@ -617,6 +631,7 @@ class ListPackaging(LoginRequiredMixin,ListView):
         context = super().get_context_data(**kwargs)
         context['flag'] = "packaging"
         return context
+
 
 @method_decorator(decorators,name='dispatch')
 class CreatePackaging(LoginRequiredMixin,CreateView):
@@ -645,8 +660,8 @@ class CreatePackaging(LoginRequiredMixin,CreateView):
         sp.created_by = self.request.user
         sp.save()
         messages.success(self.request,"Product Packaging Created")
-        # return redirect('admin:create_packaging')
-        return redirect("admin:packaging")
+        return redirect('admin:create_packaging')
+        # return redirect("admin:packaging")
     
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
@@ -686,6 +701,7 @@ class UpdatePackaging(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_packaging",pk=self.kwargs['pk'])
 
+
 @method_decorator(decorators,name='dispatch')
 class ListAnualInputNeed(LoginRequiredMixin,ListView):
     model = AnnualInputNeed
@@ -701,6 +717,7 @@ class ListAnualInputNeed(LoginRequiredMixin,ListView):
         context = super().get_context_data(**kwargs)
         context['flag'] = "anual_input_need"
         return context
+
 
 @method_decorator(decorators,name='dispatch')
 class CreateAnualInputNeed(LoginRequiredMixin,CreateView):
@@ -738,8 +755,9 @@ class CreateAnualInputNeed(LoginRequiredMixin,CreateView):
             ain.created_by = self.request.user
             ain.save()
             messages.success(self.request,"Anual Input Need Created")
-            # return redirect("admin:create_anual_inp_need")
-            return redirect("admin:anual_input_need")
+            return redirect("admin:create_anual_inp_need")
+            # return redirect("admin:anual_input_need")
+
 
 @method_decorator(decorators,name='dispatch')
 class UpdateAnualInputNeed(LoginRequiredMixin,UpdateView):
@@ -795,6 +813,7 @@ class ListInputDemandSupply(LoginRequiredMixin,ListView):
         context['flag'] = "demand_supply"
         return context
 
+
 @method_decorator(decorators,name='dispatch')
 class CreateInputDemandSupply(LoginRequiredMixin,CreateView):
     model=InputDemandSupply
@@ -832,12 +851,14 @@ class CreateInputDemandSupply(LoginRequiredMixin,CreateView):
             ds.created_by = self.request.user
             ds.save()
             messages.success(self.request,"Input Demand and Supply data added")
-            # return redirect("admin:create_demand_supply")
-            return redirect("admin:demand_supply_list")
-    
+            return redirect("admin:create_demand_supply")
+            # return redirect("admin:demand_supply_list")
+
+
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
         return redirect("admin:create_demand_supply")
+
 
 @method_decorator(decorators,name='dispatch')
 class UpdateInputDemandSupply(LoginRequiredMixin,UpdateView):
@@ -875,10 +896,6 @@ class UpdateInputDemandSupply(LoginRequiredMixin,UpdateView):
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
         return redirect("admin:update_demand_supply",pk=self.kwargs['pk'])
-
-
-
- 
 
  
 class p_serializer(serializers.ModelSerializer):
@@ -974,14 +991,32 @@ class InquiryByCategory(LoginRequiredMixin, View):
 def LikeProduct(request):
     try:
         data = json.loads( request.body )
-        p_like = ProductLike(user = request.user, product = Product.objects.get (id= int(data['p_id'] ) )  )
-        p_like.save()
-        return JsonResponse({'error':False})
+        p_like = ProductLike.objects.filter(user = request.user, product = Product.objects.get(id = int(data['p_id']))).first()
+        if not p_like:
+            p_like = ProductLike(user = request.user, product = Product.objects.get(id = int(data['p_id'])))
+            p_like.save()
+            return JsonResponse({'error':False})
+        else:
+            return JsonResponse({'error':True, 'message':"Already Liked Product!"})
+        
 
     except Exception as e:
         print("########Exception while tring to like a product ",e)
-        return JsonResponse({'error':True})
+        return JsonResponse({'error':True,'message':"Internal Server Error!"})
 
+@login_required
+def DislikeProduct(request):
+    try:
+        data = json.loads(request.body)
+        p_like = ProductLike.objects.filter( user = request.user, product = Product.objects.get (id= int(data['p_id'] ) ))
+        if p_like:
+            p_like.delete()
+            return JsonResponse({'error':False,'message':"Disliked"})
+        else:
+            return JsonResponse({'error':True, 'message':"Can't Dislike Product!"})
+    except Exception as e:
+        print("@@@@ Exception at Dislike Product ", e)
+        return JsonResponse({'error':True, 'message':'Internal Server Error!'})
 
 
 ################### newly added , delete this comment
@@ -1007,7 +1042,8 @@ class ProductByCategoryView(ListView):
         #     return Product.objects.filter(
         #         pharmacy_category=category)
         # elif category.category_type == "Food" or category.category_type == "Beverage":
-            
+
+
 class ProductByProductView(ListView):
     model=Product
     template_name="frontpages/product/product_category.html"
@@ -1025,7 +1061,6 @@ class ProductByProductView(ListView):
         for brand in category.product_category.all():
             brands.append(brand)
         return Product.objects.filter(brand__in=brands)
-
 
 
 class ProductByMainCategory(ListView):
@@ -1065,6 +1100,7 @@ class ProductByMainCategory(ListView):
         elif self.kwargs['option'] == "all":
             return Product.objects.all()
 
+
 class SearchProduct(View):
 
     def get(self,*args,**kwargs):
@@ -1082,6 +1118,7 @@ class SearchProduct(View):
             products = products 
         return render(self.request,template_name,{'object_list':products, })
         
+
 class ProductDetailView(DetailView):
     model = Product
     template_name = "frontpages/product/product_detail.html"
