@@ -3,7 +3,7 @@ from product.views.views import  (SearchProduct,InquiryByCategory,
                                     ProductDetailView, ProductByCategoryView,
                                     ProductByProductView, ProductByMainCategory,
                                     CreateReview, FetchInquiryProducts,
-                                    InquiryRequest, LikeProduct)
+                                    InquiryRequest, LikeProduct, DislikeProduct)
 
 
 urlpatterns = [
@@ -19,6 +19,7 @@ urlpatterns = [
     
     path("category_inquiry_form/", InquiryByCategory.as_view(), name = "category_inquiry_form"),
     path('like_product/', LikeProduct, name = "like_product"),
+    path("dislike_product/", DislikeProduct, name="dislike_product"),
     
 
     
