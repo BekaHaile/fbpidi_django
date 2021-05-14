@@ -187,7 +187,7 @@
 																				<div  class="row mt-1 mb-1 mr-2">
 																					<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" >
 																						<input type="hidden" name="products" value="{{product.id}},">
-																						<button class="btn btn-secondary br-tr-3 br-br-3 mr-3"  style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Inquiry" %}</button>
+																						<button class="btn btn-secondary br-tr-3 br-br-3 mr-3"  style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" title="Inquiry This Product Only!" type="submit">{% trans "Inquiry Now" %}</button>
 																					</form>
 																					<button class="btn btn-secondary br-tr-3 br-br-3" name = "prod_{{product.id}}" id = "prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
 																				</div>
@@ -282,7 +282,7 @@
 																					<div  class="row mt-1 mb-1 ml-2">
 																						<form target="blank" action="{% url 'inquiry_form' %}" metho="GET" enctype = "multipart/form-data" >
 																							<input type="hidden" name="products" value="{{product.id}},">
-																							<button class="btn btn-secondary br-tr-3 br-br-3 mr-3" style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Inquiry Now" %}</button>
+																							<button class="btn btn-secondary br-tr-3 br-br-3 mr-3" style="border:none; background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" title="Inquiry This Product Only!" type="submit">{% trans "Inquiry Now" %}</button>
 																						</form>
 																						<button class="btn btn-secondary br-tr-3 br-br-3 " name ="prod_{{product.id}}"  onclick = "add_to_cart('{{product.id}}')">{% trans "Add To Basket" %} </button>
 																					</div>
@@ -342,54 +342,53 @@
                             <div class="card-header">
                                 <h3 class="card-title">{% trans " List By Categories" %}</h3>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body" style="padding-right: 10px; padding-left:10px">
                                 <div class="" id="container">
-                                    <div class="filter-product-checkboxs">
-                                         {%for category in sub_sectors%}
-                                        <label class="custom-control custom-checkbox mb-3">
-                                            
-                                            <span class="custom-control-label">
-												<a href="{%url 'product_category' cat_id=category.id%}" class="text-dark">{% print_translated category.category_name|truncatechars_html:20  category.category_name_am|truncatechars_html:20 LANGUAGE_CODE %}</a>
-											</span>
-                                        </label>
-                                        {%endfor%}
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-						<br>
-						<div class="card mb-0">
-                            <div class="card-header">
-                                <h3 class="card-title">{% trans "Send Inquiry By Sub-Sector" %}</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="" id="container">
-                                    <div class="filter-product-checkboxs">
-                                         {%for category in sub_sectors%}
-										 <form action = "{%url 'category_inquiry_form' %}" method ="GET">
+                                    <div class="filter-product" style="padding: 0px; margin:0px">
+                                        
+										 {%for category in sub_sectors%}
+											{% count_category_companies category as companies %}
+											{% if companies > 0 %}
+											<form action = "{%url 'category_inquiry_form' %}" method ="GET">
+												<label class="custom-control ">
+												
+													<span class="custom-control-label">
+														
+														<input type="hidden" name ="category" value = "{{category.id}}"/>
+														<a class="text-dark">{% print_translated category.category_name|truncatechars_html:20  category.category_name_am|truncatechars_html:20 LANGUAGE_CODE %}</a>
+														<span class="custom-control-label">
+															<button class="badgetext badge badge-pill mb-1 mt-1 " type="submit"
+															style="border:none; color :white; padding: 7px;background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" title="Send Inquiry For Companies With This Category" type="submit">{% trans "Inquiry" %}</button>
+														</span>
+														
+													</span>
+												</label>
+											</form>
+											{% else %} 
 											<label class="custom-control custom-checkbox mb-0">
-											
+												
 												<span class="custom-control-label">
 													<input type="hidden" name ="category" value = "{{category.id}}"/>
 													<a class="text-dark">{% print_translated category.category_name|truncatechars_html:20  category.category_name_am|truncatechars_html:20 LANGUAGE_CODE %}</a>
 													<span class="custom-control-label">
-														<button class="badgetext badge badge-pill mb-1 mt-1 " type="submit"
-														style="border:none; color :white; padding: 7px;background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" type="submit">{% trans "Inquiry" %}</button>
+														<button class="badgetext badge badge-pill mb-1 mt-1 " 
+														style="border:none; color :white; padding: 7px;background-color: #3f3e50 ;" id="product_contact_now" type="submit">{% trans "No Company" %}</button>
 
 														<!-- <a  stle="color:white">{{cat}}<span style = "background-color: blue;" class="badgetext badge badge-pill badge-light mb-0 mt-1">{% trans "Send Inquiry" %}</span></a> -->
 													</span>
 													
 												</span>
 											</label>
-										</form>
-										<hr>
+
+											{% endif %}
+											<hr>
                                         {%endfor%}
                                     </div>
                                 </div>
                             </div>
 
                         </div>
+						
                     </div>
                     <!--/Right Side Content-->
 			</div>
@@ -406,6 +405,7 @@
 					
 				else{dislike_product(element_id)}
 			}
+			
 			function like_product(element_id)
 			{
 				var element = document.getElementById(element_id)
@@ -432,7 +432,7 @@
 							})	
 						}
 						else{
-							window.alert("Failed to Like"+result['message'])
+							window.alert("Failed to Like")
 						}   		
 					});
 				

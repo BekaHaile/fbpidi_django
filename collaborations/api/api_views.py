@@ -215,6 +215,7 @@ class PollDetailApiView( APIView):
             return Response(data)
         elif PollsResult.objects.filter(user = user , poll=poll):
             data['error'] = True
+            print("alreadY")
             data['message'] = "You already have voted for this poll." 
             return Response(data)          
         else:

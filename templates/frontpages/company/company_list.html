@@ -93,10 +93,12 @@
 															{% if user.is_authenticated %}
 																{% user_liked_company user company.id  as liked %}
 																{% if liked == True %}
-																	<a  class="item-card9-icons1 wishlist"   style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+																<a  class="item-card9-icons1 wishlist" id="like_{{company.id}}" name="{{company.id}}" style = "background-color: rgb(252, 67, 67);" title = "liked" onclick="like_or_dislike('like_{{company.id}}')"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+																		
 																{% else %}
-																	<a  class="item-card9-icons1 wishlist" id="like_{{company.id}}" onclick="like_company('{{company.id}}')"> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
-
+																<a  class="item-card9-icons1 wishlist" id="like_{{company.id}}" name="{{company.id}}" style  title = "" onclick="like_or_dislike('like_{{company.id}}')"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+																
+																	
 																{% endif %}
 															{% else %}
 															<a  href= "/accounts/login/?next=/company/like_company"  class="item-card9-icons1 wishlist" id="like_{{company.id}}" > <i style="color:white; " class="fa fa fa-heart-o"></i></a>
@@ -158,9 +160,13 @@
 																	{% if user.is_authenticated %}
 																		{% user_liked_company user company.id  as liked %}
 																		{% if liked == True %}
-																			<a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+																		<a  class="item-card9-icons1 wishlist" id="glike_{{company.id}}" name="{{company.id}}" style = "background-color: rgb(252, 67, 67);" title = "liked" onclick="like_or_dislike('glike_{{company.id}}')"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+																		
+																			<!-- <a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a> -->
 																		{% else %}
-																			<a  class="item-card9-icons1 wishlist" id="glike_{{company.id}}" onclick="like_company('{{company.id}}')"> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+																		<a  class="item-card9-icons1 wishlist" id="glike_{{company.id}}" name="{{company.id}}" style  title = "" onclick="like_or_dislike('glike_{{company.id}}')"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+																		
+																			<!-- <a  class="item-card9-icons1 wishlist" id="glike_{{company.id}}" onclick="like_company('{{company.id}}')"> <i style="color:white; " class="fa fa fa-heart-o"></i></a> -->
 
 																		{% endif %}
 																	{% else %}
@@ -174,7 +180,7 @@
 																<div class="card-body">
 																	<div class="item-card9">
 																		
-																		<a href="{% url 'company_home' pk=company.id %}" target = "black" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.name|truncatechars_html:21 company.name_am|truncatechars_html:21 LANGUAGE_CODE%}<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i></h4></a>
+																		<a href="{% url 'company_home' pk=company.id %}" target = "black" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated company.name|truncatechars_html:21 company.name_am|truncatechars_html:21 LANGUAGE_CODE%}</h4></a>
 																		<div class="rating-stars d-flex mr-5">
 																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="3">
 																			<a class="fs-13 leading-tight mt-1" href="#">{{company|company_product_count}} Products</a>
@@ -312,42 +318,81 @@
 		<!--/Add Listings-->
 
 
-		<script>
-			function like_company(c_id)
+	
+<script>
+				
+	function like_or_dislike(element_id){
+		var element = document.getElementById(element_id)
+		if (document.getElementById(element_id).title != 'liked')
+				like_company(element_id)
+			
+		else{dislike_company(element_id)}
+	}
+	
+	function like_company(element_id)
+	{
+		var element = document.getElementById(element_id)
+		var c_id = element_id.split("_")[1]	
+			
+				fetch("{% url 'like_company'  %}",
 			{
-				if (document.getElementById('like_'+c_id).value != "liked")
-				{
-						fetch("{% url 'like_company'  %}",
-					{
-					method:"POST",
-					credentials: 'same-origin',
-					headers:{
-						"content-Type":'application/json',
-						'X-CSRFToken':'{{csrf_token}}'
-					},
-					body:JSON.stringify({
-						'c_id': c_id,
-					})
-					}).then(e => e.json()).then(result=>{
-						if(result['error'] == false){
-							window.alert('Company Liked Successfull')
-							var linear = document.getElementById('like_'+c_id)
-							var grid = document.getElementById('glike_'+c_id)
+			method:"POST",
+			credentials: 'same-origin',
+			headers:{
+				"content-Type":'application/json',
+				'X-CSRFToken':'{{csrf_token}}'
+			},
+			body:JSON.stringify({
+				'c_id': c_id,
+			})
+			}).then(e => e.json()).then(result=>{
+				if(result['error'] == false){
+					var elements = document.getElementsByName(c_id)
+					elements.forEach( (element)=> {
+						element.style['background-color'] =  "rgb(252, 67, 67)"
+						element.title = "liked"
+						console.log("liked "+c_id)
+					})	
+				}
+				else{
+					window.alert("Failed to Like")
+				}   		
+			});
+		
+	}
 
-							linear.style['background-color'] =  "rgb(252, 67, 67)";
-							grid.style['background-color']  =  "rgb(252, 67, 67)";
-							linear.value = "liked"
-							grid.value = "liked"
-						}
-						else{window.alert("not like")}   		
-					});
+	function dislike_company(element_id)
+	{
+			var c_id = element_id.split("_")[1]		
+				fetch("{% url 'dislike_company'  %}",
+			{
+			method:"POST",
+			credentials: 'same-origin',
+			headers:{
+				"content-Type":'application/json',
+				'X-CSRFToken':'{{csrf_token}}'
+			},
+			body:JSON.stringify({
+				'c_id': c_id,
+			})
+			}).then(e => e.json()).then(result=>{
+				if(result['error'] == false){
+					var elements = document.getElementsByName(c_id)
+					elements.forEach( (element)=>{
+						element.style['background-color'] =  "#3f3e50";		
+						element.title = ""
+					})
 
 				}
-				
-				
-			}
-		
-		</script>
+				else{
+					window.alert("Failed to Dislike")
+				}   		
+			});
+	
+	}
+
+
+</script>
 
 	
 {%endblock%}

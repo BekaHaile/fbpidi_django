@@ -237,9 +237,13 @@ class CompanyProductdetail(DetailView):
     context_object_name = "product"
 
     def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        context['object'] = Product.objects.get(id=self.kwargs['pk']).company
-        return context
+        try:
+            context = super().get_context_data(**kwargs)
+            context['object'] = Product.objects.get(id=self.kwargs['pk']).company
+            return context
+        except Exception as e:
+            print("@@@@ Exception at CompanyProductDetail ",e)
+            return redirect("/")
 
 
 class CompanyProjectList(ListView):

@@ -65,28 +65,27 @@
 												</div>
 											</div> {{product|product_rating}}
 										</div>
+
 										<div class="rating-stars d-flex">
-											<div class="rating-stars-container mr-2">
-												<div class="rating-star sm">
-
-													{% if user.is_authenticated %}
+											
+											{% if user.is_authenticated %}
 												
-														{% user_liked_product user product.id  as liked %}
-														{% if liked == True %}
-															<a  class="item-card9-icons1 wishlist" style = "background-color: white;"  > <i style="color:rgb(252, 67, 67);; "class="fa fa-heart"></i></a>
-														{% else %}
-															<a  class="item-card9-icons1 wishlist" style = "background-color: white;"  id="like_{{product.id}}" onclick="like_product('{{product.id}}')"> <i  class="fa fa-heart"></i></a>
-														{% endif %}
-													{% else %}
-													<a   href="/accounts/login/?next=/product/fetch_inquiry_products/"  class="item-card9-icons1 wishlist" style = "background-color: white;"   > <i  class="fa fa-heart"></i></a>
-													{% endif %}
-												</div>
-											</div>
-
-											<p id= "product_like_count">{{product.productlike_set.all.count}}</p> 
-
+												{% user_liked_product user product.id  as liked %}
+												{% if liked == True %}
+													
+													<a  class="item-card9-icons1 wishlist" style = "background-color: white; color: rgb(252, 67, 67); " id="like_{{product.id}}" name="{{product.id}}" onclick="like_or_dislike('like_{{product.id}}')" title="liked" value="liked"> <i class="fa fa-heart"></i></a>
+												{% else %}
+													<a  class="item-card9-icons1 wishlist" style = "background-color: white; color: #3f3e50"  id="like_{{product.id}}" name="{{product.id}}" onclick="like_or_dislike('like_{{product.id}}')" title="" value=""> <i  class="fa fa-heart"></i></a>
+												{% endif %}
+											{% else %}
+											<a   href="/accounts/login/?next=/company/company-product-detail/{{product.company.name}}/{{product.id}}/"  class="item-card9-icons1 wishlist" style = "background-color: white;"   > <i  class="fa fa-heart"></i></a>
+											{% endif %}
+											<p class = "ml-2" title="{{product.id}}" id= "product_like_count">{{product.productlike_set.all.count}}</p> 
 										</div>
+
 									</div>
+
+
 								</div>
 								<div class="product-slider">
 									<div id="carousel" class="carousel slide" data-ride="carousel">
@@ -175,7 +174,7 @@
 									</div>
 								</div>
 								<div class="text-center mt-2">
-									<a href="{% url 'userprofile' %}" class="text-dark text-center"><h4 class="mt-0 mb-0 font-weight-semibold">{{product.company.contact_person.first_name|title}} {{product.company.contact_person.last_name|title}}</h4></a>
+									<a href="#" class="text-dark text-center"><h4 class="mt-0 mb-0 font-weight-semibold">{{product.company.contact_person.first_name|title}} {{product.company.contact_person.last_name|title}}</h4></a>
 									<!-- <div><small class="text-muted">Listing Id <b>365241</b></small></div> -->
 								</div>
 							</div>
@@ -210,18 +209,18 @@
 										{% if user.is_authenticated %}
 											{% user_liked_company user product.company.id  as liked %}
 											{% if liked == True %}
-												<a  class="btn btn-pink icons ml-1 mr-1"title="You Liked This Product" style = "color:white" > <i style="color:white; "class="fa fa fa-heart-o"></i>
+												<a  class="btn btn-pink icons ml-1 mr-1" title="liked" id = "like_{{product.company.id}}" name= {{product.company.id}} onclick="company_like_or_dislike('like_{{product.company.id}}')" style = "color:white"   > <i style="color:white; "class="fa fa fa-heart-o"></i>
 													<span id="company_like_count">{{product.company.companylike_set.all.count}}</span>
 												</a>
 												</a>
 											{% else %}
-												<a  class="btn btn-pink icons ml-1 mr-1" title="Like Product" id="clike_{{product.company.id}}" onclick="like_company('{{product.company.id}}')" style = "color:white"> <i style="color:white; " class="fa fa fa-heart-o"></i>
+												<a  class="btn btn-pink icons ml-1 mr-1" title = "" id = "like_{{product.company.id}}" name= {{product.company.id}}   onclick="company_like_or_dislike('like_{{product.company.id}}')" style = "color:white"> <i style="color:white; " class="fa fa fa-heart-o"></i>
 													<span id="company_like_count">{{product.company.companylike_set.all.count}}</span>
 												</a>
 
 											{% endif %}
 										{% else %}
-										<a  href= "/accounts/login/?next=/company/like_company/"  class="btn btn-pink icons ml-1 mr-1" style = "color:white" > <i style="color:white; " class="fa fa fa-heart-o"></i>
+										<a  href= "/accounts/login/?next=/company/company-product-detail/{{product.company.name}}/{{product.id}}/"  class="btn btn-pink icons ml-1 mr-1" style = "color:white" > <i style="color:white; " class="fa fa fa-heart-o"></i>
 											<span id="company_like_count">{{product.company.companylike_set.all.count}}</span>
 										</a></a>
 
@@ -262,80 +261,216 @@
 		</section>
 		<!--/Add listing-->
 
-		<script>
-			function like_product(p_id)
-			{
-				if (document.getElementById('like_'+p_id).value != "liked")
-				{
-						fetch("{% url 'like_product'  %}",
-					{
-					method:"POST",
-					credentials: 'same-origin',
-					headers:{
-						"content-Type":'application/json',
-						'X-CSRFToken':'{{csrf_token}}'
-					},
-					body:JSON.stringify({
-						'p_id': p_id,
-					})
-					}).then(e => e.json()).then(result=>{
-						if(result['error'] == false){
-							window.alert('Product Liked Successfull')
-							var linear = document.getElementById('like_'+p_id)
-							linear.style['color'] =  "rgb(252, 67, 67)";		
-							linear.value = "liked"
-							let count = parseInt(document.getElementById("product_like_count").innerHTML)
-							document.getElementById("product_like_count").innerHTML = count + 1;
-
-						}
-						else{
-							window.alert("not like")
-						}   		
-					});
-				}	
-			}
 		
-		</script>
+<script>
+	// function like_company(c_id)
+	// {
+	// 	if (document.getElementById('clike_'+c_id).value != "liked")
+	// 	{
+	// 			fetch("{% url 'like_company'  %}",
+	// 		{
+	// 		method:"POST",
+	// 		credentials: 'same-origin',
+	// 		headers:{
+	// 			"content-Type":'application/json',
+	// 			'X-CSRFToken':'{{csrf_token}}'
+	// 		},
+	// 		body:JSON.stringify({
+	// 			'c_id': c_id,
+	// 		})
+	// 		}).then(e => e.json()).then(result=>{
+	// 			if(result['error'] == false){
+					
+	// 				var likebtn = document.getElementById('clike_'+c_id)
+	// 				likebtn.style['background-color'] =  "rgb(252, 67, 67)";
+	// 				let count = parseInt(document.getElementById("company_like_count").innerHTML)
+	// 				document.getElementById("company_like_count").innerHTML = count + 1;
+					
+	// 			}
+	// 			else{
+	// 				window.alert("not like")
+	// 			}   		
+	// 		});
 
+	// 	}
+		
+		
+	// }
 
-			<script>
-				function like_company(c_id)
-				{
-					if (document.getElementById('clike_'+c_id).value != "liked")
-					{
-							fetch("{% url 'like_company'  %}",
-						{
-						method:"POST",
-						credentials: 'same-origin',
-						headers:{
-							"content-Type":'application/json',
-							'X-CSRFToken':'{{csrf_token}}'
-						},
-						body:JSON.stringify({
-							'c_id': c_id,
-						})
-						}).then(e => e.json()).then(result=>{
-							if(result['error'] == false){
-								window.alert('Company Liked Successfull')
-								var likebtn = document.getElementById('clike_'+c_id)
-								// likebtn.style['background-color'] =  "rgb(252, 67, 67)";
-								let count = parseInt(document.getElementById("company_like_count").innerHTML)
-								document.getElementById("company_like_count").innerHTML = count + 1;
-								
-							}
-							else{
-								window.alert("not like")
-							}   		
-						});
+</script>
+
+<!--  start of script for product like dislike  -->
+<script>	
+	function like_or_dislike(element_id){
+		if (document.getElementById(element_id).title != 'liked')
+			like_product(element_id)
+
+		else{
+			dislike_product(element_id)}
+	}
 	
-					}
-					
-					
-				}
+	function like_product(element_id)
+	{
+		var element = document.getElementById(element_id)
+		
+			var p_id = element_id.split("_")[1]	
 			
-			</script>
+				fetch("{% url 'like_product'  %}",
+			{
+			method:"POST",
+			credentials: 'same-origin',
+			headers:{
+				"content-Type":'application/json',
+				'X-CSRFToken':'{{csrf_token}}'
+			},
+			body:JSON.stringify({
+				'p_id': p_id,
+			})
+			}).then(e => e.json()).then(result=>{
+				if(result['error'] == false){
+					var elements = document.getElementsByName(p_id)
+					elements.forEach( (element)=> {
+						element.style['color'] =  "rgb(252, 67, 67)"
+						element.title = "liked"
+					})		
+
+					if (document.getElementById("product_like_count").title ==  p_id){
+						let count = parseInt(document.getElementById("product_like_count").innerHTML)
+						document.getElementById("product_like_count").innerHTML = count + 1;
+					}					
+				}
+				else{
+					window.alert("Failed to Like"+result['message'])
+				}   		
+			});
+		
+	}
+
+	function dislike_product(element_id)
+	{
+			var p_id = element_id.split("_")[1]		
+				fetch("{% url 'dislike_product'  %}",
+			{
+			method:"POST",
+			credentials: 'same-origin',
+			headers:{
+				"content-Type":'application/json',
+				'X-CSRFToken':'{{csrf_token}}'
+			},
+			body:JSON.stringify({
+				'p_id': p_id,
+			})
+			}).then(e => e.json()).then(result=>{
+				if(result['error'] == false){
+					
+					var elements = document.getElementsByName(p_id)
+					elements.forEach( (element)=>{
+						element.style['color'] =  "#3f3e50";		
+						element.title = ""
+					})
+				
+					if (document.getElementById("product_like_count").title ==  p_id){
+							
+					let count = parseInt(document.getElementById("product_like_count").innerHTML)
+					document.getElementById("product_like_count").innerHTML = count - 1;
+					}
+
+				}
+				else{
+					window.alert("Failed to Dislike")
+				}   		
+			});
+	
+	}
+
+
+</script>
+
+<!-- end of script for product like dislike -->
 	
 
+<!-- start of script for company like dislike -->
+
+
+<script>
+				
+	function company_like_or_dislike(element_id){
+		var element = document.getElementById(element_id)
+		if (document.getElementById(element_id).title != 'liked')
+				like_company(element_id)
+			
+		else{dislike_company(element_id)}
+	}
+	
+	function like_company(element_id)
+	{
+		var element = document.getElementById(element_id)
+		var c_id = element_id.split("_")[1]	
+			
+				fetch("{% url 'like_company'  %}",
+			{
+			method:"POST",
+			credentials: 'same-origin',
+			headers:{
+				"content-Type":'application/json',
+				'X-CSRFToken':'{{csrf_token}}'
+			},
+			body:JSON.stringify({
+				'c_id': c_id,
+			})
+			}).then(e => e.json()).then(result=>{
+				if(result['error'] == false){
+					var elements = document.getElementsByName(c_id)
+					elements.forEach( (element)=> {
+						
+					// element.style['background-color'] =  "rgb(252, 67, 67)";
+					let count = parseInt(document.getElementById("company_like_count").innerHTML)
+					document.getElementById("company_like_count").innerHTML = count + 1;
+					element.title = "liked"
+						
+					})	
+				}
+				else{
+					window.alert("Failed to Like")
+				}   		
+			});
+		
+	}
+
+	function dislike_company(element_id)
+	{
+			var c_id = element_id.split("_")[1]		
+				fetch("{% url 'dislike_company'  %}",
+			{
+			method:"POST",
+			credentials: 'same-origin',
+			headers:{
+				"content-Type":'application/json',
+				'X-CSRFToken':'{{csrf_token}}'
+			},
+			body:JSON.stringify({
+				'c_id': c_id,
+			})
+			}).then(e => e.json()).then(result=>{
+				if(result['error'] == false){
+					var elements = document.getElementsByName(c_id)
+					elements.forEach( (element)=>{
+						let count = parseInt(document.getElementById("company_like_count").innerHTML)
+						document.getElementById("company_like_count").innerHTML = count - 1;
+						element.title = ""
+					})
+				}
+				else{
+					window.alert("Failed to Dislike")
+				}   		
+			});
+	
+	}
+
+
+</script>
+
+<!-- end of script for company like dislike -->
 
 
 		
