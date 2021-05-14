@@ -2,7 +2,7 @@ from django.urls import path,include
 from product.views.views import  (SearchProduct,InquiryByCategory,
                                     ProductDetailView, ProductByCategoryView,
                                     ProductByProductView, ProductByMainCategory,
-                                    CreateReview, FetchInquiryProducts,
+                                    CreateReview, FetchInquiryProducts,CategoriesView,
                                     InquiryRequest, LikeProduct, DislikeProduct)
 
 
@@ -21,6 +21,6 @@ urlpatterns = [
     path('like_product/', LikeProduct, name = "like_product"),
     path("dislike_product/", DislikeProduct, name="dislike_product"),
     
-
+    path("categories/<category>/",CategoriesView.as_view(),name="categories")
     
 ]

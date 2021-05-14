@@ -21,10 +21,8 @@
 
     <!-- Bootstrap Css -->
     <link href="/static/frontpages/plugins/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <!-- <script src="/static/frontpages/js/vendors/jquery-3.2.1.min.js"></script>
-        
--->
-  
+    <script src="/static/frontpages/js/vendors/jquery-3.2.1.min.js"></script>
+          
 
     <!-- end for the chat part -->
 	
@@ -63,10 +61,7 @@
 
 
     <!-- jquery ui RangeSlider -->
-    <!-- <link href="/static/frontpages/plugins/jquery-uislider/jquery-ui.css" rel="stylesheet"> -->
-
-    <!-- <script src="/static/admin/assets/js/app.js"></script>
-    <script src="/static/admin/global_assets/js/demo_pages/dashboard.js"></script> -->
+    <link href="/static/frontpages/plugins/jquery-uislider/jquery-ui.css" rel="stylesheet">
 
     <script src="/static/admin/global_assets/js/plugins/visualization/d3/d3.min.js"></script>
     <script src="/static/admin/global_assets/js/plugins/visualization/d3/d3_tooltip.js"></script>
@@ -399,13 +394,9 @@
                         <h6>Categories</h6>
                         <ul class="list-unstyled mb-0">
                             <li>
-                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">RealEstate</a>
-                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">Spa</a>
-                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">Education</a>
-                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">Mediation</a>
-                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">Restaurent</a>
-                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">Backery</a>
-                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">Automobiles</a>
+                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">Food</a>
+                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">Beverage</a>
+                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">Pharmaceuticals</a>
                             </li>
                         </ul>
                     </div>
@@ -576,8 +567,10 @@
 </script>
 <!-- Start of Script for unread messages  -->
 <script>
-    check_inbox()
-    setInterval( check_inbox, 2000 );
+    
+        setInterval( check_inbox, 2000 );
+    
+    
     function check_inbox(){
         if ("{{user.is_authenticated}}"=="True")
             fetch( "{% url 'list_unread_messages'  %}").then(e=>e.json()).then(data =>

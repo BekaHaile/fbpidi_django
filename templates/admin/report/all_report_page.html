@@ -1106,6 +1106,15 @@
 				var product = "{{product}}";
 				var year = "{{year}}";
 				$(document).ready(function(){
+					$("#region").change(function(){
+						region = $(this).val();
+					});
+					$("#year").change(function(){
+						year = $(this).val();
+					});
+					$("#product").change(function(){
+						product = $(this).val();
+					});
 					$("#sector").change(function(){
 						sector = $(this).val();
 						if($(this).val() != ""){
@@ -1136,6 +1145,7 @@
 
 					});
 					$("#sub_sector").change(function(){
+						sub_sector = $(this).val();
 						if($(this).val() != ""){
 							$.ajax({
 								url:"/admin/get-products-sectors/"+$(this).val()+"/",
@@ -1198,7 +1208,7 @@
 							product = 'all';
 						}
 						if(year == ''){
-							year='all';
+							year ='all';
 						}
 
 						url = '/admin/get-all-company-report/'+region+'/'+sector+'/'+sub_sector+'/'+product+"/"+year+'/';
