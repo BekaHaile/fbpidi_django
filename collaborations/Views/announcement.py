@@ -53,20 +53,22 @@ class CreatAnnouncementAdmin(LoginRequiredMixin,View):
 		template_name="admin/announcement/announcement_form.html"
 		return render(self.request, template_name,{'form': AnnouncementForm})
 	def post(self,*args,**kwargs):
-		form = AnnouncementForm(self.request.POST,self.request.FILES) 
 		try:
+			form = AnnouncementForm(self.request.POST,self.request.FILES) 
 			if form.is_valid():				
-				x = self.request.POST.get('x')
-				y = self.request.POST.get('y')
-				w = self.request.POST.get('width')
-				h = self.request.POST.get('height')
-				announcement = form.save(x,y,w,h,self.request.user)
+				announcement = form.save(commit=False)
+				announcement.created_by = self.request.user
+				announcement.company = self.request.user.get_company()
+				announcement.save()
+				data = self.request.POST
+				image_cropper(data['x'], data['y'],data['width'],data['height'], announcement.image)
 				messages.success(self.request, "Added New Announcement Successfully")
 				return redirect("admin:anounce_list")
-			messages.warning(self.request, "Couldn't create announcement! Form contains invalid inputs!")
-			return redirect("admin:anounce_list")
+			messages.warning(self.request, "Couldn't create announcement!")
+			return render(self.request, "admin/announcement/announcement_form.html",{'form': form})
 		except Exception as e:
 			print("Exception at create announcement ",e)
+			messages.warning(self.request, "Couldn't Create Announcement!")
 			return redirect("admin:anounce_list")
 
 
@@ -88,40 +90,32 @@ class AnnouncementDetailAdmin(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
 		try:
 			announcement = Announcement.objects.get(id=self.kwargs['id'])
+			form = AnnouncementForm(instance=announcement)
 			template_name="admin/announcement/announcement_detail.html"
-			return render(self.request, template_name, {'announcement':announcement, "form":AnnouncementForm})
+			return render(self.request, template_name, {'announcement':announcement, "form":form})
 		except Exception as e:
 			print("Exception at Announcement Detail ",e)
 			return redirect("admin:anounce_list")
 
 	def post(self,*agrs,**kwargs):
-		
-			announcement = AnnouncementForm(self.request.POST, self.request.FILES)
+		try:
 			announcementpost = Announcement.objects.get(id=self.kwargs['id'])
-			if announcement.is_valid():
-				announcementpost.title = announcement.cleaned_data.get('title')
-				announcementpost.title_am = announcement.cleaned_data.get('title_am')
-				announcementpost.description = announcement.cleaned_data.get('description')
-				announcementpost.description_am = announcement.cleaned_data.get('description_am')
+			form = AnnouncementForm(self.request.POST, self.request.FILES, instance=announcementpost)
+			if form.is_valid():
+				announcementpost=form.save(commit=False)
 				announcementpost.last_updated_by = self.request.user
-				announcementpost.last_updated_date = timezone.now()
-				if 'image' in self.request.FILES:
-					announcementpost.image = self.request.FILES['image']					
+				announcementpost.last_updated_date = timezone.now()					
 				announcementpost.save()
-				if 'image' in self.request.FILES: #the cropper, crops an images and replace it source with the cropped one
-					data = self.request.POST
-					image_cropper(data['x'], data['y'],data['width'],data['height'], announcementpost.image)
-					
-				
-
+				data = self.request.POST
+				image_cropper(data['x'], data['y'],data['width'],data['height'], announcementpost.image)
 				messages.success(self.request, "Edited Announcement Successfully")
 				return redirect(f"/admin/anounce-Detail/{announcementpost.id}/")
 			messages.warning(self.request, "Could not edit announcement, invalid form!")
 			return redirect('admin:anounce_list')
-		# except Exception as e:
-		# 	print("Exception at announcement detail post ",e)
-		# 	messages.warning(self.request, "Couldn't Edit announcement!")
-		# 	return redirect('admin:anounce_list')
+		except Exception as e:
+			print("Exception at announcement detail post ",e)
+			messages.warning(self.request, "Couldn't Edit announcement!")
+			return redirect('admin:anounce_list')
 
 
 

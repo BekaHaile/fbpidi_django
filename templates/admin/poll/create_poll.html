@@ -16,6 +16,7 @@
 				<div class="card-body">		
 					<form action="{%url 'admin:edit_poll'  id=poll.id %}" method="POST" enctype="multipart/form-data">
 						<fieldset class="mb-3 ml-3 mr-3">
+							{{form.errors}}
 							<legend class="text-uppercase font-size-sm font-weight-bold">Edit "{{poll.title}}"  poll</legend>	
 							{%csrf_token%}
 							<div class="form-group row">
@@ -122,9 +123,10 @@
 
 					<form action="{%url 'admin:create_poll'%}" method="POST" enctype="multipart/form-data">
 						<fieldset class="mb-3 ml-3 mr-3">
+							{{form.errors}}
 							<legend class="text-uppercase font-size-sm font-weight-bold">Create new Poll</legend>
 							<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
-							{{form.errors}}
+							
 						
 							{%csrf_token%}
 						

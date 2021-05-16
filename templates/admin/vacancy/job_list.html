@@ -53,8 +53,8 @@
 				{%for vacancy in object_list%}
 				<tr>
 					<td>{{forloop.counter}}</td>
-					<td>{{vacancy.title|safe|truncatechars_html:10}}</td>
-					<td>{{vacancy.category.category_name}}</td>
+					<td>{{vacancy.title|safe|truncatechars_html:15}}</td>
+					<td>{{vacancy.category.category_name|safe|truncatechars_html:15}}</td>
 					<td>{{vacancy.salary|safe}}</td>
 					<td>{{vacancy.company|safe|truncatechars_html:10}}</td>
 					<td>{{vacancy.location|safe|truncatechars_html:10}}</td>

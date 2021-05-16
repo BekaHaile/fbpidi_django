@@ -37,6 +37,7 @@
         <div class="card-body">
             <form action="{%url 'admin:edit_news'  id=news.id %}" method="POST" enctype="multipart/form-data">
                 <fieldset class="mb-3 ml-3 mr-3">
+                    {{form.errors}}
                    
                     <legend class="text-uppercase font-size-sm font-weight-bold">Edit  News </legend>
                     {%csrf_token%}
