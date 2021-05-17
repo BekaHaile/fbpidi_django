@@ -232,7 +232,7 @@
 						</li> 
 						{% if user.is_superuser %}
 						<li class="nav-item nav-item">
-							<a href="{%url 'admin:forum_list' %}" class="nav-link"><i class="mi-youtube-searched-for"></i> 
+							<a href="{%url 'admin:forum_list' %}" class="nav-link {%block forum%}{%endblock%}"><i class="mi-youtube-searched-for"></i> 
 								<span>Forums</span></a>
 								
 						</li> 
