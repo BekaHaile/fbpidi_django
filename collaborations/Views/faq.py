@@ -75,8 +75,10 @@ class FaqsView(LoginRequiredMixin,View):
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = FaqsForm(self.request.POST)
+		template_name="admin/faq/faqs_detail.html"
+		faq = Faqs.objects.get(id=self.kwargs['id'])
+		
 		if form.is_valid():
-			faq = Faqs.objects.get(id=self.kwargs['id'])
 			faq.questions = self.request.POST['questions']
 			faq.questions_am = self.request.POST['questions_am']
 			faq.answers = self.request.POST['answers']
@@ -84,8 +86,10 @@ class FaqsView(LoginRequiredMixin,View):
 			faq.last_updated_date = timezone.now()
 			faq.last_updated_by = self.request.user
 			faq.save()
-		messages.success(self.request, "Edited Faqs Successfully")
-		return redirect("admin:admin_Faqs") 
+			messages.success(self.request, "Edited Faqs Successfully")
+			return redirect("admin:admin_Faqs")
+		context = {'faq':faq, 'form':form}
+		return render(self.request, template_name, context)
 
 @method_decorator(decorators,name='dispatch')
 class FaqsList(LoginRequiredMixin,View):

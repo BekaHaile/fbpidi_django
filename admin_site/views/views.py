@@ -60,7 +60,8 @@ class CreatePoll(LoginRequiredMixin, CreateView):
         record_activity(self.request.user,"PollsQuestion","Created Polls",poll.id,before=None,after=None)
         messages.success(self.request,"Poll was Successfully Created!")
         return redirect("admin:admin_polls")
-
+    def form_invalid(self, form):
+        return render(self.request, template_name, {'form': form} )
 
 
 @method_decorator(decorators,name='dispatch')
@@ -77,6 +78,7 @@ class AddChoice(LoginRequiredMixin, CreateView):
     template_name_suffix = '_create_form'
 
     def get_context_data(self, **kwargs):
+        print("the first one")
         context = super().get_context_data(**kwargs)
         context['poll']  = PollsQuestion.objects.get(id = self.kwargs['id'] )
         return context
@@ -108,10 +110,10 @@ class AddChoice(LoginRequiredMixin,View):
                 return redirect("admin:admin_polls")
             else:
                 messages.warning(self.request, "Error! Choice Creation Failed! form case! " )
-                return redirect("admin:admin_polls")
+                return render(self.request, 'admin/poll/add_choice.html', {'form': form,'poll':poll})
         except Exception as e:
             print("Exception at add choice post ",e)
-            return redirect('admin:admin_polls')
+            return redirect('admin:admin_polls', )
 
     
 @method_decorator(decorators,name='dispatch')
@@ -119,7 +121,6 @@ class EditPoll(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
             poll = PollsQuestion.objects.get(id = self.kwargs['id'] )
-            # little verification (this verification is done at the front end, this is just for safety, like if user uses url)            
             if poll.count_votes() != 0:
                 messages.warning(self.request, "Couldn't Edit poll, because poll Edit has started!")
                 return redirect('admin:admin_polls')
@@ -137,16 +138,19 @@ class EditPoll(LoginRequiredMixin,View):
                 print("error at Editpoll post", str(e))
                 messages.warning(self.request, "Error! Poll was not Edited!" )
                 return redirect("admin:admin_polls")
-        poll.title=self.request.POST['title']
-        poll.title_am=self.request.POST['title_am']
-        poll.description=self.request.POST["description"]
-        poll.description_am=self.request.POST['description_am']
-        poll.last_updated_by =self.request.user
-        poll.last_updated_date = timezone.now()
-        poll.save()
-        record_activity(self.request.user,"PollsQuestion","Edited a Polls Object",poll.id,before=None,after=None)
-        messages.success(self.request,"Poll has been Edited Successfully!")
-        return redirect("admin:admin_polls")
+        try:
+            poll.title=self.request.POST['title']
+            poll.title_am=self.request.POST['title_am']
+            poll.description=self.request.POST["description"]
+            poll.description_am=self.request.POST['description_am']
+            poll.last_updated_by =self.request.user
+            poll.last_updated_date = timezone.now()
+            poll.save()
+            record_activity(self.request.user,"PollsQuestion","Edited a Polls Object",poll.id,before=None,after=None)
+            messages.success(self.request,"Poll has been Edited Successfully!")
+            return redirect("admin:admin_polls")
+        except Exception as e:
+            return render(self.request, 'admin/poll/create_poll.html', {'pollform':form, 'choiceform':CreateChoiceForm, 'poll':poll, 'edit':True})
 
 @method_decorator(decorators,name='dispatch')
 class EditChoice(LoginRequiredMixin,View):
@@ -163,21 +167,22 @@ class EditChoice(LoginRequiredMixin,View):
         form = CreateChoiceForm(self.request.POST)       
         try:
             choice = Choices.objects.get(id = self.request.POST['choice'])
+            choice.choice_name=self.request.POST['choice_name']
+            choice.choice_name_am=self.request.POST['choice_name_am']
+            choice.description=self.request.POST["description"]
+            choice.description_am=self.request.POST['description_am']
+            choice.last_updated_by=self.request.user
+            choice.last_updated_date=timezone.now()
+            choice.save()
+            record_activity(self.request.user,"Choices","Poll Choices Updated",choice.id)
+            messages.success(self.request,"Choice has been Edited Successfully!")
+            return redirect("admin:admin_polls")
+
         except Exception as e:
                 print("error at Edit poll post", str(e))
                 messages.warning(self.request, "Error! Choice was not Edited!" )
-                return redirect("admin:admin_polls")  
-        choice.choice_name=self.request.POST['choice_name']
-        choice.choice_name_am=self.request.POST['choice_name_am']
-        choice.description=self.request.POST["description"]
-        choice.description_am=self.request.POST['description_am']
-        choice.last_updated_by=self.request.user
-        choice.last_updated_date=timezone.now()
-        choice.save()
-        record_activity(self.request.user,"Choices","Poll Choices Updated",choice.id)
-        messages.success(self.request,"Choice has been Edited Successfully!")
-        return redirect("admin:admin_polls")
-    
+                return render(self.request,'admin/poll/add_choice.html',{ 'choiceform':CreateChoiceForm, 'choice':choice, 'edit':True})
+        
 def record_activity(user,model_name,activity,object_id,before=None,after=None):
     try:
         UserActivityLog.objects.create(

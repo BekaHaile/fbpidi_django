@@ -167,7 +167,6 @@ class BlogCommentForm(forms.ModelForm):
 
         
 class PollsForm(forms.ModelForm):
-    
     class Meta:
         model = PollsQuestion
         fields = ('title', 'title_am',
@@ -207,8 +206,6 @@ class CreateChoiceForm(forms.ModelForm):
         }
 
 class TenderForm(forms.ModelForm):
-    # user, bank_account, document
-    
     class Meta:
         model = Tender
         fields = ('title', 'title_am','description', 'description_am' )
@@ -291,7 +288,7 @@ class NewsForm(forms.ModelForm):
     # NEWS_CATAGORY = ( )
     NEWS_CATAGORY = [ ('', 'Select Category'),('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological')]
     catagory = forms.ChoiceField( required = True, choices= NEWS_CATAGORY, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
-    image = forms.ImageField(allow_empty_file=True,  required=False, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field"}) )
+    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field"}) )
     class Meta:
         model = News
         fields = ('title', 'title_am', 'description', 'description_am', 'catagory','image')
@@ -304,7 +301,7 @@ class NewsForm(forms.ModelForm):
 
 class CompanyEventForm(forms.ModelForm):
     STATUS_CHOICE = [ ('Upcoming', 'Upcoming'),('Open', 'Open' )]
-    image = forms.ImageField(allow_empty_file=True,  required=False, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field"}) )
+    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field"}) )
     class Meta:
         model=CompanyEvent
         fields = ('title','title_am','description','description_am','image', 'start_date', 'end_date')
@@ -358,25 +355,21 @@ class CommentReplayForm(forms.ModelForm):
         }
  
 class AnnouncementForm(forms.ModelForm):
+    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "blogImage",'accept': 'image/*'}) )
+    
 
     class Meta:
         model = Announcement
         fields = ('title','title_am','description','description_am','image')
         widgets = {
-        'image': forms.FileInput(attrs={'id': 'blogImage' ,'accept': 'image/*'}),
+        # 'image': forms.FileInput(attrs={'id': 'blogImage' ,'accept': 'image/*'}),
         'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Announcement in English'}),
         'title_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of your Announcement in Amharic'}),
         'description':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in English'}),
         'description_am':forms.Textarea(attrs={'class': 'summernote','placeholder':'Discription of your Announcement in Amharic'}),
         
         }
-    def save(self,x,y,w,h, user):
-        announcement = super(AnnouncementForm, self).save(commit=False)
-        announcement.created_by = user
-        announcement.company = user.get_company()
-        announcement.save()
-        image_cropper(x,y,w,h,announcement.image)        
-        return announcement
+   
 
         
 class ResearchProjectCategoryForm(forms.ModelForm):

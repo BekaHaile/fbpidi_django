@@ -126,7 +126,7 @@
 													<a  class="item-card9-icons1 wishlist" style = "background-color: white; color: #3f3e50"  id="like_{{product.id}}" name="{{product.id}}" onclick="like_or_dislike('like_{{product.id}}')" title="" value=""> <i  class="fa fa-heart"></i></a>
 												{% endif %}
 											{% else %}
-											<a   href="/accounts/login/?next=/product/fetch_inquiry_products/"  class="item-card9-icons1 wishlist" style = "background-color: white;"   > <i  class="fa fa-heart"></i></a>
+											<a   href="/accounts/login/?next=/product/product-detail/{{product.id}}/"  class="item-card9-icons1 wishlist" style = "background-color: white;"   > <i  class="fa fa-heart"></i></a>
 											{% endif %}
 											<p class = "ml-2" title="{{product.id}}" id= "product_like_count">{{product.productlike_set.all.count}}</p> 
 										</div>
@@ -279,7 +279,7 @@
 											{% endif %}
 										{% else %}
 										
-										<a href="/accounts/login/?next=/product/fetch_inquiry_products/" class="item-card9-icons1 wishlist" > <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+										<a href="/accounts/login/?next=/product/product-detail/{{product.id}}/" class="item-card9-icons1 wishlist" > <i style="color:white; " class="fa fa fa-heart-o"></i></a>
 
 										{% endif %}
 									</div>

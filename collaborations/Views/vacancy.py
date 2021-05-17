@@ -182,38 +182,37 @@ class VacancyDetail(LoginRequiredMixin,View):
 		form.starting_date = datetime.datetime.strptime(start, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
 		form.ending_date =  datetime.datetime.strptime(end, '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
 		vacancy = VacancyForm() 
-		#print(str(self.kwargs['id'])+"-----------------"+str(form.categoryName))
 		context = {'form':form,'jobcategory':jobcategory,"vacancy":vacancy}
 		return render(self.request,"admin/vacancy/job_detail.html",context)
 	def post(self,*args,**kwarges):
-		form = VacancyForm(self.request.POST,self.request.FILES)
-		context = {'form':form}
-		if form.is_valid():
-			vacancy = Vacancy.objects.get(id=self.kwargs['id'])
-			vacancy.last_updated_by=self.request.user
-			vacancy.company=self.request.user.get_company()
-			vacancy.last_updated_date = timezone.now()
-			vacancy.location=form.cleaned_data.get('location')
-			vacancy.salary=form.cleaned_data.get('salary')
-			vacancy.title=form.cleaned_data.get('title')
-			vacancy.description=form.cleaned_data.get('description')
-			vacancy.requirement=form.cleaned_data.get('requirement')
-			vacancy.title_am=form.cleaned_data.get('title_am')
-			vacancy.description_am=form.cleaned_data.get('description_am')
-			vacancy.requirement_am=form.cleaned_data.get('requirement_am')
-			starting_date=datetime.datetime.strptime(self.request.POST['starting_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
-			ending_date=datetime.datetime.strptime(self.request.POST['ending_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
-			vacancy.starting_date = starting_date
-			vacancy.ending_date = ending_date
-			vacancy.category=form.cleaned_data.get('category')
-			vacancy.employement_type=form.cleaned_data.get('employement_type')
-			vacancy.save()
-			
-			messages.success(self.request, "Vacancy Edited Successfully")
-			form = JobCategory()
+		try:
+			form = VacancyForm(self.request.POST,self.request.FILES)
 			context = {'form':form}
-			return redirect("admin:Job_list")
-		return render(self.request,"admin/vacancy/job_detail.html",context)
+			if form.is_valid():
+				vacancy = Vacancy.objects.get(id=self.kwargs['id'])
+				vacancy.last_updated_by=self.request.user
+				vacancy.company=self.request.user.get_company()
+				vacancy.last_updated_date = timezone.now()
+				vacancy.location=form.cleaned_data.get('location')
+				vacancy.salary=form.cleaned_data.get('salary')
+				vacancy.title=form.cleaned_data.get('title')
+				vacancy.description=form.cleaned_data.get('description')
+				vacancy.requirement=form.cleaned_data.get('requirement')
+				vacancy.title_am=form.cleaned_data.get('title_am')
+				vacancy.description_am=form.cleaned_data.get('description_am')
+				vacancy.requirement_am=form.cleaned_data.get('requirement_am')
+				starting_date=datetime.datetime.strptime(self.request.POST['starting_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+				ending_date=datetime.datetime.strptime(self.request.POST['ending_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+				vacancy.starting_date = starting_date
+				vacancy.ending_date = ending_date
+				vacancy.category=form.cleaned_data.get('category')
+				vacancy.employement_type=form.cleaned_data.get('employement_type')
+				vacancy.save()
+				messages.success(self.request, "Vacancy Edited Successfully")
+				return redirect("admin:Job_list")
+			return render(self.request,"admin/vacancy/job_detail.html",context)
+		except Exception as e:
+			return redirect('admin:Job_list')
 
 @method_decorator(decorators,name='get')
 class AdminVacancyList(LoginRequiredMixin,ListView):
@@ -256,11 +255,11 @@ class CreateVacancy(LoginRequiredMixin, View):
 			vacancy.starting_date = starting_date
 			vacancy.ending_date = ending_date
 			vacancy.save()
-
 			messages.success(self.request, "New vacancy Added Successfully")
 			vacancy = VacancyForm()
 			context = {'vacancy':vacancy}
 			return redirect("admin:Job_list")
+		return render(self.request,template, context)
 
 #apply to a job
 class CreateApplication(LoginRequiredMixin,View):

@@ -153,9 +153,14 @@
 												{% if user.is_authenticated %}
 													{% user_liked_product user product.id  as liked %}
 													{% if liked == True %}
-														<a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+													<a  class="item-card9-icons1 wishlist" id="like_{{product.id}}" name="{{product.id}}" style = "background-color: rgb(252, 67, 67);" title = "liked" onclick="like_or_dislike('like_{{product.id}}')"> <i style="color:white; "class="fa fa fa-heart-o"></i></a>
+																		
+														<!-- <a  class="item-card9-icons1 wishlist"  style = "background-color: rgb(252, 67, 67);"> <i style="color:white; "class="fa fa fa-heart-o"></i></a> -->
 													{% else %}
-														<a   class="item-card9-icons1 wishlist" name ="like_{{product.id}}" id ="like_{{product.id}}"  onclick="like_product('{{product.id}}')" value=""> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+													<a  class="item-card9-icons1 wishlist" id="like_{{product.id}}" name="{{product.id}}" title = "" style onclick="like_or_dislike('like_{{product.id}}')"> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
+
+
+														<!-- <a   class="item-card9-icons1 wishlist" name ="like_{{product.id}}" id ="like_{{product.id}}"  onclick="like_product('{{product.id}}')" value=""> <i style="color:white; " class="fa fa fa-heart-o"></i></a> -->
 													{% endif %}
 												{% else %}
 													<a href="/accounts/login/?next=/product/fetch_inquiry_products/" class="item-card9-icons1 wishlist"   value=""> <i style="color:white; " class="fa fa fa-heart-o"></i></a>
@@ -429,48 +434,81 @@
 			}
 			
 		</script>
-		<script>
-			function like_product(p_id)
-			{
-				if (document.getElementById('like_'+p_id).value != "liked")
-				{
-						fetch("{% url 'like_product'  %}",
-					{
-					method:"POST",
-					credentials: 'same-origin',
-					headers:{
-						"content-Type":'application/json',
-						'X-CSRFToken':'{{csrf_token}}'
-					},
-					body:JSON.stringify({
-						'p_id': p_id,
-					})
-					}).then(e => e.json()).then(result=>{
-						if(result['error'] == false){
-							
-							var hearts = document.getElementsByName('like_'+p_id)
-							hearts.forEach(h=>{
-								h.style['background-color'] =  "rgb(252, 67, 67)";
-								h.value = "liked"
-							}
-							)
-							
-							// var grid = document.getElementById('glike_'+p_id)
 
-							
-							window.alert('Product Liked Successfull')
-							
-						}
-						else{
-							window.alert("not like")
-						}   		
-					});
+
+<script>
+				
+	function like_or_dislike(element_id){
+		var element = document.getElementById(element_id)
+		if (document.getElementById(element_id).title != 'liked')
+				like_product(element_id)
+			
+		else{dislike_product(element_id)}
+	}
+	
+	function like_product(element_id)
+	{
+		var element = document.getElementById(element_id)
+		var p_id = element_id.split("_")[1]	
+			
+				fetch("{% url 'like_product'  %}",
+			{
+			method:"POST",
+			credentials: 'same-origin',
+			headers:{
+				"content-Type":'application/json',
+				'X-CSRFToken':'{{csrf_token}}'
+			},
+			body:JSON.stringify({
+				'p_id': p_id,
+			})
+			}).then(e => e.json()).then(result=>{
+				if(result['error'] == false){
+					var elements = document.getElementsByName(p_id)
+					elements.forEach( (element)=> {
+						element.style['background-color'] =  "rgb(252, 67, 67)"
+						element.title = "liked"
+						console.log("liked "+p_id)
+					})	
+				}
+				else{
+					window.alert("Failed to Like")
+				}   		
+			});
+		
+	}
+
+	function dislike_product(element_id)
+	{
+			var p_id = element_id.split("_")[1]		
+				fetch("{% url 'dislike_product'  %}",
+			{
+			method:"POST",
+			credentials: 'same-origin',
+			headers:{
+				"content-Type":'application/json',
+				'X-CSRFToken':'{{csrf_token}}'
+			},
+			body:JSON.stringify({
+				'p_id': p_id,
+			})
+			}).then(e => e.json()).then(result=>{
+				if(result['error'] == false){
+					var elements = document.getElementsByName(p_id)
+					elements.forEach( (element)=>{
+						element.style['background-color'] =  "#3f3e50";		
+						element.title = ""
+					})
 
 				}
-				
-				
-			}
-		
-		</script>
+				else{
+					window.alert("Failed to Dislike")
+				}   		
+			});
+	
+	}
+
+
+</script>
 
 		{%endblock%}

@@ -16,6 +16,12 @@
 
 {% endblock %}
 {%block pagename%}Edit Vacancy{%endblock%}
+{%block nav%}
+    <a href="{%url 'admin:Job_list'%}" class="breadcrumb-item">Vacancy List</a>
+    <a href="" class="breadcrumb-item">Vacancy Detail</a>
+
+{%endblock%}
+
 {%block collaborations%}nav-item-expanded nav-item-open{%endblock%}
 
 {%block content%}

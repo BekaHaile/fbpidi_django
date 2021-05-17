@@ -23,6 +23,7 @@
 						
 						<form {%if user.is_superuser%}action="{%url 'admin:create_user'%}"{%elif user.is_company_admin%}action="{%url 'admin:create_my_staff'%}"{%endif%}  
 						method="POST">{%csrf_token%}
+						{{form.errors}}
 							<fieldset class="mb-3 ml-3 mr-3">
 								<legend class="text-uppercase font-size-sm font-weight-bold">Create User</legend>
 								<!-- {{form|crispy}} -->

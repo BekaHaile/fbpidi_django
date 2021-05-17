@@ -75,10 +75,13 @@ class ListForumQuestionAdmin(LoginRequiredMixin ,ListView):
 @method_decorator(decorators,name='dispatch')
 class CreateForumQuestionAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
-		form = ForumQuestionForm()
-		template_name = "admin/forum/Forumquestions/form.html"
-		context = {'forms':form}
-		return render(self.request, template_name,context)
+		try:
+			form = ForumQuestionForm()
+			template_name = "admin/forum/Forumquestions/form.html"
+			context = {'forms':form}
+			return render(self.request, template_name,context)
+		except Exception as e:
+			return redirect('admin:index')
 	def post(self,*args,**kwargs):
 		form = ForumQuestionForm(self.request.POST,self.request.FILES)
 		template_name = "admin/forum/Forumquestions/form.html"
@@ -103,7 +106,7 @@ class ForumQuestionDetail(LoginRequiredMixin,View):
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
 		form = ForumQuestionForm(self.request.POST,self.request.FILES)
-		emplate_name = "admin/forum/Forumquestions/detail.html"
+		template_name = "admin/forum/Forumquestions/detail.html"
 		context = {'forms':form}
 		if form.is_valid():
 			forum = ForumQuestion.objects.get(id=self.kwargs['id'])
@@ -117,8 +120,8 @@ class ForumQuestionDetail(LoginRequiredMixin,View):
 			forum.save()
 			messages.success(self.request, "Edited a Forum Successfully")
 			return redirect("admin:forum_list")
-		return render(self.request, template_name,context)
-
+		return render(self.request, template_name, context)
+		
 @method_decorator(decorators,name='dispatch')
 class ListForumCommentAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
