@@ -234,8 +234,6 @@ class DeleteAllView(LoginRequiredMixin,View):
                 vacancy.delete()
                 message ="Vacancy Deleted"
                 messages.success(self.request,message)
-                if self.request.user.is_superuser:
-                    return redirect("admin:super_Job_list")
                 return redirect("admin:Job_list")
             elif self.kwargs['model_name'] == 'ForumQuestion':
                 forum = ForumQuestion.objects.get(id=self.kwargs['id'])

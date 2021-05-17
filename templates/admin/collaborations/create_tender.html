@@ -67,6 +67,7 @@ input[type="radio"][id=edit_paid]:checked ~ .edit-reveal-if-active{
 
 					<form action="{%url 'admin:edit_tender'  id=tender.id %}" method="POST" enctype="multipart/form-data">
 						<fieldset class="mb-3 ml-3 mr-3">
+							{{form.errors}}
 							<legend class="text-uppercase font-size-sm font-weight-bold">Edit "{{tender.title}}" </legend>
 
 							{%csrf_token%}

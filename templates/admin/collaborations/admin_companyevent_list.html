@@ -52,10 +52,10 @@
 								{%for event in events%}
 									<tr>
 										<td><a href="#"><img src="{{event.get_image}}" alt="Image" width="100" height="70"></a></td> 
-										<td><b>{{event.title}}</b></td>
-										<td><b>{{event.title_am}}</b></td>
+										<td><b>{{event.title|safe}}</b></td>
+										<td><b>{{event.title_am|safe}}</b></td>
 										<td><b>{{event.status}}</b></td>
-										<td><b>{{event.company.name}}</b></td>
+										<td><b>{{event.company.name|truncatechars_html:30|safe}}</b></td>
 										<td><b>{{event.created_date}}</b></td>
 									
 										<td class="text-center">

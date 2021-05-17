@@ -228,6 +228,8 @@ class CreateCompanyStaff(LoginRequiredMixin,CreateView):
         comp_staff.save()
         messages.success(self.request,"You Created a User Successfully!")
         return redirect("admin:users_list")
+    def form_invalid(self, form):
+        return render(self.request,"admin/accounts/user_form.html", {'form':form} )
 
 
 @method_decorator(decorators,name='dispatch')
@@ -243,7 +245,8 @@ class CreateUserView(LoginRequiredMixin, CreateView):
         record_activity(self.request.user,"UserProfile","User Created",user.id,before=None,after=None)
         messages.success(self.request,"You Created a User Successfully!")
         return redirect("admin:users_list")
-
+    def form_invalid(self, form):
+        return render(self.request,"admin/accounts/user_form.html", {'form':form} )
 
 @method_decorator(decorators,name='dispatch')
 class GroupList(LoginRequiredMixin,View):

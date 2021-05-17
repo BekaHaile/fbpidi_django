@@ -46,8 +46,6 @@ urlpatterns = [
     path("vacancy_apply/",ApiVacancyApplication.as_view(),name="api_vacanvy_apply"),
     # path("vacancy-search/<id>",CategoryBasedSearch.as_view(),name="vacancy_search"),
     path("vacancy_detail/",ApiVacancyDetail.as_view(),name="api_vacancy_detail"),
-
-   
     
     path("research_list/", ApiResearchList.as_view(), name = "api_research_list"),
     path("research_detail/",ApiResearchDetail.as_view(), name = "api_research_detail" ),

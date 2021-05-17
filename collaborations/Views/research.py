@@ -161,14 +161,13 @@ class ResearchDetailAdmin(LoginRequiredMixin, View):
 			research.last_updated_date = timezone.now()
 			research.save()
 			for file in self.request.FILES.getlist('files'):
-				print("file name:"+str(file.name))
 				researchattachment= ResearchAttachment()
 				researchattachment.research = research
 				researchattachment.attachement = file
 				researchattachment.save()
 			messages.success(self.request, "Edited Research Successfully")
 			return redirect("admin:research_list")
-		print("Not Really")
+		
 		return render(self.request, template_name,context)
 
 

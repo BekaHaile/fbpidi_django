@@ -362,25 +362,25 @@ class CreateTender(LoginRequiredMixin,View):
             print("execption at createtender ", str(e))
             return redirect("admin:error_404")
     def post(self,*args,**kwargs):
-        # try:
+        
             form = TenderForm(self.request.POST)       
-            if form.is_valid():
-                tender = form.save(commit=False)
-                tender.created_by = self.request.user 
-                tender.start_date = change_to_datetime(self.request.POST['start_date'])
-                tender.end_date = change_to_datetime(self.request.POST['end_date'])
-                today = datetime.datetime.now().date()
-                tender.save()                  
-                messages.success(self.request,"Tender Successfully Created")
-                return redirect("admin:tenders")   
-            else:
+            try:
+                if form.is_valid():
+                    tender = form.save(commit=False)
+                    tender.created_by = self.request.user 
+                    tender.start_date = change_to_datetime(self.request.POST['start_date'])
+                    tender.end_date = change_to_datetime(self.request.POST['end_date'])
+                    today = datetime.datetime.now().date()
+                    tender.save()                  
+                    messages.success(self.request,"Tender Successfully Created")
+                    return redirect("admin:tenders")   
                 messages.warning(self.request, "Error! Tender was not Created!" )
-                return redirect("admin:tenders")   
-        # except Exception as e:
-        #     print("Exception at collaborations.views.CreateTender post" , str (e))
-        #     messages.warning(self.request, "Could not create Tender")
-        #     return redirect("admin:tenders")
-            
+                return render(self.requesst, 'admin/collaborations/create_tender.html',{'form':form})   
+            except Exception as e:
+                print("Exception at collaborations.views.CreateTender post" , str (e))
+                messages.warning(self.request, "Could not create Tender")
+                return redirect("admin:tenders")
+                
 
 @method_decorator(decorators,name='dispatch')
 class TenderList(LoginRequiredMixin, ListView):
@@ -413,17 +413,16 @@ class EditTender(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
             tender = Tender.objects.get(id =self.kwargs['id'] )
-            banks= Bank.objects.all() # if there will be a scenario where the admin needs to add register new bank account
             return render(self.request,'admin/collaborations/create_tender.html', {'form':TenderForm(),'tender':tender,'edit':True})
         except Exception as e:
             print("Exception at Edit Tender,get ", e)
             return redirect("admin:error_404")
 
     def post(self,*args,**kwargs):  
-        form = TenderForm(self.request.POST)                       
-        if form.is_valid():
-            try:
-                tender= Tender.objects.get(id = self.kwargs['id'])            
+        try:
+            form = TenderForm(self.request.POST)  
+            tender= Tender.objects.get(id = self.kwargs['id'])                                 
+            if  form.is_valid():
                 tender.title = self.request.POST['title']
                 tender.title_am = self.request.POST['title_am']
                 tender.description = self.request.POST['description']
@@ -433,17 +432,15 @@ class EditTender(LoginRequiredMixin,View):
                 tender.last_updated_by = self.request.user
                 tender.last_updated_date = timezone.now()
                 tender.save()
-
-            except Exception as e:
+                messages.success(self.request,"Tender Successfully Edited")
+                return redirect("admin:tenders") 
+            else:
+                print("@@Exception at Edit Tender, ",form.errors)
+                messages.warning(self.request, "Error! Tender was not Edited!", )
+                return render(self.request,'admin/collaborations/create_tender.html', {'form':form,'tender':tender,'edit':True})
+        except Exception as e:
                 print("There is an Exception while tying to edit a tender!", e)  
                 return redirect("admin:tenders")
-            messages.success(self.request,"Tender Successfully Edited")
-            return redirect("admin:tenders") 
-        else:
-            print("####",form.errors)
-            messages.warning(self.request, "Error! Tender was not Edited!", )
-            return redirect("admin:tenders")
-
 
 ######## Tender for customers
 class CustomerTenderList(View):
@@ -531,24 +528,21 @@ class CreateNews(LoginRequiredMixin, View):
     
     def post(self, *args, **kwargs):
         try:
-            form = NewsForm( self.request.POST) 
+            form = NewsForm( self.request.POST,self.request.FILES) 
             if form.is_valid:
                 news = form.save(commit=False)
                 news.created_by = self.request.user
-                news.save()
-                if 'image' in self.request.FILES:
-                    news.image = self.request.FILES['image']
-                    news.save()
-                    data = self.request.POST
-                    image_cropper(data['x'],data['y'],data['width'],data['height'], news.image )
+                news.save()               
+                data = self.request.POST
+                image_cropper(data['x'],data['y'],data['width'],data['height'], news.image )
                 messages.success(self.request, "News Created Successfully!")
                 return redirect("admin:news_list") 
             else:
                 messages.warning(self.request, "Error! News not Created!")
-                return redirect("admin:news_list") 
+                return render(self.request,'admin/collaborations/create_news.html',{'form':form})
         except Exception as e:
             print("@@@@@@ Exception while creating News ",form.errors)
-            return redirect("admin:error_500")
+            return redirect("admin:error_404")
 
 
 @method_decorator(decorators,name='dispatch')
@@ -564,25 +558,25 @@ class EditNews(LoginRequiredMixin, View):
             return redirect("admin:error_404")
         
     def post(self, *args, **kwargs):
-        if self.kwargs['id']:
+        try:
             news = get_object_or_404(News, id = self.kwargs['id'])
-            form = NewsForm(self.request.POST, instance = news) 
-            print(" ###########", form.errors)
+            form = NewsForm(self.request.POST, self.request.FILES, instance = news) 
             if form.is_valid:
                 news = form.save(commit = False)
                 news.last_updated_by = self.request.user
                 news.last_updated_date = timezone.now()    
                 news.save()
-                if 'image' in self.request.FILES:
-                    news.image = self.request.FILES['image']
-                    news.save()
-                    data = self.request.POST
-                    image_cropper(data['x'],data['y'],data['width'],data['height'], news.image )
+                data = self.request.POST
+                image_cropper(data['x'],data['y'],data['width'],data['height'], news.image )
                 messages.success(self.request, "News Edited Successfully!")
                 return redirect(f"/admin/news_list/") 
             else:
                 messages.warning(self.request, "Error! News not Edited!")
-                return redirect(f"/admin/news_list/") 
+                return render(self.request,'admin/collaborations/create_news.html',{'news':news, 'form':form,'edit':True})
+        except Exception as e:
+            print("@@ Exception at Edit News at ",e)
+            messages.warning(self.request, "Error! News not Edited!")
+            return redirect("admin:news_list")
 
 
 @method_decorator(decorators,name='dispatch')
@@ -670,26 +664,30 @@ class CreateCompanyEvent(LoginRequiredMixin, CreateView):
         template_name = "admin/collaborations/create_events.html"
 
         def form_valid(self,form):
-            event = form.save(commit=False)
-            today = datetime.datetime.now().date()
-            if today < event.start_date.date():
-                event.status = "Upcoming"
-            elif event.start_date.date() <= today and today <=event.end_date.date():
-                event.status = "Open"
-            elif today > event.end_date.date():
-                event.status = "Closed"
-            event.company = self.request.user.get_company()
-            event.created_by = self.request.user               
-            event.save()
-            if 'image' in self.request.FILES:
+            try:
+                event = form.save(commit=False)
+                today = datetime.datetime.now().date()
+                if today < event.start_date.date():
+                    event.status = "Upcoming"
+                elif event.start_date.date() <= today and today <=event.end_date.date():
+                    event.status = "Open"
+                elif today > event.end_date.date():
+                    event.status = "Closed"
+                event.company = self.request.user.get_company()
+                event.created_by = self.request.user               
+                event.save()
                 data = self.request.POST
                 image_cropper(data['x'],data['y'],data['width'],data['height'], event.image )
-            messages.success(self.request,"Event Created Successfully")
-            return redirect('admin:admin_companyevent_list')
+                messages.success(self.request,"Event Created Successfully")
+                return redirect('admin:admin_companyevent_list')
+            except Exception as e:
+                print("@@@ Exception at CreateCompany Event ",e)
+                return redirect('admin:create_companyevent')
+
 
         def form_invalid(self,form):
             messages.warning(self.request,form.errors)
-            return redirect('admin:create_companyevent')
+            return render(self.request, "admin/collaborations/create_events.html", {'form':form})
 
 
 def change_to_datetime(calender_date):
@@ -701,38 +699,41 @@ def change_to_datetime(calender_date):
 class EditCompanyEvent(LoginRequiredMixin,View):
     def get(self, *args, **kwargs):
         try:
-            return render(self.request, "admin/collaborations/create_events.html",{'edit':True,'form': CompanyEventForm, 'event':CompanyEvent.objects.get(id = self.kwargs['pk'])})
+            event  =CompanyEvent.objects.get(id = self.kwargs['pk'])
+            return render(self.request, "admin/collaborations/create_events.html",{'edit':True,'form': CompanyEventForm(instance=event), 'event':event})
         except Exception as e:
             return redirect("admin:error_404")
 
     def post(self,*args,**kwargs):
-        # form = CompanyEventForm(self.request.POST,self.request.FILES)
-        event = get_object_or_404(CompanyEvent, id=self.kwargs['pk'])
-        form = CompanyEventForm(self.request.POST, instance=event)
-        if form.is_valid():
-            event = form.save()
-            event.start_date = change_to_datetime(self.request.POST['start_date'])
-            event.end_date = change_to_datetime(self.request.POST['end_date'])
-            today = datetime.datetime.now().date()
-            if today < event.start_date.date():
-                event.status = "Upcoming"
-            elif event.start_date.date() <= today and today <=event.end_date.date():
-                event.status = "Open"
-            elif today > event.end_date.date():
-                event.status = "Closed" 
-            if 'image' in self.request.FILES:
-                event.image = self.request.FILES['image']
-                event.save()
+        try:
+            event = get_object_or_404(CompanyEvent, id=self.kwargs['pk'])
+            form = CompanyEventForm(self.request.POST,self.request.FILES, instance=event)
+            if  form.is_valid():
+                event = form.save(commit=False)
+                event.start_date = change_to_datetime(self.request.POST['start_date'])
+                event.end_date = change_to_datetime(self.request.POST['end_date'])
+                today = datetime.datetime.now().date()
+                if today < event.start_date.date():
+                    event.status = "Upcoming"
+                elif event.start_date.date() <= today and today <=event.end_date.date():
+                    event.status = "Open"
+                elif today > event.end_date.date():
+                    event.status = "Closed"
+                event.last_updated_by = self.request.user
+                event.last_updated_date = timezone.now()
+                event.save()  
+            
                 data = self.request.POST
                 image_cropper(data['x'],data['y'],data['width'],data['height'], event.image )
-            event.last_updated_by = self.request.user
-            event.last_updated_date = timezone.now()
-            event.save() 
-            messages.success(self.request,"Event Edited Successfully")
-            return redirect('admin:admin_companyevent_list')
-        else:
-            messages.warning(self.request,form.errors)
-            return redirect('admin:admin_companyevent_list')
+                
+                messages.success(self.request,"Event Edited Successfully")
+                return redirect('admin:admin_companyevent_list')
+            else:
+                messages.warning(self.request,"Error occured! Event not edited!")
+                return render(self.request, "admin/collaborations/create_events.html",{'edit':True,'form': form, 'event':event})
+        
+        except Exception as e:
+             return redirect("admin:admin_companyevent_list")
 
 
 class CustomerEventList(View):
@@ -839,8 +840,8 @@ class CreateDocument(LoginRequiredMixin, View):
             messages.success(self.request,'Successfully created the document!')
             return redirect("/admin/list_document_by_category/all/")
         else:
-            messages.warning(self.request,'Could not create the document!' + str(form.errors))
-            return render(self.request, "admin/document/create_document.html", {'form':DocumentForm})
+            messages.warning(self.request,'Could not create the document!' )
+            return render(self.request, "admin/document/create_document.html", {'form':form})
         
 
 @method_decorator(decorators,name='dispatch')
@@ -856,19 +857,18 @@ class EditDocument(LoginRequiredMixin, View):
     def post(self, args, **kwargs):
         try:
             document = get_object_or_404(Document, id = self.kwargs['id'])
-        except Http404:
-            messages.warning(self.request, "Document not Found!")
-            return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY})
-        document.title = self.request.POST['title']
-        document.category = self.request.POST['category']
-        if self.request.FILES:
-            document.document =  self.request.FILES['document']
-        document.last_updated_by = self.request.user
-        document.last_updated_date = timezone.now()
-        document.save()
-        messages.success(self.request,'Successfully Edited the document!')
-        return render(self.request, f"admin/document/list_document_by_category.html", {'documents':Document.objects.filter(category = document.category), 'categories': Document.DOC_CATEGORY})
-        
+            document.title = self.request.POST['title']
+            document.category = self.request.POST['category']
+            if self.request.FILES:
+                document.document =  self.request.FILES['document']
+            document.last_updated_by = self.request.user
+            document.last_updated_date = timezone.now()
+            document.save()
+            messages.success(self.request,'Successfully Edited the document!')
+            return render(self.request, f"admin/document/list_document_by_category.html", {'documents':Document.objects.filter(category = document.category), 'categories': Document.DOC_CATEGORY})
+        except Exception as e:
+            messages.warning(self.request, "Document not Edited!")
+            return render(self.request, "admin/document/list_document_by_category.html", {'categories':Document.DOC_CATEGORY}) 
 
 
 @method_decorator(decorators,name='dispatch')      

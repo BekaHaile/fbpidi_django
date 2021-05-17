@@ -38,6 +38,7 @@
         <div class="card-body">
             <form action="{%url 'admin:edit_companyevent' pk=event.id%}" method="POST" enctype="multipart/form-data">
                 <fieldset class="mb-3 ml-3 mr-3">
+                    {{form.errors}}
                    
                     <legend class="text-uppercase font-size-sm font-weight-bold">Edit Event </legend>
                     {%csrf_token%}
@@ -160,10 +161,11 @@
 
             <form action="{%url 'admin:create_companyevent' %}" method="POST" enctype="multipart/form-data">
                 <fieldset class="mb-3 ml-3 mr-3">
-                    <legend class="text-uppercase font-size-sm font-weight-bold">Create new Event</legend>
-                    <p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
                     {{form.errors}}
                 
+                    <legend class="text-uppercase font-size-sm font-weight-bold">Create new Event</legend>
+                    <p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
+                    
                     {%csrf_token%}
                 
                     
