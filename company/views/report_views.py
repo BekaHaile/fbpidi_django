@@ -93,7 +93,8 @@ class CapitalUtilizationReportSector(LoginRequiredMixin,View):
                 for (performance,capacity) in zip(production_performance_this_year,production_capacity_this_year):
                     if performance['product'] == capacity.product.id:
                         capital_util_data.append({
-                            'company':company.name,'product':performance['product__sub_category_name'],'production_amount':performance['all_data'],
+                            'company':company.name,'product':performance['product__sub_category_name'],
+                            'production_amount':performance['all_data'],
                             'actual_production':capacity.actual_prdn_capacity
                         })
             

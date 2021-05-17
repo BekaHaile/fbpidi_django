@@ -1,17 +1,19 @@
 {%extends 'frontpages/layout.html'%}
+{%load core_template_tags%}
+{%load i18n%}
 {%load crispy_forms_tags%}
 {%block content%}
+{% get_current_language as LANGUAGE_CODE %}
 		<!--Sliders Section-->
 		<section>
 			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Login</h1>
+							<h1 class="">{% trans "Login" %}</h1>
 							<ol class="breadcrumb text-center">
-								<li class="breadcrumb-item"><a href="#">Home</a></li>
-								<li class="breadcrumb-item"><a href="#">Pages</a></li>
-								<li class="breadcrumb-item active text-white" aria-current="page">Login</li>
+								<li class="breadcrumb-item"><a href="{%url 'index' %}">{% trans "Home" %}</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Login" %}</li>
 							</ol>
 						</div>
 					</div>
@@ -28,7 +30,7 @@
 						<div class="col-lg-5 col-xl-4 col-md-6 d-block mx-auto">
 							<div class="wrapper wrapper2">
 								<div class="card-body">
-									<h3>Login</h3>
+									<h3>{% trans "Login" %}</h3>
 									<div class="text-center">
 										<div class="btn-list d-flex">
 											<a href="/accounts/social-authlogin/google-oauth2/" class="btn btn-google btn-block"><i class="fa fa-google fa-1x"></i> Google</a>
@@ -44,12 +46,12 @@
 									{%csrf_token%}
 									{{form|crispy}}
 									<div class="submit">
-										<button class="btn btn-secondary btn-block" type="submit">Login</button>
+										<button class="btn btn-secondary btn-block" type="submit">{% trans "Login" %}</button>
 									</div>
 									{% comment %}
-									<p class="mb-2"><a href="{%url 'forgot' %}" >Forgot Password</a></p>
+									<p class="mb-2"><a href="{%url 'forgot' %}" >{% trans "Forgot Password" %}</a></p>
 									{% endcomment %}
-									<p class="text-dark mb-0">Don't have account?<a href="{%url 'register'%}" class="text-secondary ml-1">Sign UP</a></p>
+									<p class="text-dark mb-0">{% trans "Don't have account?" %}<a href="{%url 'register'%}" class="text-secondary ml-1">{% trans "Sign UP" %}</a></p>
 								</form>
 							</div>
 						</div>

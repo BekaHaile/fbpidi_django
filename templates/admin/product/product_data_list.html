@@ -1,4 +1,5 @@
 {%extends 'admin/base_site.html'%}
+{%load humanize%}
 {% block extrastyle %}
 
 <!-- Theme JS files -->
@@ -78,12 +79,12 @@ Product Packaging Data
 					<td>{{cat.company.name}}</td>
 					<td>{{cat.year}}</td>
 					<td>{{cat.product.sub_category_name}}</td>
-					<td>{{cat.install_prdn_capacity}}</td>
+					<td>{{cat.install_prdn_capacity|intcomma}} {{cat.product.uom.name|upper}}</td>
 					<td>
-						{{cat.atnbl_prdn_capacity}}
+						{{cat.atnbl_prdn_capacity|intcomma}} {{cat.product.uom.name|upper}}
 					</td>
-					<td>{{cat.actual_prdn_capacity}}</td>
-					<td>{{cat.extraction_rate}}</td>
+					<td>{{cat.actual_prdn_capacity|intcomma}} {{cat.product.uom.name|upper}}</td>
+					<td>{{cat.extraction_rate|intcomma}}</td>
 					<td class="text-center">
 						<div class="list-icons">
 							<div class="dropdown">
@@ -145,7 +146,7 @@ Product Packaging Data
 					<td>{{cat.product.sub_category_name}}</td>
 					<td>{{cat.input_name}}</td>
 					<td>
-						{{cat.amount}}
+						{{cat.amoun|intcommat}} {{cat.product.uom.name|upper}}
 					</td>
 					<td>{{cat.local_input}}%-{{cat.import_input}}%</td>
 					<td class="text-center">
@@ -271,9 +272,9 @@ Product Packaging Data
 					<td>{{cat.activity_year}}</td>
 					<td>{{cat.half_year}}</td>
 					<td>{{cat.product.sub_category_name}}</td>
-					<td>{{cat.production_amount}} {{cat.product.uom}}</td>
-					<td>{{cat.sales_amount}} {{cat.product.uom}}</td>
-					<td>ETB {{cat.sales_value}}</td>
+					<td>{{cat.production_amount|intcomma}} {{cat.product.uom|upper}}</td>
+					<td>{{cat.sales_amount|intcomma}} {{cat.product.uom|upper}}</td>
+					<td>ETB {{cat.sales_value|intcomma}}</td>
 					<td class="text-center">
 						<div class="list-icons">
 							<div class="dropdown">
@@ -335,7 +336,7 @@ Product Packaging Data
 					<td>{{cat.product.sub_category_name}}</td>
 					<td>{{cat.packaging}}</td>
 					<td>{{cat.category}}</td>
-					<td>{{cat.amount}}</td>
+					<td>{{cat.amount|intcomma}} {{cat.product.uom.name|upper}}</td>
 					<td>Local: {{cat.local_input}}
 						Import: {{cat.import_input}}</td>
 					<td>{{cat.wastage}} </td> 
