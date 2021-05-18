@@ -3,6 +3,9 @@
 {%load core_template_tags%} 
 
 {% get_current_language as LANGUAGE_CODE %}
+ <!-- file selecting js -->
+ <script src="/static/admin/global_assets/js/demo_pages/user_pages_profile_tabbed.js"></script>
+ <!-- /file selecting js  -->
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 
@@ -136,7 +139,8 @@
 						<label class="col-form-label col-lg-3">Upload your attchment (if you have one):</label>
 						<div class="col-lg-9">
 							<div class="uniform-uploader">
-								<input type="file" id="files" name="files" class="form-input-styled" data-fouc="" multiple/> 
+								{{form.files}}
+								<!-- <input type="file" id="files" name="files" class="form-input-styled" data-fouc="" multiple/>  -->
 							</div>
 						</div>
 					</div>
@@ -145,25 +149,12 @@
 
 									<div class="text-right">
 										<button style="padding-left: 10%; padding-right: 10%;" type="submit"
-											class="btn btn-primary rounded-round">{% trans "Submit" %} </button>
+											class="btn btn-primary rounded-round mb-3 mr-3">{% trans "Submit" %} </button>
 									</div>
 								</form>
                             </div> 
 						</div>
-						<div class="d-sm-flex">
-							<h6 class="mb-0 mt-3">Showing 1 to 6 of 30 entries</h6>
-							<ul class="pagination mb-lg-0 mb-5 ml-auto">
-								<li class="page-item page-prev disabled">
-									<a class="page-link" href="#" tabindex="-1">Prev</a>
-								</li>
-								<li class="page-item active"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
-								<li class="page-item page-next">
-									<a class="page-link" href="#">Next</a>
-								</li>
-							</ul>
-						</div>
+						
 					</div>
 					<!--/Add Lists-->
 				</div>

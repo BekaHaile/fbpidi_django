@@ -63,5 +63,6 @@ class CompanyMessageSerializer(serializers.ModelSerializer):
         fields = ('name', 'email', 'message')
     
     def create(self, validated_data):
-        item = CompanyMessage(name = validated_data['name'], email = validated_data['email'], message=validated_data['message'])
+        company = Company.objects.get(id = validated_data['c_id'])
+        item = CompanyMessage(company = company, name = validated_data['name'], email = validated_data['email'], message=validated_data['message'])
         return item

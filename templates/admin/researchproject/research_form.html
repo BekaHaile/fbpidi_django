@@ -1,6 +1,10 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags %}
+
 {% block extrastyle %}
+ <!-- file selecting js -->
+ <script src="/static/admin/global_assets/js/demo_pages/user_pages_profile_tabbed.js"></script>
+ <!-- /file selecting js  -->
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 
@@ -63,9 +67,11 @@
 						<label class="col-form-label col-lg-3">Upload your attchment (if you have one):</label>
 						<div class="col-lg-9">
 							<div class="uniform-uploader">
-								<input type="file" id="files" name="files" class="form-input-styled" data-fouc="" multiple/>
-								<span class="filename" style="user-select: none;">No file selected</span>
-								<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+								<div class="col-lg-12">
+									{{forms.files}}
+								   
+								</div>
+								
 							</div>
 						</div>
 					</div>

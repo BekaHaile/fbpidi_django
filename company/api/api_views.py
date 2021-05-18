@@ -137,9 +137,8 @@ class ApiContactCompany(APIView):
             serializer = CompanyMessageSerializer(data = request.data)
             if serializer.is_valid():
                 contact = serializer.create(validated_data = request.data)
-                contact.company = Company.objects.get(id = request.data['c_id'])
                 contact.save()
-                return Response(data = {'error':False, })
+                return Response(data = {'error':False,  })
             else:
                 return Response(data = {'error':True, 'message': serializer.errors})
         except Exception as e:

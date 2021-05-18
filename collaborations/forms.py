@@ -403,6 +403,7 @@ class ResearchForm(forms.ModelForm):
 
     status = forms.ChoiceField(choices = (('','Select Status'),('Completed','Completed'),('Inprogress','Inprogress')), required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
     category = forms.ModelChoiceField(queryset=ResearchProjectCategory.objects.all(), empty_label = "Select Research Category", required=True, widget =forms.Select(attrs={'class':'form-control form-control-uniform'}), )
+    files = forms.FileField( required=True,  widget=forms.FileInput( attrs={'class':'form-input-styled', 'multiple':'True'}) )
     class Meta:
         model = Research
         fields  = ('title','description','status','category')

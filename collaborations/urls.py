@@ -3,7 +3,7 @@ from django.urls import path,include
 from .views import (CustomerPollList, PollDetail, 
                     CustomerTenderList, CustomerTenderDetail,IndexSearch,
 
-                    ApplyForTender,ApplyForCompanyTender, CustomerNewsList, AjaxEventParticipation,AjaxApplyForTender,
+                    ApplyForTender,ApplyForCompanyTender, CustomerNewsList, AjaxEventParticipation,
                     CustomerNewsDetail,CustomerEventList, CustomerEventDetail, EventParticipation, send_blogs
                     )
 from .Views.forums import (CreateForumQuestion , ListForumQuestions,

@@ -26,7 +26,7 @@
 		<div class="card-header header-elements-inline">
 			<h5 class="card-title">Research</h5>
 			<div class="header-elements">
-				<div class="list-icons">
+				<div class="list-icons mr-2">
 					{% if user.is_superuser %} 
 					<a href="{% url 'admin:pedning_research_list'%}" class="badge-danger btn-sm rounded-round">Pendding </a>
 							{%endif%}
@@ -72,7 +72,7 @@
 									{% if user.is_superuser or user.get_company == research.created_by.get_company %}
 										
 										{% if perms.collaborations.delete_research %}
-										<a href="{%url 'admin:delete' model_name='Research' id=research.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Research</a>
+										<a href="{%url 'admin:delete' model_name='Research' id=research.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this item?')"><i class="icon-trash"></i>Delete Research</a>
 										{%endif%}
 									{%endif%}
 								
@@ -82,6 +82,15 @@
 									<a href="{%url 'admin:research_detail' id=research.id%}" class="dropdown-item"  >
 										<i class="icon-pencil"></i>Edit Research</a>{%endif%}
 										{%endif%}
+									
+									{% if user.is_superuser and research.accepted == "PENDING" %}
+										<a href= "{% url 'admin:research_approve' id=research.id action='APPROVED' %} "  class = "dropdown-item"><i class="icon-check2"></i>Approve</a>
+									{% endif %}
+
+									{% if user.is_superuser and research.accepted == "APPROVED" %}
+										<a href= "{% url 'admin:research_approve' id=research.id action='PENDING' %}" class = "dropdown-item"><i class="icon-cross3"></i>Suspend</a>
+									{% endif %}
+									 
 								</div>
 							</div>
 						</div>

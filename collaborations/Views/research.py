@@ -38,15 +38,24 @@ class CreateResearchCategory(LoginRequiredMixin, CreateView):
 	form_class = ResearchProjectCategoryForm
 	 
 	def form_valid(self,form):
-		research_cat = form.save(commit=False)
-		research_cat.created_by = self.request.user
-		research_cat.save()
-		messages.success(self.request, "Research Category Added Successfully!")
-		return redirect("admin:settings")
+		try:
+			research_cat = form.save(commit=False)
+			research_cat.created_by = self.request.user
+			research_cat.save()
+			messages.success(self.request, "Research Category Added Successfully!")
+			return redirect("admin:settings")
+		except Exception as e:
+			print ("@@@ Exception at CreateResearchCategory ",e)
+			return redirect("admin:settings")
 
-	def form_invalid():
-		messages.warning(self.request,form.errors)
-		return redirect("admin:settings")
+	def form_invalid(self, form):
+		try:
+			messages.warning(self.request, form.errors)
+			return redirect("admin:settings")
+		except Exception as e:
+			print ("@@@ Exception at CreateResearchCategory ",e)
+			return redirect("admin:index")
+
 
 @method_decorator(decorators,name='dispatch')
 class ResearchCategoryDetail(LoginRequiredMixin,UpdateView):
@@ -55,16 +64,25 @@ class ResearchCategoryDetail(LoginRequiredMixin,UpdateView):
 	template_name = "admin/researchproject/research_project_category_detail.html"
 	 
 	def form_valid(self,form):
-		research_cat = form.save(commit=False)
-		research_cat.last_updated_by = self.request.user
-		research_cat.last_updated_date = timezone.now()
-		research_cat.save()
-		messages.success(self.request, "Research Category Updated Successfully!")
-		return redirect("admin:settings")
+		try:
+			research_cat = form.save(commit=False)
+			research_cat.last_updated_by = self.request.user
+			research_cat.last_updated_date = timezone.now()
+			research_cat.save()
+			messages.success(self.request, "Research Category Updated Successfully!")
+			return redirect("admin:settings")
+		except Exception as e:
+			print ("@@@ Exception at ResearchCategoryDetail ",e)
+			return redirect("admin:settings")
 
-	def form_invalid():
-		messages.warning(self.request,form.errors)
-		return redirect("admin:settings")
+	def form_invalid(self, form):
+		try:
+			messages.warning(self.request,form.errors)
+			return redirect("admin:settings")
+		except Exception as e:
+			print ("@@@ Exception at ResearchCategoryDetail form invalid",e)
+			return redirect("admin:index")
+
 	   
 
 @method_decorator(decorators,name='get')
@@ -81,16 +99,16 @@ class ListResearchAdmin(LoginRequiredMixin ,View):
 @method_decorator(decorators,name='get')
 class ListPendingResearchAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
-		form = Research.objects.filter(accepted="PENDING")
+		researchs = Research.objects.filter(accepted="PENDING")
 		template_name = "admin/researchproject/pending_list.html"
-		context = {'researchs':form}
+		context = {'researchs':researchs}
 		return render(self.request, template_name,context)
 
 
 @method_decorator(decorators,name='dispatch')
 class CreateResearchAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
-		form = ResearchForm()
+		form = ResearchForm
 		template_name = "admin/researchproject/research_form.html"
 		context = {'forms':form}
 		return render(self.request, template_name,context)
@@ -99,7 +117,7 @@ class CreateResearchAdmin(LoginRequiredMixin, View):
 		template_name = "admin/researchproject/research_form.html"
 		context = {'forms':form}
 		if form.is_valid():
-			research = Research()
+			research = Research
 			research = form.save(commit=False)
 			if self.request.user.is_customer:
 				research.accepted = "PENDING"
@@ -108,7 +126,7 @@ class CreateResearchAdmin(LoginRequiredMixin, View):
 			research.created_by = self.request.user
 			research.save()
 			for file in self.request.FILES.getlist('files'):
-				print("file name:"+str(file.name))
+				
 				researchattachment= ResearchAttachment()
 				researchattachment.research = research
 				researchattachment.attachement = file
@@ -123,11 +141,21 @@ class CreateResearchAdmin(LoginRequiredMixin, View):
 @method_decorator(decorators,name='get')
 class ResearchApprove(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
-		form = Research.objects.get(id=self.kwargs['id'])
-		form.accepted = "APPROVED"
-		form.save()
-		messages.success(self.request, "Changed Status to APPROVED Successfully")
-		return redirect("admin:research_view",id=self.kwargs['id'])
+		try:
+			action = self.kwargs['action']
+			research = Research.objects.get(id=self.kwargs['id'])
+			research.accepted = action
+			research.save()
+			if action == "APPROVED":
+				messages.success(self.request, "Successfully Approved Research! Now it will be visible for everyone!")
+			else:#action == 'PENDING
+				messages.success(self.request, "Successfully Suspended Research! Now it will be visible only to Superusers!")
+			return redirect("admin:research_view",id=research.id)
+		except Exception as e:
+			print("@@@ Exception at ResearchApprove ",e)
+			return redirect ("admin:research_list")
+
+
 
 @method_decorator(decorators,name='get')
 class ResearchPending(LoginRequiredMixin, View):
@@ -141,34 +169,42 @@ class ResearchPending(LoginRequiredMixin, View):
 @method_decorator(decorators,name='dispatch')
 class ResearchDetailAdmin(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
-		form = Research.objects.get(id=self.kwargs['id'])
-		template_name = "admin/researchproject/research_detil.html"
-		researchcategory=ResearchProjectCategory.objects.all()
-		context = {'forms':form,"category":researchcategory}
-		return render(self.request, template_name,context)
-	def post(self,*args,**kwargs):
-		form = ResearchForm(self.request.POST)
-		template_name = "admin/researchproject/research_detil.html"
-		context = {'forms':form}
-		if form.is_valid():
-			research = Research.objects.get(id=self.kwargs['id'])
-			research.title = form.cleaned_data.get('title')
-			research.description = form.cleaned_data.get('description')
-			research.detail = form.cleaned_data.get('detail')
-			research.status = form.cleaned_data.get('status')
-			research.category = form.cleaned_data.get('category')
-			research.last_updated_by = self.request.user
-			research.last_updated_date = timezone.now()
-			research.save()
-			for file in self.request.FILES.getlist('files'):
-				researchattachment= ResearchAttachment()
-				researchattachment.research = research
-				researchattachment.attachement = file
-				researchattachment.save()
-			messages.success(self.request, "Edited Research Successfully")
+		try:
+			form = Research.objects.get(id=self.kwargs['id'])
+			template_name = "admin/researchproject/research_detil.html"
+			researchcategory=ResearchProjectCategory.objects.all()
+			context = {'forms':form,"category":researchcategory}
+			return render(self.request, template_name,context)
+		except Exception as e:
+			print("@@@@ Exception at ResearchDetailAdmin ",e)
 			return redirect("admin:research_list")
-		
-		return render(self.request, template_name,context)
+	def post(self,*args,**kwargs):
+		try:
+			form = ResearchForm(self.request.POST, self.request.FILES)
+			template_name = "admin/researchproject/research_detil.html"
+			context = {'forms':form}
+			if form.is_valid():
+				research = Research.objects.get(id=self.kwargs['id'])
+				research.title = form.cleaned_data.get('title')
+				research.description = form.cleaned_data.get('description')
+				research.detail = form.cleaned_data.get('detail')
+				research.status = form.cleaned_data.get('status')
+				research.category = form.cleaned_data.get('category')
+				research.last_updated_by = self.request.user
+				research.last_updated_date = timezone.now()
+				research.save()
+				for file in self.request.FILES.getlist('files'):
+					researchattachment= ResearchAttachment()
+					researchattachment.research = research
+					researchattachment.attachement = file
+					researchattachment.save()
+				messages.success(self.request, "Edited Research Successfully")
+				return redirect("admin:research_list")
+			messages.warning(self.request, 'Invalid Form Data!')
+			return render(self.request, template_name,context)
+		except Exception as e:
+			print("@@@ Exception at POST of Research Detail",e )
+			return redirect("admin:research_list")
 
 
 # customer side
@@ -195,31 +231,16 @@ class SearchResearch(View):
 		return redirect(reverse("research_list"))
 	def post(self,*args,**kwargs):
 		form = Research.objects.filter(title__contains=self.request.POST['search'])
-		if str(self.request.user) != "AnonymousUser":
+		if self.request.user.is_anonymous:
 			usercreated = Research.objects.filter(created_by=self.request.user,accepted="APPROVED")
 		else:
 			usercreated = ""
 		category = ResearchProjectCategory.objects.all()
 		context = {'researchs':form,"usercreated":usercreated,"category":category}
 		template_name = "frontpages/research/research_list.html"
-		# if str(self.request.user) != "AnonymousUser":
-		# 	userCreated = ForumQuestion.objects.filter(user=self.request.user)
-		# else:
-		# 	userCreated = ""
+		
 		return render(self.request, template_name,context)
 
-# class ListResearch(View):
-# 	def get(self,*args,**kwargs):
-# 		form = Research.objects.filter(accepted="APPROVED")
-# 		category = ResearchProjectCategory.objects.all()
-# 		if str(self.request.user) != "AnonymousUser":
-# 			usercreated = Research.objects.filter(user=self.request.user,accepted="APPROVED")
-# 		else:
-# 			usercreated = ""
-# 		context = {'researchs':form,"usercreated":usercreated,"category":category}
-# 		template_name = "frontpages/research/research_list.html"
-		
-# return render(self.request, template_name,context)
 class ResearchCategorySearch(View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.filter(accepted="APPROVED",category=self.kwargs['id'])
@@ -235,7 +256,7 @@ class ResearchCategorySearch(View):
 class ResearchDetail(View):
 	def get(self,*args,**kwargs):
 		form = Research.objects.get(id=self.kwargs['id'])
-		related = Research.objects.filter(category=form.category).exclude(id=self.kwargs['id'])
+		related = Research.objects.filter(category=form.category).exclude(id=self.kwargs['id'])[:6]
 		category = ResearchProjectCategory.objects.all()
 		context = {'research':form,"category":category,"related":related,"message":"Research"}
 		template_name = "frontpages/research/research_detail.html"
@@ -281,41 +302,34 @@ class EditResearch(View):
 
 class CreateResearch(LoginRequiredMixin, View):
 	def get(self,*args,**kwargs):
-		form = ResearchForm()
-		if str(self.request.user) != "AnonymousUser":
-			usercreated = Research.objects.filter(created_by=self.request.user,accepted="APPROVED")
-		else:
-			usercreated  = ""
+		form = ResearchForm
+		usercreated = Research.objects.filter(created_by=self.request.user,accepted="APPROVED")
 		category = ResearchProjectCategory.objects.all()
-		context = {'form':form,"usercreated":usercreated,"category":ResearchProjectCategory.objects.all()}
+		context = {'form':form,"usercreated":usercreated,"category":category}
 		template_name = "frontpages/research/research_form.html"
 		return render(self.request, template_name,context)
 	def post(self,*args,**kwargs):
-		
-		form = ResearchForm(self.request.POST,self.request.FILES)
-		if str(self.request.user) != "AnonymousUser":
-			usercreated = Research.objects.filter(created_by=self.request.user,accepted="APPROVED")
-		else:
-			redirect("research_list")
-		template_name = "admin/researchproject/research_form.html"
-		context = {'forms':form}
-		if form.is_valid():
-			research = Research()
-			research = form.save(commit=False)
-			if self.request.user.is_customer:
-				research.accepted = "PENDING"
-			else:
-				research.accepted = "APPROVED"
-			research.created_by = self.request.user
-			research.save()
-			for file in self.request.FILES.getlist('files'):
-				print("file name:"+str(file.name))
-				researchattachment= ResearchAttachment()
-				researchattachment.research = research
-				researchattachment.attachement = file
-				researchattachment.save()
+		try:
+			form = ResearchForm(self.request.POST,self.request.FILES)
+			template_name = "frontpages/research/research_form.html"
+			if form.is_valid():
+				research = form.save(commit=False)
+				if self.request.user.is_customer:
+					research.accepted = "PENDING"
+				else:
+					research.accepted = "APPROVED"
+				research.created_by = self.request.user
+				research.save()
+				for file in self.request.FILES.getlist('files'):
+					researchattachment= ResearchAttachment()
+					researchattachment.research = research
+					researchattachment.attachement = file
+					researchattachment.save()
+				messages.success(self.request, "Added New Research Successfully")
+				return redirect("research_list")
 
- 
-			messages.success(self.request, "Added New Research Successfully")
-			return redirect("research_form")
-		return render(self.request, template_name,context)
+			category = ResearchProjectCategory.objects.all()
+			return render(self.request, template_name, {'form':form, "category":category})
+		except Exception as e:
+			print("@@@ Exception at Creating Research ", e)
+			return redirect("research_list")

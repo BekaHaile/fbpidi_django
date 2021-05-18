@@ -67,7 +67,7 @@
 									{% if user.is_superuser or user.get_company == comment.created_by.get_company %}
 
 									{% if perms.collaborations.delete_forumcomments %} 
-									<a href="{%url 'admin:delete' model_name='ForumCommentsAdmin' id=comment.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Comment</a>
+									<a href="{%url 'admin:delete' model_name='ForumCommentsAdmin' id=comment.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this item?')"><i class="icon-trash"></i>Delete Comment</a>
 									{%endif%}
 									{%endif%}
 									{% if user.is_superuser or user.get_company == comment.created_by.get_company %}

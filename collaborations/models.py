@@ -278,6 +278,9 @@ class JobCategory(models.Model):
 
     def __str__(self):
         return self.category_name
+    
+    class Meta:
+        ordering=['category_name',]
         
 
 class Vacancy(models.Model):
@@ -554,7 +557,7 @@ class ResearchProjectCategory(models.Model):
     reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
     class Meta:
-        ordering = ['-created_date',]
+        ordering = ['cateoryname',]
 
     def __str__(self):
         return self.cateoryname
