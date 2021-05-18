@@ -1,11 +1,13 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags %}
 {% block extrastyle %}
+    <!-- file selecting js -->
+    <script src="/static/admin/global_assets/js/demo_pages/user_pages_profile_tabbed.js"></script>
+    <!-- /file selecting js  -->
+    <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
+    <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 
-<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
-<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
-
-<script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
+    <script src="/static/admin/global_assets/js/plugins/ui/moment/moment.min.js"></script>
     <script src="/static/admin/global_assets/js/plugins/pickers/daterangepicker.js"></script>
     <script src="/static/admin/global_assets/js/plugins/pickers/anytime.min.js"></script>
     <script src="/static/admin/global_assets/js/plugins/pickers/pickadate/picker.js"></script>
@@ -82,10 +84,8 @@
                         <div class="col-lg-9">
                             <div class="uniform-uploader">
                                 <div class="col-lg-12">
-                                    <div class="uniform-uploader">{{form.image}}<span
-                                            class="filename" id="file_selected" style="user-select: none;">No file selected</span><span
-                                            class="action btn bg-warning" style="user-select: none;">Choose File</span>
-                                    </div>
+                                    {{form.image}}
+                                    
                                 </div>
                             </div>
                             
@@ -141,7 +141,6 @@
   	</div>
 
 
-
 			
 	{%else%}
 		
@@ -154,10 +153,8 @@
 							<legend class="text-uppercase font-size-sm font-weight-bold">Create new News</legend>
 							<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
 							{{form.errors}}
-						
 							{%csrf_token%}
 						
-							
 							<div class="form-group row">
 								<label class="col-form-label col-lg-3">News Title(English) *</label>
 								<div class="col-lg-9">
@@ -198,19 +195,14 @@
                             <input type="hidden" name="width"  id="width" value="">
                             <input type="hidden" name="height" id="height" value="">
                                     
-                            
-
-                            
 
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-3">Select Image:</label>
                                 <div class="col-lg-9">
                                     <div class="uniform-uploader">
                                         <div class="col-lg-12">
-                                            <div class="uniform-uploader">{{form.image}}<span
-                                                    class="filename" style="user-select: none;">No file selected</span><span
-                                                    class="action btn bg-warning" style="user-select: none;">Choose File</span>
-                                            </div>
+                                            {{form.image}}
+                                           
                                         </div>
                                     </div>
                                 </div>
@@ -250,10 +242,13 @@
 </div>
 <!-- /content area -->
 <script>
-	$(document).ready(function () {
+    $(document).ready(function () {
 		$('#summernote').summernote();
 		$('.summernote').summernote();
 	});
+</script>
+<script>
+	
 	var cropX;
 	var cropY;
 	var cropWidth;
@@ -268,9 +263,7 @@
 			
 			reader.onload = function (e) {
 							var c = document.getElementById('image_field')
-							console.log("the e targe file is ", e.target.result);
 							
-							//console.log("the value of c src is "+ c.attributes['src'].value)
 							 $("#modal_image_field").attr("src", e.target.result);
 							$("#modalCrop").modal("show");
                             document.getElementById("file_selected").innerHTML = this.files[0].name
@@ -286,12 +279,11 @@
 		cropper = new Cropper(modalCropEdit,{
 					viewMode: 1,
 					aspectRatio: 3/1,
-					minCropBoxWidth: 300,
-					minCropBoxHeight: 100,
+					minCropBoxWidth: 400,
+					minCropBoxHeight: 140,
 
 					crop(event){
 						
-						console.log("inside crop, the event is "+event)
 						setImageCropProperties(
 							modal_image_field,
 							event.detail.x,
@@ -309,13 +301,11 @@
 	confirm.addEventListener("click",function(event){
 
 		cropImage(cropX,cropY,cropWidth,cropHeight);
-		console.log("finished cropping");
 		$("#modalCrop").modal("hide");
 
 	})
 
 	function setImageCropProperties(image,x,y,width,height){
-		console.log("Set image cropper called!")
 		cropX = x;
 		cropY = y;
 		cropWidth = width;

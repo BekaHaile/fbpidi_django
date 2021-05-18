@@ -20,21 +20,20 @@ from accounts.models import User, CompanyAdmin, Company
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import FileResponse, HttpResponse, HttpResponseRedirect, JsonResponse
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
+from django.http import  JsonResponse
+from django.views.generic import CreateView,  DetailView, ListView
 
 from datetime import timedelta
 from accounts.email_messages import sendWeekBlogAndNews
 
 from admin_site.decorators import company_created,company_is_active
 from company.models import Company,CompanyEvent, EventParticipants
-from .forms import PollsForm, TenderForm,  CreateJobApplicationForm
-from collaborations.forms import (BlogsForm, BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm,ForumQuestionForm,CommentForm,CommentReplayForm,NewsForm, CompanyEventForm, EventParticipantForm, 
-								AnnouncementForm,ResearchForm,ResearchProjectCategoryForm, TenderApplicantForm, PollsForm, CreatePollForm, CreateChoiceForm, DocumentForm )
+from .forms import  TenderForm
+from collaborations.forms import (NewsForm, CompanyEventForm, EventParticipantForm, TenderApplicantForm, DocumentForm )
 
 from collaborations.models import ( PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, Blog, BlogComment,Faqs, Vacancy,JobApplication, 
 									JobCategory,ForumQuestion, Faqs, Vacancy, JobApplication, JobCategory, News, NewsImages, ForumComments, 
-									CommentReplay,Announcement,AnnouncementImages,Research,ResearchProjectCategory, Document)
+									Announcement,AnnouncementImages,Research,ResearchProjectCategory, Document)
 
 ### a dictionay holding model names with model objects, Used to hold a model object for a string
 models = { 'Research':Research,'Announcement':Announcement, 'Blog':Blog, 'BlogComment':BlogComment, 'Choice':Choices, 'Event':CompanyEvent, 'Tender':Tender, 'TenderApplicant':TenderApplicant, 
@@ -175,10 +174,10 @@ def filter_by(field_name, field_values, query):
 def get_paginated_data(request, query):
     page_number = request.GET.get('page', 1)
     try:
-        return Paginator(query, 1).page(page_number)
+        return Paginator(query, 6).page(page_number)
     except Exception as e:
         print("exception at get_paginate_data ",e)
-        return Paginator(query, 4).page(1)
+        return Paginator(query, 6).page(1)
 
 
 class IndexSearch(View):
@@ -186,15 +185,29 @@ class IndexSearch(View):
                 ('Tender','tender_list'),('Vacancy','vacancy'),('Blog','customer_blog_list'),('Research','research_list'), ('Forum','forum_list')]
 
     title_models = ['News','Event','Announcement','Polls','Tender','Vacancy']
+    
     def blog_search(self):
-        q = Q( Q(title__icontains = self.request.GET['by_title']) | Q(title_am__icontains = self.request.GET['by_title']) )
-        return Blog.objects.filter(q)    
+        try:
+            q = Q( Q(title__icontains = self.request.GET['by_title']) | Q(title_am__icontains = self.request.GET['by_title']) )
+            return Blog.objects.filter(q)
+        except Exception as e:
+            print("@@@ Exception at IndexSearch blog, ",e)
+            return redirect("index")    
     
     def forum_search(self):
-        return ForumQuestion.objects.filter(title__icontains = self.request.GET['by_title'])
-    
+        try:
+            return ForumQuestion.objects.filter(title__icontains = self.request.GET['by_title'])
+        except Exception as e:
+            print("@@@ Exception at forum_search blog, ",e)
+            return redirect("index")
+
     def research_search(self):
-        return Research.objects.filter(Q(title__icontains = self.request.GET['by_title']))
+        try:
+            return Research.objects.filter(Q(title__icontains = self.request.GET['by_title']))
+        except Exception as e:
+            print("@@@ Exception at research_search blog, ",e)
+            return redirect("index")
+
 
     def get(self, *args, **kwargs):
         result = {}
@@ -264,7 +277,7 @@ class IndexSearch(View):
             return render(self.request, "frontpages/index_search_page.html",data)
         except Exception as e:
             print("@@@@@@@@@@@@@ Exception ",e)
-            return redirct("/")
+            return redirect("/")
         
 
 
@@ -347,6 +360,7 @@ class PollDetail(LoginRequiredMixin,View):
         
 
 def change_to_datetime(calender_date):
+
     str_date = datetime.datetime.strptime(calender_date, '%m/%d/%Y').strftime('%Y-%m-%d')
     return datetime.datetime.strptime(str_date,'%Y-%m-%d' )
 
@@ -404,9 +418,13 @@ class TenderDetail(LoginRequiredMixin, DetailView):
     context_object_name = 'tender'
     template_name = 'admin/collaborations/tender_detail.html'
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = TenderForm
-        return context
+        try:
+            context = super().get_context_data(**kwargs)
+            context['form'] = TenderForm
+            return context
+        except Exception as e:
+            print("@@@ Exception at Tender Detail", e)
+            return []
 
 @method_decorator(decorators,name='dispatch')
 class EditTender(LoginRequiredMixin,View):
@@ -482,39 +500,29 @@ class CustomerTenderDetail(View):
             return redirect("tender_list")
 
 
-@login_required
-def AjaxApplyForTender(request, id):
-    data = json.loads(request.body) 
-    try:  
-        tender= Tender.objects.get(id = id) 
-        applicant = TenderApplicant(first_name = data['first_name'], last_name = data['last_name'],email = data['email'],phone_number = data['phone_number'],company_name = data['company_name'],company_tin_number=data['company_tin_number'],tender = tender)
-        applicant.save()
-        print("saved at ", applicant.id)
-        return JsonResponse({'error':False,"message":"Application Successfully Completed", 'count':tender.get_applications().count()}, safe = False)
-
-    except Exception as e:
-        print("Exception occured while trying to paricipate in event", e)
-        return JsonResponse({'error':True,"message":f"Exception occured while registering, "}, safe = False)
-
 
 class ApplyForCompanyTender(View):
-	def post(self, *args, **kwargs):
-            tender= Tender.objects.get(id = self.kwargs['id']) 
+    def post(self, *args, **kwargs):           
+        try:
+            tender = Tender.objects.get(id=self.kwargs['id'])
             applicant = TenderApplicant(first_name = self.request.POST['first_name'], last_name = self.request.POST['last_name'],email = self.request.POST['email'],phone_number = self.request.POST['phone_number'],company_name = self.request.POST['company_name'],company_tin_number=self.request.POST['company_tin_number'],tender = tender)
             applicant.save()
             return render(self.request, "frontpages/company/company_tender_detail.html", {'obj':tender,'object':tender.company, 'applied':True})
-
+        except Exception as e:
+            print("@@@ Exception at Apply For CompanyTender ",e)
+            return redirect("/")
 
 class ApplyForTender(View):
-	def post(self, *args, **kwargs):
+    def post(self, *args, **kwargs):
+        try:
             tender= Tender.objects.get(id = self.kwargs['id']) 
             applicant = TenderApplicant(first_name = self.request.POST['first_name'], last_name = self.request.POST['last_name'],email = self.request.POST['email'],phone_number = self.request.POST['phone_number'],company_name = self.request.POST['company_name'],company_tin_number=self.request.POST['company_tin_number'],tender = tender)
             applicant.save()
             messages.success(self.request, "Application Successfully Completed")
             return render(self.request, "frontpages/tender/customer_tender_detail.html", {'tender':tender, 'applied':True})
-        # except Exception as e:
-        #     print("Exception at Apply for tender ",e)
-        #     return redirect("/collaborations/tender_list/")
+        except Exception as e:
+            print("Exception at Apply for tender ",e)
+            return redirect("/collaborations/tender_list/")
 
 
 ############ News
@@ -549,9 +557,8 @@ class CreateNews(LoginRequiredMixin, View):
 class EditNews(LoginRequiredMixin, View):
     def get(self,*args,**kwargs):
         try:   
-            if 'id' in self.kwargs:
-                news = News.objects.get(id =  self.kwargs['id'])
-                return render(self.request,'admin/collaborations/create_news.html',{'news':news, 'form':NewsForm(instance= news),'edit':True})
+            news = News.objects.get(id =  self.kwargs['id'])
+            return render(self.request,'admin/collaborations/create_news.html',{'news':news, 'form':NewsForm(instance= news),'edit':True})
         except Exception as e: 
             print("execption at create News ", str(e))
             messages.warning(self.request,"Error, Could Not Find the News! ")
@@ -570,9 +577,9 @@ class EditNews(LoginRequiredMixin, View):
                 image_cropper(data['x'],data['y'],data['width'],data['height'], news.image )
                 messages.success(self.request, "News Edited Successfully!")
                 return redirect(f"/admin/news_list/") 
-            else:
-                messages.warning(self.request, "Error! News not Edited!")
-                return render(self.request,'admin/collaborations/create_news.html',{'news':news, 'form':form,'edit':True})
+            
+            messages.warning(self.request, "Error! News not Edited!")
+            return render(self.request,'admin/collaborations/create_news.html',{'news':news, 'form':form,'edit':True})
         except Exception as e:
             print("@@ Exception at Edit News at ",e)
             messages.warning(self.request, "Error! News not Edited!")
@@ -733,28 +740,31 @@ class EditCompanyEvent(LoginRequiredMixin,View):
                 return render(self.request, "admin/collaborations/create_events.html",{'edit':True,'form': form, 'event':event})
         
         except Exception as e:
-             return redirect("admin:admin_companyevent_list")
+            print("@@@ Exception at Edit Company Event ", e)
+            return redirect("admin:admin_companyevent_list")
 
 
 class CustomerEventList(View):
 	def get(self, *agrs, **kwargs):
- 
             result ={}
-            if 'by_status' in self.request.GET:
-                result = filter_by('status',[self.request.GET['by_status']], CompanyEvent.objects.all())
-            elif 'by_company' in self.request.GET:
-                result = FilterByCompanyname(self.request.GET.getlist('by_company'), CompanyEvent.objects.all())
-            else:
-                result = SearchByTitle_All('Event', self.request)
-            data = get_paginated_data(self.request, result['query'])
+            try:
+                if 'by_status' in self.request.GET:
+                    result = filter_by('status',[self.request.GET['by_status']], CompanyEvent.objects.all())
+                elif 'by_company' in self.request.GET:
+                    result = FilterByCompanyname(self.request.GET.getlist('by_company'), CompanyEvent.objects.all())
+                else:
+                    result = SearchByTitle_All('Event', self.request)
+                data = get_paginated_data(self.request, result['query'])
 
-            eventcompanies = []
-            for comp in Company.objects.all():
-                if comp.companyevent_set.count() > 0:
-                    eventcompanies.append(comp)
-            
-            return render(self.request, "frontpages/news/customer_event_list.html", {'events':data, 'message':result['message'],  'message_am':result['message_am'],'event_companies':eventcompanies})
-        
+                eventcompanies = []
+                for comp in Company.objects.all():
+                    if comp.companyevent_set.count() > 0:
+                        eventcompanies.append(comp)
+                
+                return render(self.request, "frontpages/news/customer_event_list.html", {'events':data, 'message':result['message'],  'message_am':result['message_am'],'event_companies':eventcompanies})
+            except Exception as e:
+                print("@@@ Exception at Customer Event List, ",e)
+                return redirect("/")
         
 class CustomerEventDetail(View):
     def get(self, *args, **kwargs): 
@@ -804,21 +814,21 @@ def AjaxEventParticipation(request, id):
 #12345  use ajax for event participation.
 class EventParticipation(LoginRequiredMixin, View):
     def post(self, *args, **kwargs):   
-                try:  
-                    event = get_object_or_404( CompanyEvent, id = self.kwargs['id'])
-                    older = EventParticipants.objects.filter(event = event, patricipant_email = self.request.POST['patricipant_email']).first()
-                    if older:
-                        older.notify_on = self.request.POST["notify_on"]
-                        older.notified = False
-                        older.save()
-                    else:
-                        participant = EventParticipants(user =self.request.user, event= event, patricipant_email=self.request.POST['patricipant_email'], notify_on=self.request.POST[ "notify_on"])
-                        participant.save()
-                    return redirect(f'/collaborations/customer_event_detail/{event.id}/')
-                except Exception as e:
-                    print("Exception occured while trying to paricipate in event", e)
-                    return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
-        
+        try:  
+            event = get_object_or_404( CompanyEvent, id = self.kwargs['id'])
+            older = EventParticipants.objects.filter(event = event, patricipant_email = self.request.POST['patricipant_email']).first()
+            if older:
+                older.notify_on = self.request.POST["notify_on"]
+                older.notified = False
+                older.save()
+            else:
+                participant = EventParticipants(user =self.request.user, event= event, patricipant_email=self.request.POST['patricipant_email'], notify_on=self.request.POST[ "notify_on"])
+                participant.save()
+            return redirect(f'/collaborations/customer_event_detail/{event.id}/')
+        except Exception as e:
+            print("Exception occured while trying to paricipate in event", e)
+            return redirect(f"/collaborations/customer_event_detail/{self.kwargs['id']}/")
+
 
 #########Document
 ###Admin Side
@@ -831,17 +841,21 @@ class CreateDocument(LoginRequiredMixin, View):
             return redirect("admin:error_404")
 
     def post(self, args, **kwargs):
-        form = DocumentForm(self.request.POST)
-        if form.is_valid():
-            document = form.save(commit=False)
-            document.created_by = self.request.user
-            document.document =  self.request.FILES['document']
-            document.save()
-            messages.success(self.request,'Successfully created the document!')
-            return redirect("/admin/list_document_by_category/all/")
-        else:
-            messages.warning(self.request,'Could not create the document!' )
-            return render(self.request, "admin/document/create_document.html", {'form':form})
+        try:
+            form = DocumentForm(self.request.POST)
+            if form.is_valid():
+                document = form.save(commit=False)
+                document.created_by = self.request.user
+                document.document =  self.request.FILES['document']
+                document.save()
+                messages.success(self.request,'Successfully created the document!')
+                return redirect("/admin/list_document_by_category/all/")
+            else:
+                messages.warning(self.request,'Could not create the document!' )
+                return render(self.request, "admin/document/create_document.html", {'form':form})
+        except Exception as e:
+            print("@@@ Exception at CreateDocument ", e)
+            return redirect("admin:index")
         
 
 @method_decorator(decorators,name='dispatch')

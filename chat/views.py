@@ -14,7 +14,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from accounts.models import UserProfile
 from chat.models import ChatMessages
 from chat.api.serializer import ChatMessagesSerializer
-
+from accounts.api.serializers import UserInfoSerializer
 from admin_site.decorators import company_created,company_is_active
 
 decorators = [never_cache, company_created(),company_is_active()]
@@ -23,15 +23,19 @@ decorators = [never_cache, company_created(),company_is_active()]
 #checks if a requested user does exist in the database
 
 def check_username(request, username):
+    context ={'found':False}
     try:
         u = get_object_or_404(UserProfile, username = username)
-        return JsonResponse({'result':True}, safe =False, )
+        context['found'] =True
+        context['user'] = UserInfoSerializer(u).data
     except Http404:
-        related = UserProfile.objects.filter(username__icontains = username)[:4]
-        result = {'result':False,'related':[]}
-        for u in related:
-            result['related'].append( u.username )
-        return JsonResponse(result, safe=False)
+        context['found'] = False
+    query = UserProfile.objects.filter(username__icontains = username)[:7] 
+    related = [] 
+    for u in query:
+        related.append( UserInfoSerializer(u).data )
+    context['related'] = related
+    return JsonResponse(context, safe=False)
 
 
 @login_required

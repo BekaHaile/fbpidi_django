@@ -1077,7 +1077,7 @@
 																{% if user.is_superuser or user == chklist.created_by%}
 							
 																	{% if perms.collaborations.delete_researchprojectcategory %}
-																	<a href="{%url 'admin:delete' model_name='ResearchProjectCategory' id=chklist.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Category</a>
+																	<a href="{%url 'admin:delete' model_name='ResearchProjectCategory' id=chklist.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this item?')"><i class="icon-trash"></i>Delete Category</a>
 																	{%endif%}
 																	
 																	{%endif%}
@@ -1130,7 +1130,7 @@
 															<div class="dropdown-menu dropdown-menu-right">
 							
 																{% if perms.admin_site.delete_region %}
-																<a href="{%url 'admin:delete' model_name='RegionMaster' id=chklist.id%}"  class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete </a>
+																<a href="{%url 'admin:delete' model_name='RegionMaster' id=chklist.id%}"  class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this item?')"><i class="icon-trash"></i>Delete </a>
 																{%endif%}
 																							
 																{% if perms.admin_site.change_region %}
@@ -1177,7 +1177,7 @@
 															<div class="dropdown-menu dropdown-menu-right">
 							
 																{% if perms.admin_site.delete_uommaster %}
-																<a href="{%url 'admin:delete' model_name='uom_master' id=chklist.id%}"  class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete </a>
+																<a href="{%url 'admin:delete' model_name='uom_master' id=chklist.id%}"  class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this item?')"><i class="icon-trash"></i>Delete </a>
 																{%endif%}
 																							
 																{% if perms.admin_site.change_uommaster %}

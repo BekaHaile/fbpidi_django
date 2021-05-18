@@ -80,7 +80,7 @@ class CompanyDropdownsMaster(models.Model):
         return self.name
 
     class Meta:
-        ordering = ('-created_date',)
+        ordering = ('name',)
 
 
 class RegionMaster(models.Model):
@@ -91,6 +91,9 @@ class RegionMaster(models.Model):
     
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ('name',)
 
 class UomMaster(models.Model):
     name = models.CharField(max_length=20,verbose_name="Unit of Measurement Short Name in English")
@@ -102,6 +105,8 @@ class UomMaster(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ('name',)
 
 class ProjectDropDownsMaster(models.Model):
     name = models.CharField(max_length=200)
@@ -128,7 +133,7 @@ class ProjectDropDownsMaster(models.Model):
         return self.name
         
     class Meta:
-        ordering = ('-created_date',)
+        ordering = ('name',)
 
 class PharmaceuticalProduct(models.Model):
     name = models.CharField(max_length=255,verbose_name="Product Group Name")
@@ -143,6 +148,9 @@ class PharmaceuticalProduct(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ('name',)
 
 class TherapeuticGroup(models.Model):
     name = models.CharField(max_length=255,verbose_name="Therapeutic Group")
@@ -152,6 +160,9 @@ class TherapeuticGroup(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ('name',)
 
 class UserTracker(models.Model):
     ipaddress = models.GenericIPAddressField(unique=True)

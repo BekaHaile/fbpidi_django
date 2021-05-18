@@ -34,9 +34,27 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class UserInfoSerializer(serializers.ModelSerializer):
+    p_img = serializers.SerializerMethodField('get_user_image')
+    role = serializers.SerializerMethodField('get_role')
     class Meta:
         model = UserProfile
-        fields = ('id','first_name', 'last_name', 'username')
+        fields = ('id','first_name', 'last_name', 'username', 'p_img', 'role')
+
+    def get_user_image(self,user):
+        if user.profile_image:
+            return user.profile_image.url
+        else:
+            return '/static/frontpages/images/clients/unkonwn_user_icon.png'
+
+    def get_role(self,user):
+        if user.is_superuser:
+            return "Superuser"
+        elif user.is_company_admin:
+            return f"Admin of '{user.get_company()}'"
+        elif user.is_staff:
+            return f"Staff of '{user.get_company()}'"
+        else:
+            return "Customer User"
  
 class CompanyAdminSerializer(serializers.ModelSerializer):
     user = UserInfoSerializer(required=False) 

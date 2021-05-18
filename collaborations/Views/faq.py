@@ -1,37 +1,19 @@
 
 import datetime
-
+import os
 from django.utils import timezone
 from django.views import View
-from django.urls import reverse
-from django.http import HttpResponse, FileResponse
-from collaborations.models import Blog, BlogComment
 from collaborations.forms import FaqsForm
-from django.shortcuts import render, redirect, reverse
-
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
-from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategory, News, NewsImages
-									 #redirect with context
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from collaborations.models import Faqs
 from django.views import View
 from django.contrib import messages
-
-from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
-from accounts.models import User, CompanyAdmin, Company
-import os
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
-from django.http import FileResponse, HttpResponse
-
-from accounts.models import User
-from admin_site.decorators import company_created,company_is_active
-						 
+from admin_site.decorators import company_created,company_is_active						 
 from collaborations.forms import (FaqsForm,)
 
-from collaborations.models import ( Faqs, )
 
 decorators = [never_cache, company_created(),company_is_active()]
 class FaqList(View):
@@ -49,22 +31,27 @@ class CreateFaqs(LoginRequiredMixin,View):
 		return render(self.request,"admin/faq/faqs_forms.html",context)
 
 	def post(self,*args,**kwargs):
-		form = FaqsForm(self.request.POST)
-		context = {"form":form}
-		if form.is_valid():
-			faqs = form.save(commit=False)
-			if self.request.user.is_company_admin:
-				faqs.status = "PENDDING"
-			if self.request.user.is_superuser:
-				faqs.status = "APPROVED"
-			faqs.created_by = self.request.user
-			faqs.company = self.request.user.get_company()
-			faqs.save()
-			form = FaqsForm()
-			context = {'form':form}
-			messages.success(self.request, "New Faqs Added Successfully")
-			return redirect("admin:admin_Faqs")
-		return render(self.request, "admin/faq/faqs_forms.html",context)
+		try:
+			form = FaqsForm(self.request.POST)
+			context = {"form":form}
+			if form.is_valid():
+				faqs = form.save(commit=False)
+				if self.request.user.is_company_admin:
+					faqs.status = "PENDDING"
+				if self.request.user.is_superuser:
+					faqs.status = "APPROVED"
+				faqs.created_by = self.request.user
+				faqs.company = self.request.user.get_company()
+				faqs.save()
+				form = FaqsForm()
+				context = {'form':form}
+				messages.success(self.request, "New Faqs Added Successfully")
+				return redirect("admin:admin_Faqs")
+			return render(self.request, "admin/faq/faqs_forms.html",context)
+		except Exception as e:
+			print("@@@ Exception at CreateFaqs ",e)
+			messages.warning(self.request, "An Exception Occured!")
+			return redirect("admin:index")
 
 @method_decorator(decorators,name='dispatch')
 class FaqsView(LoginRequiredMixin,View):
