@@ -83,10 +83,10 @@
 														<div class="item-card9-img">
 															<div class="item-card9-imgs">
 																<a href="{%url 'research_detail' id=research.id %}"></a>
-																{% if research.created_by.get_company %}
-																<img src="{{research.created_by.get_company.get_image}}"  alt="img1" class="cover-image">
+																{% if research.image%}
+																<img src="{{research.image.url}}"  alt="{{research.image.name}}" class="cover-image">
 																{% elif research.created_by %}
-																<img src="{{research.created_by.profile_image}}" alt="img2" class="cover-image">
+																<img src="{{research.created_by.get_company.get_image}}" alt="company image" class="cover-image">
 																{% else %}
 																<img src="/static/frontpages/images/clients/unkonwn_user_icon.png" alt="img3" class="cover-image">
 																{% endif %}
@@ -202,6 +202,40 @@
 							</div>
 							</div>
 						</div>
+						{% if usercreated.count > 0 %}
+						<div class="card ">
+							<div class="card-header">
+                                    <h3 class="card-title">{% trans "Your Researches" %} </h3> 
+							</div>
+							<div class="card-body p-0">
+								<div class="list-catergory">
+									<div class="item-list">
+										<ul class="list-group mb-0">
+											{%for research in usercreated%}
+											<li class="list-group-item border-bottom-0">
+
+												<a href="{%url 'research_detail' id=research.id %}" class="{%block chats%}{%endblock%} d-flex border-bottom">
+													
+													{{research.title|safe|truncatechars_html:40}}
+													{% if research.accepted == "APPROVED" %}
+													<span class=" badge-pill ml-auto mb-2" style = "background-color:rgb(8, 103, 8); color: white">APPROVED</span>
+													{% else %}
+													<span class=" badge-pill ml-auto mb-2" style = "background-color: rgb(179, 179, 11); color: white">PENDING</span>
+													{% endif %}
+												</a>
+
+												
+											</li>
+											
+											{%endfor%}
+
+										</ul>
+									</div>
+								</div>
+							</div>
+                        </div>
+						{% endif %}
+
 
 						<div class="card mb-0">
 							<form action="{%url 'research_list' %}" method = "GET">		

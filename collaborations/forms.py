@@ -288,7 +288,7 @@ class NewsForm(forms.ModelForm):
     # NEWS_CATAGORY = ( )
     NEWS_CATAGORY = [ ('', 'Select Category'),('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological')]
     catagory = forms.ChoiceField( required = True, choices= NEWS_CATAGORY, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
-    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field"}) )
+    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field", 'accept': 'image/*'}) )
     class Meta:
         model = News
         fields = ('title', 'title_am', 'description', 'description_am', 'catagory','image')
@@ -301,7 +301,7 @@ class NewsForm(forms.ModelForm):
 
 class CompanyEventForm(forms.ModelForm):
     STATUS_CHOICE = [ ('Upcoming', 'Upcoming'),('Open', 'Open' )]
-    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field"}) )
+    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field",'accept': 'image/*'}) )
     class Meta:
         model=CompanyEvent
         fields = ('title','title_am','description','description_am','image', 'start_date', 'end_date')
@@ -398,15 +398,13 @@ class ProjectForm(forms.ModelForm):
         }
 
 class ResearchForm(forms.ModelForm):
-    # description = forms.CharField(widget=SummernoteWidget())
-    # detail = forms.CharField(widget=SummernoteWidget())
-
     status = forms.ChoiceField(choices = (('','Select Status'),('Completed','Completed'),('Inprogress','Inprogress')), required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
-    category = forms.ModelChoiceField(queryset=ResearchProjectCategory.objects.all(), empty_label = "Select Research Category", required=True, widget =forms.Select(attrs={'class':'form-control form-control-uniform'}), )
-    files = forms.FileField( required=True,  widget=forms.FileInput( attrs={'class':'form-input-styled', 'multiple':'True'}) )
+    category = forms.ModelChoiceField(queryset=ResearchProjectCategory.objects.all(), empty_label = "Select Research Category", required=True, widget =forms.Select(attrs={'class':'form-control form-control-uniform', 'accept': 'image/*'}), )
+    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field", 'accept': 'image/*'}) )
+    files = forms.FileField( required=False,  widget=forms.FileInput( attrs={'class':'form-input-styled', 'multiple':'True'}) )
     class Meta:
         model = Research
-        fields  = ('title','description','status','category')
+        fields  = ('title','description','status','image','category')
         widgets = {
         'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Research'}),
         'description':forms.Textarea(attrs={'class':'summernote','placeholder':'Short description'}),

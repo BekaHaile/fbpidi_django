@@ -20,21 +20,20 @@ from accounts.models import User, CompanyAdmin, Company
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import FileResponse, HttpResponse, HttpResponseRedirect, JsonResponse
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
+from django.http import  JsonResponse
+from django.views.generic import CreateView,  DetailView, ListView
 
 from datetime import timedelta
 from accounts.email_messages import sendWeekBlogAndNews
 
 from admin_site.decorators import company_created,company_is_active
 from company.models import Company,CompanyEvent, EventParticipants
-from .forms import PollsForm, TenderForm,  CreateJobApplicationForm
-from collaborations.forms import (BlogsForm, BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm,ForumQuestionForm,CommentForm,CommentReplayForm,NewsForm, CompanyEventForm, EventParticipantForm, 
-								AnnouncementForm,ResearchForm,ResearchProjectCategoryForm, TenderApplicantForm, PollsForm, CreatePollForm, CreateChoiceForm, DocumentForm )
+from .forms import  TenderForm
+from collaborations.forms import (NewsForm, CompanyEventForm, EventParticipantForm, TenderApplicantForm, DocumentForm )
 
 from collaborations.models import ( PollsQuestion, Choices, PollsResult, Tender, TenderApplicant, Blog, BlogComment,Faqs, Vacancy,JobApplication, 
 									JobCategory,ForumQuestion, Faqs, Vacancy, JobApplication, JobCategory, News, NewsImages, ForumComments, 
-									CommentReplay,Announcement,AnnouncementImages,Research,ResearchProjectCategory, Document)
+									Announcement,AnnouncementImages,Research,ResearchProjectCategory, Document)
 
 ### a dictionay holding model names with model objects, Used to hold a model object for a string
 models = { 'Research':Research,'Announcement':Announcement, 'Blog':Blog, 'BlogComment':BlogComment, 'Choice':Choices, 'Event':CompanyEvent, 'Tender':Tender, 'TenderApplicant':TenderApplicant, 

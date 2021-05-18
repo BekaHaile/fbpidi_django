@@ -585,6 +585,7 @@ class Research(models.Model):
     is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
     company = models.ForeignKey(Company, on_delete = models.CASCADE, blank=True, null = True)
+    image = models.ImageField(upload_to = "Reserch Image",  verbose_name="Research Image",help_text="jpg, png, gid", blank=True, null=True)#add at last
 
     reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
     reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
