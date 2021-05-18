@@ -22,28 +22,34 @@ decorators = [never_cache, company_created(),company_is_active()]
 ### customer side 
 class AnnouncementDetail(View):
 	def get(self,*args,**kwargs):
-		announcement = Announcement.objects.get(id=self.kwargs['id'])
-		template_name="frontpages/announcement/customer_announcement_detail.html"
-		return render(self.request, template_name,{'post':announcement})
+		try:
+			announcement = Announcement.objects.get(id=self.kwargs['id'])
+			template_name="frontpages/announcement/customer_announcement_detail.html"
+			return render(self.request, template_name,{'post':announcement})
+		except Exception as e:
+			print("@@@ Exception at Announcement Detail ", e)
+			return redirect("/")
 	
 
 class ListAnnouncement(View):
 	def get(self,*args,**kwargs):
 			result = {}
-			if 'by_company' in self.request.GET:
-				result = FilterByCompanyname(self.request.GET.getlist('by_company'), Announcement.objects.all())
-			else:
-				result = SearchByTitle_All('Announcement', self.request)
-			# if result['query']  :
-			# 	result['query'] = Announcement.objects.all()
-			data = get_paginated_data(self.request, result['query'])
-			companies = []
-			for comp in Company.objects.all():
-				if comp.announcement_set.count() > 0:
-					companies.append(comp)
-			template_name="frontpages/announcement/customer_announcement.html"
-			return render(self.request, template_name, {'Announcements':data, 'message':result['message'],'message_am':result['message_am'], 'companies': companies})
-		
+			try:
+				if 'by_company' in self.request.GET:
+					result = FilterByCompanyname(self.request.GET.getlist('by_company'), Announcement.objects.all())
+				else:
+					result = SearchByTitle_All('Announcement', self.request)
+				
+				data = get_paginated_data(self.request, result['query'])
+				companies = []
+				for comp in Company.objects.all():
+					if comp.announcement_set.count() > 0:
+						companies.append(comp)
+				template_name="frontpages/announcement/customer_announcement.html"
+				return render(self.request, template_name, {'Announcements':data, 'message':result['message'],'message_am':result['message_am'], 'companies': companies})
+			except Exception as e:
+				print("@@@ Exception at List Announcement ",e)
+				return redirect ("/")
 		
 
 #### Announcement related with admin side

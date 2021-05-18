@@ -314,7 +314,7 @@ class DeleteAllView(LoginRequiredMixin,View):
                 researchimages.delete()
                 message ="Research File Deleted"
                 messages.success(self.request,message)
-                return redirect("admin:research_detail",model_name="Research",id=id) 
+                return redirect("admin:research_detail",id=id) 
             elif self.kwargs['model_name'] == 'ProjectClient':
                 research = Project.objects.get(id=self.kwargs['id'])
                 research.delete()

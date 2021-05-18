@@ -68,7 +68,7 @@
 									{% if user.is_superuser or user.get_company == reply.created_by.get_company %}
 
 									{% if perms.collaborations.delete_commentreplay %} 
-									<a href="{%url 'admin:delete' model_name='CommentReplayAdmin' id=reply.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Comment Replay</a>
+									<a href="{%url 'admin:delete' model_name='CommentReplayAdmin' id=reply.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this item?')"><i class="icon-trash"></i>Delete Comment Replay</a>
 									{%endif%}
 
 									{%endif%}

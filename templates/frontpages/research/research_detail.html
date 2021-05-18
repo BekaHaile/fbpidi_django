@@ -64,6 +64,7 @@
 							</div>
 						</div>
 
+
 						<div class="card mb-0">
 							<form action="{%url 'research_list' %}" method = "GET">		
 								<div class="card-header border-top">
@@ -129,8 +130,8 @@
                                 <div class="card-header">
                                     <h3 class="card-title">{{research.title}}</h3> 
                                     
-                                    	 <span class="badgetext badge badge-pill badge-light mb-0 mt-1"><i class="fa fa-user text-muted mr-2"></i>  {{research.created_b.username}}{{" "}}
-													 {{research.timestamp}}</span>
+                                    	 <span class="badgetext badge badge-pill badge-light mb-0 mt-1"><i class="fa fa-user text-muted mr-2"></i> <b>By : </b> {{research.created_by.username}} <b>{{" On: "}}</b>
+													 {{research.created_date}}</span>
                                 		 
                                 		 
 									 
@@ -182,7 +183,7 @@
 		                        <div class="media-body">
 		                        	<div class="mt-4 mb-3 row">
 		                                {%for file in research.researchfiles%}
-											<div class="col-sm-6 col-lg-3">
+											<div class="col-sm-6 col-lg-6">
 												<div class="card">
 													<div class="card-img-actions m-1">
 														
@@ -222,19 +223,7 @@
                             
 						</div>
 					</div>
-						<div class="d-sm-flex">
-							<ul class="pagination mb-lg-0 mb-5 ml-auto">
-								<li class="page-item page-prev disabled">
-									<a class="page-link" href="#" tabindex="-1">Prev</a>
-								</li>
-								<li class="page-item active"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
-								<li class="page-item page-next">
-									<a class="page-link" href="#">Next</a>
-								</li>
-							</ul>
-						</div>
+						
 					</div>
 					<!--/Add Lists-->
 				</div>

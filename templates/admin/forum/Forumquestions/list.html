@@ -81,7 +81,7 @@
 									{% if user.is_superuser or user.get_company == forum.created_by.get_company %}
 
 									{% if perms.collaborations.delete_forumquestion %} 
-									<a href="{%url 'admin:delete' model_name='ForumQuestionAdmin' id=forum.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this')"><i class="icon-trash"></i>Delete Question</a>
+									<a href="{%url 'admin:delete' model_name='ForumQuestionAdmin' id=forum.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this item?')"><i class="icon-trash"></i>Delete Question</a>
 									{% endif%}
 									{% endif%}
 									{% if user.is_superuser or user.get_company == forum.created_by.get_company %}

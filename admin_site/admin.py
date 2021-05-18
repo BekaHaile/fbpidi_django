@@ -106,7 +106,7 @@ class CustomAdminSite(admin.AdminSite):
             # path('project-list',wrap(ListProjectAdmin.as_view()),name="project_list"),
             # path('project-detail/<model_name>/<id>',wrap(ProjectDetailAdmin.as_view()),name="project_detail"),
 
-            path('research-approve/<id>/',wrap(ResearchApprove.as_view()),name="research_approve"),
+            path('research-approve/<id>/<str:action>/',wrap(ResearchApprove.as_view()),name="research_approve"),
             path('research-pending/<id>/',wrap(ResearchPending.as_view()),name="research_pending"),
             path('pedning-research-list/',wrap(ListPendingResearchAdmin.as_view()),name="pedning_research_list"),
             path('research-list/',wrap(ListResearchAdmin.as_view()),name="research_list"),

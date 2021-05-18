@@ -278,6 +278,9 @@ class JobCategory(models.Model):
 
     def __str__(self):
         return self.category_name
+    
+    class Meta:
+        ordering=['category_name',]
         
 
 class Vacancy(models.Model):
@@ -554,7 +557,7 @@ class ResearchProjectCategory(models.Model):
     reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
 
     class Meta:
-        ordering = ['-created_date',]
+        ordering = ['cateoryname',]
 
     def __str__(self):
         return self.cateoryname
@@ -582,6 +585,7 @@ class Research(models.Model):
     is_active = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
     company = models.ForeignKey(Company, on_delete = models.CASCADE, blank=True, null = True)
+    image = models.ImageField(upload_to = "Reserch Image",  verbose_name="Research Image",help_text="jpg, png, gid", blank=True, null=True)#add at last
 
     reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
     reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
@@ -657,6 +661,7 @@ class Document_Category(models.Model):
     reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
     reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
     reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
+
 
 class Document(models.Model):
     DOC_CATEGORY = [ ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'),]
