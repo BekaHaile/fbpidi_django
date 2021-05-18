@@ -5,10 +5,7 @@
 {% block extrastyle %}
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-		<!-- Theme JS files -->
-		<script src="/static/admin/global_assets/js/plugins/visualization/echarts/echarts.min.js"></script>
-		<script src="/static/admin/global_assets/js/demo_pages/charts/echarts/columns_waterfalls.js"></script>
-        <script src="/static/admin/global_assets/js/demo_pages/charts/echarts/pies_donuts.js"></script>
+		<!-- Theme JS files --> 
         <script src="/static/admin/assets/js/report.js"></script>
 
         <!-- /theme JS files -->
@@ -17,7 +14,7 @@
 {% block content %}
   <!-- Content area -->
   <div class="content">
-    {%if user.is_superuser%}
+    {%if user.is_superuser or user.is_fbpidi_staff%}
     <!-- Main charts -->
     <div class="card">
         <div class="card-header header-elements-inline">

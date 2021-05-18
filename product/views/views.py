@@ -97,7 +97,7 @@ class SubCategoryView(LoginRequiredMixin,ListView):
     template_name = "admin/product/categories.html"
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return SubCategory.objects.all()
         elif self.request.user.is_company_admin:
             return SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())
@@ -167,7 +167,7 @@ class BrandView(LoginRequiredMixin,ListView):
     template_name = "admin/product/categories.html"
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return Brand.objects.all()
         elif self.request.user.is_company_admin:
             return Brand.objects.filter(company=Company.objects.get(contact_person=self.request.user))
@@ -254,7 +254,7 @@ class AdminProductListView(LoginRequiredMixin,ListView):
     template_name = "admin/product/product_list.html"
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return Product.objects.all()
         elif self.request.user.is_company_admin:
             return Product.objects.filter(company=self.request.user.get_company())
@@ -429,7 +429,7 @@ class ListProductionCapacity(LoginRequiredMixin,ListView):
     template_name = "admin/product/product_data_list.html"
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return ProductionCapacity.objects.all()
         else:
             return ProductionCapacity.objects.filter(company=self.request.user.get_company())
@@ -455,7 +455,7 @@ class CreateProductionCapacity(LoginRequiredMixin,CreateView):
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreateProductionCapacity,self).get_form_kwargs()
         
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             kwargs.update({'product':SubCategory.objects.all()})
         elif self.request.user.is_company_admin:
             kwargs.update({'company': Company.objects.get(contact_person=self.request.user),
@@ -495,7 +495,7 @@ class UpdateProductionCapacity(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(UpdateProductionCapacity,self).get_form_kwargs()
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             kwargs.update({'product':SubCategory.objects.all()})
         elif self.request.user.is_company_admin:
             kwargs.update({'company': Company.objects.get(contact_person=self.request.user),'product':SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())})
@@ -522,7 +522,7 @@ class ListSalesPerformance(LoginRequiredMixin,ListView):
     template_name = "admin/product/product_data_list.html"
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return ProductionAndSalesPerformance.objects.all()
         else:
             return ProductionAndSalesPerformance.objects.filter(company=self.request.user.get_company())
@@ -541,7 +541,7 @@ class CreateSalesPerformance(LoginRequiredMixin,CreateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreateSalesPerformance,self).get_form_kwargs()
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             kwargs.update({'product':SubCategory.objects.all(),'company':self.request.user.get_company()})
         elif self.request.user.is_company_admin:
             kwargs.update({'product':SubCategory.objects.filter(
@@ -586,7 +586,7 @@ class UpdateSalesPerformance(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(UpdateSalesPerformance,self).get_form_kwargs()
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             kwargs.update({'product':SubCategory.objects.all(),'company':self.request.user.get_company()})
         elif self.request.user.is_company_admin:
             kwargs.update({'product':SubCategory.objects.filter(
@@ -622,7 +622,7 @@ class ListPackaging(LoginRequiredMixin,ListView):
     template_name = "admin/product/product_data_list.html"
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return ProductPackaging.objects.all()
         else:
             return ProductPackaging.objects.filter(company=self.request.user.get_company())
@@ -646,7 +646,7 @@ class CreatePackaging(LoginRequiredMixin,CreateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreatePackaging,self).get_form_kwargs()
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             kwargs.update({'product':SubCategory.objects.all()})
         elif self.request.user.is_company_admin:
             kwargs.update({'product':SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())})
@@ -676,7 +676,7 @@ class UpdatePackaging(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(UpdatePackaging,self).get_form_kwargs()
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             kwargs.update({'product':SubCategory.objects.all()})
         elif self.request.user.is_company_admin:
             kwargs.update({'product':SubCategory.objects.filter(category_name__in=Company.objects.get(contact_person=self.request.user).category.all())})
@@ -708,7 +708,7 @@ class ListAnualInputNeed(LoginRequiredMixin,ListView):
     template_name = "admin/product/product_data_list.html"
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return AnnualInputNeed.objects.all()
         else:
             return AnnualInputNeed.objects.filter(company=self.request.user.get_company())
@@ -727,7 +727,7 @@ class CreateAnualInputNeed(LoginRequiredMixin,CreateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreateAnualInputNeed,self).get_form_kwargs()
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             kwargs.update({'product':SubCategory.objects.all(),'company':self.request.user.get_company()})
         elif self.request.user.is_company_admin:
             kwargs.update({'product':SubCategory.objects.filter(
@@ -767,7 +767,7 @@ class UpdateAnualInputNeed(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(UpdateAnualInputNeed,self).get_form_kwargs()
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             kwargs.update({'product':SubCategory.objects.all(),'company':self.request.user.get_company()})
         elif self.request.user.is_company_admin:
             kwargs.update({'product':SubCategory.objects.filter(
@@ -803,7 +803,7 @@ class ListInputDemandSupply(LoginRequiredMixin,ListView):
     template_name = "admin/product/product_data_list.html"
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return InputDemandSupply.objects.all()
         else:
             return InputDemandSupply.objects.filter(company=self.request.user.get_company())
@@ -822,7 +822,7 @@ class CreateInputDemandSupply(LoginRequiredMixin,CreateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreateInputDemandSupply,self).get_form_kwargs()
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             kwargs.update({'product':SubCategory.objects.all(),'company':self.request.user.get_company()})
         elif self.request.user.is_company_admin:
             kwargs.update({'product':SubCategory.objects.filter(
@@ -868,7 +868,7 @@ class UpdateInputDemandSupply(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(UpdateInputDemandSupply,self).get_form_kwargs()
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             kwargs.update({'product':SubCategory.objects.all(),'company':self.request.user.get_company()})
         elif self.request.user.is_company_admin:
             kwargs.update({'product':SubCategory.objects.filter(

@@ -270,7 +270,7 @@ def num_emp_chart(request):
         if company.main_category == "Pharmaceuticals":
             pharm_total += total
     labels = ['Food Sector','Beverage Sector','Phrmaceutical Sector']
-    data = [food_total,bev_total,pharm_total]
+    data = [0,food_total,bev_total,pharm_total]
     return JsonResponse({'labels':labels,'data':data,'colors':colors})
 
 def num_fem_emp_chart(request):

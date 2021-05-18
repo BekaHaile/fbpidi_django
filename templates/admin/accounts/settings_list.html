@@ -871,8 +871,9 @@
 							</div>
 							<div class="tab-pane fade " id="basic-tab2d">
 								<p class="card-title">Pharmaceutical Products Groups List</p>
+								{% if perms.admin_site.add_pharmaceuticalproduct %}
 								<a  href="#" data-toggle="modal" data-target="#phpg_list_form" class="float-right btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Product Group</a>
-
+								{%endif%}
 								<table class="table datatable-show-all">
 									<thead>
 										<tr>
@@ -919,8 +920,9 @@
 
 							<div class="tab-pane fade " id="basic-tab3d">
 								<p class="card-title">Therapeutic Groups List</p>
+								{% if perms.admin_site.add_therapeuticgroup %}
 								<a  href="#" data-toggle="modal" data-target="#tg_list_form" class="float-right btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Therapeutic Group</a>
-
+								{%endif%}
 								<table class="table datatable-show-all">
 									<thead>
 										<tr>
@@ -1148,8 +1150,9 @@
 							</div>
 							<div class="tab-pane fade " id="basic-tab4e">
 								<p class="card-title">Unit of Measurement List</p>
+								{% if perms.admin_site.add_uommaster %}
 								<a  href="#" data-toggle="modal" data-target="#uom_list_form" class="float-right btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add UOM</a>
-
+								{%endif%}
 								<table class="table datatable-show-all">
 									<thead>
 										<tr>

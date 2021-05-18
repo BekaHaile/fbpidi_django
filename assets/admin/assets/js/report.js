@@ -617,7 +617,7 @@
               $.ajax({
                 url: $inputshareChart.data("url"),
                 success: function (data) {
-                  print(data)
+                   
                   var ctx = $inputshareChart[0].getContext("2d");
                   new Chart(ctx, {
                     type: 'bar',

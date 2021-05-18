@@ -74,7 +74,7 @@
 								<td><a href="{%url 'admin:user_detail' pk=usr.id%}">@{{usr.username}}</a></td>
 								<td>
 									{%if usr.is_company_admin%}Contact Person{%elif usr.is_company_staff%}Industry Staff
-									{%elif usr.is_superuser%}Super Admin{%else%}Customer{%endif%}
+									{%elif usr.is_superuser%}Super Admin{%elif usr.is_fbpidi_staff%}FBPIDI Staff{%else%}Customer{%endif%}
 
 								</td>
 								<td class="text-center">

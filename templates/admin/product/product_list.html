@@ -25,7 +25,7 @@
 			<div class="header-elements">
 				
 				<div class="list-icons">
-					{%if not user.is_superuser%}
+					{%if perms.product.add_product%}
 					<a href="{% url 'admin:create_product'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Varayti</a>
 					{%endif%}

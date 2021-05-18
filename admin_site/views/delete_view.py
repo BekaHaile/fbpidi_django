@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views.generic import View, ListView, DetailView, CreateView, UpdateView
-
+from django.contrib.auth.models import Group
 
 # 
 from product.models import *
@@ -420,6 +420,12 @@ class DeleteAllView(LoginRequiredMixin,View):
                 tg.delete()
                 messages.success(self.request, "Therapeutic Group Deleted Successfully!")
                 return redirect("admin:settings")  
+            elif self.kwargs['model_name'] == 'Group':
+                tg = Group.objects.get(id = self.kwargs['id'])
+                record_activity(self.request.user,"Group","User group data Deleted",tg.id)
+                tg.delete()
+                messages.success(self.request, "User Group Deleted Successfully!")
+                return redirect("admin:view_group")  
             else:
                 return redirect("admin:error_404") 
         except Exception as e:

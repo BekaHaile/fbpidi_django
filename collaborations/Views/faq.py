@@ -55,7 +55,7 @@ class CreateFaqs(LoginRequiredMixin,View):
 			faqs = form.save(commit=False)
 			if self.request.user.is_company_admin:
 				faqs.status = "PENDDING"
-			if self.request.user.is_superuser:
+			if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
 				faqs.status = "APPROVED"
 			faqs.created_by = self.request.user
 			faqs.company = self.request.user.get_company()
@@ -94,7 +94,7 @@ class FaqsView(LoginRequiredMixin,View):
 @method_decorator(decorators,name='dispatch')
 class FaqsList(LoginRequiredMixin,View):
 	def get(self,*args,**kwargs):
-		if self.request.user.is_superuser:
+		if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
 			faqs=Faqs.objects.all()
 			pending = Faqs.objects.filter(status="PENDDING").count()
 			

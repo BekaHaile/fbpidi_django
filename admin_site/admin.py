@@ -11,7 +11,7 @@ from accounts.views import (CompanyAdminSignUpView,UserListView,
                             UserLogView,SuspendUser,
                             UserDetailView,MyProfileView,
                             CreateUserView,CreateCompanyStaff,
-                            GroupView,GroupList)
+                            GroupView,GroupList,GroupUpdateView)
 # views from admin_site app
 from admin_site.views.views import (AdminIndex,  Polls, CreatePoll, AddChoice,
                         EditPoll,EditChoice,  DetailPoll)
@@ -161,6 +161,7 @@ class CustomAdminSite(admin.AdminSite):
             path("user_audit/",wrap(UserLogView.as_view()),name="useraudit"),
             path("group_list/",wrap(GroupList.as_view()),name="view_group"),
             path("manage_group/",wrap(GroupView.as_view()),name="create_group"),
+            path("group-update-view/<pk>/",wrap(GroupUpdateView.as_view()),name="update_group"),
             path("settings-page/",wrap(AllSettingsPage.as_view()),name='settings'),
             path('create-checklist/',wrap(CreateCompanyDropdownsMaster.as_view()),name='create_checklist'),
             path('update-checklist/<pk>/',wrap(UpdateCompanyDropdownsMaster.as_view()),name='update_checklist'),

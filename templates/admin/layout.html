@@ -165,28 +165,35 @@
 								class="icon-menu" title="Forms"></i>
 						</li>
 
-						
 						<li class="nav-item nav-item-submenu {%block category_menu%}{%endblock%}">
 							<a href="#" class="nav-link"><i class="icon-cabinet"></i> <span>Sectors</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
+								{%if perms.admin_site.view_category%}
 								<li class="nav-item">
 									<a href="{%url 'admin:categories'%}" class="nav-link"><i class="icon-drawer"></i>
 										<span>Sub Sector</span></a>
 								</li>
+								{%endif%}
+								{%if perms.product.view_subcategory%}
 								<li class="nav-item">
 									<a href="{%url 'admin:sub_categories'%}" class="nav-link"><i class="icon-folder6"></i>
 										<span>Products</span></a>
 								</li>
+								{%endif%}
+								{%if perms.product.view_brand%}
 								<li class="nav-item">
 									<a href="{%url 'admin:brands'%}" class="nav-link "><i class="mi-branding-watermark"></i>
 										<span>Product Brands</span></a>
 								</li> 
+								{%endif%}
 							</ul>
 						</li>
+						{%if perms.product.view_product%}
 						<li class="nav-item">
 							<a href="{%url 'admin:admin_products'%}" class="nav-link {%block varayti%}{%endblock%}"><i
 									class="icon-stack"></i> <span>Varayti</span></a>
 						</li>
+						{%endif%}
 						{% if perms.product.view_productinquiry %}
 						<li class="nav-item">
 							<a href="{%url 'admin:admin_inquiry_list'%}" class="nav-link {%block inquiry%}{%endblock%}"><i
@@ -224,13 +231,15 @@
 								 
 							</ul>
 						</li>
-						
+
+						{%if perms.collaborations.view_research%}
 						<li class="nav-item nav-item">
 							<a href="{%url 'admin:research_list' %}" class="nav-link {%block research_data%}{%endblock%}"><i class="mi-youtube-searched-for"></i> 
 								<span>Research</span></a>
 								
 						</li> 
-						{% if user.is_superuser %}
+						{%endif%}
+						{% if user.is_superuser or user.is_fbpidi_staff %}
 						<li class="nav-item nav-item">
 							<a href="{%url 'admin:forum_list' %}" class="nav-link {%block forum%}{%endblock%}"><i class="mi-youtube-searched-for"></i> 
 								<span>Forums</span></a>
@@ -238,91 +247,75 @@
 						</li> 
 						{%endif%}
 						 
-						
-						<!-- <li class="nav-item nav-item-submenu">
-							<a href="" class="nav-link"><i >F</i> <span>Forums</span></a>
-							<ul class="nav nav-group-sub" data-submenu-title="Form components">
-								
-								<li class="nav-item">
-									<a href="{%url 'admin:forum_list'%}" class="nav-link">
-										<i >f</i>
-										<span>Forum Questions</span>
-									</a>
-								</li>
-
-								<li class="nav-item">
-									<a href="{%url 'admin:forum_comment_list'%}" class="nav-link">
-										<i class="fas fa-align-left-o">f</i>
-										<span>Forum Comments</span>
-									</a>
-								</li>
-
-								<li class="nav-item">
-									<a href="{%url 'admin:comment_replay_list' %}" class="nav-link">
-										<i >f</i>
-										<span>Comment Replays</span>
-									</a>
-								</li>
-							</ul>
-						</li> -->
-						
-						
 						<li class="nav-item nav-item-submenu {%block collaborations%}{%endblock%} ">
 							<a href="#" class="nav-link"><i class="icon-collaboration"></i> <span>Collaborations</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
-								
+								{%if perms.collaborations.view_news%}
 								<li class="nav-item">
 									<a href="{%url 'admin:news_list'%}" class="nav-link">
 										<i class="fa fa-newspaper-o"></i>
 										<span>News</span>
 									</a>
 								</li>
+								{%endif%}
+								{%if perms.collaborations.view_announcement%}
 								<li class="nav-item">
 									<a href="{%url 'admin:anounce_list' %}" class="nav-link"><i class="fa fa-bullhorn"></i>
 										<span>Announcement</span></a>
 								</li>
+								{%endif%}
+								{%if perms.collaborations.view_event%}
 								<li class="nav-item">
 									<a href="{%url 'admin:admin_companyevent_list' %}" class="nav-link"><i class="fa fa-calendar"></i>
 										<span>Events</span></a>
 								</li>
-								
+								{%endif%}
+								{%if perms.collaborations.view_blog%}
 								<li class="nav-item">
 									<a href="{%url 'admin:admin_Blogs'%}" class="nav-link">
 										<i class="icon-blog"></i>
 										<span>Blogs</span>
 									</a>
 								</li>
+								{%endif%}
+								{%if perms.collaborations.view_pollsquestion%}
 								<li class="nav-item">
 									<a href="{%url 'admin:admin_polls'%}" class="nav-link">
 										<i class="icon-clipboard3"></i>
 										<span>Polls</span>										 
 									</a>
 								</li>
-								
+								{%endif%}
+								{%if perms.collaborations.view_tender%}
             					<li class="nav-item">
 									<a href="{%url 'admin:tenders' %}" class="nav-link"><i class="fa fa-gavel"></i>
 										<span>Tenders</span></a>
 
 								</li>
-								   
+								{%endif%}
+								{%if perms.collaborations.view_vacancy%}
 								<li class="nav-item">
 
 									<a href="{%url 'admin:Job_list' %}" class="nav-link"><i class="icon-eye"></i>
 										<span>Vacancy</span></a>
               					</li>
+								{%endif%}
+								{%if perms.collaborations.view_faqs%}
 								<li class="nav-item">
 									<a href="{%url 'admin:admin_Faqs'%}" class="nav-link">
 										<i class="icon-help"></i>
 										<span>Faqs </span>										 
 									</a>
 								</li>
+								{%endif%}
 							</ul>
 						</li>
-						 
+						{%if perms.collaborations.view_document%}
 						<li class="nav-item ">
 							<a href = "{% url 'admin:list_document_by_category'  option='all' %}" class="nav-link"><i class="fa fa-folder "></i><span>Documents</span></a>
 						</li>
-						{%if user.is_superuser%}
+						{%endif%}
+						{%if user.is_superuser or user.is_fbpidi_staff%}
 						<li class="nav-item">
 							<a href="{%url 'admin:companies'%}" class="nav-link {%block industries%}{%endblock%}">
 								<i class="icon-office"></i>
@@ -352,10 +345,12 @@
 								<i class="icon-gallery"></i><span>Slider Images</span></a>
 						</li>
 						{%endif%}
+						{%if perms.company.view_investmentproject%}
 						<li class="nav-item">
 							<a href="{%url 'admin:project_list' %}" class="nav-link {%block projects%}{%endblock%}">
 								<i class="icon-task "></i><span>Projects</span></a>
 						</li>
+						{%endif%}
 						 <li class="nav-item-header">
 							<div class="text-uppercase font-size-xs line-height-xs">Account</div> <i class="icon-menu"
 								title="Forms"></i>
@@ -363,14 +358,18 @@
 						 <li class="nav-item nav-item-submenu {%block accounts%}{%endblock%}">
 							<a href="#" class="nav-link"><i class="icon-users"></i> <span>Users</span></a>
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
+								{%if perms.accounts.view_userprofile%}
 								<li class="nav-item">
 									<a href="{%url 'admin:users_list'%}" class="nav-link"><i class="icon-users"></i>
 										<span>Users</span></a>
 								</li>
+								{%endif%}
+								{%if perms.auth.view_group or user.is_superuser or user.is_company_admin%}
 								<li class="nav-item">
 									<a href="{% url 'admin:view_group'%}" class="nav-link"><i class="icon-users4"></i>
 										<span>Group</span></a>
 								</li>
+								{%endif%}
 								{%if user.is_superuser%}
 								<li class="nav-item">
 									<a href="{%url 'admin:useraudit' %}" class="nav-link"><i class="icon-archive"></i>
@@ -414,8 +413,8 @@
 			<div class="page-header page-header-light">
 				<div class="page-header-content header-elements-md-inline">
 					<div class="page-title d-flex">
-						
-						<h4><i class="icon-arrow-left52 mr-2"></i>
+						<!-- <i class="icon-arrow-left52 mr-2"></i> -->
+						<h4>
 							<span class="font-weight-semibold">{%block pagename%}Home - Dashboard{%endblock%} </span>
 						</h4>
 						

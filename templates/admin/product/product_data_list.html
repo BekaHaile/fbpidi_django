@@ -52,7 +52,7 @@ Product Packaging Data
 			<div class="header-elements">
 				
 				<div class="list-icons">
-					{%if not user.is_superuser%}
+					{%if not user.is_superuser and perms.product.add_productioncapacity%}
 					<a href="{%url 'admin:create_production_capacity'%}" class="btn bg-teal btn-sm rounded-round">
 						<i class="icon-add mr-2"></i>Add New Data</a>
 					{%endif%}
@@ -146,7 +146,7 @@ Product Packaging Data
 					<td>{{cat.product.sub_category_name}}</td>
 					<td>{{cat.input_name}}</td>
 					<td>
-						{{cat.amoun|intcommat}} {{cat.product.uom.name|upper}}
+						{{cat.amount|intcomma}} {{cat.product.uom.name|upper}}
 					</td>
 					<td>{{cat.local_input}}%-{{cat.import_input}}%</td>
 					<td class="text-center">
@@ -182,7 +182,7 @@ Product Packaging Data
 			<h5 class="card-title">Anual Product Input Demand and Supply Data</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					{%if not user.is_superuser%}
+					{%if not user.is_superuser and perms.product.add_inputdemandsupply%}
 					<a href="{%url 'admin:create_demand_supply'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Data</a>
 					{%endif%}
@@ -244,7 +244,7 @@ Product Packaging Data
 			<h5 class="card-title">Product Production & Sales Performance</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					{%if not user.is_superuser%}
+					{%if not user.is_superuser and perms.product.add_productionandsalesperformance%}
 					<a href="{%url 'admin:create_sales_performance'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Data</a>
 					{%endif%}
@@ -308,7 +308,7 @@ Product Packaging Data
 			<h5 class="card-title">Product Packaging Data</h5>
 			<div class="header-elements">
 				<div class="list-icons">
-					{%if not user.is_superuser%}
+					{%if not user.is_superuser and perms.product.add_productpackaging%}
 					<a href="{%url 'admin:create_packaging'%}" class="btn bg-teal btn-sm rounded-round"><i
 							class="icon-add mr-2"></i>Add New Data</a>
 					{%endif%}
