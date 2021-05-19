@@ -52,7 +52,7 @@ class chat_ajax_handler(APIView):
         #get all unread messages(only), these are new unread messages other than those that are loaded when the user opens the chat layout page. like online chats from the other user
         print (" a chat request from",request.user)
         other_user = UserProfile.objects.get(username = request.query_params ['name'])
-        q = Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False)  ) 
+        q = Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False) & Q(is_active = True)  ) 
         unread_messages = ChatMessages.objects.filter(q)
         for m in unread_messages:
             m.seen = True
@@ -83,11 +83,11 @@ class chat_with(APIView):
             
             messages_list = []
 
-            q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) ) | 
-                    Q( Q(sender = request.user) & Q(receiver = other_user) ) 
-                )
+            q =  Q( Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(is_active = True)  ) | 
+                    Q( Q(sender = request.user) & Q(receiver = other_user) & Q(is_active = True) ) 
+                 )
             query_messages = ChatMessages.objects.filter(q).order_by("-created_date")
-            unread = query_messages.filter( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False))
+            unread = query_messages.filter( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False) & Q(is_active = True))
             for m in unread:
                 m.seen = True
                 m.save()
@@ -117,7 +117,7 @@ class list_unread_messages(APIView):
 
         def get(self, request): 
             try:       
-                all_unread_messages = ChatMessages.objects.filter(receiver = request.user, seen =False).order_by('-created_date')        
+                all_unread_messages = ChatMessages.objects.filter(receiver = request.user, seen =False, is_active = True).order_by('-created_date')        
                 sender_names = []
                 grouped_unread_messages = []
                 for m in all_unread_messages:
@@ -142,9 +142,9 @@ class list_unread_messages(APIView):
 def get_grouped_chats(user, excluded_user = None):
         if excluded_user !=None:
             to_exclude = Q( Q(receiver = excluded_user) | Q(sender = excluded_user))
-            other_messages = ChatMessages.objects.filter( Q(receiver = user) | Q(sender = user)).exclude(to_exclude).order_by('-created_date')
+            other_messages = ChatMessages.objects.filter( Q(Q(receiver = user) | Q(sender = user)) & Q(is_active = True) ).exclude(to_exclude).order_by('-created_date')
         else:
-            other_messages = ChatMessages.objects.filter( Q(receiver = user) | Q(sender = user)).order_by('-created_date')
+            other_messages = ChatMessages.objects.filter( Q(Q(receiver = user) | Q(sender = user)) & Q(is_active = True) ).order_by('-created_date')
             
         other_user_names = []
         grouped_other_messages = []

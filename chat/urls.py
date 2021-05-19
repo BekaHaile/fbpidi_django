@@ -1,5 +1,5 @@
 from django.urls import include, path
-from .views import  chat_ajax_handler, chat_with, CustomerChatList, check_username, list_unread_messages
+from .views import  chat_ajax_handler, chat_with, delete_chat, CustomerChatList, check_username, list_unread_messages
 
 urlpatterns = [
     path('',list_unread_messages, name = "list_unread_messages"),
@@ -7,5 +7,6 @@ urlpatterns = [
     path('with/<str:reciever_name>/', chat_with, name= "chat_with"),
     path('customer_chat_list/', CustomerChatList.as_view(), name = "customer_chat_list" ),
     path('check_user/<str:username>/', check_username, name ="check_chat_username"),
+    path("delete_chat/", delete_chat, name = "delete_chat"),
       
 ]

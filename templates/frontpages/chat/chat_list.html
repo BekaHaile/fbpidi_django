@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <!-- Action toolbar -->
+    <!-- Compose modal -->
     <div id="compose_modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -30,23 +30,29 @@
                                         
                             <div style="margin-bottom: 10px;" class="row">
                                 <h5> Please enter username of the user you want to chat :</h5>
-                                <span style = "color: rgb(199, 89, 89);" id = "error-area"></span>
+                               
                             </div>
-                            <div style="margin-right: 5px;" class="row">
-
-                                <input id = "chat_to" class="form-control" placeholder="Write a Username..." style = "padding: 5px;" type="text" name = "chat_to" value="">
+                            <div style="margin-right: 5px; " class="mb-3 row">
+                                <input id = "chat_to" autocomplete="off" style = "padding: 5px;" type="text" class="form form-control" name = "chat_to" value="" placeholder="Write username ...">
                             </div>
+                            <div class="dropdown-content-body dropdown-scrollable">
+                                <span class="mb-2" style = "color: rgb(199, 89, 89);" id = "related_names"></span>
+                                <ul id = "list_of_users" style = "width: 100%;" class="media-list"> 
+                                </ul>
+                                <span class="mt-2" style = "color: rgb(199, 89, 89);" id = "error-area"></span>
+                            </div>
+                           
                         </div>						
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                        <button type="submit" onclick="chat_with_user()" style = "color:white" class="btn bg-primary">Chat</button>
+                        <button type="submit" id="chat_btn" onclick="chat_with_user()"  style = "color:white" class="btn bg-primary">Chat</button>
                     </div>
             </div>
         </div>
     </div>
-    <!-- /action toolbar -->
+    <!-- /Compose modal -->
 
 
     <!-- Table -->
@@ -126,6 +132,105 @@
 </div>
 
 			<input id = "user_name" type="hidden" value="{{user.username}}">
+
+            <script>
+                var chat_input = document.getElementById('chat_to')
+                var chat_btn =document.getElementById('chat_btn')
+                chat_btn.disabled = true
+                chat_input.addEventListener("input", 
+                
+                    function check_username()
+                        {
+                            var receiver = this.value;
+                            var error_area = document.getElementById("error-area")
+                            var related_name_text_field = document.getElementById("related_names")
+                            related_name_text_field.innerHTML = "Related Usernames"
+                            error_area.innerHTML=""
+                            fetch( "/chat/check_user/"+receiver+"/").then(e=>e.json()).then(result =>
+                            {   
+                                if (result['found'] == true){
+                                    this.style['color'] = 'green'
+                                    document.getElementById("chat_btn").disabled = false
+                                    related_name_text_field.style['color'] = 'green' 
+                                }
+                                else{
+                                    related_name_text_field.style['color'] = 'red'
+                                    related = result['related']
+                                        if( related.length > 0){
+                                            var error_message =" "
+                                            document.getElementById('list_of_users').innerHTML = "";
+                                            for (user of related){
+                                             
+                                                append_user(user)
+                                            }
+                                        }
+                                        else{
+                                            error_message = "User with username related with '"+ receiver+"' does not exist!";
+                                            related_name_text_field.style['color'] = 'red'
+                                        }
+                                    document.getElementById("chat_btn").disabled = true
+                                    error_area.style['color'] = "red"
+                                    error_area.innerHTML = error_message
+                                    this.style['color'] = 'red'
+                                    
+                                } 
+                            });    
+                        }
+                
+                );
+        
+                function append_user(user){
+                   
+                   var li_item = document.createElement('li');
+                   li_item.id = user.id;
+                   var li_card_item = document.createElement('div');
+                   li_card_item.className = "card card-body "
+                   li_card_item.style['padding']="2px";
+                   li_card_item.style['margin']="1px 2px ";
+                       var img_div = document.createElement('div');
+                           var image_anchor = document.createElement('a');
+                               var image_item = document.createElement('img');
+           
+                           var chat_div = document.createElement('div');
+                                   var name_anch = document.createElement('a');
+                               
+                       var role_area = document.createElement('small');           
+                         
+               //    ######################## setting values
+                           image_item.src = user.p_img;
+                           image_item.className = "rounded-circle mr-2"
+                           image_item.width = "30";
+                           image_item.height = "30";
+                          
+                       image_anchor.href = "/chat/with/"+user.username+"/";
+                       image_anchor.style['display'] = 'inline'
+                       image_anchor.appendChild(image_item);
+           
+                        img_div.style['display'] ='inline'
+                        img_div.appendChild(image_anchor)
+                        name_anch.href = "/chat/with/"+user.username+"/";
+                        name_anch.target = "blank";
+                        name_anch.className = "mr-3";
+                        name_anch.textContent = user.first_name+ " "+user.last_name+" ("+user.username+")";
+                       
+                   img_div.appendChild(name_anch) 
+                   
+                   role_area.textContent = user.role;
+                   role_area.className = "text-muted float-right font-size-sm mt-1 mr-1 mb-1";
+           
+                   chat_div.className = "media-body";
+                   chat_div.appendChild(role_area);
+                   
+                   li_card_item.appendChild(img_div);
+                   li_card_item.appendChild(chat_div)
+                   li_item.className = "media";
+                   li_item.appendChild(li_card_item);
+                   ul_item =document.getElementById('list_of_users')         
+                   ul_item.appendChild(li_item);
+                
+        
+               }
+            </script>
 
 			<script>
 				

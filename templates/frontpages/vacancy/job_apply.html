@@ -26,7 +26,7 @@
 					<div class="col-xl-3 col-lg-12 col-md-12">
 						<div class="card">
 							<div class="card-header">
-								<h3 class="card-title">{% trans "Categories" %}</h3>
+								<h3 class="card-title"><b>{% trans "Categories" %}</b></h3>
 							</div>
 							{%for cat in category%}
 							<div class="card-body p-0">
@@ -34,8 +34,8 @@
 									<div class="item-list">
 										<ul class="list-group mb-0">
 											<li class="list-group-item">
-												<a href="{%url 'vacancy_search' id=cat.id%}" class="text-dark">
-													 {{cat}}
+												<a href="{%url 'vacancy_search' id=cat.id%}" class="text-dark" title=" {{cat}}">
+													 {{cat|safe|truncatechars_html:25}}
 													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">{{cat.countjobs}}</span>
 												</a>
 											</li>
@@ -54,11 +54,12 @@
 								<h3 class="card-title">{% trans "Job application form" %}</h3>
 
 							</div>
-							{% if messages %}
-								{% for message in messages %}
+							{% if job.errors %}
+								<p>Re-Check The Follwoing Fields!  </p>
+								{% for error in job.errors %}
 								<div class="alert alert-warning" role="alert">
 									<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-									<span class="font-weight-semibold">{{message}}</span>
+									<span class="font-weight-semibold">{{error}} </span>
 								</div>
 
 								{% endfor %}
@@ -156,33 +157,7 @@
 						
 		<!--/User dashboard-->
 
-		<!--Newsletter-->
-		<section class="sptb bg-white border-top">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-7 col-xl-6 col-md-12">
-						<div class="sub-newsletter d-sm-flex">
-							<i class="fa fa-envelope fs-22 mr-2"></i>
-							<div>
-								<h3 class="mb-1">Subscribe To Our Newsletter</h3>
-								<p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-5 col-xl-6 col-md-12 mt-4 mt-lg-0">
-						<div class="input-group sub-input mt-1">
-							<input type="text" class="form-control input-lg" placeholder="Enter your Email">
-							<div class="input-group-append ">
-								<button type="button" class="btn btn-secondary btn-lg br-tr-3 br-br-3 pl-5 pr-5">
-									Subscribe
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<!--Newsletter-->
+		
 <script>
 	$(document).ready(function () {
 		$('#summernote').summernote();
