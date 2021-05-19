@@ -430,7 +430,7 @@ def input_share_chart(request):
     colors = []
     local_share = 0
     for product in SubCategory.objects.all():
-        ann_inp_need = AnnualInputNeed.objects.filter(product=product)
+        ann_inp_need = AnnualInputNeed.objects.filter(product=product).order_by('product')
         if ann_inp_need.exists():
             for aup in ann_inp_need:
                 local_share += aup.local_input

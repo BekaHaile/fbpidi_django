@@ -137,7 +137,7 @@
                   var ctx = $categoryChart[0].getContext("2d");
                    
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: 'doughnut',
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -297,7 +297,7 @@
                   var ctx = $changecapitalutilChart[0].getContext("2d");
                    
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: 'line',
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -360,7 +360,7 @@
         
                   var ctx = $gvpChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: 'line',
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -558,7 +558,7 @@
         
                   var ctx = $numFemChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: 'doughnut',
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -589,7 +589,7 @@
         
                   var ctx = $avlinputChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: 'line',
                     data: {
                       labels: data.labels,
                       datasets: [{
