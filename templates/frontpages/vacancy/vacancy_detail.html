@@ -37,8 +37,8 @@
 									<div class="item-list">
 										<ul class="list-group mb-0">
 											<li class="list-group-item">
-												<a href="{%url 'vacancy_search' id=cat.id%}" class="text-dark">
-													 {{cat}}
+												<a href="{%url 'vacancy_search' id=cat.id%}" class="text-dark" title="{{cat|safe}}">
+													{{cat|safe|truncatechars_html:25}}
 													<span class="badgetext badge badge-pill badge-light mb-0 mt-1">{{cat.countjobs}}</span>
 												</a>
 											</li>

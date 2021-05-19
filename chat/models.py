@@ -12,7 +12,7 @@ class ChatMessages(models.Model):
     seen = models.BooleanField(default = False)
     created_date = models.DateTimeField(auto_now_add=True)
 
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     reserve_attr0 = models.CharField(max_length=255, blank = True, null = True)
     reserve_attr1 = models.CharField(max_length=255, blank = True, null = True)
     reserve_attr2 = models.CharField(max_length=255, blank = True, null = True)
@@ -20,9 +20,9 @@ class ChatMessages(models.Model):
     
 
     def count_unread_chats(user):
-        return ChatMessages.objects.filter(receiver = user, seen =False).count()
+        return ChatMessages.objects.filter(receiver = user, seen =False, is_active = True).count()
 
     def get_unread_from_sender(sender,user):
-        unread_messages = ChatMessages.objects.filter(sender = sender, receiver=user, seen =False).order_by('-created_date')
+        unread_messages = ChatMessages.objects.filter(sender = sender, receiver=user, seen =False, is_active = True).order_by('-created_date')
         return {'count':unread_messages.count(), 'last_message':unread_messages.first()}
     

@@ -11,6 +11,8 @@ JOB_CHOICES=[ ('', 'Select Employment Type'),
             ('Permanent','Permanent'),
             ('Contract','Contract')]
 
+allowed_image_extensions = ['png','jpg','jpeg','webp',]
+
 
 class PollsQuestion(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
@@ -342,8 +344,8 @@ class JobApplication(models.Model):
     status = models.CharField(max_length=500,null=False)
     bio = models.TextField(null=False)
     experiance = models.IntegerField(null=False)
-    cv = models.FileField(upload_to="cv/", max_length=254,help_text="only pdf,jpg,doc,docx files, Max size 10MB")
-    documents = models.FileField(upload_to="documents/", max_length=254,help_text="pdf, jpg,doc,docx files, Max size 10MB")
+    cv = models.FileField(upload_to="cv/", validators=[FileExtensionValidator(allowed_extensions=allowed_image_extensions)],help_text="only pdf,jpg,doc,docx files, Max size 10MB")
+    documents = models.FileField(upload_to="documents/", help_text="pdf, jpg,doc,docx files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     is_active = models.BooleanField(default=False)

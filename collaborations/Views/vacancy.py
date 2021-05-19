@@ -266,7 +266,7 @@ class CreateApplication(LoginRequiredMixin,View):
 
 	def get(self,*args,**kwargs):
 		try:
-			vacancy=Vacancy.objects.get(id=self.kwargs['id'] ,closed=False)
+			vacancy=Vacancy.objects.get(id=self.kwargs['id'] )
 			if JobApplication.objects.filter(vacancy=vacancy, created_by=self.request.user).exists():
 				messages.warning(self.request, "You can't apply to the same vacancy Twice")
 				return redirect("vacancy")
@@ -283,15 +283,20 @@ class CreateApplication(LoginRequiredMixin,View):
 	def post(self,*args,**kwargs):
 		try:
 			form = CreateJobApplicationForm(self.request.POST,self.request.FILES)
+			vacancy = Vacancy.objects.get(id=self.kwargs['id'])
 			if form.is_valid():
 				job=form.save(commit=False)
 				job.created_by=self.request.user
-				job.vacancy = Vacancy.objects.get(id=self.kwargs['id'])
+				job.vacancy = vacancy
 				job.save()
 				return redirect("vacancy")
 			else:
+				print("!!!!! ",form.errors)
 				messages.warning(self.request, "Unsupported file type detected, the supported files are pdf, jpg, png, doc and docx! ")
-				return redirect("vacancy")
+				jobcategory = JobCategory.objects.all()
+				template_name="frontpages/vacancy/job_apply.html"
+				context={'job':form,'vacancy':vacancy,'category':jobcategory}
+				return render(self.request, template_name,context) 
 		except Exception as e:
 			print("@@@@@@@@@@@@@ Exception at CreateApplication post  ",e )
 			return redirect("vacancy")
