@@ -35,23 +35,43 @@
 
 	{%for group in groups%}
 	<div class="col-lg-4">
-		<div class="card card-body border-top-info">
-			<div class="text-center">
-				<h6 class="font-weight-semibold mb-0">{{group.name}}</h6>
-				<p class="mb-3 text-muted">Click the Expand icon and see list of roles</p>
-
-				<a href="#collapse-icon{{forloop.counter}}" class="text-default collapsed" data-toggle="collapse" aria-expanded="false">
-					<i class="icon-circle-down2"></i>
-				</a>
+		<div class="card">
+			<div class="card-header header-elements-inline">
+				<h5 class="card-title">{{group.name}}</h5>
+				<div class="header-elements">
+					
+					<div class="list-icons">
+						{%if perms.auth.change_group%}
+						<a href="{% url 'admin:update_group' pk=group.id%}" class=""><i
+								class="icon-pencil mr-2"></i></a>
+						{%endif%}
+						{%if perms.auth.delete_group%}
+						<a href="{% url 'admin:delete' model_name='Group' id=group.id%}" class=""><i
+							style="color: red;"
+								class="icon-trash mr-2"></i></a>
+						{%endif%}
+					</div>
+	
+				</div>
 			</div>
-
-			<div class="collapse" id="collapse-icon{{forloop.counter}}" >
-				<div class="mt-3">
-					<ol>
-						{%for role in group.permissions.all%}
-						<li>{{role.name|upper}}</li>
-						{%endfor%}
-					</ol>
+			 
+			<div class=" card-body border-top-info">
+				<div class="text-center">
+					<p class="mb-3 text-muted">Click the Expand icon and see list of roles</p>
+	
+					<a href="#collapse-icon{{forloop.counter}}" class="text-default collapsed" data-toggle="collapse" aria-expanded="false">
+						<i class="icon-circle-down2"></i>
+					</a>
+				</div>
+	
+				<div class="collapse" id="collapse-icon{{forloop.counter}}" >
+					<div class="mt-3">
+						<ol>
+							{%for role in group.permissions.all%}
+							<li>{{role.name|upper}}</li>
+							{%endfor%}
+						</ol>
+					</div>
 				</div>
 			</div>
 		</div>

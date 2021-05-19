@@ -135,9 +135,13 @@
 
 										<div class="form-group">
 											<div class="row">
-												<div class="col-md-12">
+												<div class="col-md-6">
 													<label>{{form.email.label}}</label>
 													{{form.email}}
+												</div>
+												<div class="col-md-6">
+													<label>{{form.groups.label}}</label>
+													{{form.groups}}
 												</div>
 											</div>
 										</div>
@@ -153,7 +157,7 @@
 												<div class="col-md-6">
 													<label>{{form.profile_image.label}}</label>
 													{{form.profile_image}}
-				                                    <span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size 2Mb</span>
+				                                    <span class="form-text text-muted">{{form.profile_image.help_text}}</span>
 												</div>
 												
 				                        	</div>

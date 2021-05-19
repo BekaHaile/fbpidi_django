@@ -34,16 +34,18 @@
 						<h5 class="card-title"> </h5>
 						<div class="header-elements">
 							<div class="list-icons">
+								{%if perms.company.change_investmentproject%}
 								<a href="{%url 'admin:mark_complete' pk=object.id%}" class="btn btn-primary text-default">
 									{%if object.project_complete == False%}
 									<i class="icon-check2 mr-2"></i>Mark Complete
 									{%else%}<i class="icon-check2 mr-2"></i>Mark InComplete
 									{%endif%}
 								</a>	
-								 
+								{%endif%}
+								{%if perms.company.view_investmentproject%}
 								<a target="_blank" href="{%url 'admin:get_project_pdf' pk=object.id%}" class="btn btn-primary text-default">
 									<i class="icon-file-pdf mr-2"></i>Export PDF</a>	
-								 
+								{%endif%}
 							</div>
 
 						</div>
@@ -68,7 +70,7 @@
 										{%csrf_token%}
 										{{form|crispy}}
 										<div>
-											<button id="submit_update" type="submit" class="btn btn-success btn-md">Save Chages <i class="fa fa-mark"></i></button>
+											<button id="submit_update" {%if not perms.company.change_investmentproject%}disabled{%endif%}  type="submit" class="btn btn-success btn-md">Save Chages <i class="fa fa-mark"></i></button>
 										</div>
 									</form>
 								</div>

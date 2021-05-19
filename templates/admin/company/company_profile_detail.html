@@ -52,6 +52,7 @@
 						<h5 class="card-title"> </h5>
 						<div class="header-elements">
 							<div class="list-icons">
+								{% if perms.company.change_company %}
 								<a href="#" data-toggle="modal" data-target="#rating_form" class="btn btn-light btn-icon">
 									<i class="icon-star-full2"></i> Rate
 								</a>
@@ -62,9 +63,11 @@
 									<i class="icon-checkmark3 mr-2"></i> Activate
 									{%endif%}
 								</a>
+								{%endif%}
+								{%if perms.company.view_company%}
 								<a target="_blank" href="{%url 'admin:get_company_pdf' pk=object.id%}" class="btn btn-light btn-icon">
 									<i class="icon-file-pdf mr-2"></i>Export PDF</a>	
-								 
+								 {%endif%}
 							</div>
 
 						</div>

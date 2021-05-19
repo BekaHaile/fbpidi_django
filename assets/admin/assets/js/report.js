@@ -14,7 +14,7 @@
 				  labels: data.labels,
 				  datasets: [{
 					label: 'Companies',
-					backgroundColor: [ '#03e8fc', '#F44336', '#6ceb87', '#FF9800', '#4CAF50'],
+					backgroundColor: data.colors,
 					data: data.data
 				  }]          
 				},
@@ -46,7 +46,7 @@
 				  labels: data.labels,
 				  datasets: [{
 					label: 'Companies',
-					backgroundColor: [ '#2196F3;', '#F44336', '#FF7043', '#FF9800', '#4CAF50','#93f78f','#a87132','#8442db',],
+					backgroundColor: data.colors,
 					data: data.data
 				  }]          
 				},
@@ -78,7 +78,7 @@
 					labels: data.labels,
 					datasets: [{
 					label: 'Industries',
-					backgroundColor: [ '#2196F3;', '#F44336', '#FF7043', '#FF9800', '#4CAF50'],
+					backgroundColor: data.colors,
 					data: data.data
 					}]          
 				},
@@ -137,12 +137,12 @@
                   var ctx = $categoryChart[0].getContext("2d");
                    
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: 'doughnut',
                     data: {
                       labels: data.labels,
                       datasets: [{
                         label: 'Industries',
-                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -174,7 +174,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: 'Industries',
-                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -206,7 +206,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: 'Investment Capital',
-                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -238,7 +238,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: 'Production Capacity',
-                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -270,7 +270,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: 'Capital Utilization',
-                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -297,12 +297,12 @@
                   var ctx = $changecapitalutilChart[0].getContext("2d");
                    
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: 'line',
                     data: {
                       labels: data.labels,
                       datasets: [{
                         label: 'Chnage in Capital Utilization',
-                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0','#a87132','#93f78f'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -334,7 +334,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: 'Average Extraction Rate',
-                        backgroundColor: [ '#13a3eb;', '#eb6b34', '#4a9150', '#725ee0'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -360,20 +360,20 @@
         
                   var ctx = $gvpChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: 'line',
                     data: {
                       labels: data.labels,
                       datasets: [{
                         label: data.year,
-                        backgroundColor: [ '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.this_year
                       },{
                         label: data.year-1,
-                        backgroundColor: [ '#f26411', '#46db14', '#4a9150', '#725ee0','#94071f'],
+                        backgroundColor: data.colors1,
                         data: data.last_year
                       },{
                         label: data.year-2,
-                        backgroundColor: [ '#46db14', '#eb6b34', '#4a9150', '#46db14','#f26411'],
+                        backgroundColor: data.colors2,
                         data: data.prev_year
                       }]          
                     },
@@ -404,7 +404,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: "Employees",
-                        backgroundColor: [ '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -435,7 +435,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: "Female Employees",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -466,7 +466,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: "Foreign Employees",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -497,7 +497,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: "Number of Jobs",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -528,11 +528,11 @@
                       labels: data.labels,
                       datasets: [{
                         label: "Male of Employees",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data_male
                       },{
                         label: "Female of Employees",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data_female
                       }]          
                     },
@@ -558,12 +558,12 @@
         
                   var ctx = $numFemChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: 'doughnut',
                     data: {
                       labels: data.labels,
                       datasets: [{
                         label: "FeMale Employees",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -589,7 +589,7 @@
         
                   var ctx = $avlinputChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: 'line',
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -617,7 +617,7 @@
               $.ajax({
                 url: $inputshareChart.data("url"),
                 success: function (data) {
-        
+                   
                   var ctx = $inputshareChart[0].getContext("2d");
                   new Chart(ctx, {
                     type: 'bar',
@@ -625,7 +625,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: "Local Share of Inputs",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -656,7 +656,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: "Companies",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -687,7 +687,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: "Companies",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -718,7 +718,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: "Companies",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -749,7 +749,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: "Inquries",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },
@@ -781,7 +781,7 @@
                       labels: data.labels,
                       datasets: [{
                         label: "Inquries",
-                        backgroundColor: ['#46db14', '#14dbdb', '#eb6b34', '#46db14', '#14dbdb','#db1460'],
+                        backgroundColor: data.colors,
                         data: data.data
                       }]          
                     },

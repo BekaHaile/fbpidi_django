@@ -73,11 +73,26 @@
 									</div>
 								</div>
 								<div class="form-group row">
-									<label class="col-form-label col-lg-2">{{form.phone_number.label|title}}</label>
-									<div class="col-lg-10">
-										{{form.phone_number}}
-										<span style="color: red;">{{form.phone_number.errors}}</span>
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.phone_number.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.phone_number}}
+												<span style="color: red;">{{form.phone_number.errors}}</span>
+											</div>
+										</div>
+										
 									</div>
+									<div class="col-md-6">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-4">{{form.designation.label|title}}</label>
+											<div class="col-lg-8">
+												{{form.designation}}
+												<span style="color: red;">{{form.designation.errors}}</span>
+											</div>
+										</div>
+									</div>
+									
 								</div>
 								<div class="row">
 									
@@ -111,12 +126,13 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-6">
+									
+									<div class="col-md-6" id="group_id" style="display: none;">
 										<div class="form-group row">
-											<label class="col-form-label col-lg-4">{{form.designation.label|title}}</label>
+											<label class="col-form-label col-lg-4">{{form.groups.label|title}}</label>
 											<div class="col-lg-8">
-												{{form.designation}}
-												<span style="color: red;">{{form.designation.errors}}</span>
+												{{form.groups}}
+												<span style="color: red;">{{form.groups.errors}}</span>
 											</div>
 										</div>
 									</div>
@@ -141,6 +157,11 @@
 				$(document).ready(function() {
 					$('#summernote').summernote();
 					$('.summernote').summernote();
+					$("#id_user_type").change(function(){
+						if($(this).val() != "" && $(this).val()=="staff"){
+							$("#group_id").css("display",'block');
+						}
+					});
 				});
 			  </script>
 {%endblock%}

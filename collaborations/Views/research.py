@@ -101,7 +101,7 @@ class ListResearchAdmin(LoginRequiredMixin ,View):
 	def get(self,*args,**kwargs):
 		try:
 			context = {}
-			if self.request.user.is_superuser:
+			if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
 				context['researchs'] = Research.objects.all()
 			else:
 				context['researchs'] = Research.objects.filter(company = self.request.user.get_company())

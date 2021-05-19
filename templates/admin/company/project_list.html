@@ -26,7 +26,7 @@
 						<h5 class="card-title">Investment Projects</h5>
 						<div class="header-elements">
 							<div class="list-icons">
-								{%if user.is_superuser  %}
+								{%if user.is_superuser or user.is_fbpidi_staff and perms.company.add_investmentproject  %}
 								<a href="{%url 'admin:create_project'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Create Project</a>
 								{%elif perms.company.add_investmentproject%}
 								<a href="{%url 'admin:create_my_project'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Create Project</a>
@@ -64,15 +64,13 @@
 											</a>
 											<div class="dropdown-menu dropdown-menu-right">
 									
-												{% if user.is_superuser or user.get_company == project.company %}
-													{% if perms.company.change_investmentproject %}
+													{% if perms.company.view_investmentproject %}
 													<a  href="{%url 'admin:update_project' pk=project.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
 													{% endif %}
 													{% if perms.company.delete_investmentproject %}
 													<a onclick="return confirm('Are you sure you want to delete this Project?');" href="{%url 'admin:delete' model_name='investment_project' id=project.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete </a>
 													{% endif %}
 													
-												{% endif %}
 											</div>
 										</div>
 									</div>

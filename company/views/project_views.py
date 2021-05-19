@@ -34,7 +34,7 @@ class ListInvestmentProject(LoginRequiredMixin,ListView):
     template_name = "admin/company/project_list.html"
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return InvestmentProject.objects.all()
         elif self.request.user.is_company_admin:
             return InvestmentProject.objects.filter(company=Company.objects.get(contact_person=self.request.user))

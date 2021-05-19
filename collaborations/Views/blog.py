@@ -158,12 +158,12 @@ class AdminBlogList(LoginRequiredMixin, ListView):
 	model = Blog
 	context_object_name = 'blogs'
 	def get_queryset(self):
-		if self.request.user.is_superuser:
+		if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
 			return Blog.objects.all()
 		else:
 			return Blog.objects.filter(created_by = self.request.user)
 	# def get(self,*args,**kwargs):
-		# if self.request.user.is_superuser:
+		# if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
 		# 	blogs = Blog.objects.all()
 		# 	template_name="admin/pages/blog_list.html"
 		# 	context={'blogs':blogs}

@@ -152,7 +152,7 @@
 
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="{% url 'admin:my_profile' pk=user.id%}" class="dropdown-item"><i class="icon-user-plus"></i> My profile</a>
-                {%if user.is_superuser%}
+                {%if user.is_superuser or user.is_fbpidi_staff%}
                 {% if user.get_company == None%}
                 <a href="{%url 'admin:create_fbpidi_company'%}" class="dropdown-item"><i class="icon-coins"></i> My Company</a>
                 {%else%}
