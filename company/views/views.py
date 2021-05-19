@@ -1011,11 +1011,11 @@ class SearchCompany(ListView):
             companies = Company.objects.all().exclude(main_category='FBPIDI')
             if 'name' in self.request.GET and self.request.GET['name'] != '':
                 companies = Company.objects.filter( Q(name__icontains=self.request.GET['name'])|Q(name_am__icontains=self.request.GET['name'])
-                |Q(company_product__name=self.request.GET['name'])) 
+                |Q(company_product__name=self.request.GET['name'])).distinct() 
 
             if 'sector' in self.request.GET:
                 if self.request.GET['sector'] !='' or self.request.GET['sector'] != 'Select':
-                        companies = companies.filter(Q(category__id=self.request.GET['sector']))
+                        companies = companies.filter(Q(category__id=self.request.GET['sector'])).distinct()
         except ValueError:
             companies=companies
 

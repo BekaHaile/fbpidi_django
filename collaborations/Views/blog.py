@@ -4,53 +4,35 @@ import datetime
 from django.views import View
 from django.utils import timezone
 
-
-from django.http import HttpResponse, FileResponse
 from collaborations.models import Blog, BlogComment
-from collaborations.forms import FaqsForm
 from django.shortcuts import render, redirect, reverse
 
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
-from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategory, News, NewsImages
+from django.views.generic import  ListView
+from collaborations.models import  Blog, BlogComment, Blog, BlogComment
 									 #redirect with context
-from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 
-from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
-from accounts.models import User, CompanyAdmin, Company
+from company.models import Company
+from accounts.models import  Company
 import os
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
 
-from django.http import FileResponse, HttpResponse
 
-from accounts.models import User
-from accounts.email_messages import sendEventNotification
+
 from admin_site.decorators import company_created,company_is_active
-from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
-from django.http import HttpResponse, FileResponse
-		
-from PIL import Image
-from io import BytesIO
-from django.core.files import File 
-from wsgiref.util import FileWrapper
-
 
 
 from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm
 
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
-from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm)
+from collaborations.forms import (BlogsForm, BlogCommentForm)
 
 from collaborations.models import ( Blog, BlogComment)
 
 from collaborations.forms import (BlogsForm,BlogsEdit,BlogCommentForm)
-from collaborations.views import get_paginated_data, filter_by, FilterByCompanyname
+from collaborations.views import get_paginated_data,  FilterByCompanyname
 from django.db.models import Q
 # --------------------------------------------
 from django.utils import timezone

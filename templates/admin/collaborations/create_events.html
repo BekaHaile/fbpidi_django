@@ -309,10 +309,7 @@
 			
 			reader.onload = function (e) {
 							var c = document.getElementById('image_field')
-							console.log("the e targe file is ", e.target.result);
-							
-							//console.log("the value of c src is "+ c.attributes['src'].value)
-							 $("#modal_image_field").attr("src", e.target.result);
+							$("#modal_image_field").attr("src", e.target.result);
 							$("#modalCrop").modal("show");
 							e.target.result = "";	
 						}
@@ -331,7 +328,6 @@
 
 					crop(event){
 						
-						console.log("inside crop, the event is "+event)
 						setImageCropProperties(
 							modal_image_field,
 							event.detail.x,
@@ -349,13 +345,11 @@
 	confirm.addEventListener("click",function(event){
 
 		cropImage(cropX,cropY,cropWidth,cropHeight);
-		console.log("finished cropping");
 		$("#modalCrop").modal("hide");
 
 	})
 
 	function setImageCropProperties(image,x,y,width,height){
-		console.log("Set image cropper called!")
 		cropX = x;
 		cropY = y;
 		cropWidth = width;

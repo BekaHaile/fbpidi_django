@@ -25,12 +25,12 @@
 <!-- Content area -->
 <div class="content">
  <script>
-  	console.log("this is that");
+ 
     $(function () {
     	
       /* SCRIPT TO OPEN THE MODAL WITH THE PREVIEW */
       $("#blogImage").change(function () {
-      	console.log("fake1-");
+     
           var reader = new FileReader();
           reader.onload = function (e) {
             $("#image").attr("src", e.target.result);
@@ -224,13 +224,13 @@
 ----------------------------------
 
  <script>
-  	console.log("this is that");
+ 
     $(function () {
     	
       /* SCRIPT TO OPEN THE MODAL WITH THE PREVIEW */
       $("#blogImage").change(function () {
       	if (this.files && this.files[0]) {
-      	console.log("fake1-");
+     
           var reader = new FileReader();
           reader.onload = function (e) {
             $("#image").attr("src", e.target.result);
@@ -274,8 +274,7 @@
       $("#js-crop-and-upload").click(function () {
         var cropData = $image.cropper("getData");
         $("x").val(cropData["x"]);
-        console.log("Maybe");
-        console.log(event.detail.x);
+     
         $("y").val(cropData["y"]);
         $("height").val(cropData["height"]);
         $("width").val(cropData["width"]);
@@ -290,13 +289,8 @@
 		cropper = new cropper(image,{
 		aspectRatio: 1/1,
 		crop(event){
-			console.log('x: '+ event.detail.x)
-			// console.log(event.detail.x);
-			// console.log(event.detail.y);
-			// console.log(event.detail.z);
-			// console.log(event.detail.rotate);
-			// console.log(event.detail.scaleX);
-			// console.log(event.detail.scaleY);
+		
+	
 		}})
 	// })
 // Get the Cropper.js instance after init

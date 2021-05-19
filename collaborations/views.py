@@ -174,7 +174,7 @@ def filter_by(field_name, field_values, query):
 def get_paginated_data(request, query):
     page_number = request.GET.get('page', 1)
     try:
-        return Paginator(query, 6).page(page_number)
+        return Paginator(query, 1).page(page_number)
     except Exception as e:
         print("exception at get_paginate_data ",e)
         return Paginator(query, 6).page(1)

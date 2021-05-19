@@ -132,7 +132,7 @@
 </div>
 
 			<input id = "user_name" type="hidden" value="{{user.username}}">
-
+        <!-- Script for searcing and listing related users  -->
             <script>
                 var chat_input = document.getElementById('chat_to')
                 var chat_btn =document.getElementById('chat_btn')
@@ -232,33 +232,15 @@
                }
             </script>
 
+            <!-- Script for searcing and listing related users  -->
+
 			<script>
 				
 				
 				function chat_with_user()
 				{
-					var receiver = document.getElementById('chat_to').value;	
-					fetch( " /chat/check_user/"+receiver+"/").then(e=>e.json()).then(result =>
-					{   
-						if (result['result'] == true){
-							 window.location.pathname = '/chat/with/' + receiver+'/';
-						}
-						else{
-							error_message = "User with username '"+ receiver+"' does not exist!";
-							related = result.related
-							if( related.length > 0){
-								error_message +="<br> Other related user names... <br>"
-								related.forEach(n=>{
-								error_message += " - "+ n+"<br>";
-							}
-							);
-							}
-							document.getElementById("error-area").innerHTML = error_message
-
-						}
-						
-					});
-					
+					var receiver = document.getElementById('chat_to').value;
+                    window.location.pathname = '/chat/with/' + receiver+'/';	
 				}
 				
                 

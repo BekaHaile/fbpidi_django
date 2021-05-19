@@ -131,7 +131,7 @@ class SubCategoryDetail(LoginRequiredMixin,UpdateView):
         return redirect("admin:sub_categories")
     
     def form_invalid(self,form):
-        message.warning(self.request,form.errors)
+        messages.warning(self.request,form.errors)
         return redirect("admin:edit_subcategory",pk=self.kwargs['pk']) 
 
 # This class/view is created for creating new categories
@@ -1003,6 +1003,7 @@ def LikeProduct(request):
     except Exception as e:
         print("########Exception while tring to like a product ",e)
         return JsonResponse({'error':True,'message':"Internal Server Error!"})
+
 
 @login_required
 def DislikeProduct(request):

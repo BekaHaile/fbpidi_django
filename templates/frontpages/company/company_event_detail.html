@@ -127,9 +127,7 @@
                                 window.alert("Fill the form first!");
                             }
                            else{
-							console.log("notify on = "+notify_on.value)
-							console.log(" event start date "+ "{{obj.start_date.date}}")
-                                
+						        
                                fetch("{% url 'ajax_event_participation' id=obj.id %}",
                                 {
                                     method:"POST",

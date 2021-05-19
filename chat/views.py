@@ -32,6 +32,7 @@ def delete_chat(request):
         print("@@@ Exception Occured at delete_chat ",e)
         return JsonResponse({'result':False})
 
+@login_required
 def check_username(request, username):
     context ={'found':False}
     try:

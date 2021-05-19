@@ -229,7 +229,6 @@ class CustomAdminSite(admin.AdminSite):
             path("create_tender/", wrap(CreateTender.as_view()), name = "create_tender"),
             path("tender_detail/<pk>/", wrap(TenderDetail.as_view()), name = "tender_detail"),
             path("edit_tender/<id>/", wrap(EditTender.as_view()), name = "edit_tender"),
-            # path("manage_bank_account/<option>/<id>/",wrap(ManageBankAccount.as_view()), name = "manage_bank_account"),
             
 
             # paths for news and events

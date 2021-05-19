@@ -267,29 +267,16 @@
 			});
 		</script>
 		<script>
-			console.log("jjjjjjjjjjjjj"+document.getElementsByName('notify_on')[0].value)
-			console.log("Event start date is "+"{{event.start_date.date}}")
-                            
 			
 
-			// console.log($("input[name = 'notify_on']").val())
-			// $("input[name = 'notify_on']").change(function () {
-
-			// 	var start_date =new Date("{{obj.start_date}}");  
-			// 	var end_date = new Date("{{obj.end_date}}"); 
-			// 	var notify_on = new Date($("input[name = 'notify_on']").val()); 
-			// 	console.log("start date "+start_date+" \n enddata "+end_date+"\n notifyon "+notify_on)
-			// })
 		
 			
 			if (document.getElementById("remind_me_button")){
 				document.querySelector('#remind_me_button').onclick = function(e) 
 						{
-							console.log("Event start date is "+"{{event.start_date.date}}")
-                            var participant_email = document.querySelector('#participant_email');
+							var participant_email = document.querySelector('#participant_email');
 							// var end_date = new Date("{{event.end_date}}"); 
                             var notify_on = new Date($("input[name = 'notify_on']").val()); 
-							console.log("selected date is "+notify_on)
 							
 							// new Date() is changed to DateString, inorder to cut of the timezone from the date, as the date from start date and end date is just the date field without time zone
                             if (participant_email.value == "" || participant_email.value == null || notify_on.value == ""   ){
