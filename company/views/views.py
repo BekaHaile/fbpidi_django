@@ -45,7 +45,7 @@ class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
                 return redirect("admin:index")
             else:
                 return super().get(*args,**kwargs)
-        elif self.request.user.is_superuser:
+        elif self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             if self.request.user.get_company() != None:
                 return redirect("admin:index")
             else:
@@ -226,14 +226,14 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
                     form.cleaned_data.get('width'),form.cleaned_data.get('height'),
                     company.logo,400,400)
         messages.success(self.request,"Company Detail Information Updated")
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser  or self.request.user.is_fbpidi_staff:
             return redirect("admin:company_detail",pk=self.kwargs['pk'])
         else:
             return redirect("admin:update_company_info",pk=self.kwargs['pk'])
 
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser  or self.request.user.is_fbpidi_staff:
             return redirect("admin:company_detail",pk=self.kwargs['pk'])
         else:
             return redirect("admin:update_company_info",pk=self.kwargs['pk'])
@@ -613,7 +613,7 @@ class UpdateInvestmentCapital(LoginRequiredMixin,UpdateView):
         data = form.save()
         record_activity(self.request.user,"InvestmentCapital","Investment capital data Updated",data.id)
         messages.success(self.request,"Investment Capital Data Updated")
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return redirect("admin:company_detail",pk=data.company.id)
         else:
             return redirect("admin:update_company_info",pk=data.company.id)
@@ -641,7 +641,7 @@ class UpdateEmployees(LoginRequiredMixin,UpdateView):
         data = form.save()
         record_activity(self.request.user,"Employees","Employees data Updated",data.id)
         messages.success(self.request,"Employees Data Updated")
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return redirect("admin:company_detail",pk=data.company.id)
         else:
             return redirect("admin:update_company_info",pk=data.company.id)
@@ -664,7 +664,7 @@ class UpdateCertificate(LoginRequiredMixin,UpdateView):
         data = form.save()
         record_activity(self.request.user,"Certificates","Certificates data Updated",data.id)
         messages.warning(self.request,"Certificate Data Updated")
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return redirect("admin:company_detail",pk=data.company.id)
         else:
             return redirect("admin:update_company_info",pk=data.company.id)
@@ -693,7 +693,7 @@ class UpdateJobsCreated(LoginRequiredMixin,UpdateView):
         data = form.save()
         record_activity(self.request.user,"JobOpportunities","Job Created data Updated",data.id)
         messages.success(self.request,"Jobs Created Data Updated")
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return redirect("admin:company_detail",pk=data.company.id)
         else:
             return redirect("admin:update_company_info",pk=data.company.id)
@@ -721,7 +721,7 @@ class UpdateEducationStatus(LoginRequiredMixin,UpdateView):
         data = form.save()
         record_activity(self.request.user,"EducationalStatus","Educational Status data Updated",data.id)
         messages.success(self.request,"Education Status Data Updated")
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return redirect("admin:company_detail",pk=data.company.id)
         else:
             return redirect("admin:update_company_info",pk=data.company.id)
@@ -749,7 +749,7 @@ class UpdateFemalesInPosn(LoginRequiredMixin,UpdateView):
         data = form.save()
         record_activity(self.request.user,"FemalesInPosition","Female Employees data Updated",data.id)
         messages.success(self.request,"Females in Position Level Data Updated")
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return redirect("admin:company_detail",pk=data.company.id)
         else:
             return redirect("admin:update_company_info",pk=data.company.id)
@@ -777,7 +777,7 @@ class UpdateSrcAmntInputs(LoginRequiredMixin,UpdateView):
         data = form.save()
         record_activity(self.request.user,"SourceAmountIputs","Source & amount of inputs data Updated",data.id)
         messages.success(self.request,"Source & Ammount of inputs Data Updated")
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return redirect("admin:company_detail",pk=data.company.id)
         else:
             return redirect("admin:update_company_info",pk=data.company.id)
@@ -805,7 +805,7 @@ class UpdatePowerConsumption(LoginRequiredMixin,UpdateView):
         data = form.save()
         record_activity(self.request.user,"PowerConsumption","Power Consumption data Updated",data.id)
         messages.success(self.request,"Power Consumption Data Updated")
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return redirect("admin:company_detail",pk=data.company.id)
         else:
             return redirect("admin:update_company_info",pk=data.company.id)
@@ -833,7 +833,7 @@ class UpdateMarketTarget(LoginRequiredMixin,UpdateView):
         data = form.save()
         record_activity(self.request.user,"MarketTarget","Market Target data Updated",data.id)
         messages.success(self.request,"Market Target Data Updated")
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return redirect("admin:company_detail",pk=data.company.id)
         else:
             return redirect("admin:update_company_info",pk=data.company.id)
@@ -861,7 +861,7 @@ class UpdateMarketDestination(LoginRequiredMixin,UpdateView):
         data = form.save()
         record_activity(self.request.user,"MarketDestination","Market Destination data Updated",data.id)
         messages.success(self.request,"Market Destination Data Updated")
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return redirect("admin:company_detail",pk=data.company.id)
         else:
             return redirect("admin:update_company_info",pk=data.company.id)
@@ -876,7 +876,7 @@ class CreateFbpidiCompanyProfile(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         context = {}
         context['form'] = InistituteForm
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return render(self.request,"admin/company/company_form_fbpidi.html",context)
         else:
             return redirect("admin:index")
@@ -934,7 +934,7 @@ class SliderImageList(LoginRequiredMixin,ListView):
     template_name = "admin/company/slider_list.html"
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return HomePageSlider.objects.all()
         else:
             return HomePageSlider.objects.filter(company=self.request.user.get_company())

@@ -30,8 +30,10 @@ class UserProfile(AbstractUser):
     phone_number = models.CharField(max_length=20,blank=True,null=True) 
     is_customer = models.BooleanField(default=False)  # ifFbpidiUser is customer
     is_company_admin = models.BooleanField(default=False)  # ifFbpidiUser is company admin
-    is_company_staff = models.BooleanField(default=False) # ifFbpidiUser is company staff
-    profile_image = models.ImageField(blank=True,validators=[FileExtensionValidator(allowed_extensions=allowed_image_extensions)])
+    is_company_staff = models.BooleanField(default=False) # ifFbpcompanyUser is company staff
+    is_fbpidi_staff = models.BooleanField(default=False) # ifFbpidiUser is Fnpidi staff
+    profile_image = models.ImageField(blank=True,help_text="Accepted formats: png, jpg, jpeg,webp. Max file size 10 MB",
+                    validators=[FileExtensionValidator(allowed_extensions=allowed_image_extensions)])
     created_by = models.ForeignKey('self',on_delete=models.RESTRICT,null=True,blank=True,related_name="user_created_by")
     created_date = models.DateTimeField(auto_now_add=True,editable=False)
     last_updated_by = models.ForeignKey('self',on_delete=models.RESTRICT,null=True,blank=True,related_name="updated_by_user")
@@ -54,6 +56,8 @@ class UserProfile(AbstractUser):
             elif self.is_company_staff:
                 return CompanyStaff.objects.get(user=self).company
             elif self.is_superuser:
+                return Company.objects.get(main_category="FBPIDI")
+            elif self.is_fbpidi_staff:
                 return Company.objects.get(main_category="FBPIDI")
         except Company.DoesNotExist:
             return None

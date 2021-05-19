@@ -1,4 +1,6 @@
 {%extends 'frontpages/layout.html'%}
+{%load core_template_tags%}
+{%load i18n%}
 {%load crispy_forms_tags%}
 {%block content%}
 		<!--Breadcrumb-->
@@ -7,11 +9,10 @@
 				<div class="header-text mb-0">
 					<div class="container">
 						<div class="text-center text-white">
-							<h1 class="">Register</h1>
+							<h1 class="">{% trans "Register"%}</h1>
 							<ol class="breadcrumb text-center">
-								<li class="breadcrumb-item"><a href="#">Home</a></li>
-								<li class="breadcrumb-item"><a href="#">Pages</a></li>
-								<li class="breadcrumb-item active text-white" aria-current="page">Register</li>
+								<li class="breadcrumb-item"><a href="{%url 'index'%}">{% trans "Home"%}</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Register"%}</li>
 							</ol>
 						</div>
 					</div>
@@ -28,7 +29,7 @@
 						<div class="col-lg-6 col-xl-6 col-md-6 d-block mx-auto">
 							<div class="wrapper wrapper2">
 								<div class="card-body">
-									<h3>Register</h3>
+									<h3>{% trans "Register"%}</h3>
 									
 								</div>
 								<hr>
@@ -37,13 +38,13 @@
 									{{form|crispy}}
 									{{form.errors}}
 									<div class="submit">
-										<button type="submit" class="btn btn-secondary btn-block">Register</button>
+										<button type="submit" class="btn btn-secondary btn-block">{% trans "Register"%}</button>
 									</div>
-									<p class="text-dark mb-0">Already have an account?<a href="{%url 'cm_login'%}" class="text-secondary ml-1">Sign In</a></p>
+									<p class="text-dark mb-0">{% trans "Already have an account?" %}<a href="{%url 'cm_login'%}" class="text-secondary ml-1">{% trans "Sign UP" %}</a></p>
 								</form>
 								<hr class="divider">
 								<div class="card-body">
-									<h3>Login With</h3>
+									<h3>{% trans "Login With" %}</h3>
 									<div class="text-center">
 										<div class="btn-list d-flex">
 											<a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-google btn-block"><i class="fa fa-google fa-1x mr-2"></i> Google</a>

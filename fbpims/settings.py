@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'django.contrib.humanize',
     'core',
     'admin_site',
     'accounts',
@@ -139,7 +140,7 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'FBPIDI_IIMS',
         'USER': 'postgres',
-        'PASSWORD': 'Fbpidi@123..',
+        'PASSWORD': 'cbe@ps4woga',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

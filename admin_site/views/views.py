@@ -36,7 +36,7 @@ class Polls(LoginRequiredMixin, ListView):
     model = PollsQuestion
     template_name = 'admin/poll/polls.html'
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return PollsQuestion.objects.all()
         else:
             return PollsQuestion.objects.filter(company=self.request.user.get_company())

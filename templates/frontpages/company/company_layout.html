@@ -365,37 +365,40 @@
 <section>
     <footer class="bg-dark-purple text-white">
         <div class="footer-main border-bottom">
+            
             <div class="container">
+                
                 <div class="row">
+
                     <div class="col-xl-3 col-lg-6 col-md-12">
-                        <h6>Categories</h6>
+                        <h6>{% trans "Categories" %}</h6>
                         <ul class="list-unstyled mb-0">
                             <li>
-                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">Food</a>
-                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">Beverage</a>
-                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">Pharmaceuticals</a>
+                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">{% trans "Food" %}</a>
+                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">{% trans "Beverage" %}</a>
+                                <a href="#" class="btn footer-btn-outline btn-sm btn-pill mb-1">{% trans "Pharmaceuticals" %}</a>
                             </li>
                         </ul>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-md-12">
-                        <h6>Popular Listings</h6>
+                        <h6>{% trans "Popular Listings" %}</h6>
                         <ul class="list-unstyled mb-0">
-                            <li><a href="#"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> Educational
-                                college</a></li>
-                            <li><a href="#"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> Free Lancer for
-                                Web Developer</a></li>
-                            <li><a href="#"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> 2BHK Flat In
-                                Hyderabad</a></li>
-                            <li><a href="#"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> Best
-                                Restaurants in Hyderabad</a></li>
+                            <li><a href="{% url 'customer_news_list' %}"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> 
+                                {% trans "Latest News" %}</a></li>
+                            <li><a  href="{% url 'manufac_category_main' option='all' %}"><i class="fa fa-angle-double-right mr-2 text-secondary"></i>
+                                 {% trans "Companies" %}</a></li>
+                            <li><a href="{% url 'product_category_main' option='all' %}"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> 
+                                {% trans "Latest Products" %}</a></li>
+                            <li><a href="{%url 'project_list'%}"><i class="fa fa-angle-double-right mr-2 text-secondary"></i> 
+                                {% trans "Latest Projects" %}</a></li>
                         </ul>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-md-12">
-                        <h6 class="mt-6 mt-xl-0">Contact</h6>
+                        <h6 class="mt-6 mt-xl-0">{% trans "FBPIDI Contact" %}</h6>
                         <ul class="list-unstyled mb-0">
                             <li>
-                                <a href="#"><i class="fa fa-home mr-3 text-secondary"></i> Ethiopia, Addis Ababa, Welo
-                                    serfer</a>
+                                <a href="#"><i class="fa fa-home mr-3 text-secondary"></i> Ethiopia, 
+                                    Addis Ababa, Welo Sefer</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-envelope mr-3 fs-12 text-secondary"></i> info@fbpidi.gov.et</a>
@@ -410,54 +413,12 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col-xl-3 col-lg-6 col-md-12">
-                        <!-- <h6 class="mb-2 mt-6 mt-xl-0">Subscribe</h6>
-                        <div class="input-group">
-                            <input type="text" class="form-control br-tl-3  br-bl-3" placeholder="Email">
-                            <div class="input-group-append ">
-                                <button type="button" class="btn btn-secondary br-tr-3 br-br-3 pl-5 pr-5">
-                                    Subscribe
-                                </button>
-                            </div>
-                        </div> -->
-                        <h6 class="mb-2 mt-5">Payments</h6>
-                        <ul class="payments mb-0">
-                            <li>
-                                <a href="#" class="payments-icon"><i class="fa fa-cc-amex" aria-hidden="true"></i></a>
-                            </li>
-                            <li>
-                                <a href="#" class="payments-icon"><i class="fa fa-cc-visa" aria-hidden="true"></i></a>
-                            </li>
-                            <li>
-                                <a href="#" class="payments-icon"><i class="fa fa-credit-card-alt"
-                                                                     aria-hidden="true"></i></a>
-                            </li>
-                            <li>
-                                <a href="#" class="payments-icon"><i class="fa fa-cc-mastercard" aria-hidden="true"></i></a>
-                            </li>
-                            <li>
-                                <a href="#" class="payments-icon"><i class="fa fa-cc-paypal" aria-hidden="true"></i></a>
-                            </li>
-                        </ul>
+                    <div class="col-xl-3 col-lg-6 col-md-12"> 
                     </div>
                 </div>
             </div>
         </div>
-        <div class="bg-dark-purple text-white p-0 border-bottom">
-            <div class="container">
-                <div class="p-2 text-center footer-links">
-                    <a href="#" class="btn btn-link">How It Works</a>
-                    <a href="#" class="btn btn-link">About Us</a>
-                    <a href="#" class="btn btn-link">Pricing</a>
-                    <a href="#" class="btn btn-link">Listing Categories</a>
-                    <a href="#" class="btn btn-link">Privacy Policy</a>
-                    <a href="#" class="btn btn-link">Terms Of Conditions</a>
-                    <a href="#" class="btn btn-link">Blog</a>
-                    <a href="#" class="btn btn-link">Contact Us</a>
-                    <a href="#" class="btn btn-link">Premium Ad</a>
-                </div>
-            </div>
-        </div>
+        
         <div class="bg-dark-purple text-white-50 p-3">
             <div class="container">
                 <div class="row d-flex">

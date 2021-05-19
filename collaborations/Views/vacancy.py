@@ -92,7 +92,7 @@ class CloseVacancy(LoginRequiredMixin,View):
 			vacancy.last_updated_date = timezone.now()
 			messages.success(self.request, "Vacancy Opened Successfully")
 			vacancy.save()
-			if self.request.user.is_superuser:
+			if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
 				return redirect("admin:super_Job_list")
 		else:
 			vacancy.closed = True
@@ -100,7 +100,7 @@ class CloseVacancy(LoginRequiredMixin,View):
 			vacancy.last_updated_date = timezone.now()
 			messages.success(self.request, "Vacancy Closed Successfully")
 			vacancy.save()
-			if self.request.user.is_superuser:
+			if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
 				return redirect("admin:super_Job_list")
 		
 		return redirect("admin:Job_list")
@@ -220,7 +220,7 @@ class AdminVacancyList(LoginRequiredMixin,ListView):
 	template_name= "admin/vacancy/job_list.html"
 	def get_queryset(self):
 		try:
-			return  Vacancy.objects.all() if self.request.user.is_superuser else  Vacancy.objects.filter(company=self.request.user.get_company())
+			return  Vacancy.objects.all() if self.request.user.is_superuser or self.request.user.is_fbpidi_staff else  Vacancy.objects.filter(company=self.request.user.get_company())
 		except:
 			return []
 

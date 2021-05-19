@@ -69,7 +69,7 @@ class ListProjectAdmin(LoginRequiredMixin, ListView):
 	template_name = "admin/researchproject/project_list.html"
 	context_object_name = 'projects'
 	def get_queryset(self):
-		if self.request.user.is_superuser:
+		if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
 			return Project.objects.all()
 		else:
 			return Project.objects.filter(company=self.request.user.get_company())

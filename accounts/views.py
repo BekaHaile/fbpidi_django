@@ -165,7 +165,7 @@ class UserListView(LoginRequiredMixin, ListView):
     template_name = "admin/accounts/users_list.html"
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return UserProfile.objects.all().exclude(id=self.request.user.id)
         elif self.request.user.is_company_admin:
             return UserProfile.objects.filter(created_by=self.request.user).exclude(id=self.request.user.id)
@@ -175,7 +175,7 @@ class UserListView(LoginRequiredMixin, ListView):
 @method_decorator(decorators,name='dispatch')
 class UserDetailView(LoginRequiredMixin, UpdateView):
     model = UserProfile
-    fields = ['first_name', 'last_name','username', 'email', 'phone_number','profile_image']
+    fields = ['first_name', 'last_name','username', 'email', 'phone_number','profile_image','groups']
     template_name = "admin/accounts/user_detail.html"
 
     def form_valid(self,form):
@@ -271,6 +271,26 @@ class GroupView(LoginRequiredMixin,View):
         record_activity(self.request.user,"Group","Role Group Created ",group.id,before=None,after=None)
         return JsonResponse({"message":"Role Group Created SuccessFully"})
 
+@method_decorator(decorators,name='dispatch')
+class GroupUpdateView(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+        permissions = Permission.objects.all()
+        context = {'permisions':permissions} 
+        try:
+            context['group'] = Group.objects.get(id=self.kwargs['pk'])   
+        except Group.DoesNotExist:
+            return redirect("admin:error_404")
+        return render(self.request,"admin/pages/group_form_update.html",context)
+    
+    def post(self,*args,**kwargs):
+        permission_list = []
+        for permision_id in self.request.POST.getlist('sel_perm_list[]'):
+            permission_list.append(Permission.objects.get(id=permision_id))
+        group  = Group.objects.get(id = self.kwargs['pk'])
+        group.permissions.set(permission_list)
+        group.save()
+        record_activity(self.request.user,"Group","Role Group Updated ",group.id,before=None,after=None)
+        return JsonResponse({"message":"User Group Updated SuccessFully"})
 
 @method_decorator(decorators,name='dispatch')
 class UserLogView(LoginRequiredMixin,View):

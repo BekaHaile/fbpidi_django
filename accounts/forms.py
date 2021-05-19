@@ -82,7 +82,7 @@ class CompanyAdminCreationForm(AbstractUserCreationForm):
         admin_permisstion_list = Permission.objects.all().exclude(
             codename__in=['add_logentry','change_logentry','delete_logentry','view_logentry',
                           'add_permission','change_permission','delete_permission','view_permission',
-                          'add_group','change_group','delete_group','view_group',
+                          'add_group','change_group','delete_group',
                           'add_contenttype','change_contenttype','delete_contenttype','view_contenttype',
                           'add_session','change_session','delete_session','view_session'] 
             )
@@ -142,12 +142,18 @@ class AdminCreateUserForm(AbstractUserCreationForm):
                                       attrs={'type': 'select', "class": "form-control form-control-uniform"}),
                                   choices=(('', 'Select User Types'),
                                             ('admin', 'Super Admin'),
+                                            ('staff', 'Inistitute\'s Staff'),
                                             ('contact_person', 'Company Contact Person'),
                                             ('customer', 'Customer'),)
                                   )
     designation = forms.CharField(max_length=255, widget=forms.TextInput(
         attrs={'class':'form-control','placeholder':'Responsiblity'}
     ))
+    groups = forms.ModelMultipleChoiceField(
+        queryset=Group.objects.all(),
+        widget=forms.SelectMultiple(attrs={}),
+        required=False
+    )
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
@@ -155,8 +161,15 @@ class AdminCreateUserForm(AbstractUserCreationForm):
         if self.cleaned_data.get("user_type") == "admin":
             user.is_staff = True
             user.is_superuser = True
-            user.save()
-        if self.cleaned_data.get("user_type") == "contact_person":
+            user.save() 
+        elif self.cleaned_data.get("user_type") == "staff":
+            user.is_staff = True
+            user.is_fbpidi_staff = True
+            user.save()            
+            if self.cleaned_data.get('groups'):
+                user.groups.set(self.cleaned_data.get('groups'))
+                user.save()
+        elif self.cleaned_data.get("user_type") == "contact_person":
             user.is_company_admin = True
             user.is_staff = True
             user.save()
@@ -184,13 +197,14 @@ class CompanyUserCreationForm(AbstractUserCreationForm):
     this form is for industry admins for creating company users.
     """
     
-    user_type = forms.ModelChoiceField(
-        empty_label="Select User Role",
+    user_type = forms.ModelMultipleChoiceField(
         queryset=Group.objects.all(),
-        widget=forms.Select(attrs={}),
+        widget=forms.SelectMultiple(attrs={}),
         required=True
     )
-
+    designation = forms.CharField(max_length=255, widget=forms.TextInput(
+        attrs={'class':'form-control','placeholder':'Responsiblity'}
+    ))
     class Meta(AbstractUserCreationForm.Meta):
         fields = ('first_name', 'last_name',
                   'username', 'email', 'phone_number',)

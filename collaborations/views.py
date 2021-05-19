@@ -403,7 +403,7 @@ class TenderList(LoginRequiredMixin, ListView):
     context_object_name = 'tenders'  
     def get_queryset(self):
         try:
-            if self.request.user.is_superuser:
+            if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
                 return Tender.objects.all() 
             else:
                 return Tender.objects.filter(company = self.request.user.get_company())
@@ -592,7 +592,7 @@ class AdminNewsList(LoginRequiredMixin, ListView):
     template_name = "admin/collaborations/admin_news_list.html"
     context_object_name = 'newslist'
     def get_queryset (self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return News.objects.all()
         else:
             try: 
@@ -658,7 +658,7 @@ class AdminCompanyEventList(LoginRequiredMixin, ListView):
     context_object_name = "events"
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
             return CompanyEvent.objects.all()
         else: 
             return CompanyEvent.objects.filter(company =  self.request.user.get_company())
