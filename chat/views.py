@@ -21,6 +21,16 @@ decorators = [never_cache, company_created(),company_is_active()]
 
 
 #checks if a requested user does exist in the database
+def delete_chat(request):
+    try:
+        data = json.loads(request.body)
+        m = ChatMessages.objects.get( id=data['id'] )
+        m.is_active = False
+        m.save()
+        return JsonResponse( {'result':True})
+    except Exception as e:
+        print("@@@ Exception Occured at delete_chat ",e)
+        return JsonResponse({'result':False})
 
 def check_username(request, username):
     context ={'found':False}
@@ -44,7 +54,7 @@ def chat_ajax_handler(request, id):
     if request.method == 'GET': #get all unread messages(only), these are new unread messages other than those that are loaded when the user opens the chat layout page. like online chats from the other user
         print (" a get request from",request.user)
         other_user = UserProfile.objects.get(id = id)
-        q = Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False)  ) 
+        q = Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False)  & Q(is_active = True)) 
         unread_messages = ChatMessages.objects.filter(q)
         for m in unread_messages:
             m.seen = True
@@ -78,8 +88,8 @@ def chat_with(request, reciever_name):
     
     messages_list = []
     if request.method == 'GET':
-        q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) ) | 
-               Q( Q(sender = request.user) & Q(receiver = other_user) ) 
+        q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(is_active = True) ) | 
+               Q( Q(sender = request.user) & Q(receiver = other_user) & Q(is_active = True)) 
             )
         query_messages = ChatMessages.objects.filter(q).order_by("-created_date")
         unread = query_messages.filter( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False))
@@ -100,7 +110,7 @@ def chat_with(request, reciever_name):
 @login_required    
 def list_unread_messages(request):
         
-        all_unread_messages = ChatMessages.objects.filter(receiver = request.user, seen =False).order_by('-created_date')        
+        all_unread_messages = ChatMessages.objects.filter(receiver = request.user, seen =False , is_active = True).order_by('-created_date')        
         sender_names = []
         grouped_unread_messages = []
         for m in all_unread_messages:
@@ -131,9 +141,9 @@ class AdminChatList( LoginRequiredMixin, View):
 def get_grouped_chats(user, excluded_user = None):
         if excluded_user !=None:
             to_exclude = Q( Q(receiver = excluded_user) | Q(sender = excluded_user))
-            other_messages = ChatMessages.objects.filter( Q(receiver = user) | Q(sender = user)).exclude(to_exclude).order_by('-created_date')
+            other_messages = ChatMessages.objects.filter( Q(Q(receiver = user) | Q(sender = user)) & Q(is_active = True) ).exclude(to_exclude).order_by('-created_date')
         else:
-            other_messages = ChatMessages.objects.filter( Q(receiver = user) | Q(sender = user)).order_by('-created_date')
+            other_messages = ChatMessages.objects.filter( Q(Q(receiver = user) | Q(sender = user)) & Q(is_active = True) ).order_by('-created_date')
             
         other_user_names = []
         grouped_other_messages = []
