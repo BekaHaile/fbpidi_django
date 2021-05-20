@@ -68,7 +68,8 @@
 
                     {% if user.username == message.receiver_name %} 
                   
-                    <tr {% if message.seen == False %}class = "unread"{% endif %}>
+                   
+                    <tr  class = " {% if message.seen == True %} unread {% else %}  {% endif %}">
                         <td class="table-inbox-checkbox rowlink-skip">
                             {{forloop.counter}}
                         </td>
@@ -86,12 +87,12 @@
                             </a>
                         </td>
                         <td class="table-inbox-message">
-                            <div class="table-inbox-subject">bb{{message.message|safe|truncatechars_html:20}}</div>
+                            <div class="table-inbox-subject">{{message.message|safe|truncatechars_html:20}}</div>
                         </td>
                         
                         <td class="table-inbox-time">
                             
-                            <p class ="mr-5 text-center">cc{{message.time|date}}</p>
+                            <p class ="mr-5 text-center">{{message.time}}</p>
                         </td>
                     </tr>
                         
@@ -119,7 +120,7 @@
                             </td>
                             
                             <td class="table-inbox-time">
-                                <p class ="mr-4 text-center">xxx{{message.time|date}}</p>
+                                <p class ="mr-4 text-center">{{message.time|date}}</p>
                             </td>
                         </tr>
                     {% endif %}

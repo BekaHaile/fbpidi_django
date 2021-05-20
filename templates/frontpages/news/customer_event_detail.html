@@ -283,7 +283,6 @@
                                 window.alert("Fill the form first!");
                             }
                            else{
-							console.log("notify on = "+notify_on.value)
 							fetch("{% url 'ajax_event_participation' id=event.id %}",
                                 {
                                     method:"POST",
