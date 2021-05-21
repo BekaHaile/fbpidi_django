@@ -382,7 +382,7 @@
 									if(sub_sector.length>0){
 										var sector_data = "<option value='all'>All "+sector+" Sectors</option>";
 										$.each(sub_sector, function(index) {
-											// console.log(sub_sector[index].fields)
+										
 											sector_data+="<option value='"+sub_sector[index].fields.category_name+"'>"+sub_sector[index].fields.category_name+"</option>";
 									  	});
 									  $("#sub_sector").html(sector_data);
@@ -391,7 +391,7 @@
 								if(company_list.length > 0){
 									var table_data = "";
 									  $.each(company_list, function(index) {
-										//   console.log(company_list[index].fields)
+									
 										table_data+="<tr><td>"+parseInt(index + 1)+"</td>"
 												+"<td>"+company_list[index].fields.name+"</td>"
 												+"<td><a href='#'>"+company_list[index].fields.main_category+"</a></td>"
@@ -405,7 +405,7 @@
 									}
 							},
 							error: function (error) {
-							 console.log(error);
+						
 							}
 						});
 					});
@@ -424,7 +424,7 @@
 							type: "GET",
 							success: function (result) {
 								var company_list =  result['data'];
-								// console.log(result['sub_sector'])
+							
 								if(company_list.length > 0){
 									var table_data = "";
 									  $.each(company_list, function(index) {
@@ -441,7 +441,7 @@
 									}
 							},
 							error: function (error) {
-							 console.log(error);
+						
 							}
 						});
 						}

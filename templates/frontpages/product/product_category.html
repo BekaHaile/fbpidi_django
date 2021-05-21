@@ -349,21 +349,22 @@
 										 {%for category in sub_sectors%}
 											{% count_category_companies category as companies %}
 											{% if companies > 0 %}
-											<form action = "{%url 'category_inquiry_form' %}" method ="GET">
 												<label class="custom-control ">
 												
 													<span class="custom-control-label">
-														
-														<input type="hidden" name ="category" value = "{{category.id}}"/>
-														<a class="text-dark">{% print_translated category.category_name|truncatechars_html:20  category.category_name_am|truncatechars_html:20 LANGUAGE_CODE %}</a>
-														<span class="custom-control-label">
-															<button class="badgetext badge badge-pill mb-1 mt-1 " type="submit"
-															style="border:none; color :white; padding: 7px;background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" title="Send Inquiry For Companies With This Category" type="submit">{% trans "Inquiry" %}</button>
-														</span>
+															<a href=" {% url 'product_category' cat_id=category.id %}" class="text-dark">{% print_translated category.category_name|truncatechars_html:30  category.category_name_am|truncatechars_html:20 LANGUAGE_CODE %}</a>
+															
+															<form style="float:inline-end" action = "{%url 'category_inquiry_form' %}" method ="GET">
+																<input type="hidden" name ="category" value = "{{category.id}}"/>
+																<span class="custom-control-label">
+																	<button class="badgetext badge badge-pill mb-1 mt-1 " type="submit"
+																	style="border:none; color :white; padding: 7px;background-color: rgba(0, 20, 142, 0.85) ;" id="product_contact_now" title="Send Inquiry For Companies With This Category" type="submit">{% trans "Inquiry" %}</button>
+																</span>
+															</form>
 														
 													</span>
 												</label>
-											</form>
+											
 											{% else %} 
 											<label class="custom-control custom-checkbox mb-0">
 												
@@ -428,7 +429,8 @@
 							elements.forEach( (element)=> {
 								element.style['background-color'] =  "rgb(252, 67, 67)"
 								element.title = "liked"
-								console.log("liked "+p_id)
+							
+								
 							})	
 						}
 						else{

@@ -28,6 +28,9 @@ class SubCategory(models.Model):
 
     def __str__(self):
         return self.sub_category_name
+
+    class Meta:
+        ordering = ('sub_category_name',)
 # Brand
 class Brand(models.Model):
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_brand")
@@ -116,7 +119,10 @@ class Dose(models.Model):
 
     def __str__(self):
         return self.dose
-    
+
+    class Meta:
+        ordering = ('dose',)
+        
 class DosageForm(models.Model):
     dosage_form = models.CharField(verbose_name="Dosage Form in English",max_length=255)
     dosage_form_am = models.CharField(verbose_name="Dosage Form in Amharic",max_length=255)
@@ -128,6 +134,9 @@ class DosageForm(models.Model):
 
     def __str__(self):
         return self.dosage_form
+    
+    class Meta:
+        ordering = ('dosage_form',)
 
 class ProductionCapacity(models.Model):	 	
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_production_capacity")	

@@ -4,62 +4,30 @@ import datetime
 from django.utils import timezone
 from django.views import View
 
-
-from django.http import HttpResponse, FileResponse
-from collaborations.models import Blog, BlogComment
-from collaborations.forms import FaqsForm
 from django.shortcuts import render, redirect, reverse
 
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
-from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategory, News, NewsImages
-									 #redirect with context
-from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic import  DetailView, ListView
+									
 from django.views import View
 from django.contrib import messages
 
-from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
-from accounts.models import User, CompanyAdmin, Company
 import os
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
 
-from django.http import FileResponse, HttpResponse
 
-from accounts.models import User
-from accounts.email_messages import sendEventNotification
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 
-from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
 
 from admin_site.decorators import company_created,company_is_active
 
 
-from collaborations.forms import BlogsForm,BlogsEdit, BlogCommentForm, FaqsForm, VacancyForm,JobCategoryForm, TenderApplicantForm
 
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
-from collaborations.forms import (BlogsForm, BlogCommentForm, FaqsForm,
-								 VacancyForm,JobCategoryForm,
-								 ForumQuestionForm,CommentForm,CommentReplayForm,
-								 AnnouncementForm,ResearchForm,
-								 ResearchProjectCategoryForm
-								 )
 
-from collaborations.models import ( Blog, BlogComment,Faqs,
-									Vacancy,JobApplication, JobCategory,
-									ForumQuestion, ForumComments, CommentReplay,
-									Announcement,AnnouncementImages,
-									Research,
-									ResearchProjectCategory
-									
-									)
-from collaborations.forms import (ProjectForm,)
+from collaborations.models import ( ResearchProjectCategory)
+from collaborations.forms import (ProjectForm)
 
-from collaborations.models import ( Research, Project,
-									ResearchProjectCategory
-									)
+from collaborations.models import (  Project,ResearchProjectCategory)
 
 # ------------ Project Admin side
 decorators = [never_cache, company_created(),company_is_active()]
