@@ -126,10 +126,10 @@
 									<i class="icon-menu9"></i>
 								</a>
 								<div class="dropdown-menu dropdown-menu-right">
-									{% if not user.is_superuser and perms.product.delete_product %}
+									{% if  perms.product.delete_product %}
 									<a href="{%url 'admin:delete' model_name='product' id=cat.id%}"  onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete Product</a>
 									{% endif %}
-									{% if not user.is_superuser and perms.product.change_product %}
+									{% if  perms.product.change_product %}
 									<a href="{%url 'admin:product_detail' pk=cat.id%}" class="dropdown-item">
 										<i class="icon-pencil"></i>Edit Varayti</a>
 									 {% endif %}

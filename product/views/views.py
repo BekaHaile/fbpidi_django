@@ -156,7 +156,7 @@ class CreateSubCategories(LoginRequiredMixin,CreateView):
         return context
     
     def form_invalid(self,form):
-        message.warning(self.request,form.errors)
+        messages.warning(self.request,form.errors)
         return redirect("admin:create_subcategory") 
 
 
@@ -177,6 +177,7 @@ class BrandView(LoginRequiredMixin,ListView):
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         context['brand'] = True
+        context['form'] = CompanySelectForm
         return context
 
 # This class/view is created for displaying category and sub category detail and editing
@@ -189,11 +190,14 @@ class BrandDetail(LoginRequiredMixin,UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(BrandDetail,self).get_form_kwargs()
-        if self.request.user.is_company_admin:
-            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
-        elif self.request.user.is_company_staff:
-            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
+        kwargs.update({'company':Brand.objects.get(id=self.kwargs['pk']).company})
         return kwargs
+
+        # if self.request.user.is_company_admin:
+        #     kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+        # elif self.request.user.is_company_staff:
+        #     kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
+        # return kwargs
 
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
@@ -218,29 +222,44 @@ class CreateBrand(LoginRequiredMixin,CreateView):
     model = Brand
     form_class = BrandForm
     template_name = "admin/product/category_form_create.html"
-    
-    def get_form_kwargs(self):
+    company = ''
+
+   
+    def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreateBrand,self).get_form_kwargs()
-        if self.request.user.is_company_admin:
-            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
-        elif self.request.user.is_company_staff:
-            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
+        if self.request.method == 'GET': 
+            self.company = Company.objects.get(id = self.request.GET['company'])
+        else:
+            self.company = Company.objects.get(name = self.request.POST['company'])
+            
+        kwargs.update({ 'company':self.company})
         return kwargs
+    
+    
+    # def get_form_kwargs(self):
+    #     kwargs = super(CreateBrand,self).get_form_kwargs()
+    #     if self.request.user.is_company_admin:
+    #         kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
+    #     elif self.request.user.is_company_staff:
+    #         kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
+    #     return kwargs
 
     def form_valid(self,form):        
         brand = form.save(commit=False)
         brand.created_by = self.request.user
-        if self.request.user.is_company_admin:
-            brand.company = Company.objects.get(contact_person=self.request.user)
-        elif self.request.user.is_company_staff:
-            brand.company = CompanyStaff.objects.get(user=self.request.user).company
+        brand.company = self.company
+        # if self.request.user.is_company_admin:
+        #     brand.company = Company.objects.get(contact_person=self.request.user)
+        # elif self.request.user.is_company_staff:
+        #     brand.company = CompanyStaff.objects.get(user=self.request.user).company
         brand.save()
         messages.success(self.request,"You Created a New Brand")
         return redirect("admin:brands")
     
-    def get_context_data(self,**kwargs):
+    def get_context_data(self,*args, **kwargs):
         context = super().get_context_data(**kwargs)
         context['brand'] = True
+        context['company'] = self.company
         return context
     
     def form_invalid(self,form):
@@ -277,7 +296,6 @@ class CreateProductView(LoginRequiredMixin,CreateView):
         kwargs = super(CreateProductView,self).get_form_kwargs()
 
         if self.request.method == 'GET': 
-
             self.company = Company.objects.get(id = self.request.GET['company'])
         else:
             self.company = Company.objects.get(name = self.request.POST['company'])
@@ -319,33 +337,54 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
     model = Product
     form_class = ProductCreationForm
     template_name = "admin/product/product_form_update.html"
+    company = ''
 
     def get_form_kwargs(self,*args,**kwargs):
-        kwargs = super(ProductUpdateView,self).get_form_kwargs()
-        kwargs.update({'company':Product.objects.get(id=self.kwargs['pk']).company})
-        return kwargs
+        try:
+            kwargs = super(ProductUpdateView,self).get_form_kwargs()
+            self.company = Product.objects.get(id=self.kwargs['pk']).company
+            kwargs.update({'company': self.company})
+            return kwargs
+        except Exception as e:
+            print("@@@ Exception at Product Update View ",e)
+            return redirect ("admin:admin_products")
 
     def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        context['image_form'] = ProductImageForm
-        context['price_form'] = ProductPriceForm
-        return context
+        try:
+            context = super().get_context_data(**kwargs)
+            context['image_form'] = ProductImageForm
+            context['price_form'] = ProductPriceForm
+            context['company'] = self.company
+            return context
+        except Exception as e:
+            print("@@@ Exception at Product Update View get_context data ",e)
+            return redirect ("admin:admin_products")
     
     def form_valid(self,form):
-        product = form.save(commit=False)
-        product.last_updated_by = self.request.user
-        product.last_updated_date = timezone.now()
-        product.save() 
-        image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
-                    form.cleaned_data.get('width'),form.cleaned_data.get('height'),
-                    product.image,400,400)   
-        messages.success(self.request,"Product Update Successfully!")
-        return redirect("admin:admin_products")
+        try:
+            product = form.save(commit=False)
+            product.last_updated_by = self.request.user
+            product.last_updated_date = timezone.now()
+            product.save() 
+            image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
+                        form.cleaned_data.get('width'),form.cleaned_data.get('height'),
+                        product.image,400,400)   
+            messages.success(self.request,"Product Update Successfully!")
+            return redirect("admin:admin_products")
+        except Exception as e:
+            print("@@@ Exception at Product Update View get_context data ",e)
+            return redirect ("admin:admin_products")
     
     def form_invalid(self,form):
-        messages.warning(self.request,form.errors)
-        return render(self.request,"admin/product/product_form_update.html",
-                        {'form':form,'image_form':ProductImageForm,'price_form':ProductPriceForm})
+        try:
+            messages.warning(self.request,form.errors)
+            return redirect('admin:admin_products')
+        except Exception as e:
+            print("@@@ Exception at Product Update View get_context data ",e)
+            return redirect ("admin:index")
+
+        # return render(self.request,"admin/product/product_form_update.html",
+        #                 {'form':form,'image_form':ProductImageForm,'price_form':ProductPriceForm})
 
 
 @method_decorator(decorators,name='dispatch')

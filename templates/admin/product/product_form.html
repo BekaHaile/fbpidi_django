@@ -54,7 +54,8 @@
 						</div>
 					</div>
 					{%comment%}
-					{%if user.get_company.main_category == "Food" or user.get_company.main_category == "Beverage" "%}
+					<!-- company is sent from the view -->
+					{%if company.main_category == "Food" or user.get_company.main_category == "Beverage" "%}
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3">{{form.fandb_category.label|title}} *</label>
 						<div class="col-lg-9">
@@ -63,7 +64,7 @@
 						</div>
 					</div>
 					{%endcomment%}
-					{%if user.get_company.main_category == "Pharmaceuticals"%}
+					{%if company.main_category == "Pharmaceuticals"%}
 					
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3">{{form.pharmacy_product_type.label|title}} *</label>

@@ -132,6 +132,7 @@ class ProductCreationForm(forms.ModelForm):
             company_categories = self.company.category.all()
             self.fields['pharmacy_product_type'].queryset = SubCategory.objects.filter(category_name__in = company_categories)
             self.fields['pharmacy_product_type'].required = True
+
             
         else:
             self.fields['brand'].required = False
@@ -139,6 +140,7 @@ class ProductCreationForm(forms.ModelForm):
         
         self.fields['dosage_form'].queryset = DosageForm.objects.all()
         # self.fields['dose'].empty_label = "Select Prodect Dose"
+        self.fields['pharmacy_product_type'].empty_label = "Select Product Type"
         self.fields['dosage_form'].empty_label = "Select Product Dosage Form"
         self.fields['brand'].empty_label = "Select Product Brand"
         self.fields['reserve_attr0'].empty_label = "Select Product Group"

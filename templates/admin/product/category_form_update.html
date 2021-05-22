@@ -8,7 +8,7 @@
 {%block nav%}
 	{%if category == True%}<a href="{%url 'admin:categories'%}" class="breadcrumb-item">Sectors</a><a href="{%url 'admin:edit_category' pk=object.id%}" class="breadcrumb-item">Update Sub-Sectors</a>
 	{%elif sub_category == True %}<a href="{%url 'admin:sub_categories'%}" class="breadcrumb-item">Products</a> <a href="{%url 'admin:edit_subcategory' pk=object.id%}" class="breadcrumb-item">Update Products</a>
-	{%elif brand == True%}<a href="{%url 'admin:brands'%}" class="breadcrumb-item">Brands</a><a href="{%url 'admin:update_brand' pk=object.id%}" class="breadcrumb-item">Update Brands</a>
+	{%elif brand == True%}<a href="{%url 'admin:brands'%}" class="breadcrumb-item">Brands</a><a href="{%url 'admin:edit_brand' pk=object.id%}" class="breadcrumb-item">Update Brands</a>
 	{%endif%}
 {%endblock%}
 {%block category_menu%}nav-item-expanded nav-item-open{%endblock%}
