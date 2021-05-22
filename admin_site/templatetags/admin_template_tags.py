@@ -167,7 +167,7 @@ def count_unread_chats(user):
 
 @register.simple_tag
 def count_unread_inbox(company):
-    return CompanyMessage.objects.filter(company = company).count()
+    return CompanyMessage.objects.filter(company = company, replied =False).count()
 
 
 @register.simple_tag
