@@ -81,7 +81,7 @@
                                             <div class="col-lg-3 row">
 
                                                 {{form.quantity}} 
-												<p style="display: inline;">{% print_translated products.0.brand.product_type.uom.name products.0.brand.product_type.uom.name_am LANGUAGE_CODE %}</p> 
+												<p style="display: inline;">{% print_translated products.0.get_subcategory.uom.name products.0.get_subcategory.uom.name_am LANGUAGE_CODE %}</p> 
                                                 </div>
                                         </div>
                                         <div class="row mb-3" style="margin-bottom: 20px;">

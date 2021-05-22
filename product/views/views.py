@@ -1133,13 +1133,9 @@ class ProductByMainCategory(ListView):
     model=Product
     template_name="frontpages/product/product_category.html"
     paginate_by = 6
+    products = []
 
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.filter(category_type=self.kwargs['option'])
-        return context
-
-    def get_queryset(self):
+    def get_data(self):
         brands = []
         if self.kwargs['option'] == "Beverage":
             categories = Category.objects.filter(category_type="Beverage")
@@ -1157,20 +1153,48 @@ class ProductByMainCategory(ListView):
             return Product.objects.filter(brand__in=brands)
         elif self.kwargs['option'] == "Pharmaceuticals":
             categories = Category.objects.filter(category_type="Pharmaceuticals")
-            for category in categories:
-                for sub_cat in category.sub_category.all():
-                    for brand in sub_cat.product_category.all():
-                        brands.append(brand)
-            return Product.objects.filter(brand__in=brands)
+            return Product.objects.filter(pharmacy_product_type__category_name__in = categories )
+            # for category in categories:
+            #     for sub_cat in category.sub_category.all():
+            #         for brand in sub_cat.product_category.all():
+            #             brands.append(brand)
+            # return Product.objects.filter(brand__in=brands)
             # return Product.objects.filter(pharmacy_category__in=Category.objects.filter(category_type="Pharmaceuticals"))
         elif self.kwargs['option'] == "all":
             return Product.objects.all()
 
 
-class SearchProduct(View):
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.filter(category_type=self.kwargs['option'])
+        count = self.get_data().count()
+        context['message'] = f" {count} Listing Found! "
+        context['message_am'] = f"{count} ውጤት ተገኝቷል! "
+        return context
 
-    def get(self,*args,**kwargs):
-        template_name = "frontpages/product/product_category.html"
+    def get_queryset(self):
+        return self.get_data()
+
+
+class SearchProduct(ListView):
+    model=Product
+    template_name="frontpages/product/product_category.html"
+    paginate_by = 6
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        count = self.get_data().count()
+        context['message'] = f" {count} Listing Found! "
+        context['message_am'] = f"{count} ውጤት ተገኝቷል! "
+        return context
+
+
+    def get_queryset(self):
+        return self.get_data()
+
+
+    def get_data(self):
+        # template_name = "frontpages/product/product_category.html"
         products = Product.objects.all()
         if 'name' in self.request.GET and self.request.GET['name'] != '':
             products = Product.objects.filter(
@@ -1180,9 +1204,10 @@ class SearchProduct(View):
             if 'sector' in self.request.GET:
                 if self.request.GET['sector'] !='' or self.request.GET['sector'] != "Select":
                     products = products.filter(Q(brand__product_type__category_name__id=self.request.GET['sector'])).distinct()
+            return products
+
         except ValueError as e:
-            products = products 
-        return render(self.request,template_name,{'object_list':products, })
+            return products
         
 
 class ProductDetailView(DetailView):
