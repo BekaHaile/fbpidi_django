@@ -97,7 +97,7 @@ class Product(models.Model):
     def get_subcategory(self):
         try:
             if self.company.main_category == 'Pharmaceuticals':
-                return self.pharmacy_product_type
+                return self.reserve_attr0.name
                 
             else:
                 return self.brand.product_type

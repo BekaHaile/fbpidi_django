@@ -242,7 +242,7 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
 class CompaniesView(LoginRequiredMixin,ListView):
     model = Company
     template_name = "admin/company/companies.html"
-    paginate_by = 6
+    paginate_by = 8
 
 
     def get_queryset(self):

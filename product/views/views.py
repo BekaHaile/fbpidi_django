@@ -296,7 +296,10 @@ class CreateProductView(LoginRequiredMixin,CreateView):
         kwargs = super(CreateProductView,self).get_form_kwargs()
 
         if self.request.method == 'GET': 
+            
             self.company = Company.objects.get(id = self.request.GET['company'])
+            
+            
         else:
             self.company = Company.objects.get(name = self.request.POST['company'])
             
@@ -326,6 +329,7 @@ class CreateProductView(LoginRequiredMixin,CreateView):
                     product.image,400,400)
         messages.success(self.request,"Product Created Successfully!")
         return redirect("admin:admin_products")
+        # return redirect("admin:create_product")
     
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
