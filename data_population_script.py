@@ -1,4 +1,5 @@
 import os
+from product.models import Product
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','fbpims.settings')
 import django
 django.setup()
@@ -28,7 +29,7 @@ from django.db import connection, reset_queries
 import time
 import functools
 from django.utils import timezone
-from background_task.models import Task
+# from background_task.models import Task
 
 def query_debugger(func):
     @functools.wraps(func)
@@ -74,10 +75,8 @@ def get_weekly_and_old(queryset):
 
 if __name__ == '__main__':    
     
-    
-    a = Announcement.objects.first()
-    Announcement.objects.all().delete()
-    print(Announcement.objects.all())
+    x = Product.objects.get(id  =16)
+    print(x.get_subcategory)
 
 
     

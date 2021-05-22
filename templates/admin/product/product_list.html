@@ -25,9 +25,69 @@
 			<div class="header-elements">
 				
 				<div class="list-icons">
-					{%if perms.product.add_product%}
-					<a href="{% url 'admin:create_product'%}" class="btn bg-teal btn-sm rounded-round"><i
-							class="icon-add mr-2"></i>Add New Varayti</a>
+					{% if user.is_superuser %}
+
+						<a  href="#compose_modal" data-toggle="modal" data-target="#compose_modal" class="btn bg-teal btn-sm rounded-round">
+							<i
+							class="icon-add mr-2"></i>Add New Varayti
+						</a>
+					
+					{% endif %}
+					<div id="compose_modal" class="modal fade" tabindex="-1">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<form action="{% url 'admin:create_product' %}" method="GET">
+									<div class="modal-header">
+										<h5 class="modal-title">Select Company ..</h5>
+										
+									</div>					
+									<div class="modal-body">
+										<div class="form-group" style="padding-left: 20px;">
+														
+											<div style="margin-bottom: 10px;" class="row">
+												<h5> Please Select Commpany Name :</h5>
+											   
+											</div>
+											<div class="form-group row">
+												<!-- <label class="col-form-label col-lg-3">Company Name </label> -->
+												<div class="col-lg-9">
+													{{form.company}}
+												</div>
+											</div>
+											<!-- <div style="margin-right: 5px; " class="mb-3 row">
+												<input id = "chat_to" autocomplete="off" style = "padding: 5px;" type="text" class="form form-control" name = "chat_to" value="" placeholder="Write username ...">
+											</div>
+											<div class="dropdown-content-body dropdown-scrollable">
+												<span class="mb-2" style = "color: rgb(199, 89, 89);" id = "related_names"></span>
+												<ul id = "list_of_users" style = "width: 100%;" class="media-list"> 
+												</ul>
+												<span class="mt-2" style = "color: rgb(199, 89, 89);" id = "error-area"></span>
+											</div> -->
+										   
+										</div>						
+									</div>
+		
+									<div class="modal-footer">
+										<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+										<button type="submit" id="chat_btn"   style = "" class="btn bg-primary">Submit</button>
+									</div>
+									</form>
+							</div>
+						</div>
+					</div>
+
+
+					{%if perms.product.add_product and not user.is_superuser %}
+					<form action = "{% url 'admin:create_product'%}" method = "GET">
+						
+						<input type="hidden"  name = "company" value = '{{user.get_company.id}}' />
+						<button type ="submit" class="btn bg-teal btn-sm rounded-round">
+							<i
+							class="icon-add mr-2"></i>Add New Varayti
+
+						</button>
+					
+					</form>
 					{%endif%}
 				</div>
 
@@ -52,7 +112,8 @@
 					<td>{{cat.name}}</td>
 					
 					<td>
-						{{cat.brand.product_type.sub_category_name}}
+						{{cat.get_subcategory}}
+						
 					</td>
 					<td>{{cat.created_by.username}}</td>
 					<td>
@@ -65,10 +126,10 @@
 									<i class="icon-menu9"></i>
 								</a>
 								<div class="dropdown-menu dropdown-menu-right">
-									{% if not user.is_superuser and perms.product.delete_product %}
+									{% if  perms.product.delete_product %}
 									<a href="{%url 'admin:delete' model_name='product' id=cat.id%}"  onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete Product</a>
 									{% endif %}
-									{% if not user.is_superuser and perms.product.change_product %}
+									{% if  perms.product.change_product %}
 									<a href="{%url 'admin:product_detail' pk=cat.id%}" class="dropdown-item">
 										<i class="icon-pencil"></i>Edit Varayti</a>
 									 {% endif %}
