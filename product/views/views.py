@@ -260,25 +260,47 @@ class AdminProductListView(LoginRequiredMixin,ListView):
             return Product.objects.filter(company=self.request.user.get_company())
         elif self.request.user.is_company_staff:
             return Product.objects.filter(company=CompanyStaff.objects.get(user=self.request.user).company)
-
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = CompanySelectForm
+        return context
 
 @method_decorator(decorators,name='dispatch')
 class CreateProductView(LoginRequiredMixin,CreateView):
     model=Product
-    form_class = ProductCreationForm
+    form_class = ProductCreationForm  
     template_name = "admin/product/product_form.html"
+    company = ''
 
+   
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreateProductView,self).get_form_kwargs()
-        if self.request.user.is_company_admin:
-            kwargs.update({'company': Company.objects.get(contact_person=self.request.user)})
-        elif self.request.user.is_company_staff:
-            kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company})
+
+        if self.request.method == 'GET': 
+
+            self.company = Company.objects.get(id = self.request.GET['company'])
+        else:
+            self.company = Company.objects.get(name = self.request.POST['company'])
+            
+        kwargs.update({ 'company':self.company})
+        
+        
+        
+        # if self.request.user.is_company_admin:
+        #     kwargs.update({'company': Company.objects.get(contact_person=self.request.user), 'user':user})
+        # elif self.request.user.is_company_staff:
+        #     kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company, 'user':user})
         return kwargs
 
+    def get_context_data(self, *args, **kwargs):
+        context= super().get_context_data(**kwargs)
+        context['company'] = self.company
+        return context
+    
     def form_valid(self,form):
         product = form.save(commit=False)
-        product.company = self.request.user.get_company()
+        product.company = self.company
+        # product.company = self.request.user.get_company()
         product.created_by = self.request.user
         product.save()    
         image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),

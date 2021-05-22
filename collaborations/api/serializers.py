@@ -84,9 +84,11 @@ class BlogCommentSerializer(serializers.ModelSerializer):
         model = BlogComment
         fields = "__all__"
 
+
 class BlogDetailSerializer(serializers.ModelSerializer):
     comments_list = BlogCommentSerializer(source= 'comments', many = True, read_only = True)
     created_by = UserInfoSerializer(read_only = True)
+    company = CompanyInfoSerializer(read_only = True)
     class Meta:
         model = Blog
         fields = "__all__"

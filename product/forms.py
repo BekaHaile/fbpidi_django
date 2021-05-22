@@ -2,13 +2,14 @@ import datetime
 
 from django import forms
 from django.db.transaction import atomic
+from django.forms import widgets
 
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 from PIL import Image
 
 from product.models import *
 from admin_site.models import Category
-from company.models import Company
+from company.models import Company, CompanyStaff
 
 
 def return_year(start_year):
@@ -41,6 +42,21 @@ def return_year_with_halfyear(start_year):
     YEAR_CHOICES += [(r,r) for r in range(start_year, current_year+1)]
     return YEAR_CHOICES
 
+class CompanySelectForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CompanySelectForm,self).__init__(*args,**kwargs)
+        self.fields['company'].queryset = Company.objects.all().order_by('name')
+        self.fields['company'].empty_label = "Select company "
+    
+
+    class Meta:
+        model = Product
+        fields = ('company',)
+        widgets ={
+            'company':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+
+        }
+    
 
 class CategoryForm(forms.ModelForm):
     class Meta:
@@ -54,6 +70,7 @@ class CategoryForm(forms.ModelForm):
             'category_name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Sub Sector Name(Amharic)'}),
             # 'description_am':forms.Textarea(attrs={'class':'summernote'}),
         }
+
 
 class BrandForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
@@ -70,6 +87,7 @@ class BrandForm(forms.ModelForm):
             'brand_name':forms.TextInput(attrs={'placeholder':'Product Brand Name'}),
             'brand_name_am':forms.TextInput(attrs={'placeholder':'Product Brand Name in Amharic'})
         }
+
 
 class SubCategoryForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
@@ -93,6 +111,7 @@ class SubCategoryForm(forms.ModelForm):
             'description_am':forms.Textarea(attrs={'class':'summernote'}),
         } 
 
+
 class ProductCreationForm(forms.ModelForm):
     x = forms.FloatField(widget=forms.HiddenInput(),required=False)
     y = forms.FloatField(widget=forms.HiddenInput(),required=False)
@@ -108,8 +127,65 @@ class ProductCreationForm(forms.ModelForm):
         # else:
         #     self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type=self.company.main_category)
         # self.fields['dose'].queryset = Dose.objects.all()
+        if self.company.main_category == "Pharmaceuticals":
+            self.fields['brand'].required = False
+            company_categories = self.company.category.all()
+            self.fields['pharmacy_product_type'].queryset = SubCategory.objects.filter(category_name__in = company_categories)
+            self.fields['pharmacy_product_type'].required = True
+            
+        else:
+            self.fields['brand'].required = False
+            self.fields['pharmacy_product_type'].required = False
+        
         self.fields['dosage_form'].queryset = DosageForm.objects.all()
         # self.fields['dose'].empty_label = "Select Prodect Dose"
+        self.fields['dosage_form'].empty_label = "Select Product Dosage Form"
+        self.fields['brand'].empty_label = "Select Product Brand"
+        self.fields['reserve_attr0'].empty_label = "Select Product Group"
+        self.fields['therapeutic_group'].empty_label = "Select Therapeutic Group"
+     
+    class Meta:
+        model = Product
+        fields = ('name','name_am','brand','reserve_attr0',
+                    'dose','dosage_form','quantity','therapeutic_group','pharmacy_product_type',
+                    'description','description_am','image',)
+        widgets = {
+            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Product/Varayti Name(English)'}),
+            'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Product/Varayti Name(Amharic)'}),
+            'brand':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'pharmacy_product_type':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'reserve_attr0':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'dose':forms.TextInput(attrs={'class':'form-control','placeholder':'Dose & Packaging'}),
+            'dosage_form':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'therapeutic_group':forms.Select(attrs={'class':'form-control form-control-uniform'}),
+            'description':forms.Textarea(attrs={'class':'summernote','required':'False'}),
+            'description_am':forms.Textarea(attrs={'class':'summernote','required':'False'}),
+            'image':forms.FileInput(attrs={'class':"form-control form-input-styled"}),
+            'quantity':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_quantity")'}),
+        } 
+
+
+class PharmaceuticalProductCreationForm(forms.ModelForm):
+    x = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    y = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    width = forms.FloatField(widget=forms.HiddenInput(),required=False)
+    height = forms.FloatField(widget=forms.HiddenInput(),required=False)
+
+    def __init__(self,*args,**kwargs):
+        self.company = kwargs.pop('company')
+        # self.user = kwargs.pop('user')
+        super(PharmaceuticalProductCreationForm,self).__init__(*args,**kwargs)
+        self.fields['brand'].queryset = Brand.objects.filter(company=self.company)
+        self.fields['brand'].required = False
+        self.fields['dose'].queryset = Dose.objects.all()
+        self.fields['dosage_form'].queryset = DosageForm.objects.all()
+
+        company_categories = self.company.category.all()
+        self.fields['pharmacy_product_type'].queryset = SubCategory.objects.filter(category_name__in = company_categories)
+        self.fields['pharmacy_product_type'].required = True
+
+        # self.fields['dose'].empty_label = "Select Prodect Dose"
+
         self.fields['dosage_form'].empty_label = "Select Product Dosage Form"
         self.fields['brand'].empty_label = "Select Product Brand"
         self.fields['reserve_attr0'].empty_label = "Select Product Group"
@@ -134,8 +210,6 @@ class ProductCreationForm(forms.ModelForm):
             'quantity':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_quantity")'}),
         } 
  
-    
-
 
 class DosageFormForm(forms.ModelForm):
     class Meta:
