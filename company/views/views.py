@@ -1005,8 +1005,9 @@ def activate_company(request,pk):
 class SearchCompany(ListView):
     model = Company
     template_name = "frontpages/company/company_list.html"
-    paginate_by = 4
-    def get_queryset(self):
+    paginate_by = 6
+
+    def get_data(self):
         try:
             companies = Company.objects.all().exclude(main_category='FBPIDI')
             if 'name' in self.request.GET and self.request.GET['name'] != '':
@@ -1018,59 +1019,53 @@ class SearchCompany(ListView):
                         companies = companies.filter(Q(category__id=self.request.GET['sector'])).distinct()
         except ValueError:
             companies=companies
-
         return companies
-    # def get(self,*args, **kwargs):
-    #     template_name = "frontpages/company/company_list.html"
-    #     companies = Company.objects.all().exclude(main_category='FBPIDI')
-    #     try:
-    #         if 'name' in self.request.GET and self.request.GET['name'] != '':
-    #             companies = Company.objects.filter( Q(name__icontains=self.request.GET['name'])|Q(name_am__icontains=self.request.GET['name'])
-    #             |Q(company_product__name=self.request.GET['name'])) 
-        
-    #         if 'sector' in self.request.GET:
-    #             if self.request.GET['sector'] !='' or self.request.GET['sector'] != 'Select':
-    #                  companies = companies.filter(Q(category__id=self.request.GET['sector']))
-    #     except ValueError:
-    #         companies=companies
 
-    #     return render(self.request,template_name,{'object_list':companies})
+    def get_queryset(self):
+        return self.get_data()
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        count = self.get_data().count()
+        context['message'] = f" {count} Listing Found! "
+        context['message_am'] = f"{count} ውጤት ተገኝቷል! "
+        return context
+    
     
 
 class FilterCompanyByCategory(ListView):
     model = Company
     template_name = "frontpages/company/company_list.html"
-    paginate_by = 12
-        
-    def get_queryset(self):
+    paginate_by = 6
+
+    def get_data(self):
         try:
             categories = self.request.GET.getlist('by_category')
             companies = Company.objects.filter(main_category__in = categories , is_active =True).exclude(main_category='FBPIDI')      
         except Exception as e:
             print("Exception while filtering companies ",e)
             companies = Company.objects.all().exclude(main_category='FBPIDI')
-
         return companies
+
+
+        
+    def get_queryset(self):
+        return self.get_data()
+
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
+        count = self.get_data().count()
+        context['message'] = f" {count} Listing Found! "
+        context['message_am'] = f"{count} ውጤት ተገኝቷል! "
         context['by_category'] = self.request.GET.getlist('by_category')
         return context
-    # def get(self, *args, **kwargs):
-        
-    #     try:
-    #         categories = self.request.GET.getlist('by_category')
-    #         companies = Company.objects.filter(main_category__in = categories).exclude(main_category='FBPIDI')      
-    #     except Exception as e:
-    #         print("Exception while filtering companies ",e)
-    #         companies = Company.objects.all().exclude(main_category='FBPIDI')      
-
-    #     return render(self.request,template_name,{'object_list':companies})
+    
 
 class CompanyByMainCategory(ListView):
     model = Company
     template_name = "frontpages/company/company_list.html"
-    paginate_by = 4
+    paginate_by = 6
     def get_data(self, cat):
         if cat == "Beverage":
             return Company.objects.filter(main_category="Beverage", is_active =True)
@@ -1084,15 +1079,6 @@ class CompanyByMainCategory(ListView):
     
     def get_queryset(self):
         return self.get_data(self.kwargs['option'])
-
-        # if self.kwargs['option'] == "Beverage":
-        #     return Company.objects.filter(main_category="Beverage", is_active =True)
-        # elif self.kwargs['option'] == "Food":
-        #     return Company.objects.filter(main_category="Food", is_active =True)
-        # elif self.kwargs['option'] == "Pharmaceuticals":
-        #     return Company.objects.filter(main_category="Pharmaceuticals", is_active =True)
-        # elif self.kwargs['option'] == "all":
-        #     return Company.objects.all().exclude(main_category="FBPIDI", is_active =True)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)

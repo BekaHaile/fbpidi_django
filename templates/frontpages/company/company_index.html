@@ -144,8 +144,9 @@
 												<img src="{{product.image.url}}" alt="img" class="cover-image">
 											</div>
 											<div class="item-card7-overlaytext">
-												<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="text-white"> 
-													{{product.brand.product_type.category_name.category_type}} </a>
+												<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="text-white">
+													{{product.company.main_category}}
+												</a>
 											</div>
 											<div class="item-card7-icons">
 												

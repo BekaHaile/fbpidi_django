@@ -814,7 +814,7 @@
 					<div class="card-body">
 						<ul class="nav nav-tabs">
 							<li class="nav-item"><a href="#basic-tab1d" class="nav-link" data-toggle="tab">Dosage Forms</a></li>
-							<li class="nav-item"><a href="#basic-tab2d" class="nav-link" data-toggle="tab">Pharmaceutical Product Group</a></li>
+							<li class="nav-item"><a href="#basic-tab2d" class="nav-link" data-toggle="tab">Pharmaceutical Products</a></li>
 							<li class="nav-item"><a href="#basic-tab3d" class="nav-link" data-toggle="tab">Therapeutic Group</a></li>
 						</ul>
 
@@ -822,7 +822,7 @@
 							 
 							<div class="tab-pane fade show active " id="basic-tab1d">
 								<p class="card-title">Product Dosage Forms</p>
-								{% if perms.product.add_dosageform %}
+								{% if user.is_superuser or perms.product.add_dosageform %}
 								<a  href="#" data-toggle="modal" data-target="#dosage_form_modal" class="float-right btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Dosage Form</a>
 								{% endif %}
 								<table class="table datatable-show-all">
@@ -872,7 +872,7 @@
 							<div class="tab-pane fade " id="basic-tab2d">
 								<p class="card-title">Pharmaceutical Products Groups List</p>
 								{% if perms.admin_site.add_pharmaceuticalproduct %}
-								<a  href="#" data-toggle="modal" data-target="#phpg_list_form" class="float-right btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Product Group</a>
+								<a  href="#" data-toggle="modal" data-target="#phpg_list_form" class="float-right btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add Pharmaceturical Product</a>
 								{%endif%}
 								<table class="table datatable-show-all">
 									<thead>

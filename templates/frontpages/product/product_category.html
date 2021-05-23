@@ -13,7 +13,7 @@
 							<div class="col-xl-8 col-lg-12 col-md-12 d-block mx-auto">
 								<div class="text-center text-white ">
 									
-									<h1 class=""><span class="font-weight-bold">{{object_list.count}}</span> {% trans "Products available" %}</h1>
+									<h1 class=""><span class="font-weight-bold"></span>{%print_translated message message_am LANGUAGE_CODE %} </h1>
 								</div>
 								<div class="search-background px-4 py-3 mt-4">
 									<form action="{%url 'search_product'%}" method="GET">
@@ -115,7 +115,8 @@
 														{% endif %}
 														</div>
 														<div class="item-cardreview-absolute bg-secondary">
-															{{product.brand.product_type.category_name.category_type}}
+														
+															{{product.get_subcategory.category_name.category_type}}
 														</div>
 													</div>
 													<div class="card border-0 mb-0">
@@ -234,8 +235,7 @@
 																	{% endif %}
 																</div>
 																<div class="item-cardreview-absolute bg-secondary">
-																	{{product.brand.product_type.category_name.category_type}}
-
+																	{{product.get_subcategory.category_name.category_type}}
 															</div>
 															<div class="card border-0 mb-0">
 																<div class="card-body">

@@ -1,5 +1,5 @@
 import os
-from product.models import Product
+from product.models import DosageForm, Product
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','fbpims.settings')
 import django
 django.setup()
@@ -64,12 +64,10 @@ def with_out():
 
 def get_weekly_and_old(queryset):
     try:
-        unnotified = queryset.filter(subscriber_notified = False)
-        week_dates  = [ timezone.now().date() - timedelta(days = d) for d in range(8)] #since we also need to subtract 7 days, the range has to b 8
-        this_week_objects = unnotified.filter( created_date__date__in= week_dates )
-        week_obj_ids = [obj.id for obj in this_week_objects]
-        older_objects = unnotified.exclude(id__in = week_obj_ids)
-        return {'error':False, "this_week_objects": this_week_objects, "older_objects": older_objects}
+        names = []
+        u = UserProfile.objects.get(id = 1)
+        print(u)
+        
     except Exception as e:
         return {'error':True, 'message':str(e)}
 
