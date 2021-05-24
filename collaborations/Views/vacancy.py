@@ -5,35 +5,27 @@ from django.urls import reverse
 from django.utils import timezone
 
 
-from django.http import HttpResponse, FileResponse
-from collaborations.models import Blog, BlogComment
-from collaborations.forms import FaqsForm
-from django.shortcuts import render, redirect, reverse
+from django.http import  FileResponse
+from django.shortcuts import render, redirect
 
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
-from collaborations.models import Faqs, Vacancy, Blog, BlogComment, Blog, BlogComment, JobApplication, JobCategory, News, NewsImages
+from django.views.generic import CreateView, UpdateView, ListView
+from collaborations.models import  Vacancy,  Blog, BlogComment, JobApplication, JobCategory
 									 #redirect with context
-from django.http import HttpResponse, HttpResponseRedirect
+
 from django.views import View
 from django.contrib import messages
 from django.utils import timezone
 
-from company.models import Company, CompanyBankAccount, Bank, CompanyStaff, CompanyEvent, EventParticipants
-from accounts.models import User, CompanyAdmin, Company
+from company.models import Company
+from accounts.models import  Company
 import os
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
 
-from django.http import FileResponse, HttpResponse
+from django.http import FileResponse
 
-from accounts.models import User
-from accounts.email_messages import sendEventNotification
 
-from collaborations.forms import PollsForm, CreatePollForm, CreateChoiceForm, NewsForm
 from django.http import HttpResponse, FileResponse
 						 
-from wsgiref.util import FileWrapper
 from django.db.models import Q
 
 

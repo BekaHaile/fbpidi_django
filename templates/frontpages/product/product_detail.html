@@ -61,7 +61,7 @@
 		<div class="bg-white border-bottom">
 			<div class="container">
 				<div class="page-header">
-					<h4 class="page-title">{{product.company.main_category}} Proccesing Industry</h4>
+					<h4 class="page-title">{{product.get_subcategory.category_name.category_type}}} Proccesing Industry</h4>
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="{%url 'index' %}">Home</a></li>
 						<li class="breadcrumb-item"><a href="{%url 'product_category_main' option='all'%}">Products</a></li>
@@ -87,7 +87,8 @@
 									<div class=" d-flex">
 										<ul class="d-flex mb-0">
 											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-briefcase text-muted mr-1"></i>
-												{{product.brand.product_type.category_name.category_type}}
+												{{product.get_subcategory.category_name.category_type}}
+												
 												</a></li>
 											<li class="mr-5"><a href="#" class="icons"><i class="icon icon-location-pin text-muted mr-1"></i> {{product.company.get_company_address.city_town|title}}</a></li>
 											<!-- <li class="mr-5"><a href="#" class="icons"><i class="icon icon-calendar text-muted mr-1"></i> 5 hours ago</a></li> -->
@@ -265,7 +266,7 @@
 									</div>
 									<div class="item-card7-overlaytext">
 										<a href="{%url 'product_detail' pk=rp.id%}" class="text-white">
-											{{product.brand.product_type.category_name.category_type}}
+											{{product.get_subcategory.category_name.category_type}}
 											 </a>
 									</div>
 									<div class="item-card7-icons">

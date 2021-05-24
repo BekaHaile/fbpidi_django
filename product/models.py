@@ -28,6 +28,9 @@ class SubCategory(models.Model):
 
     def __str__(self):
         return self.sub_category_name
+
+    class Meta:
+        ordering = ('sub_category_name',)
 # Brand
 class Brand(models.Model):
 	company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_brand")
@@ -49,9 +52,10 @@ class Product(models.Model):
     name_am = models.CharField(max_length=255,verbose_name="Varayti Name(Amharic)")
     # fandb_category = models.ForeignKey(SubCategory,on_delete=models.CASCADE, blank=True,null=True,
     #                              verbose_name="Product Category",related_name="product_fandb_category")
-    # pharmacy_category = models.ForeignKey(Category,on_delete=models.CASCADE, blank=True,null=True, 
-    #                                     verbose_name="Pharmacy Product Category",related_name="pharmacy_category")
     brand = models.ForeignKey(Brand,on_delete=models.RESTRICT,verbose_name="Varayti Brand",null=True,blank=True,related_name="varayti_brand")
+    
+    pharmacy_product_type = models.ForeignKey(SubCategory,on_delete=models.CASCADE, blank=True,null=True, verbose_name="Pharmacy Product Category",related_name="pharmacy_category")
+    
     quantity = models.FloatField(verbose_name="Product Quantity",default=0)
     therapeutic_group = models.ForeignKey(TherapeuticGroup,on_delete=models.RESTRICT,related_name="therapeutic_group",verbose_name="Therapeutic Group",null=True,blank=True)
     dose = models.CharField(max_length=255,verbose_name="Dose & Packaging",null=True,blank=True)
@@ -84,7 +88,24 @@ class Product(models.Model):
 
     # this returns the Category object for a product using the order => product.brand.subcategory.category
     def get_category(self):
-        return self.brand.product_type.category_name
+        
+        if self.company.main_category == 'Pharmaceuticals':
+            return self.pharmacy_product_type.category_name
+        else:
+            return self.brand.product_type.category_name
+
+    def get_subcategory(self):
+        try:
+            if self.company.main_category == 'Pharmaceuticals':
+                return self.pharmacy_product_type
+                
+            else:
+                return self.brand.product_type
+        except Exception as e:
+            return ''
+                # return self.brand.product_type.sub_category_name
+            
+             
 
     def rating(self):
         total = 0
@@ -116,7 +137,10 @@ class Dose(models.Model):
 
     def __str__(self):
         return self.dose
-    
+
+    class Meta:
+        ordering = ('dose',)
+        
 class DosageForm(models.Model):
     dosage_form = models.CharField(verbose_name="Dosage Form in English",max_length=255)
     dosage_form_am = models.CharField(verbose_name="Dosage Form in Amharic",max_length=255)
@@ -128,6 +152,9 @@ class DosageForm(models.Model):
 
     def __str__(self):
         return self.dosage_form
+    
+    class Meta:
+        ordering = ('dosage_form',)
 
 class ProductionCapacity(models.Model):	 	
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_production_capacity")	

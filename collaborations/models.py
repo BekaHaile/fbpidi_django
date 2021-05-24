@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.validators import FileExtensionValidator
 
 
-from company.models import Company,CompanyBankAccount
+from company.models import Company
 
 JOB_CHOICES=[ ('', 'Select Employment Type'),
             ('Temporary','Temporary'),
@@ -13,7 +13,7 @@ JOB_CHOICES=[ ('', 'Select Employment Type'),
 
 allowed_image_extensions = ['png','jpg','jpeg','webp',]
 
-
+allowed_doc_extensions =['png','jpg','jpeg','webp','pdf', 'doc', 'docx','xlsx', 'txt']
 class PollsQuestion(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=2000, verbose_name="Poll title (English)")
@@ -209,7 +209,6 @@ class Tender(models.Model):
                                                                                         ('Closed', 'Closed'), ('Suspended', 'Suspended')
                                                                                     ], default='Open')
     #if we r using the company logo there is no need to save it twice, we can get it from user.company.get_image()   
-    #image = models.ImageField(verbose_name="Company image",help_text="png,jpg,gif files, Max size 10MB") 
     bank_account = models.ManyToManyField('company.CompanyBankAccount', related_name="accounts")
     start_date = models.DateTimeField(verbose_name="Tender start date")
     end_date = models.DateTimeField(verbose_name="Tender end date")
@@ -344,8 +343,8 @@ class JobApplication(models.Model):
     status = models.CharField(max_length=500,null=False)
     bio = models.TextField(null=False)
     experiance = models.IntegerField(null=False)
-    cv = models.FileField(upload_to="cv/", validators=[FileExtensionValidator(allowed_extensions=allowed_image_extensions)],help_text="only pdf,jpg,doc,docx files, Max size 10MB")
-    documents = models.FileField(upload_to="documents/", help_text="pdf, jpg,doc,docx files, Max size 10MB")
+    cv = models.FileField(upload_to="cv/", validators=[FileExtensionValidator(allowed_extensions=allowed_doc_extensions)],help_text="only pdf,jpg,doc,docx files, Max size 10MB")
+    documents = models.FileField(upload_to="documents/", validators=[FileExtensionValidator(allowed_extensions=allowed_doc_extensions)], help_text="pdf, jpg,doc,docx files, Max size 10MB")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     is_active = models.BooleanField(default=False)
@@ -666,7 +665,7 @@ class Document_Category(models.Model):
 
 
 class Document(models.Model):
-    DOC_CATEGORY = [ ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'),]
+    DOC_CATEGORY = [ ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'), ('Other Documents','Other Documents')]
 
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(verbose_name="upload time", auto_now_add=True)

@@ -144,8 +144,9 @@
 												<img src="{{product.image.url}}" alt="img" class="cover-image">
 											</div>
 											<div class="item-card7-overlaytext">
-												<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="text-white"> 
-													{{product.brand.product_type.category_name.category_type}} </a>
+												<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="text-white">
+													{{product.get_subcategory.category_name.category_type}}
+												</a>
 											</div>
 											<div class="item-card7-icons">
 												
@@ -428,7 +429,7 @@
 					}
 					).then(e => e.json()).then(result=>{
 							window.alert(result['message'])
-							console.log(result['message']) 
+							 
 							document.getElementById('email_field').value = ""             
 						}); 
 			}
@@ -468,7 +469,7 @@
 					elements.forEach( (element)=> {
 						element.style['background-color'] =  "rgb(252, 67, 67)"
 						element.title = "liked"
-						console.log("liked "+p_id)
+					
 					})	
 				}
 				else{

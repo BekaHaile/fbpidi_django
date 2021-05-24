@@ -37,7 +37,8 @@
 										<img src="{{product.image.url}}" alt="img" class="cover-image">
 										<div class="item7-card-text">
 											<span class="badge badge-success">
-												{{product.brand.product_type.category_name.category_type}}
+												
+												{{object.main_category}}
 												</span>
 										</div>
 									</div>
@@ -45,7 +46,7 @@
 										<div class="item7-card-desc d-flex mb-2">
 											<a href="#"><i class="fa fa-calendar-o text-muted mr-2"></i>ETB {{product.price}}</a>
 											<div class="ml-auto">
-												<a class="mr-0" href="#"><i class="fa fa-ship text-muted mr-2"></i>{{product.quantity|floatformat:0}}{{product.brand.product_type.uom}} in Stock</a>
+												<a class="mr-0" href="#"><i class="fa fa-ship text-muted mr-2"></i>{{product.quantity|floatformat:0}}{{product.get_subcategory.uom}} in Stock</a>
 											</div>
 										</div>
 										<a href="#" class="text-dark"><h4 class="font-weight-semibold">{{product.name}}</h4></a>

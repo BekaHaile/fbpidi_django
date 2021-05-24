@@ -37,6 +37,8 @@ class ApiCompanyByMainCategoryList(APIView):
             companies = Company.objects.filter(main_category = main_category)
         else:
             companies = Company.objects.all()
+        if 'by_title' in request.query_params:
+            companies = companies.filter(Q(name__icontains=request.query_params['by_title'])|Q(name_am__icontains=request.query_params['by_title'])|Q(company_product__name=request.query_params['by_title'])).distinct()
         paginated = get_paginated_data(request, companies)
         subsectors = Category.objects.all()
         return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'count' : companies.count(), 'companies': CompanyInfoSerializer(paginated, many =True).data, 

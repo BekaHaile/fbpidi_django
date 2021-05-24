@@ -185,7 +185,7 @@
                             })
                         }
                        ).then(e => e.json()).then(data=>
-                       {console.log(data)
+                       {
                            if (data['result']==true){
                             item=document.getElementById('m_'+chat_id)
                             document.querySelector('#main-chat-ul').removeChild(item)
@@ -199,6 +199,7 @@
 
 
     }
+    
     function append_message(message_obj){
                
                     var br = document.createElement('br')
@@ -300,7 +301,7 @@
                        ).then(e => e.json()).then(messages=>{
                            for (m of messages)
                                 {
-                                    console.log(m," \n")
+                                   
                                     append_message(m)
                                 }                       
                             });   

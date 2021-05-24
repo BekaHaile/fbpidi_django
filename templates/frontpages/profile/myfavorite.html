@@ -23,7 +23,8 @@
 					<div class="card-body py-4">
 						<div class="item-card9">
 							<div class="d-flex">
-								<a href="{% url 'product_detail' pk=lp.product.id %}">{% print_translated lp.product.brand.product_type.sub_category_name lp.product.brand.product_type.sub_category_name_am LANGUAGE_CODE %}</a>
+								<a href="{% url 'product_detail' pk=lp.product.id %}">{% print_translated lp.product.get_subcategory.sub_category_name lp.product.get_subcategory.sub_category_name_am LANGUAGE_CODE %}</a>
+							
 							</div>
 							<a href="{% url 'product_detail' pk=lp.product.id %}" class="text-dark"><h4 class="font-weight-semibold mt-0">{%print_translated lp.product.name lp.product.name_am LANGUAGE_CODE %}<i class="ion-checkmark-circled text-success ml-1"></i></h4></a>
 							<div class="item-card2-desc mt-3">

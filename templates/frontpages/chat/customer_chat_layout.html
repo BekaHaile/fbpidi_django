@@ -66,8 +66,9 @@
                                             {% for m in old_messages %}  
                                             
                                                 {% if m.sender_name == request.user.username %}
-                                                <li class="media media-chat-item-reverse " >
+                                                <li id="m_{{m.id}}" class="media media-chat-item-reverse " >
                                                     <div class="media-body ml-3">
+                                                        <i onclick="remove_message('{{m.id}}')" class="icon-trash ml-1 mt-3" style="color: rgb(128, 70, 59);"></i>
                                                         <div class="media-chat-item">{{m.message}}</div>
                                                         <div class="font-size-sm text-muted mt-2">{{m.time}}<a href="#"></a></div>
                                                     </div>
@@ -184,7 +185,37 @@
 
 <script>
 
-        
+function remove_message(chat_id){
+            var x = confirm ('Are you sure you want to delete this Message?')
+            if (x)
+            {
+                fetch("/chat/delete_chat/",
+                            {
+                                method:"POST",
+                                credentials: 'same-origin',
+                                headers:{
+                                    "content-Type":'application/json',
+                                    'X-CSRFToken':'{{csrf_token}}'
+                                },
+                                body:JSON.stringify({
+                                    'id': chat_id,
+                                })
+                            }
+                        ).then(e => e.json()).then(data=>
+                        {
+                            if (data['result']==true){
+                                item=document.getElementById('m_'+chat_id)
+                                document.querySelector('#main-chat-ul').removeChild(item)
+                            } 
+                            else{
+                                window.alert("Couldn't delete chat message, Server Error! ")
+                            }              
+                            });   
+                
+            }
+
+
+        }
         
         scroll_down()
         setInterval(load_messages, 2000);
@@ -194,72 +225,82 @@
                 main_ul.scrollTop = main_ul.scrollHeight;
             }
         
-        function append_message(message_obj){
-                        console.log("from append"+message_obj)
-                        var br = document.createElement('br')
-                        var li_item = document.createElement('li');
-                            var img_div = document.createElement('div');
-                                var image_anchor = document.createElement('a');
-                                    var image_item = document.createElement('img');
-    
-                            var chat_div = document.createElement('div');
-                                var chat_area = document.createElement('p');
-                                var time_area = document.createElement('small');
-    
-                        // common for both sender and reciever
-                        image_anchor.href = message_obj.sender_image;
-                        image_item.src = message_obj.sender_image;
-                        image_item.className = "rounded-circle"
-                        image_item.width = "50";
-                        image_item.height = "50";
-    
-                        chat_div.className = "media-body"
-                            chat_area.textContent = message_obj.message;
-                            chat_area.className = "media-chat-item";
-                            time_area.textContent = message_obj.time;
-                            time_area.className = "smaller_time";
-                            
-                        //  if message is from another user
-                        if (message_obj.sender_name != user_name)
-                        {  
-                            li_item.className = "media";
-                            img_div.className = "mr-3";
-    
-                            image_anchor.appendChild(image_item);
-                            img_div.appendChild(image_anchor);
-    
-                            chat_div.appendChild(chat_area);
-                            chat_div.appendChild(time_area);
-    
-                            li_item.appendChild(img_div);
-                            li_item.appendChild(chat_div);
-                            
-                            document.querySelector('#main-chat-ul').appendChild(li_item);
-                            scroll_down();
-                        }
-                        else{
-                            li_item.className = "media media-chat-item-reverse";
-                            img_div.className = "ml-3";
-    
-                            chat_div.appendChild(chat_area);
-                            chat_div.appendChild(time_area);
-    
-                            image_anchor.appendChild(image_item);
-                            img_div.appendChild(image_anchor);
-    
-                            chat_div.appendChild(chat_area);
-                            chat_div.appendChild(time_area); 
-    
-                            li_item.appendChild(chat_div);
-                            li_item.appendChild(img_div);
-                            
-                            document.querySelector('#main-chat-ul').appendChild(li_item);
-                            scroll_down();
-                            
-                        }
-    
-                    }
-            
+            function append_message(message_obj){
+               
+               var br = document.createElement('br')
+               var li_item = document.createElement('li');
+               li_item.id = "m_"+message_obj.id
+
+                   var img_div = document.createElement('div');
+                       var image_anchor = document.createElement('a');
+                           var image_item = document.createElement('img');
+
+                   var chat_div = document.createElement('div');
+                       var delete_icon = document.createElement('i')
+                       var chat_area = document.createElement('p');
+                       var time_area = document.createElement('small');
+
+               // common for both sender and reciever
+               image_anchor.href = message_obj.sender_image;
+               image_item.src = message_obj.sender_image;
+               image_item.className = "rounded-circle"
+               image_item.width = "50";
+               image_item.height = "50";
+
+               chat_div.className = "media-body"
+                   chat_area.textContent = message_obj.message;
+                   chat_area.className = "media-chat-item";
+                   time_area.textContent = message_obj.time;
+                   time_area.className = "smaller_time";
+                   
+               //  if z user is z receiver
+               if (message_obj.sender_name != user_name)
+               {  
+                   li_item.className = "media";
+                   img_div.className = "mr-3";
+
+                   image_anchor.appendChild(image_item);
+                   img_div.appendChild(image_anchor);
+
+                   chat_div.appendChild(chat_area);
+                   chat_div.appendChild(time_area);
+
+                   li_item.appendChild(img_div);
+                   li_item.appendChild(chat_div);
+                   
+                   document.querySelector('#main-chat-ul').appendChild(li_item);
+                   scroll_down();
+               }
+               else{
+                   li_item.className = "media media-chat-item-reverse";
+           
+                   delete_icon.className = "icon-trash mr-1 mt-3"
+                   delete_icon.style['color']="rgb(128, 70, 59)"
+                  
+                   img_div.className = "ml-3";
+
+                   chat_div.appendChild(chat_area);
+                   chat_div.appendChild(time_area);
+
+                   image_anchor.appendChild(image_item);
+                   img_div.appendChild(image_anchor);
+
+                   chat_div.appendChild(delete_icon)
+                   chat_div.appendChild(chat_area);
+                   chat_div.appendChild(time_area); 
+
+                   li_item.appendChild(chat_div);
+                   li_item.appendChild(img_div);
+                   scroll_down();
+                   document.querySelector('#main-chat-ul').appendChild(li_item);
+                   delete_icon.addEventListener('click', function (){
+                       remove_message(message_obj.id)
+
+                   })
+                  
+               }
+
+           }    
             document.querySelector('#chat-message-submit').onclick = function(e) {
                         var messageInputDom = document.querySelector('#chat-message-input');
                         
@@ -267,6 +308,7 @@
                         if (message == "" || message == null){
                             window.alert("No message to Send!");
                         }
+                        
                         else{
                             messageInputDom.value = '';
                             fetch("{% url 'chat_request' id=other_user.id %}",
@@ -284,7 +326,7 @@
                             ).then(e => e.json()).then(messages=>{
                                 for (m of messages)
                                     {
-                                        console.log(m," \n")
+                                      
                                         append_message(m)
                                     }                       
                                 });   

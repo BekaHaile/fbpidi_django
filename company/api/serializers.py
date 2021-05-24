@@ -24,7 +24,10 @@ class CompanyFullSerializer(serializers.ModelSerializer):
     # product_category_name = serializers.CharField(source='get_product_category_type')
 
     contact_person = UserInfoSerializer(read_only=True)
+    company_certificates = CompanyCertificatesSerializer(source = 'get_company_certificates', many = True, read_only=True)
     company_address = CompanyAddressSerializer(source = 'get_company_address', read_only=True)
+    category = CategorySerializer(source= 'get_company_category' , many =True, read_only = True) #b/c it is a manytomanyrelation
+    
     class Meta:
         model = Company
         fields = ('__all__')

@@ -32,6 +32,7 @@ def delete_chat(request):
         print("@@@ Exception Occured at delete_chat ",e)
         return JsonResponse({'result':False})
 
+@login_required
 def check_username(request, username):
     context ={'found':False}
     try:
@@ -50,23 +51,27 @@ def check_username(request, username):
 
 @login_required
 def chat_ajax_handler(request, id):
-    messages = []
-    if request.method == 'GET': #get all unread messages(only), these are new unread messages other than those that are loaded when the user opens the chat layout page. like online chats from the other user
-        print (" a get request from",request.user)
-        other_user = UserProfile.objects.get(id = id)
-        q = Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False)  & Q(is_active = True)) 
-        unread_messages = ChatMessages.objects.filter(q)
-        for m in unread_messages:
-            m.seen = True
+    try:
+        messages = []
+        if request.method == 'GET': #get all unread messages(only), these are new unread messages other than those that are loaded when the user opens the chat layout page. like online chats from the other user
+            print (" a get request from",request.user)
+            other_user = UserProfile.objects.get(id = id)
+            q = Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False)  & Q(is_active = True)) 
+            unread_messages = ChatMessages.objects.filter(q)
+            for m in unread_messages:
+                m.seen = True
+                m.save()
+            messages.append(ChatMessagesSerializer( unread_messages, many = True).data)
+        elif request.method == 'POST':  #save the message and send it back for the sender to be displayed
+            data = json.loads(request.body)
+            m = ChatMessages(sender = request.user, receiver = UserProfile.objects.get(id = id), message = data['message'])
             m.save()
-        messages.append(ChatMessagesSerializer( unread_messages, many = True).data)
-    elif request.method == 'POST':  #save the message and send it back for the sender to be displayed
-        data = json.loads(request.body)
-        m = ChatMessages(sender = request.user, receiver = UserProfile.objects.get(id = id), message = data['message'])
-        m.save()
-        messages.append( ChatMessagesSerializer( m).data)
-    return JsonResponse(messages, safe = False)
+            messages.append( ChatMessagesSerializer( m).data)
+        return JsonResponse(messages, safe = False)
     
+    except Exception as e:
+        print("@@@ Exception at Chat ajax handler ",e)
+        return JsonResponse([], safe=False)
 
 # opens the chatting page and loads saved messages
 
@@ -109,26 +114,33 @@ def chat_with(request, reciever_name):
     
 @login_required    
 def list_unread_messages(request):
-        
-        all_unread_messages = ChatMessages.objects.filter(receiver = request.user, seen =False , is_active = True).order_by('-created_date')        
-        sender_names = []
-        grouped_unread_messages = []
-        for m in all_unread_messages:
-            if not m.sender.username in sender_names:
-                latest_from_sender= ChatMessagesSerializer(m).data
-                count = all_unread_messages.filter(sender__username = m.sender.username).count()
-                # add the number of unread messages from a 
-                latest_from_sender['count'] = count 
-                grouped_unread_messages.append(latest_from_sender)
-                sender_names.append(m.sender.username)
+        try:
+            all_unread_messages = ChatMessages.objects.filter(receiver = request.user, seen =False , is_active = True).order_by('-created_date')        
+            sender_names = []
+            grouped_unread_messages = []
+            for m in all_unread_messages:
+                if not m.sender.username in sender_names:
+                    latest_from_sender= ChatMessagesSerializer(m).data
+                    count = all_unread_messages.filter(sender__username = m.sender.username).count()
+                    # add the number of unread messages from a 
+                    latest_from_sender['count'] = count 
+                    grouped_unread_messages.append(latest_from_sender)
+                    sender_names.append(m.sender.username)
 
-        data = {'num':all_unread_messages.count(), 'unread_messages':grouped_unread_messages}
-        return JsonResponse( data, safe = False)
+            data = {'num':all_unread_messages.count(), 'unread_messages':grouped_unread_messages}
+            return JsonResponse( data, safe = False)
+        except Exception as e:
+            print("@@@ Exception at list_unread_messages ", e)
+            return JsonResponse( {'error':True})
 
 # for the admin side the chat listing is done inside the viewcompanyprofile view 
 class CustomerChatList( LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        return render(self.request, 'frontpages/chat/chat_list.html', {'chat_list':get_grouped_chats(self.request.user, None)})
+        try:
+            return render(self.request, 'frontpages/chat/chat_list.html', {'chat_list':get_grouped_chats(self.request.user, None)})
+        except Exception as e:
+            print("@@@ Exception at CustomerChat List ",e)
+            return redirect("/")
 
 @method_decorator(decorators,name='dispatch')
 class AdminChatList( LoginRequiredMixin, View):
@@ -139,6 +151,7 @@ class AdminChatList( LoginRequiredMixin, View):
             return redirect('admin:error_404')
 
 def get_grouped_chats(user, excluded_user = None):
+    try:
         if excluded_user !=None:
             to_exclude = Q( Q(receiver = excluded_user) | Q(sender = excluded_user))
             other_messages = ChatMessages.objects.filter( Q(Q(receiver = user) | Q(sender = user)) & Q(is_active = True) ).exclude(to_exclude).order_by('-created_date')
@@ -156,7 +169,9 @@ def get_grouped_chats(user, excluded_user = None):
                 other_user_names.append(m.sender.username)
              
         return  grouped_other_messages
-
+    except Exception as e:
+        print("@@@ Exception at get_grouped_chats ",e)
+        return []
 
 
         # return {'count':unread_messages.count(), 'unread_messages':}

@@ -149,13 +149,63 @@
 					<div class="card">
 						<div class="card-header header-elements-inline">
 							<h5 class="card-title">Product Brands</h5>
-							{%if not user.is_superuser and perms.product.add_brand %}
-							<div class="header-elements">
-								<div class="list-icons">
-									<a href="{%url 'admin:create_brand'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New Brand</a>
-								</div>
+							{% if user.is_superuser %}
+
+						<a  href="#compose_modal" data-toggle="modal" data-target="#compose_modal" class="btn bg-teal btn-sm rounded-round">
+							<i class="icon-add mr-2"></i>Add New Brand
+						</a>
+					
+					{% endif %}
+					<div id="compose_modal" class="modal fade" tabindex="-1">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<form action="{% url 'admin:create_brand' %}" method="GET">
+									<div class="modal-header">
+										<h5 class="modal-title">Select Company ..</h5>
+										
+									</div>					
+									<div class="modal-body">
+										<div class="form-group" style="padding-left: 20px;">
+														
+											<div style="margin-bottom: 10px;" class="row">
+												<h5> Please Select Commpany Name :</h5>
+											   
+											</div>
+											<div class="form-group row">
+												<div class="col-lg-9">
+													{{form.company}}
+												</div>
+											</div>   
+										</div>						
+									</div>
+		
+									<div class="modal-footer">
+										<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+										<button type="submit"     class="btn bg-primary">Submit</button>
+									</div>
+									</form>
 							</div>
-							{%endif%}
+						</div>
+					</div>
+					{%if not user.is_superuser and perms.product.add_brand %}
+					
+					<div class="header-elements">
+						
+						<div class="list-icons">
+							<form action = "{% url 'admin:create_brand'%}" method = "GET">
+				
+								<input type="hidden"  name = "company" value = '{{user.get_company.id}}' />
+								<button type ="submit" class="btn bg-teal btn-sm rounded-round">
+									<i class="icon-add mr-2"></i>Add New Brand
+		
+								</button>
+							
+							</form>
+							<!-- <a href="{%url 'admin:create_brand'%}" class="btn bg-teal btn-sm rounded-round"><i class="icon-add mr-2"></i>Add New Brand</a> -->
+						
+						</div>
+					</div>
+					{%endif%}
 						</div>
 	
 						<table class="table datatable-show-all">
@@ -184,10 +234,10 @@
 												<i class="icon-menu9"></i>
 											</a>
 											<div class="dropdown-menu dropdown-menu-right">
-												{% if not user.is_superuser and perms.product.delete_brand %}
+												{% if  perms.product.delete_brand %}
 												<a href="{%url 'admin:delete' model_name='Brand' id=cat.id%}"  onclick="return confirm('Are you sure you want to Delete this Item?')" class="dropdown-item"><i class="icon-trash"></i>Delete Brand</a>
 												{% endif %}
-												{% if not user.is_superuser and perms.product.change_brand %}
+												{% if  perms.product.change_brand %}
 												<a href="{%url 'admin:edit_brand' pk=cat.id%}" class="dropdown-item">
 													<i class="icon-pencil"></i>Edit</a>
 												{% endif %}

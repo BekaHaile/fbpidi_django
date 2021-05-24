@@ -98,10 +98,7 @@
                                 </div>
                             </div>
                         </div>
-
-
                 </div>
-                
             </div>
         </div>
     </div>
@@ -214,8 +211,6 @@
 </div>
 <input id = "user_name" type="hidden" value="{{user.username}}">
 			 
-			
-
     <script>
         var chat_input = document.getElementById('chat_to')
         var chat_btn =document.getElementById('chat_btn')
@@ -243,7 +238,8 @@
                                     var error_message =" "
                                     document.getElementById('list_of_users').innerHTML = "";
                                     for (user of related){
-                                        console.log(user.username+" "+user.p_img+" \n")
+                                    
+                                        
                                         append_user(user)
                                     }
                                 }
@@ -319,24 +315,7 @@
     function chat_with_user()
     {
         var receiver = document.getElementById('chat_to').value;	
-        fetch( " /chat/check_user/"+receiver+"/").then(e=>e.json()).then(result =>
-        {   
-            if (result['result'] == true){
-                 window.location.pathname = '/chat/with/' + receiver+'/';
-            }
-            else{
-                error_message = "User with username '"+ receiver+"' does not exist!";
-                related = result.related
-                if( related.length > 0){
-                    error_message +="<br> Other related user names... <br>"
-                    related.forEach(n=>{       
-                    error_message += " - "+ n+"<br>";
-                }
-                );
-                }
-                document.getElementById("error-area").innerHTML = error_message
-            }
-        });
+        window.location.pathname = '/chat/with/' + receiver+'/';
         
     }
     $(document).ready(function () {

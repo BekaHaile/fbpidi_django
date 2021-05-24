@@ -11,7 +11,7 @@ CAT_LIST = (
     ("Pharmaceuticals",'Pharmaceuticals'),
 )
 
-class Category(models.Model):
+class Category(models.Model): #Sub sectors (cereal and pulses)
     category_type = models.CharField(choices=CAT_LIST,max_length=200,verbose_name="Sector Name(English)")
     category_type_am = models.CharField(choices=CAT_LIST,max_length=200,verbose_name="Sector Sector(Amharic)")
     category_name = models.CharField(max_length=200,verbose_name="Sub Sector Name(English)")
@@ -30,6 +30,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.category_name
+    
+    class Meta:
+        ordering = ('category_name',)
 
 
 # class CategoryProduct(models.Model):

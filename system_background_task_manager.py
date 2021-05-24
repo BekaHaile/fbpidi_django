@@ -5,6 +5,9 @@ import django
 django.setup()
 from datetime import datetime
 from django.utils import timezone
+from product.models import *
+from accounts.models import UserProfile
+
 
 from background_task.models import Task, CompletedTask
 from collaborations.tasks import (check_event_startdate, check_event_enddate, check_event_participation, check_tender_startdate, 
@@ -73,16 +76,25 @@ def abort(task_verbose_name):
 # inorder to stop all background tasks, commenting the for loop is not enough, u have to run 
 # the clear_background_tasks cmd, so that the tasks saved in the db to be run are deleted.
 if __name__ == '__main__':    
+        names = ['Acetyl Salicylic Acid','Amitriptyline', 'Ascorobic Acid Vitamin C', 'Azithromycin', 'Vitamin B-Complex', 'Multivit (Vitamin B1+ Vitamin B6+Vitamin B12)', 'Ephavit (Multivitamin ) Film Coated Tablet',
+         'Paracetamol', 'White Petrolatum',  'Amoxillin', 'Hand Rub Soution Ethanol', 'Black Cumin Oil', 'Black cumin soap']
+        u = UserProfile.objects.get(id = 1)
+        
+        for n in names:
+            x = PharmaceuticalProduct(name=n, created_by = u)
+            x.save()
+            print("Saved ",n)
     
-    print("Starting the background tasks for ....", timezone.now())
-    clear_background_tasks()
-    clear_completed_tasks()
-    BACKGROUND_TASK_TIME = TODAY.replace(hour=0,minute=0,second=1) # set the time to when u want to send emails
+    
+    # print("Starting the background tasks for ....", timezone.now())
+    # clear_background_tasks()
+    # clear_completed_tasks()
+    # BACKGROUND_TASK_TIME = TODAY.replace(hour=0,minute=0,second=1) # set the time to when u want to send emails
    
-    print("Task scheduled at 6:00 am ",BACKGROUND_TASK_TIME)
-    for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
-        start_task(task_verbose_name=verbose_name,schedule=1, repeat = 1) 
-    send_news_and_blogs_weekly(verbose_name='WEEKLY_NEWS_BLOGS', repeat =1)
+    # print("Task scheduled at 6:00 am ",BACKGROUND_TASK_TIME)
+    # for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
+    #     start_task(task_verbose_name=verbose_name,schedule=1, repeat = 1) 
+    # send_news_and_blogs_weekly(verbose_name='WEEKLY_NEWS_BLOGS', repeat =1)
   
 
 

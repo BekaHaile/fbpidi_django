@@ -100,6 +100,7 @@ class CompanyInboxDetail(View):
             if sendRelayMessage(self.request, sender_message, reply_message): #returns true if the email is sent successfully
                 if sender_message.replied:
                     reply = sender_message.companymessagereply_set.first()
+
                     reply.reply = reply_message
                     reply.save()
                 else:
@@ -128,11 +129,17 @@ class CompanyInquiryList(ListView):
             q = Q( Q( product__company = self.request.user.get_company().id) | 
                     Q( category__in = categories))
             if 'replied_only' in self.request.GET:
-                
+                if self.request.user.is_superuser:
+                    return ProductInquiry.objects.filter(replied =True).distinct()
                 return ProductInquiry.objects.filter(q, replied =True).distinct()
             elif 'unreplied_only' in self.request.GET:
+                if self.request.user.is_superuser:
+                    return ProductInquiry.objects.filter( replied = False).distinct()
                 return ProductInquiry.objects.filter(q, replied = False).distinct()
-            return ProductInquiry.objects.filter(q).distinct()
+            else:
+                if self.request.user.is_superuser:
+                    return ProductInquiry.objects.all()
+                return ProductInquiry.objects.filter(q).distinct()
         except Exception as e:
             print("@@@@@@ Exception inside CompanyInquiryList ",e)
             return []
@@ -145,25 +152,32 @@ class CompanyInquiryReply(View):
         try:
             sender_inquiry = ProductInquiry.objects.get(id = self.kwargs['pk'])
             reply_message = self.request.POST['reply_message']
-            # if sendInquiryReplayEmail(self.request, sender_inquiry, reply_message): #returns true if the email is sent successfully
-            if sender_inquiry.replied:
-                reply = sender_inquiry.productinquiryreply_set.first()
-                reply.reply = reply_message
-                reply.save()
-            else:
-                reply= ProductInquiryReply(created_by=self.request.user, inquiry=sender_inquiry, reply =reply_message)
-                reply.save()
+
+            # if we want to edit the existing reply
+            # if sender_inquiry.replied:
+            #     reply = sender_inquiry.productinquiryreply_set.first()
+
+            #     if reply: #if z first reply was through chat or email, there will not b a reply object, so the else will work
+            #         reply.reply = reply_message
+            #     else: 
+            #         reply= ProductInquiryReply(created_by=self.request.user, inquiry=sender_inquiry, reply =reply_message)
+            #     reply.save()
+
+            # else:
+            
+            reply= ProductInquiryReply.create(created_by=self.request.user, inquiry=sender_inquiry, reply =reply_message)
+            reply.save()
 
             sender_inquiry.replied = True
             sender_inquiry.save()
             messages.success(self.request, f"Successfully, replied to {sender_inquiry.sender_email}")
             return redirect('admin:admin_inquiry_list')
-            # else:
-            #     messages.warning(self.request, f"Reply couldn't be sent! Please check your connection and try again later.")
-            #     return redirect('admin:admin_inquiry_list')
+           
         except Exception as e:
             print("!!!!!!!!!!!!!!!!!! Exception inside CompanyInquiryReply ",e)
-            return redirect ('admin:error_404')
+            messages.warning(self.request, "Exception occured! didn't reply!")
+            return redirect("admin:admin_inquiry_list")
+            
 
 
 
@@ -201,6 +215,8 @@ def LinkedInquiryReply(request):
         data = json.loads( request.body )
         sender_inquiry = ProductInquiry.objects.get(id = data['id'])
         sender_inquiry.replied = True
+
+
         # print("saving ", sender_inquiry.id)
         sender_inquiry.save()
         if data['type']=='chat':
