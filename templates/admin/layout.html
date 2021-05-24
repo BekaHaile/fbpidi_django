@@ -429,9 +429,11 @@
 						{% endfor %}
 					{% endif %}
 					<div class="header-elements d-none">
+						{%if user.is_superuser or user.is_fbpidi_staff%}
 						<div class="d-flex justify-content-center">
 							<a href="{%url 'admin:report_page'%}" class="btn btn-link btn-float text-default"><i class="icon-bars-alt text-primary"></i><span>Reports</span></a>
 						</div>
+						{%endif%}
 					</div>
 				</div>
 				<div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
@@ -444,7 +446,7 @@
 						<a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
 						
 					</div>
-
+					{%if user.is_superuser or user.is_fbpidi_staff%}
 					<div class="header-elements d-none">
 						<div class="breadcrumb justify-content-center">
 							<div class="breadcrumb-elements-item p-0">
@@ -455,6 +457,7 @@
 							</div>
 						</div>
 					</div>
+					{%endif%}
 				</div>
 
 			</div>
