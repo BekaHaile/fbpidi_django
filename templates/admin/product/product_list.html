@@ -8,8 +8,8 @@
 <!-- /theme JS files -->
 
 {% endblock %}
-{%block pagename%}Product/Varayti List{%endblock%}
-{%block nav%}<a href="{%url 'admin:admin_products'%}" class="breadcrumb-item">Varayti</a>{%endblock%}
+{%block pagename%}Product/Variety List{%endblock%}
+{%block nav%}<a href="{%url 'admin:admin_products'%}" class="breadcrumb-item">Variety</a>{%endblock%}
 {%block varayti%}active{%endblock%}
 {%block content%}
 
@@ -21,7 +21,7 @@
 	 
 	<div class="card">
 		<div class="card-header header-elements-inline">
-			<h5 class="card-title">Products/Varayties</h5>
+			<h5 class="card-title">Products/Varieties</h5>
 			<div class="header-elements">
 				
 				<div class="list-icons">
@@ -29,7 +29,7 @@
 
 						<a  href="#compose_modal" data-toggle="modal" data-target="#compose_modal" class="btn bg-teal btn-sm rounded-round">
 							<i
-							class="icon-add mr-2"></i>Add New Varayti
+							class="icon-add mr-2"></i>Add New Variety
 						</a>
 					
 					{% endif %}
@@ -83,7 +83,7 @@
 						<input type="hidden"  name = "company" value = '{{user.get_company.id}}' />
 						<button type ="submit" class="btn bg-teal btn-sm rounded-round">
 							<i
-							class="icon-add mr-2"></i>Add New Varayti
+							class="icon-add mr-2"></i>Add New Variety
 
 						</button>
 					
@@ -98,7 +98,7 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>Varayti Name</th>
+					<th>Variety Name</th>
 					<th>Product</th>
 					<th>Created By</th>
 					<th>Created Date</th>
@@ -132,7 +132,7 @@
 									{% endif %}
 									{% if  perms.product.change_product %}
 									<a href="{%url 'admin:product_detail' pk=cat.id%}" class="dropdown-item">
-										<i class="icon-pencil"></i>Edit Varayti</a>
+										<i class="icon-pencil"></i>Edit Variety</a>
 									 {% endif %}
 								</div>
 							</div>

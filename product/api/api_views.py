@@ -1,5 +1,6 @@
 import random
 import string
+from django.core import paginator
 
 from django.db.models import Q
 from django.utils import timezone
@@ -36,6 +37,8 @@ class ApiProductByCategory(APIView):
             category = Category.objects.get(id=request.query_params['category_id'])
             categories = Category.objects.filter(category_type = category.category_type).distinct()
 
+            print("########## ", category)
+
             products = Product.objects.filter(brand__product_type__category_name__id = request.query_params['category_id'])
             if 'by_title' in request.query_params:
                 products = filter_products_by_name( products, request.query_params['by_title'])
@@ -56,7 +59,10 @@ class ApiProductByMainCategory(APIView):
 
             if 'category' in request.query_params and request.query_params['category'] != 'All': # if All, products without filtering 
                 # category is  one of 'Food', "Beverage", "Pharmaceuticals":
-                products = products.filter(brand__product_type__category_name__category_type = request.query_params['category'])
+                if request.query_params['category'] == "Pharmaceuticals":
+                    products = products.filter(pharmacy_product_type__category_name__category_type = request.query_params['category'])
+                else:
+                    products = products.filter(brand__product_type__category_name__category_type = request.query_params['category'])
                 categories = categories.filter(category_type = request.query_params['category'] )
             if 'by_title' in request.query_params:
                 products = filter_products_by_name(products, request.query_params['by_title'])
@@ -64,10 +70,18 @@ class ApiProductByMainCategory(APIView):
                 companies = Company.objects.filter( Q(name__in = request.query_params['by_company'].split(',')[:-1] )| Q(name_am__in =request.query_params['by_company'].split(',')[:-1]) )
                 products = products.filter(company__in = companies)
             
-
+            count = len(products)
             products=get_paginated_data(request, products)
-            return Response( data = {'error': False, 'paginator':get_paginator_info(products), 'count':len(products), 
-                                    'products':ProductInfoSerializer(products, many = True).data, 'categories':CategorySerializer(categories, many= True).data })
+            paginator = get_paginator_info(products)
+            
+            products = ProductInfoSerializer(products, many = True).data
+            # if request.query_params['category'] == "Pharmaceuticals":
+            #     for p in products:
+            #         p['brand']={'id':0,  'product_type':p['pharmacy_product_type'],'brand_name':"None", "brand_name_am":"None"}
+                    
+            
+            return Response( data = {'error': False, 'paginator': paginator, 'count':count, 
+                                    'products':products, 'categories':CategorySerializer(categories, many= True).data })
     
         except Exception as e:
             return Response(data ={'error':True, 'message':f"{str(e)}"})
