@@ -37,7 +37,7 @@ class ProductFullSerializer(serializers.ModelSerializer):
     
     def  brand_serializer(self, product):
         if product.company.main_category == "Pharmaceuticals":
-                print(product.name," = ",product.brand) 
+              
             # if product.brand == None:
                 return { 'id':0, 'product_type': SubCategorySerializer(product.pharmacy_product_type).data, 'brand_name':"None", "brand_name_am":"None"}
         else:
@@ -57,7 +57,7 @@ class ProductInfoSerializer(serializers.ModelSerializer):
     
     def  brand_serializer(self, product):
         if product.company.main_category == "Pharmaceuticals":
-                print(product.name," = ",product.brand) 
+            
             # if product.brand == None:
                 return { 'id':0, 'product_type': SubCategorySerializer(product.pharmacy_product_type).data, 'brand_name':"None", "brand_name_am":"None"}
         else:
