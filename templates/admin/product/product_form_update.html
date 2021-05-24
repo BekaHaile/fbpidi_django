@@ -12,9 +12,9 @@
 <link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
 <script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
 {% endblock %}
-{%block pagename%}Product/Varayti Detail Form{%endblock%}
-{%block nav%}<a href="{%url 'admin:admin_products'%}" class="breadcrumb-item">Varayti</a>
-<a href="{%url 'admin:product_detail' pk=object.id%}" class="breadcrumb-item">Update Varayti</a>
+{%block pagename%}Product/Variety Detail Form{%endblock%}
+{%block nav%}<a href="{%url 'admin:admin_products'%}" class="breadcrumb-item">Variety</a>
+<a href="{%url 'admin:product_detail' pk=object.id%}" class="breadcrumb-item">Update Variety</a>
 {%endblock%}
 {%block varayti%}active{%endblock%}
 
@@ -29,7 +29,7 @@
 
 			<form action="{%url 'admin:product_detail' pk=object.id%}" method="POST" id="pdform" enctype="multipart/form-data">
 				<fieldset class="mb-3 ml-3 mr-3">
-					<legend class="text-uppercase font-size-sm font-weight-bold">Update Product Varayti</legend>
+					<legend class="text-uppercase font-size-sm font-weight-bold">Update Product Variety</legend>
 					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
 					 
 					{%csrf_token%}

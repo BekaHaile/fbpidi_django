@@ -120,6 +120,46 @@
                                 <li>
                                     <a class="social-icon text-dark" href="#"><i class="fa fa-google-plus"></i></a>
                                 </li>
+                                <li>
+                                    <a href="#compose_modal"  data-toggle="modal" data-target="#compose_modal" >
+                                        <i class="fa fa-share-alt"></i> 
+                                   
+                                    </a>
+                                   
+    
+                                </li>
+                                 <!-- Compose modal -->
+                                    <div id="compose_modal" class="modal fade" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Invite through email ..</h5>
+                                                    
+                                                </div>
+                                                   				
+                                                        <div class="modal-body">
+                                                            <div class="form-group" style="padding-left: 20px;">                
+                                                                <div style="margin-bottom: 10px;" class="row">
+                                                                    <h5> Please enter the email address </h5>
+                                                                </div>
+                                                        
+                                                                    <div style="margin-right: 5px; " class="mb-3 row">
+                                                                        <input id = "email" autocomplete="off" style = "padding: 5px;" type="text" class="form form-control" name = "email" value="" placeholder="Write email address ...">
+                                                                    </div>
+                                                                
+                                                                
+                                                            </div>						
+                                                        </div>
+    
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                                                            <button type="submit"  onclick="invite()" data-dismiss="modal" style = "color:white" class="btn bg-primary">Invite</button>
+                                                        </div>
+                                                   
+                                            </div>
+                                        </div>
+                                    </div>
+                                <!-- /Compose modal -->
                             </ul>
                         </div>
                     </div>
@@ -465,7 +505,53 @@
                             </li>
                             <li>
                                 <a class="social-icon" href=""><i class="fa fa-google-plus"></i></a>
+                                
                             </li>
+                            <li>
+                                <a href="#compose_modal" class="btn btn-success" data-toggle="modal" data-target="#compose_modal" >
+                                    <i class="icon-pencil7"></i> 
+                               
+                                </a>
+                               
+
+                            </li>
+                             <!-- Compose modal -->
+                                <div id="compose_modal" class="modal fade" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Chat With ..</h5>
+                                                
+                                            </div>					
+                                                <div class="modal-body">
+                                                    <div class="form-group" style="padding-left: 20px;">
+                                                                    
+                                                        <div style="margin-bottom: 10px;" class="row">
+                                                            <h5> Please enter username of the user you want to chat :</h5>
+                                                        
+                                                        </div>
+                                                        <div style="margin-right: 5px; " class="mb-3 row">
+                                                            <input id = "chat_to" autocomplete="off" style = "padding: 5px;" type="text" class="form form-control" name = "chat_to" value="" placeholder="Write username ...">
+                                                        </div>
+                                                        <div class="dropdown-content-body dropdown-scrollable">
+                                                            <span class="mb-2" style = "color: rgb(199, 89, 89);" id = "related_names"></span>
+                                                            <ul id = "list_of_users" style = "width: 100%;" class="media-list"> 
+                                                            </ul>
+                                                            <span class="mt-2" style = "color: rgb(199, 89, 89);" id = "error-area"></span>
+                                                        </div>
+                                                    
+                                                    </div>						
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                                                    <button type="submit" id="chat_btn" onclick="chat_with_user()"  style = "color:white" class="btn bg-primary">Chat</button>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- /Compose modal -->
+                            
                         </ul>
                     </div>
                 </div>
@@ -799,7 +885,35 @@ function append_product_cart(product){
     ul_item =document.getElementById('inquiry_list')
     ul_item.appendChild(li_item);
 
+
 }
+
+function invite(){
+    email = document.getElementById("email").value
+    
+    fetch("{% url 'invite'  %}",
+			{
+			method:"POST",
+			credentials: 'same-origin',
+			headers:{
+				"content-Type":'application/json',
+				'X-CSRFToken':'{{csrf_token}}'
+			},
+			body:JSON.stringify({
+				'email': email,
+			})
+			}).then(e => e.json()).then(result=>{
+				if(result['error'] == false){
+
+					
+					window.alert("Invitation hasbeen sent Successfully!")
+				}
+				else{
+					window.alert("Failed to send Invitation, please try again!")
+				}   		
+			});
+}
+    
 
 </script>
 <!-- End of Script for cart -->

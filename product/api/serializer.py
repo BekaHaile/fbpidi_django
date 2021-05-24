@@ -21,8 +21,7 @@ class ProductPriceSerializer(serializers.ModelSerializer):
 
 class ProductFullSerializer(serializers.ModelSerializer):
     company = CompanyInfoSerializer(read_only=True)
-    brand = BrandSerializer(read_only = True)
-    pharmacy_product_type = SubCategorySerializer(read_only = True)
+    brand = serializers.SerializerMethodField('brand_serializer')
     latest_price = ProductPriceSerializer(source='price', many = False)
     more_images = serializers.SerializerMethodField('get_more_images')
     
@@ -35,17 +34,35 @@ class ProductFullSerializer(serializers.ModelSerializer):
         for product_image in product.more_images():
             image_urls.append( product_image.image.url)
         return image_urls
+    
+    def  brand_serializer(self, product):
+        if product.company.main_category == "Pharmaceuticals":
+                print(product.name," = ",product.brand) 
+            # if product.brand == None:
+                return { 'id':0, 'product_type': SubCategorySerializer(product.pharmacy_product_type).data, 'brand_name':"None", "brand_name_am":"None"}
+        else:
+            return BrandSerializer(product.brand).data
 
 
 class ProductInfoSerializer(serializers.ModelSerializer):
     company = CompanyInfoSerializer(read_only=True)
-    brand = BrandSerializer(read_only = True)
-    pharmacy_product_type = SubCategorySerializer(read_only = True)
+    # brand = BrandSerializer(read_only = True)
+    brand =  serializers.SerializerMethodField('brand_serializer')
+    # pharmacy_product_type = SubCategorySerializer(read_only = True)
     latest_price = ProductPriceSerializer(source='price', many = False)
     class Meta:
         model  = Product
         fields = ('id','name', 'name_am','latest_price', 'company', 'brand', 
                 'therapeutic_group','dose','description','description_am', 'image', 'created_date')
+    
+    def  brand_serializer(self, product):
+        if product.company.main_category == "Pharmaceuticals":
+                print(product.name," = ",product.brand) 
+            # if product.brand == None:
+                return { 'id':0, 'product_type': SubCategorySerializer(product.pharmacy_product_type).data, 'brand_name':"None", "brand_name_am":"None"}
+        else:
+            return BrandSerializer(product.brand).data
+
 
 
 # class JobApplicationCreationSerializer(serializers.ModelSerializer):

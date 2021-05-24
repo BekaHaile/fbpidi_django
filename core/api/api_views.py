@@ -47,7 +47,7 @@ class ApiTotalViewerData(APIView):
             total_products = Product.objects.all().count()
             happy_customers = UserProfile.objects.all().count()
             total_viewers = UserTracker.objects.all().count()
-            return Response (data ={'error':False, 'total_companies':total_companies -1 ,'total_products':total_products,'happy_customers':happy_customers,'total_viewers':total_viewers})
+            return Response (data ={'error':False, 'total_companies':total_companies  ,'total_products':total_products,'happy_customers':happy_customers,'total_viewers':total_viewers})
         except Exception as e:
             print("@@@@@ Exception at ApiTatalViewerData ",e)
             return Response (data = {'error':True, 'message':str(e)})

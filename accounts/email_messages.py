@@ -16,6 +16,24 @@ from company.models import Company
 # welcome email, but the web activate view will render a web page, and the api does nothing.
 SITE_DOMAIN = "/localhost:8000/"
 
+def sendInvitationEmail(request, email, name = None):
+    try:
+        current_site = get_current_site(request)
+        mail_subject = 'An invitation to use the IIMS system'
+        message = f"You are invite to use the IIMS system, through the following link. {SITE_DOMAIN}"
+        
+        to_email = email
+        email = EmailMessage(
+        mail_subject, message, to=[to_email]
+        )
+        email.content_subtype = "html"
+        email.send()
+        return True
+    except Exception as e:
+        print("#### Exception at sendInvitationEmail ",e)
+        return False
+    
+
 def sendEmailVerification(request,user, redirect_url = 'activate'):
     try:
         current_site = get_current_site(request)
