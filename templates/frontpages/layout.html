@@ -901,6 +901,7 @@ function invite(){
 			},
 			body:JSON.stringify({
 				'email': email,
+                
 			})
 			}).then(e => e.json()).then(result=>{
 				if(result['error'] == false){
