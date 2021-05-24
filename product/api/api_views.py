@@ -37,7 +37,6 @@ class ApiProductByCategory(APIView):
             category = Category.objects.get(id=request.query_params['category_id'])
             categories = Category.objects.filter(category_type = category.category_type).distinct()
 
-            print("########## ", category)
 
             products = Product.objects.filter(brand__product_type__category_name__id = request.query_params['category_id'])
             if 'by_title' in request.query_params:
