@@ -148,7 +148,8 @@ class CreateSubCategories(LoginRequiredMixin,CreateView):
         sub_category.save()
         record_activity(self.request.user,"SubCategory","Sub-Category data Created",sub_category.id)
         messages.success(self.request,"You Created a New Product Type")
-        return redirect("admin:sub_categories")
+        return redirect("admin:create_subcategory") 
+        # return redirect("admin:sub_categories")
     
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)

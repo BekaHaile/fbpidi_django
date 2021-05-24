@@ -145,7 +145,7 @@
 											</div>
 											<div class="item-card7-overlaytext">
 												<a href="{%url 'company_product_detail' company=object.name pk=product.id%}" class="text-white">
-													{{product.company.main_category}}
+													{{product.get_subcategory.category_name.category_type}}
 												</a>
 											</div>
 											<div class="item-card7-icons">
