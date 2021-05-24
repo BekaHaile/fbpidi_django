@@ -22,6 +22,7 @@ class ProductPriceSerializer(serializers.ModelSerializer):
 class ProductFullSerializer(serializers.ModelSerializer):
     company = CompanyInfoSerializer(read_only=True)
     brand = BrandSerializer(read_only = True)
+    pharmacy_product_type = SubCategorySerializer(read_only = True)
     latest_price = ProductPriceSerializer(source='price', many = False)
     more_images = serializers.SerializerMethodField('get_more_images')
     
@@ -39,6 +40,7 @@ class ProductFullSerializer(serializers.ModelSerializer):
 class ProductInfoSerializer(serializers.ModelSerializer):
     company = CompanyInfoSerializer(read_only=True)
     brand = BrandSerializer(read_only = True)
+    pharmacy_product_type = SubCategorySerializer(read_only = True)
     latest_price = ProductPriceSerializer(source='price', many = False)
     class Meta:
         model  = Product

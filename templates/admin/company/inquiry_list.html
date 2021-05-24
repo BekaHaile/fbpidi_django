@@ -157,13 +157,13 @@
                                                 
                                             <div class="dropdown-menu dropdown-menu-right">
                                         
-                                            
+                                            {% if not user.is_superuser %}
                                             <a  class="dropdown-item" onclick="chat_reply('{{inquiry.id}}', 'chat')" ><i class="icon-bubbles4" ></i>Chat Reply</a>
                                             <a href="#" class="dropdown-item" data-toggle="modal" data-target="#compose{{inquiry.id}}" ><i class="icon-paperplane"></i>Direct Reply</a>
                                             <a  href="mailto:{{inquiry.sender_email}}" class="dropdown-item" onclick="email_reply('{{inquiry.id}}', 'email')" ><i class="icon-envelop2"></i>Email Reply</a>
                                             <a href="#compose{{inquiry.id}}" data-toggle="modal" data-target="#compose{{inquiry.id}}" class="dropdown-item" ><i class="icon-eye"></i>View Detail</a>
-                                            
-    
+                                            {% endif %}
+                                                
                                             </div>
                                         </div>
                                     </div>
