@@ -24,7 +24,7 @@ from django.http import  JsonResponse
 from django.views.generic import CreateView,  DetailView, ListView
 
 from datetime import timedelta
-from accounts.email_messages import sendWeekBlogAndNews
+from accounts.email_messages import sendWeekBlogAndNews, sendInvitationEmail
 
 from admin_site.decorators import company_created,company_is_active
 from company.models import Company,CompanyEvent, EventParticipants
@@ -174,11 +174,28 @@ def filter_by(field_name, field_values, query):
 def get_paginated_data(request, query):
     page_number = request.GET.get('page', 1)
     try:
-        return Paginator(query, 1).page(page_number)
+        return Paginator(query, 6).page(page_number)
     except Exception as e:
         print("exception at get_paginate_data ",e)
         return Paginator(query, 6).page(1)
 
+
+# class Invite(View):
+#     def post(self, *args, **kwargs):
+#         if sendInvitationEmail(self.request, self.request.POST['email']):
+#             return 
+
+def Invite(request):
+    try:
+        data = json.loads(request.body) 
+        
+        if sendInvitationEmail(request, data['email']):
+            return JsonResponse({'error':False})
+        else:
+            return JsonResponse({'error':True})
+    except Exception as e:
+        print("@@@@@@@@", e)
+        return JsonResponse({'error':True})
 
 class IndexSearch(View):
     modules =  [('News','customer_news_list'),('Event','customer_event_list'),('Announcement','announcement_list'),('Polls','polls'),

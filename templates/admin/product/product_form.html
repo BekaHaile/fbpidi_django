@@ -8,9 +8,9 @@
 <link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
 <script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
 {% endblock %}
-{%block pagename%}Product Varayti Form{%endblock%}
-{%block nav%}<a href="{%url 'admin:admin_products'%}" class="breadcrumb-item">Varayti</a>
-<a href="{%url 'admin:create_product'%}" class="breadcrumb-item">Create Varayti</a>
+{%block pagename%}Product Variety Form{%endblock%}
+{%block nav%}<a href="{%url 'admin:admin_products'%}" class="breadcrumb-item">Variety</a>
+<a href="{%url 'admin:create_product'%}" class="breadcrumb-item">Create Variety</a>
 {%endblock%}
 {%block varayti%}active{%endblock%}
 {%block content%}
@@ -24,7 +24,7 @@
 
 			<form action="{%url 'admin:create_product'%}" method="POST" id="pdform" enctype="multipart/form-data">
 				<fieldset class="mb-3 ml-3 mr-3">
-					<legend class="text-uppercase font-size-sm font-weight-bold">Create Product Varayti</legend>
+					<legend class="text-uppercase font-size-sm font-weight-bold">Create Product Variety</legend>
 					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
 					 
 					{%csrf_token%}
