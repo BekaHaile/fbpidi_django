@@ -36,7 +36,7 @@ class ApiCompanyByMainCategoryList(APIView):
         elif main_category != "All":
             companies = Company.objects.filter(main_category = main_category).exclude(main_category="FBPIDI")
         else:
-            companies = Company.objects.all()
+            companies = Company.objects.all().exclude(main_category="FBPIDI")
         if 'by_title' in request.query_params:
             companies = companies.filter(Q(name__icontains=request.query_params['by_title'])|Q(name_am__icontains=request.query_params['by_title'])|Q(company_product__name=request.query_params['by_title'])).distinct().exclude(main_category="FBPIDI")
         paginated = get_paginated_data(request, companies)
