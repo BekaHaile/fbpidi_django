@@ -41,41 +41,78 @@ class CompanyHomePage(DetailView):
     model = Company
     template_name="frontpages/company/company_index.html"  
 
-
-class CompanyAbout(DetailView):
-    model=Company
-    template_name="frontpages/company/about.html"
-
-    def get(self,*args,**kwargs):
-        record_visit(self.request)
-        return super(CompanyAbout,self).get(*args,**kwargs)
-
-
-class CompanyContact(CreateView):
-    model = CompanyMessage
-    template_name = "frontpages/company/contact.html"
-    form_class = CompanyMessageForm
-    
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['object']  = Company.objects.get(id = self.kwargs['pk'])
-        return context
-        
-    def form_valid(self, form):
+class CompanyAbout(View):
+    def get(self, *args, **kwargs):
         try:
-            comp_message = form.save(commit = False)
-            comp_message.company = Company.objects.get (id = self.kwargs['pk'])
-            comp_message.save()
-            if comp_message.company.main_category == "FBPIDI": # if the contacted company is FBPIDI
-                return redirect('index')
-            return redirect(f"/company/company-home-page/{self.kwargs['pk']}/") 
+            record_visit(self.request)
+            company = Company.objects.get(id = self.kwargs['pk'])
+            if company.main_category == "FBPIDI":
+                return render(self.request, "frontpages/company/fbpidi_about.html", {'object':company})
+            else:
+                return render(self.request, "frontpages/company/about.html", {'object':company})
         except Exception as e:
-            print("@@@@@@@@ Exception at company Contact Form ", e)
-            return redirect(f"/company/contact/{self.kwargs['pk']}/")   
+            print('@@@ Exception at CompanyAbout ',e)
+            return redirect('index')
+        
 
-    def form_invalid(self, form):
-        messages.warning(self.request, "Wrong Form Input!")
-        return redirect(f"/company/contact/{self.kwargs['pk']}/")
+# class CompanyContact(CreateView):
+#     model = CompanyMessage
+#     template_name = "frontpages/company/contact.html"
+#     form_class = CompanyMessageForm
+    
+#     def get_context_data(self, *args, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['object']  = Company.objects.get(id = self.kwargs['pk'])
+#         return context
+        
+#     def form_valid(self, form):
+#         try:
+#             comp_message = form.save(commit = False)
+#             comp_message.company = Company.objects.get (id = self.kwargs['pk'])
+#             comp_message.save()
+#             if comp_message.company.main_category == "FBPIDI": # if the contacted company is FBPIDI
+#                 return redirect('index')
+#             return redirect(f"/company/company-home-page/{self.kwargs['pk']}/") 
+#         except Exception as e:
+#             print("@@@@@@@@ Exception at company Contact Form ", e)
+#             return redirect(f"/company/contact/{self.kwargs['pk']}/")   
+
+#     def form_invalid(self, form):
+#         messages.warning(self.request, "Wrong Form Input!")
+#         return redirect(f"/company/contact/{self.kwargs['pk']}/")
+
+class CompanyContact(View):
+    def get(self, *args, **kwargs):
+        try:
+            company = Company.objects.get(id = self.kwargs['pk'])
+            if company.main_category == "FBPIDI":
+                return render(self.request, "frontpages/company/fbpidi_contact.html", {'object':company,'form':CompanyMessageForm})
+            return render(self.request, "frontpages/company/contact.html", {'object':company,'form':CompanyMessageForm})
+        except Exception as e:
+            print("@@@ Exception at CompanyContact get ", e)
+            return redirect("index")
+    def post(self, *args, **kwargs):
+        try:
+            form = CompanyMessageForm(self.request.POST, self.request.FILES)
+            c = Company.objects.get (id = self.kwargs['pk'])
+            if form.is_valid():
+                comp_message = form.save(commit = False)
+                comp_message.company = c
+                comp_message.save()
+                if comp_message.company.main_category == "FBPIDI": # if the contacted company is FBPIDI
+                    return redirect('index')
+                return redirect(f"/company/company-home-page/{self.kwargs['pk']}/") 
+            else:
+                print("@@@ form is invalid")
+                return render(self.request, "frontpages/company/contact.html", {'object': c, 'form':form})
+        
+        except Exception as e:
+            print("@@@ Exception at CompanyContact post")
+            return redirect("index")
+
+
+
+
 
 
 @method_decorator(decorators,name='dispatch')

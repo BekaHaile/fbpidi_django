@@ -1,0 +1,103 @@
+{%extends 'frontpages/layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+
+{%block title%}{{object.name}}-Contact{%endblock%}
+{%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+		<!--Breadcrumb-->
+		<div>
+			<div class="bannerimg cover-image bg-background3" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white ">
+							
+							<h1 class="">{% print_translated object.name object.name_am LANGUAGE_CODE %}</h1>
+							<ol class="breadcrumb text-center">
+								<li class="breadcrumb-item"><a href="/">{% trans "Home" %}</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "Contact" %}</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/Breadcrumb-->
+		{% if messages %}
+								{% for message in messages %}
+								<div class="alert alert-warning" role="alert">
+									<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+									<span class="font-weight-semibold">{{message}}</span>
+								</div>
+
+								{% endfor %}
+							{% endif %}
+
+		<!--Contact-->
+		<div class="sptb bg-white">
+			<div class="container">
+				<div class="row">
+				    <div class="col-lg-7 col-xl-7 col-md-12 d-block mx-auto">
+						<div class="single-page">
+							<div class="col-lg-12 col-md-12 mx-auto d-block">
+								<div class="wrapper wrapper2">
+									<div class="card mb-0 overflow-hidden">
+										<div class="card-body">
+											<form action = "{% url 'contact_company' pk=object.id %}" method=POST enctype="multipart/form-data" >
+												{% csrf_token %}
+												<div class="form-group">
+													<input type="text" name = "name" class="form-control" id="name1" placeholder="Your Name" required>
+												</div>
+												<div class="form-group">
+													<input type="email" name = "email" class="form-control" id="email" placeholder="Email Address" required>
+												</div>
+												<div class="form-group">
+													<textarea class="form-control" name="message" rows="7" placeholder="Message" required></textarea>
+												</div>
+												<button type="submit" class="btn btn-primary btn-block">{%  trans "Send Message" %}</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--Contact-->
+
+		<!--Contact-->
+		<div class="sptb">
+			<div class="container">
+				<div class="row text-white">
+					<div class="col-lg-4 mb-5 mb-lg-0">
+						<div class="support-service bg-secondary br-2 mb-4 mb-xl-0">
+							<i class="fa fa-phone"></i>
+							<h6>{{object.phone_number}}</h6>
+							<P>Call Us!</P>
+						</div>
+					</div>
+					<div class="col-lg-4 mb-5 mb-lg-0">
+						<div class="support-service bg-primary br-2 mb-4 mb-xl-0">
+							<i class="fa fa-clock-o"></i>
+							<h6>Company Name</h6>
+							<p>{% print_translated object.name object.name_am LANGUAGE_CODE%}</p>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="support-service bg-info br-2">
+							<i class="fa fa-envelope-o"></i>
+							
+							{% if object.get_company_address.email %}
+								<h6>{{object.get_company_address.email}}</h6>
+							{% else %}
+								<h6>{{object.contact_person.email}}</h6>
+							{% endif %}
+							<p>Email Us!</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+{%endblock%}

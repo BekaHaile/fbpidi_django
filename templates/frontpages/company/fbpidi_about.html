@@ -1,0 +1,54 @@
+{%extends 'frontpages/layout.html'%}
+{%load i18n%}
+{%load core_template_tags%}
+
+{%block title%}{{object.name}}-About{%endblock%}
+{%block content%}
+{% get_current_language as LANGUAGE_CODE %}
+		<!--Breadcrumb-->
+		<section>
+			<div class="bannerimg cover-image bg-background3 sptb-2" data-image-src="/static/frontpages/images/banners/banner2.jpg">
+				<div class="header-text mb-0">
+					<div class="container">
+						<div class="text-center text-white ">
+							<h1 class="">{% trans "About Us" %}</h1>
+							<ol class="breadcrumb text-center">
+								<li class="breadcrumb-item"><a href="/">{% trans "Home" %}</a></li>
+								<li class="breadcrumb-item active text-white" aria-current="page">{% trans "About Us" %}</li>
+								
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/Breadcrumb-->
+
+		<!--section-->
+		<section class="sptb">
+			<div class="content-text mb-0">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-6">
+							<h3 class="leading-normal">{% trans "About Us" %}</h3>
+					
+							{% print_translated object.detail|safe object.detail_am|safe LANGUAGE_CODE %}
+						
+						</div>
+						<div class="col-lg-6">
+							<div class="border-5 br-4 mt-5 mt-lg-0 overflow-hidden">
+								<div class="owl-carousel testimonial-owl-carousel31 mt-5 mt-lg-0 about-carousel">
+									<div class="item">
+										<img src="{{object.logo.url}}" alt="img">
+									</div>
+									 
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--/section--> 
+		<!--/Newsletter-->
+{%endblock%}
