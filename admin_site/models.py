@@ -138,6 +138,7 @@ class ProjectDropDownsMaster(models.Model):
     class Meta:
         ordering = ('name',)
 
+#pharmaceutical product group
 class PharmaceuticalProduct(models.Model):
     name = models.CharField(max_length=255,verbose_name="Product Group Name")
     created_date = models.DateTimeField(auto_now_add=True,editable=False)

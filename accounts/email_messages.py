@@ -20,7 +20,7 @@ def sendInvitationEmail(request, email, name = None):
     try:
         current_site = get_current_site(request)
         mail_subject = 'An invitation to use the IIMS system'
-        message = f"You are invite to use the IIMS system, through the following link. {SITE_DOMAIN}"
+        message = f"You are invite to use the IIMS system, through the following link. "
         
         to_email = email
         email = EmailMessage(

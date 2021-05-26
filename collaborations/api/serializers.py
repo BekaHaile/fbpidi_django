@@ -73,6 +73,7 @@ class EventListSerializer(serializers.ModelSerializer):
 
 class BlogSerializer(serializers.ModelSerializer):
     created_by = UserInfoSerializer(read_only = True)
+    company = CompanyInfoSerializer(read_only = True)
     class Meta:
         model = Blog
         fields = "__all__"
