@@ -974,10 +974,12 @@ class p_serializer(serializers.ModelSerializer):
 def FetchInquiryProducts(request):
     data = json.loads(request.body)
     # remove the last , from the incoming string
+  
     prods_id_list = data['products'][:-1] 
     product_ids = prods_id_list.split(",")
     product_list = [int(i) for i in product_ids]
     products = Product.objects.filter(id__in = product_list).distinct()
+   
     return JsonResponse( p_serializer(products, many = True).data, safe = False)
 
 
@@ -1003,16 +1005,29 @@ class InquiryRequest(LoginRequiredMixin, View):
 
     def post(self, *args,**kwargs):
         try:
+            print('>>>>>>>>>post',self.request.POST['prod_id_list'])
+
+
             products = Product.objects.filter(id__in = get_id_list( self.request.POST['prod_id_list']) ).distinct()
-            form = ProductInquiryForm(self.request.POST)
+            print("products ", products)
+           
+            form = ProductInquiryForm(self.request.POST, self.request.FILES)
             if form.is_valid:
-                for p in products:       
+                print("inside valid")
+                for p in products:     
+                    print("1")  
                     item = form.save(commit = False)
+                    print("2")
                     item.product = p
+                    print("3")
                     item.user=self.request.user
+                    print("4")
+                    print("item >>", item)
                     item.save()
+                    print("5")
             else:
                 print("form invalid")
+                
             return render(self.request, "frontpages/product/success_inquiry.html",{ 'email':self.request.POST['sender_email'], 'prod_id_list': self.request.POST['prod_id_list'] })
         except Exception as e:
             print("@@@ Exception ",e)
