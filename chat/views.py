@@ -78,6 +78,7 @@ def chat_ajax_handler(request, id):
 def chat_with(request, reciever_name):    
     try:
         other_user= UserProfile.objects.get(username=reciever_name)
+
         if other_user == request.user:
             messages.warning (request, "You can't Chat with your self!")
             if request.user.is_customer:
@@ -86,31 +87,39 @@ def chat_with(request, reciever_name):
                 return redirect("admin:admin_chat_list")
     except Exception as e:
             print("Exception at chat with ",e)
-            if request.user.is_customer:
-                return redirect('customer_chat_list')
+            if request.user.is_anonymous:
+                return redirect('cm_login')
+
+
             else:
-                return redirect("admin:admin_chat_list")
+                if request.user.is_customer:
+                    return redirect('customer_chat_list')
+                else:
+                    return redirect("admin:admin_chat_list")
     
     messages_list = []
     if request.method == 'GET':
-        q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(is_active = True) ) | 
-               Q( Q(sender = request.user) & Q(receiver = other_user) & Q(is_active = True)) 
-            )
-        query_messages = ChatMessages.objects.filter(q).order_by("-created_date")
-        unread = query_messages.filter( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False))
-        for m in unread:
-            m.seen = True
-            m.save()
-        num_of_messages = unread.count() if unread.count()>=5 else 5 #set number of messages to 5 if unread messages are lesser than 5, or set z numer equal to no of unread messages
-        query_messages = query_messages[:num_of_messages]
-        reversed_query = query_messages[::-1]#we need -created_date to retrieve from db, and order of created_date to display for users, so we have to reverse it
-        messages_list = ChatMessagesSerializer(reversed_query, many = True).data
- 
-    other_chats = get_grouped_chats(user=request.user, excluded_user=other_user)
-    if request.user.is_customer:
-        return render(request, 'frontpages/chat/customer_chat_layout.html',{'other_user':other_user, 'old_messages': messages_list,'other_chats':other_chats})
-    else:    
-        return render(request, 'admin/chat/chat_layout.html',{'other_user':other_user, 'old_messages': messages_list,'other_chats':other_chats})
+        if request.user.is_anonymous:
+                return redirect('cm_login')
+        else:
+            q = Q( Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(is_active = True) ) | 
+                Q( Q(sender = request.user) & Q(receiver = other_user) & Q(is_active = True)) 
+                )
+            query_messages = ChatMessages.objects.filter(q).order_by("-created_date")
+            unread = query_messages.filter( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False))
+            for m in unread:
+                m.seen = True
+                m.save()
+            num_of_messages = unread.count() if unread.count()>=5 else 5 #set number of messages to 5 if unread messages are lesser than 5, or set z numer equal to no of unread messages
+            query_messages = query_messages[:num_of_messages]
+            reversed_query = query_messages[::-1]#we need -created_date to retrieve from db, and order of created_date to display for users, so we have to reverse it
+            messages_list = ChatMessagesSerializer(reversed_query, many = True).data
+    
+            other_chats = get_grouped_chats(user=request.user, excluded_user=other_user)
+            if request.user.is_customer:
+                return render(request, 'frontpages/chat/customer_chat_layout.html',{'other_user':other_user, 'old_messages': messages_list,'other_chats':other_chats})
+            else:    
+                return render(request, 'admin/chat/chat_layout.html',{'other_user':other_user, 'old_messages': messages_list,'other_chats':other_chats})
     
 @login_required    
 def list_unread_messages(request):
@@ -137,6 +146,7 @@ def list_unread_messages(request):
 class CustomerChatList( LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
+            
             return render(self.request, 'frontpages/chat/chat_list.html', {'chat_list':get_grouped_chats(self.request.user, None)})
         except Exception as e:
             print("@@@ Exception at CustomerChat List ",e)

@@ -302,7 +302,7 @@ class ProductInquiry(models.Model):
 
     def save(self):
         if self.product :
-            self.pieces = self.product.brand.product_type.uom.name
+            self.pieces =  self.product.get_subcategory().uom.name
             super(ProductInquiry, self).save()
         else:
             super(ProductInquiry, self).save()          

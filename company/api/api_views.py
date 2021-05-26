@@ -41,8 +41,10 @@ class ApiCompanyByMainCategoryList(APIView):
             companies = companies.filter(Q(name__icontains=request.query_params['by_title'])|Q(name_am__icontains=request.query_params['by_title'])|Q(company_product__name=request.query_params['by_title'])).distinct().exclude(main_category="FBPIDI")
         paginated = get_paginated_data(request, companies)
         subsectors = Category.objects.all()
+        # user_liked_companies = CompanyLike.objects.filter(user = request.user, company = )
         return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'count' : companies.count(), 'companies': CompanyInfoSerializer(paginated, many =True).data, 
                                 'message':'Companies', 'message_am': 'ድርጅቶች', 'sub_sectors': CategorySerializer(subsectors, many = True).data})
+
 
 class ApiSearchCompany(APIView):
     def get(self,request):
