@@ -20,10 +20,10 @@ from collaborations.models import News, NewsImages
 class IndexView(View):
     def get(self,*args,**kwargs):
         record_visit(self.request)
-        products = Product.objects.all()
+        products = Product.objects.filter(is_active = True)
         category = Category.objects.all()
         sub_category = SubCategory.objects.all()
-        company = Company.objects.all().exclude(main_category="FBPIDI")
+        company = Company.objects.filter(is_active=True).exclude(main_category="FBPIDI")
         #12345 make it filter the latest 4 or 5
         news_list = News.objects.all()[:3]
         collaboration_modules = ['Announcement','Blog','Event','Forum', 'News','Polls','Research','Tender','Vacancy']

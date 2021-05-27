@@ -1,4 +1,5 @@
 import random
+import re
 import string
 import json
 import datetime
@@ -275,6 +276,8 @@ class AdminProductListView(LoginRequiredMixin,ListView):
 
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
+            if 'pending' in self.request.GET:
+                return Product.objects.filter(is_active = False)
             return Product.objects.all()
         elif self.request.user.is_company_admin:
             return Product.objects.filter(company=self.request.user.get_company())
@@ -283,6 +286,8 @@ class AdminProductListView(LoginRequiredMixin,ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = CompanySelectForm
+        if 'pending' in self.request.GET:
+            context['list_type'] = 'pending' 
         return context
 
 @method_decorator(decorators,name='dispatch')
@@ -295,23 +300,12 @@ class CreateProductView(LoginRequiredMixin,CreateView):
    
     def get_form_kwargs(self,*args,**kwargs):
         kwargs = super(CreateProductView,self).get_form_kwargs()
-
         if self.request.method == 'GET': 
-            
             self.company = Company.objects.get(id = self.request.GET['company'])
-            
-            
         else:
             self.company = Company.objects.get(name = self.request.POST['company'])
-            
         kwargs.update({ 'company':self.company})
         
-        
-        
-        # if self.request.user.is_company_admin:
-        #     kwargs.update({'company': Company.objects.get(contact_person=self.request.user), 'user':user})
-        # elif self.request.user.is_company_staff:
-        #     kwargs.update({'company': CompanyStaff.objects.get(user=self.request.user).company, 'user':user})
         return kwargs
 
     def get_context_data(self, *args, **kwargs):
@@ -322,8 +316,9 @@ class CreateProductView(LoginRequiredMixin,CreateView):
     def form_valid(self,form):
         product = form.save(commit=False)
         product.company = self.company
-        # product.company = self.request.user.get_company()
         product.created_by = self.request.user
+        if self.request.user.is_superuser == True:
+            product.is_active = True
         product.save()    
         image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
                     form.cleaned_data.get('width'),form.cleaned_data.get('height'),
@@ -407,6 +402,32 @@ class AddProductImage(LoginRequiredMixin,CreateView):
                     image.product_image,400,400)
         messages.success(self.request,"Image Added Successfully!")
         return redirect("admin:product_detail",pk=product.id)
+
+
+@method_decorator(decorators,name='dispatch')
+class ProductApprove(View):
+    def post(self, *args, **kwargs):
+        if self.request.user.is_superuser == True:
+            if 'approve_all' in self.request.POST:
+                ps= Product.objects.filter(is_active = False)
+                for p in ps:
+                    p.is_active = True
+                    p.save()
+                messages.success(self.request, "All Pending Products, Approved Successfully!")
+            elif 'id' in self.request.POST:
+                p = Product.objects.get(id = self.request.POST['id'])
+                if p.is_active == False:
+                    p.is_active = True
+                    p.save()
+                    messages.success(self.request, "Product Approved Successfully! ")  
+                else:
+                    p.is_active = False
+                    p.save()
+                    messages.success(self.request, "Product Suspended Successfully! ")
+            return redirect("admin:admin_products")    
+        else:
+            messages.warning(self.request, "You are not authorized for this action!")
+            return redirect("admin:admin_products")
 
 
 @method_decorator(decorators,name='dispatch')
@@ -972,15 +993,19 @@ class p_serializer(serializers.ModelSerializer):
 
 @login_required
 def FetchInquiryProducts(request):
-    data = json.loads(request.body)
-    # remove the last , from the incoming string
-  
-    prods_id_list = data['products'][:-1] 
-    product_ids = prods_id_list.split(",")
-    product_list = [int(i) for i in product_ids]
-    products = Product.objects.filter(id__in = product_list).distinct()
-   
-    return JsonResponse( p_serializer(products, many = True).data, safe = False)
+    try:
+        data = json.loads(request.body)
+        # remove the last , from the incoming string
+    
+        prods_id_list = data['products'][:-1] 
+        product_ids = prods_id_list.split(",")
+        product_list = [int(i) for i in product_ids]
+        products = Product.objects.filter(id__in = product_list).distinct()
+    
+        return JsonResponse( p_serializer(products, many = True).data, safe = False)
+    except Exception as e:
+        print("@@@ Exception at FetchInquiryProducts ",e )
+        return JsonResponse([])
 
 
 # this function is used, because to convert the list of string ids to integer and to cut the last , off
@@ -1005,28 +1030,19 @@ class InquiryRequest(LoginRequiredMixin, View):
 
     def post(self, *args,**kwargs):
         try:
-            print('>>>>>>>>>post',self.request.POST['prod_id_list'])
-
-
             products = Product.objects.filter(id__in = get_id_list( self.request.POST['prod_id_list']) ).distinct()
-            print("products ", products)
-           
             form = ProductInquiryForm(self.request.POST, self.request.FILES)
             if form.is_valid:
-                print("inside valid")
                 for p in products:     
-                    print("1")  
                     item = form.save(commit = False)
-                    print("2")
                     item.product = p
-                    print("3")
                     item.user=self.request.user
-                    print("4")
-                    print("item >>", item)
                     item.save()
-                    print("5")
             else:
                 print("form invalid")
+                messages.warning(self.request, "Invalid form data..")
+                context = {'products':products,'prod_id_list': self.request.POST['prod_id_list'],'form':form}
+                return render(self.request, "frontpages/product/inquiry_form.html", context)
                 
             return render(self.request, "frontpages/product/success_inquiry.html",{ 'email':self.request.POST['sender_email'], 'prod_id_list': self.request.POST['prod_id_list'] })
         except Exception as e:

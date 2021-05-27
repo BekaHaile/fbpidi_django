@@ -175,6 +175,13 @@ def count_new_inquiry_requests(user_company):
     return ProductInquiry.objects.filter(product__company = user_company, replied=False).count()
 
 @register.simple_tag
+def count_pending_products(company=None):
+    if company!=None:
+        return Product.objects.filter(company = company.id, is_active=False).count()
+    return Product.objects.filter(is_active = False).count()
+    
+
+@register.simple_tag
 def tag_edit(string):
     tag_list = string.split(',')
     return tag_list
