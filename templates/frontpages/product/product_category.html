@@ -154,6 +154,9 @@
 															<div class="item-card9-footer d-sm-flex">
 																<div class="item-card9-cost">
 																	<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																		<a class="" href="{% url 'company_home' pk=product.company.id %}" target = "black" data-toggle="tooltip" data-placement="top" title="" data-original-title="{% print_translated product.company.name product.company.name_am LANGUAGE_CODE %}">
+																			<img src="{{product.company.get_image}}" alt="image" class="avatar brround  mr-2">
+																		</a>
 																		<!-- <a class="" href="mailto:{{product.company.get_company_address.email}}" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a> -->
 																		<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
 																		<a class="" href="{{product.get_company_address.fax}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.get_company_address.fax}}"><i class="fa fa-globe"></i></a>
@@ -269,6 +272,10 @@
 																	<div class="item-card9-footer d-sm-flex">
 																		<div class="item-card9-cost">
 																			<div class="text-dark font-weight-normal mb-0 mt-0 item-card2-desc">
+																			
+																				<a class="" href="{% url 'company_home' pk=product.company.id %}" target = "black" data-toggle="tooltip" data-placement="top" title="" data-original-title="{% print_translated product.company.name product.company.name_am LANGUAGE_CODE %}">
+																					<img src="{{product.company.get_image}}" alt="image" class="avatar brround  mr-2">
+																				</a>
 																				<!-- <a class="" href="mailto:{{product.company.get_company_address.email}}" data-toggle="modal" data-target="#contact"><i class="fa fa-envelope"></i></a> -->
 																				<a class="" href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.company.get_company_address.phone_number}}"><i class="fa fa-phone"></i></a>
 																				<a class="" href="{{product.get_company_address.fax}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{product.get_company_address.fax}}"><i class="fa fa-globe"></i></a>

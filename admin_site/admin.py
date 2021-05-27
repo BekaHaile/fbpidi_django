@@ -187,6 +187,7 @@ class CustomAdminSite(admin.AdminSite):
             path("brand_edit/<pk>/",wrap(BrandDetail.as_view()),name="edit_brand"),
             path("delete/<model_name>/<id>/",wrap(DeleteAllView.as_view()),name="delete"),
             path("products_list/",wrap(AdminProductListView.as_view()),name="admin_products"),
+            path("product_approve/",wrap(ProductApprove.as_view()), name="product_approve"),
             path("create_product/",wrap(CreateProductView.as_view()),name="create_product"),
             path("product_detail/<pk>/",wrap(ProductUpdateView.as_view()),name="product_detail"),
             path("add_more_images/<pk>/",wrap(AddProductImage.as_view()),name="add_product_image"),

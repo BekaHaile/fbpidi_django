@@ -41,41 +41,78 @@ class CompanyHomePage(DetailView):
     model = Company
     template_name="frontpages/company/company_index.html"  
 
-
-class CompanyAbout(DetailView):
-    model=Company
-    template_name="frontpages/company/about.html"
-
-    def get(self,*args,**kwargs):
-        record_visit(self.request)
-        return super(CompanyAbout,self).get(*args,**kwargs)
-
-
-class CompanyContact(CreateView):
-    model = CompanyMessage
-    template_name = "frontpages/company/contact.html"
-    form_class = CompanyMessageForm
-    
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['object']  = Company.objects.get(id = self.kwargs['pk'])
-        return context
-        
-    def form_valid(self, form):
+class CompanyAbout(View):
+    def get(self, *args, **kwargs):
         try:
-            comp_message = form.save(commit = False)
-            comp_message.company = Company.objects.get (id = self.kwargs['pk'])
-            comp_message.save()
-            if comp_message.company.main_category == "FBPIDI": # if the contacted company is FBPIDI
-                return redirect('index')
-            return redirect(f"/company/company-home-page/{self.kwargs['pk']}/") 
+            record_visit(self.request)
+            company = Company.objects.get(id = self.kwargs['pk'])
+            if company.main_category == "FBPIDI":
+                return render(self.request, "frontpages/company/fbpidi_about.html", {'object':company})
+            else:
+                return render(self.request, "frontpages/company/about.html", {'object':company})
         except Exception as e:
-            print("@@@@@@@@ Exception at company Contact Form ", e)
-            return redirect(f"/company/contact/{self.kwargs['pk']}/")   
+            print('@@@ Exception at CompanyAbout ',e)
+            return redirect('index')
+        
 
-    def form_invalid(self, form):
-        messages.warning(self.request, "Wrong Form Input!")
-        return redirect(f"/company/contact/{self.kwargs['pk']}/")
+# class CompanyContact(CreateView):
+#     model = CompanyMessage
+#     template_name = "frontpages/company/contact.html"
+#     form_class = CompanyMessageForm
+    
+#     def get_context_data(self, *args, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['object']  = Company.objects.get(id = self.kwargs['pk'])
+#         return context
+        
+#     def form_valid(self, form):
+#         try:
+#             comp_message = form.save(commit = False)
+#             comp_message.company = Company.objects.get (id = self.kwargs['pk'])
+#             comp_message.save()
+#             if comp_message.company.main_category == "FBPIDI": # if the contacted company is FBPIDI
+#                 return redirect('index')
+#             return redirect(f"/company/company-home-page/{self.kwargs['pk']}/") 
+#         except Exception as e:
+#             print("@@@@@@@@ Exception at company Contact Form ", e)
+#             return redirect(f"/company/contact/{self.kwargs['pk']}/")   
+
+#     def form_invalid(self, form):
+#         messages.warning(self.request, "Wrong Form Input!")
+#         return redirect(f"/company/contact/{self.kwargs['pk']}/")
+
+class CompanyContact(View):
+    def get(self, *args, **kwargs):
+        try:
+            company = Company.objects.get(id = self.kwargs['pk'])
+            if company.main_category == "FBPIDI":
+                return render(self.request, "frontpages/company/fbpidi_contact.html", {'object':company,'form':CompanyMessageForm})
+            return render(self.request, "frontpages/company/contact.html", {'object':company,'form':CompanyMessageForm})
+        except Exception as e:
+            print("@@@ Exception at CompanyContact get ", e)
+            return redirect("index")
+    def post(self, *args, **kwargs):
+        try:
+            form = CompanyMessageForm(self.request.POST, self.request.FILES)
+            c = Company.objects.get (id = self.kwargs['pk'])
+            if form.is_valid():
+                comp_message = form.save(commit = False)
+                comp_message.company = c
+                comp_message.save()
+                if comp_message.company.main_category == "FBPIDI": # if the contacted company is FBPIDI
+                    return redirect('index')
+                return redirect(f"/company/company-home-page/{self.kwargs['pk']}/") 
+            else:
+                print("@@@ form is invalid")
+                return render(self.request, "frontpages/company/contact.html", {'object': c, 'form':form})
+        
+        except Exception as e:
+            print("@@@ Exception at CompanyContact post")
+            return redirect("index")
+
+
+
+
 
 
 @method_decorator(decorators,name='dispatch')
@@ -131,15 +168,15 @@ class CompanyInquiryList(ListView):
             if 'replied_only' in self.request.GET:
                 if self.request.user.is_superuser:
                     return ProductInquiry.objects.filter(replied =True).distinct()
-                return ProductInquiry.objects.filter(q, replied =True).distinct()
+                return ProductInquiry.objects.filter(q, replied =True)
             elif 'unreplied_only' in self.request.GET:
                 if self.request.user.is_superuser:
                     return ProductInquiry.objects.filter( replied = False).distinct()
-                return ProductInquiry.objects.filter(q, replied = False).distinct()
+                return ProductInquiry.objects.filter(q, replied = False)
             else:
                 if self.request.user.is_superuser:
                     return ProductInquiry.objects.all()
-                return ProductInquiry.objects.filter(q).distinct()
+                return ProductInquiry.objects.filter(q)
         except Exception as e:
             print("@@@@@@ Exception inside CompanyInquiryList ",e)
             return []
@@ -165,7 +202,7 @@ class CompanyInquiryReply(View):
 
             # else:
             
-            reply= ProductInquiryReply.create(created_by=self.request.user, inquiry=sender_inquiry, reply =reply_message)
+            reply= ProductInquiryReply(created_by=self.request.user, inquiry=sender_inquiry, reply =reply_message)
             reply.save()
 
             sender_inquiry.replied = True
@@ -174,7 +211,7 @@ class CompanyInquiryReply(View):
             return redirect('admin:admin_inquiry_list')
            
         except Exception as e:
-            print("!!!!!!!!!!!!!!!!!! Exception inside CompanyInquiryReply ",e)
+            print("@@@ Exception inside CompanyInquiryReply ",e)
             messages.warning(self.request, "Exception occured! didn't reply!")
             return redirect("admin:admin_inquiry_list")
             
@@ -236,7 +273,7 @@ class CompanyProductList(ListView):
 
     def get_queryset(self):
         try:
-            return Product.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
+            return Product.objects.filter(company = Company.objects.get(id = self.kwargs['pk']), is_active = True)
         except Exception as e:
             return []
     
@@ -246,20 +283,34 @@ class CompanyProductList(ListView):
         return context 
 
 
-
-class CompanyProductdetail(DetailView):
-    model=Product
-    template_name = "frontpages/company/product_details.html"
-    context_object_name = "product"
-
-    def get_context_data(self,**kwargs):
+class CompanyProductdetail(View):
+    def get(self, *args, **kwargs):
         try:
-            context = super().get_context_data(**kwargs)
-            context['object'] = Product.objects.get(id=self.kwargs['pk']).company
-            return context
+            p = Product.objects.get(id = self.kwargs['pk'])
+            if p.is_active == False:
+                return redirect(f"/company/company-products/{p.company.id}/")
+            context = {'product':p, 'object':p.company}
+            return render(self.request,"frontpages/company/product_details.html", context )
         except Exception as e:
-            print("@@@@ Exception at CompanyProductDetail ",e)
+            print("@@@ Exception at CompanyProductdetail ",e)
             return redirect("/")
+                
+
+
+# class CompanyProductdetail(DetailView):
+#     model=Product
+#     template_name = "frontpages/company/product_details.html"
+#     context_object_name = "product"
+
+#     def get_context_data(self,**kwargs):
+#         try:
+#             context = super().get_context_data(**kwargs)
+#             company =Product.objects.get(id=self.kwargs['pk']).company
+#             context['object'] = company
+#             return context
+#         except Exception as e:
+#             print("@@@@ Exception at CompanyProductDetail ",e)
+#             return redirect("/")
 
 
 class CompanyProjectList(ListView):
