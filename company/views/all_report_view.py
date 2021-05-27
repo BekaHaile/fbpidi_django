@@ -203,7 +203,7 @@ class AllReportPage(LoginRequiredMixin,View):
             ann_inp_need = AnnualInputNeed.objects.filter(company=company,year=get_current_year()).values(
                                             'company__name','company__main_category','input_name',
                                             'product__sub_category_name','input_unit__name').annotate(
-                                                local_share = Sum('local_input',output=models.FloatField())).order_by('product')
+                                                local_share = Avg('local_input',output=models.FloatField())).order_by('product')
             for inp_share in ann_inp_need:
                 local_share_data.append({'company':inp_share['company__name'],'product':inp_share['product__sub_category_name'],
                                 'unit':inp_share['input_unit__name'],'input':inp_share['input_name'],'data':inp_share['local_share']})
@@ -653,7 +653,7 @@ class AllReportPage(LoginRequiredMixin,View):
             ann_inp_need = AnnualInputNeed.objects.filter(company=company,year=current_year).values(
                                             'company__name','company__main_category','input_name',
                                             'product__sub_category_name','input_unit__name').annotate(
-                                                local_share = Sum('local_input',output=models.FloatField())).order_by('product')
+                                                local_share = Avg('local_input',output=models.FloatField())).order_by('product')
             for inp_share in ann_inp_need:
                 local_share_data.append({'company':inp_share['company__name'],'product':inp_share['product__sub_category_name'],
                                 'unit':inp_share['input_unit__name'],'input':inp_share['input_name'],'data':inp_share['local_share']})

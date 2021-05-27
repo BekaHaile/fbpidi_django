@@ -414,10 +414,10 @@ class ShareLocalInputs(LoginRequiredMixin,View):
         total_data = []
         local_share = 0
         for product in products:
-            ann_inp_need = AnnualInputNeed.objects.filter(product=product)
+            ann_inp_need = AnnualInputNeed.objects.filter(product=product).values('product__sub_category_name').annotate(share_data = Avg('local_input')).order_by('product')
             if ann_inp_need.exists():
                 for aup in ann_inp_need:
-                    local_share += aup.local_input
+                    local_share = round(aup['share_data'],2)
                 
                 total_data.append({'product':product.sub_category_name,'data':local_share,'unit':product.uom})
         context['input_share']=total_data
@@ -925,7 +925,7 @@ class EduLevelofEmployees(LoginRequiredMixin,View):
         education_status_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = EducationalStatus.objects.filter(year_edu=get_current_year()).values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
+        queryset = EducationalStatus.objects.all().values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
         total = 0
         for edu_data in queryset:
             total += int(edu_data['female__sum']+edu_data['male__sum'])

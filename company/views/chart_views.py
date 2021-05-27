@@ -159,7 +159,7 @@ def capital_util_chart(request):
         
         for (performance,capacity) in zip(production_performance_this_year,production_capacity_this_year):
             if performance['product'] == capacity.product.id:
-                labels.append(performance['product__sub_category_name'])
+                labels.append(performance['product__sub_category_name'][:15])
                 data.append(get_capital_util(performance['all_data'],capacity.actual_prdn_capacity))
                 colors.append(get_chart_color())
     return JsonResponse({
@@ -180,13 +180,13 @@ def change_capital_util_chart(request):
         if production_performance_last_year.exists():
             for (performance_this,performance_last,capacity) in zip(production_performance_this_year,production_performance_last_year,production_capacity_this_year):
                 if performance_this['product'] == capacity.product.id or performance_last['product'] == capacity.product.id:
-                    labels.append(company.name+"-"+performance_this['product__sub_category_name'])
+                    labels.append(str(company.name[:10])+"-"+performance_this['product__sub_category_name'][:10])
                     data.append(change_capital_util(performance_this['all_data'],performance_last['all_data'],capacity.actual_prdn_capacity))
                     colors.append(get_chart_color())
         else:
             for (performance_this,capacity) in zip(production_performance_this_year,production_capacity_this_year):
                 if performance_this['product'] == capacity.product.id:
-                    labels.append(str(company.name)+"-"+performance_this['product__sub_category_name'])
+                    labels.append(str(company.name[:10])+"-"+performance_this['product__sub_category_name'][:10])
                     data.append(change_capital_util(performance_this['all_data'],0,capacity.actual_prdn_capacity))
                     colors.append(get_chart_color())
     return JsonResponse({
@@ -232,7 +232,7 @@ def gvp_chart(request):
             if gvp_index['total_prev_year'] != None:
                 prev_year = gvp_index['total_prev_year']
 
-            labels.append(company.name+"-"+gvp_index['product__sub_category_name'])
+            labels.append(company.name[:12]+"-"+gvp_index['product__sub_category_name'][:12])
             gvp_this_year.append(this_year)
             gvp_last_year.append(last_year)
             gvp_prev_year.append(prev_year)
@@ -261,6 +261,7 @@ def num_emp_chart(request):
         
         for et in employees_temp:
             total_temp_emp = (et.male+et.female)
+
         total = total_perm_emp+total_temp_emp
         colors.append(get_chart_color())
         if company.main_category == "Food":
@@ -270,7 +271,7 @@ def num_emp_chart(request):
         if company.main_category == "Pharmaceuticals":
             pharm_total += total
     labels = ['Food Sector','Beverage Sector','Phrmaceutical Sector']
-    data = [0,food_total,bev_total,pharm_total]
+    data = [food_total,bev_total,pharm_total]
     return JsonResponse({'labels':labels,'data':data,'colors':colors})
 
 def num_fem_emp_chart(request):
@@ -374,7 +375,7 @@ def num_edu_level_chart(request):
     colors = []
     data_male = []
     data_female = []
-    queryset = EducationalStatus.objects.filter(year_edu=get_current_year()).values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
+    queryset = EducationalStatus.objects.all().values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
     total = 0
     for edu_data in queryset:
         labels.append(edu_data['education_type'])
@@ -409,16 +410,17 @@ def input_avl_chart(request):
         inp_dem_sups = InputDemandSupply.objects.filter(product=product,year=get_current_year()).values('product').annotate(
             demand=Sum('demand'),supply = Sum('supply')
         ).order_by('product')
+        print(inp_dem_sups)
         if inp_dem_sups.exists():
             for aup in inp_dem_sups:
-                demand += aup['demand']
-                supply += aup['supply']
+                demand = aup['demand']
+                supply = aup['supply']
                 
-            if demand == 0:
-                av_inp=float(supply/1)
-            else:
-                av_inp=float(supply/demand)
-        labels.append(product.sub_category_name)
+                if demand == 0:
+                    av_inp=float(supply/1)
+                else:
+                    av_inp=float(supply/demand)
+        labels.append(product.sub_category_name[:15])
         data.append(round(av_inp,2))
         colors.append(get_chart_color())
     
@@ -430,11 +432,12 @@ def input_share_chart(request):
     colors = []
     local_share = 0
     for product in SubCategory.objects.all():
-        ann_inp_need = AnnualInputNeed.objects.filter(product=product).order_by('product')
+        ann_inp_need = AnnualInputNeed.objects.filter(product=product).values('product__sub_category_name').annotate(share_data = Avg('local_input')).order_by('product')
         if ann_inp_need.exists():
             for aup in ann_inp_need:
-                local_share += aup.local_input
-        labels.append(product.sub_category_name)
+                if aup['share_data'] > 0:
+                    local_share = round(aup['share_data'],2)
+        labels.append(product.sub_category_name[:10])
         data.append(local_share)
         colors.append(get_chart_color())
     return JsonResponse({'labels':labels,'data':data,'colors':colors})
