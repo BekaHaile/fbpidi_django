@@ -273,7 +273,7 @@ class CompanyProductList(ListView):
 
     def get_queryset(self):
         try:
-            return Product.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
+            return Product.objects.filter(company = Company.objects.get(id = self.kwargs['pk']), is_active = True)
         except Exception as e:
             return []
     

@@ -1,4 +1,5 @@
 {%extends 'admin/base_site.html'%}
+{% load admin_template_tags %}
 {% block extrastyle %}
 
 <!-- Theme JS files -->
@@ -27,68 +28,93 @@
 				<div class="list-icons">
 					{% if user.is_superuser %}
 
-						<a  href="#compose_modal" data-toggle="modal" data-target="#compose_modal" class="btn bg-teal btn-sm rounded-round">
-							<i
-							class="icon-add mr-2"></i>Add New Variety
-						</a>
-					
-					{% endif %}
-					<div id="compose_modal" class="modal fade" tabindex="-1">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<form action="{% url 'admin:create_product' %}" method="GET">
-									<div class="modal-header">
-										<h5 class="modal-title">Select Company ..</h5>
-										
-									</div>					
-									<div class="modal-body">
-										<div class="form-group" style="padding-left: 20px;">
-														
-											<div style="margin-bottom: 10px;" class="row">
-												<h5> Please Select Commpany Name :</h5>
-											   
-											</div>
-											<div class="form-group row">
-												<!-- <label class="col-form-label col-lg-3">Company Name </label> -->
-												<div class="col-lg-9">
-													{{form.company}}
-												</div>
-											</div>
-											<!-- <div style="margin-right: 5px; " class="mb-3 row">
-												<input id = "chat_to" autocomplete="off" style = "padding: 5px;" type="text" class="form form-control" name = "chat_to" value="" placeholder="Write username ...">
-											</div>
-											<div class="dropdown-content-body dropdown-scrollable">
-												<span class="mb-2" style = "color: rgb(199, 89, 89);" id = "related_names"></span>
-												<ul id = "list_of_users" style = "width: 100%;" class="media-list"> 
-												</ul>
-												<span class="mt-2" style = "color: rgb(199, 89, 89);" id = "error-area"></span>
-											</div> -->
-										   
-										</div>						
-									</div>
-		
-									<div class="modal-footer">
-										<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-										<button type="submit" id="chat_btn"   style = "" class="btn bg-primary">Submit</button>
-									</div>
-									</form>
-							</div>
-						</div>
-					</div>
+						{% if list_type == 'pending' %}
+						<form action ="{% url 'admin:admin_products'  %}" method="GET">
+							<button type ="submit" class="btn bg-teal btn-sm rounded-round">
+								All Products  
+							</button>
+						</form>
+						<form action ="{% url 'admin:product_approve'  %}" method="POST">
+							{% csrf_token %}
+							<input type="hidden" name="approve_all" value=""/>
+							<button onclick="return confirm('Are you sure you want to approve ALL pending products?')" type ="submit" class="btn bg-teal btn-sm rounded-round">
+								<i class="icon-checkmark3 mr-2"></i> 
+								Approve All
+							</button>
+						</form>
+						{% else %}
+							<a  href="#add_variety_modal" data-toggle="modal" data-target="#add_variety_modal" class="btn bg-teal btn-sm rounded-round">
+								<i class="icon-add mr-2"></i>Add New Variety
+							</a>
 
+							{% count_pending_products as pending_products %}
+
+							{% if pending_products > 0 %}
+								<form action ="{% url 'admin:admin_products'  %}" method="GET">
+									<input type="hidden" name="pending" value=""/>
+									<button type = "submit"  style="background-color: rgb(192, 178, 46);" class="btn bg-teal btn-sm rounded-round">
+										<i  class="fa fa-exclamation mr-2"></i>
+										<p style="display: inline-flex; margin: 0; padding: 0;"  name="pending_products_count" >{{pending_products}}</p>
+										Pending Products
+											
+									</button>
+								</form>
+							
+							{% endif %}
+
+							<div id="add_variety_modal" class="modal fade" tabindex="-1">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<form action="{% url 'admin:create_product' %}" method="GET">
+											<div class="modal-header">
+												<h5 class="modal-title">Select Company ..</h5>
+												
+											</div>					
+											<div class="modal-body">
+												<div class="form-group" style="padding-left: 20px;">
+																
+													<div style="margin-bottom: 10px;" class="row">
+														<h5> Please Select Commpany Name :</h5>
+													   
+													</div>
+													<div class="form-group row">
+														<div class="col-lg-9">
+															{{form.company}}
+														</div>
+													</div>
+													
+												   
+												</div>						
+											</div>
+				
+											<div class="modal-footer">
+												<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+												<button type="submit" id="chat_btn"   style = "" class="btn bg-primary">Submit</button>
+											</div>
+											</form>
+									</div>
+								</div>
+							</div>
+
+						{% endif %}
+						<!-- endif for checking whether the listed products are all prodcuts or pending products -->
+
+					{% endif %}
+					<!-- endif for checking user.is_superuser -->
 
 					{%if perms.product.add_product and not user.is_superuser %}
-					<form action = "{% url 'admin:create_product'%}" method = "GET">
-						
-						<input type="hidden"  name = "company" value = '{{user.get_company.id}}' />
-						<button type ="submit" class="btn bg-teal btn-sm rounded-round">
-							<i
-							class="icon-add mr-2"></i>Add New Variety
-
-						</button>
-					
-					</form>
+						<form action = "{% url 'admin:create_product'%}" method = "GET">
+							<input type="hidden"  name = "company" value = '{{user.get_company.id}}' />
+							<button type ="submit" class="btn bg-teal btn-sm rounded-round">
+								<i
+								class="icon-add mr-2"></i>Add New Variety
+							</button>
+						</form>
 					{%endif%}
+
+
+					
+					
 				</div>
 
 			</div>
@@ -102,6 +128,7 @@
 					<th>Product</th>
 					<th>Created By</th>
 					<th>Created Date</th>
+					<th>Status</th>
 					<th class="text-center">Actions</th>
 				</tr>
 			</thead>
@@ -111,14 +138,20 @@
 					<td>{{forloop.counter}}</td>
 					<td>{{cat.name}}</td>
 					
-					<td>
-						
-						{{cat.get_subcategory}}
-						
+					<td>	
+						{{cat.get_subcategory}}	
 					</td>
 					<td>{{cat.created_by.username}}</td>
 					<td>
 						{{cat.created_date|date}}
+					</td>
+					<td>
+						{%if cat.is_active == False%}
+							<span style="color: rgb(158, 65, 22);"> Pending</span>
+						{%else%}
+						<span style="color: rgb(0, 116, 0);">Approved</span>
+						{%endif%}
+						
 					</td>
 					<td class="text-center">
 						<div class="list-icons">
@@ -133,6 +166,25 @@
 									{% if  perms.product.change_product %}
 									<a href="{%url 'admin:product_detail' pk=cat.id%}" class="dropdown-item">
 										<i class="icon-pencil"></i>Edit Variety</a>
+									 {% endif %}
+
+									 {% if user.is_superuser %} 
+									 <form action="{% url 'admin:product_approve' %}" method="POST">
+										{% csrf_token %}
+										<input type="hidden" name = "id" value="{{cat.id}}" />
+										{%if cat.is_active == True %}
+											<button  onclick="return confirm('Are you sure you want to Suspend this product?')" type="submit" class="dropdown-item">
+													<i class="icon-cross2 mr-2"></i> Suspend
+											</button>
+										{%else%}
+											<button onclick="return confirm('Are you sure you want to Approve this product?')" type="submit" class="dropdown-item">
+												<i class="icon-checkmark3 mr-2"></i> Approve
+											</button>
+												
+										{%endif%}
+								
+									 </form>
+
 									 {% endif %}
 								</div>
 							</div>
