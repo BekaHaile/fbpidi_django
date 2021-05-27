@@ -141,7 +141,7 @@
 					<td>	
 						{{cat.get_subcategory}}	
 					</td>
-					<td>{{cat.created_by.username}}</td>
+					<td>{{cat.company.name|safe|truncatechars_html:30}}</td>
 					<td>
 						{{cat.created_date|date}}
 					</td>

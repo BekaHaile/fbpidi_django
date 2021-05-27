@@ -211,7 +211,7 @@ class CompanyInquiryReply(View):
             return redirect('admin:admin_inquiry_list')
            
         except Exception as e:
-            print("!!!!!!!!!!!!!!!!!! Exception inside CompanyInquiryReply ",e)
+            print("@@@ Exception inside CompanyInquiryReply ",e)
             messages.warning(self.request, "Exception occured! didn't reply!")
             return redirect("admin:admin_inquiry_list")
             
@@ -283,20 +283,34 @@ class CompanyProductList(ListView):
         return context 
 
 
-
-class CompanyProductdetail(DetailView):
-    model=Product
-    template_name = "frontpages/company/product_details.html"
-    context_object_name = "product"
-
-    def get_context_data(self,**kwargs):
+class CompanyProductdetail(View):
+    def get(self, *args, **kwargs):
         try:
-            context = super().get_context_data(**kwargs)
-            context['object'] = Product.objects.get(id=self.kwargs['pk']).company
-            return context
+            p = Product.objects.get(id = self.kwargs['pk'])
+            if p.is_active == False:
+                return redirect(f"/company/company-products/{p.company.id}/")
+            context = {'product':p, 'object':p.company}
+            return render(self.request,"frontpages/company/product_details.html", context )
         except Exception as e:
-            print("@@@@ Exception at CompanyProductDetail ",e)
+            print("@@@ Exception at CompanyProductdetail ",e)
             return redirect("/")
+                
+
+
+# class CompanyProductdetail(DetailView):
+#     model=Product
+#     template_name = "frontpages/company/product_details.html"
+#     context_object_name = "product"
+
+#     def get_context_data(self,**kwargs):
+#         try:
+#             context = super().get_context_data(**kwargs)
+#             company =Product.objects.get(id=self.kwargs['pk']).company
+#             context['object'] = company
+#             return context
+#         except Exception as e:
+#             print("@@@@ Exception at CompanyProductDetail ",e)
+#             return redirect("/")
 
 
 class CompanyProjectList(ListView):
