@@ -308,7 +308,7 @@ class ProductInquiry(models.Model):
             super(ProductInquiry, self).save()          
 
 class ProductInquiryReply(models.Model):
-    inquiry = models.ForeignKey(ProductInquiry, on_delete = models.CASCADE)
+    inquiry = models.ForeignKey(ProductInquiry, related_name='inquiry_reply', on_delete = models.CASCADE)
     reply = models.TextField()
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)

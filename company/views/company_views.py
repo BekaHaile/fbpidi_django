@@ -168,15 +168,15 @@ class CompanyInquiryList(ListView):
             if 'replied_only' in self.request.GET:
                 if self.request.user.is_superuser:
                     return ProductInquiry.objects.filter(replied =True).distinct()
-                return ProductInquiry.objects.filter(q, replied =True).distinct()
+                return ProductInquiry.objects.filter(q, replied =True)
             elif 'unreplied_only' in self.request.GET:
                 if self.request.user.is_superuser:
                     return ProductInquiry.objects.filter( replied = False).distinct()
-                return ProductInquiry.objects.filter(q, replied = False).distinct()
+                return ProductInquiry.objects.filter(q, replied = False)
             else:
                 if self.request.user.is_superuser:
                     return ProductInquiry.objects.all()
-                return ProductInquiry.objects.filter(q).distinct()
+                return ProductInquiry.objects.filter(q)
         except Exception as e:
             print("@@@@@@ Exception inside CompanyInquiryList ",e)
             return []
@@ -202,7 +202,7 @@ class CompanyInquiryReply(View):
 
             # else:
             
-            reply= ProductInquiryReply.create(created_by=self.request.user, inquiry=sender_inquiry, reply =reply_message)
+            reply= ProductInquiryReply(created_by=self.request.user, inquiry=sender_inquiry, reply =reply_message)
             reply.save()
 
             sender_inquiry.replied = True
