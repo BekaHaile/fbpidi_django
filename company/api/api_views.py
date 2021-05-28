@@ -26,6 +26,22 @@ from accounts.api.serializers import CustomerCreationSerializer, CustomerDetailS
 
 from collaborations.api.api_views import get_paginated_data, get_paginator_info
 #api/comp-by-main-category/
+
+def user_liked_companies(user):
+    if user.is_authenticated:
+        likes = CompanyLike.objects.filter(user = user)
+        return [l.company.id for l in likes]
+    return []
+
+
+class ApiUserLikedCompanies(APIView):
+    def get(self, request):
+        try:
+            return Response(data = {'error':False, 'liked_companies':user_liked_companies(request.user)})
+        except Exception as e:
+            return Response(data = {'error':True, 'message':str(e)})
+
+
 class ApiCompanyByMainCategoryList(APIView):   
     #  request[main_category = "Beverage", "Food", "Pharmaceuticals", "All"]
     def get(self,request): 
@@ -41,8 +57,7 @@ class ApiCompanyByMainCategoryList(APIView):
             companies = companies.filter(Q(name__icontains=request.query_params['by_title'])|Q(name_am__icontains=request.query_params['by_title'])|Q(company_product__name=request.query_params['by_title'])).distinct().exclude(main_category="FBPIDI")
         paginated = get_paginated_data(request, companies)
         subsectors = Category.objects.all()
-        # user_liked_companies = CompanyLike.objects.filter(user = request.user, company = )
-        return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'count' : companies.count(), 'companies': CompanyInfoSerializer(paginated, many =True).data, 
+        return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'count' : companies.count(), 'companies': CompanyInfoSerializer(paginated, many =True).data, 'liked_companies':user_liked_companies(request.user),
                                 'message':'Companies', 'message_am': 'ድርጅቶች', 'sub_sectors': CategorySerializer(subsectors, many = True).data})
 
 
@@ -58,7 +73,7 @@ class ApiSearchCompany(APIView):
             paginated = get_paginated_data(request, companies)
             subsectors = Category.objects.all()
             count = companies.count()
-            return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'count' : count, 'companies': CompanyInfoSerializer(paginated, many =True).data, 
+            return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'count' : count, 'companies': CompanyInfoSerializer(paginated, many =True).data, 'liked_companies': user_liked_companies(request.user),
                                     'message':f'{count} result found!', 'message_am': f'{count} ውጤት ተገኝቷል!', 'sub_sectors': CategorySerializer(subsectors, many = True).data})
         except Exception as e:
             print("Exception inside ApisearchCompany ",e)
@@ -69,7 +84,10 @@ class ApiCompanyDetailView(APIView):
     def get(self, request):
         try:
             company = get_object_or_404(Company, id = request.query_params['id'])
-            return Response(data= CompanyFullSerializer( company ).data)
+            data = CompanyFullSerializer( company ).data
+            data['liked_company'] = user_liked_companies(request.user)
+            
+            return Response(data= data)
         except Http404:
             return Response(data = {"error":True, "message": "Company Not Found!"})
 
