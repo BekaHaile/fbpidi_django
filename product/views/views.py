@@ -1122,22 +1122,23 @@ class ProductByCategoryView(ListView):
     model=Product
     template_name="frontpages/product/product_category.html"
     paginate_by = 6
-    
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['cat_id']).category_type)
-      
-        return context
-
-    def get_queryset(self):
+    def get_data(self):
         category = Category.objects.get(id=self.kwargs['cat_id'])
-        
         brands = []
         for sub_cat in category.sub_category.all():
             for brand in sub_cat.product_category.all():
                 brands.append(brand)
-        print( "@@@@@@@@@@" , Product.objects.filter(brand__in=brands).count(), " ", category)
-        return Product.objects.filter(brand__in=brands)
+        return Product.objects.filter(brand__in=brands, is_active = True)
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['cat_id']).category_type)
+        count = self.get_data().count()
+        context['message'] = f" {count} Listing Found! "
+        context['message_am'] = f"{count} ውጤት ተገኝቷል! "
+        return context
+    def get_queryset(self):
+        return self.get_data()
         # if category.category_type == "Pharmaceuticals":
         #     return Product.objects.filter(
         #         pharmacy_category=category)
@@ -1160,7 +1161,7 @@ class ProductByProductView(ListView):
         brands = []
         for brand in category.product_category.all():
             brands.append(brand)
-        return Product.objects.filter(brand__in=brands)
+        return Product.objects.filter(brand__in=brands, is_active = True)
 
 
 class ProductByMainCategory(ListView):
@@ -1177,17 +1178,17 @@ class ProductByMainCategory(ListView):
                 for sub_cat in category.sub_category.all():
                     for brand in sub_cat.product_category.all():
                         brands.append(brand)
-            return Product.objects.filter(brand__in = brands)
+            return Product.objects.filter(brand__in = brands, is_active = True)
         elif self.kwargs['option'] == "Food":
             categories = Category.objects.filter(category_type="Food")
             for category in categories:
                 for sub_cat in category.sub_category.all():
                     for brand in sub_cat.product_category.all():
                         brands.append(brand)
-            return Product.objects.filter(brand__in=brands)
+            return Product.objects.filter(brand__in=brands, is_active = True)
         elif self.kwargs['option'] == "Pharmaceuticals":
             categories = Category.objects.filter(category_type="Pharmaceuticals")
-            return Product.objects.filter(pharmacy_product_type__category_name__in = categories )
+            return Product.objects.filter(pharmacy_product_type__category_name__in = categories, is_active = True )
             # for category in categories:
             #     for sub_cat in category.sub_category.all():
             #         for brand in sub_cat.product_category.all():
@@ -1195,7 +1196,7 @@ class ProductByMainCategory(ListView):
             # return Product.objects.filter(brand__in=brands)
             # return Product.objects.filter(pharmacy_category__in=Category.objects.filter(category_type="Pharmaceuticals"))
         elif self.kwargs['option'] == "all":
-            return Product.objects.all()
+            return Product.objects.filter(is_active = True)
 
 
     def get_context_data(self,**kwargs):
@@ -1229,7 +1230,7 @@ class SearchProduct(ListView):
 
     def get_data(self):
         # template_name = "frontpages/product/product_category.html"
-        products = Product.objects.all()
+        products = Product.objects.filter(is_active = True)
         if 'name' in self.request.GET and self.request.GET['name'] != '':
             products = Product.objects.filter(
                 Q(name__icontains=self.request.GET['name'])|Q(name_am__icontains=self.request.GET['name'])|Q(brand__brand_name__icontains=self.request.GET['name'])|Q(brand__product_type__sub_category_name__icontains=self.request.GET['name'])

@@ -96,7 +96,7 @@
 												<div class="d-md-flex">
 													<div class="item-card9-img">
 														<div class="item-card9-imgs">
-															<a target="_blank" href="{%url 'product_detail'  pk=product.id%}"></a>
+															<a  href="{%url 'product_detail'  pk=product.id%}"></a>
 															<img src="{{product.image.url}}" alt="img" class="cover-image">
 															<!-- /media/Images/News%20Images/wp2234690.png -->
 														</div>
@@ -122,7 +122,7 @@
 													<div class="card border-0 mb-0">
 														<div class="card-body h-100">
 															<div class="item-card9">
-																<a target="_blank" href="{%url 'product_detail'  pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}
+																<a  href="{%url 'product_detail'  pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}
 																	{% if not product.company.is_active %}
 																	<i class="fa fa-exclamation-circle text-warning ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Not Verified"></i>
 																	{% endif %}
@@ -219,7 +219,7 @@
 														<div class="h-100">
 															<div class="item-card9-img">
 																<div class="item-card9-imgs">
-																	<a target="_blank" href="{%url 'product_detail'  pk=product.id%}"></a>
+																	<a  href="{%url 'product_detail'  pk=product.id%}"></a>
 																	<img src="{{product.image.url}}" alt="img" class="cover-image">
 																</div>
 																<div class="item-card9-icons">
@@ -245,7 +245,7 @@
 																	<div class="item-card9">
 																
 																	
-																		<a target="_blank" href="{%url 'product_detail'  pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}</h4></a>
+																		<a href="{%url 'product_detail'  pk=product.id%}" class="text-dark"><h4 class="font-weight-semibold mt-1 mb-1">{% print_translated product.name product.name_am LANGUAGE_CODE %}</h4></a>
 																		<div class="rating-stars d-flex mr-5">
 																			<input type="number" readonly="readonly" class="rating-value star" name="rating-stars-value" value="1">
 																			<div class="rating-stars-container mr-2">

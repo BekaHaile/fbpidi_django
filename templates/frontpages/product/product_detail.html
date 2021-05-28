@@ -514,11 +514,21 @@
 							</div>
 							<div class="card-body product-filter-desc">
 								<div class="product-filter-icons text-center">
+									{% if product.company.get_company_address.facebooklink %}
 									<a href="{{product.company.get_company_address.facebooklink}}" class="facebook-bg"><i class="fa fa-facebook"></i></a>
+									{% endif %}
+									{% if product.company.get_company_address.twiterlink %}
 									<a href="{{product.company.get_company_address.twiterlink}}" class="twitter-bg"><i class="fa fa-twitter"></i></a>
+									{% endif %}
+									{% if product.company.get_company_address.googlelink %}
 									<a href="{{product.company.get_company_address.googlelink}}" class="google-bg"><i class="fa fa-google"></i></a>
+									{% endif %}
+									{% if product.company.get_company_address.instagramlink %}
 									<a href="{{product.company.get_company_address.instagramlink}}" class="dribbble-bg"><i class="fa fa-instagram"></i></a>
+									{% endif %} 
+									{% if product.company.get_company_address.linkedinlink %}
 									<a href="{{product.company.get_company_address.linkedinlink}}" class="pinterest-bg"><i class="fa fa-linkedin"></i></a>
+									{% endif %}
 								</div>
 							</div>
 						</div>

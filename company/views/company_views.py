@@ -41,6 +41,11 @@ class CompanyHomePage(DetailView):
     model = Company
     template_name="frontpages/company/company_index.html"  
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company_products'] = context['object'].company_product.filter(is_active = True)
+        return context
+
 class CompanyAbout(View):
     def get(self, *args, **kwargs):
         try:
@@ -54,32 +59,6 @@ class CompanyAbout(View):
             print('@@@ Exception at CompanyAbout ',e)
             return redirect('index')
         
-
-# class CompanyContact(CreateView):
-#     model = CompanyMessage
-#     template_name = "frontpages/company/contact.html"
-#     form_class = CompanyMessageForm
-    
-#     def get_context_data(self, *args, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['object']  = Company.objects.get(id = self.kwargs['pk'])
-#         return context
-        
-#     def form_valid(self, form):
-#         try:
-#             comp_message = form.save(commit = False)
-#             comp_message.company = Company.objects.get (id = self.kwargs['pk'])
-#             comp_message.save()
-#             if comp_message.company.main_category == "FBPIDI": # if the contacted company is FBPIDI
-#                 return redirect('index')
-#             return redirect(f"/company/company-home-page/{self.kwargs['pk']}/") 
-#         except Exception as e:
-#             print("@@@@@@@@ Exception at company Contact Form ", e)
-#             return redirect(f"/company/contact/{self.kwargs['pk']}/")   
-
-#     def form_invalid(self, form):
-#         messages.warning(self.request, "Wrong Form Input!")
-#         return redirect(f"/company/contact/{self.kwargs['pk']}/")
 
 class CompanyContact(View):
     def get(self, *args, **kwargs):
@@ -109,10 +88,6 @@ class CompanyContact(View):
         except Exception as e:
             print("@@@ Exception at CompanyContact post")
             return redirect("index")
-
-
-
-
 
 
 @method_decorator(decorators,name='dispatch')
@@ -320,7 +295,7 @@ class CompanyProjectList(ListView):
 
     def get_queryset(self):
         try:
-            return InvestmentProject.objects.filter(company = Company.objects.get(id = self.kwargs['pk']))
+            return InvestmentProject.objects.filter(company = Company.objects.get(id = self.kwargs['pk']), is_active = True)
         except Exception as e:
             return []
     
