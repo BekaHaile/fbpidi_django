@@ -12,4 +12,5 @@ urlpatterns = [
     
     path('like_product/', ApiLikeProduct.as_view(), name="api_like_product"),
     path('dislike_product/', ApiDislikeProduct.as_view(), name = "api_dislike_product"),
+    path('user_liked_products/', ApiUserLikedProducts.as_view(), name = "api_user_liked_products"),
 ]
