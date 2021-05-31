@@ -1009,7 +1009,7 @@ class SearchCompany(ListView):
 
     def get_data(self):
         try:
-            companies = Company.objects.all().exclude(main_category='FBPIDI')
+            companies = Company.objects.filter(is_active = True).exclude(main_category='FBPIDI')
             if 'name' in self.request.GET and self.request.GET['name'] != '':
                 companies = Company.objects.filter( Q(name__icontains=self.request.GET['name'])|Q(name_am__icontains=self.request.GET['name'])
                 |Q(company_product__name=self.request.GET['name'])).distinct() 
@@ -1044,7 +1044,7 @@ class FilterCompanyByCategory(ListView):
             companies = Company.objects.filter(main_category__in = categories , is_active =True).exclude(main_category='FBPIDI')      
         except Exception as e:
             print("Exception while filtering companies ",e)
-            companies = Company.objects.all().exclude(main_category='FBPIDI')
+            companies = []
         return companies
 
 
@@ -1074,7 +1074,7 @@ class CompanyByMainCategory(ListView):
         elif cat == "Pharmaceuticals":
             return Company.objects.filter(main_category="Pharmaceuticals", is_active =True)
         elif cat == "all":
-            return Company.objects.all().exclude(main_category="FBPIDI", is_active =True)
+            return Company.objects.filter(is_active =True).exclude(main_category="FBPIDI")
 
     
     def get_queryset(self):
@@ -1087,18 +1087,31 @@ class CompanyByMainCategory(ListView):
         context['message_am'] = f"{count} ውጤት ተገኝቷል! "
         return context
 
-class ProjectList(ListView):
+
+class ProjectList(ListView):    
     model = InvestmentProject
     template_name = "frontpages/project/project_list.html"
     paginate_by = 6
 
-class ProjectDetail(DetailView):
-    model = InvestmentProject
-    template_name = "frontpages/project/project_detail.html"
+    def get_queryset(self):
+        return InvestmentProject.objects.filter(is_active = True) 
+
+class ProjectDetail(View):
+    def get(self, *args, **kwargs):
+        try:
+            p = InvestmentProject.objects.get(id = self.kwargs['pk'])
+            if p.is_active == False:
+                return redirect("project_list")
+            return render(self.request, "frontpages/project/project_detail.html", {'object':p} )
+        except Exception as e:
+            print("@@@ Exception at ProjectDetail ",e)
+            return redirect("project_list")
+    
 
 class CompanyHomePage(DetailView):
     model = Company
     template_name="frontpages/company/business-5.html"  
+
 
 class CompanyAbout(DetailView):
     model=Company
