@@ -33,7 +33,7 @@
  
 {% endblock %}
 
-{%block pagename%}{%if flag == 'capital_utilization'%}Capital Utilization{%elif flag == 'inv_cap'%}
+{%block pagename%}{%if flag == 'capital_utilization'%}Capacity Utilization{%elif flag == 'inv_cap'%}
 Total Investment Capital
 {%elif flag == 'num_employees'%}
 Number Of Employees By Sector
@@ -42,7 +42,7 @@ Number Of Female Employees By Sector
 {%elif flag == 'num_employees_foreign'%}
 Number of Foreign Employees By Sector
 {%elif flag == 'change_capital_utilization'%}
-Change in Capital Utilization  
+Change in Capacity Utilization  
 {%elif flag == 'extraction_data'%}
 Average Extraction Rate by Product
 {%elif flag == 'gross_vp_data'%}
@@ -80,7 +80,7 @@ Number of Industries By Market Target
 
 {%block nav%}
 {%if flag == 'capital_utilization'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
-<span class="breadcrumb-item active">Capital Utilization</span>
+<span class="breadcrumb-item active">Capacity Utilization</span>
 {%elif flag == 'inv_cap'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
 <span class="breadcrumb-item active">Total Investment Capital</span>
 {%elif flag == 'num_employees'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
@@ -90,7 +90,7 @@ Number of Industries By Market Target
 {%elif flag == 'num_employees_foreign'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
 <span class="breadcrumb-item active">Number of Foreign Employees By Sector</span>
 {%elif flag == 'change_capital_utilization'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
-<span class="breadcrumb-item active">Change in Capital Utilization</span>  
+<span class="breadcrumb-item active">Change in Capacity Utilization</span>  
 {%elif flag == 'extraction_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
 <span class="breadcrumb-item active">Average Extraction Rate by Product</span>
 {%elif flag == 'gross_vp_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
@@ -886,7 +886,7 @@ Number of Industries By Market Target
 				<div class="card">
 					 
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">{{title|title}} Sector Capital Utilization Data</h5>
+						<h5 class="card-title">{{title|title}} Sector Capacity Utilization Data</h5>
 					</div>
 					<div class="card-body">
 						<table class="table datatable-basic">
@@ -896,7 +896,7 @@ Number of Industries By Market Target
 									<th>Product</th>
 									<th>Production Amount</th> 
 									<th>Actual Production</th>
-									<th>Capital Utilization Data</th>
+									<th>Capacity Utilization Data</th>
 									{%if sector != 'all'%}
 									<th>Sector</th>
 									{%endif%}
@@ -999,7 +999,7 @@ Number of Industries By Market Target
 				<div class="card">
 					 
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">{{title}} Sector Change in Capital Utilization Data</h5>
+						<h5 class="card-title">{{title}} Sector Change in Capacity Utilization Data</h5>
 					</div>
 					<div class="card-body">
 						<table class="table datatable-basic">
@@ -1010,7 +1010,7 @@ Number of Industries By Market Target
 									<th>This Year Production Amount</th>
 									<th>Last Year Production Amount</th>
 									<th>Actual Production Amount</th>
-									<th>Change in Capital Utilization</th>
+									<th>Change in Capacity Utilization</th>
 									{%if sector != 'all'%}
 									<th>Sector</th>
 									{%endif%}

@@ -76,7 +76,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'background_task',
-    #'floppyforms',
+    'mapwidgets',
+    'report_builder',
 
 ]
 
@@ -109,6 +110,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
 
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
@@ -138,7 +141,7 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'FBPIDI_IIMS',
+        'NAME': 'FBPIDI_IIMS2',
         'USER': 'postgres',
         'PASSWORD': 'cbe@ps4woga',
         'HOST': '127.0.0.1',
@@ -246,6 +249,7 @@ REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
         # 'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ],
@@ -306,3 +310,16 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 SOCIAL_AUTH_GITHUB_KEY = '1e66719b28647a384cb2'  #CLIENT ID
 SOCIAL_AUTH_GITHUB_SECRET = '271b0d0d47b41342933f5f8287f43f0f2d3eb070' #CLIENT SECRET
 ######
+
+
+MAP_WIDGETS = {
+    "GooglePointFieldWidget": (
+        ("zoom", 15),
+        ("mapCenterLocation", [8.99231453154743, 38.76233911529055]),
+        ("markerFitZoom", 12),
+    ),
+    "GOOGLE_MAP_API_KEY": "AIzaSyBr_bmUNgUmX-vKrwfmvNzkAVPh3fiV9Dg"
+}
+
+
+# REPORT_BUILDER_INCLUDE = ['company.Company']
