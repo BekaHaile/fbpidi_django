@@ -25,9 +25,6 @@ from company.api.serializers import CompanyInfoSerializer
 from product.models import SubCategory,Product, ProductImage, ProductPrice,ProductLike
 from product.api.serializer import (ProductFullSerializer, ProductInfoSerializer, ProductImageSerializer, ProductInquiryCreationSerializer)
 
-
-
-
 def filter_products_by_name(products_list, name):
     return products_list.filter( Q(name__icontains= name) | Q(brand__brand_name__icontains = name) | Q(brand__product_type__sub_category_name__icontains=name)).distinct()
 
@@ -37,6 +34,7 @@ def user_liked_products(user):
         likes = ProductLike.objects.filter(user = user)
         return [l.product.id for l in likes]
     return []
+
 
 class ApiUserLikedProducts(APIView):
     def get(self, request):

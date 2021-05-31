@@ -3,31 +3,20 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','fbpims.settings')
 import django
 django.setup()
-from datetime import datetime
-from django.utils import timezone
 from product.models import *
-from accounts.models import Customer, UserProfile
+from accounts.models import  UserProfile
 from collaborations.models import *
 
 
 from company.models import *
-# from admin_site.api.serializers import *
-# from product.models import *
-# from product.api.serializer import *
-# from PIL import Image
 from django.conf import settings
-# from chat.models import *
 from django.db.models import Count
 from django.utils.timezone import localtime
 from datetime import datetime, timedelta
-# from company.api.serializers import *
-# from collaborations.api.serializers import *
 
 from django.db import connection, reset_queries
 import time
 import functools
-from django.utils import timezone
-# from background_task.models import Task
 
 def query_debugger(func):
     @functools.wraps(func)
@@ -62,7 +51,6 @@ def with_out():
 
 def get_weekly_and_old(queryset):
     try:
-        names = []
         u = UserProfile.objects.get(id = 1)
         print(u)
         
@@ -70,11 +58,10 @@ def get_weekly_and_old(queryset):
         return {'error':True, 'message':str(e)}
 
 if __name__ == '__main__':    
-    c = Customer.objects.first()
-    print(c)
-    print(CompanyLike.objects.get(id = 34).user)
-    print(CompanyLike.objects.filter(user= UserProfile.objects.get(id = 38)))
+    c = Product.objects.all()
+    for a in c:
+        a.is_active = True
+        a.save()
+    print(Product.objects.filter(is_active = False))
 
-
-    
     

@@ -60,11 +60,11 @@ def happy_customer(non):
 
 @register.simple_tag
 def count_category_companies(category):
-    return category.company_category.all().count()
+    return category.company_category.filter(is_active =True).count()
     
 @register.filter
 def company_count_bycategory(category):
-    return Company.objects.filter(category=category).count()
+    return Company.objects.filter(category=category, is_active = True).count()
 
 
 @register.filter
