@@ -1,18 +1,16 @@
+
 import os
-from product.models import DosageForm, Product
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','fbpims.settings')
 import django
 django.setup()
-from accounts.models import *
-from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string,get_template
-# from accounts.api.serializers import CompanyAdminSerializer
-# from rest_framework.authtoken.models import Token
-# from company.api.serializers import *
-# from company.models import *
+from datetime import datetime
+from django.utils import timezone
+from product.models import *
+from accounts.models import Customer, UserProfile
 from collaborations.models import *
+
+
+from company.models import *
 # from admin_site.api.serializers import *
 # from product.models import *
 # from product.api.serializer import *
@@ -72,9 +70,11 @@ def get_weekly_and_old(queryset):
         return {'error':True, 'message':str(e)}
 
 if __name__ == '__main__':    
+    c = Customer.objects.first()
+    print(c)
+    print(CompanyLike.objects.get(id = 34).user)
+    print(CompanyLike.objects.filter(user= UserProfile.objects.get(id = 38)))
+
+
     
-    x = Product.objects.get(id  =16)
-    print(x.get_subcategory)
-
-
     

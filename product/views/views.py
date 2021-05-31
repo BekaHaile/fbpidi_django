@@ -1131,10 +1131,12 @@ class ProductByCategoryView(ListView):
 
     def get_queryset(self):
         category = Category.objects.get(id=self.kwargs['cat_id'])
+        
         brands = []
         for sub_cat in category.sub_category.all():
             for brand in sub_cat.product_category.all():
                 brands.append(brand)
+        print( "@@@@@@@@@@" , Product.objects.filter(brand__in=brands).count(), " ", category)
         return Product.objects.filter(brand__in=brands)
         # if category.category_type == "Pharmaceuticals":
         #     return Product.objects.filter(

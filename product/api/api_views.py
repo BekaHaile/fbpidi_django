@@ -31,6 +31,21 @@ from product.api.serializer import (ProductFullSerializer, ProductInfoSerializer
 def filter_products_by_name(products_list, name):
     return products_list.filter( Q(name__icontains= name) | Q(brand__brand_name__icontains = name) | Q(brand__product_type__sub_category_name__icontains=name)).distinct()
 
+
+def user_liked_products(user):
+    if user.is_authenticated:
+        likes = ProductLike.objects.filter(user = user)
+        return [l.product.id for l in likes]
+    return []
+
+class ApiUserLikedProducts(APIView):
+    def get(self, request):
+        try:
+            return Response(data = {'error':False, 'liked_products':user_liked_products(request.user)})
+        except Exception as e:
+            return Response(data = {'error':True, 'message':str(e)})
+            
+
 class ApiProductByCategory(APIView):
      def get(self, request):
         try:
@@ -43,7 +58,7 @@ class ApiProductByCategory(APIView):
                 products = filter_products_by_name( products, request.query_params['by_title'])
             
             products = get_paginated_data(request, products) #paginating the final result  
-            return Response( data ={'error':False, 'paginator':get_paginator_info(products),
+            return Response( data ={'error':False, 'paginator':get_paginator_info(products), 'liked_products':user_liked_products(request.user),
                                     'products': ProductInfoSerializer(products, many = True).data, 'categories': CategorySerializer( categories, many= True).data, },)
         except Exception as e:
             return Response( data = {'error':True, 'message': f'{str(e)}'})
@@ -79,7 +94,7 @@ class ApiProductByMainCategory(APIView):
             #         p['brand']={'id':0,  'product_type':p['pharmacy_product_type'],'brand_name':"None", "brand_name_am":"None"}
                     
             
-            return Response( data = {'error': False, 'paginator': paginator, 'count':count, 
+            return Response( data = {'error': False, 'paginator': paginator, 'count':count, 'liked_products':user_liked_products(request.user),
                                     'products':products, 'categories':CategorySerializer(categories, many= True).data })
     
         except Exception as e:
@@ -90,26 +105,12 @@ class ApiProductDetailView(APIView):
     def get(self, request):
         try:
             product = get_object_or_404(Product, id = request.query_params['id'])
-            return Response( data = {'error':False, 'product':ProductFullSerializer(product ).data},)
+            return Response( data = {'error':False, 'product':ProductFullSerializer(product ).data, 'liked_products':user_liked_products(request.user)},)
         except Http404:
             return Response(data = {'error': True, 'message':'Product Not Found!'})
 
 
-#api/comp-by-main-category/
-class ApiCompanyByMainCategoryList(APIView):   
-    #  request.query_params['company_type'] should be = manufacturer or supplier, request[product_category = "Beverage", "Food", "Pharmaceuticals", "all"]
-    def get(self,request): 
-        product_category = request.query_params['product_category']
-        companies = Company.objects.filter(company_type= request.query_params['company_type']) #all companies with 
-        if product_category != "all": # if it is "Beverage" or "Food" or "Pharmaceuticals"
-            companies = companies.filter(product_category__category_name__category_type = product_category)
-        return Response(
-            data = {'error':False, 'count' : companies.count(), 'companies': CompanyInfoSerializer(companies, many =True).data},
-            status= status.HTTP_200_OK)
-
-
-
-# this function is used, because to convert the list of string ids to integer and to cut the last , off
+# this function is used to convert the list of string ids to integer and to cut the last , off
 def get_id_list(str_id):
     prods_id_list = str_id[:-1] 
     product_ids = prods_id_list.split(",")
