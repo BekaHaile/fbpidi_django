@@ -9,7 +9,7 @@
 			  var ctx = $subsectorCompanyChart[0].getContext("2d");
 	
 			  new Chart(ctx, {
-				type: 'bar',
+				type: chart_type,
 				data: {
 				  labels: data.labels,
 				  datasets: [{
@@ -41,7 +41,7 @@
 			  var ctx = $populationChart[0].getContext("2d");
 	
 			  new Chart(ctx, {
-				type: 'bar',
+				type: chart_type,
 				data: {
 				  labels: data.labels,
 				  datasets: [{
@@ -73,7 +73,7 @@
 				var ctx = $mgmtToolChart[0].getContext("2d");
 
 				new Chart(ctx, {
-				type: 'bar',
+				type: chart_type,
 				data: {
 					labels: data.labels,
 					datasets: [{
@@ -105,7 +105,7 @@
 				var ctx = $ownershipChart[0].getContext("2d");
 
 				new Chart(ctx, {
-				type: 'bar',
+				type: chart_type,
 				data: {
 					labels: data.labels,
 					datasets: [{
@@ -137,7 +137,7 @@
                   var ctx = $categoryChart[0].getContext("2d");
                    
                   new Chart(ctx, {
-                    type: 'doughnut',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -169,7 +169,7 @@
                   var ctx = $workinghourChart[0].getContext("2d");
                    
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -201,7 +201,7 @@
                   var ctx = $invcapChart[0].getContext("2d");
                    
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -233,7 +233,7 @@
                   var ctx = $pcapChart[0].getContext("2d");
                    
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -265,7 +265,7 @@
                   var ctx = $capitalutilChart[0].getContext("2d");
                    
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -297,7 +297,7 @@
                   var ctx = $changecapitalutilChart[0].getContext("2d");
                    
                   new Chart(ctx, {
-                    type: 'line',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -329,7 +329,7 @@
                   var ctx = $extnrateChart[0].getContext("2d");
                    
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -360,7 +360,7 @@
         
                   var ctx = $gvpChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'line',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -399,7 +399,7 @@
         
                   var ctx = $numempChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -430,7 +430,7 @@
         
                   var ctx = $numfemempChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -461,7 +461,7 @@
         
                   var ctx = $numforempChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -492,7 +492,7 @@
         
                   var ctx = $numjobsChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -523,7 +523,7 @@
         
                   var ctx = $numeduChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -558,7 +558,7 @@
         
                   var ctx = $numFemChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'doughnut',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -589,7 +589,7 @@
         
                   var ctx = $avlinputChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'line',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -620,7 +620,7 @@
                    
                   var ctx = $inputshareChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -651,7 +651,7 @@
         
                   var ctx = $esChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -682,7 +682,7 @@
         
                   var ctx = $destinChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -713,7 +713,7 @@
         
                   var ctx = $targetChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -744,7 +744,7 @@
                   console.log(data);
                   var ctx = $inqproductChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'bar',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -776,7 +776,7 @@
                   console.log(data);
                   var ctx = $inqdailyChart[0].getContext("2d");
                   new Chart(ctx, {
-                    type: 'line',
+                    type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
@@ -799,6 +799,190 @@
         
                 }
               });  
-	
+              
+              // company-product-group-chart
+              var $companyPGChart = $("#company-product-grp");
+              $.ajax({
+                url: $companyPGChart.data("url"),
+                success: function (data) {
+                  console.log(data);
+                  var ctx = $companyPGChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: chart_type,
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Companies",
+                        backgroundColor: data.colors,
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Companies By Product Group'
+                      }
+                    }
+                  });
+        
+                }
+              }); 
+              // Company-therapy-group
+              var $companyTGChart = $("#company-terapy-grp");
+              $.ajax({
+                url: $companyTGChart.data("url"),
+                success: function (data) {
+                  console.log(data);
+                  var ctx = $companyTGChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: chart_type,
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Companies",
+                        backgroundColor: data.colors,
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Companies By terapeutic Group'
+                      }
+                    }
+                  });
+        
+                }
+              }); 
+              // company-dosage-form
+              var $companyDFChart = $("#company-dosage-form");
+              $.ajax({
+                url: $companyDFChart.data("url"),
+                success: function (data) {
+                  console.log(data);
+                  var ctx = $companyDFChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: chart_type,
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Companies",
+                        backgroundColor: data.colors,
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Companies By Dosage Form'
+                      }
+                    }
+                  });
+        
+                }
+              }); 
+              // product-product-group
+              var $productPGChart = $("#product-product-grp");
+              $.ajax({
+                url: $productPGChart.data("url"),
+                success: function (data) {
+                  console.log(data);
+                  var ctx = $productPGChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: chart_type,
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Products",
+                        backgroundColor: data.colors,
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Products By Product Group'
+                      }
+                    }
+                  });
+        
+                }
+              }); 
+              // product therapy group
+              var $productTGChart = $("#product-terapy-grp");
+              $.ajax({
+                url: $productTGChart.data("url"),
+                success: function (data) {
+                  var ctx = $productTGChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: chart_type,
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Products",
+                        backgroundColor: data.colors,
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Products By Therapeutic Group'
+                      }
+                    }
+                  });
+        
+                }
+              }); 
+              // product-dosage-form
+              var $productDFChart = $("#product-dosage-form");
+              $.ajax({
+                url: $productDFChart.data("url"),
+                success: function (data) {
+                  var ctx = $productDFChart[0].getContext("2d");
+                  new Chart(ctx, {
+                    type: chart_type,
+                    data: {
+                      labels: data.labels,
+                      datasets: [{
+                        label: "Products by Dosage Form",
+                        backgroundColor: data.colors,
+                        data: data.data
+                      }]          
+                    },
+                    options: {
+                      responsive: true,
+                      legend: {
+                        position: 'top',
+                      },
+                      title: {
+                        display: true,
+                        text: 'Products By Dosage Form'
+                      }
+                    }
+                  });
+        
+                }
+              }); 
 		});
 	

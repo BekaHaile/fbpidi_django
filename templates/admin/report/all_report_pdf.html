@@ -780,7 +780,7 @@
 						</table>
 					</div> 
 				</div>
-				<li>Number of Female Employees</li>
+				<li>Number of Employees</li>
 				<div class="card">
 					 
 					<div class="card-header header-elements-inline">
@@ -836,7 +836,62 @@
 						</table>
 					</div> 
 				</div>
-				  
+				<li>Number of Female Employees</li>
+				<div class="card">
+					 
+					 <div class="card-header header-elements-inline">
+						 <h5 class="card-title">Number of Female Employees</h5>
+					 </div>
+					 <div class="card-body">
+						 <table border="1" class="table datatable-basic">
+							 <thead>
+								 <tr>
+									 <th>#</th>
+									 <th>Company</th>
+									 <th>Permanent Employees</th>
+									 <th>Temporary Employees</th>
+									 <th>Total</th>
+									 {%if sector != 'all'%}
+									 <th>Sector</th>
+									 {%endif%}
+									 {%if sub_sector%}
+									 <th>Sub Sector</th>
+									 {%endif%}
+								 </tr>
+							 </thead>
+							 <tbody>
+								 {%for fd in total_fem_emp_data%}
+								 <tr>
+									 <td>{{forloop.counter}}</td>
+									 <td>{{fd.company}}</td>
+									 <td>{{fd.perm_emp}}</td>
+									 <td>{{fd.temp_emp}}</td>
+									 <td>{{fd.data}}</td>
+									 {%if sector != 'all'%}
+									 <td>{{sector}}</td>
+									 {%endif%}
+									 {%if sub_sector%}
+									 <td>{{sub_sector}}</td>
+									 {%endif%}
+								 </tr>
+								 {%endfor%}
+								 
+							 </tbody>
+							 <tr>
+								 <td></td>
+								 <td>Total</td>
+								 <td></td><td></td><td>{{total_fem_emp_data|get_sum}}</td>
+								 {%if sector != 'all'%}
+								 <td> </td>
+								 {%endif%}
+								 {%if sub_sector%}
+								 <td> </td>
+								 {%endif%}
+								 
+							 </tr>
+						 </table>
+					 </div> 
+				 </div>
 				<li>Number of Foreign Employees</li>	
 						<table border="1">
 							<thead>
@@ -930,7 +985,6 @@
 									<th>Company</th>
 									<th>Positions</th>
 									<th>Employees</th>
-									<th>Share %</th>
 									<th>Sector</th>
 								</tr>
 							</thead>
@@ -941,7 +995,6 @@
 									<td>{{od.company}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total_fem_posn %} %</td>
 									<td>{{od.sector}}</td>
 								</tr>
 								 {%endfor%}
