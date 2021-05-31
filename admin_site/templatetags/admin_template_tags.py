@@ -30,7 +30,7 @@ def get_company_id(user):
 @register.filter
 def company_count(user):
     if user.is_authenticated:
-        return int(Company.objects.all().count())
+        return int(Company.objects.all().exclude(main_category = "FBPIDI").count())
 
 @register.simple_tag
 def add_two_val(x,y):

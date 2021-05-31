@@ -58,10 +58,6 @@ def get_weekly_and_old(queryset):
         return {'error':True, 'message':str(e)}
 
 if __name__ == '__main__':    
-    c = Product.objects.all()
-    for a in c:
-        a.is_active = True
-        a.save()
-    print(Product.objects.filter(is_active = False))
+    print(EventParticipants.objects.all().delete())
 
     
