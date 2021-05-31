@@ -123,7 +123,7 @@
 							<form class="form-inline" method="POST"> {%csrf_token%}
 							<ul class="list-inline list-inline-condensed mb-0 mr-4">
 								<li class="list-inline-item"> 
-									<select class="form-control" name="region" id="">
+									<select class="form-control" style="width: 150px;" name="region" id="">
 										<option value="">Select Region</option>
 										{%for region in regions%}
 										<option value="{{region.id}}">{{region}}</option>
@@ -131,7 +131,7 @@
 									</select>
 								</li>
 								<li class="list-inline-item"> 
-									<select class="form-control" name="sector" id="">
+									<select class="form-control" style="width: 150px;" name="sector" id="">
 										<option value="">Select Sector</option>
 										<option value='Food' >Food</option>
 										<option value='Beverage' >Beverage</option>
@@ -139,7 +139,7 @@
 									</select>
 								</li>
 								<li class="list-inline-item"> 
-									<select class="form-control" name="sub_sector" id="">
+									<select class="form-control" style="width: 200px;" name="sub_sector" id="">
 										<option value="">Select Sub sectors</option>
 										{%for sub_sector in sub_sectors%}
 										<option value="{{sub_sector.id}}">{{sub_sector}}</option>
@@ -147,7 +147,7 @@
 									</select>
 								</li> 
 								<li class="list-inline-item"> 
-									<select class="form-control" name="product" id="">
+									<select class="form-control" style="width: 200px;" name="product" id="">
 										<option value="">Select Product</option>
 										{%for product in products%}
 										<option value="{{product.id}}">{{product}}</option>

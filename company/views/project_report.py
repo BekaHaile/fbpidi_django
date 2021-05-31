@@ -211,7 +211,6 @@ class ProjectReport(LoginRequiredMixin,View):
         context['region'] = self.request.POST['region']
         context['sector'] = self.request.POST['sector']
         context['sub_sector'] = self.request.POST['sub_sector']
-        context['product'] = self.request.POST['product']
         # form of ownership
         queryset = projects.values('ownership_form__name').annotate(Count('id')).order_by('ownership_form') 
         total_ownership = 0

@@ -35,6 +35,19 @@ def get_current_year():
         current_year = gc_year - 8
     return current_year
 
+def in_between(x,min,max):
+    return ((x-min)*(x-max) <= 0)
+
+def get_current_year_quarter():
+    current_year = 0
+    gc_year = datetime.datetime.today().year
+    month = datetime.datetime.today().month
+    day = datetime.datetime.today().day
+    if in_between(month,10,12) or in_between(month,1,3) or in_between(month,4,6):
+        current_year = gc_year-8
+    else:
+        current_year = gc_year - 9
+    return current_year
 # @method_decorator(decorators,name='dispatch')
 def certification_chart(request):
     labels=[]
@@ -159,7 +172,7 @@ def capital_util_chart(request):
         
         for (performance,capacity) in zip(production_performance_this_year,production_capacity_this_year):
             if performance['product'] == capacity.product.id:
-                labels.append(performance['product__sub_category_name'])
+                labels.append(performance['company__name'][:10]+" - "+performance['product__sub_category_name'][:10])
                 data.append(get_capital_util(performance['all_data'],capacity.actual_prdn_capacity))
                 colors.append(get_chart_color())
     return JsonResponse({
@@ -180,13 +193,13 @@ def change_capital_util_chart(request):
         if production_performance_last_year.exists():
             for (performance_this,performance_last,capacity) in zip(production_performance_this_year,production_performance_last_year,production_capacity_this_year):
                 if performance_this['product'] == capacity.product.id or performance_last['product'] == capacity.product.id:
-                    labels.append(company.name+"-"+performance_this['product__sub_category_name'])
+                    labels.append(str(company.name[:10])+"-"+performance_this['product__sub_category_name'][:10])
                     data.append(change_capital_util(performance_this['all_data'],performance_last['all_data'],capacity.actual_prdn_capacity))
                     colors.append(get_chart_color())
         else:
             for (performance_this,capacity) in zip(production_performance_this_year,production_capacity_this_year):
                 if performance_this['product'] == capacity.product.id:
-                    labels.append(str(company.name)+"-"+performance_this['product__sub_category_name'])
+                    labels.append(str(company.name[:10])+"-"+performance_this['product__sub_category_name'][:10])
                     data.append(change_capital_util(performance_this['all_data'],0,capacity.actual_prdn_capacity))
                     colors.append(get_chart_color())
     return JsonResponse({
@@ -197,7 +210,7 @@ def extraction_rate_chart(request):
     labels = []
     data = []
     colors = []
-    queryset = ProductionCapacity.objects.values('product__sub_category_name','product__uom').annotate(avg_extraction_rate=Avg('extraction_rate')).order_by('product')
+    queryset = ProductionCapacity.objects.filter(year=get_current_year()).values('product__sub_category_name','product__uom').annotate(avg_extraction_rate=Avg('extraction_rate')).order_by('product')
     for pdata in queryset:
         labels.append(pdata['product__sub_category_name'])
         data.append(pdata['avg_extraction_rate'])
@@ -232,7 +245,7 @@ def gvp_chart(request):
             if gvp_index['total_prev_year'] != None:
                 prev_year = gvp_index['total_prev_year']
 
-            labels.append(company.name+"-"+gvp_index['product__sub_category_name'])
+            labels.append(company.name[:12]+"-"+gvp_index['product__sub_category_name'][:12])
             gvp_this_year.append(this_year)
             gvp_last_year.append(last_year)
             gvp_prev_year.append(prev_year)
@@ -256,11 +269,18 @@ def num_emp_chart(request):
         employees_perm = Employees.objects.filter(company=company,employment_type__icontains="Permanent")
         employees_temp = Employees.objects.filter(company=company,employment_type__icontains="Temporary")
         
-        for ep in employees_perm:
-            total_perm_emp = (ep.male+ep.female)
-        
-        for et in employees_temp:
-            total_temp_emp = (et.male+et.female)
+        if employees_perm.exists():
+            for ep in employees_perm:
+                total_perm_emp = (ep.male+ep.female)
+        else:
+            total_perm_emp = 0
+
+        if employees_temp.exists():                
+            for et in employees_temp:
+                total_temp_emp = (et.male+et.female)
+        else:
+            total_temp_emp = 0
+
         total = total_perm_emp+total_temp_emp
         colors.append(get_chart_color())
         if company.main_category == "Food":
@@ -270,7 +290,7 @@ def num_emp_chart(request):
         if company.main_category == "Pharmaceuticals":
             pharm_total += total
     labels = ['Food Sector','Beverage Sector','Phrmaceutical Sector']
-    data = [0,food_total,bev_total,pharm_total]
+    data = [food_total,bev_total,pharm_total]
     return JsonResponse({'labels':labels,'data':data,'colors':colors})
 
 def num_fem_emp_chart(request):
@@ -284,15 +304,20 @@ def num_fem_emp_chart(request):
     bev_total = 0
     pharm_total = 0
     for company in Company.objects.all().exclude(main_category='FBPIDI'):
-        employees_perm = Employees.objects.filter(company=company,employment_type__icontains="Permanent")
-        employees_temp = Employees.objects.filter(company=company,employment_type__icontains="Temporary")
+        employees_perm = Employees.objects.filter(company=company,employment_type="Permanent Employee")
+        employees_temp = Employees.objects.filter(company=company,employment_type="Temporary Employee")
         
-        for ep in employees_perm:
-            total_perm_emp = (ep.female)
-        
-        for et in employees_temp:
-            total_temp_emp = (et.female)
-        
+        if employees_perm.exists():
+            for ep in employees_perm:
+                total_perm_emp = (ep.female)
+        else:
+            total_perm_emp = 0
+        if employees_temp.exists():
+            for et in employees_temp:
+                total_temp_emp = (et.female)
+        else:
+            total_temp_emp = 0
+
         total = total_perm_emp+total_temp_emp
         if company.main_category == "Food":
             food_total += total
@@ -317,10 +342,14 @@ def num_for_emp_chart(request):
     bev_total = 0
     pharm_total = 0
     for company in Company.objects.all().exclude(main_category='FBPIDI'):
-        employees_foreign = Employees.objects.filter(company=company,employment_type__icontains="Foreign")         
-        for ef in employees_foreign:
-            total_for_emp_m += (ef.male)
-            total_for_emp_f += (ef.female)
+        employees_foreign = Employees.objects.filter(company=company,employment_type="Foreign Employee")  
+        if employees_foreign.exists():       
+            for ef in employees_foreign:
+                total_for_emp_m += (ef.male)
+                total_for_emp_f += (ef.female)
+        else:
+            total_for_emp_m = 0
+            total_for_emp_f = 0
 
         total = total_for_emp_m+total_for_emp_f
         if company.main_category == "Food":
@@ -343,8 +372,8 @@ def num_jobs_chart(request):
     bev_total = 0
     pharm_total = 0
     for company in Company.objects.all().exclude(main_category='FBPIDI'):
-        jobs_created_temp = JobOpportunities.objects.filter(company=company,job_type__icontains="Temporary",year_job=get_current_year())
-        jobs_created_permanent = JobOpportunities.objects.filter(company=company,job_type__icontains="Permanent",year_job=get_current_year())
+        jobs_created_temp = JobOpportunities.objects.filter(company=company,job_type__icontains="Temporary",year_job=get_current_year_quarter())
+        jobs_created_permanent = JobOpportunities.objects.filter(company=company,job_type__icontains="Permanent",year_job=get_current_year_quarter())
         
         temp_male = 0
         temp_female = 0
@@ -374,7 +403,7 @@ def num_edu_level_chart(request):
     colors = []
     data_male = []
     data_female = []
-    queryset = EducationalStatus.objects.filter(year_edu=get_current_year()).values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
+    queryset = EducationalStatus.objects.all().values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
     total = 0
     for edu_data in queryset:
         labels.append(edu_data['education_type'])
@@ -384,7 +413,7 @@ def num_edu_level_chart(request):
     return JsonResponse({'labels':labels,'data_male':data_male,'data_female':data_female,'colors':colors})
 
 def num_fem_inpsn_chart(request):
-    queryset = FemalesInPosition.objects.filter(year_fem=get_current_year())
+    queryset = FemalesInPosition.objects.filter(year_fem=get_current_year_quarter())
     in_med = 0
     in_high = 0
     colors = []
@@ -409,16 +438,17 @@ def input_avl_chart(request):
         inp_dem_sups = InputDemandSupply.objects.filter(product=product,year=get_current_year()).values('product').annotate(
             demand=Sum('demand'),supply = Sum('supply')
         ).order_by('product')
+        print(inp_dem_sups)
         if inp_dem_sups.exists():
             for aup in inp_dem_sups:
-                demand += aup['demand']
-                supply += aup['supply']
+                demand = aup['demand']
+                supply = aup['supply']
                 
-            if demand == 0:
-                av_inp=float(supply/1)
-            else:
-                av_inp=float(supply/demand)
-        labels.append(product.sub_category_name)
+                if demand == 0:
+                    av_inp=float(supply/1)
+                else:
+                    av_inp=float(supply/demand)
+        labels.append(product.sub_category_name[:15])
         data.append(round(av_inp,2))
         colors.append(get_chart_color())
     
@@ -430,11 +460,14 @@ def input_share_chart(request):
     colors = []
     local_share = 0
     for product in SubCategory.objects.all():
-        ann_inp_need = AnnualInputNeed.objects.filter(product=product).order_by('product')
+        ann_inp_need = AnnualInputNeed.objects.filter(product=product).values('product__sub_category_name').annotate(share_data = Avg('local_input')).order_by('product')
         if ann_inp_need.exists():
             for aup in ann_inp_need:
-                local_share += aup.local_input
-        labels.append(product.sub_category_name)
+                if aup['share_data'] > 0:
+                    local_share = round(aup['share_data'],2)
+        else:
+            local_share = 0
+        labels.append(product.sub_category_name[:10])
         data.append(local_share)
         colors.append(get_chart_color())
     return JsonResponse({'labels':labels,'data':data,'colors':colors})
@@ -456,15 +489,15 @@ def market_target_chart(request):
     return JsonResponse({
         'labels':["Further Processing Factors","Final Consumers","Restaurant & Hotels","Institutions","EPSA",
                   "Hospitals","Agents","Wholesaler/Distributor","Retailor",],
-        'data':[company.filter(market_target__further_proc_power__gt=0).distinct('id').count(),
-                company.filter(market_target__final_consumer__gt=0).distinct('id').count(),
-                company.filter(market_target__restaurant_and_hotels__gt=0).distinct('id').count(),
-                company.filter(market_target__institutions__gt=0).distinct('id').count(),
-                company.filter(market_target__epsa__gt=0).distinct('id').count(),
-                company.filter(market_target__hospitals__gt=0).distinct('id').count(),
-                company.filter(market_target__agents__gt=0).distinct('id').count(),
-                company.filter(market_target__wholesaler_distributor__gt=0).distinct('id').count(),
-                company.filter(market_target__retailer__gt=0).distinct('id').count()
+        'data':[company.filter(market_target__further_proc_power__gt=0,market_target__year_target=get_current_year()).count(),
+                company.filter(market_target__final_consumer__gt=0,market_target__year_target=get_current_year()).count(),
+                company.filter(market_target__restaurant_and_hotels__gt=0,market_target__year_target=get_current_year()).count(),
+                company.filter(market_target__institutions__gt=0,market_target__year_target=get_current_year()).count(),
+                company.filter(market_target__epsa__gt=0,market_target__year_target=get_current_year()).count(),
+                company.filter(market_target__hospitals__gt=0,market_target__year_target=get_current_year()).count(),
+                company.filter(market_target__agents__gt=0,market_target__year_target=get_current_year()).count(),
+                company.filter(market_target__wholesaler_distributor__gt=0,market_target__year_target=get_current_year()).count(),
+                company.filter(market_target__retailer__gt=0,market_target__year_target=get_current_year()).count()
                 ],
         'colors':[get_chart_color(),get_chart_color(),get_chart_color(),get_chart_color(),get_chart_color(),get_chart_color(),
                 get_chart_color(),get_chart_color(),get_chart_color()]
@@ -543,3 +576,106 @@ def daily_inquiry_chart(request):
         return JsonResponse({'data':[],'labels':[],'colors':colors})
 
 
+
+
+def company_by_product_grp(request):
+    product_group_data = []
+    labels = []
+    data = []
+    colors = []
+    queryset = Product.objects.values('reserve_attr0__name').annotate(Count('company',distinct=True)).order_by('reserve_attr0')
+    total = 0
+    for product_grp in queryset:
+        if product_grp['reserve_attr0__name'] != None:
+            total += int(product_grp['company__count'])
+            labels.append(product_grp['reserve_attr0__name'])
+            data.append(product_grp['company__count'])
+            colors.append(get_chart_color())
+    return JsonResponse({
+        'labels':labels,'data':data,'colors':colors
+    })
+
+def company_by_therapy_grp(request):
+    therapeutic_group_data = []
+    labels = []
+    data = []
+    colors = []
+    queryset = Product.objects.values('therapeutic_group__name').annotate(Count('company',distinct=True)).order_by('therapeutic_group')
+    total = 0
+    for product_grp in queryset:
+        if product_grp['therapeutic_group__name'] != None:
+            total += int(product_grp['company__count'])
+            labels.append(product_grp['reserve_attr0__name'])
+            data.append(product_grp['company__count'])
+            colors.append(get_chart_color())
+    return JsonResponse({
+        'labels':labels,'data':data,'colors':colors
+    })
+
+def product_product_grp(request):
+    product_group_data = []
+    labels = []
+    data = []
+    colors = []
+    queryset = Product.objects.values('reserve_attr0__name').annotate(Count('id')).order_by('reserve_attr0')
+    total = 0
+    for product_grp in queryset:
+        if product_grp['reserve_attr0__name'] != None:
+            total += int(product_grp['id__count'])
+            labels.append(product_grp['reserve_attr0__name'])
+            data.append(product_grp['company__count'])
+            colors.append(get_chart_color())
+    return JsonResponse({
+        'labels':labels,'data':data,'colors':colors
+    })
+
+def product_terapy_grp(request):
+    therapeutic_group_data = []
+    labels = []
+    data = []
+    colors = []
+    queryset = Product.objects.values('therapeutic_group__name').annotate(Count('reserve_attr0',distinct=True)).order_by("therapeutic_group")
+    total = 0
+    for product_grp in queryset:
+        if product_grp['therapeutic_group__name'] != None:
+            total += int(product_grp['reserve_attr0__count'])
+            labels.append(product_grp['reserve_attr0__name'])
+            data.append(product_grp['company__count'])
+            colors.append(get_chart_color())
+    return JsonResponse({
+        'labels':labels,'data':data,'colors':colors
+    })
+
+def company_dosage_form(request):
+    dosage_form_data = []
+    labels = []
+    data = []
+    colors = []
+    queryset = Product.objects.values('dosage_form__dosage_form').annotate(Count('company',distinct=True)).order_by('dosage_form')
+    total = 0
+    for product_grp in queryset:
+        if product_grp['dosage_form__dosage_form'] != None:
+            total += int(product_grp['company__count'])
+            labels.append(product_grp['reserve_attr0__name'])
+            data.append(product_grp['company__count'])
+            colors.append(get_chart_color())
+    return JsonResponse({
+        'labels':labels,'data':data,'colors':colors
+    })
+
+def product_dosage_form(request):
+    dosage_form_data = []
+    labels = []
+    data = []
+    colors = []
+    queryset = Product.objects.values('dosage_form__dosage_form').annotate(Count('reserve_attr0',distinct=True)).order_by("dosage_form")
+    total = 0
+    for product_grp in queryset:
+        if product_grp['dosage_form__dosage_form'] != None:
+            total += int(product_grp['reserve_attr0__count'])
+            labels.append(product_grp['reserve_attr0__name'])
+            data.append(product_grp['company__count'])
+            colors.append(get_chart_color())
+    return JsonResponse({
+        'labels':labels,'data':data,'colors':colors
+    })

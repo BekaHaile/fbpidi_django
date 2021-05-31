@@ -223,8 +223,7 @@ class CompanyUserCreationForm(AbstractUserCreationForm):
         user.is_company_staff = True
         user.set_password(self.cleaned_data.get("password1"))
         user.save()
-        user.groups.add(Group.objects.get_by_natural_key(
-            self.cleaned_data.get("user_type")))
+        user.groups.set(self.cleaned_data.get("user_type"))
         return user
 
 

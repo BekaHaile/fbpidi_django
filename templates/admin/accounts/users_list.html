@@ -88,6 +88,8 @@
 												
 											{%if perms.accounts.delete_user%}												
 												<a onclick="return confirm('Are you sure you want to delete this user?');" href="{%url 'admin:delete' model_name='user_account' id=usr.id%}" class="dropdown-item"><i class="icon-trash"></i>Delete</a>
+											{%endif%}
+											{%if perms.accounts.change_user%}	
 												<a  href="{%url 'admin:user_detail' pk=usr.id%}" class="dropdown-item"><i class="icon-pencil"></i>Edit</a>
 												{%if usr.is_active%}
 												<a onclick="return confirm('Are you sure you want to Suspend this user?');" href="{%url 'admin:suspend_user' pk=usr.id option='suspend'%}" class="dropdown-item"><i class="icon-cross3"></i>Suspend</a>

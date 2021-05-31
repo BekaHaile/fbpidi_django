@@ -422,7 +422,6 @@
 									<th>Company</th>
 									<th>Positions</th>
 									<th>Employees</th>
-									<th>Share %</th>
 									<th>Sector</th>
 								</tr>
 							</thead>
@@ -433,7 +432,6 @@
 									<td>{{od.company}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total_fem_posn %} %</td>
 									<td>{{od.sector}}</td>
 								</tr>
 								 {%endfor%}
