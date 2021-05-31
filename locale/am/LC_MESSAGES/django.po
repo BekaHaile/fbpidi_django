@@ -1381,13 +1381,13 @@ msgid "Start New Forum Question"
 msgstr "አዲስ ፎረም ይጻፉ"
 
 #: .\templates\frontpages\index.html:17
-msgid " Welcome to the biggest Manufacturing Directory"
-msgstr "ወደ ትልቁ የአምራቾች ዳይሬክቶሪ እንኳን በደህና መጡ!"
+msgid " Welcome to the biggest Ethiopian Manufacturing Directory"
+msgstr "ወደ ትልቁ የኢትዮጵያ አምራቾች ዳይሬክቶሪ እንኳን በደህና መጡ!"
 
 #: .\templates\frontpages\index.html:18
 msgid ""
-"Food, Beverage & Pharmaceutical Industries Development Institute Director."
-msgstr "የምግብ፣ መጠጥ እና መድሃኒት ኢንዱስትሪዎች ማጎልበቻ ኢንስቲዩት ዳይሬክተር"
+"Food, Beverage & Pharmaceutical Industries Development Institute."
+msgstr "የምግብ፣ መጠጥ እና መድሃኒት ኢንዱስትሪዎች ማጎልበቻ ኢንስቲዩት"
 
 #: .\templates\frontpages\index.html:25
 msgid "Search Products"
@@ -2145,8 +2145,6 @@ msgstr ""
 #~ msgid "No applications defined"
 #~ msgstr "የማምልከቻ ቅጽ"
 
-#~ msgid "Welcome To The Biggest Business Directory"
-#~ msgstr "ወደ ትልቁ የንግድ ማውጫ እንኳን በደህና መጡ!"
 
 #~ msgid "Latest Suppliers"
 #~ msgstr "አቅራቢዎች"

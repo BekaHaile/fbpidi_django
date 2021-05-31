@@ -302,17 +302,19 @@
                     </thead>
                     <tbody>
                         {%for pkg in company.company_product_packaging.all%}
-                            <td>{{forloop.counter}}</td>
-                            <td>{{pkg.product.sub_category_name}}</td>
-                            <td>{{pkg.packaging}}</td>
-                            <td>{{pkg.product.uom}}</td>
-                            <td>{%if pkg.category == 'Primary'%}&checkmark;{%else%}&cross;{%endif%}</td>
-                            <td>{%if pkg.category == 'Secondary'%}&checkmark;{%else%}&cross;{%endif%}</td>
-                            <td>{%if pkg.category == 'Teritiary'%}&checkmark;{%else%}&cross;{%endif%}</td>
-                            <td>{{pkg.amount}}</td>
-                            <th>{{pkg.local_input}}</th>
-                            <td>{{pkg.import_input}}</td>
-                            <td>{{pkg.wastage}}</td>
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{pkg.product.sub_category_name}}</td>
+                                <td>{{pkg.packaging}}</td>
+                                <td>{{pkg.product.uom.name}}</td>
+                                <td>{%if pkg.category == 'Primary'%}&checkmark;{%else%}&cross;{%endif%}</td>
+                                <td>{%if pkg.category == 'Secondary'%}&checkmark;{%else%}&cross;{%endif%}</td>
+                                <td>{%if pkg.category == 'Teritiary'%}&checkmark;{%else%}&cross;{%endif%}</td>
+                                <td>{{pkg.amount}}</td>
+                                <th>{{pkg.local_input}}</th>
+                                <td>{{pkg.import_input}}</td>
+                                <td>{{pkg.wastage}}</td>
+                            </tr>
                         {%endfor%}
                     </tbody>
                         

@@ -60,7 +60,7 @@ def get_total_actual(data):
 @register.simple_tag
 def get_capital_util(x,y):
     if float(y) > 0:
-        return round(float(float(x)/(12 * float(y)*260))*100,2)
+        return round(float(float(x)/(float(y)*260))*100,2)
     elif float(y) == 0:
         return round(float(float(x)/(1))*100,2)
 

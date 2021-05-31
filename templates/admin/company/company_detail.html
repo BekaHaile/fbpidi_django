@@ -1,4 +1,5 @@
 {%extends 'admin/base_site.html'%}
+{%load alert_template_tags%}
 {%load crispy_forms_tags%}
 {% block extrastyle %}
 <script>
@@ -26,7 +27,13 @@
 
 			<!-- Content area -->
 			<div class="content">
-
+				<ul class="fab-menu fab-menu-fixed fab-menu-bottom-right" data-fab-toggle="click" data-fab-state="closed">
+					<li>
+						 
+						<a target="_blank" title="Export PDF" href="{%url 'admin:get_company_pdf' pk=object.id%}"  class="fab-menu-btn btn bg-teal-400 btn-float rounded-round btn-icon">
+							<i class="icon-file-pdf icon-paragraph-justify3"></i></a>
+					</li>
+				</ul>
 				<!-- Inner container -->
 				<div class="d-flex align-items-start flex-column flex-md-row">
 
@@ -429,11 +436,11 @@
 								<h6 class="font-weight-semibold mb-0">{{company.name}}</h6>
 								<!-- <span class="d-block opacity-75">{{company.products.all}}</span> -->
 
-								<div class="list-icons list-icons-extended mt-3">
+								<!-- <div class="list-icons list-icons-extended mt-3">
 									<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Google Drive"><i class="icon-google-drive"></i></a>
 									<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Twitter"><i class="icon-twitter"></i></a>
 									<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Github"><i class="icon-github"></i></a>
-								</div>
+								</div> -->
 							</div>
 					    	<!-- /user card -->
 							<div class="card">
@@ -485,28 +492,36 @@
 											<a href="#" data-toggle="tab" data-target="#employees_form_tab" class="nav-link">
 												<i class="icon-users4"></i>
 												Employees
-												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+												{%if object.id|alert_employees_data == False%}
+												<span class="badge bg-warning badge-pill ml-auto">Add last year data</span>
+												{%endif%}
 											</a>
 										</li>
 										<li class="nav-item">
 											<a href="#" data-toggle="tab" data-target="#createdjob_form_tab" class="nav-link">
 												<i class="icon-task"></i>
 												Created Jobs
-												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+												{%if object.id|alert_job_created_data == False%}
+												<span class="badge bg-warning badge-pill ml-auto"><small>Add The last Quarter Data</small></span>
+												{%endif%}
 											</a>
 										</li>
 										<li class="nav-item">
 											<a href="#" data-toggle="tab" data-target="#education_status_form_tab" class="nav-link">
 												<i class="icon-user-tie"></i>
 												Employee Education Status
-												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+												{%if object.id|alert_edu_status_data == False%}
+												<span class="badge bg-warning badge-pill ml-auto"><small>Add the last quarter data</small></span>
+												{%endif%}
 											</a>
 										</li>
 										<li class="nav-item">
 											<a href="#" data-toggle="tab" data-target="#femaleposn_form_tab" class="nav-link">
 												<i class="icon-users4"></i>
 												Females Employees
-												<!-- <span class="badge bg-warning badge-pill ml-auto"><i class="fa fa-plus"></i>add</span> -->
+												{%if object.id|alert_female_emp_data == False%}
+												<span class="badge bg-warning badge-pill ml-auto"><small>add the last quarter data</small></span>
+												{%endif%}
 											</a>
 										</li>
 										<li class="nav-item">

@@ -6,6 +6,13 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+<script>
+	var chart_type = "bar"
+	$(document).ready(function(){
+		chart_type = "{{chart_option}}";
+	});
+</script>
+
 <script src="/static/admin/assets/js/report.js"></script>
 <!-- /theme JS files -->
 	<style>
@@ -25,6 +32,22 @@
 		<div class="card-header header-elements-inline">
 			<h6 class="card-title">Customized Company Reports</h6>
 			<div class="header-elements">
+				<ul class="list-inline list-inline-condensed mb-0">
+								
+					<li class="list-inline-item"> 
+						<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+							<i class="icon-stack2 mr-2"></i>
+							Chart Types
+						</a>
+
+						<div class="dropdown-menu">
+							<a href="{%url 'admin:report_page'%}?chart_option=bar" class="dropdown-item"><i class="icon-stats-bars3"></i>Bar Chart</a>
+							<a href="{%url 'admin:report_page'%}?chart_option=line" class="dropdown-item"><i class="icon-chart"></i>Line Chart</a>
+							<a href="{%url 'admin:report_page'%}?chart_option=pie" class="dropdown-item"><i class="icon-pie-chart"></i>Pie Chart</a>
+							<a href="{%url 'admin:report_page'%}?chart_option=doughnut" class="dropdown-item"><i class="mi-multiline-chart"></i>Doughnut Chart</a>
+						</div>
+					</li>
+				</ul>
 				<div class="list-icons">
 					<a href="{%url 'admin:all_report_page'%}" class="btn btn-warning text-default">
 						<i class="icon-file-text3 mr-2"></i>Company Report</a>	
@@ -413,12 +436,11 @@
 					<div id="container" style="width: 100%;">
 						<canvas id="target-chart" data-url="{% url 'admin:market_target_chart' %}"></canvas>						
 					</div>
-					<ul class="nav nav-pills nav-justified">						
-						<li class="nav-item"><a href="{%url 'admin:get_comp_by_target'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-					</ul>
+				 
 
-					<div class="tab-content">
+					<div class="d-flex">
 						Number/Share Of Industries By Market Target
+						<a href="{%url 'admin:get_comp_by_target'%}" class="btn btn-orange rounded-round"><span class="badge bg-orange-800 badge-pill align-self-center ml-auto">View Report</span></a>
 					</div>
 				</div>
 			</div>
@@ -438,9 +460,12 @@
 				 
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4 mt-2 mb-2">
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
+					<div id="container" style="width: 100%;">
+						<canvas id="company-product-grp" data-url="{% url 'admin:company_by_product_grp' %}"></canvas>						
+					</div>
 					<div class="d-flex">
 						Number of Industries By Pharmaceutical Product Group
 						<a href="{%url 'admin:company_product_grp'%}" class="btn btn-pink rounded-round"><span class="badge bg-teal-800 badge-pill align-self-center ml-auto">View Report</span></a> 
@@ -450,10 +475,12 @@
 				 
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4 mt-2 mb-2">
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
-					
+					<div id="container" style="width: 100%;">
+						<canvas id="company-terapy-grp" data-url="{% url 'admin:company_by_therapy_grp' %}"></canvas>						
+					</div>
 					<div class="d-flex">
 						Number of Industries By Therapeutic Group
 						<a href="{%url 'admin:company_therapy_grp'%}" class="btn btn-pink rounded-round"><span class="badge bg-teal-800 badge-pill align-self-center ml-auto">View Report</span></a> 
@@ -463,9 +490,12 @@
 				 
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4 mt-2 mb-2">
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
+					<div id="container" style="width: 100%;">
+						<canvas id="product-product-grp" data-url="{% url 'admin:product_product_grp' %}"></canvas>						
+					</div>
 					<div class="d-flex">
 						Number of Varieties By Pharmaceutical Product Group
 						<a href="{%url 'admin:product_product_grp'%}" class="btn btn-pink rounded-round"><span class="badge bg-teal-800 badge-pill align-self-center ml-auto">View Report</span></a> 
@@ -475,10 +505,12 @@
 				 
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4 mt-2 mb-2">
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
-					
+					<div id="container" style="width: 100%;">
+						<canvas id="product-terapy-grp" data-url="{% url 'admin:product_terapy_grp' %}"></canvas>						
+					</div>
 					<div class="d-flex">
 						Number of Products By Therapeutic Group
 						<a href="{%url 'admin:product_therapy_grp'%}" class="btn btn-pink rounded-round"><span class="badge bg-teal-800 badge-pill align-self-center ml-auto">View Report</span></a> 
@@ -488,9 +520,12 @@
 				 
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4 mt-2 mb-2">
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
+					<div id="container" style="width: 100%;">
+						<canvas id="product-dosage-form" data-url="{% url 'admin:product_dosage_form' %}"></canvas>						
+					</div>
 					<div class="d-flex">
 						Number of Products By Dosage Form
 						<a href="{%url 'admin:product_dosage_form'%}" class="btn btn-pink rounded-round"><span class="badge bg-teal-800 badge-pill align-self-center ml-auto">View Report</span></a> 
@@ -500,10 +535,12 @@
 				 
 			</div>
 		</div>
-		<div class="col-md-4 col-sm-4 mt-2 mb-2">
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
-					
+					<div id="container" style="width: 100%;">
+						<canvas id="company-dosage-form" data-url="{% url 'admin:company_dosage_form' %}"></canvas>						
+					</div>
 					<div class="d-flex">
 						Number of Industries By Dosage Form
 						<a href="{%url 'admin:company_dosage_form'%}" class="btn btn-pink rounded-round"><span class="badge bg-teal-800 badge-pill align-self-center ml-auto">View Report</span></a> 

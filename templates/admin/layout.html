@@ -1,5 +1,6 @@
 {% load i18n static %}
 {%load admin_template_tags%}
+{%load alert_template_tags%}
 {%load core_template_tags%}
 <!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
@@ -210,19 +211,43 @@
 							<ul class="nav nav-group-sub" data-submenu-title="Form components">
 								<li class="nav-item">
 									<a href="{%url 'admin:production_capacity'%}" class="nav-link"><i class="icon-drawer"></i>
-										<span>Production Capacity</span></a>
+										<span>Production Capacity</span>
+										{%if user|get_company_id|alert_production_capacity_data == False%}
+										<span class="badge bg-warning-400 align-self-center ml-auto">
+											add last year data
+										</span>
+										{%endif%}
+									</a>
 								</li>
 								<li class="nav-item">
 									<a href="{%url 'admin:anual_input_need'%}" class="nav-link"><i class="icon-drawer"></i>
-										<span>Annual Input Need</span></a>
+										<span>Annual Input Need</span>
+										{%if user|get_company_id|alert_input_need_data == False%}
+										<span class="badge bg-warning-400 align-self-center ml-auto">
+											add last year data
+										</span>
+										{%endif%}
+									</a>
 								</li>
 								<li class="nav-item">
 									<a href="{%url 'admin:demand_supply_list'%}" class="nav-link"><i class="icon-drawer"></i>
-										<span>Input Demand & Supply</span></a>
+										<span>Input Demand & Supply</span>
+										{%if user|get_company_id|alert_demand_suply_data == False%}
+										<span class="badge bg-warning-400 align-self-center ml-auto">
+											add last year data
+										</span>
+										{%endif%}
+									</a>
 								</li>
 								<li class="nav-item">
 									<a href="{%url 'admin:sales_performance'%}" class="nav-link"><i class="icon-drawer"></i>
-										<span>Sales Performance</span></a>
+										<span>Sales Performance</span>
+										{%if user|get_company_id|alert_sales_performance_data == False%}
+										<span class="badge bg-warning-400 align-self-center ml-auto">
+											add last semister data
+										</span>
+										{%endif%}
+									</a>
 								</li>
 								<li class="nav-item">
 									<a href="{%url 'admin:packaging'%}" class="nav-link"><i class="icon-drawer"></i>

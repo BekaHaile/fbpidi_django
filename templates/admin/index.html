@@ -3,6 +3,9 @@
 {%load admin_template_tags%}
  
 {% block extrastyle %}
+        <script>
+          var chart_type = "bar";
+        </script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 		<!-- Theme JS files --> 
@@ -20,11 +23,11 @@
         <div class="card-header header-elements-inline">
             <h5 class="card-title">Company Category Summary</h5>
             <div class="header-elements">
-                <div class="list-icons">
+                <!-- <div class="list-icons">
                     <a class="list-icons-item" data-action="collapse"></a>
                     <a class="list-icons-item" data-action="reload"></a>
                     <a class="list-icons-item" data-action="remove"></a>
-                </div>
+                </div> -->
             </div>
         </div>
 

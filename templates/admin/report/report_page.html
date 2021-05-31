@@ -489,7 +489,6 @@ Number of Industries By Market Target
 									<th>#</th>
 									<th>Pharmaceutical Product Group</th>
 									<th>Industries</th>
-									<th>Share %</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -498,7 +497,6 @@ Number of Industries By Market Target
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %} %</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -518,7 +516,6 @@ Number of Industries By Market Target
 									<th>#</th>
 									<th>Therapeutic Group</th>
 									<th>Industries</th>
-									<th>Share %</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -527,7 +524,6 @@ Number of Industries By Market Target
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %} %</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -548,7 +544,6 @@ Number of Industries By Market Target
 									<th>#</th>
 									<th>Pharmaceutical Product Group</th>
 									<th>Products</th>
-									<th>Share %</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -557,7 +552,6 @@ Number of Industries By Market Target
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %} %</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -577,7 +571,6 @@ Number of Industries By Market Target
 									<th>#</th>
 									<th>Therapeutic Group</th>
 									<th>Products</th>
-									<th>Share %</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -586,7 +579,6 @@ Number of Industries By Market Target
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %} %</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -607,7 +599,6 @@ Number of Industries By Market Target
 									<th>#</th>
 									<th>Dosage Form</th>
 									<th>Industries</th>
-									<th>Share %</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -616,7 +607,6 @@ Number of Industries By Market Target
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %} %</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -636,7 +626,6 @@ Number of Industries By Market Target
 									<th>#</th>
 									<th>Dosage Form</th>
 									<th>Products</th>
-									<th>Share %</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -645,7 +634,6 @@ Number of Industries By Market Target
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %} %</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -700,10 +688,10 @@ Number of Industries By Market Target
 										 {{d.product__sub_category_name}}
 									</td>
 									<td>
-										{{d.total_prdn_capacity}} {{d.product__uom}}
+										{{d.total_prdn_capacity}} {{d.product__uom__name}}
 									</td>
 									<td>
-										{{d.total_actual}}  {{d.product__uom}}
+										{{d.total_actual}}  {{d.product__uom__name}}
 									</td>
 									 
 								</tr>
@@ -1112,7 +1100,7 @@ Number of Industries By Market Target
 								{%for fd in extn_data%}
 								<tr>
 									<td>{{fd.product__sub_category_name}}</td>
-									<td>{{fd.avg_extraction_rate|floatformat:2}} {{fd.product__uom}}</td>
+									<td>{{fd.avg_extraction_rate|floatformat:2}} {{fd.product__uom__name}}</td>
 								</tr>
 								{%endfor%}
 								
@@ -1510,7 +1498,10 @@ Number of Industries By Market Target
 					<div class="card-body">
 						<!-- <h5 class="mb-3">Website search results</h5> -->
 						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<form class="" action="{%url 'admin:get_num_jobs' option=option sector=form_sector%}" method="POST">
+								{%csrf_token%}
 							<ul class="list-inline list-inline-condensed mb-0">
+								
 								<li class="list-inline-item"> 
 									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
 										<i class="icon-stack2 mr-2"></i>
@@ -1541,8 +1532,25 @@ Number of Industries By Market Target
 									{%endif%}
 									 
 								</li>
+								
+								<li class="list-inline-item">
+									<select class="form-control" style="width: 200px;" name="year" id="year">
+										{%for year in years%}
+										<option value="{{year.0}}">{{year.1}} (E.C)</option>
+										{%endfor%}
+									</select>
+								</li>
+								<li class="list-inline-item">
+									<select class="form-control" style="width: 200px;" disabled name="quarter_year" id="quarter_year">
+										 
+									</select>
+								
+								</li>
+								<li class="list-inline-item">
+									<input type="submit" class="btn btn-primary btn-md" value="Filter" name="" id="">
+								</li>
 							</ul>
-
+						</form>
 							 
 						</div>
 					</div>
@@ -1550,7 +1558,7 @@ Number of Industries By Market Target
 				<div class="card">
 					 
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">{{title|title}} Sectors</h5>
+						<h5 class="card-title">Number of Jobs Created in {{title|title}} Sectors</h5>
 					</div>
 					<div class="card-body">
 						<table class="table datatable-basic">
@@ -1606,6 +1614,50 @@ Number of Industries By Market Target
 			<!-- /content area -->
 			<script>
 				$(document).ready(function(){
+					var date = new Date();
+    				var current_year = new Date().getFullYear()-8
+					$("#year").change(function(){
+						var selected_year = $(this).val();
+					
+						if(selected_year != ""){
+							$("#quarter_year").prop("disabled",false);
+						}else{
+							$("#quarter_year").prop("disabled",true);
+						}
+						if (selected_year == current_year){
+							if(date.getMonth()+1 == 4||date.getMonth()+1 == 5||date.getMonth()+1 == 6){
+								var options = "<option value=''>Select Year</option>"
+											+"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+											+"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>"
+											+"<option value='Third_Quarter'>Third Quarter(Jan-March)</option>";
+								$("#quarter_year").html(options);
+								
+							}else if(date.getMonth()+1 == 1||date.getMonth()+1 == 2||date.getMonth()+1 == 3){
+								var options = "<option value=''>Select Year</option>"
+												+"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+												+"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>";
+								$("#quarter_year").html(options);
+
+							}else if(date.getMonth()+1 == 10||date.getMonth()+1 == 11||date.getMonth()+1 == 12){
+								var options = "<option value=''>Select Year</option>"
+								+"<option value='First_Quarter'>First Quarter(July-Sept)</option>";
+								$("#quarter_year").html(options);
+
+							}else if(date.getMonth()+1 == 7||date.getMonth()+1 == 8||date.getMonth()+1 == 9){
+								$("#errors_jobs").html("Date for this year Is and this quarter is Inserted You Need to select The Next Year");
+								// var options = "<option value=''>You Need to select The previous Year</option>";
+								$("#quarter_year").prop("disabled",true);
+
+							}
+						}else{
+							var options = "<option value=''>Select Year</option>"
+											+"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+											+"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>"
+											+"<option value='Third_Quarter'>Third Quarter(Jan-March)</option>"
+											+"<option value='Fourth_Quarter'>Fourth Quarter(April-June)</option>";
+								$("#quarter_year").html(options);
+						}
+					});
 					$('.datatable-basic').DataTable(
 						{
 							dom: 'Bfrtip',

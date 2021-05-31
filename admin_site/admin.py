@@ -347,6 +347,15 @@ class CustomAdminSite(admin.AdminSite):
             path("energy-source-chart/",wrap(energy_source_chart),name="energy_source_chart"),
             path("market-target-chart/",wrap(market_target_chart),name="market_target_chart"),
             path("market-destin-chart/",wrap(market_destin_chart),name="market_destin_chart"),
+
+            path("company-product-grp-chart/",wrap(company_by_product_grp),name="company_by_product_grp"),
+            path("company-therapy-grp-chart/",wrap(company_by_therapy_grp),name="company_by_therapy_grp"),
+            path("company-dosage-form-chart/",wrap(company_dosage_form),name="company_dosage_form"),
+            path("product-product-grp-chart/",wrap(product_product_grp),name="product_product_grp"),
+            path("product-therapy-grp-chart/",wrap(product_terapy_grp),name="product_terapy_grp"),
+            path("product-dosage-form-chart/",wrap(product_dosage_form),name="product_dosage_form"),
+
+
             path("inquiry-product-chart/",wrap(inquiry_product_chart),name="inquiry_product_chart"),
             path("inquiry-daily-chart/",wrap(daily_inquiry_chart),name="daily_inquiry_chart"),
             path("company-list-for-generating-report/",wrap(CompanyListForReport.as_view()),name="company_list_report"),
