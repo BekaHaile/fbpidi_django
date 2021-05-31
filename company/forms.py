@@ -7,6 +7,8 @@ from django_summernote.fields import SummernoteWidget
 
 from PIL import Image
 
+from mapwidgets.widgets import GooglePointFieldWidget
+
 from admin_site.models import CompanyDropdownsMaster
 from accounts.models import UserProfile
 from company.models import *
@@ -420,6 +422,7 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'logo':forms.FileInput(attrs={'class':''}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 900, 'map_height': 400}),
+            # 'geo_location':GooglePointFieldWidget,
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
@@ -486,6 +489,7 @@ class CompanyUpdateForm(forms.ModelForm):
                 'expansion_plan':forms.Textarea(attrs={'class':'summernote'}),
                 'orgn_strct':forms.FileInput(),
                 'geo_location':gis_form.OSMWidget(attrs={'map_width': 500, 'map_height': 250}),
+                # 'geo_location':GooglePointFieldWidget,
                 'lab_test_analysis':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'lab_equipment':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'outsourced_test_param':forms.Textarea(attrs={'class':'summernote'}),
@@ -610,6 +614,7 @@ class InvestmentProjectForm(forms.ModelForm):
             'description':forms.Textarea(attrs={'class':'summernote'}),
             'description_am':forms.Textarea(attrs={'class':'summernote'}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
+            # 'geo_location':GooglePointFieldWidget,
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
         }
 
@@ -638,6 +643,7 @@ class InvestmentProjectForm_ForSuperAdmin(forms.ModelForm):
             'image':forms.FileInput(),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
+            # 'geo_location':GooglePointFieldWidget,
             'owners_nationality':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Owners Nationality'}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
@@ -797,7 +803,8 @@ class ProjectUpdateForm(forms.ModelForm):
             'land_acquisition':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'image':forms.FileInput(),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
-            'geo_location':gis_form.OSMWidget(attrs={'map_width': 600, 'map_height': 400}),
+            # 'geo_location':gis_form.OSMWidget(attrs={'map_width': 600, 'map_height': 400}),
+            'geo_location':GooglePointFieldWidget,
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
             'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),

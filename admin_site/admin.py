@@ -423,7 +423,7 @@ class CustomAdminSite(admin.AdminSite):
             path('anounce-form',wrap(CreatAnnouncementAdmin.as_view()),name="anounce_Create"),
             path('get-sub-sectors/<sector>/',wrap(get_subsector),name="get_subsector"),
             path('get-products-sectors/<sub_sector>/',wrap(get_products),name="get_products"),
-
+            
         ]
         return my_urls + urls
 
