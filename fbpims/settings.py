@@ -68,7 +68,7 @@ INSTALLED_APPS = [
     'social_django',
     'rest_framework_social_oauth2', 
     'oauth2_provider',#for rest_framework social_oauth providers
-    
+    'floppyforms',
     'colorfield',
     'crispy_forms',
     'django_summernote',
@@ -76,7 +76,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'background_task',
-    'mapwidgets',
     'report_builder',
 
 ]

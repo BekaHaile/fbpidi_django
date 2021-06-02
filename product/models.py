@@ -3,7 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from admin_site.models import Category,UomMaster,TherapeuticGroup,PharmaceuticalProduct
-from company.models import Company
+from company.models import Company,InvestmentProject
 
 UOM=(
     ('Pieces', 'Pieces'),
@@ -63,6 +63,8 @@ class Product(models.Model):
     description = models.TextField(verbose_name="Varayti Description(English)")
     description_am = models.TextField(verbose_name="Varayti Description(Amharic)")
     image = models.ImageField()
+    project = models.ForeignKey(InvestmentProject,null=True,blank=True,
+                                on_delete=models.SET_NULL,verbose_name="Which Project is this product from")
     is_active = models.BooleanField(default=False)
     reserve_attr0 = models.ForeignKey(PharmaceuticalProduct,on_delete=models.RESTRICT,related_name='product_group',null=True,blank=True,
                             verbose_name="Pharmaceutical Product Group")

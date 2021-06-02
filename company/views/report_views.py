@@ -634,12 +634,13 @@ class CompaniesByTherapeuticGroup(LoginRequiredMixin,View):
         therapeutic_group_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = Product.objects.values('therapeutic_group__name').annotate(Count('company',distinct=True)).order_by('therapeutic_group')
+        queryset = Product.objects.values('therapeutic_group__name','therapeutic_group__id').annotate(Count('company',distinct=True)).order_by('therapeutic_group')
         total = 0
         for product_grp in queryset:
             if product_grp['therapeutic_group__name'] != None:
                 total += int(product_grp['company__count'])
                 therapeutic_group_data.append({'label':product_grp['therapeutic_group__name'],
+                                    'id':product_grp['therapeutic_group__id'],
                                         'data':product_grp['company__count']})
         context['total'] = total
         context['therapeutic_group_data'] = therapeutic_group_data
@@ -689,12 +690,13 @@ class CompaniesByDosageForm(LoginRequiredMixin,View):
         dosage_form_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = Product.objects.values('dosage_form__dosage_form').annotate(Count('company',distinct=True)).order_by('dosage_form')
+        queryset = Product.objects.values('dosage_form__dosage_form','dosage_form__id').annotate(Count('company',distinct=True)).order_by('dosage_form')
         total = 0
         for product_grp in queryset:
             if product_grp['dosage_form__dosage_form'] != None:
                 total += int(product_grp['company__count'])
                 dosage_form_data.append({'label':product_grp['dosage_form__dosage_form'],
+                                        'id':product_grp['dosage_form__id'],
                                         'data':product_grp['company__count']})
         context['total'] = total
         context['dosage_form_data'] = dosage_form_data
@@ -718,6 +720,36 @@ class ProductsByDosageForm(LoginRequiredMixin,View):
         context['dosage_form_data_product'] = dosage_form_data
         context['flag'] = 'dosage_form_data_product'
         return render(self.request,template_name,context)
+
+@method_decorator(decorators,name='dispatch')
+class PharmaceuticalIndustries(LoginRequiredMixin,View):
+    def get(self,*args,**kwargs):
+
+        dosage_form_data = []
+        context = {}
+        template_name = "admin/report/report_page.html"
+        context['flag'] = 'pharmaceutical_companies'
+        try:
+            if self.kwargs['option'] == "product_group":
+                context['companies'] = Company.objects.filter(
+                    Q(company_product__reserve_attr0__id=self.kwargs['pk'])
+                ).order_by('id').distinct('id')
+                context['title'] = "List of Industries Producing Products Under {} Product Group".format(self.request.GET.get('filter_name'))
+            elif self.kwargs['option'] == "therapy_group":
+                context['companies'] = Company.objects.filter(
+                    Q(company_product__therapeutic_group__id=self.kwargs['pk'])
+                ).order_by('id').distinct('id')
+                context['title'] = "List of Industries Producing Products for {} Therapeutic Group".format(self.request.GET.get('filter_name'))
+            elif self.kwargs['option'] == "dosage_form":
+                context['companies'] = Company.objects.filter(
+                    Q(company_product__dosage_form__id=self.kwargs['pk'])
+                ).order_by('id').distinct('id')
+                context['title'] = "List of Industries Producing Products By {} Dosage Form".format(self.request.GET.get('filter_name'))
+            companies = Company.objects.filter()
+            return render(self.request,template_name,context)
+        except Exception as e:
+            messages.warning(self.request,e)
+            return render(self.request,template_name,context)
 
 @method_decorator(decorators,name='dispatch')
 class NumberofIndustriesByOption(LoginRequiredMixin,View):

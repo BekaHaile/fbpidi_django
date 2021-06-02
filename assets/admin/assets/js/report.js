@@ -855,7 +855,7 @@
                       },
                       title: {
                         display: true,
-                        text: 'Companies By terapeutic Group'
+                        text: 'Companies By therapeutic Group'
                       }
                     }
                   });
