@@ -7,7 +7,7 @@ from django_summernote.fields import SummernoteWidget
 
 from PIL import Image
 
-from mapwidgets.widgets import GooglePointFieldWidget
+import floppyforms
 
 from admin_site.models import CompanyDropdownsMaster
 from accounts.models import UserProfile
@@ -42,6 +42,14 @@ def return_year_with_quarteryear(company):
     YEAR_CHOICES=[('','Select Year'),]
     YEAR_CHOICES += [(r,r) for r in range(company.established_yr, current_year+1)]
     return YEAR_CHOICES
+
+
+class OsmPointWidget(floppyforms.gis.PointWidget, floppyforms.gis.BaseOsmWidget):
+    pass
+
+class CustomPointWidget(OsmPointWidget):
+    map_width = 900
+    map_height = 400
 
 class InvestmentCapitalForm(forms.ModelForm):
     class Meta:
@@ -421,8 +429,9 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'logo':forms.FileInput(attrs={'class':''}),
-            'geo_location':gis_form.OSMWidget(attrs={'map_width': 900, 'map_height': 400}),
-            # 'geo_location':GooglePointFieldWidget,
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 900, 'map_height': 400,'default_lat': 9.034063,
+                         'default_lon': 38.752460,'default_zoom': 6}),
+            # 'geo_location':CustomPointWidget,
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
@@ -489,7 +498,6 @@ class CompanyUpdateForm(forms.ModelForm):
                 'expansion_plan':forms.Textarea(attrs={'class':'summernote'}),
                 'orgn_strct':forms.FileInput(),
                 'geo_location':gis_form.OSMWidget(attrs={'map_width': 500, 'map_height': 250}),
-                # 'geo_location':GooglePointFieldWidget,
                 'lab_test_analysis':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'lab_equipment':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'outsourced_test_param':forms.Textarea(attrs={'class':'summernote'}),
@@ -614,7 +622,6 @@ class InvestmentProjectForm(forms.ModelForm):
             'description':forms.Textarea(attrs={'class':'summernote'}),
             'description_am':forms.Textarea(attrs={'class':'summernote'}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
-            # 'geo_location':GooglePointFieldWidget,
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
         }
 
@@ -643,7 +650,6 @@ class InvestmentProjectForm_ForSuperAdmin(forms.ModelForm):
             'image':forms.FileInput(),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
-            # 'geo_location':GooglePointFieldWidget,
             'owners_nationality':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Owners Nationality'}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
@@ -803,8 +809,7 @@ class ProjectUpdateForm(forms.ModelForm):
             'land_acquisition':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'image':forms.FileInput(),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
-            # 'geo_location':gis_form.OSMWidget(attrs={'map_width': 600, 'map_height': 400}),
-            'geo_location':GooglePointFieldWidget,
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 600, 'map_height': 400}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
             'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),

@@ -18,8 +18,7 @@ django-colorfield==0.3.2
 django-compat==1.0.15
 django-crispy-forms==1.9.2
 django-filter==2.4.0
-django-google-maps==0.12.2
-django-map-widgets==0.3.1
+django-floppyforms==1.9.0
 django-oauth-toolkit==1.4.0
 django-report-builder==6.4.2
 django-rest-framework-social-oauth2==1.1.0

@@ -605,7 +605,7 @@ def company_by_therapy_grp(request):
     for product_grp in queryset:
         if product_grp['therapeutic_group__name'] != None:
             total += int(product_grp['company__count'])
-            labels.append(product_grp['reserve_attr0__name'])
+            labels.append(product_grp['therapeutic_group__name'])
             data.append(product_grp['company__count'])
             colors.append(get_chart_color())
     return JsonResponse({
@@ -623,7 +623,7 @@ def product_product_grp(request):
         if product_grp['reserve_attr0__name'] != None:
             total += int(product_grp['id__count'])
             labels.append(product_grp['reserve_attr0__name'])
-            data.append(product_grp['company__count'])
+            data.append(product_grp['id__count'])
             colors.append(get_chart_color())
     return JsonResponse({
         'labels':labels,'data':data,'colors':colors
@@ -639,8 +639,8 @@ def product_terapy_grp(request):
     for product_grp in queryset:
         if product_grp['therapeutic_group__name'] != None:
             total += int(product_grp['reserve_attr0__count'])
-            labels.append(product_grp['reserve_attr0__name'])
-            data.append(product_grp['company__count'])
+            labels.append(product_grp['therapeutic_group__name'])
+            data.append(product_grp['reserve_attr0__count'])
             colors.append(get_chart_color())
     return JsonResponse({
         'labels':labels,'data':data,'colors':colors
@@ -656,7 +656,7 @@ def company_dosage_form(request):
     for product_grp in queryset:
         if product_grp['dosage_form__dosage_form'] != None:
             total += int(product_grp['company__count'])
-            labels.append(product_grp['reserve_attr0__name'])
+            labels.append(product_grp['dosage_form__dosage_form'])
             data.append(product_grp['company__count'])
             colors.append(get_chart_color())
     return JsonResponse({
@@ -673,8 +673,8 @@ def product_dosage_form(request):
     for product_grp in queryset:
         if product_grp['dosage_form__dosage_form'] != None:
             total += int(product_grp['reserve_attr0__count'])
-            labels.append(product_grp['reserve_attr0__name'])
-            data.append(product_grp['company__count'])
+            labels.append(product_grp['dosage_form__dosage_form'])
+            data.append(product_grp['reserve_attr0__count'])
             colors.append(get_chart_color())
     return JsonResponse({
         'labels':labels,'data':data,'colors':colors

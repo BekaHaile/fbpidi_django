@@ -2,7 +2,7 @@
 from django.contrib import admin
 from functools import update_wrapper
 from django.template.response import TemplateResponse
-from django.urls import path,include
+from django.urls import path,include,re_path
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
 # from accounts.forms import UserCreationForm 
@@ -348,12 +348,12 @@ class CustomAdminSite(admin.AdminSite):
             path("market-target-chart/",wrap(market_target_chart),name="market_target_chart"),
             path("market-destin-chart/",wrap(market_destin_chart),name="market_destin_chart"),
 
-            path("company-product-grp-chart/",wrap(company_by_product_grp),name="company_by_product_grp"),
-            path("company-therapy-grp-chart/",wrap(company_by_therapy_grp),name="company_by_therapy_grp"),
-            path("company-dosage-form-chart/",wrap(company_dosage_form),name="company_dosage_form"),
-            path("product-product-grp-chart/",wrap(product_product_grp),name="product_product_grp"),
-            path("product-therapy-grp-chart/",wrap(product_terapy_grp),name="product_terapy_grp"),
-            path("product-dosage-form-chart/",wrap(product_dosage_form),name="product_dosage_form"),
+            path("company-product-grp-chart/",wrap(company_by_product_grp),name="company_by_product_grp_chart"),
+            path("company-therapy-grp-chart/",wrap(company_by_therapy_grp),name="company_by_therapy_grp_chart"),
+            path("company-dosage-form-chart/",wrap(company_dosage_form),name="company_dosage_form_chart"),
+            path("product-product-grp-chart/",wrap(product_product_grp),name="product_product_grp_chart"),
+            path("product-therapy-grp-chart/",wrap(product_terapy_grp),name="product_terapy_grp_chart"),
+            path("product-dosage-form-chart/",wrap(product_dosage_form),name="product_dosage_form_chart"),
 
 
             path("inquiry-product-chart/",wrap(inquiry_product_chart),name="inquiry_product_chart"),
@@ -374,7 +374,7 @@ class CustomAdminSite(admin.AdminSite):
 
             path("filter-product-dosage-form/",wrap(ProductsByDosageForm.as_view()),name="product_dosage_form"),
             path("filter-company-dosage-form/",wrap(CompaniesByDosageForm.as_view()),name="company_dosage_form"),
-
+            path("companies-by-pharmaceutical-product/<pk>/<option>/",wrap(PharmaceuticalIndustries.as_view()),name="pharmceutical_companies"),
             path("get-investment-capital/<option>/<sector>/",wrap(InvestmentCapitalReportView.as_view()),name="get_by_inv_capital"),
             path("get-production-capacity-data/<product>/",wrap(ProductionCapacityView.as_view()),name="get_production_capacity"),
             path("get-available-input-data/<product>/",wrap(InputAvailablity.as_view()),name="get_input_available"),
@@ -423,7 +423,7 @@ class CustomAdminSite(admin.AdminSite):
             path('anounce-form',wrap(CreatAnnouncementAdmin.as_view()),name="anounce_Create"),
             path('get-sub-sectors/<sector>/',wrap(get_subsector),name="get_subsector"),
             path('get-products-sectors/<sub_sector>/',wrap(get_products),name="get_products"),
-            
+            path('report_builder/', include('report_builder.urls')),
         ]
         return my_urls + urls
 

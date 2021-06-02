@@ -9,7 +9,7 @@ from PIL import Image
 
 from product.models import *
 from admin_site.models import Category
-from company.models import Company, CompanyStaff
+from company.models import Company, CompanyStaff,InvestmentProject
 
 
 def return_year(start_year):
@@ -121,6 +121,8 @@ class ProductCreationForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
         self.company = kwargs.pop('company')
         super(ProductCreationForm,self).__init__(*args,**kwargs)
+        self.fields['project'].empty_label = "Select The Project"
+        self.fields['project'].queryset = InvestmentProject.objects.filter(company=self.company)
         self.fields['brand'].queryset = Brand.objects.filter(company=self.company)
         # if self.company.main_category == 'FBPIDI':
         #      self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type="Pharmaceuticals")
@@ -148,10 +150,11 @@ class ProductCreationForm(forms.ModelForm):
      
     class Meta:
         model = Product
-        fields = ('name','name_am','brand','reserve_attr0',
+        fields = ('name','name_am','project','brand','reserve_attr0',
                     'dose','dosage_form','quantity','therapeutic_group','pharmacy_product_type',
                     'description','description_am','image',)
         widgets = {
+            'project':forms.Select(attrs={'class':'form-control form-control-uniform','required':False}),
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Product/Varayti Name(English)'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Product/Varayti Name(Amharic)'}),
             'brand':forms.Select(attrs={'class':'form-control form-control-uniform'}),
@@ -181,7 +184,8 @@ class PharmaceuticalProductCreationForm(forms.ModelForm):
         self.fields['brand'].required = False
         self.fields['dose'].queryset = Dose.objects.all()
         self.fields['dosage_form'].queryset = DosageForm.objects.all()
-
+        self.fields['project'].empty_label = "Select The Project"
+        self.fields['project'].queryset = InvestmentProject.objects.filter(company=self.company)
         company_categories = self.company.category.all()
         self.fields['pharmacy_product_type'].queryset = SubCategory.objects.filter(category_name__in = company_categories)
         self.fields['pharmacy_product_type'].required = True
@@ -195,10 +199,11 @@ class PharmaceuticalProductCreationForm(forms.ModelForm):
      
     class Meta:
         model = Product
-        fields = ('name','name_am','brand','reserve_attr0',
+        fields = ('name','name_am','project','brand','reserve_attr0',
                     'dose','dosage_form','quantity','therapeutic_group',
                     'description','description_am','image',)
         widgets = {
+            'project':forms.Select(attrs={'class':'form-control form-control-uniform','required':False}),
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Product/Varayti Name(English)'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Product/Varayti Name(Amharic)'}),
             'brand':forms.Select(attrs={'class':'form-control form-control-uniform'}),
