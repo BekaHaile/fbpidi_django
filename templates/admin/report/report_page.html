@@ -33,7 +33,7 @@
  
 {% endblock %}
 
-{%block pagename%}{%if flag == 'capital_utilization'%}Capital Utilization{%elif flag == 'inv_cap'%}
+{%block pagename%}{%if flag == 'capital_utilization'%}Capacity Utilization{%elif flag == 'inv_cap'%}
 Total Investment Capital
 {%elif flag == 'num_employees'%}
 Number Of Employees By Sector
@@ -42,7 +42,7 @@ Number Of Female Employees By Sector
 {%elif flag == 'num_employees_foreign'%}
 Number of Foreign Employees By Sector
 {%elif flag == 'change_capital_utilization'%}
-Change in Capital Utilization  
+Change in Capacity Utilization  
 {%elif flag == 'extraction_data'%}
 Average Extraction Rate by Product
 {%elif flag == 'gross_vp_data'%}
@@ -75,12 +75,14 @@ Number of Industries By Source of Energy
 Number of Industries By Market Destination
 {%elif flag == 'target_data'%}
 Number of Industries By Market Target
+{%elif flag == 'pharmaceutical_companies'%}
+{{title}}
 {%endif%} Report Data
 {%endblock%}
 
 {%block nav%}
 {%if flag == 'capital_utilization'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
-<span class="breadcrumb-item active">Capital Utilization</span>
+<span class="breadcrumb-item active">Capacity Utilization</span>
 {%elif flag == 'inv_cap'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
 <span class="breadcrumb-item active">Total Investment Capital</span>
 {%elif flag == 'num_employees'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
@@ -90,7 +92,7 @@ Number of Industries By Market Target
 {%elif flag == 'num_employees_foreign'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
 <span class="breadcrumb-item active">Number of Foreign Employees By Sector</span>
 {%elif flag == 'change_capital_utilization'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
-<span class="breadcrumb-item active">Change in Capital Utilization</span>  
+<span class="breadcrumb-item active">Change in Capacity Utilization</span>  
 {%elif flag == 'extraction_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
 <span class="breadcrumb-item active">Average Extraction Rate by Product</span>
 {%elif flag == 'gross_vp_data'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
@@ -135,6 +137,8 @@ Number of Industries By Market Target
 <span class="breadcrumb-item active">Number of Industries By Dosage Form</span>
 {%elif flag == 'dosage_form_data_product'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
 <span class="breadcrumb-item active">Number of Products By Dosage Form</span>
+{%elif flag == 'pharmaceutical_companies'%}<a href="{%url 'admin:report_page'%}" class="breadcrumb-item">Report Page</a>
+<span class="breadcrumb-item active">{{title}}</span>
 {%endif%}
 {%endblock%}
 {%block reports%}active{%endblock%}
@@ -476,6 +480,44 @@ Number of Industries By Market Target
 						</table>
 					</div>
 				</div>
+				
+				{%elif flag == 'pharmaceutical_companies'%}
+				<div class="card">
+					<div class="card-header header-elements-inline">
+						<h5 class="card-title">{{title}}</h5>
+					</div>
+					<div class="card-body">
+						 
+						<table class="table datatable-basic">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Company Name</th>
+									<th>Established Year</th>
+									<th>Region</th>
+									<th>Sector</th>
+								</tr>
+							</thead>
+							<tbody>
+								{%for od in companies%}
+								<tr>
+									<td>{{forloop.counter}}</td>
+									<td>{{od.name}}</td>
+									<td>{{od.established_yr}} E.C</td>
+									<td>{{od.company_address.region.name}}</td>
+									<td>{{od.main_category}}</td>
+								</tr>
+								 {%endfor%}
+								 
+							</tbody>
+							<tr>
+								<td></td>
+								<td>Total</td><td></td><td></td>
+								<td>{{companies.count}} Companies</td>
+							</tr>
+						</table>
+					</div>
+				</div>
 				{%elif flag == 'product_group_data'%}
 				<div class="card">
 					<div class="card-header header-elements-inline">
@@ -496,7 +538,7 @@ Number of Industries By Market Target
 								<tr>
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
-									<td>{{od.data}}</td>
+									<td><a href="{%url 'admin:pharmceutical_companies' pk=od.id option='product_group'%}?filter_name={{od.label}}" title="Click here for detail"><i class="fa fa-eye m-1"></i> {{od.data}}</a></td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -523,7 +565,7 @@ Number of Industries By Market Target
 								<tr>
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
-									<td>{{od.data}}</td>
+									<td><a href="{%url 'admin:pharmceutical_companies'  pk=od.id option='therapy_group'%}?filter_name={{od.label}}" title="Click here for detail"><i class="fa fa-eye m-1"></i> {{od.data}}</a></td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -606,7 +648,7 @@ Number of Industries By Market Target
 								<tr>
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
-									<td>{{od.data}}</td>
+									<td><a href="{%url 'admin:pharmceutical_companies' pk=od.id option='dosage_form'%}?filter_name={{od.label}}" title="Click here for detail"><i class="fa fa-eye m-1"></i> {{od.data}}</a></td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -886,7 +928,7 @@ Number of Industries By Market Target
 				<div class="card">
 					 
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">{{title|title}} Sector Capital Utilization Data</h5>
+						<h5 class="card-title">{{title|title}} Sector Capacity Utilization Data</h5>
 					</div>
 					<div class="card-body">
 						<table class="table datatable-basic">
@@ -896,7 +938,7 @@ Number of Industries By Market Target
 									<th>Product</th>
 									<th>Production Amount</th> 
 									<th>Actual Production</th>
-									<th>Capital Utilization Data</th>
+									<th>Capacity Utilization Data</th>
 									{%if sector != 'all'%}
 									<th>Sector</th>
 									{%endif%}
@@ -999,7 +1041,7 @@ Number of Industries By Market Target
 				<div class="card">
 					 
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">{{title}} Sector Change in Capital Utilization Data</h5>
+						<h5 class="card-title">{{title}} Sector Change in Capacity Utilization Data</h5>
 					</div>
 					<div class="card-body">
 						<table class="table datatable-basic">
@@ -1010,7 +1052,7 @@ Number of Industries By Market Target
 									<th>This Year Production Amount</th>
 									<th>Last Year Production Amount</th>
 									<th>Actual Production Amount</th>
-									<th>Change in Capital Utilization</th>
+									<th>Change in Capacity Utilization</th>
 									{%if sector != 'all'%}
 									<th>Sector</th>
 									{%endif%}

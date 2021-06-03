@@ -49,6 +49,8 @@
 					</li>
 				</ul>
 				<div class="list-icons">
+					<a target="_blank" href="{% url 'admin:report_builder' %}" class="btn btn-primary text-default">
+						<i class="icon-file-text3 mr-2"></i>Ad-hoc Report</a>
 					<a href="{%url 'admin:all_report_page'%}" class="btn btn-warning text-default">
 						<i class="icon-file-text3 mr-2"></i>Company Report</a>	
 					<a href="{%url 'admin:project_report'%}" class="btn btn-success text-default">
@@ -173,7 +175,7 @@
 						<canvas id="capital-util-chart" data-url="{% url 'admin:capital_util_chart' %}"></canvas>								
 					</div>
 					<ul class="nav nav-pills nav-justified">	
-						Capital Utilization Report Data					
+						Capacity Utilization Report Data					
 						<li class="nav-item"><a href="{%url 'admin:get_capital_utilization' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 					</ul>
  
@@ -208,7 +210,7 @@
 								<canvas id="change-capital-util-chart" data-url="{% url 'admin:change_capital_util_chart' %}"></canvas>								
 							</div>
 							<ul class="nav nav-pills nav-justified">						
-								Change in Capital Utilization Report Data
+								Change in Capacity Utilization Report Data
 								<li class="nav-item"><a href="{%url 'admin:get_change_capital_utilization' option='by_sector' sector='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
 							</ul>
 		 
@@ -460,11 +462,11 @@
 				 
 			</div>
 		</div>
-		<div class="col-md-6 col-sm-6 mt-2 mb-2">
+		<div class="col-md-12 col-sm-12 mt-2 mb-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
 					<div id="container" style="width: 100%;">
-						<canvas id="company-product-grp" data-url="{% url 'admin:company_by_product_grp' %}"></canvas>						
+						<canvas id="company-product-grp" data-url="{% url 'admin:company_by_product_grp_chart' %}"></canvas>						
 					</div>
 					<div class="d-flex">
 						Number of Industries By Pharmaceutical Product Group
@@ -475,11 +477,11 @@
 				 
 			</div>
 		</div>
-		<div class="col-md-6 col-sm-6 mt-2 mb-2">
+		<div class="col-md-12 col-sm-12 mt-2 mb-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
 					<div id="container" style="width: 100%;">
-						<canvas id="company-terapy-grp" data-url="{% url 'admin:company_by_therapy_grp' %}"></canvas>						
+						<canvas id="company-terapy-grp" data-url="{% url 'admin:company_by_therapy_grp_chart' %}"></canvas>						
 					</div>
 					<div class="d-flex">
 						Number of Industries By Therapeutic Group
@@ -490,11 +492,11 @@
 				 
 			</div>
 		</div>
-		<div class="col-md-6 col-sm-6 mt-2 mb-2">
+		<div class="col-md-12 col-sm-12 mt-2 mb-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
 					<div id="container" style="width: 100%;">
-						<canvas id="product-product-grp" data-url="{% url 'admin:product_product_grp' %}"></canvas>						
+						<canvas id="product-product-grp" data-url="{% url 'admin:product_product_grp_chart' %}"></canvas>						
 					</div>
 					<div class="d-flex">
 						Number of Varieties By Pharmaceutical Product Group
@@ -505,11 +507,11 @@
 				 
 			</div>
 		</div>
-		<div class="col-md-6 col-sm-6 mt-2 mb-2">
+		<div class="col-md-12 col-sm-12 mt-2 mb-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
 					<div id="container" style="width: 100%;">
-						<canvas id="product-terapy-grp" data-url="{% url 'admin:product_terapy_grp' %}"></canvas>						
+						<canvas id="product-terapy-grp" data-url="{% url 'admin:product_terapy_grp_chart' %}"></canvas>						
 					</div>
 					<div class="d-flex">
 						Number of Products By Therapeutic Group
@@ -520,11 +522,11 @@
 				 
 			</div>
 		</div>
-		<div class="col-md-6 col-sm-6 mt-2 mb-2">
+		<div class="col-md-12 col-sm-12 mt-2 mb-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
 					<div id="container" style="width: 100%;">
-						<canvas id="product-dosage-form" data-url="{% url 'admin:product_dosage_form' %}"></canvas>						
+						<canvas id="product-dosage-form" data-url="{% url 'admin:product_dosage_form_chart' %}"></canvas>						
 					</div>
 					<div class="d-flex">
 						Number of Products By Dosage Form
@@ -535,11 +537,11 @@
 				 
 			</div>
 		</div>
-		<div class="col-md-6 col-sm-6 mt-2 mb-2">
+		<div class="col-md-12 col-sm-12 mt-2 mb-2">
 			<div class="card" style="height: 100%;">
 				<div class="card-body">
 					<div id="container" style="width: 100%;">
-						<canvas id="company-dosage-form" data-url="{% url 'admin:company_dosage_form' %}"></canvas>						
+						<canvas id="company-dosage-form" data-url="{% url 'admin:company_dosage_form_chart' %}"></canvas>						
 					</div>
 					<div class="d-flex">
 						Number of Industries By Dosage Form

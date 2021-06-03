@@ -7,6 +7,8 @@ from django_summernote.fields import SummernoteWidget
 
 from PIL import Image
 
+import floppyforms
+
 from admin_site.models import CompanyDropdownsMaster
 from accounts.models import UserProfile
 from company.models import *
@@ -40,6 +42,14 @@ def return_year_with_quarteryear(company):
     YEAR_CHOICES=[('','Select Year'),]
     YEAR_CHOICES += [(r,r) for r in range(company.established_yr, current_year+1)]
     return YEAR_CHOICES
+
+
+class OsmPointWidget(floppyforms.gis.PointWidget, floppyforms.gis.BaseOsmWidget):
+    pass
+
+class CustomPointWidget(OsmPointWidget):
+    map_width = 900
+    map_height = 400
 
 class InvestmentCapitalForm(forms.ModelForm):
     class Meta:
@@ -419,7 +429,9 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'logo':forms.FileInput(attrs={'class':''}),
-            'geo_location':gis_form.OSMWidget(attrs={'map_width': 900, 'map_height': 400}),
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 900, 'map_height': 400,'default_lat': 9.034063,
+                         'default_lon': 38.752460,'default_zoom': 6}),
+            # 'geo_location':CustomPointWidget,
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
