@@ -1,5 +1,10 @@
 {%extends 'admin/base_site.html'%}
 {%load crispy_forms_tags %}
+{% block extrastyle %} 
+  <!-- file selecting js -->
+  <script src="/static/admin/global_assets/js/demo_pages/user_pages_profile_tabbed.js"></script>
+  <!-- /file selecting js  -->
+{%endblock%} 
 
 {%block pagename%}<span class="font-weight-semibold">Industries</span>{%endblock%}
 {%block nav%}<a href="{%url 'admin:companies'%}" class="breadcrumb-item">Companies</a>{%endblock%}

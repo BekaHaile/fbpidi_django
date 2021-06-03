@@ -259,7 +259,7 @@ class SearchResearch(View):
 		return redirect(reverse("research_list"))
 	def post(self,*args,**kwargs):
 		try:
-			form = Research.objects.filter(title__contains=self.request.POST['search'])
+			form = Research.objects.filter(title__contains=self.request.POST['search'], accepted="APPROVED")
 			if self.request.user.is_anonymous:
 				usercreated = Research.objects.filter(created_by=self.request.user,accepted="APPROVED")
 			else:
@@ -295,7 +295,7 @@ class ResearchDetail(View):
 	def get(self,*args,**kwargs):
 		try:
 			form = Research.objects.get(id=self.kwargs['id'])
-			related = Research.objects.filter(category=form.category).exclude(id=self.kwargs['id'])[:6]
+			related = Research.objects.filter(category=form.category,accepted ="APPROVED").exclude(id=self.kwargs['id'])[:6]
 			category = ResearchProjectCategory.objects.all()
 			context = {'research':form,"category":category,"related":related,"message":"Research"}
 			if not self.request.user.is_anonymous:

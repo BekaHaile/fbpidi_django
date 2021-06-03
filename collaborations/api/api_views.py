@@ -17,6 +17,7 @@ from rest_framework.decorators import permission_classes, authentication_classes
 
 from company.models import Company, CompanyEvent, EventParticipants
 from company.api.serializers import CompanyInfoSerializer, CompanyNameSerializer
+from PIL import Image
 
 
 from collaborations.models import (PollsQuestion, PollsResult, Choices, News, NewsImages, Blog, BlogComment,
@@ -658,8 +659,11 @@ class ApiCreateResearch(APIView):
                 research.created_by = request.user
                 research.accepted = "PENDING" if request.user.is_customer else "APPROVED"
                 research.save()
+                image = Image.open(research.image)
+                resized_image = image.resize((400, 140), Image.ANTIALIAS)
+                resized_image.save(research.image.path)
+                
                 if 'attachements' in request.data:
-                    print("attachements found!")
                     attachement = ResearchAttachment(research = research, attachement = request.data['attachements'])
                     attachement.save()
                 return Response(data = {'error':False, 'research': ResearchSerializer(research).data})

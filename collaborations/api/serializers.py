@@ -147,12 +147,12 @@ class VacancyListSerializer(serializers.ModelSerializer):
 class ResearchCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Research
-        fields  = ('title','description','status','category')
+        fields  = ('title','description','status','category', 'image')
     
     def create(self, validated_data):
         category = ResearchProjectCategory.objects.get(id = validated_data['category'])
         research = Research(title = validated_data['title'], description= validated_data['description'],
-        status = validated_data['status'], category= category)
+                            status = validated_data['status'], category= category, image=validated_data['image'])
         return research
 
 class ResearchAttachmentSerializer(serializers.ModelSerializer):
