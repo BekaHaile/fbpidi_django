@@ -39,7 +39,7 @@
 							<form class="form-inline" action="{%url 'admin:all_report_page'%}" method="POST"> {%csrf_token%}
 							<ul class="list-inline list-inline-condensed mb-0 mr-4">
 								<li class="list-inline-item"> 
-									<select class="form-control" name="region" id="region">
+									<select class="form-control" style="width: 150px;" name="region" id="region">
 										<option value="">Select Region</option>
 										{%for region in regions%}
 										<option value="{{region.id}}">{{region}}</option>
@@ -47,15 +47,15 @@
 									</select>
 								</li>
 								<li class="list-inline-item"> 
-									<select class="form-control" name="year" id="year">
+									<select class="form-control" style="width: 150px;" name="year" id="year">
 										<option value="">Select Year</option>
-										{%for year in years%}
-										<option value="{{year.0}}">{{year.0}}</option>
+										{%for year in years_list%}
+										<option value="{{year.0}}">{{year.0}} (E.C)</option>
 										{%endfor%}
 									</select>
 								</li>
 								<li class="list-inline-item"> 
-									<select class="form-control" name="sector" id="sector">
+									<select class="form-control" style="width: 150px;" name="sector" id="sector">
 										<option value="">Select Sector</option>
 										<option value='Food' >Food</option>
 										<option value='Beverage' >Beverage</option>
@@ -63,12 +63,12 @@
 									</select>
 								</li>
 								<li class="list-inline-item"> 
-									<select class="form-control" name="sub_sector" style="max-width: 200px;" id="sub_sector">
+									<select class="form-control" style="width: 150px;" name="sub_sector" style="max-width: 200px;" id="sub_sector">
 										<option value="">Select Sub sectors</option>
 									</select>
 								</li> 
 								<li class="list-inline-item"> 
-									<select class="form-control" name="product" id="product">
+									<select class="form-control" style="width: 150px;" name="product" id="product">
 										<option value="">Select Product</option>
 									</select>
 								</li> 
@@ -77,7 +77,7 @@
 								 
 							</ul>
 
-							<ul class="list-inline ml-2 mb-0">
+							<ul class="list-inline ml-1 mb-0">
 								<li class="list-inline-item"> <button title="Filter Data" type="submit"class="btn btn-primary text-default">
 										<i class="icon-search4"></i></button>									 
 								</li>

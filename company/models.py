@@ -354,6 +354,9 @@ class InvestmentProject(models.Model):
 	last_updated_date	= models.DateTimeField(null=True)
 	expired	= models.BooleanField(default=False)
 
+	def __str__(self):
+		return self.project_name
+		
 	def get_project_address(self):
 		try:
 			return CompanyAddress.objects.get(project=self)
