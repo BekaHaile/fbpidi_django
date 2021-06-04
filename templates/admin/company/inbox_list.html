@@ -176,9 +176,7 @@
                                                             {{message.message}} 
                                                         </blockquote>
                                                         {% if message.link %}
-                                                        <form action ='{{message.link}}' method="GET" >
-                                                            <button type="submit">Attached Link</button>
-                                                        </form>
+                                                        <a href="{{message.link}}" >Attached Link</a>
                                                        
 
                                                         {% endif %}
