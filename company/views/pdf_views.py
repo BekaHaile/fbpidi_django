@@ -328,13 +328,13 @@ class GenerateAllCompanyPdf(View):
             
             if employees_perm.exists():
                 for ep in employees_perm:
-                    total_perm_emp = (ep.female)
+                    total_perm_emp = ep.female
             else:
                 total_perm_emp = 0
 
             if employees_temp.exists():
                 for et in employees_temp:
-                    total_temp_emp = (et.female)
+                    total_temp_emp = et.female
             else:
                 total_temp_emp = 0
             
@@ -693,13 +693,17 @@ class GenerateProjectPdf(View):
         for project in projects:
             employees_perm = Employees.objects.filter(projct=project,employment_type__icontains="Permanent")
             employees_temp = Employees.objects.filter(projct=project,employment_type__icontains="Temporary")
-            
-            for ep in employees_perm:
-                total_perm_emp = (ep.male+ep.female)
-            
-            for et in employees_temp:
-                total_temp_emp = (et.male+et.female)
-            
+            if employees_perm.exists():
+                for ep in employees_perm:
+                    total_perm_emp = (ep.male+ep.female)
+            else:
+                total_perm_emp = 0
+            if employees_temp.exists():        
+                for et in employees_temp:
+                    total_temp_emp = (et.male+et.female)
+            else:
+                total_temp_emp = 0
+
             total = total_perm_emp+total_temp_emp
             emp_data_total.append({'project':project.project_name,'sector':project.sector,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
         total_for_emp_m=0
@@ -709,11 +713,13 @@ class GenerateProjectPdf(View):
             employees_foreign = Employees.objects.filter(projct=project,employment_type__icontains="Foreign")
             if employees_foreign.exists():
                 for ef in employees_foreign:
-                    total_for_emp_m += (ef.male)
-                    total_for_emp_f += (ef.female)
-
-                total = total_for_emp_m+total_for_emp_f
-                for_emp_data.append({'project':project.project_name,'sector':project.sector,'data':total,'for_male':total_for_emp_m,'for_female':total_for_emp_f})
+                    total_for_emp_m = ef.male
+                    total_for_emp_f = ef.female
+            else:
+                total_for_emp_f = 0
+                total_for_emp_m = 0
+            total = total_for_emp_m+total_for_emp_f
+            for_emp_data.append({'project':project.project_name,'sector':project.sector,'data':total,'for_male':total_for_emp_m,'for_female':total_for_emp_f})
         job_created_data = []
         for project in projects:
             jobs_created_temp = JobOpportunities.objects.filter(project=project,job_type__icontains="Temporary",year_job=get_current_year())
@@ -722,32 +728,38 @@ class GenerateProjectPdf(View):
                 temp_male = 0
                 temp_female = 0
                 for temp in jobs_created_temp:
-                    temp_female += temp.female
-                    temp_male += temp.male
+                    temp_female = temp.female
+                    temp_male = temp.male
 
                 permanent_male = 0
                 permanent_female = 0
                 for p in jobs_created_permanent:
-                    permanent_male += p.male
-                    permanent_female += p.female
+                    permanent_male = p.male
+                    permanent_female = p.female
 
                 job_created_data.append({'project':project.project_name,'sector':project.sector,'data':{
                     'temporary_male':temp_male,'temporary_female':temp_female,
                     'permanent_male':permanent_male,'permanent_female':permanent_female
                 }})
         femal_emp_data = []
+        total_perm_emp = 0
+        total_temp_emp = 0
         for project in projects:
             employees_perm = Employees.objects.filter(projct=project,employment_type__icontains="Permanent")
             employees_temp = Employees.objects.filter(projct=project,employment_type__icontains="Temporary")
-            if employees_perm.exists() or employees_temp.exists():
+            if employees_perm.exists():
                 for ep in employees_perm:
                     total_perm_emp = (ep.female)
-                
+            else:
+                total_perm_emp = 0
+            if employees_temp.exists():
                 for et in employees_temp:
                     total_temp_emp = (et.female)
-                
-                total = total_perm_emp+total_temp_emp
-                femal_emp_data.append({'project':project.project_name,'sector':project.sector,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
+            else:
+                total_temp_emp = 0
+                            
+            total = total_perm_emp+total_temp_emp
+            femal_emp_data.append({'project':project.project_name,'sector':project.sector,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
         education_status_data = []
         total_edu = 0
         for project in projects:

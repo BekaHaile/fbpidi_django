@@ -438,7 +438,6 @@ def input_avl_chart(request):
         inp_dem_sups = InputDemandSupply.objects.filter(product=product,year=get_current_year()).values('product').annotate(
             demand=Sum('demand'),supply = Sum('supply')
         ).order_by('product')
-        print(inp_dem_sups)
         if inp_dem_sups.exists():
             for aup in inp_dem_sups:
                 demand = aup['demand']

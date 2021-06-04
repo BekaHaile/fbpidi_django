@@ -86,6 +86,8 @@ class Company(models.Model):
 	support_required	= models.ManyToManyField(CompanyDropdownsMaster,verbose_name="What kind of support do you need to increase your production and market",related_name="major_challenges")
 	company_condition = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,verbose_name="Status of processing/ industry facility",related_name="company_status")
 	is_active = models.BooleanField(default=False)
+	color_theme = models.CharField(max_length=25,verbose_name="Company Brand Color/Theme",default="#ffffff")
+	color_text = models.CharField(max_length=25,verbose_name="Company Brand Text Color",default="#ffffff")
 	reserve_attr0 = models.CharField(max_length=255,default="")
 	reserve_attr1 = models.CharField(max_length=255,default="")
 	reserve_attr2 = models.CharField(max_length=255,default="")
@@ -355,6 +357,9 @@ class InvestmentProject(models.Model):
 	last_updated_date	= models.DateTimeField(null=True)
 	expired	= models.BooleanField(default=False)
 
+	def __str__(self):
+		return self.project_name
+		
 	def get_project_address(self):
 		try:
 			return CompanyAddress.objects.get(project=self)

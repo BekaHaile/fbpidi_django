@@ -79,18 +79,29 @@
     <!-- Color-Skins -->
     <link id="theme" href="/static/frontpages/color-skins/color1.css" rel="stylesheet"/>
 
-
     <style>
         #lan_btn {
             border: none;
             background-color: transparent;
             padding: 0%;
         }
+        .horizontal-main {
+            background: {{object.color_theme}} !important;
+        }
+        .sticky-wrapper.is-sticky .horizontalMenu > .horizontalMenu-list > li > a {
+            color: {{object.color_text}} !important;
+        }
+        .bg-dark-purple {
+                background-color: {{object.color_theme}} !important;
+            }
+        .text-white{
+            color: {{object.color_text}} important;
+        }
     </style>
     {%block extrastyle%}
     {%endblock%}
 </head>
-<body>
+<body onload="assignColors();">
 
 <!--Loader-->
 <div id="global-loader">
@@ -365,7 +376,7 @@
 <!--/Newsletter-->
 
 <section>
-    <footer class="bg-dark-purple text-white">
+    <footer  style="color: {{object.color_text}} important;" class="bg-dark-purple text-white">
         <div class="footer-main border-bottom">
             
             <div class="container">
@@ -544,6 +555,7 @@
 
 <!-- subscribe script -->
 <script>
+    
     function subscribe()
     {
         fetch("{% url 'subscribe' %}",
@@ -770,7 +782,8 @@
     <!-- End of Script for cart -->
     
 <!-- JQuery js-->
-<script src="/static/frontpages/js/vendors/jquery-3.2.1.min.js"></script>
+<!-- <script src="/static/frontpages/js/vendors/jquery-3.2.1.min.js"></script> -->
+<script src="/static/admin/global_assets/js/main/jquery.min.js"></script>
 
 <!-- Bootstrap js -->
 <script src="/static/frontpages/plugins/bootstrap-4.4.1-dist/js/popper.min.js"></script>

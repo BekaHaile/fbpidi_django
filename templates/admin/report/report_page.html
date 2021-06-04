@@ -254,8 +254,37 @@ Number of Industries By Market Target
 				</div>
 				{%elif flag == 'education_status_data'%}
 				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<form class="" action="{%url 'admin:get_education_status' %}" method="POST">
+								{%csrf_token%}
+							<ul class="list-inline list-inline-condensed mb-0">
+								<li class="list-inline-item">
+									<select class="form-control" style="width: 200px;" name="year" id="year">
+										{%for year in years%}
+										<option value="{{year.0}}">{{year.1}} (E.C)</option>
+										{%endfor%}
+									</select>
+								</li>
+								<li class="list-inline-item" >
+									<select class="form-control" style="width: 200px;" name="quarter_year" id="quarter_year">
+										 <option value="">Select Quarter Year</option>
+									</select>
+								
+								</li>
+								<li class="list-inline-item">
+									<input type="submit" class="btn btn-primary btn-md" value="Filter" name="" id="">
+								</li>
+							</ul>
+						</form>
+							 
+						</div>
+					</div>
+				</div>
+				<div class="card">
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">Educational Status Data</h5>
+						<h5 class="card-title">Educational Status Data {%if year%}in {{year}} E.C{%endif%}</h5>
 					</div>
 					<div class="card-body">
 						 
@@ -265,7 +294,6 @@ Number of Industries By Market Target
 									<th>#</th>
 									<th>Educational Status</th>
 									<th>Employees</th>
-									<th>Share %</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -274,7 +302,6 @@ Number of Industries By Market Target
 									<td>{{forloop.counter}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %}</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -424,8 +451,69 @@ Number of Industries By Market Target
 				</div>
 				{%elif flag == 'women_in_pson_level'%}
 				<div class="card">
+					<div class="card-body">
+						<!-- <h5 class="mb-3">Website search results</h5> -->
+						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<form class="" action="{%url 'admin:get_women_in_psn' option=option sector=form_sector%}" method="POST">
+								{%csrf_token%}
+							<ul class="list-inline list-inline-condensed mb-0">
+								
+								<li class="list-inline-item"> 
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										<a href="{%url 'admin:get_women_in_psn' option='by_sector' sector='all'%}" class="dropdown-item"><i class="icon-stack2 "></i>All Sectors</a>
+										<a href="{%url 'admin:get_women_in_psn' option='by_sector' sector='Food'%}" class="dropdown-item"><i class="mi-cake "></i>Food</a>
+										<a href="{%url 'admin:get_women_in_psn' option='by_sector' sector='Beverage'%}" class="dropdown-item"><i class="mi-local-drink"></i>Beverage</a>
+										<a href="{%url 'admin:get_women_in_psn' option='by_sector' sector='Pharmaceuticals'%}" class="dropdown-item"><i class="mi-local-pharmacy"></i>Pharmaceutical</a>
+									</div>
+								</li>
+								<li class="list-inline-item ">
+									{%if sector == 'all'%}
+									{%elif sector == 'Food' or sector == 'Beverage' or sector == 'Pharmaceuticals'%}
+									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+										<i class="icon-stack2 mr-2"></i>
+										Sub Sectors
+									</a>
+
+									<div class="dropdown-menu">
+										{%for category in sub_sectors%}
+										<a href="{%url 'admin:get_num_jobs' option='by_sub_sector' sector=category.id%}" class="dropdown-item">{{category.category_name}}</a>
+										{%endfor%}
+									</div>
+									 
+									{%endif%}
+									 
+								</li>
+								
+								<li class="list-inline-item">
+									<select class="form-control" style="width: 200px;" name="year" id="year">
+										{%for year in years%}
+										<option value="{{year.0}}">{{year.1}} (E.C)</option>
+										{%endfor%}
+									</select>
+								</li>
+								<li class="list-inline-item" >
+									<select class="form-control" style="width: 200px;" name="quarter_year" id="quarter_year">
+										 <option value="">Select Quarter Year</option>
+									</select>
+								
+								</li>
+								<li class="list-inline-item">
+									<input type="submit" class="btn btn-primary btn-md" value="Filter" name="" id="">
+								</li>
+							</ul>
+						</form>
+							 
+						</div>
+					</div>
+				</div>
+				<div class="card">
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">Women in Positions Data</h5>
+						<h5 class="card-title">Women in Positions levels in {{title|title}} Sectors {%if year%}in {{year}} E.C{%endif%}</h5>
 					</div>
 					<div class="card-body">
 						 
@@ -433,18 +521,20 @@ Number of Industries By Market Target
 							<thead>
 								<tr>
 									<th>#</th>
+									<th>Company</th>
 									<th>Positions</th>
 									<th>Employees</th>
-									<th>Share %</th>
+									<th>Sector</th>
 								</tr>
 							</thead>
 							<tbody>
 								{%for od in women_in_pson_level%}
 								<tr>
 									<td>{{forloop.counter}}</td>
+									<td>{{od.company}}</td>
 									<td>{{od.label}}</td>
 									<td>{{od.data}}</td>
-									<td>{% get_share od.data total %} %</td>
+									<td>{{sector|title}}</td>
 								</tr>
 								 {%endfor%}
 							</tbody>
@@ -1330,6 +1420,12 @@ Number of Industries By Market Target
 					<div class="card-body">
 						<!-- <h5 class="mb-3">Website search results</h5> -->
 						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<form {%if flag == 'num_employees'%}
+								action="{%url 'admin:get_number_emp' option=option sector=form_sector%}"
+								{%elif flag == 'num_employees_female'%}
+								action="{%url 'admin:get_num_emp_female' option=option sector=form_sector%}"
+								{%endif%} method="POST">
+								{%csrf_token%}
 							<ul class="list-inline list-inline-condensed mb-0">
 								<li class="list-inline-item"> 
 									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
@@ -1375,9 +1471,19 @@ Number of Industries By Market Target
 									{%endif%}
 									 
 								</li>
-								 
+								<li class="list-inline-item">
+									<select class="form-control" style="width: 200px;" name="year" id="year">
+										{%for year in years%}
+										<option value="{{year.0}}">{{year.1}} (E.C)</option>
+										{%endfor%}
+									</select>
+								</li>
+								
+								<li class="list-inline-item">
+									<input type="submit" class="btn btn-primary btn-md" value="Filter" name="" id="">
+								</li>
 							</ul>
-
+							</form>
 							 
 						</div>
 					</div>
@@ -1385,7 +1491,12 @@ Number of Industries By Market Target
 				<div class="card">
 					 
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">{{title|title}} Sectors</h5>
+						<h5 class="card-title">
+							{%if flag == 'num_employees'%}
+							Number of Employees in
+							{%elif flag == 'num_employees_female'%}
+							Number of Female Employees in 
+							{%endif%} {{title|title}} Sectors {%if year%}in {{year}} E.C{%endif%}</h5>
 					</div>
 					<div class="card-body">
 						<table class="table datatable-basic">
@@ -1443,6 +1554,8 @@ Number of Industries By Market Target
 					<div class="card-body">
 						<!-- <h5 class="mb-3">Website search results</h5> -->
 						<div class="d-md-flex align-items-md-center flex-md-wrap text-center text-md-left">
+							<form action="{%url 'admin:get_num_emp_foreign' option=option sector=form_sector%}" method="POST">
+								{%csrf_token%} 
 							<ul class="list-inline list-inline-condensed mb-0">
 								<li class="list-inline-item"> 
 									<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
@@ -1474,8 +1587,19 @@ Number of Industries By Market Target
 									{%endif%}
 									 
 								</li>
+								<li class="list-inline-item">
+									<select class="form-control" style="width: 200px;" name="year" id="year">
+										{%for year in years%}
+										<option value="{{year.0}}">{{year.1}} (E.C)</option>
+										{%endfor%}
+									</select>
+								</li>
+								
+								<li class="list-inline-item">
+									<input type="submit" class="btn btn-primary btn-md" value="Filter" name="" id="">
+								</li>
 							</ul>
-
+							</form>
 							 
 						</div>
 					</div>
@@ -1483,7 +1607,7 @@ Number of Industries By Market Target
 				<div class="card">
 					 
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">{{title|title}} Sectors</h5>
+						<h5 class="card-title">Number of Foreign Employees in {{title|title}} Sectors {%if year%}in {{year}} E.C{%endif%}</h5>
 					</div>
 					<div class="card-body">
 						<table class="table datatable-basic">
@@ -1582,9 +1706,9 @@ Number of Industries By Market Target
 										{%endfor%}
 									</select>
 								</li>
-								<li class="list-inline-item">
-									<select class="form-control" style="width: 200px;" disabled name="quarter_year" id="quarter_year">
-										 
+								<li class="list-inline-item" >
+									<select class="form-control" style="width: 200px;" name="quarter_year" id="quarter_year">
+										 <option value="">Select Quarter Year</option>
 									</select>
 								
 								</li>
@@ -1600,7 +1724,7 @@ Number of Industries By Market Target
 				<div class="card">
 					 
 					<div class="card-header header-elements-inline">
-						<h5 class="card-title">Number of Jobs Created in {{title|title}} Sectors</h5>
+						<h5 class="card-title">Number of Jobs Created in {{title|title}} Sectors in {%if quarter_year%}{{quarter_year}} of{%endif%} {{year}} E.C</h5>
 					</div>
 					<div class="card-body">
 						<table class="table datatable-basic">
@@ -1657,15 +1781,54 @@ Number of Industries By Market Target
 			<script>
 				$(document).ready(function(){
 					var date = new Date();
-    				var current_year = new Date().getFullYear()-8
+    				var current_year = new Date().getFullYear()-8;
+					var my_year = parseInt("{{year}}");
+
+					if(my_year){
+						$("#year").val(my_year);
+						if (my_year == current_year){
+							if(date.getMonth()+1 == 4||date.getMonth()+1 == 5||date.getMonth()+1 == 6){
+								var options = "<option value=''>Select Year</option>"
+											+"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+											+"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>"
+											+"<option value='Third_Quarter'>Third Quarter(Jan-March)</option>";
+								$("#quarter_year").html(options);
+								
+							}else if(date.getMonth()+1 == 1||date.getMonth()+1 == 2||date.getMonth()+1 == 3){
+								var options = "<option value=''>Select Year</option>"
+												+"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+												+"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>";
+								$("#quarter_year").html(options);
+
+							}else if(date.getMonth()+1 == 10||date.getMonth()+1 == 11||date.getMonth()+1 == 12){
+								var options = "<option value=''>Select Year</option>"
+								+"<option value='First_Quarter'>First Quarter(July-Sept)</option>";
+								$("#quarter_year").html(options);
+
+							}else if(date.getMonth()+1 == 7||date.getMonth()+1 == 8||date.getMonth()+1 == 9){
+								$("#errors_jobs").html("Date for this year Is and this quarter is Inserted You Need to select The Next Year");
+								// var options = "<option value=''>You Need to select The previous Year</option>";
+								$("#quarter_year").empty();
+
+							}
+						}else{
+							var options = "<option value=''>Select Year</option>"
+											+"<option value='First_Quarter'>First Quarter(July-Sept)</option>"
+											+"<option value='Second_Quarter'>Second Quarter(Oct-Dec)</option>"
+											+"<option value='Third_Quarter'>Third Quarter(Jan-March)</option>"
+											+"<option value='Fourth_Quarter'>Fourth Quarter(April-June)</option>";
+								$("#quarter_year").html(options);
+						}
+					}
+
+					
 					$("#year").change(function(){
 						var selected_year = $(this).val();
 					
-						if(selected_year != ""){
-							$("#quarter_year").prop("disabled",false);
-						}else{
-							$("#quarter_year").prop("disabled",true);
-						}
+						if(selected_year == ""){
+							$("#quarter_year").empty();
+							$("#quarter_year").html("<option value=''>Select Year</option>");
+						} 
 						if (selected_year == current_year){
 							if(date.getMonth()+1 == 4||date.getMonth()+1 == 5||date.getMonth()+1 == 6){
 								var options = "<option value=''>Select Year</option>"
@@ -1688,7 +1851,7 @@ Number of Industries By Market Target
 							}else if(date.getMonth()+1 == 7||date.getMonth()+1 == 8||date.getMonth()+1 == 9){
 								$("#errors_jobs").html("Date for this year Is and this quarter is Inserted You Need to select The Next Year");
 								// var options = "<option value=''>You Need to select The previous Year</option>";
-								$("#quarter_year").prop("disabled",true);
+								$("#quarter_year").empty();
 
 							}
 						}else{

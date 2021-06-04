@@ -37,7 +37,7 @@ def sendInvitationEmail(request, email, name = None):
 def sendEmailVerification(request,user, redirect_url = 'activate'):
     try:
         current_site = get_current_site(request)
-        mail_subject = 'Email Verification Required.'
+        mail_subject = 'Welcome To FBPIDI-IIMS - Email Verification Required'
         message = get_template('email/acct_activate_email.html').render({
             'user': user,
             'domain': current_site.domain,
@@ -63,10 +63,11 @@ def sendEmailVerification(request,user, redirect_url = 'activate'):
 
 def sendWelcomeEmail(request,user, acctivated=None):
     current_site = get_current_site(request)
-    mail_subject = 'Your Account has been Activated'
+    mail_subject = 'Welcome To FBPIDI-IIMS - Email Verified'
     message = get_template('email/acc_activated_email.html').render({
         'user': user,
-        'acctivated':acctivated
+        'acctivated':acctivated,
+        'domain':current_site.domain
     })
     to_email = user.email
     email = EmailMessage(

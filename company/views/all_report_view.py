@@ -14,7 +14,7 @@ from django.views.generic import CreateView,UpdateView,ListView,View,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.core import serializers
-from django.db.models import Sum,Count,OuterRef,Exists,Q,F,Avg
+from django.db.models import Sum,Count,OuterRef,Exists,Q,F,Avg,Min
 
 from company.models import *
 from product.models import *
@@ -39,7 +39,7 @@ def get_current_year():
     return current_year
 
 
-def return_years():
+def return_years(companies):
     current_year = 0
     gc_year = datetime.datetime.today().year
     month = datetime.datetime.today().month
@@ -48,8 +48,9 @@ def return_years():
         current_year = gc_year-9
     else:
         current_year = gc_year - 8
-    YEAR_CHOICES=[('','Select Year'),]
-    YEAR_CHOICES += [(r,r) for r in range(1990, current_year+1)]
+    start_year = companies.aggregate(Min('established_yr'))
+    YEAR_CHOICES=[]
+    YEAR_CHOICES += [(r,r) for r in range(int(start_year['established_yr__min']), current_year+1)]
     return YEAR_CHOICES
 
 def get_subsector(request,sector):
@@ -498,7 +499,7 @@ class AllReportPage(LoginRequiredMixin,View):
         context['ownership_data'] = ownership_data
         context['inv_cap_data'] = total_inv_cap_data
         context['regions']= RegionMaster.objects.all()
-        context['years'] = return_years()
+        context['years_list'] = return_years(companies)
         context['sub_sectors']= Category.objects.all()
         context['products'] = SubCategory.objects.all()
         return render(self.request,"admin/report/all_report_page.html",context)
@@ -516,6 +517,7 @@ class AllReportPage(LoginRequiredMixin,View):
         context['sector'] = self.request.POST['sector']
         context['sub_sector'] = self.request.POST['sub_sector']
         context['product'] = self.request.POST['product']
+        
         if self.request.POST['year'] != '':
             current_year = int(self.request.POST['year'])
             
@@ -953,7 +955,7 @@ class AllReportPage(LoginRequiredMixin,View):
         context['ownership_data'] = ownership_data
         context['inv_cap_data'] = total_inv_cap_data
         context['regions']= RegionMaster.objects.all()
-        context['years'] = return_years()
+        context['years_list'] = return_years(companies)
         return render(self.request,template_name,context)
 
  
