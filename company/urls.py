@@ -1,6 +1,6 @@
 from django.urls import path
 from company.views.views import (
-    CompaniesDetailView,CompaniesView,CreateCompanyProfile,
+    CompaniesDetailView, CompanyAds, CompaniesView,CreateCompanyProfile,
     CreateFbpidiCompanyProfile, CompanyByMainCategory,
     ProjectList,ProjectDetail,SearchCompany,FilterCompanyByCategory
 )
@@ -11,6 +11,7 @@ urlpatterns = [
     path("man_comp-by-main-category/<option>/",CompanyByMainCategory.as_view(),name="manufac_category_main"),
     path("company-home-page/<pk>/",CompanyHomePage.as_view(),name="company_home"),
     path("about/<pk>/",CompanyAbout.as_view(),name="company_about"),
+    path("company_ads/<pk>/", CompanyAds.as_view(), name="company_ads"),
     path("contact/<pk>/",CompanyContact.as_view(),name="contact_company"),
     path("like_company", Like_Company, name = "like_company"),
     path("dislike_company",DislikeCompany, name = "dislike_company"),

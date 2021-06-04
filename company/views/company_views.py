@@ -59,6 +59,9 @@ class CompanyAbout(View):
             print('@@@ Exception at CompanyAbout ',e)
             return redirect('index')
         
+    
+    
+        
 
 class CompanyContact(View):
     def get(self, *args, **kwargs):
