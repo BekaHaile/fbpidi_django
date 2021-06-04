@@ -317,9 +317,9 @@ class CustomAdminSite(admin.AdminSite):
             path("edit_fbpidi_profile/<id>/",wrap(ViewFbpidiCompany.as_view()),name="edit_fbpidi_profile"),
 
             ### Document
-             path('create_document/', wrap(CreateDocument.as_view()), name='create_document'),
-             path('edit_document/<id>/', wrap(EditDocument.as_view()), name='edit_document'),
-             path('list_document_by_category/<option>/', wrap(DocumentListing.as_view()), name = "list_document_by_category"),
+            path('create_document/', wrap(CreateDocument.as_view()), name='create_document'),
+            path('edit_document/<id>/', wrap(EditDocument.as_view()), name='edit_document'),
+            path('list_document_by_category/<option>/', wrap(DocumentListing.as_view()), name = "list_document_by_category"),
 
             # Company Report Paths
             path('get-company-information-pdf/<pk>/',wrap(GenerateCompanyToPDF.as_view()),name='get_company_pdf'),
@@ -389,7 +389,7 @@ class CustomAdminSite(admin.AdminSite):
             path("get-number-employees-foreign/<option>/<sector>/",wrap(NumberOfEmployeesForeign.as_view()),name="get_num_emp_foreign"),
             path("get-number-jobs-created/<option>/<sector>/",wrap(NumberOfJobsCreatedBySubSector.as_view()),name="get_num_jobs"),
             path("get-education-status-data/",wrap(EduLevelofEmployees.as_view()),name="get_education_status"),
-            path("get-female-in-posn-data/",wrap(NumWomenInPosition.as_view()),name="get_women_in_psn"),
+            path("get-female-in-posn-data/<option>/<sector>/",wrap(NumWomenInPosition.as_view()),name="get_women_in_psn"),
             path("get-company-certification-data/",wrap(CompanyCertificationData.as_view()),name="get_comp_certfication"),
             path("get-company-energy_source-data/",wrap(EnergySourceData.as_view()),name="get_comp_energy_source"),
             path("get-company-market-destination-data/",wrap(CompaniesByDestination.as_view()),name="get_comp_by_destination"),

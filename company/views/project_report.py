@@ -95,11 +95,17 @@ class ProjectReport(LoginRequiredMixin,View):
             employees_perm = Employees.objects.filter(projct=project,employment_type__icontains="Permanent")
             employees_temp = Employees.objects.filter(projct=project,employment_type__icontains="Temporary")
             
-            for ep in employees_perm:
-                total_perm_emp = (ep.male+ep.female)
-            
-            for et in employees_temp:
-                total_temp_emp = (et.male+et.female)
+            if employees_perm.exists():
+                for ep in employees_perm:
+                    total_perm_emp = (ep.male+ep.female)
+            else:
+                total_perm_emp = 0
+
+            if employees_temp.exists():                
+                for et in employees_temp:
+                    total_temp_emp = (et.male+et.female)
+            else:
+                total_temp_emp = 0
             
             total = total_perm_emp+total_temp_emp
             emp_data_total.append({'project':project.project_name,'sector':project.sector,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
@@ -107,14 +113,21 @@ class ProjectReport(LoginRequiredMixin,View):
         total_for_emp_f=0
         for_emp_data = []
         for project in projects:
-            employees_foreign = Employees.objects.filter(projct=project,employment_type__icontains="Foreign")
-            if employees_foreign.exists():
+            employees_foreign = Employees.objects.filter(projct=project,employment_type__icontains="Foreign Employee")
+            # if employees_foreign.exists():
+            #     for ef in employees_foreign:
+            #         total_for_emp_m = ef.male
+            #         total_for_emp_f = ef.female
+            if employees_foreign.exists():       
                 for ef in employees_foreign:
-                    total_for_emp_m += (ef.male)
-                    total_for_emp_f += (ef.female)
+                    total_for_emp_m = ef.male
+                    total_for_emp_f = ef.female
+            else:
+                total_for_emp_m = 0
+                total_for_emp_f = 0
 
-                total = total_for_emp_m+total_for_emp_f
-                for_emp_data.append({'project':project.project_name,'sector':project.sector,'data':total,'for_male':total_for_emp_m,'for_female':total_for_emp_f})
+            total = total_for_emp_m+total_for_emp_f
+            for_emp_data.append({'project':project.project_name,'sector':project.sector,'data':total,'for_male':total_for_emp_m,'for_female':total_for_emp_f})
         job_created_data = []
         for project in projects:
             jobs_created_temp = JobOpportunities.objects.filter(project=project,job_type__icontains="Temporary")
@@ -137,18 +150,25 @@ class ProjectReport(LoginRequiredMixin,View):
                     'permanent_male':permanent_male,'permanent_female':permanent_female
                 }})
         femal_emp_data = []
+        total_perm_emp = 0
+        total_temp_emp=0
         for project in projects:
-            employees_perm = Employees.objects.filter(projct=project,employment_type__icontains="Permanent")
-            employees_temp = Employees.objects.filter(projct=project,employment_type__icontains="Temporary")
-            if employees_perm.exists() or employees_temp.exists():
+            employees_perm = Employees.objects.filter(projct=project,employment_type="Permanent Employee")
+            employees_temp = Employees.objects.filter(projct=project,employment_type="Temporary Employee")
+            if employees_perm.exists():
                 for ep in employees_perm:
                     total_perm_emp = (ep.female)
-                
+            else:
+                total_perm_emp = 0
+
+            if employees_temp.exists():
                 for et in employees_temp:
                     total_temp_emp = (et.female)
+            else:
+                total_temp_emp = 0
                 
-                total = total_perm_emp+total_temp_emp
-                femal_emp_data.append({'project':project.project_name,'sector':project.sector,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
+            total = total_perm_emp+total_temp_emp
+            femal_emp_data.append({'project':project.project_name,'sector':project.sector,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
         education_status_data = []
         total_edu = 0
         for project in projects:
@@ -263,11 +283,17 @@ class ProjectReport(LoginRequiredMixin,View):
             employees_perm = Employees.objects.filter(projct=project,employment_type__icontains="Permanent")
             employees_temp = Employees.objects.filter(projct=project,employment_type__icontains="Temporary")
             
-            for ep in employees_perm:
-                total_perm_emp = (ep.male+ep.female)
-            
-            for et in employees_temp:
-                total_temp_emp = (et.male+et.female)
+            if employees_perm.exists():
+                for ep in employees_perm:
+                    total_perm_emp = (ep.male+ep.female)
+            else:
+                total_perm_emp = 0
+
+            if employees_temp.exists():                
+                for et in employees_temp:
+                    total_temp_emp = (et.male+et.female)
+            else:
+                total_temp_emp = 0
             
             total = total_perm_emp+total_temp_emp
             emp_data_total.append({'project':project.project_name,'sector':project.sector,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
@@ -276,13 +302,16 @@ class ProjectReport(LoginRequiredMixin,View):
         for_emp_data = []
         for project in projects:
             employees_foreign = Employees.objects.filter(projct=project,employment_type__icontains="Foreign")
-            if employees_foreign.exists():
+            if employees_foreign.exists():       
                 for ef in employees_foreign:
-                    total_for_emp_m += (ef.male)
-                    total_for_emp_f += (ef.female)
+                    total_for_emp_m = ef.male
+                    total_for_emp_f = ef.female
+            else:
+                total_for_emp_m = 0
+                total_for_emp_f = 0
 
-                total = total_for_emp_m+total_for_emp_f
-                for_emp_data.append({'project':project.project_name,'sector':project.sector,'data':total,'for_male':total_for_emp_m,'for_female':total_for_emp_f})
+            total = total_for_emp_m+total_for_emp_f
+            for_emp_data.append({'project':project.project_name,'sector':project.sector,'data':total,'for_male':total_for_emp_m,'for_female':total_for_emp_f})
         job_created_data = []
         for project in projects:
             jobs_created_temp = JobOpportunities.objects.filter(project=project,job_type__icontains="Temporary")
@@ -308,17 +337,22 @@ class ProjectReport(LoginRequiredMixin,View):
         total_fem_perm_emp = 0
         total_fem_temp_emp = 0
         for project in projects:
-            employees_perm = Employees.objects.filter(projct=project,employment_type__icontains="Permanent")
-            employees_temp = Employees.objects.filter(projct=project,employment_type__icontains="Temporary")
-            if employees_perm.exists() or employees_temp.exists():
+            employees_perm = Employees.objects.filter(projct=project,employment_type="Permanent Employee")
+            employees_temp = Employees.objects.filter(projct=project,employment_type="Temporary Employee")
+            if employees_perm.exists():
                 for ep in employees_perm:
                     total_fem_perm_emp = (ep.female)
-                
+            else:
+                total_fem_perm_emp = 0
+
+            if employees_temp.exists():
                 for et in employees_temp:
                     total_fem_temp_emp = (et.female)
+            else:
+                total_fem_temp_emp = 0
                 
-                total = total_fem_perm_emp+total_fem_temp_emp
-                femal_emp_data.append({'project':project.project_name,'sector':project.sector,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
+            total = total_fem_perm_emp+total_fem_temp_emp
+            femal_emp_data.append({'project':project.project_name,'sector':project.sector,'data':total,'perm_emp':total_fem_perm_emp,'temp_emp':total_fem_temp_emp})
         education_status_data = []
         total_edu = 0
         for project in projects:

@@ -35,7 +35,7 @@ class ListInvestmentProject(LoginRequiredMixin,ListView):
 
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.is_fbpidi_staff:
-            return InvestmentProject.objects.all()
+            return InvestmentProject.objects.filter(project_complete=False)
         elif self.request.user.is_company_admin:
             return InvestmentProject.objects.filter(company=Company.objects.get(contact_person=self.request.user))
         elif self.request.user.is_company_staff:

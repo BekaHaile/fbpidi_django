@@ -122,7 +122,7 @@ class ProductCreationForm(forms.ModelForm):
         self.company = kwargs.pop('company')
         super(ProductCreationForm,self).__init__(*args,**kwargs)
         self.fields['project'].empty_label = "Select The Project"
-        self.fields['project'].queryset = InvestmentProject.objects.filter(company=self.company)
+        self.fields['project'].queryset = InvestmentProject.objects.filter(company=self.company,project_complete=True)
         self.fields['brand'].queryset = Brand.objects.filter(company=self.company)
         # if self.company.main_category == 'FBPIDI':
         #      self.fields['pharmacy_category'].queryset = Category.objects.filter(category_type="Pharmaceuticals")
@@ -185,7 +185,7 @@ class PharmaceuticalProductCreationForm(forms.ModelForm):
         self.fields['dose'].queryset = Dose.objects.all()
         self.fields['dosage_form'].queryset = DosageForm.objects.all()
         self.fields['project'].empty_label = "Select The Project"
-        self.fields['project'].queryset = InvestmentProject.objects.filter(company=self.company)
+        self.fields['project'].queryset = InvestmentProject.objects.filter(company=self.company,project_complete=True)
         company_categories = self.company.category.all()
         self.fields['pharmacy_product_type'].queryset = SubCategory.objects.filter(category_name__in = company_categories)
         self.fields['pharmacy_product_type'].required = True

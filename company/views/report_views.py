@@ -812,6 +812,7 @@ class NumberOfEmployees(LoginRequiredMixin,View):
         companies = None
         context = {}
         if self.kwargs['option'] == 'by_sector':
+            context['option'] = 'by_sector'
             if self.kwargs['sector'] == "all":
                 companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
                 context['sub_sectors'] = Category.objects.all()
@@ -820,28 +821,22 @@ class NumberOfEmployees(LoginRequiredMixin,View):
                 context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
             context['title'] = self.kwargs['sector']
             context['sector'] = self.kwargs['sector'] 
+            context['form_sector'] = self.kwargs['sector']
         elif self.kwargs['option'] == 'by_sub_sector':
+            context['option'] = 'by_sub_sector'
             companies = Company.objects.filter(category=self.kwargs['sector'])
             context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
             context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
             context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
             context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
-        
+            context['form_sector'] = Category.objects.get(id=self.kwargs['sector']).id
         if companies == None:
             context['flag'] = "num_employees"
             context['title'] = self.kwargs['sector'] 
             messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
             return render(self.request,"admin/report/report_page.html",context)
         else:
-            # employees_perm = Employees.objects.values('company__name').annotate(
-            #         permanent_male=Sum('male',distinct=True,filter=Q(employment_type__icontains="Permanent")),
-            #         permanent_female=Sum('female',distinct=True,filter=Q(employment_type__icontains="Permanent"))
-            #         ).order_by('company')
-            # employees_temp = Employees.objects.values('company__name').annotate(
-            #         permanent_male=Sum('male',distinct=True,filter=Q(employment_type__icontains="Temporary")),
-            #         permanent_female=Sum('female',distinct=True,filter=Q(employment_type__icontains="Temporary"))
-            #         ).order_by('company')
-
+            
             for company in companies:
                 employees_perm = Employees.objects.filter(company=company,employment_type="Permanent Employee")
                 employees_temp = Employees.objects.filter(company=company,employment_type="Temporary Employee")
@@ -861,6 +856,63 @@ class NumberOfEmployees(LoginRequiredMixin,View):
                 emp_data_total.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
             context['total_emp_data'] = emp_data_total
             context['flag'] = "num_employees"
+            context['years'] = return_years(companies)
+            return render(self.request,'admin/report/report_page.html',context)
+    def post(self,*args,**kwargs):
+        total_perm_emp = 0
+        total_temp_emp=0
+        emp_data_total=[]
+        companies = None
+        context = {}
+        if self.kwargs['option'] == 'by_sector':
+            if self.kwargs['sector'] == "all":
+                context['option'] = 'by_sector'
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+            context['title'] = self.kwargs['sector']
+            context['sector'] = self.kwargs['sector'] 
+            context['form_sector'] = self.kwargs['sector']
+        elif self.kwargs['option'] == 'by_sub_sector':
+            context['option'] = 'by_sub_sector'
+            companies = Company.objects.filter(category=self.kwargs['sector'])
+            context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
+            context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+            context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['form_sector'] = Category.objects.get(id=self.kwargs['sector']).id
+        if companies == None:
+            context['flag'] = "num_employees"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
+            return render(self.request,"admin/report/report_page.html",context)
+        else:
+            year_emp = get_current_year()
+            if self.request.POST['year']:
+                year_emp = self.request.POST['year']
+                context['year'] = self.request.POST['year']
+            for company in companies:
+                employees_perm = Employees.objects.filter(company=company,employment_type="Permanent Employee",year_emp=year_emp)
+                employees_temp = Employees.objects.filter(company=company,employment_type="Temporary Employee",year_emp=year_emp)
+                if employees_perm.exists():
+                    for ep in employees_perm:
+                        total_perm_emp = (ep.male+ep.female)
+                else:
+                    total_perm_emp = 0
+
+                if employees_temp.exists():                
+                    for et in employees_temp:
+                        total_temp_emp = (et.male+et.female)
+                else:
+                    total_temp_emp = 0
+
+                total = total_perm_emp+total_temp_emp
+                emp_data_total.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
+            context['total_emp_data'] = emp_data_total
+            context['flag'] = "num_employees"
+            context['years'] = return_years(companies)
             return render(self.request,'admin/report/report_page.html',context)
 
 @method_decorator(decorators,name='dispatch')
@@ -872,6 +924,7 @@ class NumberOfEmployeesFemale(LoginRequiredMixin,View):
         companies = None
         context = {}
         if self.kwargs['option'] == 'by_sector':
+            context['option'] = 'by_sector'
             if self.kwargs['sector'] == "all":
                 companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
                 context['sub_sectors'] = Category.objects.all()
@@ -880,12 +933,15 @@ class NumberOfEmployeesFemale(LoginRequiredMixin,View):
                 context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
             context['title'] = self.kwargs['sector']
             context['sector'] = self.kwargs['sector'] 
+            context['form_sector'] = self.kwargs['sector']
         elif self.kwargs['option'] == 'by_sub_sector':
+            context['option'] = 'by_sub_sector'
             companies = Company.objects.filter(category=self.kwargs['sector'])
             context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
             context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
             context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
             context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['form_sector'] = Category.objects.get(id=self.kwargs['sector']).id
         if companies == None:
             context['flag'] = "num_employees"
             context['title'] = self.kwargs['sector'] 
@@ -913,6 +969,65 @@ class NumberOfEmployeesFemale(LoginRequiredMixin,View):
                 
             context['total_emp_data'] = femal_emp_data
             context['flag'] = "num_employees_female"
+            context['years'] = return_years(companies)
+            return render(self.request,'admin/report/report_page.html',context)
+    def post(self,*args,**kwargs):
+        total_perm_emp = 0
+        total_temp_emp=0
+        femal_emp_data=[]
+        companies = None
+        context = {}
+        if self.kwargs['option'] == 'by_sector':
+            context['option'] = 'by_sector'
+            if self.kwargs['sector'] == "all":
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+            context['title'] = self.kwargs['sector']
+            context['sector'] = self.kwargs['sector'] 
+            context['form_sector'] = self.kwargs['sector']
+        elif self.kwargs['option'] == 'by_sub_sector':
+            context['option'] = 'by_sub_sector'
+            companies = Company.objects.filter(category=self.kwargs['sector'])
+            context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
+            context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+            context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['form_sector'] = Category.objects.get(id=self.kwargs['sector']).id
+        if companies == None:
+            context['flag'] = "num_employees"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
+            return render(self.request,"admin/report/report_page.html",context)
+        else:
+            year_emp = get_current_year()
+            if self.request.POST['year']:
+                year_emp = self.request.POST['year']
+                context['year'] = self.request.POST['year']
+            for company in companies:
+                employees_perm = Employees.objects.filter(company=company,employment_type__icontains="Permanent",year_emp=year_emp)
+                employees_temp = Employees.objects.filter(company=company,employment_type__icontains="Temporary",year_emp=year_emp)
+                
+                if employees_perm.exists():
+                    for ep in employees_perm:
+                        total_perm_emp = (ep.female)
+                else:
+                    total_perm_emp = 0
+
+                if employees_temp.exists():
+                    for et in employees_temp:
+                        total_temp_emp = (et.female)
+                else:
+                    total_temp_emp = 0
+                
+                total = total_perm_emp+total_temp_emp
+                femal_emp_data.append({'company':company.name,'data':total,'perm_emp':total_perm_emp,'temp_emp':total_temp_emp})
+                
+            context['total_emp_data'] = femal_emp_data
+            context['flag'] = "num_employees_female"
+            context['years'] = return_years(companies)
             return render(self.request,'admin/report/report_page.html',context)
 
 @method_decorator(decorators,name='dispatch')
@@ -924,6 +1039,7 @@ class NumberOfEmployeesForeign(LoginRequiredMixin,View):
         companies = None
         context = {}
         if self.kwargs['option'] == 'by_sector':
+            context['option'] = 'by_sector'
             if self.kwargs['sector'] == "all":
                 companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
                 context['sub_sectors'] = Category.objects.all()
@@ -932,12 +1048,15 @@ class NumberOfEmployeesForeign(LoginRequiredMixin,View):
                 context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
             context['title'] = self.kwargs['sector']
             context['sector'] = self.kwargs['sector'] 
+            context['form_sector'] = self.kwargs['sector']
         elif self.kwargs['option'] == 'by_sub_sector':
+            context['option'] = 'by_sub_sector'
             companies = Company.objects.filter(category=self.kwargs['sector'])
             context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
             context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
             context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
             context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['form_sector'] = Category.objects.get(id=self.kwargs['sector']).id
         if companies == None:
             context['flag'] = "num_employees_foreign"
             context['title'] = self.kwargs['sector'] 
@@ -945,7 +1064,7 @@ class NumberOfEmployeesForeign(LoginRequiredMixin,View):
             return render(self.request,"admin/report/report_page.html",context)
         else:
             for company in companies:
-                employees_foreign = Employees.objects.filter(company=company,employment_type__icontains="Foreign")
+                employees_foreign = Employees.objects.filter(company=company,employment_type__icontains="Foreign",year_emp=get_current_year())
                             
                 if employees_foreign.exists():       
                     for ef in employees_foreign:
@@ -960,6 +1079,61 @@ class NumberOfEmployeesForeign(LoginRequiredMixin,View):
                  
             context['for_emp_data'] = for_emp_data
             context['flag'] = "num_employees_foreign"
+            context['years'] = return_years(companies)
+            return render(self.request,'admin/report/report_page.html',context)
+
+    def post(self,*args,**kwargs):
+        total_for_emp_m=0
+        total_for_emp_f=0
+        for_emp_data=[]
+        companies = None
+        context = {}
+        if self.kwargs['option'] == 'by_sector':
+            context['option'] = 'by_sector'
+            if self.kwargs['sector'] == "all":
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+            context['title'] = self.kwargs['sector']
+            context['sector'] = self.kwargs['sector'] 
+            context['form_sector'] = self.kwargs['sector']
+        elif self.kwargs['option'] == 'by_sub_sector':
+            context['option'] = 'by_sub_sector'
+            companies = Company.objects.filter(category=self.kwargs['sector'])
+            context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
+            context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type 
+            context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['form_sector'] = Category.objects.get(id=self.kwargs['sector']).id
+        if companies == None:
+            context['flag'] = "num_employees_foreign"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
+            return render(self.request,"admin/report/report_page.html",context)
+        else:
+            year_emp = get_current_year()
+            if self.request.POST['year']:
+                year_emp = self.request.POST['year']
+                context['year'] = self.request.POST['year']
+            for company in companies:
+                employees_foreign = Employees.objects.filter(company=company,employment_type__icontains="Foreign",year_emp=year_emp)
+                
+                if employees_foreign.exists():       
+                    for ef in employees_foreign:
+                        total_for_emp_m += (ef.male)
+                        total_for_emp_f += (ef.female)
+                else:
+                    total_for_emp_m = 0
+                    total_for_emp_f = 0
+
+                total = total_for_emp_m+total_for_emp_f
+                for_emp_data.append({'company':company.name,'data':total,'for_male':total_for_emp_m,'for_female':total_for_emp_f})
+                 
+            context['for_emp_data'] = for_emp_data
+            context['flag'] = "num_employees_foreign"
+            context['years'] = return_years(companies)
             return render(self.request,'admin/report/report_page.html',context)
 
 @method_decorator(decorators,name='dispatch')
@@ -1051,18 +1225,27 @@ class NumberOfJobsCreatedBySubSector(LoginRequiredMixin,View):
             return render(self.request,"admin/report/report_page.html",context)
         else:
             context['years'] = return_year_with_quarteryear(companies)
+            year_job = get_current_year_quarter()
+            quarter_job = ""
             for company in companies:
-                jobs_created_temp = JobOpportunities.objects.filter(company=company,job_type__icontains="Temporary")
-                jobs_created_permanent = JobOpportunities.objects.filter(company=company,job_type__icontains="Permanent")
-                if self.request.POST['year'] and not self.request.POST['quarter_year']:
-                    jobs_created_temp.filter(year_job=self.request.POST['year'])
-                    jobs_created_permanent.filter(year_job=self.request.POST['year'])
+                
+                if self.request.POST['year']:
+                    year_job=self.request.POST['year']
+                    context['year'] = self.request.POST['year']
 
-                elif self.request.POST['year'] and self.request.POST['quarter_year']:
-                    jobs_created_temp.filter(year_job=self.request.POST['year'],quarter_job=self.request.POST['quarter_year'])
-                    jobs_created_permanent.filter(year_job=self.request.POST['year'],quarter_job=self.request.POST['quarter_year'])
+                if self.request.POST['quarter_year']:
+                    quarter_job = self.request.POST['quarter_year']
+                    context['quarter_year'] = self.request.POST['quarter_year']
+                jobs_created_temp = JobOpportunities.objects.filter(company=company,job_type__icontains="Temporary",
+                                            year_job=year_job)
+                jobs_created_permanent = JobOpportunities.objects.filter(company=company,job_type__icontains="Permanent",
+                                        year_job=year_job)
+                if quarter_job != "":
+                    jobs_created_temp = jobs_created_temp.filter(company=company,job_type__icontains="Temporary",
+                                            year_job=year_job,quarter_job=quarter_job)
+                    jobs_created_permanent = jobs_created_permanent.filter(company=company,job_type__icontains="Permanent",
+                                        year_job=year_job,quarter_job=quarter_job)
 
-               
                 temp_male = 0
                 temp_female = 0
                 for temp in jobs_created_temp:
@@ -1079,7 +1262,7 @@ class NumberOfJobsCreatedBySubSector(LoginRequiredMixin,View):
                     'temporary_male':temp_male,'temporary_female':temp_female,
                     'permanent_male':permanent_male,'permanent_female':permanent_female
                 }})
-
+            
             context['job_created_data'] = job_created_data 
             context['flag'] = "num_jobs_created"
             return render(self.request,'admin/report/report_page.html',context)
@@ -1091,7 +1274,11 @@ class EduLevelofEmployees(LoginRequiredMixin,View):
         education_status_data = []
         context = {}
         template_name = "admin/report/report_page.html"
-        queryset = EducationalStatus.objects.all().values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
+        companies = Company.objects.all().exclude(main_category="FBPIDI")
+        context['years'] = return_year_with_quarteryear(companies)
+        year_edu = get_current_year_quarter()
+        context['year'] = get_current_year_quarter()
+        queryset = EducationalStatus.objects.filter(year_edu=year_edu).values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
         total = 0
         for edu_data in queryset:
             total += int(edu_data['female__sum']+edu_data['male__sum'])
@@ -1101,25 +1288,144 @@ class EduLevelofEmployees(LoginRequiredMixin,View):
         context['education_status_data'] = education_status_data
         context['flag'] = 'education_status_data'
         return render(self.request,template_name,context)
-        template_name = "admin/report/companies_for_report.html"
+    
+    def post(self,*args,**kwargs):
+        education_status_data = []
+        context = {}
+        template_name = "admin/report/report_page.html"
+        companies = Company.objects.all().exclude(main_category="FBPIDI")
+        context['years'] = return_year_with_quarteryear(companies)
+        year_edu = get_current_year_quarter()
+        quarter_edu = ""
+
+        if self.request.POST['year']:
+            year_edu=self.request.POST['year']
+            context['year'] = self.request.POST['year']
+
+        if self.request.POST['quarter_year']:
+            quarter_edu = self.request.POST['quarter_year']
+            context['quarter_year'] = self.request.POST['quarter_year']
+        
+        queryset = EducationalStatus.objects.filter(year_edu=year_edu).values('education_type').annotate(Sum('male'),Sum('female')).order_by('education_type')
+        
+        if quarter_edu != "":
+            queryset = queryset.filter(quarter_edu=quarter_edu)
+        
+        total = 0
+        for edu_data in queryset:
+            total += int(edu_data['female__sum']+edu_data['male__sum'])
+            education_status_data.append({'label':edu_data['education_type'],
+                                    'data':int(edu_data['female__sum']+edu_data['male__sum'])})
+        context['total'] = total
+        context['education_status_data'] = education_status_data
+        context['flag'] = 'education_status_data'
+        return render(self.request,template_name,context)
 
 @method_decorator(decorators,name='dispatch')
 class NumWomenInPosition(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         women_in_pson_level = []
         context = {}
+        companies = None
         template_name = "admin/report/report_page.html"
-        queryset = FemalesInPosition.objects.filter(year_fem=get_current_year_quarter())
-        # (Sum('high_position'),Sum('med_position'))
-        in_med = 0
-        in_high = 0
-        total = 0
-        for women_data in queryset:
-            in_high += int(women_data.high_position)
-            in_med += int(women_data.med_position)
-        total = int(in_high+in_med)
-        women_in_pson_level.append({'label':'Med Level Positions','data':in_med})
-        women_in_pson_level.append({'label':'Higher Level Positions','data':in_high})
+        if self.kwargs['option'] == 'by_sector':
+            context['option'] = 'by_sector'
+            if self.kwargs['sector'] == "all":
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+            context['title'] = self.kwargs['sector']
+            context['sector'] = self.kwargs['sector']
+            context['form_sector'] = self.kwargs['sector']
+        elif self.kwargs['option'] == 'by_sub_sector':
+            context['option'] = 'by_sub_sector'
+            companies = Company.objects.filter(category=self.kwargs['sector'])
+            context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
+            context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type
+            context['form_sector'] = Category.objects.get(id=self.kwargs['sector']).id
+        if companies == None:
+            context['flag'] = "women_in_pson_level"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
+            return render(self.request,"admin/report/report_page.html",context)
+        else:
+            context['years'] = return_year_with_quarteryear(companies)
+            for company in  companies:
+                queryset = FemalesInPosition.objects.filter(company=company,year_fem=get_current_year_quarter())
+                # (Sum('high_position'),Sum('med_position'))
+                in_med = 0
+                in_high = 0
+                total = 0
+                for women_data in queryset:
+                    in_high += int(women_data.high_position)
+                    in_med += int(women_data.med_position)
+                total = int(in_high+in_med)
+                women_in_pson_level.append({'company':company.name,'label':'Med Level Positions','data':in_med})
+                women_in_pson_level.append({'company':company.name,'label':'Higher Level Positions','data':in_high})
+        context['total'] = total
+        context['women_in_pson_level'] = women_in_pson_level
+        context['flag'] = 'women_in_pson_level'
+        return render(self.request,template_name,context)
+    
+    def post(self,*args,**kwargs):
+        women_in_pson_level = []
+        context = {}
+        companies = None
+        template_name = "admin/report/report_page.html"
+        if self.kwargs['option'] == 'by_sector':
+            context['option'] = 'by_sector'
+            if self.kwargs['sector'] == "all":
+                companies = Company.objects.filter(main_category__in=["Food",'Beverage','Pharmaceuticals'])
+                context['sub_sectors'] = Category.objects.all()
+            else:
+                companies = Company.objects.filter(main_category=self.kwargs['sector'])
+                context['sub_sectors'] = Category.objects.filter(category_type=self.kwargs['sector'])
+            context['title'] = self.kwargs['sector']
+            context['sector'] = self.kwargs['sector']
+            context['form_sector'] = self.kwargs['sector']
+        elif self.kwargs['option'] == 'by_sub_sector':
+            context['option'] = 'by_sub_sector'
+            companies = Company.objects.filter(category=self.kwargs['sector'])
+            context['sub_sectors'] = Category.objects.filter(category_type=Category.objects.get(id=self.kwargs['sector']).category_type)
+            context['title'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sub_sector'] = Category.objects.get(id=self.kwargs['sector']).category_name
+            context['sector'] = Category.objects.get(id=self.kwargs['sector']).category_type
+            context['form_sector'] = Category.objects.get(id=self.kwargs['sector']).id
+        if companies == None:
+            context['flag'] = "women_in_pson_level"
+            context['title'] = self.kwargs['sector'] 
+            messages.warning(self.request,"Please Fix Your Request,There is issue in the request")
+            return render(self.request,"admin/report/report_page.html",context)
+        else:
+            context['years'] = return_year_with_quarteryear(companies)
+            year_fem = get_current_year_quarter()
+            quarter_fem = ""
+            if self.request.POST['year']:
+                year_fem=self.request.POST['year']
+                context['year'] = self.request.POST['year']
+
+            if self.request.POST['quarter_year']:
+                quarter_fem = self.request.POST['quarter_year']
+                context['quarter_year'] = self.request.POST['quarter_year']
+
+            for company in  companies:
+                queryset = FemalesInPosition.objects.filter(company=company,year_fem=year_fem)
+                if quarter_fem != "":
+                    queryset = queryset.filter(quarter_fem=quarter_fem)
+
+                in_med = 0
+                in_high = 0
+                total = 0
+                for women_data in queryset:
+                    in_high += int(women_data.high_position)
+                    in_med += int(women_data.med_position)
+                total = int(in_high+in_med)
+                women_in_pson_level.append({'company':company.name,'label':'Med Level Positions','data':in_med})
+                women_in_pson_level.append({'company':company.name,'label':'Higher Level Positions','data':in_high})
         context['total'] = total
         context['women_in_pson_level'] = women_in_pson_level
         context['flag'] = 'women_in_pson_level'
