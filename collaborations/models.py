@@ -2,16 +2,17 @@ import datetime
 from django.db import models
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
-
-
 from company.models import Company
+
 
 JOB_CHOICES=[ ('', 'Select Employment Type'),
             ('Temporary','Temporary'),
             ('Permanent','Permanent'),
             ('Contract','Contract')]
 
+
 allowed_image_extensions = ['png','jpg','jpeg','webp',]
+
 
 allowed_doc_extensions =['png','jpg','jpeg','webp','pdf', 'doc', 'docx','xlsx', 'txt']
 class PollsQuestion(models.Model):
@@ -56,8 +57,8 @@ class PollsQuestion(models.Model):
         return self.company.get_image()
 
     class Meta:
-        ordering = ['-created_date',] 
-    
+        ordering = ['-created_date',]  
+
 
 class Choices (models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
@@ -107,7 +108,7 @@ class PollsResult(models.Model):
     class Meta:
         unique_together = (('user', 'poll'))
 
-## Colab 
+
 class Blog(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -665,7 +666,7 @@ class Document_Category(models.Model):
 
 
 class Document(models.Model):
-    DOC_CATEGORY = [('Ads','Ads'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'), ('Other Documents','Other Documents')]
+    DOC_CATEGORY = [ ('Ads','Ads'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'), ('Other Documents','Other Documents')]
 
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(verbose_name="upload time", auto_now_add=True)
