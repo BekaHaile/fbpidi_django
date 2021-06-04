@@ -68,9 +68,12 @@
 							<div class="col-md-6">
 								<label>{{certificate_form.certificate.label}}</label>
 								<div class="uniform-uploader">
-									{{certificate_form.certificate}}
-									<span class="filename" style="user-select: none;">No file selected</span>
-									<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+									<div class="col-lg-12">
+										{{certificate_form.certificate}}
+									</div>
+
+									
+									
 								</div>
 								<span class="form-text text-muted">{{certificate_form.certificate.help_text}}</span>
 							</div>		

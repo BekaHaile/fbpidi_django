@@ -1,4 +1,6 @@
 
+from django.dispatch.dispatcher import receiver
+from chat.models import Notification
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','fbpims.settings')
 import django
@@ -9,7 +11,6 @@ from collaborations.models import *
 
 
 from company.models import *
-from django.conf import settings
 from django.db.models import Count
 from django.utils.timezone import localtime
 from datetime import datetime, timedelta
@@ -58,6 +59,7 @@ def get_weekly_and_old(queryset):
         return {'error':True, 'message':str(e)}
 
 if __name__ == '__main__':    
-    print(EventParticipants.objects.all().delete())
-
+    n = Notification(sender = UserProfile.objects.get(id = 1), receiver=UserProfile.objects.get(id = 1),
+    notification = 'New Company Created', seen = False)
+    n.save()
     

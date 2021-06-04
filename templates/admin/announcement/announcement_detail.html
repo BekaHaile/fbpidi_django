@@ -4,9 +4,7 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 
-  <!-- file selecting js -->
-  <script src="/static/admin/global_assets/js/demo_pages/user_pages_profile_tabbed.js"></script>
-  <!-- /file selecting js  -->
+
 <link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
 <script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
 <!------------>
@@ -68,17 +66,23 @@
 					</div>
 					
 					<p><b>Current Image : </b> <a target = "blank" href="{{announcement.image.url}}"> {{announcement.image.name}}</a></p>
-					<label class="col-form-label col-lg-3">Change image:</label>
-						  <div class="col-lg-9">
-							<div class="uniform-uploader">{{form.image}}<span
-								class="filename" style="user-select: none;">No file selected</span><span
-								class="action btn bg-warning" style="user-select: none;">Choose File</span>
-							</div>
-						  </div>
-						  <input type="hidden" name="x" id="x" value="">
-							<input type="hidden" name="y" id="y" value="" >
-							<input type="hidden" name="width" id="width" value="">
-							<input type="hidden" name="height" id="height" value="">
+					<div class="form-group row">
+						<label class="col-form-label col-lg-3">Change image:</label>
+						<div class="col-lg-9">
+                            <div class="uniform-uploader">
+                                <div class="col-lg-12">
+                                    {{form.image}}
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+
+					</div>
+					<input type="hidden" name="x" id="x" value="">
+					<input type="hidden" name="y" id="y" value="" >
+					<input type="hidden" name="width" id="width" value="">
+					<input type="hidden" name="height" id="height" value="">
 						
 						
 				</fieldset>

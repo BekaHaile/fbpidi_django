@@ -73,7 +73,7 @@ class CertificateForm(forms.ModelForm):
         fields = ('name','certificate',)
         widgets = {
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Certificate Name'}),
-            'certificate':forms.FileInput(attrs={'required':True})
+            'certificate':forms.FileInput(attrs={'required':True, 'class':'form form-control form-input-styled'})
         }
 
 class EmployeesForm(forms.ModelForm):
@@ -283,7 +283,7 @@ class InistituteForm(forms.ModelForm):
         widgets = {
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Name Of the Inistitute'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Name Of the Inistitute'}),
-            'logo':forms.FileInput(attrs={'class':'form-control'}),
+            'logo':forms.FileInput(attrs={'class':'form form-control form-input-styled','accept': 'image/*',}),
             'detail':forms.Textarea(attrs={'class':'summernote'}),
             'detail_am':forms.Textarea(attrs={'class':'summernote'}),
         }
@@ -393,11 +393,11 @@ class CompanyProfileForm(forms.ModelForm):
         widgets = {
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
-            'logo':forms.FileInput(attrs={'class':''}),
+            'logo':forms.FileInput(attrs={'class':'form form-control form-input-styled','accept': 'image/*',}),
             'geo_location':gis_form.OSMWidget(attrs={'required':True,'map_width': 800, 'map_height': 400}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
-            'trade_license':forms.FileInput(attrs={'class':''}),
+            'trade_license':forms.FileInput(attrs={'class':'form form-control form-input-styled'}),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'detail':forms.Textarea(attrs={'class':'summernote'}),
             'detail_am':forms.Textarea(attrs={'class':'summernote'}),
@@ -428,13 +428,13 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
             'contact_person':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
-            'logo':forms.FileInput(attrs={'class':''}),
+            'logo':forms.FileInput(attrs={'class':'form form-control form-input-styled'}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 900, 'map_height': 400,'default_lat': 9.034063,
                          'default_lon': 38.752460,'default_zoom': 6}),
             # 'geo_location':CustomPointWidget,
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
-            'trade_license':forms.FileInput(attrs={'class':''}),
+            'trade_license':forms.FileInput(attrs={'class':'form form-control form-input-styled'}),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'detail':forms.Textarea(attrs={'class':'summernote'}),
             'detail_am':forms.Textarea(attrs={'class':'summernote'}),
@@ -496,7 +496,7 @@ class CompanyUpdateForm(forms.ModelForm):
         widgets = {
                 # 'contact_person':forms.TextInput(attrs={'class':'form-control'}),
                 'expansion_plan':forms.Textarea(attrs={'class':'summernote'}),
-                'orgn_strct':forms.FileInput(),
+                'orgn_strct':forms.FileInput(attrs={ 'class':'form form-control form-input-styled'}),
                 'geo_location':gis_form.OSMWidget(attrs={'map_width': 500, 'map_height': 250}),
                 'lab_test_analysis':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'lab_equipment':forms.SelectMultiple(attrs={'class':'form-control'}),
@@ -606,7 +606,7 @@ class InvestmentProjectForm(forms.ModelForm):
             'contact_person','description','description_am',
             )
         widgets = {
-            'image':forms.FileInput(attrs={}),
+            'image':forms.FileInput(attrs={'class':'form form-control form-input-styled'}),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
             'owners_nationality':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Owners Nationality'}),
@@ -647,7 +647,7 @@ class InvestmentProjectForm_ForSuperAdmin(forms.ModelForm):
             )
         widgets = {
             'company':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-            'image':forms.FileInput(),
+            'image':forms.FileInput(attrs={'class':'form form-control form-input-styled'}),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
             'owners_nationality':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Owners Nationality'}),
@@ -707,7 +707,7 @@ class InvestmentProjectDetailForm(forms.ModelForm):
             'water_suply':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_water_suply")'}),
             'cond_provided_for_wy':forms.Textarea(attrs={'class':'summernote'}),
             'target_market':forms.Textarea(attrs={'class':'summernote'}),
-            'env_impac_ass_doc':forms.FileInput(attrs={'class':'form-control'}),
+            'env_impac_ass_doc':forms.FileInput(),
             'capital_utilization':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_capital_utilization")'}),
             'technology':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'automation':forms.Select(attrs={'class':'form-control form-control-uniform'}),
@@ -757,7 +757,7 @@ class InvestmentProjectDetailForm_Admin(forms.ModelForm):
             'water_suply':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_water_suply")'}),
             'cond_provided_for_wy':forms.Textarea(attrs={'class':'summernote'}),
             'target_market':forms.Textarea(attrs={'class':'summernote'}),
-            'env_impac_ass_doc':forms.FileInput(attrs={'class':'form-control'}),
+            'env_impac_ass_doc':forms.FileInput(attrs={'class': 'form-control'}),
             'capital_utilization':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_capital_utilization")'}),
             'technology':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'automation':forms.Select(attrs={'class':'form-control form-control-uniform'}),
@@ -807,7 +807,7 @@ class ProjectUpdateForm(forms.ModelForm):
         )
         widgets = {
             'land_acquisition':forms.Select(attrs={'class':'form-control form-control-uniform'}),
-            'image':forms.FileInput(),
+            'image':forms.FileInput(attrs={'class':'form form-control form-input-styled'}),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 600, 'map_height': 400}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
@@ -833,7 +833,7 @@ class ProjectUpdateForm(forms.ModelForm):
             'water_suply':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_water_suply")'}),
             'cond_provided_for_wy':forms.Textarea(attrs={'class':'summernote'}),
             'target_market':forms.Textarea(attrs={'class':'summernote'}),
-            'env_impac_ass_doc':forms.FileInput(attrs={'class':'form-control'}),
+            'env_impac_ass_doc':forms.FileInput(),
             'capital_utilization':forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'isNumber("id_capital_utilization")'}),
             'technology':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'automation':forms.Select(attrs={'class':'form-control form-control-uniform'}),
@@ -852,6 +852,6 @@ class SliderImageForm(forms.ModelForm):
         model = HomePageSlider
         fields = ('slider_image','alt_text')
         widgets = {
-            'slider_image':forms.FileInput(attrs={'class':'form-control'}),
+            'slider_image':forms.FileInput(attrs={'class':'form form-control form-input-styled'}),
             'alt_text':forms.TextInput(attrs={'class':'form-control','placeholder':'Image Alt Text'})
         }

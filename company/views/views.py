@@ -64,6 +64,7 @@ class CreateMyCompanyProfile(LoginRequiredMixin,CreateView):
         company.craeted_by = self.request.user
         company.save()
         record_activity(self.request.user,"Company","Company Profile Created",company.id)
+        
         image_cropper(form.cleaned_data.get('x'),form.cleaned_data.get('y'),
                     form.cleaned_data.get('width'),form.cleaned_data.get('height'),
                     company.logo,400,400)
@@ -130,6 +131,16 @@ class CreateMyCompanyDetail(LoginRequiredMixin,UpdateView):
         company.last_updated_by = self.request.user
         company.last_updated_date = timezone.now()
         company.save()
+
+        fbpidi = Company.objects.filter(main_category = 'FBPIDI')
+        if fbpidi:
+            fbpidi = fbpidi.first()
+            message = CompanyMessage(company = fbpidi, name= f'{company.contact_person.first_name} {company.contact_person.last_name} ({company.contact_person.username})',
+                                    email = company.contact_person.email, link = f'/admin/company_detail/{company.id}/',
+                                    message = f'New Company created by the name {company.name} with a contact person {company.contact_person.username}. You can use the link below to check the company profile!',)
+            message.save()
+
+        
         messages.success(self.request,"Company Detail Information Added")
         return redirect("admin:update_company_info",pk=self.kwargs['pk'])
     
