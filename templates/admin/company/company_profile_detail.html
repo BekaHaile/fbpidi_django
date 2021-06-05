@@ -12,6 +12,9 @@
 	<script src="/static/admin/global_assets/js/plugins/ui/prism.min.js"></script>
 	<script src="/static/admin/global_assets/js/demo_pages/extra_fab.js"></script>
 	<script src="/static/admin/assets/js/company_detail.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/pickers/color/spectrum.js"></script>
+	<script src="/static/admin/global_assets/js/plugins/forms/styling/switchery.min.js"></script>
+	<script src="/static/admin/global_assets/js/demo_pages/picker_color.js"></script>
 
 	<link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
 	<script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
@@ -273,13 +276,17 @@
 										</div>
 										
 										<div class="form-group row">
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<label for="">{{form.contact_person.label}} *</label>
 												{{form.contact_person}}
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<label for="">{{form.ownership_form.label}} *</label>
 												{{form.ownership_form}}
+											</div>
+											<div class="col-md-4">
+												<label for="">{{form.color_theme.label}} *</label>
+												{{form.color_theme}}
 											</div>
 										</div>
 										
@@ -292,7 +299,11 @@
 											<div class="col-md-6">
 												<label for="">{{form.category.label}} *</label>
 												{{form.category}}									
-										</div>
+											</div>
+											<div class="col-md-4">
+												<label for="">{{form.color_text.label}} *</label>
+												{{form.color_text}}
+											</div>
 										</div>
 										
 										<div class="form-group row">

@@ -1,7 +1,7 @@
  
 
 from django.urls import path,include
-from accounts.views import CustomerSignUpView,CompleteLoginView,LoginView, Subscribe
+from accounts.views import CustomerSignUpView,CompleteLoginView,LoginView, Subscribe,send_verification_email
 from accounts.profile_view import *
 appname = "accounts"
 urlpatterns = [
@@ -15,6 +15,6 @@ urlpatterns = [
     path("mydash/",ProfileView.as_view(),name="mydash"),
     path("myfavorite/",MyFavorite.as_view(),name="favorite"),
     path("orders/",MyOrders.as_view(),name="orders"),
-
+    path('send-verification-email/<request_user>/',send_verification_email,name="send_v_email"),
     
 ]

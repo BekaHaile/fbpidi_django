@@ -388,13 +388,16 @@ class CompanyProfileForm(forms.ModelForm):
         model = Company
         fields = (
             'ownership_form','name','name_am','geo_location','logo','established_yr',
-            'main_category','trade_license','detail','detail_am',
+            'main_category','trade_license','detail','detail_am','color_theme','color_text',
             )
         widgets = {
+            'color_text':forms.TextInput(attrs={'class':'form-control colorpicker-show-input','data-preferred-format':'hex','data-fouc':'data-fouc'}),
+            'color_theme':forms.TextInput(attrs={'class':'form-control colorpicker-show-input','data-preferred-format':'hex','data-fouc':'data-fouc'}),
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
             'logo':forms.FileInput(attrs={'class':''}),
-            'geo_location':gis_form.OSMWidget(attrs={'required':True,'map_width': 800, 'map_height': 400}),
+            'geo_location':gis_form.OSMWidget(attrs={'required':True,'map_width': 800, 'map_height': 400,'default_lat': 9.034063,
+                         'default_lon': 38.752460,'default_zoom': 6}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'main_category':forms.Select(attrs={'class':'form-control form-control-uniform',}),
             'trade_license':forms.FileInput(attrs={'class':''}),
@@ -422,9 +425,11 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
         model = Company
         fields = (
             'contact_person','name','name_am','logo','ownership_form','established_yr',
-            'main_category','trade_license','geo_location','detail','detail_am',
+            'main_category','trade_license','geo_location','detail','detail_am','color_theme','color_text',
             )
         widgets = {
+            'color_text':forms.TextInput(attrs={'class':'form-control colorpicker-show-input','data-preferred-format':'hex','data-fouc':'data-fouc'}),
+            'color_theme':forms.TextInput(attrs={'class':'form-control colorpicker-show-input','data-preferred-format':'hex','data-fouc':'data-fouc'}),
             'contact_person':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
@@ -490,14 +495,17 @@ class CompanyUpdateForm(forms.ModelForm):
             'efluent_treatment_plant','env_mgmt_plan',
             'gas_carb_emision','compound_allot','comunity_compliant','env_focal_person','safety_profesional',
             'notification_procedure','university_linkage','recall_system',
-            'quality_defects','gas_waste_mgmnt_measure','support_required',
+            'quality_defects','gas_waste_mgmnt_measure','support_required','color_theme','color_text',
             
             )
         widgets = {
                 # 'contact_person':forms.TextInput(attrs={'class':'form-control'}),
+                'color_theme':forms.TextInput(attrs={'class':'form-control colorpicker-show-input','data-preferred-format':'hex','data-fouc':'data-fouc'}),
+                'color_text':forms.TextInput(attrs={'class':'form-control colorpicker-show-input','data-preferred-format':'hex','data-fouc':'data-fouc'}),
                 'expansion_plan':forms.Textarea(attrs={'class':'summernote'}),
                 'orgn_strct':forms.FileInput(),
-                'geo_location':gis_form.OSMWidget(attrs={'map_width': 500, 'map_height': 250}),
+                'geo_location':gis_form.OSMWidget(attrs={'map_width': 500, 'map_height': 250,'default_lat': 9.034063,
+                         'default_lon': 38.752460,'default_zoom': 6}),
                 'lab_test_analysis':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'lab_equipment':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'outsourced_test_param':forms.Textarea(attrs={'class':'summernote'}),
@@ -621,7 +629,8 @@ class InvestmentProjectForm(forms.ModelForm):
             'contact_person':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'description':forms.Textarea(attrs={'class':'summernote'}),
             'description_am':forms.Textarea(attrs={'class':'summernote'}),
-            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400,'default_lat': 9.034063,
+                         'default_lon': 38.752460,'default_zoom': 6}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
         }
 
@@ -649,7 +658,8 @@ class InvestmentProjectForm_ForSuperAdmin(forms.ModelForm):
             'company':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'image':forms.FileInput(),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
-            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400}),
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 800, 'map_height': 400,'default_lat': 9.034063,
+                         'default_lon': 38.752460,'default_zoom': 6}),
             'owners_nationality':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Owners Nationality'}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
@@ -809,7 +819,8 @@ class ProjectUpdateForm(forms.ModelForm):
             'land_acquisition':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'image':forms.FileInput(),
             'ownership_form':forms.Select(attrs={'class':'form-control form-control-uniform',}),
-            'geo_location':gis_form.OSMWidget(attrs={'map_width': 600, 'map_height': 400}),
+            'geo_location':gis_form.OSMWidget(attrs={'map_width': 600, 'map_height': 400,'default_lat': 9.034063,
+                         'default_lon': 38.752460,'default_zoom': 6}),
             'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
             'project_name':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in English'}),
             'project_name_am':forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Investment Project Name in Amharic'}),
