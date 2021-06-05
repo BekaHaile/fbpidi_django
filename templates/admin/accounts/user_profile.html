@@ -12,7 +12,8 @@
 	<script src="/static/admin/global_assets/js/plugins/ui/fullcalendar/fullcalendar.min.js"></script> 
 	<script src="/static/admin/global_assets/js/demo_pages/user_pages_profile_tabbed.js"></script>
 	<!-- /theme JS files -->
- 
+	<script src="/static/admin/global_assets/js/plugins/forms/inputs/inputmask.js"></script>
+
 {% endblock %}
  
 
@@ -151,7 +152,7 @@
 				                        		<div class="col-md-6">
 													<label>{{form.phone_number.label}}</label>
 													{{form.phone_number}}
-													<span class="form-text text-muted">+99-99-9999-9999</span>
+													<span class="form-text text-muted">+251-99999-9999</span>
 				                        		</div>
 
 												<div class="col-md-6">
@@ -207,6 +208,8 @@
 	$(document).ready(
 		function (){
 			$("#id_username").prop('readonly',true);
+			$("#id_email").prop('readonly',true);
+			$("#id_phone_number").attr("data-mask","+251-99999-9999");
 		}
 	);
 

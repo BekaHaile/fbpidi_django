@@ -53,13 +53,26 @@ class CompanyAdminSignUpView(CreateView):
             user = form.save()
             user.save()
             sendEmailVerification(self.request,user)
-            return render(self.request,'email/confirm_registration_message.html',
-                {'message':"Please Verify your email address to complete the registration\n"
-                +"If you can\'t find the mail please check it in your spam folder!"})
+            return render(self.request,'email/confirm_registration_message_admin.html',
+                {'message':"Verification Email is Sent,\nPlease Verify your email address to complete the registration\n"
+                +"If you can\'t find the mail please check it in your spam folder!",'user_to_activate':user})
             # return redirect('admin:complete_company_profile')
         else:
             return render(self.request,'registration/admin_signup.html',{'form':form})
 
+def send_verification_email(request,request_user):
+    try:
+        user = UserProfile.objects.get(id=request_user)
+        sendEmailVerification(request,user)
+        return render(request,'email/confirm_registration_message_admin.html',
+                {'message':"Verification Email is Sent,\n Please Verify your email address to complete the registration\n"
+                +"If you can\'t find the mail please check it in your spam folder!",'user_to_activate':user})
+    except UserProfile.DoesNotExist:
+        return redirect('error_404')
+    except Exception:
+        user = UserProfile.objects.get(id=request_user)
+        return render(request,'email/confirm_registration_message_admin.html',
+                {'message':"Verification Email is Not Sent, Please Try Again!!",'user_to_activate':user})
 # view for customer sign up
 class CustomerSignUpView(CreateView):
     model = UserProfile
@@ -115,14 +128,18 @@ def activate(request, uidb64, token):
         user.save()
         sendWelcomeEmail(request,user)
         if user.is_staff:
-            return render(request,'email/confirm_registration_message.html',
-            {'message':"Thank you for your email confirmation. Now you can login to your account.",'url':'admin:login'})
+            return render(request,'email/confirm_registration_message_admin.html',
+            {'message':"Thank you! Your Account is Successfully Verified & active.\n Now you can login to your account.",'url':'admin:login'})
         elif user.is_staff is False:
             return render(request,'email/confirm_registration_message.html',
-            {'message':"Thank you for your email confirmation. Now you can login to your account.",'url':'login'})
+            {'message':"Thank you! Your Account is Successfully Verified & active.\n Now you can login to your account.",'url':'login'})
     else:
-        return render(request,'email/confirm_registration_message.html',
-        {'message':"Activation link is invalid!"})
+        if user.is_staff:
+            return render(request,'email/confirm_registration_message_admin.html',
+            {'message':"Activation link is invalid/Expired!, Please click the Send Email Verification Button",})
+        elif user.is_staff is False:
+            return render(request,'email/confirm_registration_message.html',
+                 {'message':"Activation link is invalid/Expired!, Please click the Send Email Verification Button"})
 
 # 
 def api_activate(request, uidb64, token):
