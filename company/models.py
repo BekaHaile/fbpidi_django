@@ -1,4 +1,5 @@
 
+from fbpims.settings import AUTH_USER_MODEL
 from admin_site.models import (Category, CompanyDropdownsMaster,
                                ProjectDropDownsMaster,RegionMaster)
 from django.conf import settings
@@ -380,6 +381,7 @@ class CompanyMessage(models.Model):
 	name = models.CharField(max_length = 50, verbose_name='Sender Name')
 	email = models.EmailField(verbose_name="Sender Email")
 	message = models.TextField()
+	link=models.CharField(max_length=200, verbose_name='additional_link', blank=True, null=True)
 	replied = models.BooleanField(default=False)
 	created_date = models.DateTimeField(auto_now_add=True)
 
@@ -399,6 +401,7 @@ class CompanyMessageReply(models.Model):
 	message = models.ForeignKey(CompanyMessage, on_delete = models.CASCADE)
 	created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
 	reply = models.TextField()
+	
 	created_date = models.DateTimeField(auto_now_add=True)
 
 	class Meta:

@@ -9,10 +9,11 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic.list import ListView
 
 
 from accounts.models import UserProfile
-from chat.models import ChatMessages
+from chat.models import ChatMessages, Notification
 from chat.api.serializer import ChatMessagesSerializer
 from accounts.api.serializers import UserInfoSerializer
 from admin_site.decorators import company_created,company_is_active
@@ -185,3 +186,16 @@ def get_grouped_chats(user, excluded_user = None):
 
 
         # return {'count':unread_messages.count(), 'unread_messages':}
+
+
+# Notifications
+
+class AdminNotificationsList(LoginRequiredMixin, View):
+     def get(self, *args, **kwargs):
+        try:
+            return render(self.request, 'admin/chat/admin_notifications_list.html', {'object_list':Notification.new_notifications(self.request.user)})
+        except Exception:
+            return redirect('admin:error_404')
+
+
+

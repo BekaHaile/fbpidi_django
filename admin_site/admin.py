@@ -61,7 +61,7 @@ from company.views.all_report_view import *
 from company.views.project_report import *
 
 from accounts.forms import AdminLoginForm
-from chat.views import AdminChatList
+from chat.views import AdminChatList,AdminNotificationsList
 
 def create_ref_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits,k=30))
@@ -243,6 +243,7 @@ class CustomAdminSite(admin.AdminSite):
             
             # path("",include("company.urls")),
             path("admin_chat_list/", wrap(AdminChatList.as_view()), name = "admin_chat_list"),
+            path("notifications_list/", wrap(AdminNotificationsList.as_view()), name = "admin_notifications"),
 
             # Company Paths
             # path("",wrap(include("company.urls"))),

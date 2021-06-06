@@ -187,7 +187,9 @@ class ProductPackaging(models.Model):
     amount = models.FloatField(verbose_name="Amount",default=0)	 
     local_input	= models.FloatField(default=0,verbose_name="Source of Local Inputs in %")			
     import_input	= models.FloatField(default=0,verbose_name="Source of Imported Inputs in %")			
-    wastage	= models.IntegerField(verbose_name="Wastage in %",default=0)
+    # wastage	= models.IntegerField(verbose_name="Wastage in %",default=0)
+    wastage	= models.FloatField(verbose_name="Wastage in %",default=0)
+
     is_active = models.BooleanField(default=False)
     reserve_attr0 = models.CharField(max_length=255,default="")
     reserve_attr1 = models.CharField(max_length=255,default="")

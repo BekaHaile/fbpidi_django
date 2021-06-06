@@ -3,7 +3,9 @@
 {% load admin_template_tags %}
 {%load crispy_forms_tags%}
 {% block extrastyle %}
-
+  <!-- file selecting js -->
+  <script src="/static/admin/global_assets/js/demo_pages/user_pages_profile_tabbed.js"></script>
+  <!-- /file selecting js  -->
 	<!-- links for image cropper -->
 	<script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 	<script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
@@ -359,9 +361,12 @@
 												<div class="col-md-6">
 													<label>{{form.orgn_strct.label}} *</label>
 													<div class="uniform-uploader">
-														{{form.orgn_strct}}
-														<span class="filename" style="user-select: none;">No file selected</span>
-														<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+														<div class="col-lg-12">
+															{{form.orgn_strct}}
+													
+
+														</div>
+														
 													</div>
 													<span class="form-text text-muted">{{form.orgn_strct.help_text}}</span>
 													<span class="form-text text-warning">{{form.orgn_strct.errors}}</span>

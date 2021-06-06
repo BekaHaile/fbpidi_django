@@ -70,7 +70,7 @@ class BlogsForm(forms.ModelForm):
         model = Blog
         fields = ('blogImage','title', 'tag', 'content','publish','title_am','tag_am','content_am')
         widgets = {
-                    'blogImage': forms.FileInput(attrs={'id': 'blogImage' ,'accept': 'image/*'}),
+                    'blogImage': forms.FileInput(attrs={'id': 'blogImage' ,'accept': 'image/*', 'class':'form form-control form-input-styled'}),
                     'content': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in English'}),
                     'content_am': forms.Textarea(attrs={'class':'summernote','placeholder':'Blog Content in Amharic'}),
                     'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Title of the Blog in English'}),
@@ -288,7 +288,7 @@ class NewsForm(forms.ModelForm):
     # NEWS_CATAGORY = ( )
     NEWS_CATAGORY = [ ('', 'Select Category'),('Bevearage','Bevearage'),('Business','Business'), ('Food','Food'),('Job Related','Job Related'),('New Product Release','New Product Release'),('Pharmaceutical','Pharmaceutical'), ('Statistics','Statistics'), ('Technological','Technological')]
     catagory = forms.ChoiceField( required = True, choices= NEWS_CATAGORY, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
-    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field", 'accept': 'image/*'}) )
+    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form form-control form-input-styled', 'id': "image_field", 'accept': 'image/*'}) )
     class Meta:
         model = News
         fields = ('title', 'title_am', 'description', 'description_am', 'catagory','image')
@@ -301,7 +301,7 @@ class NewsForm(forms.ModelForm):
 
 class CompanyEventForm(forms.ModelForm):
     STATUS_CHOICE = [ ('Upcoming', 'Upcoming'),('Open', 'Open' )]
-    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field",'accept': 'image/*'}) )
+    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form form-control form-input-styled', 'id': "image_field",'accept': 'image/*'}) )
     class Meta:
         model=CompanyEvent
         fields = ('title','title_am','description','description_am','image', 'start_date', 'end_date')
@@ -355,7 +355,7 @@ class CommentReplayForm(forms.ModelForm):
         }
  
 class AnnouncementForm(forms.ModelForm):
-    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "blogImage",'accept': 'image/*'}) )
+    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form form-control form-input-styled', 'id': "blogImage",'accept': 'image/*'}) )
     
 
     class Meta:
@@ -400,8 +400,8 @@ class ProjectForm(forms.ModelForm):
 class ResearchForm(forms.ModelForm):
     status = forms.ChoiceField(choices = (('','Select Status'),('Completed','Completed'),('Inprogress','Inprogress')), required=True, widget=forms.Select(attrs={'type': 'dropdown','class':'form-control'}),)
     category = forms.ModelChoiceField(queryset=ResearchProjectCategory.objects.all(), empty_label = "Select Research Category", required=True, widget =forms.Select(attrs={'class':'form-control form-control-uniform', 'accept': 'image/*'}), )
-    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form-input-styled', 'id': "image_field", 'accept': 'image/*'}) )
-    files = forms.FileField( required=False,  widget=forms.FileInput( attrs={'class':'form-input-styled', 'multiple':'True'}) )
+    image = forms.ImageField(allow_empty_file=True,  required=True, widget= forms.FileInput(attrs={'class': 'form form-control form-input-styled', 'id': "image_field", 'accept': 'image/*'}) )
+    files = forms.FileField( required=False,  widget=forms.FileInput( attrs={'class':'form form-control form-input-styled', 'multiple':'True'}) )
     class Meta:
         model = Research
         fields  = ('title','description','status','image','category')
@@ -420,7 +420,7 @@ class DocumentForm(forms.ModelForm):
             widgets = {
                 'title': forms.TextInput( attrs={'class': 'form-control form-control-uniform'}),
                 'category': forms.Select( attrs={'type':'dropdown', 'class':'form-control'}),
-                'document' : forms.FileInput( attrs={'class':'form-input-styled'})
+                'document' : forms.FileInput( attrs={'class':'form form-control form-input-styled'})
             }
  
 

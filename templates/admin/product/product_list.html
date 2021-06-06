@@ -139,7 +139,11 @@
 					<td>{{cat.name}}</td>
 					
 					<td>	
-						{{cat.get_subcategory}}	
+						{% if cat.company.main_category == 'Pharmaceuticals'%}
+						{{cat.reserve_attr0.name|safe|truncatechars_html:30}}
+						{% else %}	
+						{{cat.brand.product_type.sub_category_name}}
+						{% endif %}
 					</td>
 					<td>{{cat.company.name|safe|truncatechars_html:30}}</td>
 					<td>

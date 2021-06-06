@@ -8,9 +8,8 @@
  <!-- /file selecting js  -->
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
-
-<link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
-<script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
+<!-- 
+<link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css/"> -->
 <!------------>
 
 {%block content%}
@@ -230,87 +229,82 @@
 			</div>
 		</section>
 		<!--Add Listing-->
+<script type="module" src="/static/admin/cropperjs/dist/cropper.js"></script>
+<script type="module" src="/static/admin/cropperjs/js/cropper.min.js"></script>
 
-		<!-- <script>
-			$(document).ready(function () {
-				$('#summernote').summernote();
-				$('.summernote').summernote();
-			});
-			var cropX;
-			var cropY;
-			var cropWidth;
-			var cropHeight;
-			var modal_image  = document.getElementById("modal_image_field");
+<script type="module" src="/static/admin/cropperjs/dist/cropper.esm.js"></script>
+
+<script>
+	
+	var cropX;
+	var cropY;
+	var cropWidth;
+	var cropHeight;
+	var modal_image  = document.getElementById("modal_image_field");
+	
+	$("#image_field").change(function () {
+
+	
+		if (this.files && this.files[0]) {
+			var reader = new FileReader();
+			reader.readAsDataURL(this.files[0])
 			
-			$("#image_field").change(function () {
-			
-				if (this.files && this.files[0]) {
-					var reader = new FileReader();
-					reader.readAsDataURL(this.files[0])
-					
-					reader.onload = function (e) {
-									var c = document.getElementById('image_field')
-									
-									
-								
-									 $("#modal_image_field").attr("src", e.target.result);
-									$("#modalCrop").modal("show");
-									
-									e.target.result = "";	
-								}
-		
-		
+			reader.onload = function (e) {
+							var c = document.getElementById('image_field')
+							
+							 $("#modal_image_field").attr("src", e.target.result);
+							$("#modalCrop").modal("show");
+                            // document.getElementById("file_selected").innerHTML = this.files[0].name
+							e.target.result = "";	
+						}
+
+
+			}
+		})
+
+	$("#modalCrop").on("shown.bs.modal", function () {
+		modalCropEdit = document.getElementById('modal_image_field')
+		cropper = new Cropper(modalCropEdit,{
+					viewMode: 1,
+					aspectRatio: 1/1,
+					minCropBoxWidth: 100,
+					minCropBoxHeight: 100,
+
+					crop(event){
+						setImageCropProperties(
+							modal_image_field,
+							event.detail.x,
+							event.detail.y,
+							event.detail.width,
+							event.detail.height)
 					}
 				})
-		
-			$("#modalCrop").on("shown.bs.modal", function () {
-				modalCropEdit = document.getElementById('modal_image_field')
-				cropper = new Cropper(modalCropEdit,{
-							viewMode: 1,
-							aspectRatio: 3/1,
-							minCropBoxWidth: 300,
-							minCropBoxHeight: 100,
-		
-							crop(event){
-								
-								
-								setImageCropProperties(
-									modal_image_field,
-									event.detail.x,
-									event.detail.y,
-									event.detail.width,
-									event.detail.height)
-							}
-						})
-			})
-			var cancel = document.getElementById("cancel-btn")
-			cancel.addEventListener("click", function(e){
-				$("#modalCrop").modal("hide");
-			})
-			var confirm = document.getElementById("js-crop-and-upload-button")
-			confirm.addEventListener("click",function(event){
-		
-				cropImage(cropX,cropY,cropWidth,cropHeight);
-				
-				$("#modalCrop").modal("hide");
-		
-			})
-		
-			function setImageCropProperties(image,x,y,width,height){
-				
-				cropX = x;
-				cropY = y;
-				cropWidth = width;
-				cropHeight = height;  
-			}
-			
-			function cropImage(x,y,width,height){
-				document.getElementById("x").value = cropX;
-				document.getElementById("y").value = cropY;
-				document.getElementById("width").value = cropWidth;
-				document.getElementById("height").value = cropHeight;
-			}
-			
-		</script>
-		 -->
-		{%endblock%}
+	})
+	var cancel = document.getElementById("cancel-btn")
+	cancel.addEventListener("click", function(e){
+		$("#modalCrop").modal("hide");
+	})
+	var confirm = document.getElementById("js-crop-and-upload-button")
+	confirm.addEventListener("click",function(event){
+
+		cropImage(cropX,cropY,cropWidth,cropHeight);
+		$("#modalCrop").modal("hide");
+
+	})
+
+	function setImageCropProperties(image,x,y,width,height){
+		cropX = x;
+		cropY = y;
+		cropWidth = width;
+		cropHeight = height;  
+	}
+	
+	function cropImage(x,y,width,height){
+		document.getElementById("x").value = cropX;
+		document.getElementById("y").value = cropY;
+		document.getElementById("width").value = cropWidth;
+		document.getElementById("height").value = cropHeight;
+	}
+	
+</script>
+		 {%endblock%}

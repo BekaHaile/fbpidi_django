@@ -11,7 +11,6 @@ from background_task.models import Task, CompletedTask
 
 @background
 def clear_completed_tasks():
-    
     CompletedTask.objects.all().delete()  
     print("Completed tasks cleared successfully")
 

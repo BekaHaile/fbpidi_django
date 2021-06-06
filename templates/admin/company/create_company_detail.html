@@ -8,6 +8,9 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>FBPIDI_Admin Company Form</title>
+	  <!-- file selecting js -->
+	  <script src="/static/admin/global_assets/js/demo_pages/user_pages_profile_tabbed.js"></script>
+	  <!-- /file selecting js  -->
 	<!-- Global stylesheets -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
 	<link href="/static/admin/global_assets/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
@@ -179,10 +182,8 @@
 													</div>
 													<div class="col-md-6">
 														<label>{{form.orgn_strct.label}} *</label>
-														<div class="uniform-uploader">
+														<div>
 															{{form.orgn_strct}}
-															<span class="filename" style="user-select: none;">No file selected</span>
-															<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
 														</div>
 														<span class="form-text text-muted">{{form.orgn_strct.help_text}}</span>
 														<span class="form-text text-warning">{{form.orgn_strct.errors}}</span>

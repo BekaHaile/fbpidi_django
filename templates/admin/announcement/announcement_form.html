@@ -4,7 +4,9 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 
-
+  <!-- file selecting js -->
+  <script src="/static/admin/global_assets/js/demo_pages/user_pages_profile_tabbed.js"></script>
+  <!-- /file selecting js  -->
 
 <link rel="stylesheet" href="/static/admin/cropperjs/dist/cropper.min.css">
 <script type="module" src="/static/admin/cropperjs/dist/cropper.min.js"></script>
@@ -69,10 +71,7 @@
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3">Select files:</label>
 						<div class="col-lg-9">
-							<div class="uniform-uploader">{{form.image}}<span
-									class="filename" style="user-select: none;">No file selected</span><span
-									class="action btn bg-warning" style="user-select: none;">Choose File</span>
-							</div>
+							{{form.image}}
 
 						</div>
 					</div>

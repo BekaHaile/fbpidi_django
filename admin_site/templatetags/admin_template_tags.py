@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from company.models import Company,CompanyStaff, CompanyMessage
 from product.models import Product, ProductInquiry
-from chat.models import  ChatMessages
+from chat.models import  ChatMessages, Notification
 from chat import views
 from collaborations.models import Document, Document_Category
 
@@ -169,6 +169,9 @@ def count_unread_chats(user):
 def count_unread_inbox(company):
     return CompanyMessage.objects.filter(company = company, replied =False).count()
 
+@register.simple_tag
+def count_notifications(user):
+    return Notification.new_notifications(user).count()
 
 @register.simple_tag
 def count_new_inquiry_requests(user_company):

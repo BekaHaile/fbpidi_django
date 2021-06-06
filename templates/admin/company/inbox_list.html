@@ -92,7 +92,9 @@
                     <td><b>Sender Email</b></td>
                     <td><b>Sender Name</b></td>
                     <td><b>Status</b></td>
+                    <td><b>Replied By</b></td>
                     <td><b>Message Hint</b></td>
+
                     <td><b>Request Date</b></td>
                 </tr>		
             </thead>								
@@ -133,11 +135,18 @@
                                         </div>
                                     </a>
                                 </td>
-                                <!-- the rest is the same whether the user is a receiver or a sender -->
+                                <td class="table-inbox-message">
+                                    {% if message.replied %}
+                                    <div class="table-inbox-subject">{{message.companymessagereply_set.first.created_by}}</div>
+                                    {% endif %}
+                                    
+                                </td>
+
                                 <td class="table-inbox-message">
                                     <div class="table-inbox-subject">{{message.message|truncatechars_html:20}}</div>
-                                    <!-- <span class="text-muted font-weight-normal">To the London docks, you may have seen a crippled beggar (or KEDGER, as the sailors say) holding a painted board before him, representing the tragic scene in which he lost his leg</span> -->
+                                    
                                 </td>
+
                                 
                                 <td class="table-inbox-time ">
                                    <p class  = "mr-5">{{message.created_date}}</p> 
@@ -148,8 +157,6 @@
                          <div id="compose{{message.id}}" class="modal fade" tabindex="-1">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <form action = "{% url 'admin:admin_inbox_detail' pk=message.id %} " method = "POST" enctype="multipart/form-data">
-                                        {% csrf_token %}
                                         <div class="modal-header">
                                             <h5 class="modal-title"><b>Compose Reply</b> </h5>
                                         
@@ -168,10 +175,15 @@
                                                         <blockquote class = "form-control" style = "height:auto">
                                                             {{message.message}} 
                                                         </blockquote>
+                                                        {% if message.link %}
+                                                        <a href="{{message.link}}" >Attached Link</a>
+                                                       
+
+                                                        {% endif %}
                                                        
                                                     </div>
                                                 
-                                                   
+                                                 
                                                     <br>
                                                     {% if message.replied %}
                                                     <b>Your previous reply, You can resend another reply, by editing.</b>
@@ -181,6 +193,9 @@
                                                     </div>
                                                     {% else %}
                                                     <p>Write Your Reply Here</p>
+                                            <form action = "{% url 'admin:admin_inbox_detail' pk=message.id %} " method = "POST" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                    
                                                     <div class="form-group">
                                                         <textarea class="form-control" name="reply_message" rows="7" placeholder="Reply Message" required></textarea>
                                                     </div>

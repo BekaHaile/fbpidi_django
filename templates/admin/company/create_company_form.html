@@ -181,9 +181,11 @@
 											<div class="col-md-6">
 												<label>{{form.trade_license.label}} *</label>
 												<div class="uniform-uploader">
-													{{form.trade_license}}
-													<span class="filename" style="user-select: none;">No file selected</span>
-													<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+													<div class="col-lg-12">
+														{{form.trade_license}}
+
+													</div>
+													
 												</div>
 												<span class="form-text text-muted">{{form.trade_license.help_text}}b</span>
 												<span class="form-text text-warning">{{form.trade_license.errors}}</span>
@@ -195,9 +197,10 @@
 												{{form.width}}
 												<label>{{form.logo.label}} *</label>
 												<div class="uniform-uploader">
-													{{form.logo}}
-													<span class="filename" style="user-select: none;">No file selected</span>
-													<span class="action btn bg-warning" style="user-select: none;">Choose File</span>
+													<div class="col-lg-12">
+														{{form.logo}}
+													</div>
+													
 												</div>
 												<span class="form-text text-muted">{{form.logo.help_text}}</span>
 												<span class="form-text text-warning">{{form.logo.errors}}</span>
