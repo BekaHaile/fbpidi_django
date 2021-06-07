@@ -107,29 +107,31 @@
                 <div class="col-xl-7 col-lg-7 col-sm-4 col-7">
                     <div class="top-bar-left d-flex">
                         <div class="clearfix">
+                            {% get_fbpidi as fbpidi %}
                             <ul class="socials">
+                                {% if fbpidi %}
                                 <li>
-                                    <a class="social-icon text-dark" href="#"><i class="fa fa-facebook"></i></a>
+                                    <a class="social-icon text-dark" href="{{fbpidi.get_company_address.facebooklink}}" target="_blank"><i class="fa fa-facebook"></i></a>
                                 </li>
                                 <li>
-                                    <a class="social-icon text-dark" href="#"><i class="fa fa-twitter"></i></a>
+                                    <a class="social-icon text-dark" href="{{fbpidi.get_company_address.twiterlink}}"><i class="fa fa-twitter"></i></a>
                                 </li>
                                 <li>
-                                    <a class="social-icon text-dark" href="#"><i class="fa fa-linkedin"></i></a>
+                                    <a class="social-icon text-dark" href="{{fbpidi.get_company_address.linkedinlink}}"><i class="fa fa-linkedin"></i></a>
                                 </li>
                                 <li>
-                                    <a class="social-icon text-dark" href="#"><i class="fa fa-google-plus"></i></a>
+                                    <a class="social-icon text-dark" href="{{fbpidi.get_company_address.email}}"><i class="fa fa-google-plus"></i></a>
                                 </li>
                                 <li>
-                                    <a href="#compose_modal"  data-toggle="modal" data-target="#compose_modal" >
+                                    <a href="#invite_modal"  data-toggle="modal" data-target="#invite_modal" >
                                         <i class="fa fa-share-alt"></i> 
                                    
                                     </a>
                                    
-    
                                 </li>
+                                {% endif %}
                                  <!-- Compose modal -->
-                                    <div id="compose_modal" class="modal fade" tabindex="-1">
+                                    <div id="invite_modal" class="modal fade" tabindex="-1">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -140,7 +142,8 @@
                                                         <div class="modal-body">
                                                             <div class="form-group" style="padding-left: 20px;">                
                                                                 <div style="margin-bottom: 10px;" class="row">
-                                                                    <h5> Please enter the email address </h5>
+                                                                    <h5> Please enter the email address: </h5>
+                                                                    <small>You can invite multiple email addresses by separating them by , (commma) <br> ex. email1@gmail.com, email2@gmail.com</small>
                                                                 </div>
                                                         
                                                                     <div style="margin-right: 5px; " class="mb-3 row">
@@ -169,13 +172,7 @@
                     <div class="top-bar-right">
                         <ul class="custom ">
 
-                            
-
-                           
-                           
-
                             {%if user.is_authenticated%}
-                            
                             {%if user.is_customer%}
                             <li  class="nav-item dropdown">
                                 <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown">
@@ -440,6 +437,7 @@
                             </li>
                         </ul>
                     </div>
+
                     <div class="col-xl-3 col-lg-6 col-md-12">
                         <h6>{% trans "Popular Listings" %}</h6>
                         <ul class="list-unstyled mb-0">
@@ -457,32 +455,72 @@
                                
                         </ul>
                     </div>
+                    {% get_fbpidi as fbpidi %}
                     <div class="col-xl-3 col-lg-6 col-md-12">
                         <h6 class="mt-6 mt-xl-0">{% trans "FBPIDI Contact" %}</h6>
                         <ul class="list-unstyled mb-0">
+                            {% if fbpidi %}
                             <li>
                                 <a href="#"><i class="fa fa-home mr-3 text-secondary"></i> Ethiopia, 
-                                    Addis Ababa, Welo Sefer</a>
+                                    {{fbpidi.get_company_address.region}}, {{fbpidi.get_company_address.city_town}}, {{fbpidi.get_company_address.subcity_zone}}, {{fbpidi.get_company_address.local_area}}  </a>
                             </li>
-                            <li>
-                                <a href="#"><i class="fa fa-globe mr-3 text-secondary"></i> FBPIDI Portal, 
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-envelope mr-3 fs-12 text-secondary"></i> </a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-phone mr-3 text-secondary"></i> + 251 911 111 111 , + 251
-                                    911 111 111</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-print mr-3 text-secondary"></i> + 251 111 111 111, + 251 111
-                                    111 111</a>
-                            </li>
+                                {% if fbpidi.get_company_address.website %}
+                                <li>
+                                    <a href="{{fbpidi.get_company_address.website}}"><i class="fa fa-globe mr-3 text-secondary"></i> FBPIDI Portal 
+                                        </a>
+                                </li>
+                                {% endif %}
+
+                                {% if fbpidi.get_company_address.email %}
+                                <li>
+                                    <a href="mailto:{{fbpidi.get_company_address.email}}"><i class="fa fa-envelope mr-3 fs-12 text-secondary"></i>Email</a>
+                                </li>
+                                {% endif %}
+                                {% if fbpidi.get_company_address.facebooklink %}
+                                <li>
+                                    <a href="{{fbpidi.get_company_address.facebooklink}} " target="_blank"><i class="fa fa-facebook mr-4 fs-12 text-secondary"></i>Facebook</a>
+                                </li>
+                                {% endif %}
+                            
+                                {% if fbpidi.get_company_address.phone_number %}
+                                <li>
+                                    <a href="#"><i class="fa fa-phone mr-3 text-secondary"></i> {{fbpidi.get_company_address.phone_number}} </a>
+                                </li>
+                                {% endif %}
+
+                                {% if fbpidi.get_company_address.fax %}
+                                <li>
+                                    <a href="#"><i class="fa fa-print mr-3 text-secondary"></i>{{fbpidi.get_company_address.fax}}</a>
+                                </li>
+                                {% endif %}
+                            {% endif %}
                         </ul>
                     </div>
-                    <div class="col-xl-3 col-lg-6 col-md-12"> 
+
+                  
+
+                    <div class="col-xl-3 col-lg-6 col-md-12">
+                        <h6 class="mt-6 mt-xl-0">{% trans "Related Links" %}</h6>
+                        <ul>
+                            <li>
+                                <a href="http://mor.gov.et/s"></i> {% trans "Ethiopian Ministry of Revenues" %}</a>
+                            </li>
+                            <li>
+                                <a href="http://www.investethiopia.gov.et/"></i>{% trans "Ethiopian Investment commission" %}</a>
+                            </li>
+                            
+                            <li>
+                                <a href="https://http://www.ethiopia.gov.et/"></i>{% trans "Ethiopian Portal" %}</a>
+                            </li>
+                            
+                            <li>
+                                <a href="https://www.mofed.gov.et/en/"></i>{% trans "Ministry of Finance" %}</a>
+                            </li>
+                            
+                        </ul>
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -914,8 +952,9 @@ function invite(){
 			}).then(e => e.json()).then(result=>{
 				if(result['error'] == false){
 
-					
+					document.getElementById("email").value = ""
 					window.alert("Invitation has been sent Successfully!")
+
 				}
 				else{
 					window.alert("Failed to send Invitation, please try again later!")

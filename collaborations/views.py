@@ -191,7 +191,7 @@ def Invite(request):
         if ',' in data['email']:
             emails = data['email'].split(',')
         else:
-            emails = data['email']
+            emails = [data['email']]
         
         emails = [email.strip() for email in emails]
         if sendInvitationEmail(request, emails):

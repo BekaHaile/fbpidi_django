@@ -181,7 +181,7 @@
                                     <form action = "{% url 'admin:admin_inquiry_reply' pk=inquiry.id %}" method = "POST" enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <div class="modal-header">
-                                            <h5 class="modal-title"><b>Compose Replay</b> </h5>
+                                            <h5 class="modal-title"><b>Compose Reply</b> </h5>
                                         
                                         </div>					
                                         <div class="modal-body">
@@ -206,13 +206,13 @@
                                                    
                                                     <br>
                                                     {% if inquiry.replied %}
-                                                    <h5><p>Your previous reply, You can resend another replay, by editing.</p></h5>
+                                                    <h5><p>Your previous reply, You can resend another reply, by editing.</p></h5>
                                                     
                                                     <div class="form-group">
                                                         <textarea class="form-control" name="reply_message" rows="10" placeholder="Reply Message" required>{{inquiry.productinquiryreply_set.first.reply}}</textarea>
                                                     </div>
                                                     {% else %}
-                                                    <h5><p>Write Your Replay Here</p></h5>
+                                                    <h5><p>Write Your Reply Here</p></h5>
                                                     <div class="form-group">
                                                         <textarea class="form-control" name="reply_message" rows="10" placeholder="Reply Message" required></textarea>
                                                     </div>
@@ -226,9 +226,9 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
                                             {% if inquiry.replied %}
-                                                <button type="submit" class="btn bg-primary">Replay Again</button>
+                                                <button type="submit" class="btn bg-primary">Reply Again</button>
                                             {% else %}
-                                            <button type="submit" class="btn bg-primary">Replay</button>
+                                            <button type="submit" class="btn bg-primary">Reply</button>
                                              {% endif %}
                                         </div>
                                     </form>

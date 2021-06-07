@@ -8,7 +8,7 @@
 <!-- /theme JS files -->
 
 {% endblock %}
-{%block pagename%}Comment Replay List{%endblock%}
+{%block pagename%}Comment Reply List{%endblock%}
 {%block nav%}<a href="{%url 'admin:forum_list'%}" class="breadcrumb-item">Forums</a>
 <a href="{%url 'admin:Forum_Comments' id=forum.id%}" class="breadcrumb-item">Forum Comments</a>
 <a href="" class="breadcrumb-item">Comment Replies</a>
@@ -27,7 +27,7 @@
 	
 	<div class="card">
 		<div class="card-header header-elements-inline">
-			<h5 class="card-title">Comment Replay</h5>
+			<h5 class="card-title">Comment Reply</h5>
 			<div class="header-elements">
 			</div>
 		</div>
@@ -39,7 +39,7 @@
 					<th>#</th>
 					<th>Forum Question</th>
 					<th>Comment</th>
-					<th>Comment Replay</th>
+					<th>Comment Reply</th>
 					<th>User</th>
 					<th>Timestamp</th>
 					
@@ -68,7 +68,7 @@
 									{% if user.is_superuser or user.get_company == reply.created_by.get_company %}
 
 									{% if perms.collaborations.delete_commentreplay %} 
-									<a href="{%url 'admin:delete' model_name='CommentReplayAdmin' id=reply.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this item?')"><i class="icon-trash"></i>Delete Comment Replay</a>
+									<a href="{%url 'admin:delete' model_name='CommentReplayAdmin' id=reply.id%}" class="dropdown-item" onclick="return confirm('Are you sure you want to Delete this item?')"><i class="icon-trash"></i>Delete Comment Reply</a>
 									{%endif%}
 
 									{%endif%}
@@ -77,7 +77,7 @@
 
 									{% if perms.collaborations.change_commentreplay %} 
 									<a href="{%url 'admin:comment_replay_detail' model_name='CommentReplay' id=reply.id%}" class="dropdown-item"  >
-										<i class="icon-pencil"></i>Edit Comment Replay</a>
+										<i class="icon-pencil"></i>Edit Comment Reply</a>
 										{%endif%}
 										{%endif%}
 								</div>
