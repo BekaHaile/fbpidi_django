@@ -149,8 +149,10 @@ def get_weekly_and_old(queryset):
 def send_news_and_blogs_weekly():
     print("____________________")
     print("Started sending week blogs and news for subscribed emails ...")
-    blogs = get_weekly_and_old(Blog.objects.filter(publish = True))
-    news = get_weekly_and_old(News.objects.all())
+    # blogs = get_weekly_and_old(Blog.objects.filter(publish = True))
+    # news = get_weekly_and_old(News.objects.all())
+    blogs= Blog.objects.all()
+    news=News.objects.all()
     if blogs['error']==False:
         if news['error'] == False:
             week_blogs_count = blogs['this_week_objects'].count()

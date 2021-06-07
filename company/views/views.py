@@ -148,6 +148,7 @@ class CreateMyCompanyDetail(LoginRequiredMixin,UpdateView):
         messages.warning(self.request,form.errors)
         return redirect("admin:create_mycompany_detail",pk=self.kwargs['pk'])
 
+
 class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
     model = Company
     form_class = MyCompanyDetailForm
@@ -192,6 +193,7 @@ class CreateCompanyDetail(LoginRequiredMixin,UpdateView):
     def form_invalid(self,form):
         messages.warning(self.request,form.errors)
         return redirect("admin:create_company_detail",pk=self.kwargs['pk'])
+
 
 class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
     model = Company
@@ -249,6 +251,7 @@ class ViewMyCompanyProfile(LoginRequiredMixin,UpdateView):
         else:
             return redirect("admin:update_company_info",pk=self.kwargs['pk'])
 
+
 @method_decorator(decorators,name='dispatch')
 class CompaniesView(LoginRequiredMixin,ListView):
     model = Company
@@ -258,6 +261,7 @@ class CompaniesView(LoginRequiredMixin,ListView):
 
     def get_queryset(self):
         return Company.objects.all().exclude(main_category="FBPIDI")
+
 
 class CompaniesDetailView(LoginRequiredMixin,UpdateView):
     model = Company
@@ -286,6 +290,7 @@ class CompaniesDetailView(LoginRequiredMixin,UpdateView):
         kwargs.update({'main_type': Company.objects.get(id=self.kwargs['pk']).main_category,
         'company':Company.objects.get(id=self.kwargs['pk'])})
         return kwargs
+
 
 class RateCompany(LoginRequiredMixin,UpdateView):
     model=Company

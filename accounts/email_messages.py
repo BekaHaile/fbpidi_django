@@ -16,15 +16,19 @@ from company.models import Company
 # welcome email, but the web activate view will render a web page, and the api does nothing.
 SITE_DOMAIN = "/localhost:8000/"
 
-def sendInvitationEmail(request, email, name = None):
+def sendInvitationEmail(request, emails):
     try:
         current_site = get_current_site(request)
         mail_subject = 'An invitation to use the IIMS system'
-        message = f"You are invite to use the IIMS system, through the following link. "
-        
-        to_email = email
+        name = request.user.username if request.user.is_authenticated else 'Someone'
+        message = get_template('email/invitation_email.html').render({
+            'name': name,
+            'domain': current_site.domain,
+        })
+
+       
         email = EmailMessage(
-        mail_subject, message, to=[to_email]
+        mail_subject, message, to=emails
         )
         email.content_subtype = "html"
         email.send()
@@ -52,8 +56,7 @@ def sendEmailVerification(request,user, redirect_url = 'activate'):
         )
         email.content_subtype = "html"
         email.send()
-        print("email sent")
-        # return email
+       
         return True
 
     except Exception as e :
@@ -174,7 +177,9 @@ def sendInquiryReplayEmail(request, inquiry, reply_message):
 
 def sendWeekBlogAndNews(blogs,week_blogs_count,news,week_news_count):
     try:
-        subscribers_email =[ s.email for s in Subscribers.objects.filter(is_active = True)]
+        # subscribers_email =[ s.email for s in Subscribers.objects.filter(is_active = True)]
+        subscribers_email =[ 'antenyismu@gmail.com']
+        
         mail_subject = f'Latest News and Blogs From FBPIDI'
         context = {
             'blogs': blogs,
