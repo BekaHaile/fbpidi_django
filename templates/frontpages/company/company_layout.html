@@ -310,6 +310,7 @@
                     <li><a href="{%url 'company_home' pk=object.id %}">{% trans "Home"%} <span class="fa fa-caret m-0"></span></a></li>
                     
                     <li><a href="{%url 'company_about' pk=object.id%}">{% trans "About Us" %} </a></li>
+                    <li><a href="{%url 'company_ads' pk=object.id%}">{% trans "Ads" %} </a></li>
                     {% if object.main_category != 'FBPIDI' %}
                         <li><a href="{%url 'company_products' pk=object.id%}">{% trans "Products" %} </a></li>
                     {% endif %}
