@@ -18,6 +18,11 @@ CAT_LIST = (
     ("Pharmaceuticals",'Pharmaceuticals'),
 )
 
+BOOLEAN_CHOICE = (
+    (True,'Yes'),
+    (False,'No'),
+)
+
 
 class Company(models.Model):
 	main_category = models.CharField(max_length=100,verbose_name="Company Type",choices=CAT_LIST)
@@ -57,7 +62,7 @@ class Company(models.Model):
 	new_product_developed	= models.TextField(verbose_name="New Product_Developed",null=True,blank=True)
 	new_product_developed_am	= models.TextField(verbose_name="New Product_Developed Amharic",null=True,blank=True) # under question
 	management_tools = models.ManyToManyField(CompanyDropdownsMaster,verbose_name="Management Tools",related_name="mgmt_tools")
-	electric_power = models.BooleanField(default=False)
+	electric_power = models.BooleanField(default=False,choices=BOOLEAN_CHOICE)
 	water_supply = models.BooleanField(default=False)
 	telecom	= models.BooleanField(default=False)
 	marketing_department = models.BooleanField(default=False,verbose_name="Does the company have Marketing Department section?")

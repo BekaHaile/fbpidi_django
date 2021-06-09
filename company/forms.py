@@ -521,6 +521,7 @@ class CompanyUpdateForm(forms.ModelForm):
                 'detail':forms.Textarea(attrs={'class':'summernote'}),
                 'detail_am':forms.Textarea(attrs={'class':'summernote'}),
                 'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
+                'electric_city':forms.RadioSelect(),
             }
         
      
