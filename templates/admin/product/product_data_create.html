@@ -132,7 +132,7 @@ Product Packaging Data Form
 		var date = new Date()
 		var current_year = date.getFullYear()-8;
 		var current_month = date.getMonth()+1;
-		$(".summernote").summernote();
+		
 		$("#id_activity_year").change(function(){
 			if($(this).val() != ""){
 				$("#id_half_year").prop("disabled",false);
