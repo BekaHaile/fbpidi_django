@@ -79,11 +79,12 @@ def get_current_quarter():
 def alert_employees_data(company):
     try:
         company = Company.objects.get(id=company)
-        employee_data = Employees.objects.filter(company=company,year_emp=get_current_year())
-        if employees_data.exists():
-            return True
-        else:
-            return False
+        if company.main_category != "FBPIDI":
+            employee_data = Employees.objects.filter(company=company,year_emp=get_current_year())
+            if employees_data.exists():
+                return True
+            else:
+                return False
     except Exception as e:
         return True
 
@@ -91,11 +92,12 @@ def alert_employees_data(company):
 def alert_production_capacity_data(company):
     try:
         company = Company.objects.get(id=company)
-        pcap_data = ProductionCapacity.objects.filter(company=company,year=get_current_year())
-        if pcap_data.exists():
-            return True
-        else:
-            return False
+        if company.main_category != "FBPIDI":
+            pcap_data = ProductionCapacity.objects.filter(company=company,year=get_current_year())
+            if pcap_data.exists():
+                return True
+            else:
+                return False
     except Exception as e:
         return True
 
@@ -103,11 +105,12 @@ def alert_production_capacity_data(company):
 def alert_input_need_data(company):
     try:
         company = Company.objects.get(id=company)
-        input_need_data = AnnualInputNeed.objects.filter(company=company,year=get_current_year())
-        if input_need_data.exists():
-            return True
-        else:
-            return False
+        if company.main_category != "FBPIDI":
+            input_need_data = AnnualInputNeed.objects.filter(company=company,year=get_current_year())
+            if input_need_data.exists():
+                return True
+            else:
+                return False
     except Exception as e:
         return True
 
@@ -115,11 +118,12 @@ def alert_input_need_data(company):
 def alert_demand_suply_data(company):
     try:
         company = Company.objects.get(id=company)
-        demand_supply = InputDemandSupply.objects.filter(company=company,year=get_current_year())
-        if demand_supply.exists():
-            return True
-        else:
-            return False
+        if company.main_category != "FBPIDI":
+            demand_supply = InputDemandSupply.objects.filter(company=company,year=get_current_year())
+            if demand_supply.exists():
+                return True
+            else:
+                return False
     except Exception as e:
         return True
 
@@ -135,18 +139,19 @@ def alert_sales_performance_data(company):
     flag = False
     try:
         company = Company.objects.get(id=company)
-        if quarter != "":
-            sales_performance = ProductionAndSalesPerformance.objects.filter(
-                company=company,
-                activity_year=get_current_year_half(),half_year=half
-            )
+        if company.main_category != "FBPIDI":
+            if quarter != "":
+                sales_performance = ProductionAndSalesPerformance.objects.filter(
+                    company=company,
+                    activity_year=get_current_year_half(),half_year=half
+                )
 
-            if sales_performance.exists():
-                flag =  True
+                if sales_performance.exists():
+                    flag =  True
+                else:
+                    flag =  False
             else:
-                flag =  False
-        else:
-            flag =  True
+                flag =  True
     except Exception as e:
         flag =  True
     return flag
@@ -166,18 +171,19 @@ def alert_job_created_data(company):
     flag = False
     try:
         company = Company.objects.get(id=company)
-        if quarter != "":
-            jobs_created = JobOpportunities.objects.filter(
-                company=company,
-                year_job=get_current_year_quarter(),quarter_job=quarter
-            )
+        if company.main_category != "FBPIDI":
+            if quarter != "":
+                jobs_created = JobOpportunities.objects.filter(
+                    company=company,
+                    year_job=get_current_year_quarter(),quarter_job=quarter
+                )
 
-            if jobs_created.exists():
-                flag =  True
+                if jobs_created.exists():
+                    flag =  True
+                else:
+                    flag =  False
             else:
-                flag =  False
-        else:
-            flag =  True
+                flag =  True
     except Exception as e:
         flag =  True
     return flag
@@ -197,18 +203,19 @@ def alert_edu_status_data(company):
     flag = False
     try:
         company = Company.objects.get(id=company)
-        if quarter != "":
-            edu_status = EducationalStatus.objects.filter(
-                company=company,
-                year_edu=get_current_year_quarter(),quarter_edu=quarter
-            )
+        if company.main_category != "FBPIDI":
+            if quarter != "":
+                edu_status = EducationalStatus.objects.filter(
+                    company=company,
+                    year_edu=get_current_year_quarter(),quarter_edu=quarter
+                )
 
-            if edu_status.exists():
-                flag =  True
+                if edu_status.exists():
+                    flag =  True
+                else:
+                    flag =  False
             else:
-                flag =  False
-        else:
-            flag =  True
+                flag =  True
     except Exception as e:
         flag =  True
     return flag
@@ -228,18 +235,19 @@ def alert_female_emp_data(company):
     flag = False
     try:
         company = Company.objects.get(id=company)
-        if quarter != "":
-            female_emps = FemalesInPosition.objects.filter(
-                company=company,
-                year_fem=get_current_year_quarter(),quarter_fem=quarter
-            )
+        if company.main_category != "FBPIDI":
+            if quarter != "":
+                female_emps = FemalesInPosition.objects.filter(
+                    company=company,
+                    year_fem=get_current_year_quarter(),quarter_fem=quarter
+                )
 
-            if female_emps.exists():
-                flag =  True
+                if female_emps.exists():
+                    flag =  True
+                else:
+                    flag =  False
             else:
-                flag =  False
-        else:
-            flag =  True
+                flag =  True
     except Exception as e:
         flag =  True
     return flag

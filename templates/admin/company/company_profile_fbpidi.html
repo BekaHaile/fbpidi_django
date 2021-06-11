@@ -166,9 +166,7 @@
 			<script>
 				$(document).ready(function(){
 					var my_token = "{{csrf_token}}";
-					$("#summernote").summernote();
-					$(".summernote").summernote();
-
+					
 					$("#add_tab").click(function(){
 						$("#id_region").val("{{object.get_company_address.region}}".toUpperCase());
 						$("#id_city_town").val("{{object.get_company_address.city_town}}".toUpperCase());
