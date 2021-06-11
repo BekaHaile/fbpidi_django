@@ -52,7 +52,7 @@ class chat_ajax_handler(APIView):
         #get all unread messages(only), these are new unread messages other than those that are loaded when the user opens the chat layout page. like online chats from the other user
         print (" a chat request from",request.user)
         other_user = UserProfile.objects.get(username = request.query_params ['name'])
-        q = Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(seen = False) & Q(is_active = True)  ) 
+        q = Q( Q(sender = other_user ) & Q(receiver = request.user) & Q(is_active = True)  ) 
         unread_messages = ChatMessages.objects.filter(q)
         for m in unread_messages:
             m.seen = True
