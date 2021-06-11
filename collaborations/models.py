@@ -665,7 +665,7 @@ class Document_Category(models.Model):
 
 
 class Document(models.Model):
-    DOC_CATEGORY = [ ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'), ('Other Documents','Other Documents')]
+    DOC_CATEGORY = [('Ads','Ads'), ('Company Forms', 'Company Forms'), ('Finance','Finance'),('HR', 'HR'), ('Managment','Managment'), ('Other Documents','Other Documents')]
 
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(verbose_name="upload time", auto_now_add=True)

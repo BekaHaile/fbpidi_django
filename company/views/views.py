@@ -1129,6 +1129,18 @@ class CompanyAbout(DetailView):
     template_name="frontpages/company/about.html"
 
 
+class CompanyAds(View):
+    def get(self, *args, **kwargs):
+        try:
+            company = Company.objects.get(id = self.kwargs['pk'])
+            ads = Document.objects.filter(company = company, category = 'Ads')
+            data = get_paginated_data(self.request, ads)
+            return render(self.request, 'frontpages/company/ads.html', {'object_list':data, 'object':company})
+        except Exception as e:
+            print("@@@ Exception at CompanyAds ", e)
+            return redirect("/")
+
+
 class CompanyContact(DetailView):
     model=Company
     template_name="frontpages/company/contact.html"
