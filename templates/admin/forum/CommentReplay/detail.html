@@ -4,7 +4,7 @@
 <script src="/static/admin/global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 <script src="/static/admin/global_assets/js/demo_pages/form_inputs.js"></script>
 {% endblock %}
-{%block pagename%}Edit Comment Replay {%endblock%}
+{%block pagename%}Edit Comment Reply {%endblock%}
 {%block nav%}<a href="{%url 'admin:forum_list'%}" class="breadcrumb-item">Forums</a>
 <a href="{%url 'admin:Forum_Comments' id=forum.id%}" class="breadcrumb-item">Forum Comments</a>
 <a href="{%url 'admin:Comment_replays' id=comment.id%}" class="breadcrumb-item">Comment Replies</a>
@@ -24,7 +24,7 @@
 
 			<form action="" method="POST" enctype="multipart/form-data">
 				<fieldset class="mb-3 ml-3 mr-3">
-					<legend class="text-uppercase font-size-sm font-weight-bold">Comment Replay</legend>
+					<legend class="text-uppercase font-size-sm font-weight-bold">Comment Reply</legend>
 					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
 					{{form.errors}}
 					{%csrf_token%}
@@ -35,7 +35,7 @@
 					{% endif %}
 					{%csrf_token%}
 					<div class="form-group row">
-						<label class="col-form-label col-lg-3">Comment Replay Title *</label>
+						<label class="col-form-label col-lg-3">Comment Reply Title *</label>
 						<div class="col-lg-9"> 
 							<Textarea type="text" name="comment" class="form-control" >
 									{{forms.content}}
@@ -55,11 +55,4 @@
 		</div>
 	</div>
 </div>
-<!-- /content area -->
-<script>
-	$(document).ready(function () {
-		$('#summernote').summernote();
-		$('.summernote').summernote();
-	});
-</script>
 {%endblock%}

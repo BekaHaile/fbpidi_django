@@ -24,6 +24,17 @@
 			border-radius: 1%;
 			padding: 2%;
 		}
+		#id_electric_power, #id_e_commerce, #id_telecom, #id_marketing_department,#id_env_mgmt_plan, #id_compound_allot, #id_env_focal_person,
+		#id_water_supply, #id_active_database, #id_efluent_treatment_plant  ,  #id_safety_profesional, #id_recall_system, #id_notification_procedure {
+			list-style-type:none;
+			margin-left: 0;
+			padding-left: 0;
+		}
+		#id_active_database li, #id_e_commerce li, #id_marketing_department li,  #id_efluent_treatment_plant li, #id_env_mgmt_plan li, #id_compound_allot li, #id_env_focal_person li,
+		 #id_safety_profesional li, #id_notification_procedure li,  #id_recall_system li{
+			display: inline;
+			margin-right: 40px  ;
+		} 
 	</style>
 	
 	{{form.media}}
@@ -112,13 +123,11 @@
 													</div>
 													<div class="col-md-6">
 														<label>{{form.orgn_strct.label}} *</label>
-														<div class="uniform-uploader">
-															<div class="col-lg-12">
+														
 																{{form.orgn_strct}}
 															
-															</div>
 															
-														</div>
+														
 														<span class="form-text text-muted">{{form.orgn_strct.help_text}}</span>
 														<span class="form-text text-warning">{{form.orgn_strct.errors}}</span>
 													</div>					
@@ -299,14 +308,17 @@
 												
 												<div class="ml-4 row">
 													<div class="col-md-4">
-														<label class="mr-2 font-weight-semibold" for=""><span class="mr-1">{{form.electric_power}}</span>{{form.electric_power.label}}</label>
+														<label class="mr-2 font-weight-semibold" for="" style="display: inline-flex; ">{{form.electric_power.label}}</label>
+														<span class="mr-1" style="display: inline-flex; ">{{form.electric_power}}</span>
 													</div>
 													<div class="col-md-4">
-														<label class="mr-2 font-weight-semibold" for=""><span class="mr-1">{{form.water_supply}}</span>{{form.water_supply.label}}</label>
+														<label class="mr-2 font-weight-semibold" for="" style="display: inline-flex; ">{{form.water_supply.label}}</label>
+														<span class="mr-1" style="display: inline-flex; ">{{form.water_supply}}</span>
 													</div>
-
+	
 													<div class="col-md-4">
-														<label class="mr-2 font-weight-semibold" for=""><span class="mr-1">{{form.telecom}}</span>{{form.telecom.label}}</label>
+														<label class="mr-2 font-weight-semibold" for="" style="display: inline-flex; ">{{form.telecom.label}}</label>
+														<span class="mr-1" style="display: inline-flex; ">{{form.telecom}}</span>
 														
 													</div>
 												</div>
@@ -314,15 +326,18 @@
 											<hr>
 											<div class="form-group row ml-4">
 												<div class="col-md-4">
-													<label class="font-weight-semibold pr-2" for=""><span class="mr-1">{{form.marketing_department}}</span>{{form.marketing_department.label}}</label>
+													<label class="font-weight-semibold pr-2" for="">{{form.marketing_department.label}}</label>
+													<span class="mr-1">{{form.marketing_department}}</span>
 													
 												</div>
 												<div class="col-md-4">
-													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.e_commerce}}</span>{{form.e_commerce.label}}</label>
+													<label class="font-weight-semibold" for="">{{form.e_commerce.label}}</label>
+													<span class="mr-1">{{form.e_commerce}}</span>
 													
 												</div>
 												<div class="col-md-4">
-													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.active_database}}</span>{{form.active_database.label}}</label>
+													<label class="font-weight-semibold" for="">{{form.active_database.label}}</label>
+													<span class="mr-1">{{form.active_database}}</span>
 													
 												</div>
 												
@@ -350,11 +365,13 @@
 										<hr>
 											<div class="form-group row ml-4">
 												<div class="col-md-6">
-													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.efluent_treatment_plant}}</span>{{form.efluent_treatment_plant.label}}</label>
+													<label class="font-weight-semibold" for="">{{form.efluent_treatment_plant.label}}</label>
+													<span class="mr-1">{{form.efluent_treatment_plant}}</span>
 													
 												</div>
 												<div class="col-md-6">
-													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.env_mgmt_plan}}</span>{{form.env_mgmt_plan.label}}</label>
+													<label class="font-weight-semibold" for="">{{form.env_mgmt_plan.label}}</label>
+													<span class="mr-1">{{form.env_mgmt_plan}}</span>
 													
 												</div>
 												
@@ -404,11 +421,13 @@
 											<hr>
 											<div class="form-group row ml-4">
 												<div class="col-md-6">
-													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.compound_allot}}</span>{{form.compound_allot.label}}</label>
+													<label class="font-weight-semibold" for="">{{form.compound_allot.label}}</label>
+													<span class="mr-1">{{form.compound_allot}}</span>
 													
 												</div>
 												<div class="col-md-6">
-													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.env_focal_person}}</span>{{form.env_focal_person.label}}</label>
+													<label class="font-weight-semibold" for="">{{form.env_focal_person.label}}</label>
+													<span class="mr-1">{{form.env_focal_person}}</span>
 													
 												</div>
 												
@@ -416,13 +435,16 @@
 											<hr>
 											<div class="form-group row ml-4">
 												<div class="col-md-6">
-													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.safety_profesional}}</span>{{form.safety_profesional.label}}</label>
+													<label class="font-weight-semibold" for="">{{form.safety_profesional.label}}</label>
+													<span class="mr-1">{{form.safety_profesional}}</span>
 													
 												</div>
 												<div class="col-md-6">
-													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.notification_procedure}}</span>{{form.notification_procedure.label}}</label>
+													<label class="font-weight-semibold" for="">{{form.notification_procedure.label}}</label>
+													<span class="mr-1">{{form.notification_procedure}}</span>
 													
 												</div>
+												
 												
 											</div>
 											<hr>
@@ -462,7 +484,8 @@
 											<hr>
 											<div class="form-group row ml-4">
 												<div class="col-md-6">
-													<label class="font-weight-semibold" for=""><span class="mr-1">{{form.recall_system}}</span>{{form.recall_system.label}}</label>
+													<label class="font-weight-semibold" for="">{{form.recall_system.label}}</label>
+													<span class="mr-1">{{form.recall_system}}</span>
 													
 												</div>
 												<div class="col-md-6">

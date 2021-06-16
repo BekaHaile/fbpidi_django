@@ -232,7 +232,7 @@ class CreateBrand(LoginRequiredMixin,CreateView):
         if self.request.method == 'GET': 
             self.company = Company.objects.get(id = self.request.GET['company'])
         else:
-            self.company = Company.objects.get(name = self.request.POST['company'])
+            self.company = Company.objects.get(id = self.request.POST['company'])
             
         kwargs.update({ 'company':self.company})
         return kwargs
@@ -303,7 +303,7 @@ class CreateProductView(LoginRequiredMixin,CreateView):
         if self.request.method == 'GET': 
             self.company = Company.objects.get(id = self.request.GET['company'])
         else:
-            self.company = Company.objects.get(name = self.request.POST['company'])
+            self.company = Company.objects.get(id = self.request.POST['company'])
         kwargs.update({ 'company':self.company})
         
         return kwargs

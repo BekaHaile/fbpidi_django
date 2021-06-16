@@ -33,12 +33,12 @@
 			<div class="header-elements">
 				<div class="list-icons">
 					{% if user.is_superuser %} 
-					<a href="{% url 'admin:admin_pendding_Faqs'%}" class="badge-danger btn-sm rounded-round">{{pending}} in Pendding </a>
+					<a href="{% url 'admin:admin_pendding_Faqs'%}" class="badge-danger btn-sm rounded-round mr-3">{{pending}} in Pendding </a>
 							{%endif%}
 				</div>
 				<div class="list-icons">
 					{% if user.is_superuser %}					
-						<a href="{% url 'admin:admin_approved_Faqs'%}" class="badge-success btn-sm rounded-round">Approved </a>
+						<a href="{% url 'admin:admin_approved_Faqs'%}" class="badge-success btn-sm rounded-round mr-3">Approved </a>
 					{%endif%}		 
 				</div>
 				<div class="list-icons">

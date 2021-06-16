@@ -188,8 +188,13 @@ def get_paginated_data(request, query):
 def Invite(request):
     try:
         data = json.loads(request.body) 
+        if ',' in data['email']:
+            emails = data['email'].split(',')
+        else:
+            emails = [data['email']]
         
-        if sendInvitationEmail(request, data['email']):
+        emails = [email.strip() for email in emails]
+        if sendInvitationEmail(request, emails):
             return JsonResponse({'error':False})
         else:
             return JsonResponse({'error':True})

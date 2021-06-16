@@ -7,6 +7,9 @@ from datetime import datetime
 from django.utils import timezone
 from product.models import *
 from accounts.models import UserProfile
+from collaborations.models import News, Blog
+from accounts.email_messages import sendWeekBlogAndNews
+
 
 
 from background_task.models import Task, CompletedTask
@@ -76,17 +79,38 @@ def abort(task_verbose_name):
 # inorder to stop all background tasks, commenting the for loop is not enough, u have to run 
 # the clear_background_tasks cmd, so that the tasks saved in the db to be run are deleted.
 if __name__ == '__main__':    
-        
+        print("Started sending week blogs and news for subscribed emails ...")
+        # blogs = get_weekly_and_old(Blog.objects.filter(publish = True))
+        # news = get_weekly_and_old(News.objects.all())
+        blogs= Blog.objects.all()
+        news=News.objects.all()
+        week_blogs_count = blogs.count()
+        week_news_count = news.count()
+        if news.count()==0 and blogs.count()==0:
+            print("There is no Unnotified News or Blog this week, So system stopped sending email!")
+        else:
+            if sendWeekBlogAndNews(blogs, week_blogs_count, news, week_news_count):
+                for b in blogs:
+                    b.subscriber_notified = True
+                    
+                print("Finished sending weekly blog emai to subscribed emails")
+                for n in news:
+                    n.subscriber_notified = True
+                    
+                print("Finished sending weekly news emai to subscribed emails")
+            else:
+                print("Failed to send weekly blogs and news to subscribed emails")
+
     
-    print("Starting the background tasks for ....", timezone.now())
-    clear_background_tasks()
-    clear_completed_tasks()
-    BACKGROUND_TASK_TIME = TODAY.replace(hour=0,minute=0,second=1) # set the time to when u want to send emails
+    # print("Starting the background tasks for ....", timezone.now())
+    # clear_background_tasks()
+    # clear_completed_tasks()
+    # BACKGROUND_TASK_TIME = TODAY.replace(hour=0,minute=0,second=1) # set the time to when u want to send emails
    
-    print("Task scheduled at 6:00 am ",BACKGROUND_TASK_TIME)
-    for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
-        start_task(task_verbose_name=verbose_name,schedule=1, repeat = 1) 
-    send_news_and_blogs_weekly(verbose_name='WEEKLY_NEWS_BLOGS', repeat =1)
+    # print("Task scheduled at 6:00 am ",BACKGROUND_TASK_TIME)
+    # for verbose_name in BACKGROUND_TASK_DICTIONARY.keys():
+    #     start_task(task_verbose_name=verbose_name,schedule=1, repeat = 1) 
+    # send_news_and_blogs_weekly(verbose_name='WEEKLY_NEWS_BLOGS', repeat =1)
   
 
 

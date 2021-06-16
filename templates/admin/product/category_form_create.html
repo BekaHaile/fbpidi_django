@@ -57,7 +57,7 @@
 							   
 							   <form action="{%url 'admin:create_brand' %}" method="POST" enctype="multipart/form-data">
 									   {%csrf_token%}
-									   <input type = 'hidden' name ='company' value = '{{company}}' /> 
+									   <input type = 'hidden' name ='company' value = '{{company.id}}' /> 
 										{{form|crispy}}
 	   
 								   <div class="text-right">

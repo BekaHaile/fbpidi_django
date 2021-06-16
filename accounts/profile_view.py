@@ -25,7 +25,7 @@ class IndexView(View):
         sub_category = SubCategory.objects.all()
         company = Company.objects.filter(is_active=True).exclude(main_category="FBPIDI")
         #12345 make it filter the latest 4 or 5
-        news_list = News.objects.all()[:3]
+        news_list = News.objects.all()[:9]
         collaboration_modules = ['Announcement','Blog','Event','Forum', 'News','Polls','Research','Tender','Vacancy']
         context = {'products':products,'categories':category,'sub_categories':sub_category,'companies':company, 'news_list':news_list, 'NEWS_CATAGORY': News.NEWS_CATAGORY, 'modules':collaboration_modules}
       

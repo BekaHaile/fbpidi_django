@@ -14,6 +14,10 @@ from accounts.models import UserProfile
 from company.models import *
 
     
+BOOLEAN_CHOICE = (
+    (True,'Yes'),
+    (False,'No'),
+)
 def return_years(company):
     current_year = 0
     gc_year = datetime.datetime.today().year
@@ -321,9 +325,25 @@ class MyCompanyDetailForm(forms.ModelForm):
             
             )
         widgets = {
+                'electric_power':forms.RadioSelect(),
+                'water_supply':forms.RadioSelect(),
+                'telecom':forms.RadioSelect(),
+                'marketing_department':forms.RadioSelect(),
+                'e_commerce':forms.RadioSelect(),
+                'active_database':forms.RadioSelect(),
+
+                'efluent_treatment_plant':forms.RadioSelect(),
+                'env_mgmt_plan':forms.RadioSelect(),
+                'compound_allot':forms.RadioSelect(),
+                'env_focal_person':forms.RadioSelect(),
+                'safety_profesional':forms.RadioSelect(),
+                'recall_system':forms.RadioSelect(),
+                'notification_procedure':forms.RadioSelect(),
+
+
                 'expansion_plan':forms.Textarea(attrs={'class':'summernote'}),
                 'category':forms.SelectMultiple(attrs={'class':'form-control'}),
-                'orgn_strct':forms.FileInput(),
+                'orgn_strct':forms.FileInput(attrs={'class':'form-control'}),
                 'lab_test_analysis':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'lab_equipment':forms.SelectMultiple(attrs={'class':'form-control'}),
                 'outsourced_test_param':forms.Textarea(attrs={'class':'summernote'}),
@@ -433,7 +453,7 @@ class CompanyProfileForm_Superadmin(forms.ModelForm):
             'contact_person':forms.Select(attrs={'class':'form-control form-control-uniform'}),
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in English'}),
             'name_am':forms.TextInput(attrs={'class':'form-control','placeholder':'Company Name in Amharic'}),
-            'logo':forms.FileInput(attrs={'class':'form form-control form-input-styled'}),
+            'logo':forms.FileInput(attrs={'class':'form form-control form-input-styled','accept': 'image/*'}),
             'geo_location':gis_form.OSMWidget(attrs={'map_width': 900, 'map_height': 400,'default_lat': 9.034063,
                          'default_lon': 38.752460,'default_zoom': 6}),
             # 'geo_location':CustomPointWidget,
@@ -467,7 +487,6 @@ class CompanyUpdateForm(forms.ModelForm):
     y = forms.FloatField(widget=forms.HiddenInput(),required=False)
     width = forms.FloatField(widget=forms.HiddenInput(),required=False)
     height = forms.FloatField(widget=forms.HiddenInput(),required=False)
-
     def __init__(self,*args,**kwargs):
         self.main_type = kwargs.pop('main_type')
         self.company = kwargs.pop("company")
@@ -521,6 +540,22 @@ class CompanyUpdateForm(forms.ModelForm):
                 'detail':forms.Textarea(attrs={'class':'summernote'}),
                 'detail_am':forms.Textarea(attrs={'class':'summernote'}),
                 'established_yr':forms.TextInput(attrs={'class':'form-control','onkeyup':'isNumber("id_established_yr")','placeholder':'Established Year (E.C)','maxlength':'4'}),
+                'electric_power':forms.RadioSelect(),
+                'water_supply':forms.RadioSelect(),
+                'telecom':forms.RadioSelect(),
+                'marketing_department':forms.RadioSelect(),
+                'e_commerce':forms.RadioSelect(),
+                'active_database':forms.RadioSelect(),
+
+                'efluent_treatment_plant':forms.RadioSelect(),
+                'env_mgmt_plan':forms.RadioSelect(),
+                'compound_allot':forms.RadioSelect(),
+                'env_focal_person':forms.RadioSelect(),
+                'safety_profesional':forms.RadioSelect(),
+                'recall_system':forms.RadioSelect(),
+                'notification_procedure':forms.RadioSelect(),
+
+
             }
         
      

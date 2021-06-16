@@ -43,9 +43,7 @@
 			<script>
 				var my_token = "{{csrf_token}}";
 				$(document).ready(function() {
-					$('#summernote').summernote();
-					$('.summernote').summernote();
-
+					
 					var selected_permissions_list = [];
 					var assigned_option = "";
 					var group_permissions =  "{{group.permissions.all}}";
