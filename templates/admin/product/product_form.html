@@ -28,7 +28,7 @@
 					<p class="mb-4"> All Fields ending with * are required. You are required to fill fields in English and Amharic</p>
 					 
 					{%csrf_token%}
-					<input type="hidden" name = 'company' value = '{{company}}'/>
+					<input type="hidden" name = 'company' value = '{{company.id}}'/>
 					<div class="form-group row">
 						<label class="col-form-label col-lg-3">{{form.name.label|title}} *</label>
 						<div class="col-lg-9">
