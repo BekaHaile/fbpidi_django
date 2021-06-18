@@ -325,14 +325,13 @@ class VacancyList(View):
 				result = filter_by('category__category_name',self.request.GET.getlist('by_category'), query)
 				
 			elif 'by_category' in self.request.GET:
+				print("@@@@@@@@@",self.request.GET.getlist('by_category'))
 				result = filter_by('category__category_name', self.request.GET.getlist('by_category'), Vacancy.objects.all())
 			elif 'by_company' in self.request.GET:
 				result = FilterByCompanyname(self.request.GET.getlist('by_company'), Vacancy.objects.all())
 			else: 
 				result = SearchByTitle_All('Vacancy', self.request)
 
-			if result['query'].count()==0:
-				result['query'] = Vacancy.objects.all()
 			
 			#what ever the result is, paginate it and send
 			data = get_paginated_data(self.request, result['query'])

@@ -18,6 +18,11 @@ CAT_LIST = (
     ("Pharmaceuticals",'Pharmaceuticals'),
 )
 
+BOOLEAN_CHOICE = (
+    (True,'Yes'),
+    (False,'No'),
+)
+
 
 class Company(models.Model):
 	main_category = models.CharField(max_length=100,verbose_name="Company Type",choices=CAT_LIST)
@@ -57,28 +62,28 @@ class Company(models.Model):
 	new_product_developed	= models.TextField(verbose_name="New Product_Developed",null=True,blank=True)
 	new_product_developed_am	= models.TextField(verbose_name="New Product_Developed Amharic",null=True,blank=True) # under question
 	management_tools = models.ManyToManyField(CompanyDropdownsMaster,verbose_name="Management Tools",related_name="mgmt_tools")
-	electric_power = models.BooleanField(default=False)
-	water_supply = models.BooleanField(default=False)
-	telecom	= models.BooleanField(default=False)
-	marketing_department = models.BooleanField(default=False,verbose_name="Does the company have Marketing Department section?")
-	e_commerce	= models.BooleanField(default=False,verbose_name="Do you use E-Commerce?")
-	active_database =	models.BooleanField(default=False,verbose_name="Do you adopt any active data base system?")
+	electric_power = models.BooleanField(default=False,choices=BOOLEAN_CHOICE)
+	water_supply = models.BooleanField(default=False, choices=BOOLEAN_CHOICE)
+	telecom	= models.BooleanField(default=False, choices=BOOLEAN_CHOICE)
+	marketing_department = models.BooleanField(default=False,verbose_name="Does the company have Marketing Department section?", choices=BOOLEAN_CHOICE)
+	e_commerce	= models.BooleanField(default=False, verbose_name="Do you use E-Commerce?", choices=BOOLEAN_CHOICE)
+	active_database =	models.BooleanField(default=False,verbose_name="Do you adopt any active data base system?", choices=BOOLEAN_CHOICE)
 	waste_trtmnt_system	= models.TextField(verbose_name="Waste Treatment and disposal system",null=True,blank=True)
 	waste_trtmnt_system_am	= models.TextField(verbose_name="Waste Treatment and disposal system in amharic",null=True,blank=True)
-	efluent_treatment_plant = models.BooleanField(default=False,verbose_name="Do you have effluent treatment plant?")
-	env_mgmt_plan = models.BooleanField(default=False,verbose_name="Does the company have Environmental management plan?")
+	efluent_treatment_plant = models.BooleanField(default=False,choices=BOOLEAN_CHOICE,verbose_name="Do you have effluent treatment plant?")
+	env_mgmt_plan = models.BooleanField(default=False,choices=BOOLEAN_CHOICE, verbose_name="Does the company have Environmental management plan?")
 	source_of_energy = models.ManyToManyField(CompanyDropdownsMaster,related_name="source_of_energy",blank=True)
 	gas_carb_emision = models.TextField(verbose_name="Measure of Gas/carbon emission to the environment",null=True,blank=True)
 	gas_carb_emision_am = models.TextField(verbose_name="Measure of Gas/carbon emission to the environment in amharic",null=True,blank=True)
-	compound_allot	= models.BooleanField(default=False,verbose_name="Does the company allot 5%\ of the compound for greenery?")
+	compound_allot	= models.BooleanField(default=False,choices=BOOLEAN_CHOICE, verbose_name="Does the company allot 5%\ of the compound for greenery?")
 	comunity_compliant	= models.TextField(verbose_name="Environmental issue compliant with the community",null=True,blank=True)
 	comunity_compliant_am	= models.TextField(verbose_name="Environmental issue compliant with the community in amharic",null=True,blank=True)
-	env_focal_person = models.BooleanField(default=False,verbose_name="Does the company have Environmental and social focal person?")
-	safety_profesional	 = models.BooleanField(default=False,verbose_name="Does the company have safety professionals?")
-	notification_procedure	= models.BooleanField(default=False,verbose_name="Do you have proper notification procedure to inform EFDA regarding proper disposal?")
+	env_focal_person = models.BooleanField(default=False,choices=BOOLEAN_CHOICE, verbose_name="Does the company have Environmental and social focal person?")
+	safety_profesional	 = models.BooleanField(default=False,choices=BOOLEAN_CHOICE, verbose_name="Does the company have safety professionals?")
+	notification_procedure	= models.BooleanField(default=False,choices=BOOLEAN_CHOICE,verbose_name="Do you have proper notification procedure to inform EFDA regarding proper disposal?")
 	university_linkage	= models.TextField(verbose_name="Industry University linkage",null=True,blank=True)
 	university_linkage_am	= models.TextField(verbose_name="Industry University linkage in amharic",null=True,blank=True)
-	recall_system	= models.BooleanField(default=False,verbose_name="Is there a Recall system due to quality issue?")
+	recall_system	= models.BooleanField(default=False,choices=BOOLEAN_CHOICE, verbose_name="Is there a Recall system due to quality issue?")
 	quality_defects_am	= models.TextField(verbose_name="What quality defect frequently observed in your product? in amharic",null=True,blank=True)
 	quality_defects	= models.TextField(verbose_name="What quality defect frequently observed in your product? ",null=True,blank=True)
 	gas_waste_mgmnt_measure	= models.TextField(verbose_name="What measures does your company introduced to reduce its gas and waste management? ",null=True,blank=True)

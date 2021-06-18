@@ -8,6 +8,7 @@ django.setup()
 from product.models import *
 from accounts.models import  UserProfile
 from collaborations.models import *
+from accounts.email_messages import sendWeekBlogAndNews
 
 
 from company.models import *
@@ -59,7 +60,27 @@ def get_weekly_and_old(queryset):
         return {'error':True, 'message':str(e)}
 
 if __name__ == '__main__':    
-    n = Notification(sender = UserProfile.objects.get(id = 1), receiver=UserProfile.objects.get(id = 1),
-    notification = 'New Company Created', seen = False)
-    n.save()
+
+        print("Started sending week blogs and news for subscribed emails ...")
+        # blogs = get_weekly_and_old(Blog.objects.filter(publish = True))
+        # news = get_weekly_and_old(News.objects.all())
+        blogs= Blog.objects.all()
+        news=News.objects.all()
+        week_blogs_count = blogs.count()
+        week_news_count = news.count()
+        if news.count()==0 and blogs.count()==0:
+            print("There is no Unnotified News or Blog this week, So system stopped sending email!")
+        else:
+            if sendWeekBlogAndNews(blogs, week_blogs_count, news, week_news_count):
+                for b in blogs:
+                    b.subscriber_notified = True
+                    
+                print("Finished sending weekly blog email to subscribed emails")
+                for n in news:
+                    n.subscriber_notified = True
+                    
+                print("Finished sending weekly news email to subscribed emails")
+            else:
+                print("Failed to send weekly blogs and news to subscribed emails")
+
     
