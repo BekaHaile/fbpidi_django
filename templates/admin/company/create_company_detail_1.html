@@ -116,12 +116,17 @@
 											</div>
 											<hr>
 											<div class="form-group row">
-													<div class="col-md-6">
+												<div class="col-md-4">
+													<label>{{form.stage.label}} *</label>
+														{{form.stage}}
+														<span class="form-text text-warning">{{form.stage.errors}}</span>
+												</div>
+													<div class="col-md-4">
 														<label>{{form.working_hours.label}} *</label>
 															{{form.working_hours}}
 															<span class="form-text text-warning">{{form.working_hours.errors}}</span>
 													</div>
-													<div class="col-md-6">
+													<div class="col-md-4">
 														<label>{{form.orgn_strct.label}} *</label>
 														
 																{{form.orgn_strct}}

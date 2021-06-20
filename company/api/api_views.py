@@ -48,11 +48,11 @@ class ApiCompanyByMainCategoryList(APIView):
         main_category = request.query_params['main_category']  
         if ',' in main_category:# if multiple categories are selected
             categories = request.query_params['main_category'].split(',')[:-1]
-            companies =    Company.objects.filter(main_category__in = categories).exclude(main_category="FBPIDI")
+            companies =    Company.objects.filter(main_category__in = categories,stage=False).exclude(main_category="FBPIDI")
         elif main_category != "All":
-            companies = Company.objects.filter(main_category = main_category).exclude(main_category="FBPIDI")
+            companies = Company.objects.filter(main_category = main_category,stage=False).exclude(main_category="FBPIDI")
         else:
-            companies = Company.objects.all().exclude(main_category="FBPIDI")
+            companies = Company.objects.all().exclude(main_category="FBPIDI",stage=False)
         if 'by_title' in request.query_params:
             companies = companies.filter(Q(name__icontains=request.query_params['by_title'])|Q(name_am__icontains=request.query_params['by_title'])|Q(company_product__name=request.query_params['by_title'])).distinct().exclude(main_category="FBPIDI")
         paginated = get_paginated_data(request, companies)
@@ -64,11 +64,11 @@ class ApiCompanyByMainCategoryList(APIView):
 class ApiSearchCompany(APIView):
     def get(self,request):
         try:
-            companies = Company.objects.all()
+            companies = Company.objects.filter(stage=False)
             if 'by_title' in request.query_params:
-                companies = Company.objects.filter(Q(name__icontains=request.query_params['by_title'])|Q(name_am__icontains=request.query_params['by_title'])|Q(company_product__name=request.query_params['by_title'])).exclude(main_category="FBPIDI").distinct()
+                companies = Company.objects.filter(Q(name__icontains=request.query_params['by_title'])|Q(name_am__icontains=request.query_params['by_title'])|Q(company_product__name=request.query_params['by_title']),stage=False).exclude(main_category="FBPIDI").distinct()
             if 'by_subsector' in request.query_params:
-                companies = companies.filter(category__id=request.query_params['by_subsector']).exclude(main_category="FBPIDI")
+                companies = companies.filter(category__id=request.query_params['by_subsector'],stage=False).exclude(main_category="FBPIDI")
             # companies = companies.exclude(main_category='FBPIDI') #if this were on top of the first if, it means it has to fetch data just to exclude it
             paginated = get_paginated_data(request, companies)
             subsectors = Category.objects.all()

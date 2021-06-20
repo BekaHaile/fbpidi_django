@@ -38,23 +38,17 @@
 				},
 				options: {
 				  responsive: true,
-				  legend: {
-					position: 'top',
-				  },
 				  plugins:{
             title: {
               display: true,
               text: 'Number of Industries by Sub Sector'
               },
-            legend: {
-                display: true,
-                labels: {
-                    color: 'rgb(255, 99, 132)'
+              legend: {
+                position: 'top',
                 }
             }
             
           }
-				}
 			  });
 	
 			}

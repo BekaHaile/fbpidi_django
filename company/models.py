@@ -23,6 +23,10 @@ BOOLEAN_CHOICE = (
     (False,'No'),
 )
 
+BOOLEAN_CHOICE_P = (
+	(True,"Project Stage"),
+	(False,"Manufacturing Stage"),
+)
 
 class Company(models.Model):
 	main_category = models.CharField(max_length=100,verbose_name="Company Type",choices=CAT_LIST)
@@ -93,6 +97,7 @@ class Company(models.Model):
 	is_active = models.BooleanField(default=False)
 	color_theme = models.CharField(max_length=25,verbose_name="Company Brand Color/Theme",default="#ffffff")
 	color_text = models.CharField(max_length=25,verbose_name="Company Brand Text Color",default="#ffffff")
+	stage	= models.BooleanField(default=False, choices=BOOLEAN_CHOICE_P,verbose_name="Industry Stage")
 	reserve_attr0 = models.CharField(max_length=255,default="")
 	reserve_attr1 = models.CharField(max_length=255,default="")
 	reserve_attr2 = models.CharField(max_length=255,default="")

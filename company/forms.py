@@ -321,7 +321,7 @@ class MyCompanyDetailForm(forms.ModelForm):
             'gas_carb_emision','compound_allot','comunity_compliant', 
             'env_focal_person','safety_profesional','notification_procedure', 
             'university_linkage','recall_system',
-            'quality_defects','gas_waste_mgmnt_measure',
+            'quality_defects','gas_waste_mgmnt_measure','stage',
             
             )
         widgets = {
@@ -339,7 +339,7 @@ class MyCompanyDetailForm(forms.ModelForm):
                 'safety_profesional':forms.RadioSelect(),
                 'recall_system':forms.RadioSelect(),
                 'notification_procedure':forms.RadioSelect(),
-
+                'stage':forms.Select(attrs={'class':'form-control form-control-uniform'}),
 
                 'expansion_plan':forms.Textarea(attrs={'class':'summernote'}),
                 'category':forms.SelectMultiple(attrs={'class':'form-control'}),
