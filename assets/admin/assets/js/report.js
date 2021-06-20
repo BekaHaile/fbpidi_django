@@ -30,7 +30,7 @@
 				data: {
 				  labels: data.labels,
 				  datasets: [{
-					label: 'Companies',
+					label: 'Number of Companies By Sub Sector',
 					backgroundColor: data.colors,
 					data: data.data,
           
@@ -41,10 +41,19 @@
 				  legend: {
 					position: 'top',
 				  },
-				  title: {
-					display: true,
-					text: 'Number of Industries by Sub Sector'
-				  }
+				  plugins:{
+            title: {
+              display: true,
+              text: 'Number of Industries by Sub Sector'
+              },
+            legend: {
+                display: true,
+                labels: {
+                    color: 'rgb(255, 99, 132)'
+                }
+            }
+            
+          }
 				}
 			  });
 	
@@ -72,13 +81,16 @@
 				},
         options: {
 				  responsive: true,
-				  legend: {
-					position: 'top',
-				  },
-				  title: {
-					display: true,
-					text: 'Number of Industries by Certification'
-				  }
+				  plugins:{
+            legend: {
+              position: 'top',
+              },
+            title: {
+              display: true,
+              text: 'Number of Industries by Certification'
+              }
+    
+          },
 				}
 			  });
 	
@@ -104,13 +116,15 @@
 				},
 				options: {
 					responsive: true,
-					legend: {
-					position: 'top',
-					},
-					title: {
-					display: true,
-					text: 'Number of Industries by Management Tools'
-					}
+					plugins:{
+            legend: {
+              position: 'top',
+              },
+              title: {
+              display: true,
+              text: 'Number of Industries by Management Tools'
+              }
+          }
 				}
 				});
 
@@ -136,13 +150,15 @@
 				},
 				options: {
 					responsive: true,
-					legend: {
-					position: 'top',
-					},
-					title: {
-					display: true,
-					text: 'Number of Industries by Form of Ownership'
-					}
+					plugins:{
+            legend: {
+              position: 'top',
+              },
+              title: {
+              display: true,
+              text: 'Number of Industries by Form of Ownership'
+              }
+          },
 				}
 				});
 
@@ -168,13 +184,16 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Number of Industries By Sector'
+                        }
                       },
-                      title: {
-                        display: true,
-                        text: 'Company Summary'
-                      }
+                      
                     }
                   });
         
@@ -200,12 +219,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Companies By Working Hour'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Companies By Working Hour'
+                        }
                       }
                     }
                   });
@@ -239,12 +260,14 @@
                      
                       indexAxis: 'y',
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Companies Investment Capital'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Companies Investment Capital'
+                        }
                       }
                     }
                   });
@@ -271,12 +294,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Products Production Capacity'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Products Production Capacity'
+                        }
                       }
                     }
                   });
@@ -303,12 +328,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Capacity Utilization data'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Capacity Utilization data'
+                        }
                       }
                     }
                   });
@@ -335,12 +362,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Change in Capacity Utilization data'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Change in Capacity Utilization data'
+                        }
                       }
                     }
                   });
@@ -367,12 +396,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Average Extraction Rate of a Product'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Average Extraction Rate of a Product'
+                        }
                       }
                     }
                   });
@@ -419,12 +450,14 @@
                     options: {
                       indexAxis: 'y',
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Gross Value of Production'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Gross Value of Production'
+                        }
                       }
                     }
                   });
@@ -450,12 +483,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Number of Employees By Sector'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Number of Employees By Sector'
+                        }
                       }
                     }
                   });
@@ -481,12 +516,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Number of Female Employees By Sector'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Number of Female Employees By Sector'
+                        }
                       }
                     }
                   });
@@ -512,12 +549,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Number of Foreign Employees By Sector'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Number of Foreign Employees By Sector'
+                        }
                       }
                     }
                   });
@@ -543,12 +582,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'bottom',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Number of Jobs Created By Sector'
+                      plugins:{
+                        legend: {
+                          position: 'bottom',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Number of Jobs Created By Sector'
+                        }
                       }
                     }
                   });
@@ -578,12 +619,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Number of Employees Educational Status By Sector'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Number of Employees Educational Status By Sector'
+                        }
                       }
                     }
                   });
@@ -609,12 +652,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Number of Female Employees in Position Level'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Number of Female Employees in Position Level'
+                        }
                       }
                     }
                   });
@@ -640,12 +685,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Available Inputs'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Available Inputs'
+                        }
                       }
                     }
                   });
@@ -671,12 +718,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Local Share of Inputs'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Local Share of Inputs'
+                        }
                       }
                     }
                   });
@@ -702,12 +751,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Number/Share of Companies by Energy Source'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Number/Share of Companies by Energy Source'
+                        }
                       }
                     }
                   });
@@ -733,12 +784,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Number/Share of Companies by Destination'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Number/Share of Companies by Destination'
+                        }
                       }
                     }
                   });
@@ -764,12 +817,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Number/Share of Companies by Market Target'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Number/Share of Companies by Market Target'
+                        }
                       }
                     }
                   });
@@ -795,12 +850,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Product Inqury '
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Product Inqury '
+                        }
                       }
                     }
                   });
@@ -827,12 +884,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Product Inqury Weakly'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Product Inqury Weakly'
+                        }
                       }
                     }
                   });
@@ -859,12 +918,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Companies By Product Group'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Companies By Product Group'
+                        }
                       }
                     }
                   });
@@ -890,12 +951,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Companies By therapeutic Group'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Companies By therapeutic Group'
+                        }
                       }
                     }
                   });
@@ -921,12 +984,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Companies By Dosage Form'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Companies By Dosage Form'
+                        }
                       }
                     }
                   });
@@ -952,12 +1017,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Products By Product Group'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Products By Product Group'
+                        }
                       }
                     }
                   });
@@ -982,12 +1049,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Products By Therapeutic Group'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Products By Therapeutic Group'
+                        }
                       }
                     }
                   });
@@ -1012,12 +1081,14 @@
                     },
                     options: {
                       responsive: true,
-                      legend: {
-                        position: 'top',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Products By Dosage Form'
+                      plugins:{
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Products By Dosage Form'
+                        }
                       }
                     }
                   });
