@@ -59,7 +59,7 @@ def certification_chart(request):
             labels.append(str(certification['certification__name'])+"("+str(certification['id__count'])+")")
             data.append(certification['id__count'])
             colors.append(get_chart_color())
-    return JsonResponse({'labels':labels,'data':data,'colors':colors})
+    return JsonResponse({'labels':labels,'data':data,'colors':colors,'chart_type':'doughnut'})
 
 def company_subsector_chart(request):
     labels=[]
@@ -84,7 +84,7 @@ def management_tool_chart(request):
             labels.append(tools['management_tools__name'])
             data.append(tools['id__count'])
             colors.append(get_chart_color())
-    return JsonResponse({'labels':labels,'data':data,'colors':colors})  
+    return JsonResponse({'labels':labels,'data':data,'colors':colors,'chart_type':'pie'})  
 
 def ownership_form_chart(self,*args,**kwargs):
     labels = []
@@ -142,7 +142,7 @@ def inv_cap_chart(request):
             )
             for invcap in queryset:
                 labels.append(invcap['company__name'])
-                data.append(invcap['machinery']+invcap['working']+invcap['building'])
+                data.append(round(invcap['machinery']+invcap['working']+invcap['building'],2))
                 colors.append(get_chart_color())
     return JsonResponse({'labels':labels,'data':data,'colors':colors})
 
