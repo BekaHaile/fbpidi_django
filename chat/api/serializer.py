@@ -12,7 +12,7 @@ class ChatMessagesSerializer(serializers.ModelSerializer):
     sender_full_name = serializers.SerializerMethodField('get_sender_fullname')
     receiver_id = serializers.SerializerMethodField('get_receiver_id')
     receiver_name = serializers.SerializerMethodField('get_receiver_name')
-    receiver_full_name = serializers.SerializerMethodField('get_sender_fullname')
+    receiver_full_name = serializers.SerializerMethodField('get_receiver_fullname')
     receiver_image = serializers.SerializerMethodField('get_receiver_image')
     time = serializers.SerializerMethodField('get_time')
     

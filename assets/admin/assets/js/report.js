@@ -1,6 +1,23 @@
 
 		$(function () {
-
+      Chart.register(ChartDataLabels);
+      Chart.defaults.set('plugins.datalabels', {
+       color:'black',
+       anchor:'end',
+            align:'top',
+      });
+      // if(chart_type == 'bar'){
+      //     Chart.defaults.set('plugins.datalabels', {
+      //       anchor:'end',
+      //       align:'top',
+      //     });
+      //   }else if(chart_type == "pie"){
+      //   Chart.defaults.set('plugins.datalabels', {
+      //     color:'white',
+      //     anchor:'start',
+      //     align:'center',
+      //   });
+      // }
 			var $subsectorCompanyChart = $("#subsector-company-chart");
 		  $.ajax({
 			url: $subsectorCompanyChart.data("url"),
@@ -15,7 +32,8 @@
 				  datasets: [{
 					label: 'Companies',
 					backgroundColor: data.colors,
-					data: data.data
+					data: data.data,
+          
 				  }]          
 				},
 				options: {
@@ -37,20 +55,22 @@
 		  $.ajax({
 			url: $populationChart.data("url"),
 			success: function (data) {
-	
+        if(chart_type == ""){
+          chart_type = data.chart_type;
+        }
 			  var ctx = $populationChart[0].getContext("2d");
-	
+        
 			  new Chart(ctx, {
-				type: chart_type,
+        type: chart_type,
 				data: {
 				  labels: data.labels,
 				  datasets: [{
-					label: 'Companies',
+					label: 'Number of Industries By Certification',
 					backgroundColor: data.colors,
 					data: data.data
 				  }]          
 				},
-				options: {
+        options: {
 				  responsive: true,
 				  legend: {
 					position: 'top',
@@ -69,7 +89,7 @@
 			$.ajax({
 			url: $mgmtToolChart.data("url"),
 			success: function (data) {
-
+       
 				var ctx = $mgmtToolChart[0].getContext("2d");
 
 				new Chart(ctx, {
@@ -77,7 +97,7 @@
 				data: {
 					labels: data.labels,
 					datasets: [{
-					label: 'Industries',
+					label: 'Number of Industries by Management Tools',
 					backgroundColor: data.colors,
 					data: data.data
 					}]          
@@ -109,7 +129,7 @@
 				data: {
 					labels: data.labels,
 					datasets: [{
-					label: 'Industries',
+					label: 'Number of Industries by Form of Ownership',
 					backgroundColor: data.colors,
 					data: data.data
 					}]          
@@ -141,7 +161,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: 'Industries',
+                        label: 'Number of Industries By Sector',
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -173,7 +193,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: 'Industries',
+                        label: 'Number of Industries by Working hour',
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -205,12 +225,19 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: 'Investment Capital',
+                        label: 'Industries Investment Capital',
                         backgroundColor: data.colors,
-                        data: data.data
+                        data: data.data,
+                        datalabels:{
+                        anchor:'end',
+                          align:'right',
+                        },
                       }]          
                     },
+                    plugins:[ChartDataLabels],
                     options: {
+                     
+                      indexAxis: 'y',
                       responsive: true,
                       legend: {
                         position: 'top',
@@ -237,7 +264,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: 'Production Capacity',
+                        label: 'Industries Production Capacity',
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -256,7 +283,7 @@
         
                 }
               });  
-			  //Capital Utilization data
+			  //Capacity Utilization data
 			var $capitalutilChart = $("#capital-util-chart");
               $.ajax({
                 url: $capitalutilChart.data("url"),
@@ -269,7 +296,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: 'Capital Utilization',
+                        label: 'Industries Capacity Utilization',
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -281,14 +308,14 @@
                       },
                       title: {
                         display: true,
-                        text: 'Capital Utilization data'
+                        text: 'Capacity Utilization data'
                       }
                     }
                   });
         
                 }
               }); 
-			//   change in capital utilization
+			//   change in capacity utilization
 			var $changecapitalutilChart = $("#change-capital-util-chart");
               $.ajax({
                 url: $changecapitalutilChart.data("url"),
@@ -301,7 +328,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: 'Chnage in Capital Utilization',
+                        label: 'Change in Capacity Utilization',
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -313,7 +340,7 @@
                       },
                       title: {
                         display: true,
-                        text: 'Chnage in Capital Utilization data'
+                        text: 'Change in Capacity Utilization data'
                       }
                     }
                   });
@@ -366,18 +393,31 @@
                       datasets: [{
                         label: data.year,
                         backgroundColor: data.colors,
-                        data: data.this_year
+                        data: data.this_year,
+                        datalabels:{
+                          anchor:'end',
+                            align:'right',
+                          },
                       },{
                         label: data.year-1,
                         backgroundColor: data.colors1,
-                        data: data.last_year
+                        data: data.last_year,
+                        datalabels:{
+                          anchor:'end',
+                            align:'right',
+                          },
                       },{
                         label: data.year-2,
                         backgroundColor: data.colors2,
-                        data: data.prev_year
+                        data: data.prev_year,
+                        datalabels:{
+                          anchor:'end',
+                            align:'right',
+                          },
                       }]          
                     },
                     options: {
+                      indexAxis: 'y',
                       responsive: true,
                       legend: {
                         position: 'top',
@@ -403,7 +443,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Employees",
+                        label: "Number of Employees by Sector",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -434,7 +474,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Female Employees",
+                        label: "Number of Female Employees By Sector",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -465,7 +505,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Foreign Employees",
+                        label: "Number of Foreign Employees by Sector",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -496,7 +536,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Number of Jobs",
+                        label: "Number of Jobs Created By Sector",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -504,7 +544,7 @@
                     options: {
                       responsive: true,
                       legend: {
-                        position: 'top',
+                        position: 'bottom',
                       },
                       title: {
                         display: true,
@@ -527,11 +567,11 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Male of Employees",
+                        label: "Male Employees",
                         backgroundColor: data.colors,
                         data: data.data_male
                       },{
-                        label: "Female of Employees",
+                        label: "Female Employees",
                         backgroundColor: data.colors,
                         data: data.data_female
                       }]          
@@ -655,7 +695,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Companies",
+                        label: "Number of Industries by Energy Source",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -686,7 +726,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Companies",
+                        label: "Number of Industries By Market Destination",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -717,7 +757,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Companies",
+                        label: "Number of Industries By Market Target",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -812,7 +852,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Companies",
+                        label: "Number of Industries By Product Group",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -843,7 +883,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Companies",
+                        label: "Number of Industries By Therapeutic Group",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -874,7 +914,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Companies",
+                        label: "Number of Industries By Dosage Form",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -905,7 +945,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Products",
+                        label: "Number of Products by Product group",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -935,7 +975,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Products",
+                        label: "Number of Products therapeutic Group",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
@@ -965,7 +1005,7 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: "Products by Dosage Form",
+                        label: "Number of Products by Dosage Form",
                         backgroundColor: data.colors,
                         data: data.data
                       }]          
