@@ -305,6 +305,8 @@ class RateCompany(LoginRequiredMixin,UpdateView):
         return redirect("admin:company_detail", pk=self.kwargs['pk'])
 
 
+
+
 class CreateCompanyAddress(LoginRequiredMixin,CreateView):
     model = CompanyAddress
     form_class = CompanyAddressForm
@@ -1011,6 +1013,18 @@ def activate_company(request,pk):
             company.is_active = True
         else:
             company.is_active = False
+        company.save()
+        return redirect("admin:company_detail",pk=pk)
+    except Company.DoesNotExist:
+        return redirect("admin:error_404")
+
+def change_stage(request,pk):
+    try:
+        company = Company.objects.get(id=pk)
+        if company.stage == True:
+            company.stage = False
+        else:
+            company.stage = True
         company.save()
         return redirect("admin:company_detail",pk=pk)
     except Company.DoesNotExist:
