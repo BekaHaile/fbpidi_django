@@ -38,7 +38,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
     role = serializers.SerializerMethodField('get_role')
     class Meta:
         model = UserProfile
-        fields = ('id','first_name', 'last_name', 'username', 'p_img', 'role')
+        fields = ('id','first_name', 'last_name', 'username','email', 'p_img', 'role')
 
     def get_user_image(self,user):
         if user.profile_image:

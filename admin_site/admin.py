@@ -415,6 +415,7 @@ class CustomAdminSite(admin.AdminSite):
             # path('researchprojectcategorys-form',wrap(CreateResearchProjectCategoryAdmin.as_view()),name='researchprojectcategory_form'), 
             # path('researchprojectcategorys-list',wrap(ListResearchProjectCategoryAdmin.as_view()),name='research_project_category_list'),
             path("activate-company/<pk>/",wrap(activate_company),name="activate_comapany"),
+            path("change-company-stage/<pk>/",wrap(change_stage),name="change_stage"),
             path("project-complete/<pk>/",wrap(mark_complete),name="mark_complete"),
             path("404-page/",wrap(error_404),name="error_404"),
             path("500-page/",wrap(error_500), name="error_500"),

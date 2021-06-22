@@ -3,21 +3,24 @@
 {% block extrastyle %}
 
 <!-- Theme JS files -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-<script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
-<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.0.0-rc.1/chartjs-plugin-datalabels.min.js" integrity="sha512-+UYTD5L/bU1sgAfWA0ELK5RlQ811q8wZIocqI7+K0Lhh8yVdIoAMEs96wJAIbgFvzynPm36ZCXtkydxu1cs27w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/static/admin/assets/js/report.js"></script>
+
 <script>
-	var chart_type = "bar"
+	var chart_type = "bar";
 	$(document).ready(function(){
 		chart_type = "{{chart_option}}";
 	});
 </script>
-
-<script src="/static/admin/assets/js/report.js"></script>
 <!-- /theme JS files -->
 	<style>
 		.card{
 			height: 150px;
+		}
+		canvas{
+			height: 500px;
+			width: 100%;
 		}
 	</style>
 	
@@ -119,14 +122,11 @@
 					<div id="container" style="width: 100%;">
 						<canvas id="working-hour-chart" data-url="{% url 'admin:working_hour_chart' %}"></canvas>								
 					</div>
-					<div class="d-flex">
-						<div>Number of Companies By Working Hour</div>	
-						<div class="list-icons ml-auto">
-							<a class="list-icons-item" href="{%url 'admin:filter_by_working_hour'%}"><i class="icon-file-text3"></i></a>
-						</div>
-					</div>
-
-								 
+					<ul class="nav nav-pills nav-justified">
+						Number of Companies By Working Hour
+						<li class="nav-item"><a href="{%url 'admin:filter_by_working_hour'%}" class="btn btn-primary rounded-round">View Report</a></li>
+					</ul>
+					 	 
 				</div>
 			</div>
 			<!-- /today's revenue -->
@@ -420,7 +420,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12 col-sm-12 mt-2 mb-1">
-			<div class="card" style="height: 90%;">
+			<div class="card" style="height: 100%;">
 				<div class="card-body">
 					<div id="container" style="width: 100%;">
 						<canvas id="certification-chart" data-url="{% url 'admin:certification_chart' %}"></canvas>						
@@ -555,4 +555,5 @@
 	 
 </div>
 <!-- /content area -->
+
 {%endblock%}

@@ -92,7 +92,7 @@ class chat_with(APIView):
                 m.seen = True
                 m.save()
             num_of_messages = unread.count() if unread.count()>=5 else 5 #set number of messages to 5 if unread messages are lesser than 5, or set z numer equal to no of unread messages
-            query_messages = query_messages[:num_of_messages]
+            # query_messages = query_messages[:num_of_messages]
             reversed_query = query_messages[::-1]#we need -created_date to retrieve from db, and order of created_date to display for users, so we have to reverse it
             messages_list = ChatMessagesSerializer(reversed_query, many = True).data
 
