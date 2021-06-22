@@ -35,7 +35,7 @@ class check_username(APIView):
             related = UserProfile.objects.filter(username__icontains = request.query_params['username'])[:4]
             result = {'result':False,'related':[]}
             for u in related:
-                result['related'].append( u.username )
+                result['related'].append( UserInfoSerializer(u).data )
             return JsonResponse(result, safe=False)
 
 # list grouped chats
