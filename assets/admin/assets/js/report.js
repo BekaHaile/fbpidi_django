@@ -1,5 +1,6 @@
 
 		$(function () {
+
       Chart.register(ChartDataLabels);
       Chart.defaults.set('plugins.datalabels', {
        color:'black',
@@ -25,7 +26,7 @@
 	
 			  var ctx = $subsectorCompanyChart[0].getContext("2d");
 	
-			  new Chart(ctx, {
+			  subsectorCompanyChart = new Chart(ctx, {
 				type: chart_type,
 				data: {
 				  labels: data.labels,
@@ -54,16 +55,16 @@
 			}
 		  });
 	
-		  var $populationChart = $("#certification-chart");
+		  var $certificationChart = $("#certification-chart");
 		  $.ajax({
-			url: $populationChart.data("url"),
+			url: $certificationChart.data("url"),
 			success: function (data) {
         if(chart_type == ""){
           chart_type = data.chart_type;
         }
-			  var ctx = $populationChart[0].getContext("2d");
+			  var ctx = $certificationChart[0].getContext("2d");
         
-			  new Chart(ctx, {
+			  certificationChart = new Chart(ctx, {
         type: chart_type,
 				data: {
 				  labels: data.labels,
@@ -98,7 +99,7 @@
        
 				var ctx = $mgmtToolChart[0].getContext("2d");
 
-				new Chart(ctx, {
+				mgmtToolChart = new Chart(ctx, {
 				type: chart_type,
 				data: {
 					labels: data.labels,
@@ -125,6 +126,8 @@
 			}
 			});
 			// ownership chart
+     
+      
 			var $ownershipChart = $("#ownership-chart");
 			$.ajax({
 			url: $ownershipChart.data("url"),
@@ -132,7 +135,7 @@
         console.log(data);
 				var ctx = $ownershipChart[0].getContext("2d");
 
-				new Chart(ctx, {
+				onwershipChart = new Chart(ctx, {
 				type: chart_type,
 				data: {
 					labels: data.labels,
@@ -158,6 +161,7 @@
 
 			}
 			});
+     
 			// sector data
 			var $categoryChart = $("#category-chart");
               $.ajax({
@@ -166,7 +170,7 @@
         
                   var ctx = $categoryChart[0].getContext("2d");
                    
-                  new Chart(ctx, {
+                  categoryChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -201,7 +205,7 @@
         
                   var ctx = $workinghourChart[0].getContext("2d");
                    
-                  new Chart(ctx, {
+                  workinghourChart = new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -235,7 +239,7 @@
         
                   var ctx = $invcapChart[0].getContext("2d");
                    
-                  new Chart(ctx, {
+                  invcapChart = new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -276,17 +280,22 @@
         
                   var ctx = $pcapChart[0].getContext("2d");
                    
-                  new Chart(ctx, {
+                  pcapChart= new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
                         label: 'Industries Production Capacity',
                         backgroundColor: data.colors,
-                        data: data.data
+                        data: data.data,
+                        datalabels:{
+                          anchor:'end',
+                            align:'right',
+                          },
                       }]          
                     },
                     options: {
+                      indexAxis: 'y',
                       responsive: true,
                       plugins:{
                         legend: {
@@ -310,7 +319,7 @@
         
                   var ctx = $capitalutilChart[0].getContext("2d");
                    
-                  new Chart(ctx, {
+                  capitalutilChart= new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -344,7 +353,7 @@
         
                   var ctx = $changecapitalutilChart[0].getContext("2d");
                    
-                  new Chart(ctx, {
+                  changecapitalutilChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -378,17 +387,22 @@
         
                   var ctx = $extnrateChart[0].getContext("2d");
                    
-                  new Chart(ctx, {
+                  extnrateChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
                         label: 'Average Extraction Rate',
                         backgroundColor: data.colors,
-                        data: data.data
+                        data: data.data,
+                        datalabels:{
+                          anchor:'end',
+                            align:'right',
+                          },
                       }]          
                     },
                     options: {
+                      indexAxis: 'y',
                       responsive: true,
                       plugins:{
                         legend: {
@@ -411,42 +425,48 @@
                 success: function (data) {
         
                   var ctx = $gvpChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  gvpChart =    new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
                       datasets: [{
                         label: data.year,
-                        backgroundColor: data.colors,
+                        backgroundColor: ['#32e36a'],
                         data: data.this_year,
                         datalabels:{
                           anchor:'end',
                             align:'right',
-                          },
+                          }, 
                       },{
                         label: data.year-1,
-                        backgroundColor: data.colors1,
+                        backgroundColor: ['#1b73d1'],
                         data: data.last_year,
                         datalabels:{
                           anchor:'end',
                             align:'right',
                           },
+                           
                       },{
                         label: data.year-2,
-                        backgroundColor: data.colors2,
+                        backgroundColor: ['#ad1856'],
                         data: data.prev_year,
                         datalabels:{
                           anchor:'end',
                             align:'right',
                           },
-                      }]          
+                         
+                      },
+                      
+                    ]          
                     },
                     options: {
+                      
                       indexAxis: 'y',
                       responsive: true,
                       plugins:{
                         legend: {
                           position: 'top',
+                          
                         },
                         title: {
                           display: true,
@@ -465,7 +485,7 @@
                 success: function (data) {
         
                   var ctx = $numempChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  numempChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -480,6 +500,7 @@
                       plugins:{
                         legend: {
                           position: 'top',
+                          
                         },
                         title: {
                           display: true,
@@ -498,7 +519,7 @@
                 success: function (data) {
         
                   var ctx = $numfemempChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  numfemempChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -531,7 +552,7 @@
                 success: function (data) {
         
                   var ctx = $numforempChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  numforempChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -564,7 +585,7 @@
                 success: function (data) {
         
                   var ctx = $numjobsChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  numjobsChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -597,7 +618,7 @@
                 success: function (data) {
         
                   var ctx = $numeduChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  numeduChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -634,7 +655,7 @@
                 success: function (data) {
         
                   var ctx = $numFemChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  numFemChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -667,7 +688,7 @@
                 success: function (data) {
         
                   var ctx = $avlinputChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  avlinputChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -678,6 +699,7 @@
                       }]          
                     },
                     options: {
+                      indexAxis:'y',
                       responsive: true,
                       plugins:{
                         legend: {
@@ -700,7 +722,7 @@
                 success: function (data) {
                    
                   var ctx = $inputshareChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  inputshareChart =    new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -733,7 +755,7 @@
                 success: function (data) {
         
                   var ctx = $esChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  esChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -766,7 +788,7 @@
                 success: function (data) {
         
                   var ctx = $destinChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  destinChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -799,7 +821,7 @@
                 success: function (data) {
         
                   var ctx = $targetChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  targetChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -900,7 +922,7 @@
                 success: function (data) {
                   console.log(data);
                   var ctx = $companyPGChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  companyPGChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -933,7 +955,7 @@
                 success: function (data) {
                   console.log(data);
                   var ctx = $companyTGChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  companyTGChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -966,7 +988,7 @@
                 success: function (data) {
                   console.log(data);
                   var ctx = $companyDFChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  companyDFChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -999,7 +1021,7 @@
                 success: function (data) {
                   console.log(data);
                   var ctx = $productPGChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  productPGChart =  new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -1031,7 +1053,7 @@
                 url: $productTGChart.data("url"),
                 success: function (data) {
                   var ctx = $productTGChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  productTGChart =   new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -1063,7 +1085,7 @@
                 url: $productDFChart.data("url"),
                 success: function (data) {
                   var ctx = $productDFChart[0].getContext("2d");
-                  new Chart(ctx, {
+                  productDFChart = new Chart(ctx, {
                     type: chart_type,
                     data: {
                       labels: data.labels,
@@ -1089,5 +1111,6 @@
         
                 }
               }); 
+            
 		});
 	

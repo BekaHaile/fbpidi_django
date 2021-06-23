@@ -68,7 +68,7 @@ def company_subsector_chart(request):
     queryset = Company.objects.values('category__category_name').annotate(Count('id')).order_by('category').exclude(main_category='FBPIDI')
     for category in queryset:
         if category['category__category_name'] != None:
-            labels.append(category['category__category_name']+"("+str(category['id__count'])+")")
+            labels.append(category['category__category_name'][:30])
             data.append(category['id__count'])
         colors.append(get_chart_color())
     return JsonResponse({'labels':labels,'data':data,'colors':colors})
@@ -93,7 +93,7 @@ def ownership_form_chart(self,*args,**kwargs):
     queryset = Company.objects.values('ownership_form').annotate(Count('id')).order_by('ownership_form').exclude(main_category='FBPIDI')
     for ownership in queryset:
         if ownership['ownership_form'] != None:
-            labels.append(str(CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']).name)+" ("+str(ownership['id__count'])+")")
+            labels.append(str(CompanyDropdownsMaster.objects.get(id=ownership['ownership_form']).name))
             data.append(ownership['id__count'])
             colors.append(get_chart_color())
 
@@ -153,7 +153,7 @@ def production_capacity_chart(request):
     queryset = ProductionCapacity.objects.values('product__sub_category_name','product__uom').annotate(
         total_prdn_capacity=Sum('install_prdn_capacity')*260).order_by('product')     
     for pdata in queryset:
-        labels.append(pdata['product__sub_category_name'])
+        labels.append(pdata['product__sub_category_name'][:15])
         data.append(pdata['total_prdn_capacity'])
         colors.append(get_chart_color())
     return JsonResponse({
@@ -212,7 +212,7 @@ def extraction_rate_chart(request):
     colors = []
     queryset = ProductionCapacity.objects.filter(year=get_current_year()).values('product__sub_category_name','product__uom').annotate(avg_extraction_rate=Avg('extraction_rate')).order_by('product')
     for pdata in queryset:
-        labels.append(pdata['product__sub_category_name'])
+        labels.append(pdata['product__sub_category_name'][:20])
         data.append(pdata['avg_extraction_rate'])
         colors.append(get_chart_color())
     return JsonResponse({'labels':labels,'data':data,'colors':colors})

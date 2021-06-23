@@ -179,7 +179,7 @@ Number of Industries By Market Target
 					</div>
 					<div class="card-body">
 						 
-						<table class="table datatable-basic">
+						<table class="table datatable-invcap">
 							<thead>
 								<tr>
 									<th>#</th>
@@ -207,19 +207,19 @@ Number of Industries By Market Target
 									{%endif%}
 								</tr>
 								{%endfor%}
-								
-							</tbody>
-							<tr>
-								<td></td>
-								<td>Total</td>
-								<td>ETB {% get_inv_cap_sum inv_cap_data 'machinery' %}</td>
-								<td>ETB {% get_inv_cap_sum inv_cap_data 'building' %}</td>
-								<td>ETB {% get_inv_cap_sum inv_cap_data 'working' %}</td>
-								<td>ETB {% get_inv_cap_sum inv_cap_data  'total' %}</td>
-								{%if sector != 'all'%}
+								<tr>
 									<td></td>
-									{%endif%}
-							</tr>
+									<td>Total</td>
+									<td>ETB {% get_inv_cap_sum inv_cap_data 'machinery' %}</td>
+									<td>ETB {% get_inv_cap_sum inv_cap_data 'building' %}</td>
+									<td>ETB {% get_inv_cap_sum inv_cap_data 'working' %}</td>
+									<td>ETB {% get_inv_cap_sum inv_cap_data  'total' %}</td>
+									{%if sector != 'all'%}
+										<td></td>
+										{%endif%}
+								</tr>
+							</tbody>
+						 
 							
 						</table>
 					</div>
@@ -1866,6 +1866,15 @@ Number of Industries By Market Target
 					});
 					$('.datatable-basic').DataTable(
 						{
+							dom: 'Bfrtip',
+							buttons: [
+								'csv', 'excel', 'pdf', 'print'
+							]
+						}
+					);
+					$('.datatable-invcap').DataTable(
+						{
+							"ordering": false,
 							dom: 'Bfrtip',
 							buttons: [
 								'csv', 'excel', 'pdf', 'print'
