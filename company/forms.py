@@ -481,6 +481,7 @@ class CompanyRatingForm(forms.ModelForm):
             'company_condition':forms.Select(attrs={'class':'form-control form-control-uniform'}),
         }
 
+
 class CompanyUpdateForm(forms.ModelForm):
     #  default_lat=38.781596,default_lon=8.983564,
     x = forms.FloatField(widget=forms.HiddenInput(),required=False)
@@ -492,11 +493,25 @@ class CompanyUpdateForm(forms.ModelForm):
         self.company = kwargs.pop("company")
         super(CompanyUpdateForm,self).__init__(*args,**kwargs)
         self.fields['category'].queryset = Category.objects.filter(category_type=self.main_type)
+        if self.company.stage == True:
+            self.fields['category'].required = False
         self.fields['certification'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Certifications")
+        if self.company.stage == True:
+            self.fields['certification'].required = False
+        
         self.fields['source_of_energy'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Source of Energy")
         self.fields['support_required'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Areas of Major Challenges")
+        if self.company.stage == True:
+            self.fields['support_required'].required = False
+        
         self.fields['management_tools'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Management Tools")
+        if self.company.stage == True:
+            self.fields['management_tools'].required = False
+        
         self.fields['working_hours'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Working hours")
+        if self.company.stage == True:
+            self.fields['working_hours'].required = False
+        
         self.fields['ownership_form'].queryset = CompanyDropdownsMaster.objects.filter(chk_type='Forms of Ownership')
         self.fields['lab_test_analysis'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Laboratory Test Analysis")
         self.fields['lab_equipment'].queryset = CompanyDropdownsMaster.objects.filter(chk_type="Laboratory Equipment")
