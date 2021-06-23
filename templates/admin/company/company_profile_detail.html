@@ -1,4 +1,5 @@
 {%extends 'admin/base_site.html'%}
+{%load humanize%}
 {%load core_template_tags%}
 {% load admin_template_tags %}
 {%load crispy_forms_tags%}
@@ -173,6 +174,45 @@
 												Company Address
 											</a>
 										</li>
+										{% if user.is_superuser or user.is_fbpidi_staff %}
+										<li class="nav-item nav-item-submenu {%block product_data%}{%endblock%}">
+											<a href="#" class="nav-link"><i class="icon-store"></i> <span>Company Production Data</span></a>
+											<ul class="nav nav-group-sub" data-submenu-title="Form components">
+												<li class="nav-item">
+													<a href="#" data-toggle="tab" data-target="#production_capacity" class="nav-link">
+														<i class="icon-drawer"></i>
+														Production Capacity
+													</a>
+												</li>
+												<li class="nav-item">
+													<a href="#" data-toggle="tab" data-target="#annual_input_need" class="nav-link">
+														<i class="icon-drawer"></i>
+														Annual Input Need
+													</a>
+												</li>
+												<li class="nav-item">
+													<a href="#" data-toggle="tab" data-target="#input_demand" class="nav-link">
+														<i class="icon-drawer"></i>
+														Input Demand & Supply
+													</a>
+												</li>
+												<li class="nav-item">
+													<a href="#" data-toggle="tab" data-target="#sales_performance" class="nav-link">
+														<i class="icon-drawer"></i>
+														Sales Performance
+													</a>
+												</li>
+												<li class="nav-item">
+													<a href="#" data-toggle="tab" data-target="#prod_packaging" class="nav-link">
+														<i class="icon-drawer"></i>
+														Product Packaging
+													</a>
+												</li>
+
+											</ul>
+										</li>
+										{% endif %}
+
 										<li class="nav-item">
 											<a href="#" data-toggle="tab" data-target="#inv_capital_form_tab" class="nav-link">
 												<i class="icon-cash3"></i>
