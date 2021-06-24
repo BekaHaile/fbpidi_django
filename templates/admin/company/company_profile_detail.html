@@ -956,8 +956,12 @@
  				});
 				 
 
-				 
-					
+				 $('.table-hover').DataTable({
+					dom: 'Bfrtip',
+					buttons: [
+						'csv', 'excel', 'pdf', 'print'
+					]
+				});
 				
 			</script>
 			

@@ -5,6 +5,11 @@
 {% block extrastyle %}
         <script>
           var chart_type = "bar";
+          var categoryChart = "";
+          var onwershipChart = "";
+          var numFemChart = "";
+          var numempChart = "";
+          var numeduChart = "";
         </script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -23,16 +28,28 @@
     {%if user.is_superuser or user.is_fbpidi_staff%}
     <!-- Main charts -->
     <div class="card">
-        <div class="card-header header-elements-inline">
-            <h5 class="card-title">Company Category Summary</h5>
-            <div class="header-elements">
-                <!-- <div class="list-icons">
-                    <a class="list-icons-item" data-action="collapse"></a>
-                    <a class="list-icons-item" data-action="reload"></a>
-                    <a class="list-icons-item" data-action="remove"></a>
-                </div> -->
-            </div>
+      <div class="card-header header-elements-inline">
+        <h3></h3>
+
+        <div class="header-elements">
+          <ul class="list-inline list-inline-condensed mb-0">
+              
+            <li class="list-inline-item"> 
+              <a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+                <i class="icon-stack2 mr-2"></i>
+                Chart Types
+              </a>
+  
+              <div class="dropdown-menu">
+                <a href="javascript:void(0)" onclick="changeChart('bar','region_sector');" class="dropdown-item"><i class="icon-stats-bars3"></i>Bar Chart</a>
+                <a href="javascript:void(0)" onclick="changeChart('line','region_sector');" class="dropdown-item"><i class="icon-chart"></i>Line Chart</a>
+                <a href="javascript:void(0)" onclick="changeChart('pie','region_sector');" class="dropdown-item"><i class="icon-pie-chart"></i>Pie Chart</a>
+                <a href="javascript:void(0)" onclick="changeChart('doughnut','region_sector');" class="dropdown-item"><i class="mi-multiline-chart"></i>Doughnut Chart</a>
+              </div>
+            </li>
+          </ul>
         </div>
+      </div>
 
         <div class="card-body">
         <div id="container" style="width: 100%;">
@@ -43,6 +60,28 @@
     </div>
     <!-- /main charts -->
     <div class="card " style="height: 100%;">
+      <div class="card-header header-elements-inline">
+        <h3></h3>
+
+        <div class="header-elements">
+          <ul class="list-inline list-inline-condensed mb-0">
+              
+            <li class="list-inline-item"> 
+              <a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+                <i class="icon-stack2 mr-2"></i>
+                Chart Types
+              </a>
+  
+              <div class="dropdown-menu">
+                <a href="javascript:void(0)" onclick="changeChart('bar','ownership');" class="dropdown-item"><i class="icon-stats-bars3"></i>Bar Chart</a>
+                <a href="javascript:void(0)" onclick="changeChart('line','ownership');" class="dropdown-item"><i class="icon-chart"></i>Line Chart</a>
+                <a href="javascript:void(0)" onclick="changeChart('pie','ownership');" class="dropdown-item"><i class="icon-pie-chart"></i>Pie Chart</a>
+                <a href="javascript:void(0)" onclick="changeChart('doughnut','ownership');" class="dropdown-item"><i class="mi-multiline-chart"></i>Doughnut Chart</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
       <div class="card-body">
         <div id="container" style="width: 100%;">
           <canvas id="ownership-chart" data-url="{% url 'admin:ownership_form_chart' %}"></canvas>
@@ -59,6 +98,28 @@
     </div>
 
     <div class="card" style="height: 100%;">
+      <div class="card-header header-elements-inline">
+        <h3></h3>
+
+        <div class="header-elements">
+          <ul class="list-inline list-inline-condensed mb-0">
+              
+            <li class="list-inline-item"> 
+              <a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+                <i class="icon-stack2 mr-2"></i>
+                Chart Types
+              </a>
+  
+              <div class="dropdown-menu">
+                <a href="javascript:void(0)" onclick="changeChart('bar','numFemChart');" class="dropdown-item"><i class="icon-stats-bars3"></i>Bar Chart</a>
+                <a href="javascript:void(0)" onclick="changeChart('line','numFemChart');" class="dropdown-item"><i class="icon-chart"></i>Line Chart</a>
+                <a href="javascript:void(0)" onclick="changeChart('pie','numFemChart');" class="dropdown-item"><i class="icon-pie-chart"></i>Pie Chart</a>
+                <a href="javascript:void(0)" onclick="changeChart('doughnut','numFemChart');" class="dropdown-item"><i class="mi-multiline-chart"></i>Doughnut Chart</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
       <div class="card-body">
         <div id="container" style="width: 100%;">
           <canvas id="num-fem-chart" data-url="{% url 'admin:num_fem_inpsn_chart' %}"></canvas>								
@@ -75,6 +136,28 @@
     <div class="row">
         <div class="col-xl-6 col-md-6">
           <div class="card" style="height: 100%;">
+            <div class="card-header header-elements-inline">
+              <h3></h3>
+    
+              <div class="header-elements">
+                <ul class="list-inline list-inline-condensed mb-0">
+                    
+                  <li class="list-inline-item"> 
+                    <a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+                      <i class="icon-stack2 mr-2"></i>
+                      Chart Types
+                    </a>
+        
+                    <div class="dropdown-menu">
+                      <a href="javascript:void(0)" onclick="changeChart('bar','numempChart');" class="dropdown-item"><i class="icon-stats-bars3"></i>Bar Chart</a>
+                      <a href="javascript:void(0)" onclick="changeChart('line','numempChart');" class="dropdown-item"><i class="icon-chart"></i>Line Chart</a>
+                      <a href="javascript:void(0)" onclick="changeChart('pie','numempChart');" class="dropdown-item"><i class="icon-pie-chart"></i>Pie Chart</a>
+                      <a href="javascript:void(0)" onclick="changeChart('doughnut','numempChart');" class="dropdown-item"><i class="mi-multiline-chart"></i>Doughnut Chart</a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
             <div class="card-body">
               <div id="container" style="width: 100%;">
                 <canvas id="num-emp-chart" data-url="{% url 'admin:num_emp_chart' %}"></canvas>								
@@ -84,6 +167,28 @@
         </div>
         <div class="col-xl-6 col-md-6">
           <div class="card" style="height: 100%;">
+            <div class="card-header header-elements-inline">
+              <h3></h3>
+    
+              <div class="header-elements">
+                <ul class="list-inline list-inline-condensed mb-0">
+                    
+                  <li class="list-inline-item"> 
+                    <a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
+                      <i class="icon-stack2 mr-2"></i>
+                      Chart Types
+                    </a>
+        
+                    <div class="dropdown-menu">
+                      <a href="javascript:void(0)" onclick="changeChart('bar','numeduChart');" class="dropdown-item"><i class="icon-stats-bars3"></i>Bar Chart</a>
+                      <a href="javascript:void(0)" onclick="changeChart('line','numeduChart');" class="dropdown-item"><i class="icon-chart"></i>Line Chart</a>
+                      <a href="javascript:void(0)" onclick="changeChart('pie','numeduChart');" class="dropdown-item"><i class="icon-pie-chart"></i>Pie Chart</a>
+                      <a href="javascript:void(0)" onclick="changeChart('doughnut','numeduChart');" class="dropdown-item"><i class="mi-multiline-chart"></i>Doughnut Chart</a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
             <div class="card-body">
               <div id="container" style="width: 100%;">
                 <canvas id="num-edu-level-chart" data-url="{% url 'admin:num_edu_level_chart' %}"></canvas>								
@@ -112,4 +217,24 @@
     {%endif%}
 </div>
 <!-- /content area -->
+<script>
+	function changeChart(charttype,option){
+		if(option == 'ownership'){
+			onwershipChart.config.type = charttype;
+			onwershipChart.update();
+		}else if(option == 'region_sector'){
+			categoryChart.config.type = charttype;
+			categoryChart.update();
+		}else if(option == 'numempChart'){
+			numempChart.config.type = charttype;
+			numempChart.update();
+		}else if(option == 'numeduChart'){
+			numeduChart.config.type = charttype;
+			numeduChart.update();
+		}else if(option == 'numFemChart'){
+			numFemChart.config.type = charttype;
+			numFemChart.update();
+		} 
+	}
+</script>
 {% endblock %}
