@@ -1,10 +1,10 @@
 
-from django.dispatch.dispatcher import receiver
-from chat.models import Notification
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','fbpims.settings')
 import django
 django.setup()
+
+
 from product.models import *
 from accounts.models import  UserProfile
 from collaborations.models import *
@@ -12,14 +12,13 @@ from accounts.email_messages import sendWeekBlogAndNews
 
 
 from company.models import *
-from django.db.models import Count
+from django.db.models import Count, Aggregate, Avg, Max, Min, Sum
 from django.utils.timezone import localtime
 from datetime import datetime, timedelta
 
 from django.db import connection, reset_queries
 import time
 import functools
-
 def query_debugger(func):
     @functools.wraps(func)
     def inner_func(*args, **kwargs):
@@ -59,28 +58,11 @@ def get_weekly_and_old(queryset):
     except Exception as e:
         return {'error':True, 'message':str(e)}
 
+
 if __name__ == '__main__':    
-
-        print("Started sending week blogs and news for subscribed emails ...")
-        # blogs = get_weekly_and_old(Blog.objects.filter(publish = True))
-        # news = get_weekly_and_old(News.objects.all())
-        blogs= Blog.objects.all()
-        news=News.objects.all()
-        week_blogs_count = blogs.count()
-        week_news_count = news.count()
-        if news.count()==0 and blogs.count()==0:
-            print("There is no Unnotified News or Blog this week, So system stopped sending email!")
-        else:
-            if sendWeekBlogAndNews(blogs, week_blogs_count, news, week_news_count):
-                for b in blogs:
-                    b.subscriber_notified = True
-                    
-                print("Finished sending weekly blog email to subscribed emails")
-                for n in news:
-                    n.subscriber_notified = True
-                    
-                print("Finished sending weekly news email to subscribed emails")
-            else:
-                print("Failed to send weekly blogs and news to subscribed emails")
-
+    c = Company.objects.aggregate( e = Count('employees') )
+    e = Company.objects.annotate(e = Count('employees')).values(e)
+    
+    
+    print (c," ",e[1].e)
     

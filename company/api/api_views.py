@@ -54,7 +54,8 @@ class ApiCompanyByMainCategoryList(APIView):
         else:
             companies = Company.objects.all().exclude(main_category="FBPIDI",stage=False)
         if 'by_title' in request.query_params:
-            companies = companies.filter(Q(name__icontains=request.query_params['by_title'])|Q(name_am__icontains=request.query_params['by_title'])|Q(company_product__name=request.query_params['by_title'])).distinct().exclude(main_category="FBPIDI")
+            companies = companies.filter(   Q( Q(name__icontains=request.query_params['by_title']) | Q(name_am__icontains=request.query_params['by_title']) | 
+                                                Q(company_product__name=request.query_params['by_title'])) & Q(is_active = True)).distinct().exclude(main_category="FBPIDI")
         paginated = get_paginated_data(request, companies)
         subsectors = Category.objects.all()
         return Response(data = {'error':False, 'paginator':get_paginator_info(paginated), 'count' : companies.count(), 'companies': CompanyInfoSerializer(paginated, many =True).data, 'liked_companies':user_liked_companies(request.user),

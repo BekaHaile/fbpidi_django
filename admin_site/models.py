@@ -11,6 +11,13 @@ CAT_LIST = (
     ("Pharmaceuticals",'Pharmaceuticals'),
 )
 
+CAT_LIST_AM = (
+    ('','ሴክተር ይምረጡ'),
+    ("ምግብ",'ምግብ'),
+    ("መጠጥ",'መጠጥ'),
+    ("ፋርማሲ",'Pharmaceuticals'),
+)
+
 class Category(models.Model): #Sub sectors (cereal and pulses)
     category_type = models.CharField(choices=CAT_LIST,max_length=200,verbose_name="Sector Name(English)")
     category_type_am = models.CharField(choices=CAT_LIST,max_length=200,verbose_name="Sector Sector(Amharic)")

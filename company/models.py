@@ -24,8 +24,8 @@ BOOLEAN_CHOICE = (
 )
 
 BOOLEAN_CHOICE_P = (
-	(True,"Project Stage"),
-	(False,"Manufacturing Stage"),
+	(True,"Investment"),
+	(False,"Oprational"),
 )
 
 class Company(models.Model):
