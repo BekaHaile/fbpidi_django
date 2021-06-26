@@ -60,9 +60,8 @@ def get_weekly_and_old(queryset):
 
 
 if __name__ == '__main__':    
-    c = Company.objects.aggregate( e = Count('employees') )
-    e = Company.objects.annotate(e = Count('employees')).values(e)
-    
-    
-    print (c," ",e[1].e)
+  pass
+
+
+
     
