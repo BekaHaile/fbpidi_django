@@ -3,9 +3,7 @@
 {% block extrastyle %}
 
 <!-- Theme JS files -->
-<script src="/static/admin/global_assets/js/plugins/tables/datatables/datatables.min.js"></script>
 <script src="/static/admin/global_assets/js/plugins/forms/selects/select2.min.js"></script>
-<script src="/static/admin/global_assets/js/demo_pages/datatables_advanced.js"></script>
 <!-- /theme JS files -->
 
 {% endblock %}
@@ -375,12 +373,12 @@ Product Packaging Data
 </div>
 <script>
 	$(document).ready(function(){
-		// $('.datatable-show-all').DataTable({
-		// 			dom: 'Bfrtip',
-		// 			buttons: [
-		// 				'csv', 'excel', 'pdf', 'print'
-		// 			]
-		// 		});
+		$('.datatable-show-all').DataTable({
+					dom: 'Bfrtip',
+					buttons: [
+						'csv', 'excel', 'pdf', 'print'
+					]
+				});
 		});
 </script>
 <!-- /content area -->

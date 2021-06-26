@@ -244,19 +244,14 @@
                     data: {
                       labels: data.labels,
                       datasets: [{
-                        label: 'Industries Investment Capital',
+                        label: ' Investment Capital',
                         backgroundColor: data.colors,
                         data: data.data,
-                        datalabels:{
-                        anchor:'end',
-                          align:'right',
-                        },
                       }]          
                     },
                     plugins:[ChartDataLabels],
                     options: {
                      
-                      indexAxis: 'y',
                       responsive: true,
                       plugins:{
                         legend: {
@@ -264,7 +259,7 @@
                         },
                         title: {
                           display: true,
-                          text: 'Companies Investment Capital'
+                          text: 'Industries Investment Capital(000)'
                         }
                       }
                     }
@@ -288,14 +283,11 @@
                         label: 'Industries Production Capacity',
                         backgroundColor: data.colors,
                         data: data.data,
-                        datalabels:{
-                          anchor:'end',
-                            align:'right',
-                          },
+                        
                       }]          
                     },
                     options: {
-                      indexAxis: 'y',
+                      // indexAxis: 'y',
                       responsive: true,
                       plugins:{
                         legend: {
@@ -433,27 +425,17 @@
                         label: data.year,
                         backgroundColor: ['#32e36a'],
                         data: data.this_year,
-                        datalabels:{
-                          anchor:'end',
-                            align:'right',
-                          }, 
+                        
                       },{
                         label: data.year-1,
                         backgroundColor: ['#1b73d1'],
                         data: data.last_year,
-                        datalabels:{
-                          anchor:'end',
-                            align:'right',
-                          },
-                           
+                         
                       },{
                         label: data.year-2,
                         backgroundColor: ['#ad1856'],
                         data: data.prev_year,
-                        datalabels:{
-                          anchor:'end',
-                            align:'right',
-                          },
+                         
                          
                       },
                       
@@ -461,7 +443,7 @@
                     },
                     options: {
                       
-                      indexAxis: 'y',
+                      // indexAxis: 'y',
                       responsive: true,
                       plugins:{
                         legend: {
