@@ -1,4 +1,4 @@
-import datetime
+import datetime,math
 import random
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -10,7 +10,8 @@ from django.db.models import Sum,Count,OuterRef,Exists,Q,F,Avg
 
 from admin_site.models import CompanyDropdownsMaster
 from admin_site.decorators import company_created,company_is_active
-from admin_site.templatetags.admin_template_tags import get_capital_util,change_capital_util
+from admin_site.templatetags.admin_template_tags import (get_capital_util,change_capital_util,change_util_total,
+                                            get_total_prodn,get_total_actual)
 
 from company.models import *
 from product.models import *
@@ -130,9 +131,16 @@ def working_hour_chart(request):
              
 def inv_cap_chart(request):
     companies = Company.objects.all().exclude(main_category="FBPIDI")
+    # companies_f = Company.objects.filter(main_category="Food").aggregate(machinery = Sum('investment_capital__machinery_cost'),building = Sum('investment_capital__building_cost'),working = Sum('investment_capital__working_capital') )
+    # companies_b = Company.objects.filter(main_category="Beverage")
+    # companies_ph = Company.objects.filter(main_category="Pharmaceuticals")
     labels = []
     data = []
     colors = []
+    food_inv_cap = []
+    bev_inv_cap = []
+    pharm_inv_cap = []
+    total_inv_cap = 0
     for company in companies:
         if InvestmentCapital.objects.filter(company=company).exists():
             queryset =  InvestmentCapital.objects.filter(company=company).values('company__name').annotate(
@@ -140,48 +148,90 @@ def inv_cap_chart(request):
                 building = Sum('building_cost'),
                 working = Sum('working_capital')
             )
+
             for invcap in queryset:
-                labels.append(invcap['company__name'])
-                data.append(round(invcap['machinery']+invcap['working']+invcap['building'],2))
-                colors.append(get_chart_color())
-    return JsonResponse({'labels':labels,'data':data,'colors':colors})
+                # total_inv_cap = round(invcap['machinery']+invcap['working']+invcap['building'],2)
+
+                if company.main_category == "Food":
+                    food_inv_cap.append(round(invcap['machinery']+invcap['working']+invcap['building'],2))
+                if company.main_category == "Beverage":
+                    bev_inv_cap.append(round(invcap['machinery']+invcap['working']+invcap['building'],2))
+                if company.main_category == "Pharmaceuticals":
+                    pharm_inv_cap.append(round(invcap['machinery']+invcap['working']+invcap['building'],2))
+
+    labels = ['Food Sector','Beverage Sector','Phrmaceutical Sector']
+    data = [round(sum(food_inv_cap),2),round(sum(bev_inv_cap),2),round(sum(pharm_inv_cap),2)]
+    return JsonResponse({'labels':labels,'data':data,'colors':['blue','orange','cyan']})
 
 def production_capacity_chart(request):
     labels = []
     data = []    
     colors = []
-    queryset = ProductionCapacity.objects.values('product__sub_category_name','product__uom').annotate(
-        total_prdn_capacity=Sum('install_prdn_capacity')*260).order_by('product')     
-    for pdata in queryset:
-        labels.append(pdata['product__sub_category_name'][:15])
-        data.append(pdata['total_prdn_capacity'])
-        colors.append(get_chart_color())
+    food_pcap = 0
+    bev_pcap = 0
+    pharm_pcap = 0
+    total_pcap = 0
+    for company in Company.objects.all().exclude(main_category="FBPIDI"):
+        queryset = ProductionCapacity.objects.values('product__sub_category_name','product__uom').annotate(
+            total_prdn_capacity=Sum('install_prdn_capacity')*260).order_by('product')   
+
+        for pdata in queryset:
+            # labels.append(pdata['product__sub_category_name'][:15])
+            total_pcap = pdata['total_prdn_capacity']
+            # colors.append(get_chart_color())
+        if company.main_category == "Food":
+            food_pcap += total_pcap
+        if company.main_category == "Beverage":
+            bev_pcap += total_pcap
+        if company.main_category == "Pharmaceuticals":
+            pharm_pcap += total_pcap
+
     return JsonResponse({
-        'labels':labels,'data':data,'colors':colors
+        'labels':labels,'data':data,'colors':['#77bcd1','#635eab','#6c7a4c']
     })
 def capital_util_chart(request):
     labels = []
     data=[]
     colors = []
+    food_cu = []
+    bev_cu = []
+    pharm_cu = []
     companies_with_data = Company.objects.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))),
                                                     Exists(ProductionCapacity.objects.filter(company=OuterRef('pk')))
                                                     ).exclude(main_category="FBPIDI")
+
     for company in companies_with_data:
         production_performance_this_year = ProductionAndSalesPerformance.objects.filter(company=company,activity_year=get_current_year()).values('product','product__sub_category_name','company__name').annotate(all_data=Sum('production_amount'))
         production_capacity_this_year = ProductionCapacity.objects.filter(company=company,year=get_current_year())
         
         for (performance,capacity) in zip(production_performance_this_year,production_capacity_this_year):
             if performance['product'] == capacity.product.id:
-                labels.append(performance['company__name'][:10]+" - "+performance['product__sub_category_name'][:10])
-                data.append(get_capital_util(performance['all_data'],capacity.actual_prdn_capacity))
-                colors.append(get_chart_color())
+                # labels.append(performance['company__name'][:10]+" - "+performance['product__sub_category_name'][:10])
+                # total_cu = get_capital_util(performance['all_data'],capacity.actual_prdn_capacity)
+                # data.append(get_capital_util(performance['all_data'],capacity.actual_prdn_capacity))
+                # colors.append(get_chart_color())
+                
+                if company.main_category == "Food":
+                    food_cu.append(get_capital_util(performance['all_data'],capacity.actual_prdn_capacity))
+                if company.main_category == "Beverage":
+                   bev_cu.append(get_capital_util(performance['all_data'],capacity.actual_prdn_capacity))
+                if company.main_category == "Pharmaceuticals":
+                    pharm_cu.append(get_capital_util(performance['all_data'],capacity.actual_prdn_capacity))
+    labels = ['Food Sector','Beverage Sector','Phrmaceutical Sector']
+
+    data = [round(sum(food_cu)/len(food_cu),2),
+            round(sum(bev_cu)/len(bev_cu),2),
+            round(sum(pharm_cu)/len(pharm_cu),2)]
     return JsonResponse({
-        'labels':labels,'data':data,'colors':colors
+        'labels':labels,'data':data,'colors':['#77bcd1','#635eab','#6c7a4c']
     })
 def change_capital_util_chart(request):
     labels = []
     data = []
     colors = []
+    food_ccu = []
+    bev_ccu = []
+    pharm_ccu = []
     companies_with_data = Company.objects.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk'))),
                                                     Exists(ProductionCapacity.objects.filter(company=OuterRef('pk')))
                                                     ).exclude(main_category="FBPIDI")
@@ -193,17 +243,34 @@ def change_capital_util_chart(request):
         if production_performance_last_year.exists():
             for (performance_this,performance_last,capacity) in zip(production_performance_this_year,production_performance_last_year,production_capacity_this_year):
                 if performance_this['product'] == capacity.product.id or performance_last['product'] == capacity.product.id:
-                    labels.append(str(company.name[:10])+"-"+performance_this['product__sub_category_name'][:10])
-                    data.append(change_capital_util(performance_this['all_data'],performance_last['all_data'],capacity.actual_prdn_capacity))
-                    colors.append(get_chart_color())
+                    # labels.append(str(company.name[:10])+"-"+performance_this['product__sub_category_name'][:10])
+                    # data.append(change_capital_util(performance_this['all_data'],performance_last['all_data'],capacity.actual_prdn_capacity))
+                    # colors.append(get_chart_color())                    
+                    # ccu_total = change_capital_util(performance_this['all_data'],performance_last['all_data'],capacity.actual_prdn_capacity)
+                    if company.main_category == "Food":
+                        food_ccu.append(change_capital_util(performance_this['all_data'],performance_last['all_data'],capacity.actual_prdn_capacity))
+                    if company.main_category == "Beverage":
+                        bev_ccu.append(change_capital_util(performance_this['all_data'],performance_last['all_data'],capacity.actual_prdn_capacity))
+                    if company.main_category == "Pharmaceuticals":
+                        pharm_ccu.append(change_capital_util(performance_this['all_data'],performance_last['all_data'],capacity.actual_prdn_capacity))
         else:
             for (performance_this,capacity) in zip(production_performance_this_year,production_capacity_this_year):
                 if performance_this['product'] == capacity.product.id:
-                    labels.append(str(company.name[:10])+"-"+performance_this['product__sub_category_name'][:10])
-                    data.append(change_capital_util(performance_this['all_data'],0,capacity.actual_prdn_capacity))
-                    colors.append(get_chart_color())
+                    # labels.append(str(company.name[:10])+"-"+performance_this['product__sub_category_name'][:10])
+                    # data.append(change_capital_util(performance_this['all_data'],0,capacity.actual_prdn_capacity))
+                    # colors.append(get_chart_color())
+                    # ccu_total = change_capital_util(performance_this['all_data'],performance_last['all_data'],capacity.actual_prdn_capacity)
+                    if company.main_category == "Food":
+                        food_ccu.append(change_capital_util(performance_this['all_data'],0,capacity.actual_prdn_capacity))
+                    if company.main_category == "Beverage":
+                        bev_ccu.append(change_capital_util(performance_this['all_data'],0,capacity.actual_prdn_capacity))
+                    if company.main_category == "Pharmaceuticals":
+                        pharm_ccu.append(change_capital_util(performance_this['all_data'],0,capacity.actual_prdn_capacity))
+    # change_util_total change_capital_util_data 'total'
+    labels = ['Food Sector','Beverage Sector','Phrmaceutical Sector']
+    data = [round(sum(food_ccu)/len(food_ccu),2),round(sum(bev_ccu)/len(bev_ccu),2),round(sum(pharm_ccu)/len(pharm_ccu),2)]
     return JsonResponse({
-        'labels':labels,'data':data,'colors':colors
+        'labels':labels,'data':data,'colors':['#17acd1','#03fedb','#bdaa45']
     })
 
 def extraction_rate_chart(request):
@@ -223,9 +290,19 @@ def gvp_chart(request):
     colors = []
     colors1 = []
     colors2 = []
-    gvp_this_year = []
-    gvp_last_year = []
-    gvp_prev_year = []
+    gvp_this_year_food = []
+    gvp_last_year_bev = []
+    gvp_prev_year_pharm = []
+
+    gvp_this_year_bev = []
+    gvp_last_year_pharm = []
+    gvp_prev_year_food = []
+
+    gvp_this_year_pharm = []
+    gvp_last_year_food = []
+    gvp_prev_year_bev = []
+    
+    
     companies_with_data = Company.objects.filter(Exists( ProductionAndSalesPerformance.objects.filter(company=OuterRef('pk')))).exclude(main_category='FBPIDI')
     for company in companies_with_data:
         perform_data = ProductionAndSalesPerformance.objects.filter(
@@ -244,14 +321,40 @@ def gvp_chart(request):
                 last_year = gvp_index['total_last_year']
             if gvp_index['total_prev_year'] != None:
                 prev_year = gvp_index['total_prev_year']
+            
+            
+            # labels.append(company.name[:12]+"-"+gvp_index['product__sub_category_name'][:12])
+            if company.main_category == "Food":
+                gvp_this_year_food.append(this_year)
+                gvp_last_year_food.append(last_year)
+                gvp_prev_year_food.append(prev_year)
+            if company.main_category == "Beverage":
+                gvp_this_year_bev.append(this_year)
+                gvp_last_year_bev.append(last_year)
+                gvp_prev_year_bev.append(prev_year)
+            if company.main_category == "Pharmaceuticals":
+                gvp_this_year_pharm.append(this_year)
+                gvp_last_year_pharm.append(last_year)
+                gvp_prev_year_pharm.append(prev_year)
 
-            labels.append(company.name[:12]+"-"+gvp_index['product__sub_category_name'][:12])
-            gvp_this_year.append(this_year)
-            gvp_last_year.append(last_year)
-            gvp_prev_year.append(prev_year)
-            colors.append(get_chart_color())
-            colors1.append(get_chart_color())
-            colors2.append(get_chart_color())
+    gvp_this_year = [round(sum(gvp_this_year_food)/len(gvp_this_year_food)),
+                    round(sum(gvp_this_year_bev)/len(gvp_this_year_bev)),
+                    round(sum(gvp_this_year_pharm)/len(gvp_this_year_pharm)),
+                    ]
+    gvp_last_year = [
+                    round(sum(gvp_last_year_food)/len(gvp_last_year_food)),
+                    round(sum(gvp_last_year_bev)/len(gvp_last_year_bev)),
+                    round(sum(gvp_last_year_pharm)/len(gvp_last_year_pharm)),
+                    ]
+    gvp_prev_year = [round(sum(gvp_prev_year_food)/len(gvp_prev_year_food)),
+                    round(sum(gvp_prev_year_bev)/len(gvp_prev_year_bev)),
+                    round(sum(gvp_prev_year_pharm)/len(gvp_prev_year_pharm)),
+                    ]
+    colors.append(get_chart_color())
+    colors1.append(get_chart_color())
+    colors2.append(get_chart_color())
+    labels = ['Food Sector','Beverage Sector','Phrmaceutical Sector']
+    data = []
     return JsonResponse({'labels':labels,'this_year':gvp_this_year,
                         'last_year':gvp_last_year,'prev_year':gvp_prev_year,'year':get_current_year(),
                         'colors':colors,'colors1':colors1,'colors2':colors2})
@@ -458,6 +561,10 @@ def input_share_chart(request):
     data = []
     colors = []
     local_share = 0
+    local_share_food = []
+    local_share_bev = []
+    local_share_pharm = []
+
     for product in SubCategory.objects.all():
         ann_inp_need = AnnualInputNeed.objects.filter(product=product).values('product__sub_category_name').annotate(share_data = Avg('local_input')).order_by('product')
         if ann_inp_need.exists():
@@ -468,7 +575,19 @@ def input_share_chart(request):
             local_share = 0
         labels.append(product.sub_category_name[:10])
         data.append(local_share)
+        if product.category_name.category_type == "Food":
+            local_share_food.append(local_share)
+        if product.category_name.category_type == "Beverage":
+            local_share_bev.append(local_share)
+        if product.category_name.category_type == "Pharmaceuticals":
+            local_share_pharm.append(local_share)
         colors.append(get_chart_color())
+    
+    
+    data = [round(sum(local_share_food)/len(local_share_food),2),
+            round(sum(local_share_bev)/len(local_share_bev),2),
+            round(sum(local_share_pharm)/len(local_share_pharm),2)]
+    labels = ['Food Sector','Beverage Sector','Phrmaceutical Sector']
     return JsonResponse({'labels':labels,'data':data,'colors':colors})
 
 def energy_source_chart(request):

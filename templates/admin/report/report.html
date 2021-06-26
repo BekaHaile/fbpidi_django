@@ -271,44 +271,7 @@
 			</div>
 			 
 		</div>
-		<div class="col-md-12 col-sm-12 mb-2">
-			<div class="card" style="height: 100%;">
-				<div class="card-header header-elements-inline">
-					<h3></h3>
-
-					<div class="header-elements">
-						<ul class="list-inline list-inline-condensed mb-0">
-								
-							<li class="list-inline-item"> 
-								<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
-									<i class="icon-stack2 mr-2"></i>
-									Chart Types
-								</a>
 		
-								<div class="dropdown-menu">
-									<a href="javascript:void(0)" onclick="changeChart('bar','pcap');" class="dropdown-item"><i class="icon-stats-bars3"></i>Bar Chart</a>
-									<a href="javascript:void(0)" onclick="changeChart('line','pcap');" class="dropdown-item"><i class="icon-chart"></i>Line Chart</a>
-									<a href="javascript:void(0)" onclick="changeChart('pie','pcap');" class="dropdown-item"><i class="icon-pie-chart"></i>Pie Chart</a>
-									<a href="javascript:void(0)" onclick="changeChart('doughnut','pcap');" class="dropdown-item"><i class="mi-multiline-chart"></i>Doughnut Chart</a>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="card-body">
-					<div id="container" style="width: 100%;">
-						<canvas id="pcap-chart" data-url="{% url 'admin:production_capacity_chart' %}"></canvas>								
-					</div>
-					<ul class="nav nav-pills nav-justified">
-						Production Capacity Report By Prouct
-						<li class="nav-item"><a href="{%url 'admin:get_production_capacity' product='all'%}" class="btn btn-primary rounded-round">View Report</a></li>
-					</ul>
-	
-				 
-				</div>
-			</div>
-			 
-		</div>
 		<div class="col-md-12 col-sm-12 mb-2 ">
 			<div class="card" style="height: 100%;">
 				<div class="card-header header-elements-inline">
@@ -424,42 +387,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-12 col-sm-12 mb-2 mt-2">
-					<div class="card" style="height: 100%;">
-						<div class="card-header header-elements-inline">
-							<h3></h3>
-		
-							<div class="header-elements">
-								<ul class="list-inline list-inline-condensed mb-0">
-										
-									<li class="list-inline-item"> 
-										<a href="#" class="btn btn-link text-default dropdown-toggle" data-toggle="dropdown">
-											<i class="icon-stack2 mr-2"></i>
-											Chart Types
-										</a>
 				
-										<div class="dropdown-menu">
-											<a href="javascript:void(0)" onclick="changeChart('bar','extnrate');" class="dropdown-item"><i class="icon-stats-bars3"></i>Bar Chart</a>
-											<a href="javascript:void(0)" onclick="changeChart('line','extnrate');" class="dropdown-item"><i class="icon-chart"></i>Line Chart</a>
-											<a href="javascript:void(0)" onclick="changeChart('pie','extnrate');" class="dropdown-item"><i class="icon-pie-chart"></i>Pie Chart</a>
-											<a href="javascript:void(0)" onclick="changeChart('doughnut','extnrate');" class="dropdown-item"><i class="mi-multiline-chart"></i>Doughnut Chart</a>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<div class="card-body">
-							<div id="container" style="width: 100%;">
-								<canvas id="extn-rate-chart" data-url="{% url 'admin:extraction_rate_chart' %}"></canvas>								
-							</div>
-							<ul class="nav nav-pills nav-justified">	
-								Average Extraction Rate					
-								<li class="nav-item"><a href="{%url 'admin:average_extraction_rate' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-							</ul>
-		 
-						</div>
-					</div>
-				</div>
 				<div class="col-md-12 col-sm-12 mb-2 mt-2">
 					<div class="card" style="height: 100%;">
 						<div class="card-header header-elements-inline">
@@ -486,7 +414,7 @@
 						</div>
 						<div class="card-body " >
 							<div id="container" >
-								<canvas id="gvp-chart" data-url="{% url 'admin:gvp_chart' %}" style="overflow-x: scroll;overflow-y: scroll;height:1000px; "></canvas>								
+								<canvas id="gvp-chart" data-url="{% url 'admin:gvp_chart' %}" ></canvas>								
 							</div>
 							<ul class="nav nav-pills nav-justified">
 								Gross Value of Production Data						
@@ -792,32 +720,7 @@
 				</div>
 			</div>
 			
-			<div class="col-md-6 col-sm-6 mt-2 mb-2">
-				<div class="card">
-					<div class="card-body">
-						<ul class="nav nav-pills nav-justified">						
-							<li class="nav-item"><a href="{%url 'admin:get_number_companies' option='research'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-						</ul>
-	
-						<div class="tab-content">
-							Number of Industries With Filtering Option
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6 col-sm-6 mt-2 mb-2">
-				<div class="card">
-					<div class="card-body">
-						<ul class="nav nav-pills nav-justified">						
-							<li class="nav-item"><a href="{%url 'admin:get_unit_price' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
-						</ul>
-	
-						<div class="tab-content">
-							Average Unit Price
-						</div>
-					</div>
-				</div>
-			</div>
+			
 		<div class="col-md-6 col-sm-6 mt-2 mb-2">
 			<div class="card " style="height: 100%;">
 				<div class="card-header header-elements-inline">
@@ -1218,6 +1121,65 @@
 						<a href="{%url 'admin:company_dosage_form'%}" class="btn btn-pink rounded-round"><span class="badge bg-teal-800 badge-pill align-self-center ml-auto">View Report</span></a> 
 					</div>
 				</div>				 
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 mb-2">
+			<div class="card" style="height: 100%;">
+				 
+				<div class="card-body">
+					<!-- <div id="container" style="width: 100%;">
+						<canvas id="pcap-chart" data-url="{% url 'admin:production_capacity_chart' %}"></canvas>								
+					</div> -->
+					<ul class="nav nav-pills nav-justified">
+						Production Capacity Report By Prouct
+						<li class="nav-item"><a href="{%url 'admin:get_production_capacity' product='all'%}" class="btn btn-primary rounded-round">View Report</a></li>
+					</ul>
+	
+				 
+				</div>
+			</div>
+			 
+		</div>
+		<div class="col-md-6 col-sm-6 mb-2 mt-2">
+			<div class="card" style="height: 100%;">
+				 
+				<div class="card-body">
+					<!-- <div id="container" style="width: 100%;">
+						<canvas id="extn-rate-chart" data-url="{% url 'admin:extraction_rate_chart' %}"></canvas>								
+					</div> -->
+					<ul class="nav nav-pills nav-justified">	
+						Average Extraction Rate					
+						<li class="nav-item"><a href="{%url 'admin:average_extraction_rate' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+ 
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_unit_price' product='all'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Average Unit Price
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 mt-2 mb-2">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-pills nav-justified">						
+						<li class="nav-item"><a href="{%url 'admin:get_number_companies' option='research'%}" class="btn bg-orange btn-sm rounded-round">View Report</a></li>
+					</ul>
+
+					<div class="tab-content">
+						Other Reports (Yes/No)
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
