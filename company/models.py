@@ -24,8 +24,8 @@ BOOLEAN_CHOICE = (
 )
 
 BOOLEAN_CHOICE_P = (
-	(True,"Project Stage"),
-	(False,"Manufacturing Stage"),
+	(True,"Investment"),
+	(False,"Oprational"),
 )
 
 class Company(models.Model):
@@ -95,7 +95,7 @@ class Company(models.Model):
 	support_required	= models.ManyToManyField(CompanyDropdownsMaster,verbose_name="What kind of support do you need to increase your production and market",related_name="major_challenges")
 	company_condition = models.ForeignKey(CompanyDropdownsMaster,on_delete=models.RESTRICT,null=True,verbose_name="Status of processing/ industry facility",related_name="company_status")
 	is_active = models.BooleanField(default=False)
-	color_theme = models.CharField(max_length=25,verbose_name="Company Brand Color/Theme",default="#ffffff")
+	color_theme = models.CharField(max_length=25,verbose_name="Company Brand Color/Theme",default="#26236a")
 	color_text = models.CharField(max_length=25,verbose_name="Company Brand Text Color",default="#ffffff")
 	stage	= models.BooleanField(default=False, choices=BOOLEAN_CHOICE_P,verbose_name="Industry Stage")
 	reserve_attr0 = models.CharField(max_length=255,default="")
@@ -106,6 +106,7 @@ class Company(models.Model):
 	last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='company_updated_by',null=True)
 	last_updated_date	= models.DateTimeField(null=True)
 	expired	= models.BooleanField(default=False)
+
 
 	def __str__(self):
 		return self.name

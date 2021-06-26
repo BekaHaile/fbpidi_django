@@ -798,3 +798,226 @@
 
 </div>
  
+
+<!-- production capacity -->
+
+<div class="tab-pane fade show" id="production_capacity">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Daily Production Capacity data</h6>
+			
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Year</th>
+						<th>Product</th>
+						<th>Installed Capacity</th>
+						<th>Attainable</th>
+						<th>Actuall</th>
+						<th>Extraction Rate</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+					
+				{%for cat in object.company_production_capacity.all%}
+				<tr>
+					<td>{{cat.year}}</td>
+					<td>{{cat.product.sub_category_name}}</td>
+					<td>{{cat.install_prdn_capacity}} {{cat.product.uom.name|upper}}</td>
+					<td>
+						{{cat.atnbl_prdn_capacity}} {{cat.product.uom.name|upper}}
+					</td>
+					<td>{{cat.actual_prdn_capacity}} {{cat.product.uom.name|upper}}</td>
+					<td>{{cat.extraction_rate}}</td>	
+				</tr>
+				 
+				{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+<!-- end of production capacity -->
+
+
+<!-- Annual Input -->
+<div class="tab-pane fade show" id="annual_input_need">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Annual Input Need data</h6>
+			
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Year</th>
+						<th>Product</th>
+						<th>Input Name</th>
+						<th>Amount</th>
+						<th>Local Input:Imported Input</th>
+							
+					</tr>
+				</thead>
+				<tbody>
+					
+				{%for cat in object.company_product_input.all%}
+				<tr>
+					<td>{{cat.year}}</td>
+					<td>{{cat.product.sub_category_name}}</td>
+					<td>{{cat.input_name}}</td>
+					<td>
+						{{cat.amount}} {{cat.product.uom.name|upper}}
+					</td>
+					<td>{{cat.local_input}}%-{{cat.import_input}}%</td>
+				</tr>
+				 
+				{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+<!-- end of Annual Input -->
+
+
+
+
+<!-- Input demand and supply -->
+<div class="tab-pane fade show" id="input_demand">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Anual Product Input Demand and Supply Data</h6>
+			
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Year</th>
+						<th>Product</th>
+						<th>Input Type</th>
+						<th>Demand</th>
+						<th>Supply</th>
+							
+					</tr>
+				</thead>
+				<tbody>
+					
+				{%for cat in object.company_product_demand.all%}
+				<tr>
+					<td>{{forloop.counter}}</td>
+					<td>{{cat.year}}</td>
+					<td>{{cat.product.sub_category_name}}</td>
+					<td>{{cat.input_type}}</td>
+					<td>{{cat.demand}}%</td>
+					<td>{{cat.supply}}%</td>
+				</tr>
+				 
+				{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+<!-- end of Input demand and supply -->
+
+
+
+<!-- Sales Performance -->
+<div class="tab-pane fade show" id="sales_performance">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Product Production & Sales Performance</h6>
+			
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Year</th>
+						<th>Half Year</th>
+						<th>Product</th>
+						<th>Production</th>
+						<th>Sales Amount</th>
+						<th>Sales Value</th>
+							
+					</tr>
+				</thead>
+				<tbody>
+					
+				{%for cat in object.company_product_perfornamce.all%}
+				<tr>
+					<td>{{cat.activity_year}}</td>
+					<td>{{cat.half_year}}</td>
+					<td>{{cat.product.sub_category_name}}</td>
+					<td>{{cat.production_amount}} {{cat.product.uom|upper}}</td>
+					<td>{{cat.sales_amount}} {{cat.product.uom|upper}}</td>
+					<td>ETB {{cat.sales_value}}</td>
+				</tr>
+				 
+				{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+<!-- end of Sales Performance -->
+
+
+<!-- Product Packaging -->
+<div class="tab-pane fade show" id="prod_packaging">
+	<div class="card">
+		<div class="card-header header-elements-sm-inline">
+			<h6 class="card-title">Product Packaging Data</h6>
+			
+		</div>
+
+		<div class="card-body">
+			 <table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Product</th>
+						<th>Packaging Type</th>
+						<th>Packaging Category</th>
+						<th>Amount</th>
+						<th>Source of Inputs</th>
+						<th>Wastage %</th>	
+					</tr>
+				</thead>
+				<tbody>
+					
+				{%for cat in object.company_product_packaging.all%}
+				<tr>
+					<td>{{forloop.counter}}</td>
+					<td>{{cat.product.sub_category_name}}</td>
+					<td>{{cat.packaging}}</td>
+					<td>{{cat.category}}</td>
+					<td>{{cat.amount}} {{cat.product.uom.name|upper}}</td>
+					<td>Local: {{cat.local_input}}
+						Import: {{cat.import_input}}</td>
+					<td>{{cat.wastage}} </td> 
+				</tr>
+				 
+				{%endfor%}
+				</tbody>
+			 </table>
+		</div>		 
+	</div>
+
+</div>
+<!-- end of Product Packaging -->
+

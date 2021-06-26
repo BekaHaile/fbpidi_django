@@ -142,7 +142,8 @@ class Dose(models.Model):
 
     class Meta:
         ordering = ('dose',)
-        
+
+
 class DosageForm(models.Model):
     dosage_form = models.CharField(verbose_name="Dosage Form in English",max_length=255)
     dosage_form_am = models.CharField(verbose_name="Dosage Form in Amharic",max_length=255)
@@ -157,6 +158,7 @@ class DosageForm(models.Model):
     
     class Meta:
         ordering = ('dosage_form',)
+
 
 class ProductionCapacity(models.Model):	 	
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_production_capacity")	
@@ -176,6 +178,7 @@ class ProductionCapacity(models.Model):
     last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='prdn_updated_by',null=True)
     last_updated_date	= models.DateTimeField(null=True)
     expired	= models.BooleanField(default=False)
+
 
 class ProductPackaging(models.Model):
     PACKAGING_CATEGORY =  (('','Select Packaging Category'),('Primary','Primary'),('Secondary','Secondary'),('Teritiary','Teritiary'))
@@ -200,6 +203,7 @@ class ProductPackaging(models.Model):
     last_updated_date	= models.DateTimeField(null=True)
     expired	= models.BooleanField(default=False)		
 
+
 class ProductionAndSalesPerformance(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_product_perfornamce")
     product	= models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="sales_performance")
@@ -217,6 +221,7 @@ class ProductionAndSalesPerformance(models.Model):
     last_updated_by	= models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='performance_updated_by',null=True)
     last_updated_date	= models.DateTimeField(null=True)
     expired	= models.BooleanField(default=False)
+
 
 class AnnualInputNeed(models.Model):				
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_product_input")
@@ -240,6 +245,7 @@ class AnnualInputNeed(models.Model):
 
     def __str__(self):
         return self.input_name
+
 
 class InputDemandSupply(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE,related_name="company_product_demand")

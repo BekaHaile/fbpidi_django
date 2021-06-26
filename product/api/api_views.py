@@ -50,8 +50,15 @@ class ApiProductByCategory(APIView):
             category = Category.objects.get(id=request.query_params['category_id'])
             categories = Category.objects.filter(category_type = category.category_type).distinct()
 
+            products = Product.objects.filter(is_active = True)
+            subsector = Category.objects.get(id = request.query_params['category_id'] )
 
-            products = Product.objects.filter(brand__product_type__category_name__id = request.query_params['category_id'])
+            if subsector.category_type == "Pharmaceuticals":
+                    products = products.filter(pharmacy_product_type__category_name__id = request.query_params['category_id'])
+            else:
+                    products = products.filter(brand__product_type__category_name__id = request.query_params['category_id'])
+
+            # products = Product.objects.filter(brand__product_type__category_name__id = request.query_params['category_id'], is_active = True)
             if 'by_title' in request.query_params:
                 products = filter_products_by_name( products, request.query_params['by_title'])
             
@@ -66,7 +73,7 @@ class ApiProductByCategory(APIView):
 class ApiProductByMainCategory(APIView):
     def get(self, request):
         try:
-            products = Product.objects.all()
+            products = Product.objects.filter(is_active = True)
             categories = Category.objects.all().distinct()
 
             if 'category' in request.query_params and request.query_params['category'] != 'All': # if All, products without filtering 
@@ -150,7 +157,7 @@ class ApiInquiryByCategory(APIView):
     def get(self, request):
         try:    
             category = Category.objects.get(id = request.query_params['category'])
-            companies = Company.objects.filter(category =   category)
+            companies = Company.objects.filter(category =   category, is_active = True)
             company_ids = [c.id for c in companies ]
             return Response(data={'error':False, 'company_ids':company_ids,'count':len(company_ids),'category':request.query_params['category']})
     
