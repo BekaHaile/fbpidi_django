@@ -60,10 +60,8 @@ def get_weekly_and_old(queryset):
 
 
 if __name__ == '__main__':    
-    for c in Company.objects.all():
-        c.color_theme = "#26236a"
-        c.save()
-        
+  pass
+
 
 
     
