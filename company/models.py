@@ -107,6 +107,7 @@ class Company(models.Model):
 	last_updated_date	= models.DateTimeField(null=True)
 	expired	= models.BooleanField(default=False)
 
+
 	def __str__(self):
 		return self.name
 
